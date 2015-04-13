@@ -5,12 +5,13 @@
   color: #fff;
   display: inline-block;
   font-size: 14px;
+  left: -999em;
   opacity: 0;
   padding: 8px 21px;
   position: fixed;
   pointer-events: none;
-  margin-top: -10px;
   transition: opacity 0.5s ease-out , margin-top 0.3s ease-out;
+  top: -999em;
   &:after {
     content: "";
     width: 0;
@@ -18,10 +19,11 @@
     position: absolute;
   }
   &.show {
-    opacity: 0.9;
-    margin-top: 0px;
+    opacity: 0.9 !important;
+    margin-top: 0px !important;
   }
   &.place-top {
+    margin-top: -15px;
     &:after {
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;

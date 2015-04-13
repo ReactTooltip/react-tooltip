@@ -8,7 +8,7 @@ var Index = React.createClass({displayName: "Index",
   render: function() {
     return (
       React.createElement("section", {className: "tooltip-example"}, 
-        React.createElement("p", {"data-placeholder": "My name is wayne"}, "hover on me"), 
+        React.createElement("p", {"data-placeholder": "fool"}, "hover on me"), 
         React.createElement("p", {"data-placeholder": "This is another experiment", "data-place": "bottom"}, "hover on me"), 
         React.createElement(ReactTooltip, {place: "top"})
       )
@@ -40,14 +40,13 @@ var ReactTooltip = React.createClass({displayName: "ReactTooltip",
   showTooltip: function(e) {
     this.setState({
       placeholder: e.target.dataset.placeholder,
-      show: true,
-      x: e.x,
-      y: e.y,
       place:e.target.dataset.place?e.target.dataset.place:(this.props.place?this.props.place:"top")
     })
+    this.updateTooltip(e);
   },
   updateTooltip: function(e) {
     this.setState({
+      show: true,
       x: e.x,
       y: e.y
     })
@@ -74,15 +73,16 @@ var ReactTooltip = React.createClass({displayName: "ReactTooltip",
     }
   },
   componentDidUpdate: function(prevProps, prevState) {
-    var width = document.querySelector("[data-id='tooltip']").clientWidth ;
-    if(prevState.place === "top" || prevState.place === "bottom") {
-      if(this.state.tipWidth !== width) {
-        this.setState({
-          tipWidth: width
-        })
-      }
-    }
-
+    // var width = document.querySelector("[data-id='tooltip']").clientWidth ;
+    // console.log(this.state.tipWidth);
+    // console.log(width);
+    // if(prevState.place === "top" || prevState.place === "bottom") {
+    //     if(this.state.tipWidth !== width) {
+    //       this.setState({
+    //         tipWidth: width
+    //       })
+    //     }
+    //   }
   },
   render: function() {
     var offset = {x:0, y:0};
@@ -92,7 +92,7 @@ var ReactTooltip = React.createClass({displayName: "ReactTooltip",
     }
     else if(this.state.place === "bottom") {
       offset.x = -(this.state.tipWidth/2);
-      offset.y = 50;
+      offset.y = 30;
     }
     var style = {
       left: this.state.x + offset.x + "px",
