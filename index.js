@@ -2,6 +2,12 @@
 
 var React = require("react");
 var classNames = require("classnames");
+var basicClass = require("./src/basic");
+var topPlaceClass = require("./src/place-top");
+var bottomPlaceClass = require("./src/place-bottom");
+var RCSS = require("rcss");
+
+RCSS.injectAll();
 
 var ReactTooltip = React.createClass({
   getInitialState: function() {
@@ -10,8 +16,6 @@ var ReactTooltip = React.createClass({
       placeholder: "",
       x: 0,
       y: 0,
-      tipWidth: 0,
-      tipHeight: 0,
       place: this.props.place?this.props.place:"top"
     }
   },
@@ -23,6 +27,8 @@ var ReactTooltip = React.createClass({
     this.updateTooltip(e);
   },
   updateTooltip: function(e) {
+
+
     this.setState({
       show: true,
       x: e.x,
@@ -50,38 +56,33 @@ var ReactTooltip = React.createClass({
       targetArray[i].removeEventListener("mouseleave", this.hideTooltip);
     }
   },
-  componentDidUpdate: function(prevProps, prevState) {
-    // var width = document.querySelector("[data-id='tooltip']").clientWidth ;
-    // console.log(this.state.tipWidth);
-    // console.log(width);
-    // if(prevState.place === "top" || prevState.place === "bottom") {
-    //     if(this.state.tipWidth !== width) {
-    //       this.setState({
-    //         tipWidth: width
-    //       })
-    //     }
-    //   }
-  },
   render: function() {
+    var tipWidth = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientWidth:0;
     var offset = {x:0, y:0};
     if(this.state.place === "top") {
-      offset.x = -(this.state.tipWidth/2);
+      offset.x = -(tipWidth/2);
       offset.y = -50;
     }
     else if(this.state.place === "bottom") {
-      offset.x = -(this.state.tipWidth/2);
+      offset.x = -(tipWidth/2);
       offset.y = 30;
     }
     var style = {
       left: this.state.x + offset.x + "px",
       top: this.state.y + offset.y + "px"
     }
-    var toolTipClass = classNames({
-      "react-tooltip": true,
-      "show": this.state.show,
-      "place-top": this.state.place === "top",
-      "place-bottom": this.state.place === "bottom"
-    })
+    var classNamesObject = {
+      "show": this.state.show
+    }
+    classNamesObject[basicClass.className] = true ;
+    if(this.state.place === "top") {
+      classNamesObject[topPlaceClass.className] = true
+    }
+    if(this.state.place === "bottom") {
+      classNamesObject[bottomPlaceClass.className] = true;
+    }
+    var toolTipClass = classNames(classNamesObject)
+
     return (
       <span className={toolTipClass} style={style} data-id="tooltip">{this.state.placeholder}</span>
     )

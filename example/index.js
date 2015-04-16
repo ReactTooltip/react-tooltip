@@ -1,15 +1,15 @@
 'use strict';
 
 var React = require("react");
-var ReactTooltip = require("../");
+var ReactTooltip = require("../index");
 
 var Index = React.createClass({
   render: function() {
     return (
       <section className="tooltip-example">
-        <p data-placeholder="fool">hover on me</p>
-        <p data-placeholder="This is another experiment" data-place="bottom">hover on me</p>
-        <ReactTooltip place="top"/>
+        <p data-placeholder="foo">hover on me</p>
+        <p data-placeholder="This is another hover test" data-place="bottom">hover on me</p>
+        <ReactTooltip />
       </section>
     )
   }

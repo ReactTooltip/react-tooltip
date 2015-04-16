@@ -11,8 +11,8 @@ var reactify = require('reactify');
 var sourcemaps = require("gulp-sourcemaps");
 var sass = require('gulp-sass');
 
-gulp.task('js',bundle);
-var bundler = watchify(browserify("./index.js", watchify.args));
+gulp.task('jsDev',bundle);
+var bundler = watchify(browserify("./example/index.js", watchify.args));
 bundler.transform(reactify);
 bundler.on('update',bundle); // that's why we need bundle func instead write it inside
 bundler.on('log',gutil.log);
@@ -23,22 +23,39 @@ function bundle(){
             .pipe(buffer())
             .pipe(sourcemaps.init({loadMaps:true}))
             .pipe(sourcemaps.write('./'))
-            .pipe(gulp.dest('./'))
+            .pipe(gulp.dest('./example'))
 }
 
 gulp.task('sass', function () {
-  gulp.src(['./index.scss','../style.scss'])
+  gulp.src('/example/index.scss')
     .pipe(sourcemaps.init())
     .pipe(sass({
       errLogToConsole:true
     }))
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest('./'));
+    .pipe(gulp.dest('./example/'));
+  gulp.src('./src/style.scss')
+    .pipe(sourcemaps.init())
+    .pipe(sass({
+      errLogToConsole:true
+    }))
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('./src/'));
 });
 
 gulp.task('watch', function () {
-  gulp.watch(['./*.scss'], ['sass']);
-  gulp.watch(['../style.scss'], ['sass']);
+  gulp.watch(['./example/*.scss'], ['sass']);
+  gulp.watch(['./src/*.scss'], ['sass']);
 });
 
-gulp.task("default",["sass","watch",'js']);
+gulp.task("default",["sass","watch","jsDev"]);
+
+gulp.task("build",function() {
+  gulp.src('./src/style.scss')
+    .pipe(sourcemaps.init())
+    .pipe(sass({
+      errLogToConsole:true
+    }))
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('./src/'));
+})
