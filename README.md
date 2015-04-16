@@ -1,6 +1,4 @@
 # react-tooltip
-======
-
 
 React tooltip component, inspired by tooltipsy (a jquery plugin I've used) [tooltipsy](http://tooltipsy.com/)
 
@@ -9,8 +7,6 @@ React tooltip component, inspired by tooltipsy (a jquery plugin I've used) [tool
 
 
 #### Installation
-======
-
 
 ```
 npm install react-tooltip --save
@@ -20,8 +16,6 @@ npm install react-tooltip --save
 
 
 #### Usage
-======
-
 
 1 . Require react-tooltip after installation
 
@@ -43,17 +37,9 @@ var ReactTooltip = require("react-tooltip")
 
 
 #### Options
-======
-
-
 
 #### Next
-======
-
-
 
 #### License
-======
-
 
 MIT
