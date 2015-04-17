@@ -4,6 +4,7 @@ React tooltip component, inspired by tooltipsy (a jquery plugin I've used)
 
 [![Version](http://img.shields.io/npm/v/react-tooltip.svg)](https://www.npmjs.org/package/react-tooltip)
 
+#### still have bug , fix soon
 
 ### Installation
 
