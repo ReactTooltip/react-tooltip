@@ -10,7 +10,7 @@ var RCSS = require("rcss");
 
 RCSS.injectAll();
 
-var ReactTooltip = React.createClass({displayName: "ReactTooltip",
+var ReactTooltip = React.createClass({
   getInitialState: function() {
     return {
       show: false,
@@ -28,6 +28,8 @@ var ReactTooltip = React.createClass({displayName: "ReactTooltip",
     this.updateTooltip(e);
   },
   updateTooltip: function(e) {
+
+
     this.setState({
       show: true,
       x: e.x,
@@ -84,7 +86,7 @@ var ReactTooltip = React.createClass({displayName: "ReactTooltip",
     var toolTipClass = classNames(classNamesObject)
 
     return (
-      React.createElement("span", {className: toolTipClass, style: style, "data-id": "tooltip"}, this.state.placeholder)
+      <span className={toolTipClass} style={style} data-id="tooltip">{this.state.placeholder}</span>
     )
   }
 });
