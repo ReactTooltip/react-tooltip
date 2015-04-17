@@ -1,21 +1,17 @@
 # react-tooltip
 
-React tooltip component, inspired by tooltipsy (a jquery plugin I've used) [tooltipsy](http://tooltipsy.com/)
-
+React tooltip component, inspired by tooltipsy (a jquery plugin I've used)
 
 [![Version](http://img.shields.io/npm/v/react-tooltip.svg)](https://www.npmjs.org/package/react-tooltip)
 
 
-#### Installation
+### Installation
 
 ```
 npm install react-tooltip --save
-
-
 ```
 
-
-#### Usage
+### Usage
 
 1 . Require react-tooltip after installation
 
@@ -36,10 +32,28 @@ var ReactTooltip = require("react-tooltip")
 ```
 
 
-#### Options
+### Example
+```
+'use strict';
 
-#### Next
+var React = require("react");
+var ReactTooltip = require("../index");
 
-#### License
+var Index = React.createClass({
+  render: function() {
+    return (
+      <section className="tooltip-example">
+        <p data-placeholder="foo">hover on me</p>
+        <p data-placeholder="This is another hover test" data-place="bottom">Tooltip from bottom</p>
+        <ReactTooltip />
+      </section>
+    )
+  }
+});
+
+React.render(<Index />,document.body)
+```
+
+### License
 
 MIT

@@ -8,7 +8,7 @@ var Index = React.createClass({
     return (
       <section className="tooltip-example">
         <p data-placeholder="foo">hover on me</p>
-        <p data-placeholder="This is another hover test" data-place="bottom">hover on me</p>
+        <p data-placeholder="This is another hover test" data-place="bottom">Tooltip from bottom</p>
         <ReactTooltip />
       </section>
     )

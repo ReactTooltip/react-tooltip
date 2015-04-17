@@ -3,6 +3,7 @@
 var React = require("react");
 var classNames = require("classnames");
 var basicClass = require("./src/basic");
+var basicShowClass = require("./src/basic-show");
 var topPlaceClass = require("./src/place-top");
 var bottomPlaceClass = require("./src/place-bottom");
 var RCSS = require("rcss");
@@ -71,10 +72,11 @@ var ReactTooltip = React.createClass({
       left: this.state.x + offset.x + "px",
       top: this.state.y + offset.y + "px"
     }
-    var classNamesObject = {
-      "show": this.state.show
-    }
+    var classNamesObject = {};
     classNamesObject[basicClass.className] = true ;
+    if(this.state.show) {
+      classNamesObject[basicShowClass.className] = true ;
+    }
     if(this.state.place === "top") {
       classNamesObject[topPlaceClass.className] = true
     }

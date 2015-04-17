@@ -9,7 +9,7 @@ var Index = React.createClass({displayName: "Index",
     return (
       React.createElement("section", {className: "tooltip-example"}, 
         React.createElement("p", {"data-placeholder": "foo"}, "hover on me"), 
-        React.createElement("p", {"data-placeholder": "This is another hover test", "data-place": "bottom"}, "hover on me"), 
+        React.createElement("p", {"data-placeholder": "This is another hover test", "data-place": "bottom"}, "Tooltip from bottom"), 
         React.createElement(ReactTooltip, null)
       )
     )
@@ -25,6 +25,7 @@ React.render(React.createElement(Index, null),document.body)
 var React = require("react");
 var classNames = require("classnames");
 var basicClass = require("./src/basic");
+var basicShowClass = require("./src/basic-show");
 var topPlaceClass = require("./src/place-top");
 var bottomPlaceClass = require("./src/place-bottom");
 var RCSS = require("rcss");
@@ -93,10 +94,11 @@ var ReactTooltip = React.createClass({displayName: "ReactTooltip",
       left: this.state.x + offset.x + "px",
       top: this.state.y + offset.y + "px"
     }
-    var classNamesObject = {
-      "show": this.state.show
-    }
+    var classNamesObject = {};
     classNamesObject[basicClass.className] = true ;
+    if(this.state.show) {
+      classNamesObject[basicShowClass.className] = true ;
+    }
     if(this.state.place === "top") {
       classNamesObject[topPlaceClass.className] = true
     }
@@ -114,7 +116,7 @@ var ReactTooltip = React.createClass({displayName: "ReactTooltip",
 module.exports = ReactTooltip;
 
 
-},{"./src/basic":176,"./src/place-bottom":177,"./src/place-top":178,"classnames":8,"rcss":10,"react":175}],3:[function(require,module,exports){
+},{"./src/basic":177,"./src/basic-show":176,"./src/place-bottom":178,"./src/place-top":179,"classnames":8,"rcss":10,"react":175}],3:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -22442,21 +22444,11 @@ module.exports = require('./lib/React');
 },{"./lib/React":48}],176:[function(require,module,exports){
 var RCSS = require("rcss");
 
-var tooltip = {
-  background: '#222',
-  borderRadius: '3px',
-  color: '#fff',
-  display: 'inline-block',
-  fontSize: '14px',
-  left: '-999em',
-  opacity: 0,
-  padding: '8px 21px',
-  position: 'fixed',
-  pointerEvents: 'none',
-  transition: 'opacity 0.5s ease-out, margin-top 0.3s ease-out',
-  top: '-999em'
+var tooltipShow = {
+  opacity: '0.9 !important',
+  marginTop: '0px !important'
 }
-module.exports = RCSS.registerClass(tooltip);
+module.exports = RCSS.registerClass(tooltipShow);
 
 
 },{"rcss":10}],177:[function(require,module,exports){
@@ -22482,10 +22474,43 @@ module.exports = RCSS.registerClass(tooltip);
 },{"rcss":10}],178:[function(require,module,exports){
 var RCSS = require("rcss");
 
-var tooltip = {
-  color: "yellow"
+var tooltipBottom = {
+  marginTop: '10px',
+  ':after': {
+    borderLeft: '10px solid transparent',
+    borderRight: '10px solid transparent',
+    borderBottom: '8px solid #222',
+    top: '-8px',
+    left: '50%',
+    marginLeft: '-10px',
+    content: " ",
+    width: 0,
+    height: 0,
+    position: 'absolute'
+  }
 }
-module.exports = RCSS.registerClass(tooltip);
+module.exports = RCSS.registerClass(tooltipBottom);
+
+
+},{"rcss":10}],179:[function(require,module,exports){
+var RCSS = require("rcss");
+
+var tooltipTop = {
+  marginTop: '-10px',
+  ':after': {
+    marginLeft: '-10px',
+    content: " ",
+    width: 0,
+    height: 0,
+    position: 'absolute',
+    borderLeft: '10px solid transparent',
+    borderRight: '10px solid transparent',
+    borderTop: '8px solid #222',
+    bottom: '-8px',
+    left: '50%'
+  }
+}
+module.exports = RCSS.registerClass(tooltipTop);
 
 
 },{"rcss":10}]},{},[1]);
