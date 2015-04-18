@@ -33,6 +33,8 @@ var ReactTooltip = require("react-tooltip")
 
 
 ### Example
+[http://wwayne.github.io/react-tooltip](http://wwayne.github.io/react-tooltip/)
+
 ```
 'use strict';
 
