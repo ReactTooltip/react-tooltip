@@ -1,63 +1,75 @@
 'use strict';
 
-var React = require("react");
-var classNames = require("classnames");
-var basicClass = require("./basic");
-var basicShowClass = require("./basic-show");
-var topPlaceClass = require("./place-top");
-var bottomPlaceClass = require("./place-bottom");
-var RCSS = require("rcss");
+import React from 'react';
+import classNames from 'classNames';
+import basicClass from './basic';
+import basicShowClass from './basic-show';
+import topPlaceClass from './place-top';
+import bottomPlaceClass from './place-bottom';
+import RCSS from 'rcss';
 
 RCSS.injectAll();
 
-var ReactTooltip = React.createClass({
-  getInitialState: function() {
-    return {
+class ReactTooltip extends React.Component {
+
+  displayName: 'ReactTooltip'
+
+  propTypes: {
+    place: React.PropTypes.string
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
       show: false,
       placeholder: "",
       x: 0,
       y: 0,
       place: this.props.place?this.props.place:"top"
     }
-  },
-  showTooltip: function(e) {
+  }
+
+  showTooltip(e) {
     this.setState({
       placeholder: e.target.dataset.placeholder,
       place:e.target.dataset.place?e.target.dataset.place:(this.props.place?this.props.place:"top")
     })
     this.updateTooltip(e);
-  },
-  updateTooltip: function(e) {
+  }
 
-
+  updateTooltip(e) {
     this.setState({
       show: true,
       x: e.x,
       y: e.y
     })
-  },
-  hideTooltip: function(e) {
+  }
+
+  hideTooltip(e) {
     this.setState({
       show: false
     })
-  },
-  componentDidMount: function() {
+  }
+
+  componentDidMount() {
     var targetArray = document.querySelectorAll("[data-placeholder]");
     for(var i = 0; i < targetArray.length; i++) {
       targetArray[i].addEventListener("mouseover", this.showTooltip, false);
       targetArray[i].addEventListener("mousemove", this.updateTooltip, false);
       targetArray[i].addEventListener("mouseleave", this.hideTooltip, false);
     }
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     var targetArray = document.querySelectorAll("[data-placeholder]");
     for(var i = 0; i < targetArray.length; i++) {
       targetArray[i].removeEventListener("mouseover", this.showTooltip);
       targetArray[i].removeEventListener("mousemove", this.updateTooltip);
       targetArray[i].removeEventListener("mouseleave", this.hideTooltip);
     }
-  },
-  render: function() {
+  }
+
+  render() {
     var tipWidth = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientWidth:0;
     var offset = {x:0, y:0};
     if(this.state.place === "top") {
@@ -89,6 +101,6 @@ var ReactTooltip = React.createClass({
       <span className={toolTipClass} style={style} data-id="tooltip">{this.state.placeholder}</span>
     )
   }
-});
+}
 
-module.exports = ReactTooltip;
+export default ReactTooltip;
