@@ -2,10 +2,10 @@
 
 var React = require("react");
 var classNames = require("classnames");
-var basicClass = require("./src/basic");
-var basicShowClass = require("./src/basic-show");
-var topPlaceClass = require("./src/place-top");
-var bottomPlaceClass = require("./src/place-bottom");
+var basicClass = require("./basic");
+var basicShowClass = require("./basic-show");
+var topPlaceClass = require("./place-top");
+var bottomPlaceClass = require("./place-bottom");
 var RCSS = require("rcss");
 
 RCSS.injectAll();
