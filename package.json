@@ -1,6 +1,6 @@
 {
   "name": "react-tooltip",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "react tooltip component",
   "main": "index.js",
   "scripts": {
@@ -30,9 +30,5 @@
     "classnames": "^1.2.0",
     "rcss": "^0.1.5",
     "react": "^0.13.1"
-  },
-  "devDependencies": {
-    "babelify": "^6.0.2",
-    "browserify": "^9.0.8"
   }
 }
