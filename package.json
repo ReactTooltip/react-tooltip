@@ -4,8 +4,13 @@
   "description": "react tooltip component",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
-    "dev": "webpack-dev-server --devtool eval --progress --colors --hot --cotent-base build"
+    "test": "jest"
+  },
+  "jest": {
+    "scriptPreprocessor": "_test_/preprocessor.js",
+    "unmockedModulePathPatterns": [
+      "./node_modules/react"
+    ]
   },
   "repository": {
     "type": "git",
@@ -28,7 +33,12 @@
   },
   "dependencies": {
     "classnames": "^1.2.0",
+    "jest": "^0.1.39",
     "rcss": "^0.1.5",
     "react": "^0.13.1"
+  },
+  "devDependencies": {
+    "jest-cli": "^0.4.0",
+    "react-tools": "^0.13.2"
   }
 }
