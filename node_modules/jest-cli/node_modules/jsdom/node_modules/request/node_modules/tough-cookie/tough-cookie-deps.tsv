@@ -1,0 +1,6 @@
+async (0.1.18)	MIT (http://github.com/caolan/async/raw/master/LICENSE)	node_modules/async/package.json
+diff (1.0.8)	BSD (http://github.com/kpdecker/jsdiff/blob/master/LICENSE)	node_modules/vows/node_modules/diff/package.json
+eyes (0.1.8)	MIT License (https://spdx.org/licenses/MIT)	node_modules/vows/node_modules/eyes/package.json
+punycode (1.0.0)	MIT (http://mths.be/mit)	node_modules/punycode/package.json
+tough-cookie (0.12.1)	MIT License (https://spdx.org/licenses/MIT)	package.json
+vows (0.7.0)	MIT License (https://spdx.org/licenses/MIT)	node_modules/vows/LICENSE

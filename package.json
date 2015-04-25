@@ -7,7 +7,9 @@
     "react": "^0.13.2",
     "react-tooltip": "^0.1.5"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "reactify": "^1.1.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
