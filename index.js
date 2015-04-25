@@ -22,19 +22,19 @@ var _classNames = require('classNames');
 
 var _classNames2 = _interopRequireWildcard(_classNames);
 
-var _basicClass = require('./basic');
+var _basicClass = require('./src/basic');
 
 var _basicClass2 = _interopRequireWildcard(_basicClass);
 
-var _basicShowClass = require('./basic-show');
+var _basicShowClass = require('./src/basic-show');
 
 var _basicShowClass2 = _interopRequireWildcard(_basicShowClass);
 
-var _topPlaceClass = require('./place-top');
+var _topPlaceClass = require('./src/place-top');
 
 var _topPlaceClass2 = _interopRequireWildcard(_topPlaceClass);
 
-var _bottomPlaceClass = require('./place-bottom');
+var _bottomPlaceClass = require('./src/place-bottom');
 
 var _bottomPlaceClass2 = _interopRequireWildcard(_bottomPlaceClass);
 
@@ -157,3 +157,4 @@ var ReactTooltip = (function (_React$Component) {
 
 exports['default'] = ReactTooltip;
 module.exports = exports['default'];
+

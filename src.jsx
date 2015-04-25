@@ -2,10 +2,10 @@
 
 import React from 'react';
 import classNames from 'classNames';
-import basicClass from './basic';
-import basicShowClass from './basic-show';
-import topPlaceClass from './place-top';
-import bottomPlaceClass from './place-bottom';
+import basicClass from './src/basic';
+import basicShowClass from './src/basic-show';
+import topPlaceClass from './src/place-top';
+import bottomPlaceClass from './src/place-bottom';
 import RCSS from 'rcss';
 
 RCSS.injectAll();
