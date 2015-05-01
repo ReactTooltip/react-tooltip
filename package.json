@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "react": "^0.13.2",
-    "react-tooltip": "^0.1.6"
+    "react-tooltip": "^0.1.7"
   },
   "devDependencies": {
     "reactify": "^1.1.0"

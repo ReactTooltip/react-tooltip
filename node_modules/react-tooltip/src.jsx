@@ -10,24 +10,23 @@ import RCSS from 'rcss';
 
 RCSS.injectAll();
 
-class ReactTooltip extends React.Component {
+const ReactTooltip = React.createClass({
 
-  displayName: 'ReactTooltip'
+  displayName: 'ReactTooltip',
 
   propTypes: {
     place: React.PropTypes.string
-  }
+  },
 
-  constructor(props) {
-    super(props);
-    this.state = {
+  getInitialState() {
+    return {
       show: false,
       placeholder: "",
       x: 0,
       y: 0,
       place: this.props.place?this.props.place:"top"
     }
-  }
+  },
 
   showTooltip(e) {
     this.setState({
@@ -35,7 +34,7 @@ class ReactTooltip extends React.Component {
       place:e.target.dataset.place?e.target.dataset.place:(this.props.place?this.props.place:"top")
     })
     this.updateTooltip(e);
-  }
+  },
 
   updateTooltip(e) {
     this.setState({
@@ -43,13 +42,13 @@ class ReactTooltip extends React.Component {
       x: e.x,
       y: e.y
     })
-  }
+  },
 
   hideTooltip(e) {
     this.setState({
       show: false
     })
-  }
+  },
 
   componentDidMount() {
     var targetArray = document.querySelectorAll("[data-placeholder]");
@@ -58,7 +57,7 @@ class ReactTooltip extends React.Component {
       targetArray[i].addEventListener("mousemove", this.updateTooltip, false);
       targetArray[i].addEventListener("mouseleave", this.hideTooltip, false);
     }
-  }
+  },
 
   componentWillUnmount() {
     var targetArray = document.querySelectorAll("[data-placeholder]");
@@ -67,7 +66,7 @@ class ReactTooltip extends React.Component {
       targetArray[i].removeEventListener("mousemove", this.updateTooltip);
       targetArray[i].removeEventListener("mouseleave", this.hideTooltip);
     }
-  }
+  },
 
   render() {
     var tipWidth = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientWidth:0;
@@ -101,6 +100,6 @@ class ReactTooltip extends React.Component {
       <span className={toolTipClass} style={style} data-id="tooltip">{this.state.placeholder}</span>
     )
   }
-}
+});
 
 export default ReactTooltip;

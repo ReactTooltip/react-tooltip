@@ -1,0 +1,39 @@
+"use strict";
+
+var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { "default": obj }; };
+
+var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+var estraverse = _interopRequire(require("estraverse"));
+
+var extend = _interopRequire(require("lodash/object/extend"));
+
+var types = _interopRequire(require("ast-types"));
+
+var t = _interopRequireWildcard(require("./types"));
+
+// estraverse
+
+extend(estraverse.VisitorKeys, t.VISITOR_KEYS);
+
+// regenerator/ast-types
+
+var def = types.Type.def;
+var or = types.Type.or;
+
+//def("File")
+//  .bases("Node")
+//  .build("program")
+//  .field("program", def("Program"));
+
+def("AssignmentPattern").bases("Pattern").build("left", "right").field("left", def("Pattern")).field("right", def("Expression"));
+
+def("RestElement").bases("Pattern").build("argument").field("argument", def("expression"));
+
+def("DoExpression").bases("Expression").build("body").field("body", [def("Statement")]);
+
+def("ExportDefaultDeclaration").bases("Declaration").build("declaration").field("declaration", or(def("Declaration"), def("Expression"), null));
+
+def("ExportNamedDeclaration").bases("Declaration").build("declaration").field("declaration", or(def("Declaration"), def("Expression"), null)).field("specifiers", [or(def("ExportSpecifier"))]).field("source", or(def("ModuleSpecifier"), null));
+
+types.finalize();

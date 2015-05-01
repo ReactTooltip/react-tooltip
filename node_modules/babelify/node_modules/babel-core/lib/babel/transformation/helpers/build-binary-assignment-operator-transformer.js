@@ -1,0 +1,48 @@
+"use strict";
+
+var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { "default": obj }; };
+
+var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+var explode = _interopRequire(require("./explode-assignable-expression"));
+
+var t = _interopRequireWildcard(require("../../types"));
+
+module.exports = function (exports, opts) {
+  var isAssignment = function isAssignment(node) {
+    return node.operator === opts.operator + "=";
+  };
+
+  var buildAssignment = function buildAssignment(left, right) {
+    return t.assignmentExpression("=", left, right);
+  };
+
+  exports.ExpressionStatement = function (node, parent, scope, file) {
+    // hit the `AssignmentExpression` one below
+    if (file.isConsequenceExpressionStatement(node)) return;
+
+    var expr = node.expression;
+    if (!isAssignment(expr)) return;
+
+    var nodes = [];
+    var exploded = explode(expr.left, nodes, file, scope, true);
+
+    nodes.push(t.expressionStatement(buildAssignment(exploded.ref, opts.build(exploded.uid, expr.right))));
+
+    return nodes;
+  };
+
+  exports.AssignmentExpression = function (node, parent, scope, file) {
+    if (!isAssignment(node)) return;
+
+    var nodes = [];
+    var exploded = explode(node.left, nodes, file, scope);
+    nodes.push(buildAssignment(exploded.ref, opts.build(exploded.uid, node.right)));
+    return nodes;
+  };
+
+  exports.BinaryExpression = function (node) {
+    if (node.operator !== opts.operator) return;
+    return opts.build(node.left, node.right);
+  };
+};
