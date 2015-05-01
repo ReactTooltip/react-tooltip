@@ -4,10 +4,12 @@
   "description": "react tooltip component",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/jest"
+    "test": "jest"
   },
   "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
     "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react-tools",
       "<rootDir>/node_modules/react"
     ]
   },
@@ -35,9 +37,10 @@
     "rcss": "^0.1.5"
   },
   "devDependencies": {
-    "react": "^0.13.1",
+    "babel-jest": "^5.0.1",
     "jest": "^0.1.39",
     "jest-cli": "^0.4.0",
+    "react": "^0.13.1",
     "react-tools": "^0.13.2"
   }
 }

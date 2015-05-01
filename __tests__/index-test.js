@@ -2,7 +2,7 @@
 
 'use strict';
 
-jest.dontMock('../src.jsx');
+jest.dontMock('../index');
 
 var React = require('react/addons');
 var ReactTooltip = require('../index');
