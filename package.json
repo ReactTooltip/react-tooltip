@@ -4,12 +4,11 @@
   "description": "react tooltip component",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "./node_modules/.bin/jest"
   },
   "jest": {
-    "scriptPreprocessor": "_test_/preprocessor.js",
     "unmockedModulePathPatterns": [
-      "./node_modules/react"
+      "<rootDir>/node_modules/react"
     ]
   },
   "repository": {
@@ -29,15 +28,15 @@
   },
   "homepage": "https://github.com/wwayne/react-tooltip",
   "peerDependencies": {
-    "react": ">=0.13.0"
+    "react": ">=0.12.0"
   },
   "dependencies": {
     "classnames": "^1.2.0",
-    "jest": "^0.1.39",
-    "rcss": "^0.1.5",
-    "react": "^0.13.1"
+    "rcss": "^0.1.5"
   },
   "devDependencies": {
+    "react": "^0.13.1",
+    "jest": "^0.1.39",
     "jest-cli": "^0.4.0",
     "react-tools": "^0.13.2"
   }

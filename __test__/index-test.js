@@ -1,6 +1,8 @@
+// __tests__/index-test.js
+
 'use strict';
 
-jest.dontMock('../index.js');
+jest.dontMock('../src.jsx');
 
 var React = require('react/addons');
 var ReactTooltip = require('../index');
@@ -10,14 +12,9 @@ describe('react tooltip', function() {
   var tooltip = TestUtils.renderIntoDocument(
     <ReactTooltip />
   );
-  //correct placeholder
   it('should render data-placeholder', function() {
-    var testNode = TestUtils.renderIntoDocument(
-      <p data-placeholder='placeholder'>Lorem</p>
-    );
-    TestUtils.Simulate.mouseOver(testNode)
+    var span = TestUtils.findRenderDOMComponentWithTag(tooltip, "span");
+    expect(span.getDOMNode().textContent).toEqual("");
 
   })
-  //correct position
-  //display when blur
 })
