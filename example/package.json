@@ -1,0 +1,15 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "livereload": "live-reload --port 8888 ./",
+    "build:js": "watchify src/js/index.js -t babelify -o dist/react-tooltip.js -dv ",
+    "build:css": "node-sass -w --output-style compressed src/scss/style.scss dist/react-tooltip.css",
+    "dev": "npm run live-reload & npm run build:js & npm run build:css"    
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -2,9 +2,12 @@
   "name": "react-tooltip",
   "version": "0.1.7",
   "description": "react tooltip component",
-  "main": "index.js",
+  "main": "dist/react-tooltip.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build:js": "watchify src/js/index.jsx -t babelify -o dist/react-tooltip.js -dv ",
+    "build:css": "node-sass -w --output-style compressed src/scss/style.scss dist/react-tooltip.css",
+    "dev": "npm run build:js & npm run build:css"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/__tests__/preprocessor.js",
@@ -32,13 +35,16 @@
     "react": ">=0.12.0"
   },
   "dependencies": {
-    "classnames": "^1.2.0",
-    "rcss": "^0.1.5"
+    "classnames": "^1.2.0"
   },
   "devDependencies": {
-    "react": "^0.13.1",
+    "babelify": "^6.0.2",
     "jest": "^0.1.39",
     "jest-cli": "^0.4.0",
-    "react-tools": "^0.13.2"
+    "live-reload": "^1.1.0",
+    "node-sass": "^3.0.0",
+    "react": "^0.13.1",
+    "react-tools": "^0.13.2",
+    "watchify": "^3.2.1"
   }
 }

@@ -2,13 +2,6 @@
 
 import React from 'react';
 import classNames from 'classNames';
-import basicClass from './src/basic';
-import basicShowClass from './src/basic-show';
-import topPlaceClass from './src/place-top';
-import bottomPlaceClass from './src/place-bottom';
-import RCSS from 'rcss';
-
-RCSS.injectAll();
 
 const ReactTooltip = React.createClass({
 
@@ -83,21 +76,9 @@ const ReactTooltip = React.createClass({
       left: this.state.x + offset.x + "px",
       top: this.state.y + offset.y + "px"
     }
-    var classNamesObject = {};
-    classNamesObject[basicClass.className] = true ;
-    if(this.state.show) {
-      classNamesObject[basicShowClass.className] = true ;
-    }
-    if(this.state.place === "top") {
-      classNamesObject[topPlaceClass.className] = true
-    }
-    if(this.state.place === "bottom") {
-      classNamesObject[bottomPlaceClass.className] = true;
-    }
-    var toolTipClass = classNames(classNamesObject)
 
     return (
-      <span className={toolTipClass} style={style} data-id="tooltip">{this.state.placeholder}</span>
+      <span className="reactTooltip" style={style} data-id="tooltip">{this.state.placeholder}</span>
     )
   }
 });
