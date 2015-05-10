@@ -3,19 +3,30 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {
-    "react": "^0.13.2",
-    "react-tooltip": "^0.1.7"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "reactify": "^1.1.0"
+    "babelify": "^6.0.2",
+    "live-reload": "^1.1.0",
+    "node-sass": "^2.1.1",
+    "react": "^0.13.2",
+    "react-tooltip": "^0.1.7",
+    "uglifyjs": "^2.4.10",
+    "watchify": "^3.2.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "livereload": "live-reload --port 8888 ./",
+    "build:js": "watchify index.js -t babelify -o bundle.js -dv ",
+    "build:css": "node-sass -w --output-style compressed index.scss index.css",
+    "dev": "npm run livereload & npm run build:js & npm run build:css"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/wwayne/react-tooltip.git"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
   },
   "author": "",
   "license": "ISC",

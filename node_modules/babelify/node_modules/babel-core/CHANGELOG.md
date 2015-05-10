@@ -13,6 +13,81 @@ _Note: Gaps between patch versions are faulty/broken releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.2.6
+
+ * **Internal**
+  * Fix transformer aliases being accidently set as deprecated ones.
+  * Expose `Pipeline` as `TransformerPipeline` instead.
+
+## 5.2.5
+
+ * **Bug Fix**
+  * Fix `parse` API not adding all the correct pipeline transformers.
+
+## 5.2.4
+
+ * **Bug Fix**
+  * Fix race condition with the Node API being loaded awkwardly and not being able to initialise itself when used in the browser.
+ * **Internal**
+  * Expose `transform.pipeline`.
+
+## 5.2.3
+
+ * **Bug Fix**
+  * Fix plugin containers being called with an undefined import. Thanks [@timbur](https://github.com/timbur)!
+  * Allow Flow object separators to be commas. Thanks [@monsanto](https://github.com/monsanto)!
+  * Add missing `Statement` and `Declaration` node aliases to flow types.
+
+## 5.2.2
+
+ * **Internal**
+  * Allow `util.arrayify` to take arbitrary types and coerce it into an array.
+
+## 5.2.1
+
+ * **Bug Fix**
+  * Fix regression in `node/register` that caused `node_modules` to not be ignored.
+
+## 5.2.0
+
+ * **Bug Fix**
+  * Fix plugin strings splitting arbitrarily on `:` which caused full paths on Windows to fail as they include `:` after the drive letter.
+  * Call class property `initializer`s with their target instead of their descriptor.
+  * Fix `ignore` and `only` not properly working on Windows path separators. Thanks [@stagas](https://github.com/stagas)!
+  * Fix `resolveRc` running on files twice causing issues. Thanks [@lukescott](https://github.com/lukescott)!
+  * Fix shorthand properties not correctly being target for `isReferenced` checks. Thanks [@monsanto](https://github.com/monsanto)!
+ * **Polish**
+  * Allow passing an array of globs to `babel/register` `only` and `ignore` options. Thanks [@Mark-Simulacrum](https://github.com/Mark-Simulacrum)!
+  * When inferring function names that collide with upper bindings, instead of doing the wrapper, instead rename them.
+  * Consider constant-like variable declaration functions to always refer to themselves so TOC can be performed.
+  * Process globs manually when using `$ babel` as some shells such as Windows don't explode them. Thanks [@jden](https://github.com/jden)!
+  * Add alternative way to execute plugins via a closure that's called with the current Babel instance.
+ * **Internal**
+  * Remove multiple internal transformers in favor of directly doing things when we need to. Previously, declarations such as `_ref` that we needed to create in specific scopes were done at the very end via the `_declarations` transformer. Now, they're done and added to the scope **right** when they're needed. This gets rid of the crappy `_declarations` property on scope nodes and fixes the crappy regenerator bug where it was creating a new `BlockStatement` so the declarations were being lost.
+  * Rework transformer traversal optimisation. Turns out that calling a `check` function for **every single node** in the AST is ridiculously expensive. 300,000 nodes timesed by ~30 transformers meant that it took tens of seconds to perform while it's quicker to just do the unnecessary traversal. Seems obvious in hindsight.
+ * **New Feature**
+  * Add `jscript` transformer that turns named function expressions into function declarations to get around [JScript's horribly broken function expression semantics](https://kangax.github.io/nfe/#jscript-bugs). Thanks [@kondi](https://github.com/kondi)!
+  * Add `@@hasInstance` support to objects when using the `es6.spec.symbols` transformer.
+  * Add `retainLines` option that retains the line (but not the columns!) of the input code.
+
+## 5.1.13
+
+ * **Polish**
+  * Remove symbol check from `defineProperty` helper.
+
+## 5.1.12
+
+ * **Bug Fix**
+  * Fix `resolveModuleSource` not being ran on `ExportAllDeclaration`s.
+  * Fix `.babelrc` being resolved multiple times when using the require hook.
+  * Fix parse error on spread properties in assignment position.
+  * Fix `externalHelpers` option being incorrectly listed as type `string`.
+ * **Internal**
+  * Upgrade `core-js` to `0.9.0`.
+ * **Spec Compliancy**
+  * Fix object decorators not using the `initializer` pattern.
+  * Remove property initializer descriptor reflection.
+
 ## 5.1.11
 
  * **Bug Fix**

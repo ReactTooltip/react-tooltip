@@ -1,18 +1,17 @@
 'use strict';
 
-var React = require("react");
-var ReactTooltip = require("react-tooltip");
+import React from "react";
+import ReactTooltip from "react-tooltip";
 
-var Index = React.createClass({
-  render: function() {
+const Test = React.createClass({
+  render() {
     return (
-      <section className="tooltip-example">
-        <p data-placeholder="foo">hover on me</p>
-        <p data-placeholder="This is another hover test" data-place="bottom">Tooltip from bottom</p>
+      <section>
+        <p data-placeholder="wangzixiao">hover</p>
         <ReactTooltip />
       </section>
     )
   }
 });
 
-React.render(<Index />,document.body)
+React.render(<Test />, document.body);

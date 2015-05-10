@@ -25,6 +25,13 @@
     "type": "string"
   },
 
+  "retainLines": {
+    "hidden": true,
+    "type": "boolean",
+    "default": false,
+    "description": "retain line numbers - will result in really ugly code"
+  },
+
   "nonStandard": {
     "type": "boolean",
     "default": true,
@@ -157,7 +164,7 @@
   },
 
   "externalHelpers": {
-    "type": "string",
+    "type": "boolean",
     "default": false,
     "shorthand": "r",
     "description": "uses a reference to `babelHelpers` instead of placing helpers at the top of your code."
@@ -206,6 +213,10 @@
     "default": false,
     "hidden": true,
     "description": "stop trying to load .babelrc files"
-  }
+  },
 
+  "babelrc": {
+    "hidden": true,
+    "description": "do not load the same .babelrc file twice"
+  }
 }
