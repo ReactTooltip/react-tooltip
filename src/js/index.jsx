@@ -32,8 +32,8 @@ const ReactTooltip = React.createClass({
   updateTooltip(e) {
     this.setState({
       show: true,
-      x: e.x,
-      y: e.y
+      x: e.clientX,
+      y: e.clientY
     })
   },
 

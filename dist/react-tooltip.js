@@ -45,8 +45,8 @@ var ReactTooltip = _react2['default'].createClass({
   updateTooltip: function updateTooltip(e) {
     this.setState({
       show: true,
-      x: e.x,
-      y: e.y
+      x: e.clientX,
+      y: e.clientY
     });
   },
 
