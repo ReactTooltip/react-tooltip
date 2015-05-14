@@ -18,13 +18,17 @@ npm install react-tooltip --save
 ```
 var ReactTooltip = require("react-tooltip")
 ```
+2 . Include css or scss file(you can find the file in dist folder) into your project
 
+```
+sass: @import "react-tooltip";
+``` 
 
-2 . Add data-placeholder = "your placeholder" to your element
+3 . Add data-placeholder = "your placeholder" to your element
 
 	<p data-placeholder="hello world">Tooltip</p>
 
-3 . Including react-tooltip component
+4 . Including react-tooltip component
 
 
 ```
