@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import classNames from 'classNames';
+import classname from 'classNames';
 
 const ReactTooltip = React.createClass({
 
@@ -62,8 +62,8 @@ const ReactTooltip = React.createClass({
   },
 
   render() {
-    var tipWidth = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientWidth:0;
-    var offset = {x:0, y:0};
+    let tipWidth = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientWidth:0;
+    let offset = {x:0, y:0};
     if(this.state.place === "top") {
       offset.x = -(tipWidth/2);
       offset.y = -50;
@@ -72,13 +72,15 @@ const ReactTooltip = React.createClass({
       offset.x = -(tipWidth/2);
       offset.y = 30;
     }
-    var style = {
+    let style = {
       left: this.state.x + offset.x + "px",
       top: this.state.y + offset.y + "px"
     }
 
+    let tooltipClass = classname({show: this.state.show},'reactTooltip');
+
     return (
-      <span className="reactTooltip" style={style} data-id="tooltip">{this.state.placeholder}</span>
+      <span className={tooltipClass} style={style} data-id="tooltip">{this.state.placeholder}</span>
     )
   }
 });

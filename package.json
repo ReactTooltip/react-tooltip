@@ -5,9 +5,12 @@
   "main": "dist/react-tooltip.js",
   "scripts": {
     "test": "jest",
-    "build:js": "watchify src/js/index.jsx -t babelify -o dist/react-tooltip.js -dv ",
-    "build:css": "node-sass -w --output-style compressed src/scss/style.scss dist/react-tooltip.css",
-    "dev": "npm run build:js & npm run build:css"
+    "build:js": "babel src/js/index.jsx --out-file dist/react-tooltip.js & babel src/js/index.jsx --out-file example/src/react-tooltip.js",
+    "build:css": "node-sass --output-style compressed src/scss/style.scss dist/react-tooltip.css & node-sass --output-style compressed src/scss/style.scss example/src/react-tooltip.css ",
+    "watch:js": "watchify src/js/index.jsx -t babelify -o dist/react-tooltip.js -dv & watchify src/js/index.jsx -t babelify -o example/src/react-tooltip.js -dv",
+    "watch:css": "node-sass -w --output-style compressed src/scss/style.scss dist/react-tooltip.css & node-sass -w --output-style compressed src/scss/style.scss example/src/react-tooltip.css ",
+    "build": "npm run build:js & npm run build:css",
+    "dev": "npm run watch:js & npm run watch:css"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/__tests__/preprocessor.js",
@@ -38,10 +41,10 @@
     "classnames": "^1.2.0"
   },
   "devDependencies": {
+    "babel": "^5.3.1",
     "babelify": "^6.0.2",
     "jest": "^0.1.39",
     "jest-cli": "^0.4.0",
-    "live-reload": "^1.1.0",
     "node-sass": "^3.0.0",
     "react": "^0.13.1",
     "react-tools": "^0.13.2",
