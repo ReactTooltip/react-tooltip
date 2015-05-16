@@ -7,7 +7,7 @@ React tooltip component, inspired by tooltipsy (a jquery plugin I've used)
 
 ### Installation
 
-```
+```sh
 npm install react-tooltip --save
 ```
 
@@ -15,12 +15,12 @@ npm install react-tooltip --save
 
 1 . Require react-tooltip after installation
 
-```
+```js
 var ReactTooltip = require("react-tooltip")
 ```
 2 . Include css or scss file(you can find them in dist folder) into your project
 
-```
+```js
 sass: @import "react-tooltip";
 ``` 
 
@@ -31,7 +31,7 @@ sass: @import "react-tooltip";
 4 . Including react-tooltip component
 
 
-```
+```js
 <ReactTooltip />
 ```
 
@@ -45,7 +45,7 @@ Check example:  [React-tooltip Test](http://wwayne.github.io/react-tooltip)
 
 ##### Place: String [ top, right, bottom, left ]
 
-```
+```js
 Specific element:
 	<p data-tip="tooltip" data-place="top"></p>
 
@@ -54,7 +54,7 @@ global:
 ```
 ##### Type: String [ dark, success, warning, error, info, light ]
 
-```
+```js
 Specific element:
 	<p data-tip="tooltip" data-type="dark"></p>
 		
@@ -63,7 +63,7 @@ global:
 ```
 ##### Effect: String [ float, solid ]
 
-```
+```js
 Specific element:
 	<p data-tip="tooltip" data-type="float"></p>
 	
