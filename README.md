@@ -18,7 +18,7 @@ npm install react-tooltip --save
 ```
 var ReactTooltip = require("react-tooltip")
 ```
-2 . Include css or scss file(you can find the file in dist folder) into your project
+2 . Include css or scss file(you can find them in dist folder) into your project
 
 ```
 sass: @import "react-tooltip";
@@ -26,7 +26,7 @@ sass: @import "react-tooltip";
 
 3 . Add data-placeholder = "your placeholder" to your element
 
-	<p data-placeholder="hello world">Tooltip</p>
+	<p data-tip="hello world">Tooltip</p>
 
 4 . Including react-tooltip component
 
@@ -36,28 +36,40 @@ sass: @import "react-tooltip";
 ```
 
 
-### Example
-[http://wwayne.github.io/react-tooltip](http://wwayne.github.io/react-tooltip/)
+### Options
+Every option has default value, You don't need to add option if default options are enough.
+
+The options set to `<ReactTooltip />` will affect all tootips in a same page and options set to specific element only affect the specific tooltip's behaviour
+
+##### Place: String ( top, right, bottom, left )
+Specific element:
+
+	<p data-tip="tooltip" data-place="top"></p>
+		
+global:	
 
 ```
-'use strict';
+<ReactTooltip place="top"/>
+```
+##### Type: String ( dark, success, warning, error, info, light )
+Specific element:
 
-var React = require("react");
-var ReactTooltip = require("../index");
+	<p data-tip="tooltip" data-type="dark"></p>
+		
+global:	
 
-var Index = React.createClass({
-  render: function() {
-    return (
-      <section className="tooltip-example">
-        <p data-placeholder="foo">hover on me</p>
-        <p data-placeholder="This is another hover test" data-place="bottom">Tooltip from bottom</p>
-        <ReactTooltip />
-      </section>
-    )
-  }
-});
+```
+<ReactTooltip type="dark"/>
+```
+##### Effect: String ( float, solid)
+Specific element:
 
-React.render(<Index />,document.body)
+	<p data-tip="tooltip" data-type="float"></p>
+	
+global:	
+
+```
+<ReactTooltip type="float"/>
 ```
 
 ### License

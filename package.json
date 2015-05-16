@@ -1,16 +1,13 @@
 {
   "name": "react-tooltip",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "react tooltip component",
   "main": "dist/react-tooltip.js",
   "scripts": {
     "test": "jest",
-    "build:js": "babel src/js/index.jsx --out-file dist/react-tooltip.js & babel src/js/index.jsx --out-file example/src/react-tooltip.js",
+    "build:js": "babel src/js/index.jsx --out-file dist/react-tooltip.js",
     "build:css": "node-sass --output-style compressed src/scss/style.scss dist/react-tooltip.min.css",
-    "watch:js": "npm run build:js & watchify src/js/index.jsx -t babelify -o dist/react-tooltip.js -dv & watchify src/js/index.jsx -t babelify -o example/src/react-tooltip.js -dv",
-    "watch:css": "npm run build:css & node-sass -w --output-style compressed src/scss/style.scss dist/react-tooltip.min.css",
-    "build": "npm run build:js & npm run build:css & cp src/scss/style.scss dist/react-tooltip.scss & cp src/scss/style.scss example/src/react-tooltip.scss",
-    "dev": "npm run watch:js & npm run watch:css"
+    "build": "npm run build:js & npm run build:css & cp src/scss/style.scss dist/react-tooltip.scss & cp src/scss/style.scss example/src/react-tooltip.scss & cp src/js/index.jsx example/src/react-tooltip.js"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/__tests__/preprocessor.js",

@@ -1,3 +1,5 @@
 node_modules/
 *.log
 .DS_Store*
+example/index.css
+example/index.js

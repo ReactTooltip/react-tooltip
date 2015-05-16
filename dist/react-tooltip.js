@@ -36,7 +36,7 @@ var ReactTooltip = _react2['default'].createClass({
 
   showTooltip: function showTooltip(e) {
     this.setState({
-      placeholder: e.target.dataset.placeholder,
+      placeholder: e.target.dataset.tip,
       place: e.target.dataset.place ? e.target.dataset.place : this.props.place ? this.props.place : 'top'
     });
     this.updateTooltip(e);
@@ -57,7 +57,7 @@ var ReactTooltip = _react2['default'].createClass({
   },
 
   componentDidMount: function componentDidMount() {
-    var targetArray = document.querySelectorAll('[data-placeholder]');
+    var targetArray = document.querySelectorAll('[data-tip]');
     for (var i = 0; i < targetArray.length; i++) {
       targetArray[i].addEventListener('mouseover', this.showTooltip, false);
       targetArray[i].addEventListener('mousemove', this.updateTooltip, false);
@@ -66,7 +66,7 @@ var ReactTooltip = _react2['default'].createClass({
   },
 
   componentWillUnmount: function componentWillUnmount() {
-    var targetArray = document.querySelectorAll('[data-placeholder]');
+    var targetArray = document.querySelectorAll('[data-tip]');
     for (var i = 0; i < targetArray.length; i++) {
       targetArray[i].removeEventListener('mouseover', this.showTooltip);
       targetArray[i].removeEventListener('mousemove', this.updateTooltip);

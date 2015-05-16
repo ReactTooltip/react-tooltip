@@ -10,7 +10,7 @@ var React = require('react/addons');
 //   var tooltip = TestUtils.renderIntoDocument(
 //     <ReactTooltip />
 //   );
-//   it('should render data-placeholder', function() {
+//   it('should render data-tip', function() {
 //     var span = TestUtils.findRenderDOMComponentWithTag(tooltip, "span");
 //     expect(span.getDOMNode().textContent).toEqual("");
 //
