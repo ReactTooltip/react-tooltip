@@ -11,12 +11,12 @@
     "node-sass": "^3.0.0",
     "react": "^0.13.1",
     "watchify": "^3.2.1",
-    "react-tooltip": "^0.2.0"
+    "react-tooltip": "^0.2.1"
   },
   "scripts": {
     "server": "http-server ./ -p 8888",
-    "build:js": "babel src/index.js --out-file ./index.js & watchify src/index.js -t babelify -o ./index.js -dv ",
-    "build:css": "node-sass --output-style compressed src/index.scss ./index.css & node-sass -w --output-style compressed src/index.scss ./index.css",
+    "build:js": "babel src/index.js --out-file dist/index.js & watchify src/index.js -t babelify -o dist/index.js -dv ",
+    "build:css": "node-sass --output-style compressed src/index.scss dist/index.css & node-sass -w --output-style compressed src/index.scss dist/index.css",
     "dev": "npm run server & npm run build:js & npm run build:css"
   },
   "repository": {
