@@ -5,28 +5,23 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
+    "babel": "^5.3.1",
     "babelify": "^6.0.2",
-    "live-reload": "^1.1.0",
-    "node-sass": "^2.1.1",
-    "react": "^0.13.2",
-    "react-tooltip": "^0.1.7",
-    "uglifyjs": "^2.4.10",
-    "watchify": "^3.2.1"
+    "http-server": "^0.8.0",
+    "node-sass": "^3.0.0",
+    "react": "^0.13.1",
+    "watchify": "^3.2.1",
+    "react-tooltip": "^0.2.0"
   },
   "scripts": {
-    "livereload": "live-reload --port 8888 ./",
-    "build:js": "watchify index.js -t babelify -o bundle.js -dv ",
-    "build:css": "node-sass -w --output-style compressed index.scss index.css",
-    "dev": "npm run livereload & npm run build:js & npm run build:css"
+    "server": "http-server ./ -p 8888",
+    "build:js": "babel src/index.js --out-file ./index.js & watchify src/index.js -t babelify -o ./index.js -dv ",
+    "build:css": "node-sass --output-style compressed src/index.scss ./index.css & node-sass -w --output-style compressed src/index.scss ./index.css",
+    "dev": "npm run server & npm run build:js & npm run build:css"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/wwayne/react-tooltip.git"
-  },
-  "browserify": {
-    "transform": [
-      "babelify"
-    ]
   },
   "author": "",
   "license": "ISC",
