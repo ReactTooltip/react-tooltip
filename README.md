@@ -24,7 +24,7 @@ var ReactTooltip = require("react-tooltip")
 sass: @import "react-tooltip";
 ``` 
 
-3 . Add data-placeholder = "your placeholder" to your element
+3 . Add data-tip = "your placeholder" to your element
 
 	<p data-tip="hello world">Tooltip</p>
 
