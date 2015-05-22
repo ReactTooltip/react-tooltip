@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import classname from 'classNames';
+import classname from 'classnames';
 
 const ReactTooltip = React.createClass({
 
