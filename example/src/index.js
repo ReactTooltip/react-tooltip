@@ -37,7 +37,11 @@ const Test = React.createClass({
       <section className="tooltip-example">
         <h4 className="title">React Tooltip</h4>
         <div className="demonstration">
-          <a data-tip="React-tooltip">( ◕‿‿◕ )</a>
+          <a data-tip="React-tooltip">
+            ( ◕‿‿◕ )
+            <p>akjlshfkjahlskjdfhjadsfjasdfhjkahdsjf</p>
+            <span>jksadhfklaskjdhfjk</span>
+          </a>
         </div>
         <div className="control-panel">
           <div className="button-group">

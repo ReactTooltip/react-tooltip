@@ -92,7 +92,7 @@ var ReactTooltip = _react2['default'].createClass({
   componentDidMount: function componentDidMount() {
     var targetArray = document.querySelectorAll('[data-tip]');
     for (var i = 0; i < targetArray.length; i++) {
-      targetArray[i].addEventListener('mouseover', this.showTooltip, false);
+      targetArray[i].addEventListener('mouseenter', this.showTooltip, false);
       targetArray[i].addEventListener('mousemove', this.updateTooltip, false);
       targetArray[i].addEventListener('mouseleave', this.hideTooltip, false);
     }
@@ -101,7 +101,7 @@ var ReactTooltip = _react2['default'].createClass({
   componentWillUnmount: function componentWillUnmount() {
     var targetArray = document.querySelectorAll('[data-tip]');
     for (var i = 0; i < targetArray.length; i++) {
-      targetArray[i].removeEventListener('mouseover', this.showTooltip);
+      targetArray[i].removeEventListener('mouseenter', this.showTooltip);
       targetArray[i].removeEventListener('mousemove', this.updateTooltip);
       targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
     }
