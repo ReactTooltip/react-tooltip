@@ -39,8 +39,6 @@ const Test = React.createClass({
         <div className="demonstration">
           <a data-tip="React-tooltip">
             ( ◕‿‿◕ )
-            <p>akjlshfkjahlskjdfhjadsfjasdfhjkahdsjf</p>
-            <span>jksadhfklaskjdhfjk</span>
           </a>
         </div>
         <div className="control-panel">

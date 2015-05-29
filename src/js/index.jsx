@@ -27,10 +27,10 @@ const ReactTooltip = React.createClass({
 
   showTooltip(e) {
     this.setState({
-      placeholder: e.target.dataset.tip,
-      place: e.target.dataset.place?e.target.dataset.place:(this.props.place?this.props.place:"top"),
-      type: e.target.dataset.type?e.target.dataset.type:(this.props.type?this.props.type:"dark"),
-      effect: e.target.dataset.effect?e.target.dataset.effect:(this.props.effect?this.props.effect:"float"),
+      placeholder: e.target.getAttribute("data-tip"),
+      place: e.target.getAttribute("data-place")?e.target.getAttribute("data-place"):(this.props.place?this.props.place:"top"),
+      type: e.target.getAttribute("data-type")?e.target.getAttribute("data-type"):(this.props.type?this.props.type:"dark"),
+      effect: e.target.getAttribute("data-effect")?e.target.getAttribute("data-effect"):(this.props.effect?this.props.effect:"float"),
     })
     this.updateTooltip(e);
   },
