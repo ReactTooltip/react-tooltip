@@ -5,7 +5,7 @@
   "main": "dist/react-tooltip.js",
   "scripts": {
     "test": "jest",
-    "build:js": "babel src/js/index.jsx --out-file dist/react-tooltip.js",
+    "build:js": "babel --modules umd src/js/index.jsx --out-file dist/react-tooltip.js",
     "build:css": "node-sass --output-style compressed src/scss/style.scss dist/react-tooltip.min.css",
     "build": "npm run build:js & npm run build:css & cp src/scss/style.scss dist/react-tooltip.scss & cp src/scss/style.scss example/src/react-tooltip.scss & cp src/js/index.jsx example/src/react-tooltip.js"
   },
