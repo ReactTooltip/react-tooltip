@@ -10,8 +10,7 @@
     "http-server": "^0.8.0",
     "node-sass": "^3.0.0",
     "react": "^0.13.1",
-    "watchify": "^3.2.1",
-    "react-tooltip": "^0.2.1"
+    "watchify": "^3.2.1"
   },
   "scripts": {
     "server": "http-server ./ -p 8888",
