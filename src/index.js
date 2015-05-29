@@ -1,7 +1,7 @@
 'use strict';
 
 import React from "react";
-import ReactTooltip from "react-tooltip";
+import ReactTooltip from "./react-tooltip.js";
 
 const Test = React.createClass({
 
@@ -37,7 +37,9 @@ const Test = React.createClass({
       <section className="tooltip-example">
         <h4 className="title">React Tooltip</h4>
         <div className="demonstration">
-          <a data-tip="React-tooltip">( ◕‿‿◕ )</a>
+          <a data-tip="React-tooltip">
+            ( ◕‿‿◕ )
+          </a>
         </div>
         <div className="control-panel">
           <div className="button-group">
@@ -55,7 +57,7 @@ const Test = React.createClass({
               <a className={type==="warning"?"active":""} onClick={this.changeType.bind(this,"warning")}>Warning</a>
               <a className={type==="error"?"active":""} onClick={this.changeType.bind(this,"error")}>Error</a>
               <a className={type==="info"?"active":""} onClick={this.changeType.bind(this,"info")}>Info</a>
-              <a className={type==="light"?"active":""} onClick={this.changeType.bind(this,"light")}>Light</a>
+              <a className={type==="dlight"?"active":""} onClick={this.changeType.bind(this,"light")}>Light</a>
             </div>
             <div className="item">
               <p>Effect</p>
@@ -68,7 +70,7 @@ const Test = React.createClass({
               <p className="label">Code</p>
               <hr></hr>
               <p>{"<a data-tip='React-tooltip'>( ◕‿‿◕ )</a>"}</p>
-              <p>{"<ReactTooltip place={"+place+"} type={"+type+"} effect={"+effect+"}/>"}</p>
+              <p>{"<ReactTooltip place='"+place+"' type='"+type+"' effect='"+effect+"'/>"}</p>
             </div>
           </pre>
         </div>
