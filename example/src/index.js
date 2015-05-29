@@ -72,7 +72,7 @@ const Test = React.createClass({
               <p className="label">Code</p>
               <hr></hr>
               <p>{"<a data-tip='React-tooltip'>( ◕‿‿◕ )</a>"}</p>
-              <p>{"<ReactTooltip place={"+place+"} type={"+type+"} effect={"+effect+"}/>"}</p>
+              <p>{"<ReactTooltip place='"+place+"' type='"+type+"' effect='"+effect+"'/>"}</p>
             </div>
           </pre>
         </div>
