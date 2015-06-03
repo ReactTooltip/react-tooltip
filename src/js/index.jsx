@@ -87,18 +87,22 @@ const ReactTooltip = React.createClass({
   componentDidMount() {
     var targetArray = document.querySelectorAll("[data-tip]");
     for(var i = 0; i < targetArray.length; i++) {
-      targetArray[i].addEventListener("mouseenter", this.showTooltip, false);
-      targetArray[i].addEventListener("mousemove", this.updateTooltip, false);
-      targetArray[i].addEventListener("mouseleave", this.hideTooltip, false);
+      if(targetArray[i].getAttribute("data-type") === this.props.type) {
+        targetArray[i].addEventListener("mouseenter", this.showTooltip, false);
+        targetArray[i].addEventListener("mousemove", this.updateTooltip, false);
+        targetArray[i].addEventListener("mouseleave", this.hideTooltip, false);
+      }
     }
   },
 
   componentWillUnmount() {
     var targetArray = document.querySelectorAll("[data-tip]");
     for(var i = 0; i < targetArray.length; i++) {
-      targetArray[i].removeEventListener("mouseenter", this.showTooltip);
-      targetArray[i].removeEventListener("mousemove", this.updateTooltip);
-      targetArray[i].removeEventListener("mouseleave", this.hideTooltip);
+      if (targetArray[i].getAttribute("data-type") === this.props.type) {
+        targetArray[i].removeEventListener("mouseover", this.showTooltip);
+        targetArray[i].removeEventListener("mousemove", this.updateTooltip);
+        targetArray[i].removeEventListener("mouseleave", this.hideTooltip);
+      }
     }
   },
 
