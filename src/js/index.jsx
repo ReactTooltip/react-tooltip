@@ -134,20 +134,16 @@ const ReactTooltip = React.createClass({
       top: this.state.y + offset.y + "px"
     }
 
-    let tooltipClass = classname(
-      'reactTooltip',
-      {"show": this.state.show},
-      {"place-top": this.state.place === "top"},
-      {"place-bottom": this.state.place === "bottom"},
-      {"place-left": this.state.place === "left"},
-      {"place-right": this.state.place === "right"},
-      {"type-dark": this.state.type === "dark"},
-      {"type-success": this.state.type === "success"},
-      {"type-warning": this.state.type === "warning"},
-      {"type-error": this.state.type === "error"},
-      {"type-info": this.state.type === "info"},
-      {"type-light": this.state.type === "light"}
-    );
+    let tooltipClass = {
+      'reactTooltip' :  true,
+      "show": this.state.show,
+      "place-top": this.state.place === "top",
+      "place-bottom": this.state.place === "bottom",
+      "place-left": this.state.place === "left",
+      "place-right": this.state.place === "right"
+    }
+    tooltipClass['type-' + this.state.type] = true
+    tooltipClass = classname(tooltipClass)
 
     return (
       <span className={tooltipClass} style={style} data-id="tooltip">{this.state.placeholder}</span>
