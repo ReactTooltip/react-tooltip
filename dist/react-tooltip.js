@@ -21,7 +21,8 @@ var ReactTooltip = _react2['default'].createClass({
   propTypes: {
     place: _react2['default'].PropTypes.string,
     type: _react2['default'].PropTypes.string,
-    effect: _react2['default'].PropTypes.string },
+    effect: _react2['default'].PropTypes.string
+  },
 
   getInitialState: function getInitialState() {
     return {
@@ -31,7 +32,8 @@ var ReactTooltip = _react2['default'].createClass({
       y: 'NONE',
       place: '',
       type: '',
-      effect: '' };
+      effect: ''
+    };
   },
 
   showTooltip: function showTooltip(e) {
@@ -39,7 +41,8 @@ var ReactTooltip = _react2['default'].createClass({
       placeholder: e.target.getAttribute('data-tip'),
       place: e.target.getAttribute('data-place') ? e.target.getAttribute('data-place') : this.props.place ? this.props.place : 'top',
       type: e.target.getAttribute('data-type') ? e.target.getAttribute('data-type') : this.props.type ? this.props.type : 'dark',
-      effect: e.target.getAttribute('data-effect') ? e.target.getAttribute('data-effect') : this.props.effect ? this.props.effect : 'float' });
+      effect: e.target.getAttribute('data-effect') ? e.target.getAttribute('data-effect') : this.props.effect ? this.props.effect : 'float'
+    });
     this.updateTooltip(e);
   },
 
@@ -86,11 +89,14 @@ var ReactTooltip = _react2['default'].createClass({
     this.setState({
       show: false,
       x: 'NONE',
-      y: 'NONE' });
+      y: 'NONE'
+    });
   },
 
   componentDidMount: function componentDidMount() {
-    var targetArray = document.querySelectorAll('[data-tip]');
+    var targetArray = Array.prototype.slice.apply(document.querySelectorAll('[data-tip]')).filter(function (target, index) {
+      return target.getAttribute('data-tip').length > 0;
+    });
     for (var i = 0; i < targetArray.length; i++) {
       targetArray[i].addEventListener('mouseenter', this.showTooltip, false);
       targetArray[i].addEventListener('mousemove', this.updateTooltip, false);
@@ -99,7 +105,9 @@ var ReactTooltip = _react2['default'].createClass({
   },
 
   componentWillUnmount: function componentWillUnmount() {
-    var targetArray = document.querySelectorAll('[data-tip]');
+    var targetArray = Array.prototype.slice.apply(document.querySelectorAll('[data-tip]')).filter(function (target, index) {
+      return target.getAttribute('data-tip').length > 0;
+    });
     for (var i = 0; i < targetArray.length; i++) {
       targetArray[i].removeEventListener('mouseenter', this.showTooltip);
       targetArray[i].removeEventListener('mousemove', this.updateTooltip);
