@@ -47,41 +47,43 @@ var ReactTooltip = _react2['default'].createClass({
   },
 
   updateTooltip: function updateTooltip(e) {
-    if (this.state.effect === 'float') {
-      this.setState({
-        show: true,
-        x: e.clientX,
-        y: e.clientY
-      });
-    } else if (this.state.effect === 'solid') {
-      var targetTop = e.target.getBoundingClientRect().top;
-      var targetLeft = e.target.getBoundingClientRect().left;
-      var tipWidth = document.querySelector('[data-id=\'tooltip\']') ? document.querySelector('[data-id=\'tooltip\']').clientWidth : 0;
-      var tipHeight = document.querySelector('[data-id=\'tooltip\']') ? document.querySelector('[data-id=\'tooltip\']').clientHeight : 0;
-      var targetWidth = e.target.clientWidth;
-      var targetHeight = e.target.clientHeight;
-      var place = this.state.place;
+    if (this.trim(this.state.placeholder).length > 0) {
+      if (this.state.effect === 'float') {
+        this.setState({
+          show: true,
+          x: e.clientX,
+          y: e.clientY
+        });
+      } else if (this.state.effect === 'solid') {
+        var targetTop = e.target.getBoundingClientRect().top;
+        var targetLeft = e.target.getBoundingClientRect().left;
+        var tipWidth = document.querySelector('[data-id=\'tooltip\']') ? document.querySelector('[data-id=\'tooltip\']').clientWidth : 0;
+        var tipHeight = document.querySelector('[data-id=\'tooltip\']') ? document.querySelector('[data-id=\'tooltip\']').clientHeight : 0;
+        var targetWidth = e.target.clientWidth;
+        var targetHeight = e.target.clientHeight;
+        var place = this.state.place;
 
-      var x = undefined,
-          y = undefined;
-      if (place === 'top') {
-        x = targetLeft - tipWidth / 2 + targetWidth / 2;
-        y = targetTop - tipHeight - 8;
-      } else if (place === 'bottom') {
-        x = targetLeft - tipWidth / 2 + targetWidth / 2;
-        y = targetTop + targetHeight + 8;
-      } else if (place === 'left') {
-        x = targetLeft - tipWidth - 6;
-        y = targetTop + targetHeight / 2 - tipHeight / 2;
-      } else if (place === 'right') {
-        x = targetLeft + targetWidth + 6;
-        y = targetTop + targetHeight / 2 - tipHeight / 2;
+        var x = undefined,
+            y = undefined;
+        if (place === 'top') {
+          x = targetLeft - tipWidth / 2 + targetWidth / 2;
+          y = targetTop - tipHeight - 8;
+        } else if (place === 'bottom') {
+          x = targetLeft - tipWidth / 2 + targetWidth / 2;
+          y = targetTop + targetHeight + 8;
+        } else if (place === 'left') {
+          x = targetLeft - tipWidth - 6;
+          y = targetTop + targetHeight / 2 - tipHeight / 2;
+        } else if (place === 'right') {
+          x = targetLeft + targetWidth + 6;
+          y = targetTop + targetHeight / 2 - tipHeight / 2;
+        }
+        this.setState({
+          show: true,
+          x: this.state.x === 'NONE' ? x : this.state.x,
+          y: this.state.y === 'NONE' ? y : this.state.y
+        });
       }
-      this.setState({
-        show: true,
-        x: this.state.x === 'NONE' ? x : this.state.x,
-        y: this.state.y === 'NONE' ? y : this.state.y
-      });
     }
   },
 
@@ -93,10 +95,29 @@ var ReactTooltip = _react2['default'].createClass({
     });
   },
 
+  trim: function trim(string) {
+    var newString = string.split('');
+    var firstCount = 0,
+        lastCount = 0;
+    for (var i = 0; i < string.length; i++) {
+      if (string[i] !== ' ') {
+        break;
+      }
+      firstCount++;
+    }
+    for (var i = string.length - 1; i >= 0; i--) {
+      if (string[i] !== ' ') {
+        break;
+      }
+      lastCount++;
+    }
+    newString.splice(0, firstCount);
+    newString.splice(-lastCount, lastCount);
+    return newString.join('');
+  },
+
   componentDidMount: function componentDidMount() {
-    var targetArray = Array.prototype.slice.apply(document.querySelectorAll('[data-tip]')).filter(function (target, index) {
-      return target.getAttribute('data-tip').length > 0;
-    });
+    var targetArray = document.querySelectorAll('[data-tip]');
     for (var i = 0; i < targetArray.length; i++) {
       targetArray[i].addEventListener('mouseenter', this.showTooltip, false);
       targetArray[i].addEventListener('mousemove', this.updateTooltip, false);
@@ -105,9 +126,7 @@ var ReactTooltip = _react2['default'].createClass({
   },
 
   componentWillUnmount: function componentWillUnmount() {
-    var targetArray = Array.prototype.slice.apply(document.querySelectorAll('[data-tip]')).filter(function (target, index) {
-      return target.getAttribute('data-tip').length > 0;
-    });
+    var targetArray = document.querySelectorAll('[data-tip]');
     for (var i = 0; i < targetArray.length; i++) {
       targetArray[i].removeEventListener('mouseenter', this.showTooltip);
       targetArray[i].removeEventListener('mousemove', this.updateTooltip);

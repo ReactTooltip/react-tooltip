@@ -36,43 +36,45 @@ const ReactTooltip = React.createClass({
   },
 
   updateTooltip(e) {
-    if(this.state.effect === "float") {
-      this.setState({
-        show: true,
-        x: e.clientX,
-        y: e.clientY
-      })
-    }
-    else if(this.state.effect === "solid"){
-      let targetTop = e.target.getBoundingClientRect().top;
-      let targetLeft = e.target.getBoundingClientRect().left;
-      let tipWidth = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientWidth:0;
-      let tipHeight = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientHeight:0;
-      let targetWidth = e.target.clientWidth;
-      let targetHeight = e.target.clientHeight;
-      let { place } = this.state;
-      let x, y ;
-      if(place === "top") {
-        x = targetLeft - (tipWidth/2) + (targetWidth/2);
-        y = targetTop - tipHeight - 8;
+    if(this.trim(this.state.placeholder).length > 0) {
+      if(this.state.effect === "float") {
+        this.setState({
+          show: true,
+          x: e.clientX,
+          y: e.clientY
+        })
       }
-      else if(place === "bottom") {
-        x = targetLeft - (tipWidth/2) + (targetWidth/2);
-        y = targetTop + targetHeight + 8;
+      else if(this.state.effect === "solid"){
+        let targetTop = e.target.getBoundingClientRect().top;
+        let targetLeft = e.target.getBoundingClientRect().left;
+        let tipWidth = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientWidth:0;
+        let tipHeight = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientHeight:0;
+        let targetWidth = e.target.clientWidth;
+        let targetHeight = e.target.clientHeight;
+        let { place } = this.state;
+        let x, y ;
+        if(place === "top") {
+          x = targetLeft - (tipWidth/2) + (targetWidth/2);
+          y = targetTop - tipHeight - 8;
+        }
+        else if(place === "bottom") {
+          x = targetLeft - (tipWidth/2) + (targetWidth/2);
+          y = targetTop + targetHeight + 8;
+        }
+        else if(place === "left") {
+          x = targetLeft - tipWidth - 6;
+          y = targetTop + (targetHeight/2) - (tipHeight/2);
+        }
+        else if(place === "right") {
+          x = targetLeft + targetWidth + 6;
+          y = targetTop + (targetHeight/2) - (tipHeight/2);
+        }
+        this.setState({
+          show: true,
+          x: this.state.x === "NONE" ? x : this.state.x,
+          y: this.state.y === "NONE" ? y : this.state.y
+        })
       }
-      else if(place === "left") {
-        x = targetLeft - tipWidth - 6;
-        y = targetTop + (targetHeight/2) - (tipHeight/2);
-      }
-      else if(place === "right") {
-        x = targetLeft + targetWidth + 6;
-        y = targetTop + (targetHeight/2) - (tipHeight/2);
-      }
-      this.setState({
-        show: true,
-        x: this.state.x === "NONE" ? x : this.state.x,
-        y: this.state.y === "NONE" ? y : this.state.y
-      })
     }
   },
 
@@ -84,11 +86,28 @@ const ReactTooltip = React.createClass({
     });
   },
 
+  trim(string) {
+    let newString = string.split("");
+    let firstCount = 0, lastCount = 0;
+    for(let i = 0; i < string.length; i++) {
+      if(string[i] !== " ") {
+        break;
+      }
+      firstCount++;
+    }
+    for(let i = string.length-1; i >= 0; i--) {
+      if(string[i] !== " ") {
+        break;
+      }
+      lastCount++;
+    }
+    newString.splice(0, firstCount);
+    newString.splice(-lastCount, lastCount);
+    return newString.join("");
+  },
+
   componentDidMount() {
-    let targetArray = Array.prototype.slice.apply(document.querySelectorAll("[data-tip]"))
-      .filter((target, index) => {
-        return target.getAttribute("data-tip").length > 0;
-      });
+    let targetArray = document.querySelectorAll("[data-tip]");
     for(let i = 0; i < targetArray.length; i++) {
       targetArray[i].addEventListener("mouseenter", this.showTooltip, false);
       targetArray[i].addEventListener("mousemove", this.updateTooltip, false);
@@ -97,10 +116,7 @@ const ReactTooltip = React.createClass({
   },
 
   componentWillUnmount() {
-    let targetArray = Array.prototype.slice.apply(document.querySelectorAll("[data-tip]"))
-      .filter((target, index) => {
-        return target.getAttribute("data-tip").length > 0;
-      });
+    let targetArray = document.querySelectorAll("[data-tip]");
     for(let i = 0; i < targetArray.length; i++) {
       targetArray[i].removeEventListener("mouseenter", this.showTooltip);
       targetArray[i].removeEventListener("mousemove", this.updateTooltip);
