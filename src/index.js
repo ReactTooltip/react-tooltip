@@ -1,7 +1,7 @@
 'use strict';
 
 import React from "react";
-import ReactTooltip from "./react-tooltip.js";
+import ReactTooltip from "react-tooltip";
 
 const Test = React.createClass({
 
@@ -38,7 +38,7 @@ const Test = React.createClass({
         <h4 className="title">React Tooltip</h4>
         <div className="demonstration">
           <a data-tip="React-tooltip">
-             ◕‿‿◕ 
+            ( ◕‿‿◕ )
           </a>
         </div>
         <div className="control-panel">
@@ -69,12 +69,12 @@ const Test = React.createClass({
             <div>
               <p className="label">Code</p>
               <hr></hr>
-              <p>{"<a data-tip='React-tooltip'> ◕‿‿◕ </a>"}</p>
+              <p>{"<a data-tip='React-tooltip'>( ◕‿‿◕ )</a>"}</p>
               <p>{"<ReactTooltip place='"+place+"' type='"+type+"' effect='"+effect+"'/>"}</p>
             </div>
           </pre>
         </div>
-        <ReactTooltip place={place} type={type} effect={effect} />
+        <ReactTooltip place={place} type={type} effect={effect}/>
       </section>
     )
   }

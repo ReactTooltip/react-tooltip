@@ -11,6 +11,7 @@ const ReactTooltip = React.createClass({
     place: React.PropTypes.string,
     type: React.PropTypes.string,
     effect: React.PropTypes.string,
+    positon: React.PropTypes.object,
   },
 
   getInitialState() {
@@ -22,6 +23,25 @@ const ReactTooltip = React.createClass({
       place: "",
       type: "",
       effect: "",
+      position: {},
+    }
+  },
+
+  componentDidMount() {
+    let targetArray = document.querySelectorAll("[data-tip]");
+    for(let i = 0; i < targetArray.length; i++) {
+      targetArray[i].addEventListener("mouseenter", this.showTooltip, false);
+      targetArray[i].addEventListener("mousemove", this.updateTooltip, false);
+      targetArray[i].addEventListener("mouseleave", this.hideTooltip, false);
+    }
+  },
+
+  componentWillUnmount() {
+    let targetArray = document.querySelectorAll("[data-tip]");
+    for(let i = 0; i < targetArray.length; i++) {
+      targetArray[i].removeEventListener("mouseenter", this.showTooltip);
+      targetArray[i].removeEventListener("mousemove", this.updateTooltip);
+      targetArray[i].removeEventListener("mouseleave", this.hideTooltip);
     }
   },
 
@@ -31,6 +51,7 @@ const ReactTooltip = React.createClass({
       place: e.target.getAttribute("data-place")?e.target.getAttribute("data-place"):(this.props.place?this.props.place:"top"),
       type: e.target.getAttribute("data-type")?e.target.getAttribute("data-type"):(this.props.type?this.props.type:"dark"),
       effect: e.target.getAttribute("data-effect")?e.target.getAttribute("data-effect"):(this.props.effect?this.props.effect:"float"),
+      position: e.target.getAttribute("data-position")?e.target.getAttribute("data-position"):(this.props.position?this.props.position:{}),
     })
     this.updateTooltip(e);
   },
@@ -106,24 +127,6 @@ const ReactTooltip = React.createClass({
     return newString.join("");
   },
 
-  componentDidMount() {
-    let targetArray = document.querySelectorAll("[data-tip]");
-    for(let i = 0; i < targetArray.length; i++) {
-      targetArray[i].addEventListener("mouseenter", this.showTooltip, false);
-      targetArray[i].addEventListener("mousemove", this.updateTooltip, false);
-      targetArray[i].addEventListener("mouseleave", this.hideTooltip, false);
-    }
-  },
-
-  componentWillUnmount() {
-    let targetArray = document.querySelectorAll("[data-tip]");
-    for(let i = 0; i < targetArray.length; i++) {
-      targetArray[i].removeEventListener("mouseenter", this.showTooltip);
-      targetArray[i].removeEventListener("mousemove", this.updateTooltip);
-      targetArray[i].removeEventListener("mouseleave", this.hideTooltip);
-    }
-  },
-
   render() {
     let tipWidth = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientWidth:0;
     let tipHeight = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientHeight:0;
@@ -147,9 +150,28 @@ const ReactTooltip = React.createClass({
         offset.y = -(tipHeight/2);
       }
     }
+    let xPosition = 0, yPosition = 0, {position} = this.state;
+    if(Object.prototype.toString.apply(position) === "[object String]") {
+      position = JSON.parse(position);
+    }
+    for(let key in position) {
+      if(key === "top") {
+        yPosition -= parseInt(position[key]);
+      }
+      else if(key === "bottom") {
+        yPosition += parseInt(position[key]);
+      }
+      else if(key === "left") {
+        xPosition -= parseInt(position[key]);
+      }
+      else if(key === "right") {
+        xPosition += parseInt(position[key]);
+      }
+    }
+
     let style = {
-      left: this.state.x + offset.x + "px",
-      top: this.state.y + offset.y + "px"
+      left: this.state.x + offset.x + xPosition + "px",
+      top: this.state.y + offset.y + yPosition + "px"
     }
 
     let tooltipClass = classname(
