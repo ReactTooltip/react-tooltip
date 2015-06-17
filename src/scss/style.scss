@@ -33,6 +33,7 @@
   pointer-events: none;
   transition: opacity 0.3s ease-out , margin-top 0.3s ease-out, margin-left 0.3s ease-out;
   top: -999em;
+  z-index: 99999;
   &:after {
     content: "";
     width: 0;
