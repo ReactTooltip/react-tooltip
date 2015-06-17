@@ -14,6 +14,55 @@ const ReactTooltip = React.createClass({
     positon: React.PropTypes.object,
   },
 
+  _updatePosition: function(){
+    let tipWidth = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientWidth:0;
+    let tipHeight = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientHeight:0;
+    let offset = {x:0, y:0};
+    let { effect } = this.state;
+    if(effect === "float") {
+      if(this.state.place === "top") {
+        offset.x = -(tipWidth/2);
+        offset.y = -50;
+      }
+      else if(this.state.place === "bottom") {
+        offset.x = -(tipWidth/2);
+        offset.y = 30;
+      }
+      else if(this.state.place === "left") {
+        offset.x = -(tipWidth + 15);
+        offset.y = -(tipHeight/2);
+      }
+      else if(this.state.place === "right") {
+        offset.x = 10;
+        offset.y = -(tipHeight/2);
+      }
+    }
+    let xPosition = 0, yPosition = 0, {position} = this.state;
+    if(Object.prototype.toString.apply(position) === "[object String]") {
+      position = JSON.parse(position);
+    }
+    for(let key in position) {
+      if(key === "top") {
+        yPosition -= parseInt(position[key]);
+      }
+      else if(key === "bottom") {
+        yPosition += parseInt(position[key]);
+      }
+      else if(key === "left") {
+        xPosition -= parseInt(position[key]);
+      }
+      else if(key === "right") {
+        xPosition += parseInt(position[key]);
+      }
+    }
+
+    let node = React.findDOMNode(this);
+    
+    node.style.left = this.state.x + offset.x + xPosition + 'px';
+    node.style.top = this.state.y + offset.y + yPosition + 'px';
+    
+  },
+  
   getInitialState() {
     return {
       show: false,
@@ -28,6 +77,9 @@ const ReactTooltip = React.createClass({
   },
 
   componentDidMount() {
+    
+    this._updatePosition();
+    
     let targetArray = document.querySelectorAll("[data-tip]");
     for(let i = 0; i < targetArray.length; i++) {
       targetArray[i].addEventListener("mouseenter", this.showTooltip, false);
@@ -45,6 +97,10 @@ const ReactTooltip = React.createClass({
     }
   },
 
+  componentDidUpdate(){
+    this._updatePosition();
+  },
+  
   showTooltip(e) {
     this.setState({
       placeholder: e.target.getAttribute("data-tip"),
@@ -128,52 +184,7 @@ const ReactTooltip = React.createClass({
   },
 
   render() {
-    let tipWidth = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientWidth:0;
-    let tipHeight = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientHeight:0;
-    let offset = {x:0, y:0};
-    let { effect } = this.state;
-    if(effect === "float") {
-      if(this.state.place === "top") {
-        offset.x = -(tipWidth/2);
-        offset.y = -50;
-      }
-      else if(this.state.place === "bottom") {
-        offset.x = -(tipWidth/2);
-        offset.y = 30;
-      }
-      else if(this.state.place === "left") {
-        offset.x = -(tipWidth + 15);
-        offset.y = -(tipHeight/2);
-      }
-      else if(this.state.place === "right") {
-        offset.x = 10;
-        offset.y = -(tipHeight/2);
-      }
-    }
-    let xPosition = 0, yPosition = 0, {position} = this.state;
-    if(Object.prototype.toString.apply(position) === "[object String]") {
-      position = JSON.parse(position);
-    }
-    for(let key in position) {
-      if(key === "top") {
-        yPosition -= parseInt(position[key]);
-      }
-      else if(key === "bottom") {
-        yPosition += parseInt(position[key]);
-      }
-      else if(key === "left") {
-        xPosition -= parseInt(position[key]);
-      }
-      else if(key === "right") {
-        xPosition += parseInt(position[key]);
-      }
-    }
-
-    let style = {
-      left: this.state.x + offset.x + xPosition + "px",
-      top: this.state.y + offset.y + yPosition + "px"
-    }
-
+    
     let tooltipClass = classname(
       'reactTooltip',
       {"show": this.state.show},
@@ -190,7 +201,7 @@ const ReactTooltip = React.createClass({
     );
 
     return (
-      <span className={tooltipClass} style={style} data-id="tooltip">{this.state.placeholder}</span>
+      <span className={tooltipClass} data-id="tooltip">{this.state.placeholder}</span>
     )
   }
 });
