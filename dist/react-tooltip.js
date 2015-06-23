@@ -22,7 +22,54 @@ var ReactTooltip = _react2['default'].createClass({
     place: _react2['default'].PropTypes.string,
     type: _react2['default'].PropTypes.string,
     effect: _react2['default'].PropTypes.string,
-    positon: _react2['default'].PropTypes.object
+    positon: _react2['default'].PropTypes.object },
+
+  getInitialState: function getInitialState() {
+    return {
+      show: false,
+      placeholder: '',
+      x: 'NONE',
+      y: 'NONE',
+      place: '',
+      type: '',
+      effect: '',
+      position: {} };
+  },
+
+  componentDidMount: function componentDidMount() {
+    this._updatePosition();
+    this.bindListener();
+  },
+
+  componentWillUnmount: function componentWillUnmount() {
+    this.unbindListener();
+  },
+
+  componentWillUpdate: function componentWillUpdate() {
+    this.unbindListener();
+  },
+
+  componentDidUpdate: function componentDidUpdate() {
+    this._updatePosition();
+    this.bindListener();
+  },
+
+  bindListener: function bindListener() {
+    var targetArray = document.querySelectorAll('[data-tip]');
+    for (var i = 0; i < targetArray.length; i++) {
+      targetArray[i].addEventListener('mouseenter', this.showTooltip, false);
+      targetArray[i].addEventListener('mousemove', this.updateTooltip, false);
+      targetArray[i].addEventListener('mouseleave', this.hideTooltip, false);
+    }
+  },
+
+  unbindListener: function unbindListener() {
+    var targetArray = document.querySelectorAll('[data-tip]');
+    for (var i = 0; i < targetArray.length; i++) {
+      targetArray[i].removeEventListener('mouseenter', this.showTooltip);
+      targetArray[i].removeEventListener('mousemove', this.updateTooltip);
+      targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
+    }
   },
 
   _updatePosition: function _updatePosition() {
@@ -69,52 +116,13 @@ var ReactTooltip = _react2['default'].createClass({
     node.style.top = this.state.y + offset.y + yPosition + 'px';
   },
 
-  getInitialState: function getInitialState() {
-    return {
-      show: false,
-      placeholder: '',
-      x: 'NONE',
-      y: 'NONE',
-      place: '',
-      type: '',
-      effect: '',
-      position: {}
-    };
-  },
-
-  componentDidMount: function componentDidMount() {
-
-    this._updatePosition();
-
-    var targetArray = document.querySelectorAll('[data-tip]');
-    for (var i = 0; i < targetArray.length; i++) {
-      targetArray[i].addEventListener('mouseenter', this.showTooltip, false);
-      targetArray[i].addEventListener('mousemove', this.updateTooltip, false);
-      targetArray[i].addEventListener('mouseleave', this.hideTooltip, false);
-    }
-  },
-
-  componentWillUnmount: function componentWillUnmount() {
-    var targetArray = document.querySelectorAll('[data-tip]');
-    for (var i = 0; i < targetArray.length; i++) {
-      targetArray[i].removeEventListener('mouseenter', this.showTooltip);
-      targetArray[i].removeEventListener('mousemove', this.updateTooltip);
-      targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
-    }
-  },
-
-  componentDidUpdate: function componentDidUpdate() {
-    this._updatePosition();
-  },
-
   showTooltip: function showTooltip(e) {
     this.setState({
       placeholder: e.target.getAttribute('data-tip'),
       place: e.target.getAttribute('data-place') ? e.target.getAttribute('data-place') : this.props.place ? this.props.place : 'top',
       type: e.target.getAttribute('data-type') ? e.target.getAttribute('data-type') : this.props.type ? this.props.type : 'dark',
       effect: e.target.getAttribute('data-effect') ? e.target.getAttribute('data-effect') : this.props.effect ? this.props.effect : 'float',
-      position: e.target.getAttribute('data-position') ? e.target.getAttribute('data-position') : this.props.position ? this.props.position : {}
-    });
+      position: e.target.getAttribute('data-position') ? e.target.getAttribute('data-position') : this.props.position ? this.props.position : {} });
     this.updateTooltip(e);
   },
 
@@ -163,8 +171,17 @@ var ReactTooltip = _react2['default'].createClass({
     this.setState({
       show: false,
       x: 'NONE',
-      y: 'NONE'
-    });
+      y: 'NONE' });
+  },
+
+  render: function render() {
+    var tooltipClass = (0, _classnames2['default'])('reactTooltip', { 'show': this.state.show }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
+
+    return _react2['default'].createElement(
+      'span',
+      { className: tooltipClass, 'data-id': 'tooltip' },
+      this.state.placeholder
+    );
   },
 
   trim: function trim(string) {
@@ -186,19 +203,7 @@ var ReactTooltip = _react2['default'].createClass({
     newString.splice(0, firstCount);
     newString.splice(-lastCount, lastCount);
     return newString.join('');
-  },
-
-  render: function render() {
-
-    var tooltipClass = (0, _classnames2['default'])('reactTooltip', { 'show': this.state.show }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
-
-    return _react2['default'].createElement(
-      'span',
-      { className: tooltipClass, 'data-id': 'tooltip' },
-      this.state.placeholder
-    );
-  }
-});
+  } });
 
 exports['default'] = ReactTooltip;
 module.exports = exports['default'];
