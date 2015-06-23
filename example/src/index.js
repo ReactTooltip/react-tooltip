@@ -9,7 +9,8 @@ const Test = React.createClass({
     return {
       place: "top",
       type: "dark",
-      effect: "float"
+      effect: "float",
+      condition: false,
     }
   },
 
@@ -31,6 +32,12 @@ const Test = React.createClass({
     })
   },
 
+  _onClick() {
+    this.setState({
+      condition: true,
+    })
+  },
+
   render() {
     let { place, type, effect } = this.state;
     return (
@@ -39,7 +46,7 @@ const Test = React.createClass({
         <div className="demonstration">
           <a data-tip="React-tooltip">
              ◕‿‿◕ 
-          </a>
+          </a>       
         </div>
         <div className="control-panel">
           <div className="button-group">
