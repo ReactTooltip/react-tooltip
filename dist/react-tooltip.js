@@ -22,7 +22,8 @@ var ReactTooltip = _react2['default'].createClass({
     place: _react2['default'].PropTypes.string,
     type: _react2['default'].PropTypes.string,
     effect: _react2['default'].PropTypes.string,
-    positon: _react2['default'].PropTypes.object },
+    positon: _react2['default'].PropTypes.object
+  },
 
   getInitialState: function getInitialState() {
     return {
@@ -33,7 +34,8 @@ var ReactTooltip = _react2['default'].createClass({
       place: '',
       type: '',
       effect: '',
-      position: {} };
+      position: {}
+    };
   },
 
   componentDidMount: function componentDidMount() {
@@ -73,8 +75,10 @@ var ReactTooltip = _react2['default'].createClass({
   },
 
   _updatePosition: function _updatePosition() {
-    var tipWidth = document.querySelector('[data-id=\'tooltip\']') ? document.querySelector('[data-id=\'tooltip\']').clientWidth : 0;
-    var tipHeight = document.querySelector('[data-id=\'tooltip\']') ? document.querySelector('[data-id=\'tooltip\']').clientHeight : 0;
+    var node = _react2['default'].findDOMNode(this);
+
+    var tipWidth = node.clientWidth;
+    var tipHeight = node.clientHeight;
     var offset = { x: 0, y: 0 };
     var effect = this.state.effect;
 
@@ -110,8 +114,6 @@ var ReactTooltip = _react2['default'].createClass({
       }
     }
 
-    var node = _react2['default'].findDOMNode(this);
-
     node.style.left = this.state.x + offset.x + xPosition + 'px';
     node.style.top = this.state.y + offset.y + yPosition + 'px';
   },
@@ -122,7 +124,8 @@ var ReactTooltip = _react2['default'].createClass({
       place: e.target.getAttribute('data-place') ? e.target.getAttribute('data-place') : this.props.place ? this.props.place : 'top',
       type: e.target.getAttribute('data-type') ? e.target.getAttribute('data-type') : this.props.type ? this.props.type : 'dark',
       effect: e.target.getAttribute('data-effect') ? e.target.getAttribute('data-effect') : this.props.effect ? this.props.effect : 'float',
-      position: e.target.getAttribute('data-position') ? e.target.getAttribute('data-position') : this.props.position ? this.props.position : {} });
+      position: e.target.getAttribute('data-position') ? e.target.getAttribute('data-position') : this.props.position ? this.props.position : {}
+    });
     this.updateTooltip(e);
   },
 
@@ -137,8 +140,9 @@ var ReactTooltip = _react2['default'].createClass({
       } else if (this.state.effect === 'solid') {
         var targetTop = e.target.getBoundingClientRect().top;
         var targetLeft = e.target.getBoundingClientRect().left;
-        var tipWidth = document.querySelector('[data-id=\'tooltip\']') ? document.querySelector('[data-id=\'tooltip\']').clientWidth : 0;
-        var tipHeight = document.querySelector('[data-id=\'tooltip\']') ? document.querySelector('[data-id=\'tooltip\']').clientHeight : 0;
+        var node = _react2['default'].findDOMNode(this);
+        var tipWidth = node.clientWidth;
+        var tipHeight = node.clientHeight;
         var targetWidth = e.target.clientWidth;
         var targetHeight = e.target.clientHeight;
         var place = this.state.place;
@@ -171,7 +175,8 @@ var ReactTooltip = _react2['default'].createClass({
     this.setState({
       show: false,
       x: 'NONE',
-      y: 'NONE' });
+      y: 'NONE'
+    });
   },
 
   render: function render() {
@@ -203,7 +208,8 @@ var ReactTooltip = _react2['default'].createClass({
     newString.splice(0, firstCount);
     newString.splice(-lastCount, lastCount);
     return newString.join('');
-  } });
+  }
+});
 
 exports['default'] = ReactTooltip;
 module.exports = exports['default'];

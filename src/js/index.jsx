@@ -64,8 +64,10 @@ const ReactTooltip = React.createClass({
   },
 
   _updatePosition: function(){
-    let tipWidth = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientWidth:0;
-    let tipHeight = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientHeight:0;
+    let node = React.findDOMNode(this);
+    
+    let tipWidth = node.clientWidth;
+    let tipHeight = node.clientHeight;
     let offset = {x:0, y:0};
     let { effect } = this.state;
     if(effect === "float") {
@@ -104,8 +106,6 @@ const ReactTooltip = React.createClass({
         xPosition += parseInt(position[key]);
       }
     }
-
-    let node = React.findDOMNode(this);
     
     node.style.left = this.state.x + offset.x + xPosition + 'px';
     node.style.top = this.state.y + offset.y + yPosition + 'px';
@@ -135,8 +135,9 @@ const ReactTooltip = React.createClass({
       else if(this.state.effect === "solid"){
         let targetTop = e.target.getBoundingClientRect().top;
         let targetLeft = e.target.getBoundingClientRect().left;
-        let tipWidth = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientWidth:0;
-        let tipHeight = document.querySelector("[data-id='tooltip']")?document.querySelector("[data-id='tooltip']").clientHeight:0;
+        let node = React.findDOMNode(this);
+        let tipWidth = node.clientWidth;
+        let tipHeight = node.clientHeight;
         let targetWidth = e.target.clientWidth;
         let targetHeight = e.target.clientHeight;
         let { place } = this.state;
