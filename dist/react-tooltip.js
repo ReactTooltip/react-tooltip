@@ -22,8 +22,7 @@ var ReactTooltip = _react2['default'].createClass({
     place: _react2['default'].PropTypes.string,
     type: _react2['default'].PropTypes.string,
     effect: _react2['default'].PropTypes.string,
-    positon: _react2['default'].PropTypes.object
-  },
+    positon: _react2['default'].PropTypes.object },
 
   getInitialState: function getInitialState() {
     return {
@@ -34,8 +33,7 @@ var ReactTooltip = _react2['default'].createClass({
       place: '',
       type: '',
       effect: '',
-      position: {}
-    };
+      position: {} };
   },
 
   componentDidMount: function componentDidMount() {
@@ -100,7 +98,7 @@ var ReactTooltip = _react2['default'].createClass({
     var xPosition = 0;var yPosition = 0;var position = this.state.position;
 
     if (Object.prototype.toString.apply(position) === '[object String]') {
-      position = JSON.parse(position);
+      position = JSON.parse(position.toString().replace(/\'/g, '"'));
     }
     for (var key in position) {
       if (key === 'top') {
@@ -124,8 +122,7 @@ var ReactTooltip = _react2['default'].createClass({
       place: e.target.getAttribute('data-place') ? e.target.getAttribute('data-place') : this.props.place ? this.props.place : 'top',
       type: e.target.getAttribute('data-type') ? e.target.getAttribute('data-type') : this.props.type ? this.props.type : 'dark',
       effect: e.target.getAttribute('data-effect') ? e.target.getAttribute('data-effect') : this.props.effect ? this.props.effect : 'float',
-      position: e.target.getAttribute('data-position') ? e.target.getAttribute('data-position') : this.props.position ? this.props.position : {}
-    });
+      position: e.target.getAttribute('data-position') ? e.target.getAttribute('data-position') : this.props.position ? this.props.position : {} });
     this.updateTooltip(e);
   },
 
@@ -175,8 +172,7 @@ var ReactTooltip = _react2['default'].createClass({
     this.setState({
       show: false,
       x: 'NONE',
-      y: 'NONE'
-    });
+      y: 'NONE' });
   },
 
   render: function render() {
@@ -208,8 +204,7 @@ var ReactTooltip = _react2['default'].createClass({
     newString.splice(0, firstCount);
     newString.splice(-lastCount, lastCount);
     return newString.join('');
-  }
-});
+  } });
 
 exports['default'] = ReactTooltip;
 module.exports = exports['default'];

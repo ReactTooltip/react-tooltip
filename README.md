@@ -78,7 +78,7 @@ Specific element:
 	<p data-tip="tooltip" data-position="{'top': 10, 'left': 10}"></p>
 	
 global:	
-	<ReactTooltip type="float" position={top: 10, left: 10}/>
+	<ReactTooltip type="float" position={{top: 10, left: 10}}/>
 ```
 
 

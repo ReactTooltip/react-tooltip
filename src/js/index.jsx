@@ -89,8 +89,10 @@ const ReactTooltip = React.createClass({
       }
     }
     let xPosition = 0, yPosition = 0, {position} = this.state;
-    if(Object.prototype.toString.apply(position) === "[object String]") {
-      position = JSON.parse(position);
+
+    if(Object.prototype.toString.apply(position) === "[object String]") {     
+      position = JSON.parse(position.toString().replace(/\'/g,"\""));
+
     }
     for(let key in position) {
       if(key === "top") {
