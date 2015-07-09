@@ -33,6 +33,8 @@
   pointer-events: none;
   transition: opacity 0.3s ease-out , margin-top 0.3s ease-out, margin-left 0.3s ease-out;
   top: -999em;
+  // Modify z-index if you have some specific requirement for the layout
+  z-index: 999;
   &:after {
     content: "";
     width: 0;
