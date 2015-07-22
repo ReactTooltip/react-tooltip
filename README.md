@@ -65,10 +65,10 @@ global:
 
 ```js
 Specific element:
-	<p data-tip="tooltip" data-type="float"></p>
+	<p data-tip="tooltip" data-effect="float"></p>
 	
 global:	
-	<ReactTooltip type="float"/>
+	<ReactTooltip effect="float"/>
 ```
 
 ##### Position: Object [ top, right, bottom, left ]
