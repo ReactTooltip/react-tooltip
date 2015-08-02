@@ -10,6 +10,8 @@ var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_ag
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -53,7 +55,8 @@ var ReactTooltip = (function (_React$Component) {
       place: "",
       type: "",
       effect: "",
-      position: {}
+      position: {},
+      customClassName: ""
     };
   }
 
@@ -152,7 +155,8 @@ var ReactTooltip = (function (_React$Component) {
         place: e.target.getAttribute("data-place") ? e.target.getAttribute("data-place") : this.props.place ? this.props.place : "top",
         type: e.target.getAttribute("data-type") ? e.target.getAttribute("data-type") : this.props.type ? this.props.type : "dark",
         effect: e.target.getAttribute("data-effect") ? e.target.getAttribute("data-effect") : this.props.effect ? this.props.effect : "float",
-        position: e.target.getAttribute("data-position") ? e.target.getAttribute("data-position") : this.props.position ? this.props.position : {}
+        position: e.target.getAttribute("data-position") ? e.target.getAttribute("data-position") : this.props.position ? this.props.position : {},
+        customClassName: e.target.getAttribute("data-customClassName") ? e.target.getAttribute("data-customClassName") : this.props.customClassName ? this.props.customClassName : ""
       });
       this.updateTooltip(e);
     }
@@ -211,7 +215,7 @@ var ReactTooltip = (function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var tooltipClass = (0, _classnames2['default'])('reactTooltip', { "show": this.state.show }, { "place-top": this.state.place === "top" }, { "place-bottom": this.state.place === "bottom" }, { "place-left": this.state.place === "left" }, { "place-right": this.state.place === "right" }, { "type-dark": this.state.type === "dark" }, { "type-success": this.state.type === "success" }, { "type-warning": this.state.type === "warning" }, { "type-error": this.state.type === "error" }, { "type-info": this.state.type === "info" }, { "type-light": this.state.type === "light" });
+      var tooltipClass = (0, _classnames2['default'])('reactTooltip', { "show": this.state.show }, { "place-top": this.state.place === "top" }, { "place-bottom": this.state.place === "bottom" }, { "place-left": this.state.place === "left" }, { "place-right": this.state.place === "right" }, { "type-dark": this.state.type === "dark" }, { "type-success": this.state.type === "success" }, { "type-warning": this.state.type === "warning" }, { "type-error": this.state.type === "error" }, { "type-info": this.state.type === "info" }, { "type-light": this.state.type === "light" }, _defineProperty({}, this.state.customClassName, this.state.customClassName.length));
 
       return _react2['default'].createElement(
         'span',
@@ -252,7 +256,8 @@ ReactTooltip.propTypes = {
   place: _react.PropTypes.string,
   type: _react.PropTypes.string,
   effect: _react.PropTypes.string,
-  positon: _react.PropTypes.object
+  positon: _react.PropTypes.object,
+  customClassName: _react.PropTypes.string
 };
 
 exports['default'] = ReactTooltip;
