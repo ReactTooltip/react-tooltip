@@ -1,21 +1,18 @@
 'use strict';
 
-import React from 'react';
+import React, { PropTypes } from 'react';
 import classname from 'classnames';
 
-const ReactTooltip = React.createClass({
+class ReactTooltip extends React.Component {
 
-  displayName: 'ReactTooltip',
+  _bind(...handlers) {
+    handlers.forEach(handler => this[handler] = this[handler].bind(this));
+  }
 
-  propTypes: {
-    place: React.PropTypes.string,
-    type: React.PropTypes.string,
-    effect: React.PropTypes.string,
-    positon: React.PropTypes.object,
-  },
-  
-  getInitialState() {
-    return {
+  constructor() {
+    super();
+    this._bind("showTooltip", "updateTooltip", "hideTooltip");
+    this.state = {
       show: false,
       placeholder: "",
       x: "NONE",
@@ -23,27 +20,27 @@ const ReactTooltip = React.createClass({
       place: "",
       type: "",
       effect: "",
-      position: {},
-    }
-  },
+      position: {}
+    };
+  }
 
-  componentDidMount() {   
+  componentDidMount() {
     this._updatePosition();
     this.bindListener();
-  },
+  }
 
   componentWillUnmount() {
     this.unbindListener();
-  },
+  }
 
   componentWillUpdate() {
     this.unbindListener();
-  },
+  }
 
   componentDidUpdate(){
     this._updatePosition();
     this.bindListener();
-  },
+  }
 
   bindListener() {
     let targetArray = document.querySelectorAll("[data-tip]");
@@ -52,7 +49,7 @@ const ReactTooltip = React.createClass({
       targetArray[i].addEventListener("mousemove", this.updateTooltip, false);
       targetArray[i].addEventListener("mouseleave", this.hideTooltip, false);
     }
-  },
+  }
 
   unbindListener() {
     let targetArray = document.querySelectorAll("[data-tip]");
@@ -61,11 +58,11 @@ const ReactTooltip = React.createClass({
       targetArray[i].removeEventListener("mousemove", this.updateTooltip);
       targetArray[i].removeEventListener("mouseleave", this.hideTooltip);
     }
-  },
+  }
 
-  _updatePosition: function(){
+  _updatePosition(){
     let node = React.findDOMNode(this);
-    
+
     let tipWidth = node.clientWidth;
     let tipHeight = node.clientHeight;
     let offset = {x:0, y:0};
@@ -90,7 +87,7 @@ const ReactTooltip = React.createClass({
     }
     let xPosition = 0, yPosition = 0, {position} = this.state;
 
-    if(Object.prototype.toString.apply(position) === "[object String]") {     
+    if(Object.prototype.toString.apply(position) === "[object String]") {
       position = JSON.parse(position.toString().replace(/\'/g,"\""));
 
     }
@@ -108,12 +105,12 @@ const ReactTooltip = React.createClass({
         xPosition += parseInt(position[key]);
       }
     }
-    
+
     node.style.left = this.state.x + offset.x + xPosition + 'px';
     node.style.top = this.state.y + offset.y + yPosition + 'px';
-    
-  },
-  
+
+  }
+
   showTooltip(e) {
     this.setState({
       placeholder: e.target.getAttribute("data-tip"),
@@ -123,7 +120,7 @@ const ReactTooltip = React.createClass({
       position: e.target.getAttribute("data-position")?e.target.getAttribute("data-position"):(this.props.position?this.props.position:{}),
     })
     this.updateTooltip(e);
-  },
+  }
 
   updateTooltip(e) {
     if(this.trim(this.state.placeholder).length > 0) {
@@ -167,7 +164,7 @@ const ReactTooltip = React.createClass({
         })
       }
     }
-  },
+  }
 
   hideTooltip(e) {
     this.setState({
@@ -175,7 +172,7 @@ const ReactTooltip = React.createClass({
       x: "NONE",
       y: "NONE",
     });
-  },
+  }
 
   render() {
     let tooltipClass = classname(
@@ -196,7 +193,7 @@ const ReactTooltip = React.createClass({
     return (
       <span className={tooltipClass} data-id="tooltip">{this.state.placeholder}</span>
     )
-  },
+  }
 
   trim(string) {
     let newString = string.split("");
@@ -216,7 +213,17 @@ const ReactTooltip = React.createClass({
     newString.splice(0, firstCount);
     newString.splice(-lastCount, lastCount);
     return newString.join("");
-  },
-});
+  }
+
+}
+
+ReactTooltip.displayName = 'ReactTooltip';
+
+ReactTooltip.propTypes = {
+  place: PropTypes.string,
+  type: PropTypes.string,
+  effect: PropTypes.string,
+  positon: PropTypes.object
+};
 
 export default ReactTooltip;
