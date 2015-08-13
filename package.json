@@ -39,7 +39,10 @@
   },
   "devDependencies": {
     "babel": "^5.3.1",
+    "babel-eslint": "^4.0.5",
     "babelify": "^6.0.2",
+    "eslint": "^1.0.0",
+    "eslint-plugin-react": "^3.1.0",
     "jest": "^0.1.39",
     "jest-cli": "^0.4.0",
     "node-sass": "^3.0.0",
