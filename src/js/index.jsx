@@ -223,7 +223,7 @@ ReactTooltip.propTypes = {
   place: PropTypes.string,
   type: PropTypes.string,
   effect: PropTypes.string,
-  positon: PropTypes.object
+  position: PropTypes.object
 };
 
 export default ReactTooltip;
