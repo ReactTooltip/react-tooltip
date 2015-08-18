@@ -38,7 +38,7 @@
   &:after {
     content: "";
     width: 0;
-	  height: 0;
+    height: 0;
     position: absolute;
   }
   &.show {
@@ -111,5 +111,11 @@
       top: 50%;
       margin-top: -5px;
     }
+  }
+  // For multi line
+  .multi-line {
+    display: block;
+    padding: 2px 0px;
+    text-align: center;
   }
 }

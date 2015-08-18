@@ -14,6 +14,7 @@ class ReactTooltip extends React.Component {
     this._bind("showTooltip", "updateTooltip", "hideTooltip");
     this.state = {
       show: false,
+      multiline: 0,
       placeholder: "",
       x: "NONE",
       y: "NONE",
@@ -112,8 +113,24 @@ class ReactTooltip extends React.Component {
   }
 
   showTooltip(e) {
+    const originTooltip = e.target.getAttribute("data-tip"),
+          regexp = /<br\s*\W*>|\W+/;
+    let tooltipText, multiline = false;
+
+    if(!regexp.test(originTooltip)) {
+      tooltipText = originTooltip
+    }
+    else {
+      tooltipText = originTooltip.split(regexp).map((d, i) => {
+        multiline += 1;
+        return (
+          <span key={i} className="multi-line">{d}</span>
+        )
+      })
+    }
     this.setState({
-      placeholder: e.target.getAttribute("data-tip"),
+      placeholder: tooltipText,
+      multiline: multiline,
       place: e.target.getAttribute("data-place")?e.target.getAttribute("data-place"):(this.props.place?this.props.place:"top"),
       type: e.target.getAttribute("data-type")?e.target.getAttribute("data-type"):(this.props.type?this.props.type:"dark"),
       effect: e.target.getAttribute("data-effect")?e.target.getAttribute("data-effect"):(this.props.effect?this.props.effect:"float"),
@@ -124,11 +141,18 @@ class ReactTooltip extends React.Component {
 
   updateTooltip(e) {
     if(this.trim(this.state.placeholder).length > 0) {
+      const {multiline, place} = this.state;
       if(this.state.effect === "float") {
+        const offsetY = !multiline ? 
+          e.clientY : 
+          place !== "top" ? 
+            e.clientY:
+            e.clientY - multiline * 14.5
+
         this.setState({
           show: true,
           x: e.clientX,
-          y: e.clientY
+          y: offsetY
         })
       }
       else if(this.state.effect === "solid"){
@@ -139,7 +163,6 @@ class ReactTooltip extends React.Component {
         let tipHeight = node.clientHeight;
         let targetWidth = e.target.clientWidth;
         let targetHeight = e.target.clientHeight;
-        let { place } = this.state;
         let x, y ;
         if(place === "top") {
           x = targetLeft - (tipWidth/2) + (targetWidth/2);
@@ -196,6 +219,9 @@ class ReactTooltip extends React.Component {
   }
 
   trim(string) {
+    if(Object.prototype.toString.call(string) !== "[object String]") {
+      return string
+    }
     let newString = string.split("");
     let firstCount = 0, lastCount = 0;
     for(let i = 0; i < string.length; i++) {
@@ -223,7 +249,7 @@ ReactTooltip.propTypes = {
   place: PropTypes.string,
   type: PropTypes.string,
   effect: PropTypes.string,
-  positon: PropTypes.object
+  position: PropTypes.object
 };
 
 export default ReactTooltip;
