@@ -81,6 +81,17 @@ global:
 	<ReactTooltip type="float" position={{top: 10, left: 10}}/>
 ```
 
+##### Multiline: Bool [ true, false ]
+
+```js
+Specific element:
+	<p data-tip="tooltip a     b" data-multiline="true"></p>
+	<p data-tip="tooltip<br>a<br />b" data-multiline={true}></p>
+	
+global:	
+	<ReactTooltip multiline={true}/>
+```
+
 
 ### License
 

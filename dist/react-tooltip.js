@@ -47,13 +47,14 @@ var ReactTooltip = (function (_React$Component) {
     this._bind("showTooltip", "updateTooltip", "hideTooltip");
     this.state = {
       show: false,
-      multiline: 0,
+      multilineCount: 0,
       placeholder: "",
       x: "NONE",
       y: "NONE",
       place: "",
       type: "",
       effect: "",
+      multiline: false,
       position: {}
     };
   }
@@ -149,15 +150,15 @@ var ReactTooltip = (function (_React$Component) {
     key: 'showTooltip',
     value: function showTooltip(e) {
       var originTooltip = e.target.getAttribute("data-tip"),
-          regexp = /<br\s*\W*>|\W+/;
+          regexp = /<br\s*\W*>|\W+/,
+          multiline = e.target.getAttribute("data-multiline") ? e.target.getAttribute("data-multiline") : this.props.multiline ? this.props.multiline : false;
       var tooltipText = undefined,
-          multiline = false;
-
-      if (!regexp.test(originTooltip)) {
+          multilineCount = 0;
+      if (!multiline || multiline === "false" || !regexp.test(originTooltip)) {
         tooltipText = originTooltip;
       } else {
         tooltipText = originTooltip.split(regexp).map(function (d, i) {
-          multiline += 1;
+          multilineCount += 1;
           return _react2['default'].createElement(
             'span',
             { key: i, className: 'multi-line' },
@@ -167,11 +168,17 @@ var ReactTooltip = (function (_React$Component) {
       }
       this.setState({
         placeholder: tooltipText,
-        multiline: multiline,
+        multilineCount: multilineCount,
         place: e.target.getAttribute("data-place") ? e.target.getAttribute("data-place") : this.props.place ? this.props.place : "top",
+
         type: e.target.getAttribute("data-type") ? e.target.getAttribute("data-type") : this.props.type ? this.props.type : "dark",
+
         effect: e.target.getAttribute("data-effect") ? e.target.getAttribute("data-effect") : this.props.effect ? this.props.effect : "float",
-        position: e.target.getAttribute("data-position") ? e.target.getAttribute("data-position") : this.props.position ? this.props.position : {}
+
+        position: e.target.getAttribute("data-position") ? e.target.getAttribute("data-position") : this.props.position ? this.props.position : {},
+
+        multiline: multiline
+
       });
       this.updateTooltip(e);
     }
@@ -180,11 +187,11 @@ var ReactTooltip = (function (_React$Component) {
     value: function updateTooltip(e) {
       if (this.trim(this.state.placeholder).length > 0) {
         var _state = this.state;
-        var multiline = _state.multiline;
+        var multilineCount = _state.multilineCount;
         var place = _state.place;
 
         if (this.state.effect === "float") {
-          var offsetY = !multiline ? e.clientY : place !== "top" ? e.clientY : e.clientY - multiline * 14.5;
+          var offsetY = !multilineCount ? e.clientY : place !== "top" ? e.clientY : e.clientY - multilineCount * 14.5;
 
           this.setState({
             show: true,
@@ -278,7 +285,8 @@ ReactTooltip.propTypes = {
   place: _react.PropTypes.string,
   type: _react.PropTypes.string,
   effect: _react.PropTypes.string,
-  position: _react.PropTypes.object
+  position: _react.PropTypes.object,
+  multiline: _react.PropTypes.bool
 };
 
 exports['default'] = ReactTooltip;
