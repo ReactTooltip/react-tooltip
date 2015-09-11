@@ -185,8 +185,9 @@ class ReactTooltip extends React.Component {
         })
       }
       else if(this.state.effect === "solid"){
-        let targetTop = e.target.getBoundingClientRect().top;
-        let targetLeft = e.target.getBoundingClientRect().left;
+        const boundingClientRect = e.target.getBoundingClientRect()
+        let targetTop = boundingClientRect.top;
+        let targetLeft = boundingClientRect.left;
         let node = React.findDOMNode(this);
         let tipWidth = node.clientWidth;
         let tipHeight = node.clientHeight;
