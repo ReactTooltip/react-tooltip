@@ -13,7 +13,7 @@ const ReactTooltip = React.createClass({
     effect: React.PropTypes.string,
     positon: React.PropTypes.object,
   },
-  
+
   getInitialState() {
     return {
       show: false,
@@ -27,7 +27,7 @@ const ReactTooltip = React.createClass({
     }
   },
 
-  componentDidMount() {   
+  componentDidMount() {
     this._updatePosition();
     this.bindListener();
   },
@@ -65,7 +65,7 @@ const ReactTooltip = React.createClass({
 
   _updatePosition: function(){
     let node = React.findDOMNode(this);
-    
+
     let tipWidth = node.clientWidth;
     let tipHeight = node.clientHeight;
     let offset = {x:0, y:0};
@@ -90,7 +90,7 @@ const ReactTooltip = React.createClass({
     }
     let xPosition = 0, yPosition = 0, {position} = this.state;
 
-    if(Object.prototype.toString.apply(position) === "[object String]") {     
+    if(Object.prototype.toString.apply(position) === "[object String]") {
       position = JSON.parse(position.toString().replace(/\'/g,"\""));
 
     }
@@ -108,12 +108,12 @@ const ReactTooltip = React.createClass({
         xPosition += parseInt(position[key]);
       }
     }
-    
+
     node.style.left = this.state.x + offset.x + xPosition + 'px';
     node.style.top = this.state.y + offset.y + yPosition + 'px';
-    
+
   },
-  
+
   showTooltip(e) {
     this.setState({
       placeholder: e.target.getAttribute("data-tip"),
@@ -135,8 +135,9 @@ const ReactTooltip = React.createClass({
         })
       }
       else if(this.state.effect === "solid"){
-        let targetTop = e.target.getBoundingClientRect().top;
-        let targetLeft = e.target.getBoundingClientRect().left;
+        const boundingClientRect = e.target.getBoundingClientRect();
+        let targetTop = boundingClientRect.top;
+        let targetLeft = boundingClientRect.left;
         let node = React.findDOMNode(this);
         let tipWidth = node.clientWidth;
         let tipHeight = node.clientHeight;
