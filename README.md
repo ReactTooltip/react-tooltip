@@ -1,14 +1,12 @@
 # react-tooltip
-
-React tooltip component, inspired by tooltipsy (a jquery plugin I've used)
-
 [![Version](http://img.shields.io/npm/v/react-tooltip.svg)](https://www.npmjs.org/package/react-tooltip)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
 
 ### Installation
 
 ```sh
-npm install react-tooltip --save
+npm install react-tooltip
 ```
 
 ### Usage
@@ -18,17 +16,12 @@ npm install react-tooltip --save
 ```js
 var ReactTooltip = require("react-tooltip")
 ```
-2 . Include css or scss file(you can find them in dist folder) into your project
 
-```js
-sass: @import "react-tooltip";
-``` 
-
-3 . Add data-tip = "your placeholder" to your element
+2 . Add data-tip = "your placeholder" to your element
 
 	<p data-tip="hello world">Tooltip</p>
 
-4 . Including react-tooltip component
+3 . Including react-tooltip component
 
 
 ```js

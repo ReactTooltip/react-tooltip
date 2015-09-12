@@ -1,18 +1,26 @@
 {
   "name": "react-tooltip",
-  "version": "0.3.8",
+  "version": "0.5.0",
   "description": "react tooltip component",
   "main": "dist/react-tooltip.js",
   "scripts": {
-    "test": "jest",
-    "build:js": "babel src/js/index.jsx --out-file dist/react-tooltip.js",
-    "build:css": "node-sass --output-style compressed src/scss/style.scss dist/react-tooltip.min.css",
-    "build": "npm run build:js & npm run build:css & cp src/scss/style.scss dist/react-tooltip.scss & cp src/scss/style.scss example/src/react-tooltip.scss & cp src/js/index.jsx example/src/react-tooltip.js"
+    "check": "standard --verbose | snazzy src/index.js",
+    "test": "npm run check",
+    "devjs": "node bin/transferSass.js & watchify -t babelify -o ./example/dist/index.js ./example/src/index.js -dv",
+    "devcss": "node-sass example/src/index.scss example/dist/index.css & node-sass -w example/src/index.scss example/dist/index.css",
+    "predev": "rm -rf example/dist",
+    "dev": "mkdir -p ./example/dist & npm run devjs & npm run devcss & http-server example -p 8888 -s -o",
+    "deployjs": "babel src/index.js --out-file dist/react-tooltip.js",
+    "predeploycss": "cp src/index.scss dist/react-tooltip.scss",
+    "deploycss": "node-sass --output-style compressed src/index.scss dist/react-tooltip.min.css",
+    "predeploy": "rm -rf dist",
+    "deploy": "mkdir dist & npm run deployjs & npm run deploycss"
   },
-  "jest": {
-    "scriptPreprocessor": "<rootDir>/__tests__/preprocessor.js",
-    "unmockedModulePathPatterns": [
-      "<rootDir>/node_modules/react"
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [
+      "dist/",
+      "src/style.js"
     ]
   },
   "repository": {
@@ -39,14 +47,13 @@
   },
   "devDependencies": {
     "babel": "^5.3.1",
-    "babel-eslint": "^4.0.5",
+    "babel-eslint": "^4.1.1",
     "babelify": "^6.0.2",
-    "eslint": "^1.0.0",
-    "eslint-plugin-react": "^3.1.0",
-    "jest": "^0.1.39",
-    "jest-cli": "^0.4.0",
-    "node-sass": "^3.0.0",
-    "react-tools": "^0.13.2",
+    "http-server": "^0.8.0",
+    "node-sass": "^3.3.2",
+    "snazzy": "^2.0.1",
+    "standard": "^5.2.2",
+    "tape": "^4.2.0",
     "watchify": "^3.2.1"
   }
 }

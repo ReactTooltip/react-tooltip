@@ -22,7 +22,7 @@
   }
 }
 
-.reactTooltip {
+.__react_component_tooltip {
   border-radius: 3px;
   display: inline-block;
   font-size: 13px;
@@ -33,7 +33,6 @@
   pointer-events: none;
   transition: opacity 0.3s ease-out , margin-top 0.3s ease-out, margin-left 0.3s ease-out;
   top: -999em;
-  // Modify z-index if you have some specific requirement for the layout
   z-index: 999;
   &:after {
     content: "";
@@ -46,7 +45,6 @@
     margin-top: 0px !important;
     margin-left: 0px !important;
   }
-  //Type
   &.type-dark {
     color: #fff;
     @include type(#222);
@@ -112,10 +110,9 @@
       margin-top: -5px;
     }
   }
-  // For multi line
   .multi-line {
     display: block;
     padding: 2px 0px;
     text-align: center;
   }
-}
+} 
