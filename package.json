@@ -10,7 +10,7 @@
     "devcss": "node-sass example/src/index.scss example/dist/index.css & node-sass -w example/src/index.scss example/dist/index.css",
     "predev": "rm -rf example/dist",
     "dev": "mkdir -p ./example/dist & npm run devjs & npm run devcss & http-server example -p 8888 -s -o",
-    "deployjs": "babel src/index.js --out-file dist/react-tooltip.js",
+    "deployjs": "babel src/index.js --out-file dist/react-tooltip.js && babel src/style.js --out-file dist/style.js",
     "predeploycss": "cp src/index.scss dist/react-tooltip.scss",
     "deploycss": "node-sass --output-style compressed src/index.scss dist/react-tooltip.min.css",
     "predeploy": "rm -rf dist",
