@@ -26,6 +26,7 @@ export default class ReactTooltip extends Component {
   constructor (props) {
     super(props)
     this._bind('showTooltip', 'updateTooltip', 'hideTooltip')
+    this.mount = true
     this.state = {
       show: false,
       multilineCount: 0,
@@ -51,16 +52,21 @@ export default class ReactTooltip extends Component {
    *
    **/
   globalHide () {
-    this.hideTooltip()
+    if(this.mount) {
+      this.hideTooltip()
+    }
   }
 
   globalRebuild () {
-    this.unbindListener()
-    this.bindListener()
+    if(this.mount) {
+      this.unbindListener()
+      this.bindListener()
+    }
   }
 
   componentWillUnmount () {
     this.unbindListener()
+    this.mount = false
     let tag = document.querySelector('style[id="react-tooltip"]')
     document.getElementsByTagName('head')[0].removeChild(tag)
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
