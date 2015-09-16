@@ -1,6 +1,6 @@
 'use strict'
 
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes, findDOMNode } from 'react'
 import classname from 'classnames'
 import cssStyle from './style'
 
@@ -10,8 +10,21 @@ export default class ReactTooltip extends Component {
     handlers.forEach(handler => this[handler] = this[handler].bind(this))
   }
 
-  constructor () {
-    super()
+  static displayName = 'ReactTooltip'
+
+  static hide () {
+    window.dispatchEvent(new window.Event('__react_tooltip_hide_event'))
+  }
+
+  static rebuild () {
+    window.dispatchEvent(new window.Event('__react_tooltip_rebuild_event'))
+  }
+
+  static eventHideMark = `hide${Date.now()}`
+  static eventRebuildMark = `rebuild${Date.now()}`
+
+  constructor (props) {
+    super(props)
     this._bind('showTooltip', 'updateTooltip', 'hideTooltip')
     this.state = {
       show: false,
@@ -28,7 +41,21 @@ export default class ReactTooltip extends Component {
   }
 
   componentDidMount () {
-    this._updatePosition()
+    this.bindListener()
+    /* Add window event listener for hide and rebuild */
+    window.addEventListener('__react_tooltip_hide_event', ::this.globalHide, false)
+    window.addEventListener('__react_tooltip_rebuild_event', ::this.globalRebuild, false)
+  }
+
+  /** Method for window.addEventListener
+   *
+   **/
+  globalHide () {
+    this.hideTooltip()
+  }
+
+  globalRebuild () {
+    this.unbindListener()
     this.bindListener()
   }
 
@@ -36,6 +63,8 @@ export default class ReactTooltip extends Component {
     this.unbindListener()
     let tag = document.querySelector('style[id="react-tooltip"]')
     document.getElementsByTagName('head')[0].removeChild(tag)
+    window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
+    window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
   }
 
   componentWillUpdate () {
@@ -66,7 +95,7 @@ export default class ReactTooltip extends Component {
   }
 
   _updatePosition () {
-    let node = React.findDOMNode(this)
+    let node = findDOMNode(this)
 
     let tipWidth = node.clientWidth
     let tipHeight = node.clientHeight
@@ -181,7 +210,7 @@ export default class ReactTooltip extends Component {
     }
   }
 
-  hideTooltip (e) {
+  hideTooltip () {
     this.setState({
       show: false,
       x: 'NONE',
@@ -242,8 +271,6 @@ export default class ReactTooltip extends Component {
   }
 
 }
-
-ReactTooltip.displayName = 'ReactTooltip'
 
 ReactTooltip.propTypes = {
   place: PropTypes.string,

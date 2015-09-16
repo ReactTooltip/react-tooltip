@@ -33,6 +33,7 @@
   pointer-events: none;
   transition: opacity 0.3s ease-out , margin-top 0.3s ease-out, margin-left 0.3s ease-out;
   top: -999em;
+  visibility: hidden;
   z-index: 999;
   &:after {
     content: "";
@@ -41,9 +42,10 @@
     position: absolute;
   }
   &.show {
-    opacity: 0.9 !important;
-    margin-top: 0px !important;
-    margin-left: 0px !important;
+    opacity: 0.9;
+    margin-top: 0px;
+    margin-left: 0px;
+    visibility: visible;
   }
   &.type-dark {
     color: #fff;

@@ -15,7 +15,7 @@ function transferSass () {
       if (err) {
         console.error(err)
       }
-      console.log('css file has been transformed success')
+      console.log('css file has been transformed successful')
     })
   })
 }
