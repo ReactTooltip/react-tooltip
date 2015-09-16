@@ -64,6 +64,7 @@ var ReactTooltip = (function (_Component) {
 
     _Component.call(this, props);
     this._bind('showTooltip', 'updateTooltip', 'hideTooltip');
+    this.mount = true;
     this.state = {
       show: false,
       multilineCount: 0,
@@ -90,16 +91,21 @@ var ReactTooltip = (function (_Component) {
    **/
 
   ReactTooltip.prototype.globalHide = function globalHide() {
-    this.hideTooltip();
+    if (this.mount) {
+      this.hideTooltip();
+    }
   };
 
   ReactTooltip.prototype.globalRebuild = function globalRebuild() {
-    this.unbindListener();
-    this.bindListener();
+    if (this.mount) {
+      this.unbindListener();
+      this.bindListener();
+    }
   };
 
   ReactTooltip.prototype.componentWillUnmount = function componentWillUnmount() {
     this.unbindListener();
+    this.mount = false;
     var tag = document.querySelector('style[id="react-tooltip"]');
     document.getElementsByTagName('head')[0].removeChild(tag);
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
