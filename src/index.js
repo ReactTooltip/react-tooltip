@@ -147,7 +147,8 @@ export default class ReactTooltip extends Component {
 
   showTooltip (e) {
     const originTooltip = e.target.getAttribute('data-tip')
-    const regexp = /<br\s*\W*>|\W+/
+    // Detect multiline
+    const regexp = /<br\s*\/?>|\s{1,}/
     const multiline = e.target.getAttribute('data-multiline') ? e.target.getAttribute('data-multiline') : (this.props.multiline ? this.props.multiline : false)
     let tooltipText
     let multilineCount = 0
