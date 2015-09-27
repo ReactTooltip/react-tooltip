@@ -1,3 +1,11 @@
+v0.6.4
+======
+release date: 2015-09-27
+###Notable Changes:
+
+Multiline option now only detect <br>, <br/> and <br /> to seperate tooltip 
+
+
 v0.6.2
 ======
 release date: 2015-09-16

@@ -188,7 +188,7 @@ var ReactTooltip = (function (_Component) {
   ReactTooltip.prototype.showTooltip = function showTooltip(e) {
     var originTooltip = e.target.getAttribute('data-tip');
     // Detect multiline
-    var regexp = /<br\s*\/?>|\s{1,}/;
+    var regexp = /<br\s*\/?>/;
     var multiline = e.target.getAttribute('data-multiline') ? e.target.getAttribute('data-multiline') : this.props.multiline ? this.props.multiline : false;
     var tooltipText = undefined;
     var multilineCount = 0;
