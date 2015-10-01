@@ -249,7 +249,7 @@ export default class ReactTooltip extends Component {
     }
 
     return (
-      <span className={tooltipClass} data-id='tooltip'>{this.state.placeholder}</span>
+      <span className={tooltipClass} data-id='tooltip' dangerouslySetInnerHTML={{ __html: this.state.placeholder }}></span>
     )
   }
 
