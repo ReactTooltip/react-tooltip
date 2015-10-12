@@ -137,9 +137,6 @@ var ReactTooltip = (function (_Component) {
       targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
     } else {
       targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]');
-      if (targetArray.length > 0) {
-        console.error('You have duplicate react-tooltip, tooltip id is: ' + id);
-      }
     }
 
     for (var i = 0; i < targetArray.length; i++) {
