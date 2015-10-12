@@ -38,7 +38,7 @@ The options set to `<ReactTooltip />` will affect all tootips in a same page and
 
 Check example:  [React-tooltip Test](http://wwayne.github.io/react-tooltip)
 
-##### Place: String [ top, right, bottom, left ]
+#### Place: String [ top, right, bottom, left ]
 
 ```js
 Specific element:
@@ -47,7 +47,7 @@ Specific element:
 global:	
 	<ReactTooltip place="top"/>
 ```
-##### Type: String [ dark, success, warning, error, info, light ]
+#### Type: String [ dark, success, warning, error, info, light ]
 
 ```js
 Specific element:
@@ -56,7 +56,7 @@ Specific element:
 global:	
 	<ReactTooltip type="dark"/>
 ```
-##### Effect: String [ float, solid ]
+#### Effect: String [ float, solid ]
 
 ```js
 Specific element:
@@ -66,7 +66,7 @@ global:
 	<ReactTooltip effect="float"/>
 ```
 
-##### Position: Object [ top, right, bottom, left ]
+#### Position: Object [ top, right, bottom, left ]
 
 ```js
 Specific element:
@@ -76,7 +76,7 @@ global:
 	<ReactTooltip type="float" position={{top: 10, left: 10}}/>
 ```
 
-##### Multiline: Bool [ true, false ]
+#### Multiline: Bool [ true, false ]
 
 ```js
 Specific element:
@@ -86,7 +86,7 @@ global:
 	<ReactTooltip multiline={true}/>
 ```
 
-##### Extra Class: String
+#### Extra Class: String
 
 ```js
 Specific element:
@@ -96,7 +96,7 @@ global:
 	<ReactTooltip class="extra-class"/>
 ```
 
-##### Insert HTML
+#### Insert HTML
 
 ```js
 Specific element:
@@ -109,14 +109,14 @@ global:
 #### Using react component as tooltip
 Check the example [React-tooltip Test](http://wwayne.github.io/react-tooltip)
 
-**Note:**
-
+##### Note:
 1. **data-tip** is necessary, because `<ReactTooltip />` find tooltip via this attribute
 2. **data-for** correspond to the **id** of `<ReactTooltip />`
 3. When using react component as tooltip, you can have many `<ReactTooltip />` in a page but they should have different **id**
 
 #### Static method
 `ReactTooltip.hide()` for hide the tooltip manually
+
 `ReactTooltup.rebuild()` for re-bind tooltip to the corresponding element
 
 I suggest always put `<ReactTooltip />` in the Highest level or smart component of Redux, so you might need these static
