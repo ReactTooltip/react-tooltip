@@ -96,9 +96,6 @@ export default class ReactTooltip extends Component {
       targetArray = document.querySelectorAll('[data-tip]:not([data-for])')
     } else {
       targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]')
-      if (targetArray.length > 0) {
-        console.error('You have duplicate react-tooltip, tooltip id is: ' + id)
-      }
     }
 
     for (let i = 0; i < targetArray.length; i++) {
@@ -329,7 +326,7 @@ export default class ReactTooltip extends Component {
       }
       firstCount++
     }
-    for (let i = string.length - 1; i >= 0 ; i--) {
+    for (let i = string.length - 1; i >= 0; i--) {
       if (string[i] !== ' ') {
         break
       }
