@@ -1,6 +1,7 @@
 'use strict'
 
 import React from 'react'
+import {render} from 'react-dom'
 import ReactTooltip from '../../src/index'
 
 const Test = React.createClass({
@@ -87,4 +88,4 @@ const Test = React.createClass({
   }
 })
 
-React.render(<Test />, document.body)
+render(<Test />, document.getElementById('main'))

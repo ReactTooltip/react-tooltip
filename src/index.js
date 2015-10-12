@@ -1,6 +1,7 @@
 'use strict'
 
-import React, { Component, PropTypes, findDOMNode } from 'react'
+import React, { Component, PropTypes } from 'react'
+import {findDOMNode} from 'react-dom'
 import classname from 'classnames'
 import cssStyle from './style'
 
@@ -52,13 +53,13 @@ export default class ReactTooltip extends Component {
    *
    **/
   globalHide () {
-    if(this.mount) {
+    if (this.mount) {
       this.hideTooltip()
     }
   }
 
   globalRebuild () {
-    if(this.mount) {
+    if (this.mount) {
       this.unbindListener()
       this.bindListener()
     }
@@ -84,7 +85,7 @@ export default class ReactTooltip extends Component {
 
   bindListener () {
     let targetArray = document.querySelectorAll('[data-tip]')
-    for (let i = 0 ; i < targetArray.length ; i++) {
+    for (let i = 0; i < targetArray.length; i++) {
       targetArray[i].addEventListener('mouseenter', this.showTooltip, false)
       targetArray[i].addEventListener('mousemove', this.updateTooltip, false)
       targetArray[i].addEventListener('mouseleave', this.hideTooltip, false)
@@ -93,7 +94,7 @@ export default class ReactTooltip extends Component {
 
   unbindListener () {
     let targetArray = document.querySelectorAll('[data-tip]')
-    for (let i = 0 ; i < targetArray.length ; i++) {
+    for (let i = 0; i < targetArray.length; i++) {
       targetArray[i].removeEventListener('mouseenter', this.showTooltip)
       targetArray[i].removeEventListener('mousemove', this.updateTooltip)
       targetArray[i].removeEventListener('mouseleave', this.hideTooltip)
@@ -260,13 +261,13 @@ export default class ReactTooltip extends Component {
     let newString = string.split('')
     let firstCount = 0
     let lastCount = 0
-    for (let i = 0 ; i < string.length ; i++) {
+    for (let i = 0; i < string.length; i++) {
       if (string[i] !== ' ') {
         break
       }
       firstCount++
     }
-    for (let i = string.length - 1 ; i >= 0 ; i--) {
+    for (let i = string.length - 1; i >= 0; i--) {
       if (string[i] !== ' ') {
         break
       }

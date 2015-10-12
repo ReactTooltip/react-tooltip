@@ -14,6 +14,8 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactDom = require('react-dom');
+
 var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
@@ -140,7 +142,7 @@ var ReactTooltip = (function (_Component) {
   };
 
   ReactTooltip.prototype._updatePosition = function _updatePosition() {
-    var node = _react.findDOMNode(this);
+    var node = _reactDom.findDOMNode(this);
 
     var tipWidth = node.clientWidth;
     var tipHeight = node.clientHeight;
