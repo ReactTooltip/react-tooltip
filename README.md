@@ -80,11 +80,30 @@ global:
 
 ```js
 Specific element:
-	<p data-tip="tooltip a     b" data-multiline="true"></p>
 	<p data-tip="tooltip<br>a<br />b" data-multiline={true}></p>
 	
 global:	
 	<ReactTooltip multiline={true}/>
+```
+
+##### Extra Class: String
+
+```js
+Specific element:
+	<p data-tip="tooltip" data-class="extra-class"></p>
+	
+global:	
+	<ReactTooltip class="extra-class"/>
+```
+
+##### Insert HTML
+
+```js
+Specific element:
+	<p data-tip="<p>HTML tooltip</p>" data-html={true}></p>
+	
+global:	
+	<ReactTooltip html={true}/>
 ```
 
 

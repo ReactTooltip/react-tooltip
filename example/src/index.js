@@ -88,7 +88,7 @@ const Test = React.createClass({
         <section className="advance">
           <div className="section">
             <h4 className='title'>Advance features</h4>
-            <p className="sub-title">Using everything as tooltip</p>
+            <p className="sub-title">Use everything as tooltip</p>
             {/* EXAMPLE ONE */}
             <div className="example-jsx">
               <div className="side">

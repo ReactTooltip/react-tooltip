@@ -38,7 +38,9 @@ export default class ReactTooltip extends Component {
       type: '',
       effect: '',
       multiline: false,
-      position: {}
+      position: {},
+      extraClass: '',
+      html: false
     }
   }
 
@@ -179,6 +181,9 @@ export default class ReactTooltip extends Component {
         )
       })
     }
+    /* Define extra class */
+    let extraClass = e.target.getAttribute('data-class') ? e.target.getAttribute('data-class') : ''
+    extraClass = this.props.class ? this.props.class + " " + extraClass : extraClass
     this.setState({
       placeholder: tooltipText,
       multilineCount: multilineCount,
@@ -186,7 +191,9 @@ export default class ReactTooltip extends Component {
       type: e.target.getAttribute('data-type') ? e.target.getAttribute('data-type') : (this.props.type ? this.props.type : 'dark'),
       effect: e.target.getAttribute('data-effect') ? e.target.getAttribute('data-effect') : (this.props.effect ? this.props.effect : 'float'),
       position: e.target.getAttribute('data-position') ? e.target.getAttribute('data-position') : (this.props.position ? this.props.position : {}),
-      multiline: multiline
+      extraClass,
+      multiline,
+      html: e.target.getAttribute('data-html') ? e.target.getAttribute('data-html') : (this.props.html ? this.props.html : false)
     })
     this.updateTooltip(e)
   }
@@ -243,7 +250,7 @@ export default class ReactTooltip extends Component {
   }
 
   render () {
-    const {placeholder} = this.state
+    const {placeholder, extraClass, html} = this.state
 
     let tooltipClass = classname(
       '__react_component_tooltip',
@@ -267,10 +274,16 @@ export default class ReactTooltip extends Component {
       document.getElementsByTagName('head')[0].appendChild(tag)
     }
 
-    const content = this.props.children ? this.props.children : placeholder
-    return (
-      <span className={tooltipClass} data-id='tooltip'>{content}</span>
-    )
+    if (html) {
+      return (
+        <span className={tooltipClass + " " + extraClass} data-id='tooltip' dangerouslySetInnerHTML={{__html:placeholder}}></span>
+      )
+    } else {
+      const content = this.props.children ? this.props.children : placeholder
+      return (
+        <span className={tooltipClass + " " + extraClass} data-id='tooltip'>{content}</span>
+      )
+    }
   }
 
   trim (string) {
@@ -305,5 +318,7 @@ ReactTooltip.propTypes = {
   effect: PropTypes.string,
   position: PropTypes.object,
   multiline: PropTypes.bool,
-  id: PropTypes.string
+  class: PropTypes.string,
+  id: PropTypes.string,
+  html: PropTypes.bool
 }

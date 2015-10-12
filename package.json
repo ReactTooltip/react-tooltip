@@ -41,7 +41,7 @@
   },
   "homepage": "https://github.com/wwayne/react-tooltip",
   "peerDependencies": {
-    "react": ">=0.13.1"
+    "react": ">=0.14.0"
   },
   "dependencies": {
     "classnames": "^1.2.0",
