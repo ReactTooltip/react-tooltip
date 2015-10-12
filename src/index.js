@@ -111,10 +111,10 @@ export default class ReactTooltip extends Component {
     if (effect === 'float') {
       if (this.state.place === 'top') {
         offset.x = -(tipWidth / 2)
-        offset.y = -50
+        offset.y = -tipHeight
       } else if (this.state.place === 'bottom') {
         offset.x = -(tipWidth / 2)
-        offset.y = 30
+        offset.y = 15
       } else if (this.state.place === 'left') {
         offset.x = -(tipWidth + 15)
         offset.y = -(tipHeight / 2)
@@ -178,22 +178,22 @@ export default class ReactTooltip extends Component {
   updateTooltip (e) {
     if (this.trim(this.state.placeholder).length > 0) {
       const {multilineCount, place} = this.state
+      const node = findDOMNode(this)
       if (this.state.effect === 'float') {
-        const offsetY = !multilineCount ? e.clientY : (place !== 'top' ? e.clientY : (e.clientY - multilineCount * 14.5))
+        // const offsetY = e.clientY 
         this.setState({
           show: true,
           x: e.clientX,
-          y: offsetY
+          y: e.clientY 
         })
       } else if (this.state.effect === 'solid') {
         const boundingClientRect = e.target.getBoundingClientRect()
-        let targetTop = boundingClientRect.top
-        let targetLeft = boundingClientRect.left
-        let node = React.findDOMNode(this)
-        let tipWidth = node.clientWidth
-        let tipHeight = node.clientHeight
-        let targetWidth = e.target.clientWidth
-        let targetHeight = e.target.clientHeight
+        const targetTop = boundingClientRect.top
+        const targetLeft = boundingClientRect.left
+        const tipWidth = node.clientWidth
+        const tipHeight = node.clientHeight
+        const targetWidth = e.target.clientWidth
+        const targetHeight = e.target.clientHeight
         let x
         let y
         if (place === 'top') {
@@ -249,8 +249,9 @@ export default class ReactTooltip extends Component {
       document.getElementsByTagName('head')[0].appendChild(tag)
     }
 
+    const content = this.props.children ? this.props.children : this.state.placeholder 
     return (
-      <span className={tooltipClass} data-id='tooltip'>{this.state.placeholder}</span>
+      <span className={tooltipClass} data-id='tooltip'>{content}</span>
     )
   }
 
@@ -267,7 +268,7 @@ export default class ReactTooltip extends Component {
       }
       firstCount++
     }
-    for (let i = string.length - 1; i >= 0; i--) {
+    for (let i = string.length - 1; i >= 0 ; i--) {
       if (string[i] !== ' ') {
         break
       }

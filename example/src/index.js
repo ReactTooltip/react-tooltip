@@ -45,7 +45,7 @@ const Test = React.createClass({
       <section className='tooltip-example'>
         <h4 className='title'>React Tooltip</h4>
         <div className='demonstration'>
-          <a data-tip='react tooltip<br />multiline'>
+          <a data-tip>
              ◕‿‿◕
           </a>
         </div>
@@ -82,7 +82,10 @@ const Test = React.createClass({
             </div>
           </pre>
         </div>
-        <ReactTooltip place={place} type={type} effect={effect} multiline={true} />
+        <ReactTooltip place={place} type={type} effect={effect} multiline={true} >
+          <p>whatever you like</p>
+          <h3>hehehehe</h3>
+        </ReactTooltip>
       </section>
     )
   }
