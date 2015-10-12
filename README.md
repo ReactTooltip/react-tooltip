@@ -1,9 +1,11 @@
 # react-tooltip
 [![Version](http://img.shields.io/npm/v/react-tooltip.svg)](https://www.npmjs.org/package/react-tooltip)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
+[![npm download][download-image]][download-url]
 [![Circle CI](https://circleci.com/gh/wwayne/react-tooltip/tree/master.svg?style=svg)](https://circleci.com/gh/wwayne/react-tooltip/tree/master)
 
-
+[download-image]: https://img.shields.io/npm/dm/react-tooltip.svg?style=flat-square
+[download-url]: https://npmjs.org/package/react-tooltip
 
 ### Installation
 
