@@ -159,9 +159,36 @@ export default class ReactTooltip extends Component {
         xPosition += parseInt(position[key], 10)
       }
     }
+    /* When tooltip over the screen */
+    const styleLeft = this.state.x + offset.x + xPosition
+    const styleTop = this.state.y + offset.y + yPosition
+    const windoWidth = window.innerWidth
+    const windowHeight = window.innerHeight
 
-    node.style.left = this.state.x + offset.x + xPosition + 'px'
-    node.style.top = this.state.y + offset.y + yPosition + 'px'
+    if (styleLeft < 0) {
+      this.setState({
+        place: 'right'
+      })
+      return
+    } else if (styleLeft + tipWidth > windoWidth) {
+      this.setState({
+        place: 'left'
+      })
+      return
+    } else if (styleTop < 0) {
+      this.setState({
+        place: 'bottom'
+      })
+      return
+    } else if (styleTop + tipHeight > windowHeight) {
+      this.setState({
+        place: 'top'
+      })
+      return
+    }
+
+    node.style.left = styleLeft + 'px'
+    node.style.top = styleTop + 'px'
   }
 
   showTooltip (e) {
