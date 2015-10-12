@@ -1,13 +1,16 @@
 html, body{
   margin:0px;
   padding:0px;
-  background: #1182dd;
   min-width: 1024px;
 }
 .tooltip-example {
+  background: #1182dd;
+  height: 550px;
+  position: relative;
   .title {
     color: #fff;
-    margin-top: 50px;
+    padding-top: 50px;
+    margin-top: 0px;
     font-size: 45px;
     text-align: center;
     margin-bottom: 20px;
@@ -16,7 +19,7 @@ html, body{
 }
 .demonstration {
   width: 600px;
-  height: 210px;
+  height: 150px;
   margin: 10px auto;
   background: rgba(0,0,0,0.1);
   border-radius: 5px;
@@ -54,7 +57,7 @@ html, body{
 .control-panel {
   background: rgba(255,255,255,0.4);
   border-top: 1px solid rgba(0,0,0,0.2);
-  position: fixed;
+  position: absolute;
   bottom:0px;
   left:0px;
   right:0px;
@@ -120,5 +123,86 @@ html, body{
       font-size: 18px;
       color: #777;
     }
+  }
+}
+
+.advance {
+  .title {
+    color: #222;
+    padding-top: 100px;
+    margin-top: 0px;
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  .sub-title {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    color: #666;
+    font-size: 20px;
+    padding-bottom: 5px;
+  }
+  .section {
+    width: 800px;
+    margin: 20px auto;
+  }
+}
+
+.example-jsx {
+  padding: 10px 0px;
+  height: 50px;
+  &:after {
+    content: '';
+    clear: both;
+    height: 0;
+    visibility: hidden;
+  }
+  .side {
+    width: 50%;
+    float: left;
+    box-sizing: border-box;
+  }
+  a {
+    text-align: center;
+    $width: 50px;
+    width: $width;
+    height: $width;
+    line-height: $width;
+    border-radius: $width;
+    display: block;
+    margin: auto;
+    cursor: pointer;
+    color: #999;
+    border: 1px solid #999;
+    font-size: 13px;
+    &:hover {
+      color: #222;
+      border: 1px solid #222;
+    }
+  }
+  p {
+    margin-bottom: 2px;
+    padding: 0px;
+  }
+  ul {
+    padding: 0px;
+    list-style: none;
+    li {
+      padding-left: 10px;
+      margin: 0px;
+      text-align: left;
+    }
+  }
+}
+
+.example-pre {
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,0.2);
+  box-sizing: border-box;
+  padding: 10px;
+  margin-bottom: 60px;
+  font-size: 14px;
+  p {
+    line-height: 30px;
   }
 }

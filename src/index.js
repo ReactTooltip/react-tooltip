@@ -45,7 +45,10 @@ export default class ReactTooltip extends Component {
   componentDidMount () {
     this.bindListener()
     /* Add window event listener for hide and rebuild */
+    window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
     window.addEventListener('__react_tooltip_hide_event', ::this.globalHide, false)
+
+    window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
     window.addEventListener('__react_tooltip_rebuild_event', ::this.globalRebuild, false)
   }
 
@@ -84,10 +87,23 @@ export default class ReactTooltip extends Component {
   }
 
   bindListener () {
-    let targetArray = document.querySelectorAll('[data-tip]')
+    const {id} = this.props
+    let targetArray
+
+    if (id === undefined) {
+      targetArray = document.querySelectorAll('[data-tip]:not([data-for])')
+    } else {
+      targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]')
+    }
+    
     for (let i = 0; i < targetArray.length; i++) {
+      targetArray[i].removeEventListener('mouseenter', this.showTooltip)
       targetArray[i].addEventListener('mouseenter', this.showTooltip, false)
+
+      targetArray[i].removeEventListener('mousemove', this.updateTooltip)
       targetArray[i].addEventListener('mousemove', this.updateTooltip, false)
+
+      targetArray[i].removeEventListener('mouseleave', this.hideTooltip)
       targetArray[i].addEventListener('mouseleave', this.hideTooltip, false)
     }
   }
@@ -148,7 +164,7 @@ export default class ReactTooltip extends Component {
 
   showTooltip (e) {
     const originTooltip = e.target.getAttribute('data-tip')
-    // Detect multiline
+    /* Detect multiline */
     const regexp = /<br\s*\/?>/
     const multiline = e.target.getAttribute('data-multiline') ? e.target.getAttribute('data-multiline') : (this.props.multiline ? this.props.multiline : false)
     let tooltipText
@@ -227,6 +243,8 @@ export default class ReactTooltip extends Component {
   }
 
   render () {
+    const {placeholder} = this.state
+
     let tooltipClass = classname(
       '__react_component_tooltip',
       {'show': this.state.show},
@@ -249,7 +267,7 @@ export default class ReactTooltip extends Component {
       document.getElementsByTagName('head')[0].appendChild(tag)
     }
 
-    const content = this.props.children ? this.props.children : this.state.placeholder 
+    const content = this.props.children ? this.props.children : placeholder
     return (
       <span className={tooltipClass} data-id='tooltip'>{content}</span>
     )
@@ -286,5 +304,6 @@ ReactTooltip.propTypes = {
   type: PropTypes.string,
   effect: PropTypes.string,
   position: PropTypes.object,
-  multiline: PropTypes.bool
+  multiline: PropTypes.bool,
+  id: PropTypes.string
 }
