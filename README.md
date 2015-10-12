@@ -106,6 +106,21 @@ global:
 	<ReactTooltip html={true}/>
 ```
 
+#### Using react component as tooltip
+Check the example [React-tooltip Test](http://wwayne.github.io/react-tooltip)
+
+**Note:**
+
+1. **data-tip** is necessary, because `<ReactTooltip />` find tooltip via this attribute
+2. **data-for** correspond to the **id** of `<ReactTooltip />`
+3. When using react component as tooltip, you can have many `<ReactTooltip />` in a page but they should have different **id**
+
+#### Static method
+`ReactTooltip.hide()` for hide the tooltip manually
+`ReactTooltup.rebuild()` for re-bind tooltip to the corresponding element
+
+I suggest always put `<ReactTooltip />` in the Highest level or smart component of Redux, so you might need these static
+method to control tooltip's behaviour in some situations
 
 ### License
 

@@ -96,8 +96,11 @@ export default class ReactTooltip extends Component {
       targetArray = document.querySelectorAll('[data-tip]:not([data-for])')
     } else {
       targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]')
+      if (targetArray.length > 0) {
+        console.error('You have duplicate react-tooltip, tooltip id is: ' + id)
+      }
     }
-    
+
     for (let i = 0; i < targetArray.length; i++) {
       targetArray[i].removeEventListener('mouseenter', this.showTooltip)
       targetArray[i].addEventListener('mouseenter', this.showTooltip, false)
@@ -210,7 +213,7 @@ export default class ReactTooltip extends Component {
     }
     /* Define extra class */
     let extraClass = e.target.getAttribute('data-class') ? e.target.getAttribute('data-class') : ''
-    extraClass = this.props.class ? this.props.class + " " + extraClass : extraClass
+    extraClass = this.props.class ? this.props.class + ' ' + extraClass : extraClass
     this.setState({
       placeholder: tooltipText,
       multilineCount: multilineCount,
@@ -227,14 +230,14 @@ export default class ReactTooltip extends Component {
 
   updateTooltip (e) {
     if (this.trim(this.state.placeholder).length > 0) {
-      const {multilineCount, place} = this.state
+      const {place} = this.state
       const node = findDOMNode(this)
       if (this.state.effect === 'float') {
-        // const offsetY = e.clientY 
+        // const offsetY = e.clientY
         this.setState({
           show: true,
           x: e.clientX,
-          y: e.clientY 
+          y: e.clientY
         })
       } else if (this.state.effect === 'solid') {
         const boundingClientRect = e.target.getBoundingClientRect()
@@ -303,12 +306,12 @@ export default class ReactTooltip extends Component {
 
     if (html) {
       return (
-        <span className={tooltipClass + " " + extraClass} data-id='tooltip' dangerouslySetInnerHTML={{__html:placeholder}}></span>
+        <span className={tooltipClass + ' ' + extraClass} data-id='tooltip' dangerouslySetInnerHTML={{__html: placeholder}}></span>
       )
     } else {
       const content = this.props.children ? this.props.children : placeholder
       return (
-        <span className={tooltipClass + " " + extraClass} data-id='tooltip'>{content}</span>
+        <span className={tooltipClass + ' ' + extraClass} data-id='tooltip'>{content}</span>
       )
     }
   }
@@ -340,6 +343,7 @@ export default class ReactTooltip extends Component {
 }
 
 ReactTooltip.propTypes = {
+  children: PropTypes.any,
   place: PropTypes.string,
   type: PropTypes.string,
   effect: PropTypes.string,

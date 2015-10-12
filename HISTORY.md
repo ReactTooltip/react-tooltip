@@ -1,9 +1,33 @@
 v0.7.0
 ======
-release date: 2015-09-27
+release date: 2015-10-12
 ###Notable Changes:
 
-Multiline option now only detect `<br>`, `<br/>` and `<br />` to seperate tooltip 
+#### Customer extra class
+Now support `<ReactTooltip class="myClass"/>` to append your own custom class, use `!important` if your class doesn't make effect
+
+#### Insert HTML as tooltip
+`<ReactTooltip html={true}>` then you can set html as your tooltip `<a data-tip='<p>html tooltip</p>'></a>`
+
+#### Use React component as your tooltip
+
+```
+<p data-tip data-for="myTooltip"></p>
+<ReactTooltip id="myTooltip">
+ <div>Tooltip</div>
+ <p>sub tooltip</p>
+</ReactTooltip>
+```
+
+You can find how to use this in [React-tooltip Test](http://wwayne.github.io/react-tooltip)
+
+**Note: ** 
+
+1. **data-tip** is necessary, because `<ReactTooltip />` find tooltip via this attribute
+2. **data-for** corresponds to the **id** of `<ReactTooltip />`
+3. When using react component as tooltip, you can have many `<ReactTooltip />` in a page but they should have different **id**
+
+
 
 v0.6.4
 ======
