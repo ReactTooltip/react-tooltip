@@ -40,7 +40,8 @@ export default class ReactTooltip extends Component {
       multiline: false,
       position: {},
       extraClass: '',
-      html: false
+      html: false,
+      delayHide: 0
     }
   }
 
@@ -74,9 +75,11 @@ export default class ReactTooltip extends Component {
     this.unbindListener()
     this.mount = false
     let tag = document.querySelector('style[id="react-tooltip"]')
+
     if (tag !== null) {
       document.getElementsByTagName('head')[0].removeChild(tag)
     }
+
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
   }
@@ -222,7 +225,8 @@ export default class ReactTooltip extends Component {
       position: e.target.getAttribute('data-position') ? e.target.getAttribute('data-position') : (this.props.position ? this.props.position : {}),
       extraClass,
       multiline,
-      html: e.target.getAttribute('data-html') ? e.target.getAttribute('data-html') : (this.props.html ? this.props.html : false)
+      html: e.target.getAttribute('data-html') ? e.target.getAttribute('data-html') : (this.props.html ? this.props.html : false),
+      delayHide: e.target.getAttribute('data-delay-hide') ? e.target.getAttribute('data-delay-hide') : (this.props.delayHide ? this.props.delayHide : 0)
     })
     this.updateTooltip(e)
   }
@@ -263,19 +267,21 @@ export default class ReactTooltip extends Component {
         }
         this.setState({
           show: true,
-          x: this.state.x === 'NONE' ? x : this.state.x,
-          y: this.state.y === 'NONE' ? y : this.state.y
+          x,
+          y
         })
       }
     }
   }
 
   hideTooltip () {
-    this.setState({
-      show: false,
-      x: 'NONE',
-      y: 'NONE'
-    })
+    const {delayHide} = this.state
+    console.log(delayHide)
+    setTimeout(() => {
+      this.setState({
+        show: false
+      })
+    }, parseInt(delayHide, 10))
   }
 
   render () {
@@ -350,5 +356,6 @@ ReactTooltip.propTypes = {
   multiline: PropTypes.bool,
   class: PropTypes.string,
   id: PropTypes.string,
-  html: PropTypes.bool
+  html: PropTypes.bool,
+  delayHide: PropTypes.number
 }

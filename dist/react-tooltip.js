@@ -79,7 +79,8 @@ var ReactTooltip = (function (_Component) {
       multiline: false,
       position: {},
       extraClass: '',
-      html: false
+      html: false,
+      delayHide: 0
     };
   }
 
@@ -114,9 +115,11 @@ var ReactTooltip = (function (_Component) {
     this.unbindListener();
     this.mount = false;
     var tag = document.querySelector('style[id="react-tooltip"]');
+
     if (tag !== null) {
       document.getElementsByTagName('head')[0].removeChild(tag);
     }
+
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
   };
@@ -266,7 +269,8 @@ var ReactTooltip = (function (_Component) {
       position: e.target.getAttribute('data-position') ? e.target.getAttribute('data-position') : this.props.position ? this.props.position : {},
       extraClass: extraClass,
       multiline: multiline,
-      html: e.target.getAttribute('data-html') ? e.target.getAttribute('data-html') : this.props.html ? this.props.html : false
+      html: e.target.getAttribute('data-html') ? e.target.getAttribute('data-html') : this.props.html ? this.props.html : false,
+      delayHide: e.target.getAttribute('data-delay-hide') ? e.target.getAttribute('data-delay-hide') : this.props.delayHide ? this.props.delayHide : 0
     });
     this.updateTooltip(e);
   };
@@ -308,19 +312,24 @@ var ReactTooltip = (function (_Component) {
         }
         this.setState({
           show: true,
-          x: this.state.x === 'NONE' ? x : this.state.x,
-          y: this.state.y === 'NONE' ? y : this.state.y
+          x: x,
+          y: y
         });
       }
     }
   };
 
   ReactTooltip.prototype.hideTooltip = function hideTooltip() {
-    this.setState({
-      show: false,
-      x: 'NONE',
-      y: 'NONE'
-    });
+    var _this2 = this;
+
+    var delayHide = this.state.delayHide;
+
+    console.log(delayHide);
+    setTimeout(function () {
+      _this2.setState({
+        show: false
+      });
+    }, parseInt(delayHide, 10));
   };
 
   ReactTooltip.prototype.render = function render() {
@@ -388,6 +397,7 @@ ReactTooltip.propTypes = {
   multiline: _react.PropTypes.bool,
   'class': _react.PropTypes.string,
   id: _react.PropTypes.string,
-  html: _react.PropTypes.bool
+  html: _react.PropTypes.bool,
+  delayHide: _react.PropTypes.number
 };
 module.exports = exports['default'];
