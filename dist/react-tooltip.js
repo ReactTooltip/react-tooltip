@@ -114,7 +114,9 @@ var ReactTooltip = (function (_Component) {
     this.unbindListener();
     this.mount = false;
     var tag = document.querySelector('style[id="react-tooltip"]');
-    document.getElementsByTagName('head')[0].removeChild(tag);
+    if (tag !== null) {
+      document.getElementsByTagName('head')[0].removeChild(tag);
+    }
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
   };
