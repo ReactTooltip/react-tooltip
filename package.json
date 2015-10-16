@@ -1,6 +1,6 @@
 {
   "name": "react-tooltip",
-  "version": "0.7.5",
+  "version": "0.8.1",
   "description": "react tooltip component",
   "main": "dist/react-tooltip.js",
   "scripts": {

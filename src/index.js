@@ -38,7 +38,7 @@ export default class ReactTooltip extends Component {
       type: '',
       effect: '',
       multiline: false,
-      position: {},
+      offset: {},
       extraClass: '',
       html: false,
       delayHide: 0
@@ -129,44 +129,44 @@ export default class ReactTooltip extends Component {
 
     let tipWidth = node.clientWidth
     let tipHeight = node.clientHeight
-    let offset = {x: 0, y: 0}
+    let offsetFormEffect = {x: 0, y: 0}
     let { effect } = this.state
     if (effect === 'float') {
       if (this.state.place === 'top') {
-        offset.x = -(tipWidth / 2)
-        offset.y = -tipHeight
+        offsetFormEffect.x = -(tipWidth / 2)
+        offsetFormEffect.y = -tipHeight
       } else if (this.state.place === 'bottom') {
-        offset.x = -(tipWidth / 2)
-        offset.y = 15
+        offsetFormEffect.x = -(tipWidth / 2)
+        offsetFormEffect.y = 15
       } else if (this.state.place === 'left') {
-        offset.x = -(tipWidth + 15)
-        offset.y = -(tipHeight / 2)
+        offsetFormEffect.x = -(tipWidth + 15)
+        offsetFormEffect.y = -(tipHeight / 2)
       } else if (this.state.place === 'right') {
-        offset.x = 10
-        offset.y = -(tipHeight / 2)
+        offsetFormEffect.x = 10
+        offsetFormEffect.y = -(tipHeight / 2)
       }
     }
     let xPosition = 0
     let yPosition = 0
-    let {position} = this.state
+    let {offset} = this.state
 
-    if (Object.prototype.toString.apply(position) === '[object String]') {
-      position = JSON.parse(position.toString().replace(/\'/g, '\"'))
+    if (Object.prototype.toString.apply(offset) === '[object String]') {
+      offset = JSON.parse(offset.toString().replace(/\'/g, '\"'))
     }
-    for (let key in position) {
+    for (let key in offset) {
       if (key === 'top') {
-        yPosition -= parseInt(position[key], 10)
+        yPosition -= parseInt(offset[key], 10)
       } else if (key === 'bottom') {
-        yPosition += parseInt(position[key], 10)
+        yPosition += parseInt(offset[key], 10)
       } else if (key === 'left') {
-        xPosition -= parseInt(position[key], 10)
+        xPosition -= parseInt(offset[key], 10)
       } else if (key === 'right') {
-        xPosition += parseInt(position[key], 10)
+        xPosition += parseInt(offset[key], 10)
       }
     }
     /* When tooltip over the screen */
-    const styleLeft = this.state.x + offset.x + xPosition
-    const styleTop = this.state.y + offset.y + yPosition
+    const styleLeft = this.state.x + offsetFormEffect.x + xPosition
+    const styleTop = this.state.y + offsetFormEffect.y + yPosition
     const windoWidth = window.innerWidth
     const windowHeight = window.innerHeight
 
@@ -222,7 +222,7 @@ export default class ReactTooltip extends Component {
       place: e.target.getAttribute('data-place') ? e.target.getAttribute('data-place') : (this.props.place ? this.props.place : 'top'),
       type: e.target.getAttribute('data-type') ? e.target.getAttribute('data-type') : (this.props.type ? this.props.type : 'dark'),
       effect: e.target.getAttribute('data-effect') ? e.target.getAttribute('data-effect') : (this.props.effect ? this.props.effect : 'float'),
-      position: e.target.getAttribute('data-position') ? e.target.getAttribute('data-position') : (this.props.position ? this.props.position : {}),
+      offset: e.target.getAttribute('data-offset') ? e.target.getAttribute('data-offset') : (this.props.offset ? this.props.offset : {}),
       extraClass,
       multiline,
       html: e.target.getAttribute('data-html') ? e.target.getAttribute('data-html') : (this.props.html ? this.props.html : false),
@@ -352,7 +352,7 @@ ReactTooltip.propTypes = {
   place: PropTypes.string,
   type: PropTypes.string,
   effect: PropTypes.string,
-  position: PropTypes.object,
+  offset: PropTypes.object,
   multiline: PropTypes.bool,
   class: PropTypes.string,
   id: PropTypes.string,

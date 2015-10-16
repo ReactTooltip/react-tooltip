@@ -77,7 +77,7 @@ var ReactTooltip = (function (_Component) {
       type: '',
       effect: '',
       multiline: false,
-      position: {},
+      offset: {},
       extraClass: '',
       html: false,
       delayHide: 0
@@ -170,45 +170,45 @@ var ReactTooltip = (function (_Component) {
 
     var tipWidth = node.clientWidth;
     var tipHeight = node.clientHeight;
-    var offset = { x: 0, y: 0 };
+    var offsetFormEffect = { x: 0, y: 0 };
     var effect = this.state.effect;
 
     if (effect === 'float') {
       if (this.state.place === 'top') {
-        offset.x = -(tipWidth / 2);
-        offset.y = -tipHeight;
+        offsetFormEffect.x = -(tipWidth / 2);
+        offsetFormEffect.y = -tipHeight;
       } else if (this.state.place === 'bottom') {
-        offset.x = -(tipWidth / 2);
-        offset.y = 15;
+        offsetFormEffect.x = -(tipWidth / 2);
+        offsetFormEffect.y = 15;
       } else if (this.state.place === 'left') {
-        offset.x = -(tipWidth + 15);
-        offset.y = -(tipHeight / 2);
+        offsetFormEffect.x = -(tipWidth + 15);
+        offsetFormEffect.y = -(tipHeight / 2);
       } else if (this.state.place === 'right') {
-        offset.x = 10;
-        offset.y = -(tipHeight / 2);
+        offsetFormEffect.x = 10;
+        offsetFormEffect.y = -(tipHeight / 2);
       }
     }
     var xPosition = 0;
     var yPosition = 0;
-    var position = this.state.position;
+    var offset = this.state.offset;
 
-    if (Object.prototype.toString.apply(position) === '[object String]') {
-      position = JSON.parse(position.toString().replace(/\'/g, '\"'));
+    if (Object.prototype.toString.apply(offset) === '[object String]') {
+      offset = JSON.parse(offset.toString().replace(/\'/g, '\"'));
     }
-    for (var key in position) {
+    for (var key in offset) {
       if (key === 'top') {
-        yPosition -= parseInt(position[key], 10);
+        yPosition -= parseInt(offset[key], 10);
       } else if (key === 'bottom') {
-        yPosition += parseInt(position[key], 10);
+        yPosition += parseInt(offset[key], 10);
       } else if (key === 'left') {
-        xPosition -= parseInt(position[key], 10);
+        xPosition -= parseInt(offset[key], 10);
       } else if (key === 'right') {
-        xPosition += parseInt(position[key], 10);
+        xPosition += parseInt(offset[key], 10);
       }
     }
     /* When tooltip over the screen */
-    var styleLeft = this.state.x + offset.x + xPosition;
-    var styleTop = this.state.y + offset.y + yPosition;
+    var styleLeft = this.state.x + offsetFormEffect.x + xPosition;
+    var styleTop = this.state.y + offsetFormEffect.y + yPosition;
     var windoWidth = window.innerWidth;
     var windowHeight = window.innerHeight;
 
@@ -266,7 +266,7 @@ var ReactTooltip = (function (_Component) {
       place: e.target.getAttribute('data-place') ? e.target.getAttribute('data-place') : this.props.place ? this.props.place : 'top',
       type: e.target.getAttribute('data-type') ? e.target.getAttribute('data-type') : this.props.type ? this.props.type : 'dark',
       effect: e.target.getAttribute('data-effect') ? e.target.getAttribute('data-effect') : this.props.effect ? this.props.effect : 'float',
-      position: e.target.getAttribute('data-position') ? e.target.getAttribute('data-position') : this.props.position ? this.props.position : {},
+      offset: e.target.getAttribute('data-offset') ? e.target.getAttribute('data-offset') : this.props.offset ? this.props.offset : {},
       extraClass: extraClass,
       multiline: multiline,
       html: e.target.getAttribute('data-html') ? e.target.getAttribute('data-html') : this.props.html ? this.props.html : false,
@@ -393,7 +393,7 @@ ReactTooltip.propTypes = {
   place: _react.PropTypes.string,
   type: _react.PropTypes.string,
   effect: _react.PropTypes.string,
-  position: _react.PropTypes.object,
+  offset: _react.PropTypes.object,
   multiline: _react.PropTypes.bool,
   'class': _react.PropTypes.string,
   id: _react.PropTypes.string,

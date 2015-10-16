@@ -1,3 +1,14 @@
+v0.8.0
+======
+release date: 2015-10-16
+###Notable Changes:
+
+#### delay hide the tooltip
+`<ReactTooltip delayHide=1000>` or `<a data0delay-hide="1000"></a>`
+
+#### Change data-position to data-offset
+
+
 v0.7.0
 ======
 release date: 2015-10-12

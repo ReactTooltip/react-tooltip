@@ -34,81 +34,25 @@ var ReactTooltip = require("react-tooltip")
 
 
 ### Options
-Every option has default value, You don't need to add option if default options are enough. 
-
-The options set to `<ReactTooltip />` will affect all tootips in a same page and options set to specific element only affect the specific tooltip's behaviour.
+Notes:
+* The tooltip is using `type: dark` `place: top` `effect: float` as **default** attribute, you don't have to add these options if you don't want to change default
+* The option you set on `<ReactTooltip />` component will be implemented on every tooltip in a same page: `<ReactTooltip effect="solid" />`
+* The option you set on specific elecment, for example: `<a data-type="warning"></a>` will only make effect on this specific tooltip
 
 Check example:  [React-tooltip Test](http://wwayne.github.io/react-tooltip)
 
-#### Place: String [ top, right, bottom, left ]
+	Global  |	Specific	|	Type	|	Values  |       Description
+:-----------|:-------------|:----------|:----------|:------------------
+    place	|   data-place  |  String  |  top, right, bottom, left | 
+    type	|   data-type  |  String  |  success, warning, error, info, light | 
+    effect	|   data-effect  |  String  |  float, solid | 
+    offset	|   data-offset  |  Object  |  top, right, bottom, left | data-offset="{'top': 10, 'left': 10}" for specific and offset={{top: 10, left: 10}} for global
+   multiline	|   data-multiline  |  Bool  |  true, false | support `<br>`, `<br />` to make multiline
+  class	|   data-class  |  String  |  your custom class | extra custom class, can use !important to cover react-tooltip's default class
+      html	|   data-html  |  Bool  |  true, false  |  `<p data-tip="<p>HTML tooltip</p>" data-html={true}></p>` or `<ReactTooltip html={true} />`
+   delayHide	|   data-delay-hide  |  Number  |   |    `<p data-tip="tooltip" data-delay-hide='1000' or `<ReactTooltip delayHide=1000 />`
 
-```js
-Specific element:
-	<p data-tip="tooltip" data-place="top"></p>
-
-global:	
-	<ReactTooltip place="top"/>
-```
-#### Type: String [ dark, success, warning, error, info, light ]
-
-```js
-Specific element:
-	<p data-tip="tooltip" data-type="dark"></p>
-		
-global:	
-	<ReactTooltip type="dark"/>
-```
-#### Effect: String [ float, solid ]
-
-```js
-Specific element:
-	<p data-tip="tooltip" data-effect="float"></p>
-	
-global:	
-	<ReactTooltip effect="float"/>
-```
-
-#### Position: Object [ top, right, bottom, left ]
-
-```js
-Specific element:
-	<p data-tip="tooltip" data-position="{'top': 10, 'left': 10}"></p>
-	
-global:	
-	<ReactTooltip type="float" position={{top: 10, left: 10}}/>
-```
-
-#### Multiline: Bool [ true, false ]
-
-```js
-Specific element:
-	<p data-tip="tooltip<br>a<br />b" data-multiline={true}></p>
-	
-global:	
-	<ReactTooltip multiline={true}/>
-```
-
-#### Extra Class: String
-
-```js
-Specific element:
-	<p data-tip="tooltip" data-class="extra-class"></p>
-	
-global:	
-	<ReactTooltip class="extra-class"/>
-```
-
-#### Insert HTML
-
-```js
-Specific element:
-	<p data-tip="<p>HTML tooltip</p>" data-html={true}></p>
-	
-global:	
-	<ReactTooltip html={true}/>
-```
-
-#### Using react component as tooltip
+### Using react component as tooltip
 Check the example [React-tooltip Test](http://wwayne.github.io/react-tooltip)
 
 ##### Note:
@@ -116,7 +60,7 @@ Check the example [React-tooltip Test](http://wwayne.github.io/react-tooltip)
 2. **data-for** correspond to the **id** of `<ReactTooltip />`
 3. When using react component as tooltip, you can have many `<ReactTooltip />` in a page but they should have different **id**
 
-#### Static method
+### Methods
 `ReactTooltip.hide()` for hide the tooltip manually
 
 `ReactTooltup.rebuild()` for re-bind tooltip to the corresponding element
