@@ -212,26 +212,29 @@ var ReactTooltip = (function (_Component) {
     var windoWidth = window.innerWidth;
     var windowHeight = window.innerHeight;
 
-    if (styleLeft < 0) {
-      this.setState({
-        place: 'right'
-      });
-      return;
-    } else if (styleLeft + tipWidth > windoWidth) {
-      this.setState({
-        place: 'left'
-      });
-      return;
-    } else if (styleTop < 0) {
-      this.setState({
-        place: 'bottom'
-      });
-      return;
-    } else if (styleTop + tipHeight > windowHeight) {
-      this.setState({
-        place: 'top'
-      });
-      return;
+    /* Solid use this method will get Uncaught RangeError: Maximum call stack size exceeded */
+    if (effect === 'float') {
+      if (styleLeft < 0) {
+        this.setState({
+          place: 'right'
+        });
+        return;
+      } else if (styleLeft + tipWidth > windoWidth) {
+        this.setState({
+          place: 'left'
+        });
+        return;
+      } else if (styleTop < 0) {
+        this.setState({
+          place: 'bottom'
+        });
+        return;
+      } else if (styleTop + tipHeight > windowHeight) {
+        this.setState({
+          place: 'top'
+        });
+        return;
+      }
     }
 
     node.style.left = styleLeft + 'px';
@@ -239,6 +242,7 @@ var ReactTooltip = (function (_Component) {
   };
 
   ReactTooltip.prototype.showTooltip = function showTooltip(e) {
+    e.stopPropagation();
     var originTooltip = e.target.getAttribute('data-tip');
     /* Detect multiline */
     var regexp = /<br\s*\/?>/;
@@ -276,6 +280,7 @@ var ReactTooltip = (function (_Component) {
   };
 
   ReactTooltip.prototype.updateTooltip = function updateTooltip(e) {
+    e.stopPropagation();
     if (this.trim(this.state.placeholder).length > 0) {
       var place = this.state.place;
 
@@ -312,8 +317,8 @@ var ReactTooltip = (function (_Component) {
         }
         this.setState({
           show: true,
-          x: x,
-          y: y
+          x: this.state.x === 'NONE' ? x : this.state.x,
+          y: this.state.y === 'NONE' ? y : this.state.y
         });
       }
     }
@@ -324,10 +329,11 @@ var ReactTooltip = (function (_Component) {
 
     var delayHide = this.state.delayHide;
 
-    console.log(delayHide);
     setTimeout(function () {
       _this2.setState({
-        show: false
+        show: false,
+        x: 'NONE',
+        y: 'NONE'
       });
     }, parseInt(delayHide, 10));
   };

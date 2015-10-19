@@ -89,7 +89,7 @@ const Test = React.createClass({
           <div className="section">
             <h4 className='title'>Advance features</h4>
             <p className="sub-title">Use everything as tooltip</p>
-            {/* EXAMPLE ONE */}
+          
             <div className="example-jsx">
               <div className="side">
                 <a data-tip data-for='happyFace'> d(`･∀･)b </a>
@@ -113,7 +113,7 @@ const Test = React.createClass({
                 "</ReactTooltip>"}</p>
               </div>
             </pre>
-            {/* EXAMPLE TWO */}
+          
             <div className="example-jsx">
               <div className="side"><a data-tip data-for='global'> σ`∀´)σ </a></div>
               <div className="side"><a data-tip data-for='global'> (〃∀〃) </a></div>

@@ -170,26 +170,29 @@ export default class ReactTooltip extends Component {
     const windoWidth = window.innerWidth
     const windowHeight = window.innerHeight
 
-    if (styleLeft < 0) {
-      this.setState({
-        place: 'right'
-      })
-      return
-    } else if (styleLeft + tipWidth > windoWidth) {
-      this.setState({
-        place: 'left'
-      })
-      return
-    } else if (styleTop < 0) {
-      this.setState({
-        place: 'bottom'
-      })
-      return
-    } else if (styleTop + tipHeight > windowHeight) {
-      this.setState({
-        place: 'top'
-      })
-      return
+    /* Solid use this method will get Uncaught RangeError: Maximum call stack size exceeded */
+    if (effect === 'float') {
+      if (styleLeft < 0) {
+        this.setState({
+          place: 'right'
+        })
+        return
+      } else if (styleLeft + tipWidth > windoWidth) {
+        this.setState({
+          place: 'left'
+        })
+        return
+      } else if (styleTop < 0) {
+        this.setState({
+          place: 'bottom'
+        })
+        return
+      } else if (styleTop + tipHeight > windowHeight) {
+        this.setState({
+          place: 'top'
+        })
+        return
+      }
     }
 
     node.style.left = styleLeft + 'px'
@@ -197,6 +200,7 @@ export default class ReactTooltip extends Component {
   }
 
   showTooltip (e) {
+    e.stopPropagation()
     const originTooltip = e.target.getAttribute('data-tip')
     /* Detect multiline */
     const regexp = /<br\s*\/?>/
@@ -232,6 +236,7 @@ export default class ReactTooltip extends Component {
   }
 
   updateTooltip (e) {
+    e.stopPropagation()
     if (this.trim(this.state.placeholder).length > 0) {
       const {place} = this.state
       const node = findDOMNode(this)
@@ -267,8 +272,8 @@ export default class ReactTooltip extends Component {
         }
         this.setState({
           show: true,
-          x,
-          y
+          x: this.state.x === 'NONE' ? x : this.state.x,
+          y: this.state.y === 'NONE' ? y : this.state.y
         })
       }
     }
@@ -276,10 +281,11 @@ export default class ReactTooltip extends Component {
 
   hideTooltip () {
     const {delayHide} = this.state
-    console.log(delayHide)
     setTimeout(() => {
       this.setState({
-        show: false
+        show: false,
+        x: 'NONE',
+        y: 'NONE'
       })
     }, parseInt(delayHide, 10))
   }
