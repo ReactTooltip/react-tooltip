@@ -39,7 +39,7 @@ Notes:
 * The option you set on `<ReactTooltip />` component will be implemented on every tooltip in a same page: `<ReactTooltip effect="solid" />`
 * The option you set on specific elecment, for example: `<a data-type="warning"></a>` will only make effect on this specific tooltip
 
-Check example:  [React-tooltip Test](http://wwayne.github.io/react-tooltip)
+Check example:  [React-tooltip Test](http://wwayne.com/react-tooltip)
 
 	Global  |	Specific	|	Type	|	Values  |       Description
 :-----------|:-------------|:----------|:----------|:------------------
@@ -53,7 +53,7 @@ Check example:  [React-tooltip Test](http://wwayne.github.io/react-tooltip)
    delayHide	|   data-delay-hide  |  Number  |   |    `<p data-tip="tooltip" data-delay-hide='1000' or `<ReactTooltip delayHide=1000 />`
 
 ### Using react component as tooltip
-Check the example [React-tooltip Test](http://wwayne.github.io/react-tooltip)
+Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
 
 ##### Note:
 1. **data-tip** is necessary, because `<ReactTooltip />` find tooltip via this attribute
