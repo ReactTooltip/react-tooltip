@@ -114,12 +114,6 @@ var ReactTooltip = (function (_Component) {
   ReactTooltip.prototype.componentWillUnmount = function componentWillUnmount() {
     this.unbindListener();
     this.mount = false;
-    var tag = document.querySelector('style[id="react-tooltip"]');
-
-    if (tag !== null) {
-      document.getElementsByTagName('head')[0].removeChild(tag);
-    }
-
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
   };
@@ -317,8 +311,8 @@ var ReactTooltip = (function (_Component) {
         }
         this.setState({
           show: true,
-          x: this.state.x === 'NONE' ? x : this.state.x,
-          y: this.state.y === 'NONE' ? y : this.state.y
+          x: x,
+          y: y
         });
       }
     }
@@ -331,9 +325,7 @@ var ReactTooltip = (function (_Component) {
 
     setTimeout(function () {
       _this2.setState({
-        show: false,
-        x: 'NONE',
-        y: 'NONE'
+        show: false
       });
     }, parseInt(delayHide, 10));
   };
