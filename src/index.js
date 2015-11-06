@@ -55,8 +55,8 @@ export default class ReactTooltip extends Component {
     window.addEventListener('__react_tooltip_rebuild_event', ::this.globalRebuild, false)
   }
 
-  /** Method for window.addEventListener
-   *
+  /**
+   *  Method for window.addEventListener
    **/
   globalHide () {
     if (this.mount) {
@@ -83,7 +83,7 @@ export default class ReactTooltip extends Component {
   }
 
   componentDidUpdate () {
-    this._updatePosition()
+    this.updatePosition()
     this.bindListener()
   }
 
@@ -118,81 +118,9 @@ export default class ReactTooltip extends Component {
     }
   }
 
-  _updatePosition () {
-    let node = findDOMNode(this)
-
-    let tipWidth = node.clientWidth
-    let tipHeight = node.clientHeight
-    let offsetFormEffect = {x: 0, y: 0}
-    let { effect } = this.state
-    if (effect === 'float') {
-      if (this.state.place === 'top') {
-        offsetFormEffect.x = -(tipWidth / 2)
-        offsetFormEffect.y = -tipHeight
-      } else if (this.state.place === 'bottom') {
-        offsetFormEffect.x = -(tipWidth / 2)
-        offsetFormEffect.y = 15
-      } else if (this.state.place === 'left') {
-        offsetFormEffect.x = -(tipWidth + 15)
-        offsetFormEffect.y = -(tipHeight / 2)
-      } else if (this.state.place === 'right') {
-        offsetFormEffect.x = 10
-        offsetFormEffect.y = -(tipHeight / 2)
-      }
-    }
-    let xPosition = 0
-    let yPosition = 0
-    let {offset} = this.state
-
-    if (Object.prototype.toString.apply(offset) === '[object String]') {
-      offset = JSON.parse(offset.toString().replace(/\'/g, '\"'))
-    }
-    for (let key in offset) {
-      if (key === 'top') {
-        yPosition -= parseInt(offset[key], 10)
-      } else if (key === 'bottom') {
-        yPosition += parseInt(offset[key], 10)
-      } else if (key === 'left') {
-        xPosition -= parseInt(offset[key], 10)
-      } else if (key === 'right') {
-        xPosition += parseInt(offset[key], 10)
-      }
-    }
-    /* When tooltip over the screen */
-    const styleLeft = this.state.x + offsetFormEffect.x + xPosition
-    const styleTop = this.state.y + offsetFormEffect.y + yPosition
-    const windoWidth = window.innerWidth
-    const windowHeight = window.innerHeight
-
-    /* Solid use this method will get Uncaught RangeError: Maximum call stack size exceeded */
-    if (effect === 'float') {
-      if (styleLeft < 0) {
-        this.setState({
-          place: 'right'
-        })
-        return
-      } else if (styleLeft + tipWidth > windoWidth) {
-        this.setState({
-          place: 'left'
-        })
-        return
-      } else if (styleTop < 0) {
-        this.setState({
-          place: 'bottom'
-        })
-        return
-      } else if (styleTop + tipHeight > windowHeight) {
-        this.setState({
-          place: 'top'
-        })
-        return
-      }
-    }
-
-    node.style.left = styleLeft + 'px'
-    node.style.top = styleTop + 'px'
-  }
-
+  /**
+   * When mouse enter, show update
+   */
   showTooltip (e) {
     e.stopPropagation()
     const originTooltip = e.target.getAttribute('data-tip')
@@ -229,6 +157,9 @@ export default class ReactTooltip extends Component {
     this.updateTooltip(e)
   }
 
+  /**
+   * When mouse hover, updatetooltip
+   */
   updateTooltip (e) {
     e.stopPropagation()
     if (this.trim(this.state.placeholder).length > 0) {
@@ -273,6 +204,9 @@ export default class ReactTooltip extends Component {
     }
   }
 
+  /**
+   * When mouse leave, hide tooltip
+   */
   hideTooltip () {
     const {delayHide} = this.state
     setTimeout(() => {
@@ -280,6 +214,89 @@ export default class ReactTooltip extends Component {
         show: false
       })
     }, parseInt(delayHide, 10))
+  }
+
+  /**
+   * Execute in componentDidUpdate, used in the render function, move out for server rending
+   */
+  updatePosition () {
+    let node = findDOMNode(this)
+
+    let tipWidth = node.clientWidth
+    let tipHeight = node.clientHeight
+    let { effect, place, offset } = this.state
+    let offsetFromEffect = {}
+
+    if (effect === 'float') {
+      offsetFromEffect.top = {
+        x: -(tipWidth / 2),
+        y: -tipHeight
+      }
+      offsetFromEffect.bottom = {
+        x: -(tipWidth / 2),
+        y: 15
+      }
+      offsetFromEffect.left = {
+        x: -(tipWidth + 15),
+        y: -(tipHeight / 2)
+      }
+      offsetFromEffect.right = {
+        x: 10,
+        y: -(tipHeight / 2)
+      }
+    }
+    let xPosition = 0
+    let yPosition = 0
+
+    if (Object.prototype.toString.apply(offset) === '[object String]') {
+      offset = JSON.parse(offset.toString().replace(/\'/g, '\"'))
+    }
+    for (let key in offset) {
+      if (key === 'top') {
+        yPosition -= parseInt(offset[key], 10)
+      } else if (key === 'bottom') {
+        yPosition += parseInt(offset[key], 10)
+      } else if (key === 'left') {
+        xPosition -= parseInt(offset[key], 10)
+      } else if (key === 'right') {
+        xPosition += parseInt(offset[key], 10)
+      }
+    }
+    /* When tooltip over the screen */
+    let offsetEffectX = effect === 'solid' ? 0 : (place ? offsetFromEffect[place].x : 0)
+    let offsetEffectY = effect === 'solid' ? 0 : (place ? offsetFromEffect[place].y : 0)
+    const styleLeft = this.state.x + offsetEffectX + xPosition
+    const styleTop = this.state.y + offsetEffectY + yPosition
+    const windoWidth = window.innerWidth
+    const windowHeight = window.innerHeight
+
+    /* Solid use this method will get Uncaught RangeError: Maximum call stack size exceeded */
+    if (effect === 'float') {
+      if (styleLeft < 0 && this.state.x + offsetFromEffect['right'].x + xPosition <= windoWidth) {
+        this.setState({
+          place: 'right'
+        })
+        return
+      } else if (styleLeft + tipWidth > windoWidth && this.state.x + offsetFromEffect['left'].x + xPosition >= 0) {
+        this.setState({
+          place: 'left'
+        })
+        return
+      } else if (styleTop < 0 && this.state.y + offsetFromEffect['bottom'].y + yPosition + tipHeight < windowHeight) {
+        this.setState({
+          place: 'bottom'
+        })
+        return
+      } else if (styleTop + tipHeight >= windowHeight && this.state.y + offsetFromEffect['top'].y + yPosition >= 0) {
+        this.setState({
+          place: 'top'
+        })
+        return
+      }
+    }
+
+    node.style.left = styleLeft + 'px'
+    node.style.top = styleTop + 'px'
   }
 
   render () {

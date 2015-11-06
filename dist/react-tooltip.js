@@ -94,8 +94,8 @@ var ReactTooltip = (function (_Component) {
     window.addEventListener('__react_tooltip_rebuild_event', this.globalRebuild.bind(this), false);
   };
 
-  /** Method for window.addEventListener
-   *
+  /**
+   *  Method for window.addEventListener
    **/
 
   ReactTooltip.prototype.globalHide = function globalHide() {
@@ -123,7 +123,7 @@ var ReactTooltip = (function (_Component) {
   };
 
   ReactTooltip.prototype.componentDidUpdate = function componentDidUpdate() {
-    this._updatePosition();
+    this.updatePosition();
     this.bindListener();
   };
 
@@ -159,81 +159,9 @@ var ReactTooltip = (function (_Component) {
     }
   };
 
-  ReactTooltip.prototype._updatePosition = function _updatePosition() {
-    var node = _reactDom.findDOMNode(this);
-
-    var tipWidth = node.clientWidth;
-    var tipHeight = node.clientHeight;
-    var offsetFormEffect = { x: 0, y: 0 };
-    var effect = this.state.effect;
-
-    if (effect === 'float') {
-      if (this.state.place === 'top') {
-        offsetFormEffect.x = -(tipWidth / 2);
-        offsetFormEffect.y = -tipHeight;
-      } else if (this.state.place === 'bottom') {
-        offsetFormEffect.x = -(tipWidth / 2);
-        offsetFormEffect.y = 15;
-      } else if (this.state.place === 'left') {
-        offsetFormEffect.x = -(tipWidth + 15);
-        offsetFormEffect.y = -(tipHeight / 2);
-      } else if (this.state.place === 'right') {
-        offsetFormEffect.x = 10;
-        offsetFormEffect.y = -(tipHeight / 2);
-      }
-    }
-    var xPosition = 0;
-    var yPosition = 0;
-    var offset = this.state.offset;
-
-    if (Object.prototype.toString.apply(offset) === '[object String]') {
-      offset = JSON.parse(offset.toString().replace(/\'/g, '\"'));
-    }
-    for (var key in offset) {
-      if (key === 'top') {
-        yPosition -= parseInt(offset[key], 10);
-      } else if (key === 'bottom') {
-        yPosition += parseInt(offset[key], 10);
-      } else if (key === 'left') {
-        xPosition -= parseInt(offset[key], 10);
-      } else if (key === 'right') {
-        xPosition += parseInt(offset[key], 10);
-      }
-    }
-    /* When tooltip over the screen */
-    var styleLeft = this.state.x + offsetFormEffect.x + xPosition;
-    var styleTop = this.state.y + offsetFormEffect.y + yPosition;
-    var windoWidth = window.innerWidth;
-    var windowHeight = window.innerHeight;
-
-    /* Solid use this method will get Uncaught RangeError: Maximum call stack size exceeded */
-    if (effect === 'float') {
-      if (styleLeft < 0) {
-        this.setState({
-          place: 'right'
-        });
-        return;
-      } else if (styleLeft + tipWidth > windoWidth) {
-        this.setState({
-          place: 'left'
-        });
-        return;
-      } else if (styleTop < 0) {
-        this.setState({
-          place: 'bottom'
-        });
-        return;
-      } else if (styleTop + tipHeight > windowHeight) {
-        this.setState({
-          place: 'top'
-        });
-        return;
-      }
-    }
-
-    node.style.left = styleLeft + 'px';
-    node.style.top = styleTop + 'px';
-  };
+  /**
+   * When mouse enter, show update
+   */
 
   ReactTooltip.prototype.showTooltip = function showTooltip(e) {
     e.stopPropagation();
@@ -272,6 +200,10 @@ var ReactTooltip = (function (_Component) {
     });
     this.updateTooltip(e);
   };
+
+  /**
+   * When mouse hover, updatetooltip
+   */
 
   ReactTooltip.prototype.updateTooltip = function updateTooltip(e) {
     e.stopPropagation();
@@ -318,6 +250,10 @@ var ReactTooltip = (function (_Component) {
     }
   };
 
+  /**
+   * When mouse leave, hide tooltip
+   */
+
   ReactTooltip.prototype.hideTooltip = function hideTooltip() {
     var _this2 = this;
 
@@ -330,11 +266,99 @@ var ReactTooltip = (function (_Component) {
     }, parseInt(delayHide, 10));
   };
 
-  ReactTooltip.prototype.render = function render() {
+  /**
+   * Execute in componentDidUpdate, used in the render function, move out for server rending
+   */
+
+  ReactTooltip.prototype.updatePosition = function updatePosition() {
+    var node = _reactDom.findDOMNode(this);
+
+    var tipWidth = node.clientWidth;
+    var tipHeight = node.clientHeight;
     var _state = this.state;
-    var placeholder = _state.placeholder;
-    var extraClass = _state.extraClass;
-    var html = _state.html;
+    var effect = _state.effect;
+    var place = _state.place;
+    var offset = _state.offset;
+
+    var offsetFromEffect = {};
+
+    if (effect === 'float') {
+      offsetFromEffect.top = {
+        x: -(tipWidth / 2),
+        y: -tipHeight
+      };
+      offsetFromEffect.bottom = {
+        x: -(tipWidth / 2),
+        y: 15
+      };
+      offsetFromEffect.left = {
+        x: -(tipWidth + 15),
+        y: -(tipHeight / 2)
+      };
+      offsetFromEffect.right = {
+        x: 10,
+        y: -(tipHeight / 2)
+      };
+    }
+    var xPosition = 0;
+    var yPosition = 0;
+
+    if (Object.prototype.toString.apply(offset) === '[object String]') {
+      offset = JSON.parse(offset.toString().replace(/\'/g, '\"'));
+    }
+    for (var key in offset) {
+      if (key === 'top') {
+        yPosition -= parseInt(offset[key], 10);
+      } else if (key === 'bottom') {
+        yPosition += parseInt(offset[key], 10);
+      } else if (key === 'left') {
+        xPosition -= parseInt(offset[key], 10);
+      } else if (key === 'right') {
+        xPosition += parseInt(offset[key], 10);
+      }
+    }
+    /* When tooltip over the screen */
+    var offsetEffectX = effect === 'solid' ? 0 : place ? offsetFromEffect[place].x : 0;
+    var offsetEffectY = effect === 'solid' ? 0 : place ? offsetFromEffect[place].y : 0;
+    var styleLeft = this.state.x + offsetEffectX + xPosition;
+    var styleTop = this.state.y + offsetEffectY + yPosition;
+    var windoWidth = window.innerWidth;
+    var windowHeight = window.innerHeight;
+
+    /* Solid use this method will get Uncaught RangeError: Maximum call stack size exceeded */
+    if (effect === 'float') {
+      if (styleLeft < 0 && this.state.x + offsetFromEffect['right'].x + xPosition <= windoWidth) {
+        this.setState({
+          place: 'right'
+        });
+        return;
+      } else if (styleLeft + tipWidth > windoWidth && this.state.x + offsetFromEffect['left'].x + xPosition >= 0) {
+        this.setState({
+          place: 'left'
+        });
+        return;
+      } else if (styleTop < 0 && this.state.y + offsetFromEffect['bottom'].y + yPosition + tipHeight < windowHeight) {
+        this.setState({
+          place: 'bottom'
+        });
+        return;
+      } else if (styleTop + tipHeight >= windowHeight && this.state.y + offsetFromEffect['top'].y + yPosition >= 0) {
+        this.setState({
+          place: 'top'
+        });
+        return;
+      }
+    }
+
+    node.style.left = styleLeft + 'px';
+    node.style.top = styleTop + 'px';
+  };
+
+  ReactTooltip.prototype.render = function render() {
+    var _state2 = this.state;
+    var placeholder = _state2.placeholder;
+    var extraClass = _state2.extraClass;
+    var html = _state2.html;
 
     var tooltipClass = _classnames2['default']('__react_component_tooltip', { 'show': this.state.show }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
 
