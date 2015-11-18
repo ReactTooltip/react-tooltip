@@ -86,6 +86,7 @@ var ReactTooltip = (function (_Component) {
 
   ReactTooltip.prototype.componentDidMount = function componentDidMount() {
     this.bindListener();
+    this.setStyleHeader();
     /* Add window event listener for hide and rebuild */
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
     window.addEventListener('__react_tooltip_hide_event', this.globalHide.bind(this), false);
@@ -354,6 +355,20 @@ var ReactTooltip = (function (_Component) {
     node.style.top = styleTop + 'px';
   };
 
+  /**
+   * Set style tag in header
+   * Insert style by this way
+   */
+
+  ReactTooltip.prototype.setStyleHeader = function setStyleHeader() {
+    if (!document.getElementsByTagName('head')[0].querySelector('style[id="react-tooltip"]')) {
+      var tag = document.createElement('style');
+      tag.id = 'react-tooltip';
+      tag.innerHTML = _style2['default'];
+      document.getElementsByTagName('head')[0].appendChild(tag);
+    }
+  };
+
   ReactTooltip.prototype.render = function render() {
     var _state2 = this.state;
     var placeholder = _state2.placeholder;
@@ -361,13 +376,6 @@ var ReactTooltip = (function (_Component) {
     var html = _state2.html;
 
     var tooltipClass = _classnames2['default']('__react_component_tooltip', { 'show': this.state.show }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
-
-    if (!document.getElementsByTagName('head')[0].querySelector('style[id="react-tooltip"]')) {
-      var tag = document.createElement('style');
-      tag.id = 'react-tooltip';
-      tag.innerHTML = _style2['default'];
-      document.getElementsByTagName('head')[0].appendChild(tag);
-    }
 
     if (html) {
       return _react2['default'].createElement('span', { className: tooltipClass + ' ' + extraClass, 'data-id': 'tooltip', dangerouslySetInnerHTML: { __html: placeholder } });

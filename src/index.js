@@ -47,6 +47,7 @@ export default class ReactTooltip extends Component {
 
   componentDidMount () {
     this.bindListener()
+    this.setStyleHeader()
     /* Add window event listener for hide and rebuild */
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
     window.addEventListener('__react_tooltip_hide_event', ::this.globalHide, false)
@@ -299,6 +300,19 @@ export default class ReactTooltip extends Component {
     node.style.top = styleTop + 'px'
   }
 
+  /**
+   * Set style tag in header
+   * Insert style by this way
+   */
+  setStyleHeader () {
+    if (!document.getElementsByTagName('head')[0].querySelector('style[id="react-tooltip"]')) {
+      let tag = document.createElement('style')
+      tag.id = 'react-tooltip'
+      tag.innerHTML = cssStyle
+      document.getElementsByTagName('head')[0].appendChild(tag)
+    }
+  }
+
   render () {
     const {placeholder, extraClass, html} = this.state
 
@@ -316,13 +330,6 @@ export default class ReactTooltip extends Component {
       {'type-info': this.state.type === 'info'},
       {'type-light': this.state.type === 'light'}
     )
-
-    if (!document.getElementsByTagName('head')[0].querySelector('style[id="react-tooltip"]')) {
-      let tag = document.createElement('style')
-      tag.id = 'react-tooltip'
-      tag.innerHTML = cssStyle
-      document.getElementsByTagName('head')[0].appendChild(tag)
-    }
 
     if (html) {
       return (
