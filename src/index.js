@@ -26,7 +26,7 @@ export default class ReactTooltip extends Component {
 
   constructor (props) {
     super(props)
-    this._bind('showTooltip', 'updateTooltip', 'hideTooltip')
+    this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkStatus')
     this.mount = true
     this.state = {
       show: false,
@@ -41,7 +41,8 @@ export default class ReactTooltip extends Component {
       offset: {},
       extraClass: '',
       html: false,
-      delayHide: 0
+      delayHide: 0,
+      event: props.event || null
     }
   }
 
@@ -99,23 +100,65 @@ export default class ReactTooltip extends Component {
     }
 
     for (let i = 0; i < targetArray.length; i++) {
-      targetArray[i].removeEventListener('mouseenter', this.showTooltip)
-      targetArray[i].addEventListener('mouseenter', this.showTooltip, false)
+      targetArray[i].setAttribute('currentItem', 'false');
 
-      targetArray[i].removeEventListener('mousemove', this.updateTooltip)
-      targetArray[i].addEventListener('mousemove', this.updateTooltip, false)
+      if (this.state.event) {
+        targetArray[i].removeEventListener(this.state.event, this.checkStatus)
+        targetArray[i].addEventListener(this.state.event, this.checkStatus, false)
+      } else {
+        targetArray[i].removeEventListener('mouseenter', this.showTooltip)
+        targetArray[i].addEventListener('mouseenter', this.showTooltip, false)
 
-      targetArray[i].removeEventListener('mouseleave', this.hideTooltip)
-      targetArray[i].addEventListener('mouseleave', this.hideTooltip, false)
+        if (this.state.effect === 'float') {
+          targetArray[i].removeEventListener('mousemove', this.updateTooltip)
+          targetArray[i].addEventListener('mousemove', this.updateTooltip, false)
+        }
+
+        targetArray[i].removeEventListener('mouseleave', this.hideTooltip)
+        targetArray[i].addEventListener('mouseleave', this.hideTooltip, false)
+      }
+    }
+  }
+
+  checkStatus (e) {
+    if (this.state.show && e.currentTarget.getAttribute('currentItem') === 'true') {
+      this.hideTooltip(e);
+    } else {
+      e.currentTarget.setAttribute('currentItem', 'true');
+      this.showTooltip(e);
+      this.setUntargetItems(e.currentTarget);
+    }
+  }
+
+  setUntargetItems(currentTarget) {
+    const {id} = this.props
+    let targetArray
+
+    if (id === undefined) {
+      targetArray = document.querySelectorAll('[data-tip]:not([data-for])')
+    } else {
+      targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]')
+    }
+
+    for (let i = 0; i < targetArray.length; i++) {
+      if(currentTarget !== targetArray[i]) {
+        targetArray[i].setAttribute('currentItem', 'false');
+      } else {
+        targetArray[i].setAttribute('currentItem', 'true');
+      }
     }
   }
 
   unbindListener () {
     let targetArray = document.querySelectorAll('[data-tip]')
     for (let i = 0; i < targetArray.length; i++) {
-      targetArray[i].removeEventListener('mouseenter', this.showTooltip)
-      targetArray[i].removeEventListener('mousemove', this.updateTooltip)
-      targetArray[i].removeEventListener('mouseleave', this.hideTooltip)
+      if (this.state.event) {
+        targetArray[i].removeEventListener(this.state.event, this.checkStatus)
+      } else {
+        targetArray[i].removeEventListener('mouseenter', this.showTooltip)
+        targetArray[i].removeEventListener('mousemove', this.updateTooltip)
+        targetArray[i].removeEventListener('mouseleave', this.hideTooltip)
+      }
     }
   }
 
@@ -123,11 +166,10 @@ export default class ReactTooltip extends Component {
    * When mouse enter, show update
    */
   showTooltip (e) {
-    e.stopPropagation()
-    const originTooltip = e.target.getAttribute('data-tip')
+    const originTooltip = e.currentTarget.getAttribute('data-tip')
     /* Detect multiline */
     const regexp = /<br\s*\/?>/
-    const multiline = e.target.getAttribute('data-multiline') ? e.target.getAttribute('data-multiline') : (this.props.multiline ? this.props.multiline : false)
+    const multiline = e.currentTarget.getAttribute('data-multiline') ? e.currentTarget.getAttribute('data-multiline') : (this.props.multiline ? this.props.multiline : false)
     let tooltipText
     let multilineCount = 0
     if (!multiline || multiline === 'false' || !regexp.test(originTooltip)) {
@@ -141,19 +183,19 @@ export default class ReactTooltip extends Component {
       })
     }
     /* Define extra class */
-    let extraClass = e.target.getAttribute('data-class') ? e.target.getAttribute('data-class') : ''
+    let extraClass = e.currentTarget.getAttribute('data-class') ? e.currentTarget.getAttribute('data-class') : ''
     extraClass = this.props.class ? this.props.class + ' ' + extraClass : extraClass
     this.setState({
       placeholder: tooltipText,
       multilineCount: multilineCount,
-      place: e.target.getAttribute('data-place') ? e.target.getAttribute('data-place') : (this.props.place ? this.props.place : 'top'),
-      type: e.target.getAttribute('data-type') ? e.target.getAttribute('data-type') : (this.props.type ? this.props.type : 'dark'),
-      effect: e.target.getAttribute('data-effect') ? e.target.getAttribute('data-effect') : (this.props.effect ? this.props.effect : 'float'),
-      offset: e.target.getAttribute('data-offset') ? e.target.getAttribute('data-offset') : (this.props.offset ? this.props.offset : {}),
+      place: e.currentTarget.getAttribute('data-place') ? e.currentTarget.getAttribute('data-place') : (this.props.place ? this.props.place : 'top'),
+      type: e.currentTarget.getAttribute('data-type') ? e.currentTarget.getAttribute('data-type') : (this.props.type ? this.props.type : 'dark'),
+      effect: e.currentTarget.getAttribute('data-effect') ? e.currentTarget.getAttribute('data-effect') : (this.props.effect ? this.props.effect : 'float'),
+      offset: e.currentTarget.getAttribute('data-offset') ? e.currentTarget.getAttribute('data-offset') : (this.props.offset ? this.props.offset : {}),
       extraClass,
       multiline,
-      html: e.target.getAttribute('data-html') ? e.target.getAttribute('data-html') : (this.props.html ? this.props.html : false),
-      delayHide: e.target.getAttribute('data-delay-hide') ? e.target.getAttribute('data-delay-hide') : (this.props.delayHide ? this.props.delayHide : 0)
+      html: e.currentTarget.getAttribute('data-html') ? e.currentTarget.getAttribute('data-html') : (this.props.html ? this.props.html : false),
+      delayHide: e.currentTarget.getAttribute('data-delay-hide') ? e.currentTarget.getAttribute('data-delay-hide') : (this.props.delayHide ? this.props.delayHide : 0)
     })
     this.updateTooltip(e)
   }
@@ -162,7 +204,6 @@ export default class ReactTooltip extends Component {
    * When mouse hover, updatetooltip
    */
   updateTooltip (e) {
-    e.stopPropagation()
     if (this.trim(this.state.placeholder).length > 0) {
       const {place} = this.state
       const node = findDOMNode(this)
@@ -174,13 +215,13 @@ export default class ReactTooltip extends Component {
           y: e.clientY
         })
       } else if (this.state.effect === 'solid') {
-        const boundingClientRect = e.target.getBoundingClientRect()
+        const boundingClientRect = e.currentTarget.getBoundingClientRect()
         const targetTop = boundingClientRect.top
         const targetLeft = boundingClientRect.left
         const tipWidth = node.clientWidth
         const tipHeight = node.clientHeight
-        const targetWidth = e.target.clientWidth
-        const targetHeight = e.target.clientHeight
+        const targetWidth = e.currentTarget.clientWidth
+        const targetHeight = e.currentTarget.clientHeight
         let x
         let y
         if (place === 'top') {
@@ -333,7 +374,7 @@ export default class ReactTooltip extends Component {
 
     if (html) {
       return (
-        <span className={tooltipClass + ' ' + extraClass} data-id='tooltip' dangerouslySetInnerHTML={{__html: placeholder}}></span>
+        <div className={tooltipClass + ' ' + extraClass} data-id='tooltip' dangerouslySetInnerHTML={{__html: placeholder}}></div>
       )
     } else {
       const content = this.props.children ? this.props.children : placeholder

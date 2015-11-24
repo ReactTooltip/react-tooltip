@@ -65,7 +65,7 @@ var ReactTooltip = (function (_Component) {
     _classCallCheck(this, ReactTooltip);
 
     _Component.call(this, props);
-    this._bind('showTooltip', 'updateTooltip', 'hideTooltip');
+    this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkStatus');
     this.mount = true;
     this.state = {
       show: false,
@@ -80,7 +80,8 @@ var ReactTooltip = (function (_Component) {
       offset: {},
       extraClass: '',
       html: false,
-      delayHide: 0
+      delayHide: 0,
+      event: props.event || null
     };
   }
 
@@ -140,23 +141,66 @@ var ReactTooltip = (function (_Component) {
     }
 
     for (var i = 0; i < targetArray.length; i++) {
-      targetArray[i].removeEventListener('mouseenter', this.showTooltip);
-      targetArray[i].addEventListener('mouseenter', this.showTooltip, false);
+      targetArray[i].setAttribute('currentItem', 'false');
 
-      targetArray[i].removeEventListener('mousemove', this.updateTooltip);
-      targetArray[i].addEventListener('mousemove', this.updateTooltip, false);
+      if (this.state.event) {
+        targetArray[i].removeEventListener(this.state.event, this.checkStatus);
+        targetArray[i].addEventListener(this.state.event, this.checkStatus, false);
+      } else {
+        targetArray[i].removeEventListener('mouseenter', this.showTooltip);
+        targetArray[i].addEventListener('mouseenter', this.showTooltip, false);
 
-      targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
-      targetArray[i].addEventListener('mouseleave', this.hideTooltip, false);
+        if (this.state.effect === 'float') {
+          targetArray[i].removeEventListener('mousemove', this.updateTooltip);
+          targetArray[i].addEventListener('mousemove', this.updateTooltip, false);
+        }
+
+        targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
+        targetArray[i].addEventListener('mouseleave', this.hideTooltip, false);
+      }
+    }
+  };
+
+  ReactTooltip.prototype.checkStatus = function checkStatus(e) {
+    if (this.state.show && e.currentTarget.getAttribute('currentItem') === 'true') {
+      this.hideTooltip(e);
+    } else {
+      e.currentTarget.setAttribute('currentItem', 'true');
+      this.showTooltip(e);
+      this.setUntargetItems(e.currentTarget);
+    }
+  };
+
+  ReactTooltip.prototype.setUntargetItems = function setUntargetItems(currentTarget) {
+    var id = this.props.id;
+
+    var targetArray = undefined;
+
+    if (id === undefined) {
+      targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
+    } else {
+      targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]');
+    }
+
+    for (var i = 0; i < targetArray.length; i++) {
+      if (currentTarget !== targetArray[i]) {
+        targetArray[i].setAttribute('currentItem', 'false');
+      } else {
+        targetArray[i].setAttribute('currentItem', 'true');
+      }
     }
   };
 
   ReactTooltip.prototype.unbindListener = function unbindListener() {
     var targetArray = document.querySelectorAll('[data-tip]');
     for (var i = 0; i < targetArray.length; i++) {
-      targetArray[i].removeEventListener('mouseenter', this.showTooltip);
-      targetArray[i].removeEventListener('mousemove', this.updateTooltip);
-      targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
+      if (this.state.event) {
+        targetArray[i].removeEventListener(this.state.event, this.checkStatus);
+      } else {
+        targetArray[i].removeEventListener('mouseenter', this.showTooltip);
+        targetArray[i].removeEventListener('mousemove', this.updateTooltip);
+        targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
+      }
     }
   };
 
@@ -165,11 +209,10 @@ var ReactTooltip = (function (_Component) {
    */
 
   ReactTooltip.prototype.showTooltip = function showTooltip(e) {
-    e.stopPropagation();
-    var originTooltip = e.target.getAttribute('data-tip');
+    var originTooltip = e.currentTarget.getAttribute('data-tip');
     /* Detect multiline */
     var regexp = /<br\s*\/?>/;
-    var multiline = e.target.getAttribute('data-multiline') ? e.target.getAttribute('data-multiline') : this.props.multiline ? this.props.multiline : false;
+    var multiline = e.currentTarget.getAttribute('data-multiline') ? e.currentTarget.getAttribute('data-multiline') : this.props.multiline ? this.props.multiline : false;
     var tooltipText = undefined;
     var multilineCount = 0;
     if (!multiline || multiline === 'false' || !regexp.test(originTooltip)) {
@@ -185,19 +228,19 @@ var ReactTooltip = (function (_Component) {
       });
     }
     /* Define extra class */
-    var extraClass = e.target.getAttribute('data-class') ? e.target.getAttribute('data-class') : '';
+    var extraClass = e.currentTarget.getAttribute('data-class') ? e.currentTarget.getAttribute('data-class') : '';
     extraClass = this.props['class'] ? this.props['class'] + ' ' + extraClass : extraClass;
     this.setState({
       placeholder: tooltipText,
       multilineCount: multilineCount,
-      place: e.target.getAttribute('data-place') ? e.target.getAttribute('data-place') : this.props.place ? this.props.place : 'top',
-      type: e.target.getAttribute('data-type') ? e.target.getAttribute('data-type') : this.props.type ? this.props.type : 'dark',
-      effect: e.target.getAttribute('data-effect') ? e.target.getAttribute('data-effect') : this.props.effect ? this.props.effect : 'float',
-      offset: e.target.getAttribute('data-offset') ? e.target.getAttribute('data-offset') : this.props.offset ? this.props.offset : {},
+      place: e.currentTarget.getAttribute('data-place') ? e.currentTarget.getAttribute('data-place') : this.props.place ? this.props.place : 'top',
+      type: e.currentTarget.getAttribute('data-type') ? e.currentTarget.getAttribute('data-type') : this.props.type ? this.props.type : 'dark',
+      effect: e.currentTarget.getAttribute('data-effect') ? e.currentTarget.getAttribute('data-effect') : this.props.effect ? this.props.effect : 'float',
+      offset: e.currentTarget.getAttribute('data-offset') ? e.currentTarget.getAttribute('data-offset') : this.props.offset ? this.props.offset : {},
       extraClass: extraClass,
       multiline: multiline,
-      html: e.target.getAttribute('data-html') ? e.target.getAttribute('data-html') : this.props.html ? this.props.html : false,
-      delayHide: e.target.getAttribute('data-delay-hide') ? e.target.getAttribute('data-delay-hide') : this.props.delayHide ? this.props.delayHide : 0
+      html: e.currentTarget.getAttribute('data-html') ? e.currentTarget.getAttribute('data-html') : this.props.html ? this.props.html : false,
+      delayHide: e.currentTarget.getAttribute('data-delay-hide') ? e.currentTarget.getAttribute('data-delay-hide') : this.props.delayHide ? this.props.delayHide : 0
     });
     this.updateTooltip(e);
   };
@@ -207,7 +250,6 @@ var ReactTooltip = (function (_Component) {
    */
 
   ReactTooltip.prototype.updateTooltip = function updateTooltip(e) {
-    e.stopPropagation();
     if (this.trim(this.state.placeholder).length > 0) {
       var place = this.state.place;
 
@@ -220,13 +262,13 @@ var ReactTooltip = (function (_Component) {
           y: e.clientY
         });
       } else if (this.state.effect === 'solid') {
-        var boundingClientRect = e.target.getBoundingClientRect();
+        var boundingClientRect = e.currentTarget.getBoundingClientRect();
         var targetTop = boundingClientRect.top;
         var targetLeft = boundingClientRect.left;
         var tipWidth = node.clientWidth;
         var tipHeight = node.clientHeight;
-        var targetWidth = e.target.clientWidth;
-        var targetHeight = e.target.clientHeight;
+        var targetWidth = e.currentTarget.clientWidth;
+        var targetHeight = e.currentTarget.clientHeight;
         var x = undefined;
         var y = undefined;
         if (place === 'top') {
@@ -378,7 +420,7 @@ var ReactTooltip = (function (_Component) {
     var tooltipClass = _classnames2['default']('__react_component_tooltip', { 'show': this.state.show }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
 
     if (html) {
-      return _react2['default'].createElement('span', { className: tooltipClass + ' ' + extraClass, 'data-id': 'tooltip', dangerouslySetInnerHTML: { __html: placeholder } });
+      return _react2['default'].createElement('div', { className: tooltipClass + ' ' + extraClass, 'data-id': 'tooltip', dangerouslySetInnerHTML: { __html: placeholder } });
     } else {
       var content = this.props.children ? this.props.children : placeholder;
       return _react2['default'].createElement(
