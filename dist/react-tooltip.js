@@ -65,7 +65,7 @@ var ReactTooltip = (function (_Component) {
     _classCallCheck(this, ReactTooltip);
 
     _Component.call(this, props);
-    this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkStatus');
+    this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkStatus', 'onWindowResize');
     this.mount = true;
     this.state = {
       show: false,
@@ -94,6 +94,11 @@ var ReactTooltip = (function (_Component) {
 
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
     window.addEventListener('__react_tooltip_rebuild_event', this.globalRebuild.bind(this), false);
+
+    if (this.props.watchWindow) {
+      window.removeEventListener('resize', this.onWindowResize);
+      window.addEventListener('resize', this.onWindowResize.bind(this), false);
+    }
   };
 
   /**
@@ -118,6 +123,9 @@ var ReactTooltip = (function (_Component) {
     this.mount = false;
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
+    if (this.props.watchWindow) {
+      window.removeEventListener('resize', this.onWindowResize);
+    }
   };
 
   ReactTooltip.prototype.componentWillUpdate = function componentWillUpdate() {
@@ -129,7 +137,7 @@ var ReactTooltip = (function (_Component) {
     this.bindListener();
   };
 
-  ReactTooltip.prototype.bindListener = function bindListener() {
+  ReactTooltip.prototype.getTargetArray = function getTargetArray() {
     var id = this.props.id;
 
     var targetArray = undefined;
@@ -139,6 +147,35 @@ var ReactTooltip = (function (_Component) {
     } else {
       targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]');
     }
+
+    return targetArray;
+  };
+
+  ReactTooltip.prototype.onWindowResize = function onWindowResize() {
+    if (!this.mount) return;
+    var targetArray = this.getTargetArray();
+
+    for (var i = 0; i < targetArray.length; i++) {
+      if (targetArray[i].getAttribute('currentItem') === 'true') {
+        // todo: timer for performance
+
+        var _getPosition = this.getPosition(targetArray[i]);
+
+        var x = _getPosition.x;
+        var y = _getPosition.y;
+
+        _reactDom.findDOMNode(this).style.left = x + 'px';
+        _reactDom.findDOMNode(this).style.top = y + 'px';
+        /*this.setState({
+          x,
+          y
+        })*/
+      }
+    }
+  };
+
+  ReactTooltip.prototype.bindListener = function bindListener() {
+    var targetArray = this.getTargetArray();
 
     for (var i = 0; i < targetArray.length; i++) {
       targetArray[i].setAttribute('currentItem', 'false');
@@ -172,15 +209,7 @@ var ReactTooltip = (function (_Component) {
   };
 
   ReactTooltip.prototype.setUntargetItems = function setUntargetItems(currentTarget) {
-    var id = this.props.id;
-
-    var targetArray = undefined;
-
-    if (id === undefined) {
-      targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
-    } else {
-      targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]');
-    }
+    var targetArray = this.getTargetArray();
 
     for (var i = 0; i < targetArray.length; i++) {
       if (currentTarget !== targetArray[i]) {
@@ -251,9 +280,6 @@ var ReactTooltip = (function (_Component) {
 
   ReactTooltip.prototype.updateTooltip = function updateTooltip(e) {
     if (this.trim(this.state.placeholder).length > 0) {
-      var place = this.state.place;
-
-      var node = _reactDom.findDOMNode(this);
       if (this.state.effect === 'float') {
         // const offsetY = e.clientY
         this.setState({
@@ -262,28 +288,11 @@ var ReactTooltip = (function (_Component) {
           y: e.clientY
         });
       } else if (this.state.effect === 'solid') {
-        var boundingClientRect = e.currentTarget.getBoundingClientRect();
-        var targetTop = boundingClientRect.top;
-        var targetLeft = boundingClientRect.left;
-        var tipWidth = node.clientWidth;
-        var tipHeight = node.clientHeight;
-        var targetWidth = e.currentTarget.clientWidth;
-        var targetHeight = e.currentTarget.clientHeight;
-        var x = undefined;
-        var y = undefined;
-        if (place === 'top') {
-          x = targetLeft - tipWidth / 2 + targetWidth / 2;
-          y = targetTop - tipHeight - 8;
-        } else if (place === 'bottom') {
-          x = targetLeft - tipWidth / 2 + targetWidth / 2;
-          y = targetTop + targetHeight + 8;
-        } else if (place === 'left') {
-          x = targetLeft - tipWidth - 6;
-          y = targetTop + targetHeight / 2 - tipHeight / 2;
-        } else if (place === 'right') {
-          x = targetLeft + targetWidth + 6;
-          y = targetTop + targetHeight / 2 - tipHeight / 2;
-        }
+        var _getPosition2 = this.getPosition(e.currentTarget);
+
+        var x = _getPosition2.x;
+        var y = _getPosition2.y;
+
         this.setState({
           show: true,
           x: x,
@@ -291,6 +300,36 @@ var ReactTooltip = (function (_Component) {
         });
       }
     }
+  };
+
+  ReactTooltip.prototype.getPosition = function getPosition(currentTarget) {
+    var place = this.state.place;
+
+    var node = _reactDom.findDOMNode(this);
+    var boundingClientRect = currentTarget.getBoundingClientRect();
+    var targetTop = boundingClientRect.top;
+    var targetLeft = boundingClientRect.left;
+    var tipWidth = node.clientWidth;
+    var tipHeight = node.clientHeight;
+    var targetWidth = currentTarget.clientWidth;
+    var targetHeight = currentTarget.clientHeight;
+    var x = undefined;
+    var y = undefined;
+    if (place === 'top') {
+      x = targetLeft - tipWidth / 2 + targetWidth / 2;
+      y = targetTop - tipHeight - 8;
+    } else if (place === 'bottom') {
+      x = targetLeft - tipWidth / 2 + targetWidth / 2;
+      y = targetTop + targetHeight + 8;
+    } else if (place === 'left') {
+      x = targetLeft - tipWidth - 6;
+      y = targetTop + targetHeight / 2 - tipHeight / 2;
+    } else if (place === 'right') {
+      x = targetLeft + targetWidth + 6;
+      y = targetTop + targetHeight / 2 - tipHeight / 2;
+    }
+
+    return { x: x, y: y };
   };
 
   /**
