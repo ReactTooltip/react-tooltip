@@ -100,7 +100,7 @@ export default class ReactTooltip extends Component {
     }
 
     for (let i = 0; i < targetArray.length; i++) {
-      targetArray[i].setAttribute('currentItem', 'false');
+      targetArray[i].setAttribute('currentItem', 'false')
 
       if (this.state.event) {
         targetArray[i].removeEventListener(this.state.event, this.checkStatus)
@@ -122,15 +122,15 @@ export default class ReactTooltip extends Component {
 
   checkStatus (e) {
     if (this.state.show && e.currentTarget.getAttribute('currentItem') === 'true') {
-      this.hideTooltip(e);
+      this.hideTooltip(e)
     } else {
-      e.currentTarget.setAttribute('currentItem', 'true');
-      this.showTooltip(e);
-      this.setUntargetItems(e.currentTarget);
+      e.currentTarget.setAttribute('currentItem', 'true')
+      this.showTooltip(e)
+      this.setUntargetItems(e.currentTarget)
     }
   }
 
-  setUntargetItems(currentTarget) {
+  setUntargetItems (currentTarget) {
     const {id} = this.props
     let targetArray
 
@@ -141,10 +141,10 @@ export default class ReactTooltip extends Component {
     }
 
     for (let i = 0; i < targetArray.length; i++) {
-      if(currentTarget !== targetArray[i]) {
-        targetArray[i].setAttribute('currentItem', 'false');
+      if (currentTarget !== targetArray[i]) {
+        targetArray[i].setAttribute('currentItem', 'false')
       } else {
-        targetArray[i].setAttribute('currentItem', 'true');
+        targetArray[i].setAttribute('currentItem', 'true')
       }
     }
   }
