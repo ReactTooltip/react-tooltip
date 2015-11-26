@@ -27,17 +27,10 @@ var _style2 = _interopRequireDefault(_style);
 var ReactTooltip = (function (_Component) {
   _inherits(ReactTooltip, _Component);
 
-  ReactTooltip.prototype._bind = function _bind() {
-    var _this = this;
-
-    for (var _len = arguments.length, handlers = Array(_len), _key = 0; _key < _len; _key++) {
-      handlers[_key] = arguments[_key];
-    }
-
-    handlers.forEach(function (handler) {
-      return _this[handler] = _this[handler].bind(_this);
-    });
-  };
+  /**
+   * Class method
+   * @see ReactTooltip.hide() && ReactTooltup.rebuild()
+   */
 
   ReactTooltip.hide = function hide() {
     window.dispatchEvent(new window.Event('__react_tooltip_hide_event'));
@@ -45,6 +38,19 @@ var ReactTooltip = (function (_Component) {
 
   ReactTooltip.rebuild = function rebuild() {
     window.dispatchEvent(new window.Event('__react_tooltip_rebuild_event'));
+  };
+
+  ReactTooltip.prototype.globalHide = function globalHide() {
+    if (this.mount) {
+      this.hideTooltip();
+    }
+  };
+
+  ReactTooltip.prototype.globalRebuild = function globalRebuild() {
+    if (this.mount) {
+      this.unbindListener();
+      this.bindListener();
+    }
   };
 
   _createClass(ReactTooltip, null, [{
@@ -85,6 +91,20 @@ var ReactTooltip = (function (_Component) {
     };
   }
 
+  /* Bind this with method */
+
+  ReactTooltip.prototype._bind = function _bind() {
+    var _this = this;
+
+    for (var _len = arguments.length, handlers = Array(_len), _key = 0; _key < _len; _key++) {
+      handlers[_key] = arguments[_key];
+    }
+
+    handlers.forEach(function (handler) {
+      return _this[handler] = _this[handler].bind(_this);
+    });
+  };
+
   ReactTooltip.prototype.componentDidMount = function componentDidMount() {
     this.bindListener();
     this.setStyleHeader();
@@ -96,30 +116,6 @@ var ReactTooltip = (function (_Component) {
     window.addEventListener('__react_tooltip_rebuild_event', this.globalRebuild.bind(this), false);
   };
 
-  /**
-   *  Method for window.addEventListener
-   **/
-
-  ReactTooltip.prototype.globalHide = function globalHide() {
-    if (this.mount) {
-      this.hideTooltip();
-    }
-  };
-
-  ReactTooltip.prototype.globalRebuild = function globalRebuild() {
-    if (this.mount) {
-      this.unbindListener();
-      this.bindListener();
-    }
-  };
-
-  ReactTooltip.prototype.componentWillUnmount = function componentWillUnmount() {
-    this.unbindListener();
-    this.mount = false;
-    window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
-    window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
-  };
-
   ReactTooltip.prototype.componentWillUpdate = function componentWillUpdate() {
     this.unbindListener();
   };
@@ -127,6 +123,13 @@ var ReactTooltip = (function (_Component) {
   ReactTooltip.prototype.componentDidUpdate = function componentDidUpdate() {
     this.updatePosition();
     this.bindListener();
+  };
+
+  ReactTooltip.prototype.componentWillUnmount = function componentWillUnmount() {
+    this.unbindListener();
+    this.mount = false;
+    window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
+    window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
   };
 
   ReactTooltip.prototype.bindListener = function bindListener() {
@@ -140,12 +143,13 @@ var ReactTooltip = (function (_Component) {
       targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]');
     }
 
+    var dataEvent = undefined;
     for (var i = 0; i < targetArray.length; i++) {
       targetArray[i].setAttribute('currentItem', 'false');
-
-      if (this.state.event) {
-        targetArray[i].removeEventListener(this.state.event, this.checkStatus);
-        targetArray[i].addEventListener(this.state.event, this.checkStatus, false);
+      dataEvent = this.state.event || targetArray[i].getAttribute('data-event');
+      if (dataEvent) {
+        targetArray[i].removeEventListener(dataEvent, this.checkStatus);
+        targetArray[i].addEventListener(dataEvent, this.checkStatus, false);
       } else {
         targetArray[i].removeEventListener('mouseenter', this.showTooltip);
         targetArray[i].addEventListener('mouseenter', this.showTooltip, false);
@@ -193,9 +197,12 @@ var ReactTooltip = (function (_Component) {
 
   ReactTooltip.prototype.unbindListener = function unbindListener() {
     var targetArray = document.querySelectorAll('[data-tip]');
+    var dataEvent = undefined;
+
     for (var i = 0; i < targetArray.length; i++) {
-      if (this.state.event) {
-        targetArray[i].removeEventListener(this.state.event, this.checkStatus);
+      dataEvent = this.state.event || targetArray[i].getAttribute('data-event');
+      if (dataEvent) {
+        targetArray[i].removeEventListener(dataEvent, this.checkStatus);
       } else {
         targetArray[i].removeEventListener('mouseenter', this.showTooltip);
         targetArray[i].removeEventListener('mousemove', this.updateTooltip);
@@ -237,10 +244,10 @@ var ReactTooltip = (function (_Component) {
       type: e.currentTarget.getAttribute('data-type') ? e.currentTarget.getAttribute('data-type') : this.props.type ? this.props.type : 'dark',
       effect: e.currentTarget.getAttribute('data-effect') ? e.currentTarget.getAttribute('data-effect') : this.props.effect ? this.props.effect : 'float',
       offset: e.currentTarget.getAttribute('data-offset') ? e.currentTarget.getAttribute('data-offset') : this.props.offset ? this.props.offset : {},
-      extraClass: extraClass,
-      multiline: multiline,
       html: e.currentTarget.getAttribute('data-html') ? e.currentTarget.getAttribute('data-html') : this.props.html ? this.props.html : false,
-      delayHide: e.currentTarget.getAttribute('data-delay-hide') ? e.currentTarget.getAttribute('data-delay-hide') : this.props.delayHide ? this.props.delayHide : 0
+      delayHide: e.currentTarget.getAttribute('data-delay-hide') ? e.currentTarget.getAttribute('data-delay-hide') : this.props.delayHide ? this.props.delayHide : 0,
+      extraClass: extraClass,
+      multiline: multiline
     });
     this.updateTooltip(e);
   };
@@ -424,7 +431,7 @@ var ReactTooltip = (function (_Component) {
     } else {
       var content = this.props.children ? this.props.children : placeholder;
       return _react2['default'].createElement(
-        'span',
+        'div',
         { className: tooltipClass + ' ' + extraClass, 'data-id': 'tooltip' },
         content
       );
@@ -470,6 +477,7 @@ ReactTooltip.propTypes = {
   'class': _react.PropTypes.string,
   id: _react.PropTypes.string,
   html: _react.PropTypes.bool,
-  delayHide: _react.PropTypes.number
+  delayHide: _react.PropTypes.number,
+  event: _react.PropTypes.any
 };
 module.exports = exports['default'];

@@ -7,22 +7,30 @@ import cssStyle from './style'
 
 export default class ReactTooltip extends Component {
 
-  _bind (...handlers) {
-    handlers.forEach(handler => this[handler] = this[handler].bind(this))
-  }
-
   static displayName = 'ReactTooltip'
 
-  static hide () {
-    window.dispatchEvent(new window.Event('__react_tooltip_hide_event'))
-  }
-
-  static rebuild () {
-    window.dispatchEvent(new window.Event('__react_tooltip_rebuild_event'))
-  }
+  /**
+   * Class method
+   * @see ReactTooltip.hide() && ReactTooltup.rebuild()
+   */
+  static hide () { window.dispatchEvent(new window.Event('__react_tooltip_hide_event')) }
+  static rebuild () { window.dispatchEvent(new window.Event('__react_tooltip_rebuild_event')) }
 
   static eventHideMark = `hide${Date.now()}`
   static eventRebuildMark = `rebuild${Date.now()}`
+
+  globalHide () {
+    if (this.mount) {
+      this.hideTooltip()
+    }
+  }
+
+  globalRebuild () {
+    if (this.mount) {
+      this.unbindListener()
+      this.bindListener()
+    }
+  }
 
   constructor (props) {
     super(props)
@@ -46,6 +54,11 @@ export default class ReactTooltip extends Component {
     }
   }
 
+  /* Bind this with method */
+  _bind (...handlers) {
+    handlers.forEach(handler => this[handler] = this[handler].bind(this))
+  }
+
   componentDidMount () {
     this.bindListener()
     this.setStyleHeader()
@@ -57,29 +70,6 @@ export default class ReactTooltip extends Component {
     window.addEventListener('__react_tooltip_rebuild_event', ::this.globalRebuild, false)
   }
 
-  /**
-   *  Method for window.addEventListener
-   **/
-  globalHide () {
-    if (this.mount) {
-      this.hideTooltip()
-    }
-  }
-
-  globalRebuild () {
-    if (this.mount) {
-      this.unbindListener()
-      this.bindListener()
-    }
-  }
-
-  componentWillUnmount () {
-    this.unbindListener()
-    this.mount = false
-    window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
-    window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
-  }
-
   componentWillUpdate () {
     this.unbindListener()
   }
@@ -87,6 +77,13 @@ export default class ReactTooltip extends Component {
   componentDidUpdate () {
     this.updatePosition()
     this.bindListener()
+  }
+
+  componentWillUnmount () {
+    this.unbindListener()
+    this.mount = false
+    window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
+    window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
   }
 
   bindListener () {
@@ -99,12 +96,13 @@ export default class ReactTooltip extends Component {
       targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]')
     }
 
+    let dataEvent
     for (let i = 0; i < targetArray.length; i++) {
       targetArray[i].setAttribute('currentItem', 'false')
-
-      if (this.state.event) {
-        targetArray[i].removeEventListener(this.state.event, this.checkStatus)
-        targetArray[i].addEventListener(this.state.event, this.checkStatus, false)
+      dataEvent = this.state.event || targetArray[i].getAttribute('data-event')
+      if (dataEvent) {
+        targetArray[i].removeEventListener(dataEvent, this.checkStatus)
+        targetArray[i].addEventListener(dataEvent, this.checkStatus, false)
       } else {
         targetArray[i].removeEventListener('mouseenter', this.showTooltip)
         targetArray[i].addEventListener('mouseenter', this.showTooltip, false)
@@ -151,9 +149,12 @@ export default class ReactTooltip extends Component {
 
   unbindListener () {
     let targetArray = document.querySelectorAll('[data-tip]')
+    let dataEvent
+
     for (let i = 0; i < targetArray.length; i++) {
-      if (this.state.event) {
-        targetArray[i].removeEventListener(this.state.event, this.checkStatus)
+      dataEvent = this.state.event || targetArray[i].getAttribute('data-event')
+      if (dataEvent) {
+        targetArray[i].removeEventListener(dataEvent, this.checkStatus)
       } else {
         targetArray[i].removeEventListener('mouseenter', this.showTooltip)
         targetArray[i].removeEventListener('mousemove', this.updateTooltip)
@@ -192,10 +193,10 @@ export default class ReactTooltip extends Component {
       type: e.currentTarget.getAttribute('data-type') ? e.currentTarget.getAttribute('data-type') : (this.props.type ? this.props.type : 'dark'),
       effect: e.currentTarget.getAttribute('data-effect') ? e.currentTarget.getAttribute('data-effect') : (this.props.effect ? this.props.effect : 'float'),
       offset: e.currentTarget.getAttribute('data-offset') ? e.currentTarget.getAttribute('data-offset') : (this.props.offset ? this.props.offset : {}),
-      extraClass,
-      multiline,
       html: e.currentTarget.getAttribute('data-html') ? e.currentTarget.getAttribute('data-html') : (this.props.html ? this.props.html : false),
-      delayHide: e.currentTarget.getAttribute('data-delay-hide') ? e.currentTarget.getAttribute('data-delay-hide') : (this.props.delayHide ? this.props.delayHide : 0)
+      delayHide: e.currentTarget.getAttribute('data-delay-hide') ? e.currentTarget.getAttribute('data-delay-hide') : (this.props.delayHide ? this.props.delayHide : 0),
+      extraClass,
+      multiline
     })
     this.updateTooltip(e)
   }
@@ -379,7 +380,7 @@ export default class ReactTooltip extends Component {
     } else {
       const content = this.props.children ? this.props.children : placeholder
       return (
-        <span className={tooltipClass + ' ' + extraClass} data-id='tooltip'>{content}</span>
+        <div className={tooltipClass + ' ' + extraClass} data-id='tooltip'>{content}</div>
       )
     }
   }
@@ -420,5 +421,6 @@ ReactTooltip.propTypes = {
   class: PropTypes.string,
   id: PropTypes.string,
   html: PropTypes.bool,
-  delayHide: PropTypes.number
+  delayHide: PropTypes.number,
+  event: PropTypes.any
 }

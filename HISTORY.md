@@ -1,3 +1,12 @@
+v0.9.0
+======
+release date: 2015-11-26
+###Notable Changes:
+
+#### customer event
+`<ReactTooltip event='click'>` or `<a data-event='click'></a>`
+
+
 v0.8.0
 ======
 release date: 2015-10-16
