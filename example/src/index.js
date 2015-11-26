@@ -46,7 +46,7 @@ const Test = React.createClass({
         <section className='tooltip-example'>
           <h4 className='title'>React Tooltip</h4>
           <div className='demonstration'>
-            <a data-tip="Hello<br />multiline<br />tooltip">
+            <a data-for='main' data-tip="Hello<br />multiline<br />tooltip">
                ◕‿‿◕
             </a>
           </div>
@@ -83,7 +83,7 @@ const Test = React.createClass({
               </div>
             </pre>
           </div>
-          <ReactTooltip place={place} type={type} effect={effect} multiline={true} />
+          <ReactTooltip id='main' place={place} type={type} effect={effect} multiline={true} />
         </section>
         <section className="advance">
           <div className="section">
@@ -142,6 +142,28 @@ const Test = React.createClass({
                   "</ReactTooltip>"}</p>
               </div>
             </pre>
+          </div>
+        </section>
+
+        <section className="advance">
+          <div className="section">
+            <h4 className='title'>Customer event</h4>
+            <p className="sub-title"></p>
+          
+            <div className="example-jsx">
+              <div className="side">
+                <a data-for='customer-event' data-tip='customer event' data-event='click' data-type='info'>( •̀д•́)</a>
+                <ReactTooltip id='customer-event' />
+              </div>
+            </div>
+            <br />
+            <pre className='example-pre'>
+              <div>
+                <p>{"<a data-tip='customer event' data-event='click' data-type='info'>( •̀д•́)</a>\n" +
+                "<ReactTooltip/>"}</p>
+              </div>
+            </pre>
+          
           </div>
         </section>
       </div>

@@ -45,7 +45,8 @@ Check example:  [React-tooltip Test](http://wwayne.com/react-tooltip)
 :-----------|:-------------|:----------|:----------|:------------------
     place	|   data-place  |  String  |  top, right, bottom, left | 
     type	|   data-type  |  String  |  success, warning, error, info, light | 
-    effect	|   data-effect  |  String  |  float, solid | 
+    effect	|   data-effect  |  String  |  float, solid |
+    event |   data-event  |  String  |  e.g. click | customer event to trigger tooltip
     offset	|   data-offset  |  Object  |  top, right, bottom, left | data-offset="{'top': 10, 'left': 10}" for specific and offset={{top: 10, left: 10}} for global
    multiline	|   data-multiline  |  Bool  |  true, false | support `<br>`, `<br />` to make multiline
   class	|   data-class  |  String  |  your custom class | extra custom class, can use !important to cover react-tooltip's default class
