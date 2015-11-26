@@ -133,19 +133,19 @@ export default class ReactTooltip extends Component {
   }
 
   onWindowResize () {
-    if(!this.mount) return;
+    if (!this.mount) return
     let targetArray = this.getTargetArray()
 
     for (let i = 0; i < targetArray.length; i++) {
       if (targetArray[i].getAttribute('currentItem') === 'true') {
         // todo: timer for performance
-        let {x,y} = this.getPosition(targetArray[i])
+        let {x, y} = this.getPosition(targetArray[i])
         findDOMNode(this).style.left = x + 'px'
         findDOMNode(this).style.top = y + 'px'
-        /*this.setState({
+        /* this.setState({
          x,
          y
-         })*/
+         }) */
       }
     }
   }
@@ -239,7 +239,7 @@ export default class ReactTooltip extends Component {
           y: e.clientY
         })
       } else if (this.state.effect === 'solid') {
-        let {x,y} = this.getPosition(e.currentTarget)
+        let {x, y} = this.getPosition(e.currentTarget)
         this.setState({
           show: true,
           x,
@@ -453,5 +453,6 @@ ReactTooltip.propTypes = {
   id: PropTypes.string,
   html: PropTypes.bool,
   delayHide: PropTypes.number,
-  event: PropTypes.any
+  event: PropTypes.any,
+  watchWindow: PropTypes.bool
 }

@@ -194,10 +194,10 @@ var ReactTooltip = (function (_Component) {
 
         _reactDom.findDOMNode(this).style.left = x + 'px';
         _reactDom.findDOMNode(this).style.top = y + 'px';
-        /*this.setState({
+        /* this.setState({
          x,
          y
-         })*/
+         }) */
       }
     }
   };
@@ -517,6 +517,7 @@ ReactTooltip.propTypes = {
   id: _react.PropTypes.string,
   html: _react.PropTypes.bool,
   delayHide: _react.PropTypes.number,
-  event: _react.PropTypes.any
+  event: _react.PropTypes.any,
+  watchWindow: _react.PropTypes.bool
 };
 module.exports = exports['default'];
