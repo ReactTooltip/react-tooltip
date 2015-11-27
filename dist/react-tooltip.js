@@ -75,6 +75,7 @@ var ReactTooltip = (function (_Component) {
     this.mount = true;
     this.state = {
       show: false,
+      border: false,
       multilineCount: 0,
       placeholder: '',
       x: 'NONE',
@@ -246,6 +247,7 @@ var ReactTooltip = (function (_Component) {
       offset: e.currentTarget.getAttribute('data-offset') ? e.currentTarget.getAttribute('data-offset') : this.props.offset ? this.props.offset : {},
       html: e.currentTarget.getAttribute('data-html') ? e.currentTarget.getAttribute('data-html') : this.props.html ? this.props.html : false,
       delayHide: e.currentTarget.getAttribute('data-delay-hide') ? e.currentTarget.getAttribute('data-delay-hide') : this.props.delayHide ? this.props.delayHide : 0,
+      border: this.props.border,
       extraClass: extraClass,
       multiline: multiline
     });
@@ -424,7 +426,7 @@ var ReactTooltip = (function (_Component) {
     var extraClass = _state2.extraClass;
     var html = _state2.html;
 
-    var tooltipClass = _classnames2['default']('__react_component_tooltip', { 'show': this.state.show }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
+    var tooltipClass = _classnames2['default']('__react_component_tooltip', { 'show': this.state.show }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
 
     if (html) {
       return _react2['default'].createElement('div', { className: tooltipClass + ' ' + extraClass, 'data-id': 'tooltip', dangerouslySetInnerHTML: { __html: placeholder } });
@@ -474,6 +476,7 @@ ReactTooltip.propTypes = {
   effect: _react.PropTypes.string,
   offset: _react.PropTypes.object,
   multiline: _react.PropTypes.bool,
+  border: _react.PropTypes.bool,
   'class': _react.PropTypes.string,
   id: _react.PropTypes.string,
   html: _react.PropTypes.bool,
