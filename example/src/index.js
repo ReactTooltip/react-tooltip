@@ -66,7 +66,7 @@ const Test = React.createClass({
                 <a className={type === 'warning' ? 'active' : ''} onClick={this.changeType.bind(this, 'warning')}>Warning</a>
                 <a className={type === 'error' ? 'active' : ''} onClick={this.changeType.bind(this, 'error')}>Error</a>
                 <a className={type === 'info' ? 'active' : ''} onClick={this.changeType.bind(this, 'info')}>Info</a>
-                <a className={type === 'dlight' ? 'active' : ''} onClick={this.changeType.bind(this, 'light')}>Light</a>
+                <a className={type === 'light' ? 'active' : ''} onClick={this.changeType.bind(this, 'light')}>Light</a>
               </div>
               <div className='item'>
                 <p>Effect</p>
