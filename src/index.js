@@ -38,6 +38,7 @@ export default class ReactTooltip extends Component {
     this.mount = true
     this.state = {
       show: false,
+      border: false,
       multilineCount: 0,
       placeholder: '',
       x: 'NONE',
@@ -195,6 +196,7 @@ export default class ReactTooltip extends Component {
       offset: e.currentTarget.getAttribute('data-offset') ? e.currentTarget.getAttribute('data-offset') : (this.props.offset ? this.props.offset : {}),
       html: e.currentTarget.getAttribute('data-html') ? e.currentTarget.getAttribute('data-html') : (this.props.html ? this.props.html : false),
       delayHide: e.currentTarget.getAttribute('data-delay-hide') ? e.currentTarget.getAttribute('data-delay-hide') : (this.props.delayHide ? this.props.delayHide : 0),
+      border: this.props.border,
       extraClass,
       multiline
     })
@@ -361,6 +363,7 @@ export default class ReactTooltip extends Component {
     let tooltipClass = classname(
       '__react_component_tooltip',
       {'show': this.state.show},
+      {'border': this.state.border},
       {'place-top': this.state.place === 'top'},
       {'place-bottom': this.state.place === 'bottom'},
       {'place-left': this.state.place === 'left'},
@@ -418,6 +421,7 @@ ReactTooltip.propTypes = {
   effect: PropTypes.string,
   offset: PropTypes.object,
   multiline: PropTypes.bool,
+  border: PropTypes.bool,
   class: PropTypes.string,
   id: PropTypes.string,
   html: PropTypes.bool,

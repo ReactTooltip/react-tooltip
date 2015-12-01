@@ -11,6 +11,7 @@ const Test = React.createClass({
       place: 'top',
       type: 'dark',
       effect: 'float',
+      border: false,
       condition: false
     }
   },
@@ -33,6 +34,12 @@ const Test = React.createClass({
     })
   },
 
+  changeBorder (border) {
+    this.setState({
+      border: border
+    })
+  },
+
   _onClick () {
     this.setState({
       condition: true
@@ -40,7 +47,7 @@ const Test = React.createClass({
   },
 
   render () {
-    let { place, type, effect } = this.state
+    let { place, type, effect, border } = this.state
     return (
       <div>
         <section className='tooltip-example'>
@@ -66,12 +73,17 @@ const Test = React.createClass({
                 <a className={type === 'warning' ? 'active' : ''} onClick={this.changeType.bind(this, 'warning')}>Warning</a>
                 <a className={type === 'error' ? 'active' : ''} onClick={this.changeType.bind(this, 'error')}>Error</a>
                 <a className={type === 'info' ? 'active' : ''} onClick={this.changeType.bind(this, 'info')}>Info</a>
-                <a className={type === 'dlight' ? 'active' : ''} onClick={this.changeType.bind(this, 'light')}>Light</a>
+                <a className={type === 'light' ? 'active' : ''} onClick={this.changeType.bind(this, 'light')}>Light</a>
               </div>
               <div className='item'>
                 <p>Effect</p>
                 <a className={effect === 'float' ? 'active' : ''} onClick={this.changeEffect.bind(this, 'float')}>Float<span className='mark'>(default)</span></a>
                 <a className={effect === 'solid' ? 'active' : ''} onClick={this.changeEffect.bind(this, 'solid')}>Solid</a>
+              </div>
+              <div className='item'>
+                <p>Border</p>
+                <a className={!border ? 'active' : ''} onClick={this.changeBorder.bind(this, false)}>No border<span className='mark'>(default)</span></a>
+                <a className={border ? 'active' : ''} onClick={this.changeBorder.bind(this, true)}>Border</a>
               </div>
             </div>
             <pre>
@@ -79,11 +91,11 @@ const Test = React.createClass({
                 <p className='label'>Code</p>
                 <hr></hr>
                 <p>{'<a data-tip="React-tooltip"> ◕‿‿◕ </a>'}</p>
-                <p>{'<ReactTooltip place="' + place + '" type="' + type + '" effect="' + effect + '"/>'}</p>
+                <p>{'<ReactTooltip place="' + place + '" type="' + type + '" effect="' + effect + '"' + (border ? ' border' : '') + '/>'}</p>
               </div>
             </pre>
           </div>
-          <ReactTooltip id='main' place={place} type={type} effect={effect} multiline={true} />
+          <ReactTooltip id='main' place={place} type={type} effect={effect} border={border} multiline={true} />
         </section>
         <section className="advance">
           <div className="section">
