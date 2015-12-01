@@ -11,7 +11,6 @@ const Test = React.createClass({
       place: 'top',
       type: 'dark',
       effect: 'float',
-      border: false,
       condition: false
     }
   },
@@ -34,12 +33,6 @@ const Test = React.createClass({
     })
   },
 
-  changeBorder (border) {
-    this.setState({
-      border: border
-    })
-  },
-
   _onClick () {
     this.setState({
       condition: true
@@ -47,7 +40,7 @@ const Test = React.createClass({
   },
 
   render () {
-    let { place, type, effect, border } = this.state
+    let { place, type, effect } = this.state
     return (
       <div>
         <section className='tooltip-example'>
@@ -80,22 +73,17 @@ const Test = React.createClass({
                 <a className={effect === 'float' ? 'active' : ''} onClick={this.changeEffect.bind(this, 'float')}>Float<span className='mark'>(default)</span></a>
                 <a className={effect === 'solid' ? 'active' : ''} onClick={this.changeEffect.bind(this, 'solid')}>Solid</a>
               </div>
-              <div className='item'>
-                <p>Border</p>
-                <a className={!border ? 'active' : ''} onClick={this.changeBorder.bind(this, false)}>No border<span className='mark'>(default)</span></a>
-                <a className={border ? 'active' : ''} onClick={this.changeBorder.bind(this, true)}>Border</a>
-              </div>
             </div>
             <pre>
               <div>
                 <p className='label'>Code</p>
                 <hr></hr>
                 <p>{'<a data-tip="React-tooltip"> ◕‿‿◕ </a>'}</p>
-                <p>{'<ReactTooltip place="' + place + '" type="' + type + '" effect="' + effect + '"' + (border ? ' border' : '') + '/>'}</p>
+                <p>{'<ReactTooltip place="' + place + '" type="' + type + '" effect="' + effect + '"/>'}</p>
               </div>
             </pre>
           </div>
-          <ReactTooltip id='main' place={place} type={type} effect={effect} border={border} multiline={true} />
+          <ReactTooltip id='main' place={place} type={type} effect={effect} multiline={true} />
         </section>
         <section className="advance">
           <div className="section">
@@ -175,7 +163,6 @@ const Test = React.createClass({
                 "<ReactTooltip/>"}</p>
               </div>
             </pre>
-          
           </div>
         </section>
       </div>

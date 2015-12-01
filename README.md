@@ -52,6 +52,7 @@ Check example:  [React-tooltip Test](http://wwayne.com/react-tooltip)
   class	|   data-class  |  String  |  your custom class | extra custom class, can use !important to cover react-tooltip's default class
       html	|   data-html  |  Bool  |  true, false  |  `<p data-tip="<p>HTML tooltip</p>" data-html={true}></p>` or `<ReactTooltip html={true} />`
    delayHide	|   data-delay-hide  |  Number  |   |    `<p data-tip="tooltip" data-delay-hide='1000' or `<ReactTooltip delayHide=1000 />`
+   border  |   data-border  |  Bool  |  true, false | Add one pixel white border
 
 ### Using react component as tooltip
 Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
