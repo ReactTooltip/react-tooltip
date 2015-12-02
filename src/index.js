@@ -69,7 +69,7 @@ export default class ReactTooltip extends Component {
 
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
     window.addEventListener('__react_tooltip_rebuild_event', ::this.globalRebuild, false)
-
+    /* Add listener on window resize  */
     window.removeEventListener('resize', this.onWindowResize)
     window.addEventListener('resize', ::this.onWindowResize, false)
   }
