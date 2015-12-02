@@ -116,10 +116,8 @@ var ReactTooltip = (function (_Component) {
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
     window.addEventListener('__react_tooltip_rebuild_event', this.globalRebuild.bind(this), false);
 
-    if (this.props.watchWindow) {
-      window.removeEventListener('resize', this.onWindowResize);
-      window.addEventListener('resize', this.onWindowResize.bind(this), false);
-    }
+    window.removeEventListener('resize', this.onWindowResize);
+    window.addEventListener('resize', this.onWindowResize.bind(this), false);
   };
 
   ReactTooltip.prototype.componentWillUpdate = function componentWillUpdate() {
@@ -136,9 +134,7 @@ var ReactTooltip = (function (_Component) {
     this.mount = false;
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
-    if (this.props.watchWindow) {
-      window.removeEventListener('resize', this.onWindowResize);
-    }
+    window.removeEventListener('resize', this.onWindowResize);
   };
 
   ReactTooltip.prototype.bindListener = function bindListener() {
@@ -166,6 +162,26 @@ var ReactTooltip = (function (_Component) {
     }
   };
 
+  ReactTooltip.prototype.unbindListener = function unbindListener() {
+    var targetArray = document.querySelectorAll('[data-tip]');
+    var dataEvent = undefined;
+
+    for (var i = 0; i < targetArray.length; i++) {
+      dataEvent = this.state.event || targetArray[i].getAttribute('data-event');
+      if (dataEvent) {
+        targetArray[i].removeEventListener(dataEvent, this.checkStatus);
+      } else {
+        targetArray[i].removeEventListener('mouseenter', this.showTooltip);
+        targetArray[i].removeEventListener('mousemove', this.updateTooltip);
+        targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
+      }
+    }
+  };
+
+  /**
+   * Get all tooltip targets
+   */
+
   ReactTooltip.prototype.getTargetArray = function getTargetArray() {
     var id = this.props.id;
 
@@ -179,6 +195,10 @@ var ReactTooltip = (function (_Component) {
 
     return targetArray;
   };
+
+  /**
+   * listener on window resize
+   */
 
   ReactTooltip.prototype.onWindowResize = function onWindowResize() {
     if (!this.mount) return;
@@ -203,6 +223,10 @@ var ReactTooltip = (function (_Component) {
     }
   };
 
+  /**
+   * Used in customer event
+   */
+
   ReactTooltip.prototype.checkStatus = function checkStatus(e) {
     if (this.state.show && e.currentTarget.getAttribute('currentItem') === 'true') {
       this.hideTooltip(e);
@@ -221,22 +245,6 @@ var ReactTooltip = (function (_Component) {
         targetArray[i].setAttribute('currentItem', 'false');
       } else {
         targetArray[i].setAttribute('currentItem', 'true');
-      }
-    }
-  };
-
-  ReactTooltip.prototype.unbindListener = function unbindListener() {
-    var targetArray = document.querySelectorAll('[data-tip]');
-    var dataEvent = undefined;
-
-    for (var i = 0; i < targetArray.length; i++) {
-      dataEvent = this.state.event || targetArray[i].getAttribute('data-event');
-      if (dataEvent) {
-        targetArray[i].removeEventListener(dataEvent, this.checkStatus);
-      } else {
-        targetArray[i].removeEventListener('mouseenter', this.showTooltip);
-        targetArray[i].removeEventListener('mousemove', this.updateTooltip);
-        targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
       }
     }
   };
@@ -311,6 +319,26 @@ var ReactTooltip = (function (_Component) {
     }
   };
 
+  /**
+   * When mouse leave, hide tooltip
+   */
+
+  ReactTooltip.prototype.hideTooltip = function hideTooltip() {
+    var _this2 = this;
+
+    var delayHide = this.state.delayHide;
+
+    setTimeout(function () {
+      _this2.setState({
+        show: false
+      });
+    }, parseInt(delayHide, 10));
+  };
+
+  /**
+   * Get tooltip poisition by current target
+   */
+
   ReactTooltip.prototype.getPosition = function getPosition(currentTarget) {
     var place = this.state.place;
 
@@ -339,22 +367,6 @@ var ReactTooltip = (function (_Component) {
     }
 
     return { x: x, y: y };
-  };
-
-  /**
-   * When mouse leave, hide tooltip
-   */
-
-  ReactTooltip.prototype.hideTooltip = function hideTooltip() {
-    var _this2 = this;
-
-    var delayHide = this.state.delayHide;
-
-    setTimeout(function () {
-      _this2.setState({
-        show: false
-      });
-    }, parseInt(delayHide, 10));
   };
 
   /**

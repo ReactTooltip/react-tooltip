@@ -70,10 +70,8 @@ export default class ReactTooltip extends Component {
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
     window.addEventListener('__react_tooltip_rebuild_event', ::this.globalRebuild, false)
 
-    if (this.props.watchWindow) {
-      window.removeEventListener('resize', this.onWindowResize)
-      window.addEventListener('resize', ::this.onWindowResize, false)
-    }
+    window.removeEventListener('resize', this.onWindowResize)
+    window.addEventListener('resize', ::this.onWindowResize, false)
   }
 
   componentWillUpdate () {
@@ -90,9 +88,7 @@ export default class ReactTooltip extends Component {
     this.mount = false
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
-    if (this.props.watchWindow) {
-      window.removeEventListener('resize', this.onWindowResize)
-    }
+    window.removeEventListener('resize', this.onWindowResize)
   }
 
   bindListener () {
@@ -120,6 +116,25 @@ export default class ReactTooltip extends Component {
     }
   }
 
+  unbindListener () {
+    let targetArray = document.querySelectorAll('[data-tip]')
+    let dataEvent
+
+    for (let i = 0; i < targetArray.length; i++) {
+      dataEvent = this.state.event || targetArray[i].getAttribute('data-event')
+      if (dataEvent) {
+        targetArray[i].removeEventListener(dataEvent, this.checkStatus)
+      } else {
+        targetArray[i].removeEventListener('mouseenter', this.showTooltip)
+        targetArray[i].removeEventListener('mousemove', this.updateTooltip)
+        targetArray[i].removeEventListener('mouseleave', this.hideTooltip)
+      }
+    }
+  }
+
+  /**
+   * Get all tooltip targets
+   */
   getTargetArray () {
     const {id} = this.props
     let targetArray
@@ -133,6 +148,9 @@ export default class ReactTooltip extends Component {
     return targetArray
   }
 
+  /**
+   * listener on window resize
+   */
   onWindowResize () {
     if (!this.mount) return
     let targetArray = this.getTargetArray()
@@ -151,6 +169,9 @@ export default class ReactTooltip extends Component {
     }
   }
 
+  /**
+   * Used in customer event
+   */
   checkStatus (e) {
     if (this.state.show && e.currentTarget.getAttribute('currentItem') === 'true') {
       this.hideTooltip(e)
@@ -169,22 +190,6 @@ export default class ReactTooltip extends Component {
         targetArray[i].setAttribute('currentItem', 'false')
       } else {
         targetArray[i].setAttribute('currentItem', 'true')
-      }
-    }
-  }
-
-  unbindListener () {
-    let targetArray = document.querySelectorAll('[data-tip]')
-    let dataEvent
-
-    for (let i = 0; i < targetArray.length; i++) {
-      dataEvent = this.state.event || targetArray[i].getAttribute('data-event')
-      if (dataEvent) {
-        targetArray[i].removeEventListener(dataEvent, this.checkStatus)
-      } else {
-        targetArray[i].removeEventListener('mouseenter', this.showTooltip)
-        targetArray[i].removeEventListener('mousemove', this.updateTooltip)
-        targetArray[i].removeEventListener('mouseleave', this.hideTooltip)
       }
     }
   }
@@ -251,6 +256,21 @@ export default class ReactTooltip extends Component {
     }
   }
 
+  /**
+   * When mouse leave, hide tooltip
+   */
+  hideTooltip () {
+    const {delayHide} = this.state
+    setTimeout(() => {
+      this.setState({
+        show: false
+      })
+    }, parseInt(delayHide, 10))
+  }
+
+  /**
+   * Get tooltip poisition by current target
+   */
   getPosition (currentTarget) {
     const {place} = this.state
     const node = findDOMNode(this)
@@ -278,18 +298,6 @@ export default class ReactTooltip extends Component {
     }
 
     return { x, y }
-  }
-
-  /**
-   * When mouse leave, hide tooltip
-   */
-  hideTooltip () {
-    const {delayHide} = this.state
-    setTimeout(() => {
-      this.setState({
-        show: false
-      })
-    }, parseInt(delayHide, 10))
   }
 
   /**
