@@ -88,8 +88,10 @@ var ReactTooltip = (function (_Component) {
       extraClass: '',
       html: false,
       delayHide: 0,
+      delayShow: 0,
       event: props.event || null
     };
+    this.delayShowLoop = null;
   }
 
   /* Bind this with method */
@@ -115,7 +117,7 @@ var ReactTooltip = (function (_Component) {
 
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
     window.addEventListener('__react_tooltip_rebuild_event', this.globalRebuild.bind(this), false);
-
+    /* Add listener on window resize  */
     window.removeEventListener('resize', this.onWindowResize);
     window.addEventListener('resize', this.onWindowResize.bind(this), false);
   };
@@ -283,6 +285,7 @@ var ReactTooltip = (function (_Component) {
       effect: e.currentTarget.getAttribute('data-effect') ? e.currentTarget.getAttribute('data-effect') : this.props.effect ? this.props.effect : 'float',
       offset: e.currentTarget.getAttribute('data-offset') ? e.currentTarget.getAttribute('data-offset') : this.props.offset ? this.props.offset : {},
       html: e.currentTarget.getAttribute('data-html') ? e.currentTarget.getAttribute('data-html') : this.props.html ? this.props.html : false,
+      delayShow: e.currentTarget.getAttribute('data-delay-show') ? e.currentTarget.getAttribute('data-delay-show') : this.props.delayShow ? this.props.delayShow : 0,
       delayHide: e.currentTarget.getAttribute('data-delay-hide') ? e.currentTarget.getAttribute('data-delay-hide') : this.props.delayHide ? this.props.delayHide : 0,
       border: e.currentTarget.getAttribute('data-border') ? e.currentTarget.getAttribute('data-border') === 'true' : this.props.border ? this.props.border : false,
       extraClass: extraClass,
@@ -296,27 +299,38 @@ var ReactTooltip = (function (_Component) {
    */
 
   ReactTooltip.prototype.updateTooltip = function updateTooltip(e) {
-    if (this.trim(this.state.placeholder).length > 0) {
-      if (this.state.effect === 'float') {
-        // const offsetY = e.clientY
-        this.setState({
-          show: true,
-          x: e.clientX,
-          y: e.clientY
-        });
-      } else if (this.state.effect === 'solid') {
-        var _getPosition2 = this.getPosition(e.currentTarget);
+    var _this2 = this;
 
-        var x = _getPosition2.x;
-        var y = _getPosition2.y;
+    var _state = this.state;
+    var delayShow = _state.delayShow;
+    var show = _state.show;
 
-        this.setState({
-          show: true,
-          x: x,
-          y: y
-        });
+    clearTimeout(this.delayShowLoop);
+
+    var delayTime = show ? 0 : parseInt(delayShow, 10);
+    this.delayShowLoop = setTimeout(function () {
+      if (_this2.trim(_this2.state.placeholder).length > 0) {
+        if (_this2.state.effect === 'float') {
+          // const offsetY = e.clientY
+          _this2.setState({
+            show: true,
+            x: e.clientX,
+            y: e.clientY
+          });
+        } else if (_this2.state.effect === 'solid') {
+          var _getPosition2 = _this2.getPosition(e.currentTarget);
+
+          var x = _getPosition2.x;
+          var y = _getPosition2.y;
+
+          _this2.setState({
+            show: true,
+            x: x,
+            y: y
+          });
+        }
       }
-    }
+    }, delayTime);
   };
 
   /**
@@ -324,12 +338,12 @@ var ReactTooltip = (function (_Component) {
    */
 
   ReactTooltip.prototype.hideTooltip = function hideTooltip() {
-    var _this2 = this;
+    var _this3 = this;
 
     var delayHide = this.state.delayHide;
 
     setTimeout(function () {
-      _this2.setState({
+      _this3.setState({
         show: false
       });
     }, parseInt(delayHide, 10));
@@ -378,10 +392,10 @@ var ReactTooltip = (function (_Component) {
 
     var tipWidth = node.clientWidth;
     var tipHeight = node.clientHeight;
-    var _state = this.state;
-    var effect = _state.effect;
-    var place = _state.place;
-    var offset = _state.offset;
+    var _state2 = this.state;
+    var effect = _state2.effect;
+    var place = _state2.place;
+    var offset = _state2.offset;
 
     var offsetFromEffect = {};
 
@@ -472,10 +486,10 @@ var ReactTooltip = (function (_Component) {
   };
 
   ReactTooltip.prototype.render = function render() {
-    var _state2 = this.state;
-    var placeholder = _state2.placeholder;
-    var extraClass = _state2.extraClass;
-    var html = _state2.html;
+    var _state3 = this.state;
+    var placeholder = _state3.placeholder;
+    var extraClass = _state3.extraClass;
+    var html = _state3.html;
 
     var tooltipClass = _classnames2['default']('__react_component_tooltip', { 'show': this.state.show }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
 
@@ -532,6 +546,7 @@ ReactTooltip.propTypes = {
   id: _react.PropTypes.string,
   html: _react.PropTypes.bool,
   delayHide: _react.PropTypes.number,
+  delayShow: _react.PropTypes.number,
   event: _react.PropTypes.any,
   watchWindow: _react.PropTypes.bool
 };

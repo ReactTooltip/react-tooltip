@@ -51,8 +51,10 @@ export default class ReactTooltip extends Component {
       extraClass: '',
       html: false,
       delayHide: 0,
+      delayShow: 0,
       event: props.event || null
     }
+    this.delayShowLoop = null
   }
 
   /* Bind this with method */
@@ -225,6 +227,7 @@ export default class ReactTooltip extends Component {
       effect: e.currentTarget.getAttribute('data-effect') ? e.currentTarget.getAttribute('data-effect') : (this.props.effect ? this.props.effect : 'float'),
       offset: e.currentTarget.getAttribute('data-offset') ? e.currentTarget.getAttribute('data-offset') : (this.props.offset ? this.props.offset : {}),
       html: e.currentTarget.getAttribute('data-html') ? e.currentTarget.getAttribute('data-html') : (this.props.html ? this.props.html : false),
+      delayShow: e.currentTarget.getAttribute('data-delay-show') ? e.currentTarget.getAttribute('data-delay-show') : (this.props.delayShow ? this.props.delayShow : 0),
       delayHide: e.currentTarget.getAttribute('data-delay-hide') ? e.currentTarget.getAttribute('data-delay-hide') : (this.props.delayHide ? this.props.delayHide : 0),
       border: e.currentTarget.getAttribute('data-border') ? (e.currentTarget.getAttribute('data-border') === 'true') : (this.props.border ? this.props.border : false),
       extraClass,
@@ -237,23 +240,29 @@ export default class ReactTooltip extends Component {
    * When mouse hover, updatetooltip
    */
   updateTooltip (e) {
-    if (this.trim(this.state.placeholder).length > 0) {
-      if (this.state.effect === 'float') {
-        // const offsetY = e.clientY
-        this.setState({
-          show: true,
-          x: e.clientX,
-          y: e.clientY
-        })
-      } else if (this.state.effect === 'solid') {
-        let {x, y} = this.getPosition(e.currentTarget)
-        this.setState({
-          show: true,
-          x,
-          y
-        })
+    const {delayShow, show} = this.state
+    clearTimeout(this.delayShowLoop)
+
+    const delayTime = show ? 0 : parseInt(delayShow, 10)
+    this.delayShowLoop = setTimeout(() => {
+      if (this.trim(this.state.placeholder).length > 0) {
+        if (this.state.effect === 'float') {
+          // const offsetY = e.clientY
+          this.setState({
+            show: true,
+            x: e.clientX,
+            y: e.clientY
+          })
+        } else if (this.state.effect === 'solid') {
+          let {x, y} = this.getPosition(e.currentTarget)
+          this.setState({
+            show: true,
+            x,
+            y
+          })
+        }
       }
-    }
+    }, delayTime)
   }
 
   /**
@@ -464,6 +473,7 @@ ReactTooltip.propTypes = {
   id: PropTypes.string,
   html: PropTypes.bool,
   delayHide: PropTypes.number,
+  delayShow: PropTypes.number,
   event: PropTypes.any,
   watchWindow: PropTypes.bool
 }

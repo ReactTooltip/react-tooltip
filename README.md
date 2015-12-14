@@ -43,15 +43,16 @@ Check example:  [React-tooltip Test](http://wwayne.com/react-tooltip)
 
 	Global  |	Specific	|	Type	|	Values  |       Description
 :-----------|:-------------|:----------|:----------|:------------------
-    place	|   data-place  |  String  |  top, right, bottom, left | 
-    type	|   data-type  |  String  |  success, warning, error, info, light | 
-    effect	|   data-effect  |  String  |  float, solid |
+    place	|   data-place  |  String  |  top, right, bottom, left | tooltip's placement
+    type	|   data-type  |  String  |  success, warning, error, info, light | tooltip's color theme
+    effect	|   data-effect  |  String  |  float, solid | either float or pinned
     event |   data-event  |  String  |  e.g. click | customer event to trigger tooltip
     offset	|   data-offset  |  Object  |  top, right, bottom, left | data-offset="{'top': 10, 'left': 10}" for specific and offset={{top: 10, left: 10}} for global
    multiline	|   data-multiline  |  Bool  |  true, false | support `<br>`, `<br />` to make multiline
   class	|   data-class  |  String  |  your custom class | extra custom class, can use !important to cover react-tooltip's default class
       html	|   data-html  |  Bool  |  true, false  |  `<p data-tip="<p>HTML tooltip</p>" data-html={true}></p>` or `<ReactTooltip html={true} />`
-   delayHide	|   data-delay-hide  |  Number  |   |    `<p data-tip="tooltip" data-delay-hide='1000' or `<ReactTooltip delayHide=1000 />`
+   delayHide	|   data-delay-hide  |  Number  |   |    `<p data-tip="tooltip" data-delay-hide='1000'></p>` or `<ReactTooltip delayHide={1000} />`
+    delayShow	|   data-delay-show  |  Number  |   |    `<p data-tip="tooltip" data-delay-show='1000'></p>` or `<ReactTooltip delayShow={1000} />`
    border  |   data-border  |  Bool  |  true, false | Add one pixel white border
 
 ### Using react component as tooltip
