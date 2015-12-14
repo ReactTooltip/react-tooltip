@@ -87,6 +87,7 @@ export default class ReactTooltip extends Component {
 
   componentWillUnmount () {
     this.unbindListener()
+    this.removeScrollListener()
     this.mount = false
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
@@ -233,6 +234,8 @@ export default class ReactTooltip extends Component {
       extraClass,
       multiline
     })
+
+    this.addScrollListener()
     this.updateTooltip(e)
   }
 
@@ -274,7 +277,21 @@ export default class ReactTooltip extends Component {
       this.setState({
         show: false
       })
+      this.removeScrollListener()
     }, parseInt(delayHide, 10))
+  }
+
+  /**
+   * Add scroll eventlistener when tooltip show
+   * or tooltip will always existed
+   */
+  addScrollListener () {
+    window.addEventListener("scroll", this.hideTooltip);
+  }
+
+  /* Remove listener when tooltip hide */
+  removeScrollListener () {
+    window.removeEventListener("scroll", this.hideTooltip);
   }
 
   /**

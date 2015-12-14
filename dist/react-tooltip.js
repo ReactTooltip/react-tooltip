@@ -133,6 +133,7 @@ var ReactTooltip = (function (_Component) {
 
   ReactTooltip.prototype.componentWillUnmount = function componentWillUnmount() {
     this.unbindListener();
+    this.removeScrollListener();
     this.mount = false;
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
@@ -291,6 +292,8 @@ var ReactTooltip = (function (_Component) {
       extraClass: extraClass,
       multiline: multiline
     });
+
+    this.addScrollListener();
     this.updateTooltip(e);
   };
 
@@ -346,7 +349,23 @@ var ReactTooltip = (function (_Component) {
       _this3.setState({
         show: false
       });
+      _this3.removeScrollListener();
     }, parseInt(delayHide, 10));
+  };
+
+  /**
+   * Add scroll eventlistener when tooltip show
+   * or tooltip will always existed
+   */
+
+  ReactTooltip.prototype.addScrollListener = function addScrollListener() {
+    window.addEventListener("scroll", this.hideTooltip);
+  };
+
+  /* Remove listener when tooltip hide */
+
+  ReactTooltip.prototype.removeScrollListener = function removeScrollListener() {
+    window.removeEventListener("scroll", this.hideTooltip);
   };
 
   /**
