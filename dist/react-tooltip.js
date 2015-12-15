@@ -359,13 +359,13 @@ var ReactTooltip = (function (_Component) {
    */
 
   ReactTooltip.prototype.addScrollListener = function addScrollListener() {
-    window.addEventListener("scroll", this.hideTooltip);
+    window.addEventListener('scroll', this.hideTooltip);
   };
 
   /* Remove listener when tooltip hide */
 
   ReactTooltip.prototype.removeScrollListener = function removeScrollListener() {
-    window.removeEventListener("scroll", this.hideTooltip);
+    window.removeEventListener('scroll', this.hideTooltip);
   };
 
   /**
