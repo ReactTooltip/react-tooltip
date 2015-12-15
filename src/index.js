@@ -286,12 +286,12 @@ export default class ReactTooltip extends Component {
    * or tooltip will always existed
    */
   addScrollListener () {
-    window.addEventListener("scroll", this.hideTooltip);
+    window.addEventListener('scroll', this.hideTooltip)
   }
 
   /* Remove listener when tooltip hide */
   removeScrollListener () {
-    window.removeEventListener("scroll", this.hideTooltip);
+    window.removeEventListener('scroll', this.hideTooltip)
   }
 
   /**
