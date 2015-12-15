@@ -311,17 +311,17 @@ var ReactTooltip = (function (_Component) {
     clearTimeout(this.delayShowLoop);
 
     var delayTime = show ? 0 : parseInt(delayShow, 10);
+    var eventTarget = e.currentTarget;
     this.delayShowLoop = setTimeout(function () {
       if (_this2.trim(_this2.state.placeholder).length > 0) {
         if (_this2.state.effect === 'float') {
-          // const offsetY = e.clientY
           _this2.setState({
             show: true,
             x: e.clientX,
             y: e.clientY
           });
         } else if (_this2.state.effect === 'solid') {
-          var _getPosition2 = _this2.getPosition(e.currentTarget);
+          var _getPosition2 = _this2.getPosition(eventTarget);
 
           var x = _getPosition2.x;
           var y = _getPosition2.y;
@@ -345,6 +345,7 @@ var ReactTooltip = (function (_Component) {
 
     var delayHide = this.state.delayHide;
 
+    clearTimeout(this.delayShowLoop);
     setTimeout(function () {
       _this3.setState({
         show: false

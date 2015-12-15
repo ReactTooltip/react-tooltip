@@ -247,17 +247,17 @@ export default class ReactTooltip extends Component {
     clearTimeout(this.delayShowLoop)
 
     const delayTime = show ? 0 : parseInt(delayShow, 10)
+    const eventTarget = e.currentTarget
     this.delayShowLoop = setTimeout(() => {
       if (this.trim(this.state.placeholder).length > 0) {
         if (this.state.effect === 'float') {
-          // const offsetY = e.clientY
           this.setState({
             show: true,
             x: e.clientX,
             y: e.clientY
           })
         } else if (this.state.effect === 'solid') {
-          let {x, y} = this.getPosition(e.currentTarget)
+          let {x, y} = this.getPosition(eventTarget)
           this.setState({
             show: true,
             x,
@@ -273,6 +273,7 @@ export default class ReactTooltip extends Component {
    */
   hideTooltip () {
     const {delayHide} = this.state
+    clearTimeout(this.delayShowLoop)
     setTimeout(() => {
       this.setState({
         show: false
