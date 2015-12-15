@@ -83,7 +83,7 @@ const Test = React.createClass({
               </div>
             </pre>
           </div>
-          <ReactTooltip id='main' place={place} type={type} effect={effect} multiline={true} />
+          <ReactTooltip id='main' place={place} type={type} effect={effect} multiline={true} class='extra'/>
         </section>
         <section className="advance">
           <div className="section">
