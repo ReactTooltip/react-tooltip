@@ -13,8 +13,25 @@ export default class ReactTooltip extends Component {
    * Class method
    * @see ReactTooltip.hide() && ReactTooltup.rebuild()
    */
-  static hide () { window.dispatchEvent(new window.Event('__react_tooltip_hide_event')) }
-  static rebuild () { window.dispatchEvent(new window.Event('__react_tooltip_rebuild_event')) }
+  static hide () {
+    if (window.Event == "function") {
+      window.dispatchEvent(new window.Event('__react_tooltip_hide_event'))
+    } else {
+      var event = document.createEvent("Event");
+      event.initEvent("__react_tooltip_hide_event", false, true);
+      window.dispatchEvent(event);
+    }
+
+  }
+  static rebuild () {
+    if (window.Event == "function") {
+      window.dispatchEvent(new window.Event('__react_tooltip_rebuild_event'))
+    } else {
+      var event = document.createEvent("Event");
+      event.initEvent("__react_tooltip_rebuild_event", false, true);
+      window.dispatchEvent(event);
+    }
+  }
 
   static eventHideMark = `hide${Date.now()}`
   static eventRebuildMark = `rebuild${Date.now()}`
