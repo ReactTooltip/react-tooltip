@@ -33,11 +33,23 @@ var ReactTooltip = (function (_Component) {
    */
 
   ReactTooltip.hide = function hide() {
-    window.dispatchEvent(new window.Event('__react_tooltip_hide_event'));
+    if (typeof window.Event === 'function') {
+      window.dispatchEvent(new window.Event('__react_tooltip_hide_event'));
+    } else {
+      var _event = document.createEvent('Event');
+      _event.initEvent('__react_tooltip_hide_event', false, true);
+      window.dispatchEvent(_event);
+    }
   };
 
   ReactTooltip.rebuild = function rebuild() {
-    window.dispatchEvent(new window.Event('__react_tooltip_rebuild_event'));
+    if (typeof window.Event === 'function') {
+      window.dispatchEvent(new window.Event('__react_tooltip_rebuild_event'));
+    } else {
+      var _event2 = document.createEvent('Event');
+      _event2.initEvent('__react_tooltip_rebuild_event', false, true);
+      window.dispatchEvent(_event2);
+    }
   };
 
   ReactTooltip.prototype.globalHide = function globalHide() {

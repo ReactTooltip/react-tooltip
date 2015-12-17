@@ -14,22 +14,26 @@ export default class ReactTooltip extends Component {
    * @see ReactTooltip.hide() && ReactTooltup.rebuild()
    */
   static hide () {
-    if (window.Event == "function") {
+    /**
+     * Check for ie
+     * @see http://stackoverflow.com/questions/26596123/internet-explorer-9-10-11-event-constructor-doesnt-work
+     */
+    if (typeof window.Event === 'function') {
       window.dispatchEvent(new window.Event('__react_tooltip_hide_event'))
     } else {
-      var event = document.createEvent("Event");
-      event.initEvent("__react_tooltip_hide_event", false, true);
-      window.dispatchEvent(event);
+      let event = document.createEvent('Event')
+      event.initEvent('__react_tooltip_hide_event', false, true)
+      window.dispatchEvent(event)
     }
-
   }
+
   static rebuild () {
-    if (window.Event == "function") {
+    if (typeof window.Event === 'function') {
       window.dispatchEvent(new window.Event('__react_tooltip_rebuild_event'))
     } else {
-      var event = document.createEvent("Event");
-      event.initEvent("__react_tooltip_rebuild_event", false, true);
-      window.dispatchEvent(event);
+      let event = document.createEvent('Event')
+      event.initEvent('__react_tooltip_rebuild_event', false, true)
+      window.dispatchEvent(event)
     }
   }
 
