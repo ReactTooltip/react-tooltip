@@ -266,7 +266,7 @@ export default class ReactTooltip extends Component {
   updateTooltip (e) {
     const {delayShow, show} = this.state
     clearTimeout(this.delayShowLoop)
-
+    
     const delayTime = show ? 0 : parseInt(delayShow, 10)
     const eventTarget = e.currentTarget
     this.delayShowLoop = setTimeout(() => {
