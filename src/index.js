@@ -394,32 +394,67 @@ export default class ReactTooltip extends Component {
         xPosition += parseInt(offset[key], 10)
       }
     }
-    /* When tooltip over the screen */
-    let offsetEffectX = effect === 'solid' ? 0 : (place ? offsetFromEffect[place].x : 0)
-    let offsetEffectY = effect === 'solid' ? 0 : (place ? offsetFromEffect[place].y : 0)
-    const styleLeft = this.state.x + offsetEffectX + xPosition
-    const styleTop = this.state.y + offsetEffectY + yPosition
-    const windoWidth = window.innerWidth
-    const windowHeight = window.innerHeight
 
-    /* Solid use this method will get Uncaught RangeError: Maximum call stack size exceeded */
-    if (effect === 'float') {
-      if (styleLeft < 0 && this.state.x + offsetFromEffect['right'].x + xPosition <= windoWidth) {
+    /* If our tooltip goes outside the window we want to try and change its place to be inside the window */
+    var x = this.state.x
+    var y = this.state.y
+    function getStyleLeft (_place) {
+      var _offsetEffectX = effect === 'solid' ? 0 : _place ? offsetFromEffect[_place].x : 0
+      return x + _offsetEffectX + xPosition
+    }
+    function getStyleTop (_place) {
+      var _offsetEffectY = effect === 'solid' ? 0 : _place ? offsetFromEffect[_place].y : 0
+      return y + _offsetEffectY + yPosition
+    }
+
+    var windoWidth = window.innerWidth
+    var windowHeight = window.innerHeight
+
+    function outsideLeft (_place) {
+      var styleLeft = getStyleLeft(_place)
+      return styleLeft < 0 && x + offsetFromEffect['right'].x + xPosition <= windoWidth
+    }
+    function outsideRight (_place) {
+      var styleLeft = getStyleLeft(_place)
+      return styleLeft + tipWidth > windoWidth && x + offsetFromEffect['left'].x + xPosition >= 0
+    }
+    function outsideTop (_place) {
+      var styleTop = getStyleTop(_place)
+      return styleTop < 0 && y + offsetFromEffect['bottom'].y + yPosition + tipHeight < windowHeight
+    }
+    function outsideBottom (_place) {
+      var styleTop = getStyleTop(_place)
+      return styleTop + tipHeight >= windowHeight && y + offsetFromEffect['top'].y + yPosition >= 0
+    }
+    /* We want to make sure the place we switch to will not go outside either */
+    function outside (_place) {
+      return outsideTop(_place) || outsideRight(_place) || outsideBottom(_place) || outsideLeft(_place)
+    }
+
+    /* We check each side and switch if the new place will be in bounds */
+    if (outsideLeft(place)) {
+      if (!outside('right')) {
         this.setState({
           place: 'right'
         })
         return
-      } else if (styleLeft + tipWidth > windoWidth && this.state.x + offsetFromEffect['left'].x + xPosition >= 0) {
+      }
+    } else if (outsideRight(place)) {
+      if (!outside('left')) {
         this.setState({
           place: 'left'
         })
         return
-      } else if (styleTop < 0 && this.state.y + offsetFromEffect['bottom'].y + yPosition + tipHeight < windowHeight) {
+      }
+    } else if (outsideTop(place)) {
+      if (!outside('bottom')) {
         this.setState({
           place: 'bottom'
         })
         return
-      } else if (styleTop + tipHeight >= windowHeight && this.state.y + offsetFromEffect['top'].y + yPosition >= 0) {
+      }
+    } else if (outsideBottom(place)) {
+      if (!outside('top')) {
         this.setState({
           place: 'top'
         })
@@ -427,8 +462,8 @@ export default class ReactTooltip extends Component {
       }
     }
 
-    node.style.left = styleLeft + 'px'
-    node.style.top = styleTop + 'px'
+    node.style.left = getStyleLeft(place) + 'px'
+    node.style.top = getStyleTop(place) + 'px'
   }
 
   /**
