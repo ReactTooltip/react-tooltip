@@ -386,6 +386,11 @@ export default class ReactTooltip extends Component {
         x: 10,
         y: -(tipHeight / 2)
       }
+    } else {
+      offsetFromEffect.top = {x: 0, y: 0}
+      offsetFromEffect.bottom = {x: 0, y: 0}
+      offsetFromEffect.left = {x: 0, y: 0}
+      offsetFromEffect.right = {x: 0, y: 0}
     }
 
     let xPosition = 0
