@@ -366,7 +366,7 @@ export default class ReactTooltip extends Component {
      */
     const placements = ['top', 'bottom', 'left', 'right']
     placements.forEach(key => {
-      offsetFromEffect[key] = {x:0, y:0}
+      offsetFromEffect[key] = {x: 0, y: 0}
     })
 
     if (effect === 'float') {
