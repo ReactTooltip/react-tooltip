@@ -362,7 +362,13 @@ export default class ReactTooltip extends Component {
     /**
      * List all situations for different placement,
      * then tooltip can judge switch to which side if window space is not enough
+     * @note only support for float at the moment
      */
+    const placements = ['top', 'bottom', 'left', 'right']
+    placements.forEach(key => {
+      offsetFromEffect[key] = {x:0, y:0}
+    })
+
     if (effect === 'float') {
       offsetFromEffect.top = {
         x: -(tipWidth / 2),
@@ -381,6 +387,7 @@ export default class ReactTooltip extends Component {
         y: -(tipHeight / 2)
       }
     }
+
     let xPosition = 0
     let yPosition = 0
 
