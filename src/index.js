@@ -266,7 +266,7 @@ export default class ReactTooltip extends Component {
   updateTooltip (e) {
     const {delayShow, show} = this.state
     clearTimeout(this.delayShowLoop)
-    
+
     const delayTime = show ? 0 : parseInt(delayShow, 10)
     const eventTarget = e.currentTarget
     this.delayShowLoop = setTimeout(() => {
@@ -349,7 +349,7 @@ export default class ReactTooltip extends Component {
   }
 
   /**
-   * Execute in componentDidUpdate, used in the render function, move out for server rending
+   * Execute in componentDidUpdate, can't put this into render() to support server rendering
    */
   updatePosition () {
     let node = findDOMNode(this)
@@ -359,6 +359,10 @@ export default class ReactTooltip extends Component {
     let { effect, place, offset } = this.state
     let offsetFromEffect = {}
 
+    /**
+     * List all situations for different placement,
+     * then tooltip can judge switch to which side if window space is not enough
+     */
     if (effect === 'float') {
       offsetFromEffect.top = {
         x: -(tipWidth / 2),
@@ -380,6 +384,7 @@ export default class ReactTooltip extends Component {
     let xPosition = 0
     let yPosition = 0
 
+    /* If user set offset attribute, we have to consider it into out position calculating */
     if (Object.prototype.toString.apply(offset) === '[object String]') {
       offset = JSON.parse(offset.toString().replace(/\'/g, '\"'))
     }
@@ -396,39 +401,40 @@ export default class ReactTooltip extends Component {
     }
 
     /* If our tooltip goes outside the window we want to try and change its place to be inside the window */
-    var x = this.state.x
-    var y = this.state.y
-    function getStyleLeft (_place) {
-      var _offsetEffectX = effect === 'solid' ? 0 : _place ? offsetFromEffect[_place].x : 0
-      return x + _offsetEffectX + xPosition
+    let x = this.state.x
+    let y = this.state.y
+    const windoWidth = window.innerWidth
+    const windowHeight = window.innerHeight
+
+    const getStyleLeft = (place) => {
+      const offsetEffectX = effect === 'solid' ? 0 : place ? offsetFromEffect[place].x : 0
+      return x + offsetEffectX + xPosition
     }
-    function getStyleTop (_place) {
-      var _offsetEffectY = effect === 'solid' ? 0 : _place ? offsetFromEffect[_place].y : 0
-      return y + _offsetEffectY + yPosition
+    const getStyleTop = (place) => {
+      const offsetEffectY = effect === 'solid' ? 0 : place ? offsetFromEffect[place].y : 0
+      return y + offsetEffectY + yPosition
     }
 
-    var windoWidth = window.innerWidth
-    var windowHeight = window.innerHeight
-
-    function outsideLeft (_place) {
-      var styleLeft = getStyleLeft(_place)
+    const outsideLeft = (place) => {
+      const styleLeft = getStyleLeft(place)
       return styleLeft < 0 && x + offsetFromEffect['right'].x + xPosition <= windoWidth
     }
-    function outsideRight (_place) {
-      var styleLeft = getStyleLeft(_place)
+    const outsideRight = (place) => {
+      const styleLeft = getStyleLeft(place)
       return styleLeft + tipWidth > windoWidth && x + offsetFromEffect['left'].x + xPosition >= 0
     }
-    function outsideTop (_place) {
-      var styleTop = getStyleTop(_place)
+    const outsideTop = (place) => {
+      const styleTop = getStyleTop(place)
       return styleTop < 0 && y + offsetFromEffect['bottom'].y + yPosition + tipHeight < windowHeight
     }
-    function outsideBottom (_place) {
-      var styleTop = getStyleTop(_place)
+    const outsideBottom = (place) => {
+      var styleTop = getStyleTop(place)
       return styleTop + tipHeight >= windowHeight && y + offsetFromEffect['top'].y + yPosition >= 0
     }
+
     /* We want to make sure the place we switch to will not go outside either */
-    function outside (_place) {
-      return outsideTop(_place) || outsideRight(_place) || outsideBottom(_place) || outsideLeft(_place)
+    const outside = (place) => {
+      return outsideTop(place) || outsideRight(place) || outsideBottom(place) || outsideLeft(place)
     }
 
     /* We check each side and switch if the new place will be in bounds */

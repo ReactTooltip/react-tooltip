@@ -1,3 +1,12 @@
+v1.0.0
+======
+release date: 2016-1-10
+###Notable Changes:
+
+Max possibility of keeping tooltip inside the window
+Support for border feature
+Add event listener to watch tooltip
+
 v0.9.0
 ======
 release date: 2015-11-26

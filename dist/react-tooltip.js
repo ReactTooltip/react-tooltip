@@ -33,6 +33,10 @@ var ReactTooltip = (function (_Component) {
    */
 
   ReactTooltip.hide = function hide() {
+    /**
+     * Check for ie
+     * @see http://stackoverflow.com/questions/26596123/internet-explorer-9-10-11-event-constructor-doesnt-work
+     */
     if (typeof window.Event === 'function') {
       window.dispatchEvent(new window.Event('__react_tooltip_hide_event'));
     } else {
@@ -416,7 +420,7 @@ var ReactTooltip = (function (_Component) {
   };
 
   /**
-   * Execute in componentDidUpdate, used in the render function, move out for server rending
+   * Execute in componentDidUpdate, can't put this into render() to support server rendering
    */
 
   ReactTooltip.prototype.updatePosition = function updatePosition() {
@@ -431,6 +435,10 @@ var ReactTooltip = (function (_Component) {
 
     var offsetFromEffect = {};
 
+    /**
+     * List all situations for different placement,
+     * then tooltip can judge switch to which side if window space is not enough
+     */
     if (effect === 'float') {
       offsetFromEffect.top = {
         x: -(tipWidth / 2),
@@ -452,6 +460,7 @@ var ReactTooltip = (function (_Component) {
     var xPosition = 0;
     var yPosition = 0;
 
+    /* If user set offset attribute, we have to consider it into out position calculating */
     if (Object.prototype.toString.apply(offset) === '[object String]') {
       offset = JSON.parse(offset.toString().replace(/\'/g, '\"'));
     }
@@ -466,32 +475,68 @@ var ReactTooltip = (function (_Component) {
         xPosition += parseInt(offset[key], 10);
       }
     }
-    /* When tooltip over the screen */
-    var offsetEffectX = effect === 'solid' ? 0 : place ? offsetFromEffect[place].x : 0;
-    var offsetEffectY = effect === 'solid' ? 0 : place ? offsetFromEffect[place].y : 0;
-    var styleLeft = this.state.x + offsetEffectX + xPosition;
-    var styleTop = this.state.y + offsetEffectY + yPosition;
+
+    /* If our tooltip goes outside the window we want to try and change its place to be inside the window */
+    var x = this.state.x;
+    var y = this.state.y;
     var windoWidth = window.innerWidth;
     var windowHeight = window.innerHeight;
 
-    /* Solid use this method will get Uncaught RangeError: Maximum call stack size exceeded */
-    if (effect === 'float') {
-      if (styleLeft < 0 && this.state.x + offsetFromEffect['right'].x + xPosition <= windoWidth) {
+    var getStyleLeft = function getStyleLeft(place) {
+      var offsetEffectX = effect === 'solid' ? 0 : place ? offsetFromEffect[place].x : 0;
+      return x + offsetEffectX + xPosition;
+    };
+    var getStyleTop = function getStyleTop(place) {
+      var offsetEffectY = effect === 'solid' ? 0 : place ? offsetFromEffect[place].y : 0;
+      return y + offsetEffectY + yPosition;
+    };
+
+    var outsideLeft = function outsideLeft(place) {
+      var styleLeft = getStyleLeft(place);
+      return styleLeft < 0 && x + offsetFromEffect['right'].x + xPosition <= windoWidth;
+    };
+    var outsideRight = function outsideRight(place) {
+      var styleLeft = getStyleLeft(place);
+      return styleLeft + tipWidth > windoWidth && x + offsetFromEffect['left'].x + xPosition >= 0;
+    };
+    var outsideTop = function outsideTop(place) {
+      var styleTop = getStyleTop(place);
+      return styleTop < 0 && y + offsetFromEffect['bottom'].y + yPosition + tipHeight < windowHeight;
+    };
+    var outsideBottom = function outsideBottom(place) {
+      var styleTop = getStyleTop(place);
+      return styleTop + tipHeight >= windowHeight && y + offsetFromEffect['top'].y + yPosition >= 0;
+    };
+
+    /* We want to make sure the place we switch to will not go outside either */
+    var outside = function outside(place) {
+      return outsideTop(place) || outsideRight(place) || outsideBottom(place) || outsideLeft(place);
+    };
+
+    /* We check each side and switch if the new place will be in bounds */
+    if (outsideLeft(place)) {
+      if (!outside('right')) {
         this.setState({
           place: 'right'
         });
         return;
-      } else if (styleLeft + tipWidth > windoWidth && this.state.x + offsetFromEffect['left'].x + xPosition >= 0) {
+      }
+    } else if (outsideRight(place)) {
+      if (!outside('left')) {
         this.setState({
           place: 'left'
         });
         return;
-      } else if (styleTop < 0 && this.state.y + offsetFromEffect['bottom'].y + yPosition + tipHeight < windowHeight) {
+      }
+    } else if (outsideTop(place)) {
+      if (!outside('bottom')) {
         this.setState({
           place: 'bottom'
         });
         return;
-      } else if (styleTop + tipHeight >= windowHeight && this.state.y + offsetFromEffect['top'].y + yPosition >= 0) {
+      }
+    } else if (outsideBottom(place)) {
+      if (!outside('top')) {
         this.setState({
           place: 'top'
         });
@@ -499,8 +544,8 @@ var ReactTooltip = (function (_Component) {
       }
     }
 
-    node.style.left = styleLeft + 'px';
-    node.style.top = styleTop + 'px';
+    node.style.left = getStyleLeft(place) + 'px';
+    node.style.top = getStyleTop(place) + 'px';
   };
 
   /**
