@@ -87,7 +87,7 @@ var ReactTooltip = (function (_Component) {
     _classCallCheck(this, ReactTooltip);
 
     _Component.call(this, props);
-    this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkStatus', 'onWindowResize');
+    this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkStatus', 'onWindowResize', 'bindClickListener');
     this.mount = true;
     this.state = {
       show: false,
@@ -156,12 +156,16 @@ var ReactTooltip = (function (_Component) {
     window.removeEventListener('resize', this.onWindowResize);
   };
 
+  /* TODO: optimize, bind has been trigger too maany times */
+
   ReactTooltip.prototype.bindListener = function bindListener() {
     var targetArray = this.getTargetArray();
 
     var dataEvent = undefined;
     for (var i = 0; i < targetArray.length; i++) {
-      targetArray[i].setAttribute('currentItem', 'false');
+      if (targetArray[i].getAttribute('currentItem') === null) {
+        targetArray[i].setAttribute('currentItem', 'false');
+      }
       dataEvent = this.state.event || targetArray[i].getAttribute('data-event');
       if (dataEvent) {
         targetArray[i].removeEventListener(dataEvent, this.checkStatus);
@@ -247,10 +251,15 @@ var ReactTooltip = (function (_Component) {
    */
 
   ReactTooltip.prototype.checkStatus = function checkStatus(e) {
+    e.stopPropagation();
     if (this.state.show && e.currentTarget.getAttribute('currentItem') === 'true') {
       this.hideTooltip(e);
     } else {
       e.currentTarget.setAttribute('currentItem', 'true');
+      /* when click other place, the tooltip should be removed */
+      window.removeEventListener('click', this.bindClickListener);
+      window.addEventListener('click', this.bindClickListener, false);
+
       this.showTooltip(e);
       this.setUntargetItems(e.currentTarget);
     }
@@ -258,7 +267,6 @@ var ReactTooltip = (function (_Component) {
 
   ReactTooltip.prototype.setUntargetItems = function setUntargetItems(currentTarget) {
     var targetArray = this.getTargetArray();
-
     for (var i = 0; i < targetArray.length; i++) {
       if (currentTarget !== targetArray[i]) {
         targetArray[i].setAttribute('currentItem', 'false');
@@ -266,6 +274,11 @@ var ReactTooltip = (function (_Component) {
         targetArray[i].setAttribute('currentItem', 'true');
       }
     }
+  };
+
+  ReactTooltip.prototype.bindClickListener = function bindClickListener() {
+    this.globalHide();
+    window.removeEventListener('click', this.bindClickListener);
   };
 
   /**
@@ -378,8 +391,6 @@ var ReactTooltip = (function (_Component) {
   ReactTooltip.prototype.addScrollListener = function addScrollListener() {
     window.addEventListener('scroll', this.hideTooltip);
   };
-
-  /* Remove listener when tooltip hide */
 
   ReactTooltip.prototype.removeScrollListener = function removeScrollListener() {
     window.removeEventListener('scroll', this.hideTooltip);
