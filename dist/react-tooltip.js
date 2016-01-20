@@ -148,6 +148,7 @@ var ReactTooltip = (function (_Component) {
   };
 
   ReactTooltip.prototype.componentWillUnmount = function componentWillUnmount() {
+    clearTimeout(this.delayShowLoop);
     this.unbindListener();
     this.removeScrollListener();
     this.mount = false;
