@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "classnames": "^1.2.0",
-    "react-dom": "^0.14.0"
+    "react-dom": "0.14.*"
   },
   "devDependencies": {
     "babel": "^5.3.1",
