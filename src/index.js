@@ -107,6 +107,7 @@ export default class ReactTooltip extends Component {
   }
 
   componentWillUnmount () {
+    clearTimeout(this.delayShowLoop)
     this.unbindListener()
     this.removeScrollListener()
     this.mount = false
