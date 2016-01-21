@@ -155,7 +155,6 @@ var ReactTooltip = (function (_Component) {
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
     window.removeEventListener('resize', this.onWindowResize);
-    window.clearTimeout(this.delayShowLoop);
   };
 
   /* TODO: optimize, bind has been trigger too maany times */
@@ -339,10 +338,10 @@ var ReactTooltip = (function (_Component) {
     var delayShow = _state.delayShow;
     var show = _state.show;
 
-    window.clearTimeout(this.delayShowLoop);
-
     var delayTime = show ? 0 : parseInt(delayShow, 10);
     var eventTarget = e.currentTarget;
+
+    clearTimeout(this.delayShowLoop);
     this.delayShowLoop = setTimeout(function () {
       if (_this2.trim(_this2.state.placeholder).length > 0) {
         if (_this2.state.effect === 'float') {
@@ -376,7 +375,7 @@ var ReactTooltip = (function (_Component) {
 
     var delayHide = this.state.delayHide;
 
-    window.clearTimeout(this.delayShowLoop);
+    clearTimeout(this.delayShowLoop);
     setTimeout(function () {
       _this3.setState({
         show: false

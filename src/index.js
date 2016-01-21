@@ -114,7 +114,6 @@ export default class ReactTooltip extends Component {
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
     window.removeEventListener('resize', this.onWindowResize)
-    window.clearTimeout(this.delayShowLoop)
   }
 
  /* TODO: optimize, bind has been trigger too maany times */
@@ -279,10 +278,10 @@ export default class ReactTooltip extends Component {
    */
   updateTooltip (e) {
     const {delayShow, show} = this.state
-    window.clearTimeout(this.delayShowLoop)
-
     const delayTime = show ? 0 : parseInt(delayShow, 10)
     const eventTarget = e.currentTarget
+
+    clearTimeout(this.delayShowLoop)
     this.delayShowLoop = setTimeout(() => {
       if (this.trim(this.state.placeholder).length > 0) {
         if (this.state.effect === 'float') {
@@ -308,7 +307,7 @@ export default class ReactTooltip extends Component {
    */
   hideTooltip () {
     const {delayHide} = this.state
-    window.clearTimeout(this.delayShowLoop)
+    clearTimeout(this.delayShowLoop)
     setTimeout(() => {
       this.setState({
         show: false
