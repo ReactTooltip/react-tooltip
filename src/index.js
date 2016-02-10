@@ -55,7 +55,7 @@ export default class ReactTooltip extends Component {
 
   constructor (props) {
     super(props)
-    this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkStatus', 'onWindowResize', 'bindClickListener')
+    this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkStatus', 'onWindowResize', 'bindClickListener', 'globalHide', 'globalRebuild')
     this.mount = true
     this.state = {
       show: false,
@@ -88,13 +88,13 @@ export default class ReactTooltip extends Component {
     this.setStyleHeader()
     /* Add window event listener for hide and rebuild */
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
-    window.addEventListener('__react_tooltip_hide_event', ::this.globalHide, false)
+    window.addEventListener('__react_tooltip_hide_event', this.globalHide, false)
 
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
-    window.addEventListener('__react_tooltip_rebuild_event', ::this.globalRebuild, false)
+    window.addEventListener('__react_tooltip_rebuild_event', this.globalRebuild, false)
     /* Add listener on window resize  */
     window.removeEventListener('resize', this.onWindowResize)
-    window.addEventListener('resize', ::this.onWindowResize, false)
+    window.addEventListener('resize', this.onWindowResize, false)
   }
 
   componentWillUpdate () {
@@ -116,7 +116,7 @@ export default class ReactTooltip extends Component {
     window.removeEventListener('resize', this.onWindowResize)
   }
 
- /* TODO: optimize, bind has been trigger too maany times */
+ /* TODO: optimize, bind has been trigger too many times */
   bindListener () {
     let targetArray = this.getTargetArray()
 

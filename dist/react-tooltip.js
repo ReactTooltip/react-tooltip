@@ -87,7 +87,7 @@ var ReactTooltip = (function (_Component) {
     _classCallCheck(this, ReactTooltip);
 
     _Component.call(this, props);
-    this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkStatus', 'onWindowResize', 'bindClickListener');
+    this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkStatus', 'onWindowResize', 'bindClickListener', 'globalHide', 'globalRebuild');
     this.mount = true;
     this.state = {
       show: false,
@@ -129,13 +129,13 @@ var ReactTooltip = (function (_Component) {
     this.setStyleHeader();
     /* Add window event listener for hide and rebuild */
     window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
-    window.addEventListener('__react_tooltip_hide_event', this.globalHide.bind(this), false);
+    window.addEventListener('__react_tooltip_hide_event', this.globalHide, false);
 
     window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
-    window.addEventListener('__react_tooltip_rebuild_event', this.globalRebuild.bind(this), false);
+    window.addEventListener('__react_tooltip_rebuild_event', this.globalRebuild, false);
     /* Add listener on window resize  */
     window.removeEventListener('resize', this.onWindowResize);
-    window.addEventListener('resize', this.onWindowResize.bind(this), false);
+    window.addEventListener('resize', this.onWindowResize, false);
   };
 
   ReactTooltip.prototype.componentWillUpdate = function componentWillUpdate() {
@@ -157,7 +157,7 @@ var ReactTooltip = (function (_Component) {
     window.removeEventListener('resize', this.onWindowResize);
   };
 
-  /* TODO: optimize, bind has been trigger too maany times */
+  /* TODO: optimize, bind has been trigger too many times */
 
   ReactTooltip.prototype.bindListener = function bindListener() {
     var targetArray = this.getTargetArray();
