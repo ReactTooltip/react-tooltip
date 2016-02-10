@@ -14,6 +14,7 @@ npm install react-tooltip
 ```
 
 ### Usage
+**Using NPM**
 
 1 . Require react-tooltip after installation
 
@@ -32,6 +33,9 @@ var ReactTooltip = require("react-tooltip")
 <ReactTooltip />
 ```
 
+**Standalone**
+
+You can import `standalone/react-tooltip.min.js` into your page, please make sure that you have already imported `react` and `react-dom` into your page.
 
 ### Options
 Notes:

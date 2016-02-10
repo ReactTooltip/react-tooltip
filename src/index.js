@@ -5,10 +5,7 @@ import ReactDOM from 'react-dom'
 import classname from 'classnames'
 import cssStyle from './style'
 
-export default class ReactTooltip extends Component {
-
-  static displayName = 'ReactTooltip'
-
+class ReactTooltip extends Component {
   /**
    * Class method
    * @see ReactTooltip.hide() && ReactTooltup.rebuild()
@@ -36,9 +33,6 @@ export default class ReactTooltip extends Component {
       window.dispatchEvent(event)
     }
   }
-
-  static eventHideMark = `hide${Date.now()}`
-  static eventRebuildMark = `rebuild${Date.now()}`
 
   globalHide () {
     if (this.mount) {
@@ -576,3 +570,6 @@ ReactTooltip.propTypes = {
   event: PropTypes.any,
   watchWindow: PropTypes.bool
 }
+
+/* export default not fit for standalone, it will exports {default:...} */
+module.exports = ReactTooltip

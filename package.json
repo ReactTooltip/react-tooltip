@@ -1,25 +1,29 @@
 {
   "name": "react-tooltip",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "react tooltip component",
-  "main": "dist/react-tooltip.js",
+  "main": "index.js",
   "scripts": {
     "check": "standard --verbose | snazzy src/index.js",
     "test": "npm run check",
-    "devjs": "node bin/transferSass.js & watchify -t babelify -o ./example/dist/index.js ./example/src/index.js -dv",
+    "devjs": "node bin/transferSass.js & watchify -t babelify ./example/src/index.js -o ./example/dist/index.js -dv",
     "devcss": "node-sass example/src/index.scss example/dist/index.css & node-sass -w example/src/index.scss example/dist/index.css",
     "predev": "rm -rf example/dist",
     "dev": "mkdir -p ./example/dist & npm run devjs & npm run devcss & http-server example -p 8888 -s -o",
-    "deployjs": "babel src/index.js --out-file dist/react-tooltip.js && babel src/style.js --out-file dist/style.js",
+    "deployjs": "babel src/index.js -o dist/react-tooltip.js && babel src/style.js -o dist/style.js && npm run deployminjs",
+    "deployminjs": "babel src/index.js | uglifyjs > dist/react-tooltip.min.js",
     "predeploycss": "cp src/index.scss dist/react-tooltip.scss",
     "deploycss": "node-sass --output-style compressed src/index.scss dist/react-tooltip.min.css",
     "predeploy": "rm -rf dist",
-    "deploy": "mkdir dist & npm run deployjs & npm run deploycss"
+    "deploy": "mkdir dist & npm run deployjs & npm run deploycss & npm run standjs & npm run standminjs",
+    "standjs": "browserify -t babelify -t browserify-shim src/index.js --standalone ReactTooltip -o standalone/react-tooltip.js",
+    "standminjs": "browserify -t babelify -t browserify-shim src/index.js --standalone ReactTooltip | uglifyjs > standalone/react-tooltip.min.js"
   },
   "standard": {
     "parser": "babel-eslint",
     "ignore": [
       "dist/",
+      "standalone/",
       "src/style.js",
       "example/"
     ]
@@ -40,17 +44,25 @@
     "url": "https://github.com/wwayne/react-tooltip/issues"
   },
   "homepage": "https://github.com/wwayne/react-tooltip",
-  "peerDependencies": {
-    "react": ">=0.14.0"
+  "browserify-shim": {
+    "react": "global:React",
+    "react-dom": "global:ReactDOM"
   },
-  "dependencies": {
-    "classnames": "^1.2.0",
+  "peerDependencies": {
+    "react": ">=0.14.0",
     "react-dom": "0.14.*"
   },
+  "dependencies": {
+    "classnames": "^1.2.0" 
+  },
   "devDependencies": {
-    "babel": "^5.3.1",
+    "babel-cli": "^6.5.1",
     "babel-eslint": "^4.1.1",
-    "babelify": "^6.0.2",
+    "babel-plugin-transform-runtime": "^6.5.0",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-react": "^6.5.0",
+    "browserify": "^13.0.0",
+    "browserify-shim": "^3.8.12",
     "http-server": "^0.8.0",
     "node-sass": "^3.3.2",
     "snazzy": "^2.0.1",
