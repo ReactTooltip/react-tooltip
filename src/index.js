@@ -1,7 +1,7 @@
 'use strict'
 
 import React, { Component, PropTypes } from 'react'
-import {findDOMNode} from 'react-dom'
+import ReactDOM from 'react-dom'
 import classname from 'classnames'
 import cssStyle from './style'
 
@@ -187,8 +187,8 @@ export default class ReactTooltip extends Component {
       if (targetArray[i].getAttribute('currentItem') === 'true') {
         // todo: timer for performance
         let {x, y} = this.getPosition(targetArray[i])
-        findDOMNode(this).style.left = x + 'px'
-        findDOMNode(this).style.top = y + 'px'
+        ReactDOM.findDOMNode(this).style.left = x + 'px'
+        ReactDOM.findDOMNode(this).style.top = y + 'px'
         /* this.setState({
          x,
          y
@@ -333,7 +333,7 @@ export default class ReactTooltip extends Component {
    */
   getPosition (currentTarget) {
     const {place} = this.state
-    const node = findDOMNode(this)
+    const node = ReactDOM.findDOMNode(this)
     const boundingClientRect = currentTarget.getBoundingClientRect()
     const targetTop = boundingClientRect.top
     const targetLeft = boundingClientRect.left
@@ -364,7 +364,7 @@ export default class ReactTooltip extends Component {
    * Execute in componentDidUpdate, can't put this into render() to support server rendering
    */
   updatePosition () {
-    let node = findDOMNode(this)
+    let node = ReactDOM.findDOMNode(this)
 
     let tipWidth = node.clientWidth
     let tipHeight = node.clientHeight

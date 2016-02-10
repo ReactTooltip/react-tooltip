@@ -16,6 +16,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = require('react-dom');
 
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
 var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
@@ -237,8 +239,8 @@ var ReactTooltip = (function (_Component) {
         var x = _getPosition.x;
         var y = _getPosition.y;
 
-        _reactDom.findDOMNode(this).style.left = x + 'px';
-        _reactDom.findDOMNode(this).style.top = y + 'px';
+        _reactDom2['default'].findDOMNode(this).style.left = x + 'px';
+        _reactDom2['default'].findDOMNode(this).style.top = y + 'px';
         /* this.setState({
          x,
          y
@@ -404,7 +406,7 @@ var ReactTooltip = (function (_Component) {
   ReactTooltip.prototype.getPosition = function getPosition(currentTarget) {
     var place = this.state.place;
 
-    var node = _reactDom.findDOMNode(this);
+    var node = _reactDom2['default'].findDOMNode(this);
     var boundingClientRect = currentTarget.getBoundingClientRect();
     var targetTop = boundingClientRect.top;
     var targetLeft = boundingClientRect.left;
@@ -436,7 +438,7 @@ var ReactTooltip = (function (_Component) {
    */
 
   ReactTooltip.prototype.updatePosition = function updatePosition() {
-    var node = _reactDom.findDOMNode(this);
+    var node = _reactDom2['default'].findDOMNode(this);
 
     var tipWidth = node.clientWidth;
     var tipHeight = node.clientHeight;
