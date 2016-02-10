@@ -53,7 +53,7 @@
     "react-dom": "0.14.*"
   },
   "dependencies": {
-    "classnames": "^1.2.0" 
+    "classnames": "^1.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
@@ -68,6 +68,7 @@
     "snazzy": "^2.0.1",
     "standard": "^5.2.2",
     "tape": "^4.2.0",
+    "uglifyjs": "^2.4.10",
     "watchify": "^3.2.1"
   }
 }
