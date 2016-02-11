@@ -1,6 +1,6 @@
 {
   "name": "react-tooltip",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "react tooltip component",
   "main": "index.js",
   "scripts": {
@@ -15,9 +15,11 @@
     "predeploycss": "cp src/index.scss dist/react-tooltip.scss",
     "deploycss": "node-sass --output-style compressed src/index.scss dist/react-tooltip.min.css",
     "predeploy": "rm -rf dist",
-    "deploy": "mkdir dist & npm run deployjs & npm run deploycss & npm run standjs & npm run standminjs",
-    "standjs": "browserify -t babelify -t browserify-shim src/index.js --standalone ReactTooltip -o standalone/react-tooltip.js",
-    "standminjs": "browserify -t babelify -t browserify-shim src/index.js --standalone ReactTooltip | uglifyjs > standalone/react-tooltip.min.js"
+    "deploy": "mkdir dist & npm run deployjs & npm run deploycss & npm run standjs",
+    "prestandjs": "rm -rf standalone",
+    "standjs": "mkdir standalone && browserify -t babelify -t browserify-shim src/index.js --standalone ReactTooltip -o standalone/react-tooltip.js & npm run standminjs",
+    "standminjs": "browserify -t babelify -t browserify-shim src/index.js --standalone ReactTooltip | uglifyjs > standalone/react-tooltip.min.js",
+    "poststandjs": "cp ./dist/style.js ./standalone/style.js"
   },
   "standard": {
     "parser": "babel-eslint",

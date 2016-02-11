@@ -35,7 +35,7 @@ var ReactTooltip = require("react-tooltip")
 
 **Standalone**
 
-You can import `standalone/react-tooltip.min.js` into your page, please make sure that you have already imported `react` and `react-dom` into your page.
+You can import `node_modules/react-tooltip/standalone/react-tooltip.min.js` into your page, please make sure that you have already imported `react` and `react-dom` into your page.
 
 ### Options
 Notes:

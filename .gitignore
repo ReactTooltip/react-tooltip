@@ -1,8 +1,13 @@
-!.babelrc
-!.gitignore
-
-node_modules/
+# system files
 *.log
 .DS_Store*
-example/dist
 .idea/
+
+# push to github
+!.babelrc
+!.gitignore
+!.npmignore
+
+# files
+node_modules/
+example/dist

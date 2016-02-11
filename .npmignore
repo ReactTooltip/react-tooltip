@@ -1,8 +1,14 @@
-node_modules/
+// system file
 *.log
 .DS_Store*
+.idea/
+
+// specific files
+node_modules/
 example/
 test/
 bin/
+
+// setting files
 .babelrc
 circle.yml
