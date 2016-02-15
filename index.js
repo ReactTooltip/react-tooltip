@@ -1,3 +1,3 @@
 'use strict'
 
-module.exports = require('./dist/react-tooltip.min')
+module.exports = require('./dist/react-tooltip')
