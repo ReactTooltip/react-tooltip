@@ -70,7 +70,7 @@ Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
 ### Methods
 `ReactTooltip.hide()` for hide the tooltip manually
 
-`ReactTooltup.rebuild()` for re-bind tooltip to the corresponding element
+`ReactTooltip.rebuild()` for re-bind tooltip to the corresponding element
 
 I suggest always put `<ReactTooltip />` in the Highest level or smart component of Redux, so you might need these static
 method to control tooltip's behaviour in some situations
