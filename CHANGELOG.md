@@ -1,5 +1,13 @@
 ## Change Log
 
+### v1.1.3 (2016/03/10 12:57 +00:00)
+- [#84](https://github.com/wwayne/react-tooltip/pull/84) Add logic to handle outside cases for solid tooltips #83 (@andrejunges)
+- [91dd56c](https://github.com/wwayne/react-tooltip/commit/91dd56cb17bd0358b222fc9b4ef400f3c43b058d) Add logic to handle outside cases for solid tooltips (@andrejunges)
+- [ef7874d](https://github.com/wwayne/react-tooltip/commit/ef7874d841a4efd849b8630d3786d451668d0fab) Update README.md (@wwayne)
+- [#81](https://github.com/wwayne/react-tooltip/pull/81) Fix typo (@robzolkos)
+- [52e7529](https://github.com/wwayne/react-tooltip/commit/52e7529f818502bc6a2dabcf83f863387b2b53d2) Fix typo (@robzolkos)
+- [0856392](https://github.com/wwayne/react-tooltip/commit/08563929aee2dbde1813b0460a529ce707633996) Add CHANGELOG to replace HISTORY (@wwayne)
+
 ### v1.1.2 (2016/02/15 12:31 +00:00)
 - [f99e911](https://github.com/wwayne/react-tooltip/commit/f99e91167db1a0723e84699b6184056dd25748c0) Import unminified file (@wwayne)
 - [#79](https://github.com/wwayne/react-tooltip/pull/79) Require the non-minified dist build in index (@idan)
@@ -141,8 +149,8 @@
 - [bd27ab2](https://github.com/wwayne/react-tooltip/commit/bd27ab2ce17d38ce4d1f6927a70a90f44127705f) to 0.2.2 (@wwayne)
 - [739ecca](https://github.com/wwayne/react-tooltip/commit/739ecca856e63585a21942a6fd28edd3714a0a62) fix build file (@wwayne)
 - [#5](https://github.com/wwayne/react-tooltip/pull/5) fixed classnames require call (@mciparelli)
-- [ed35092](https://github.com/wwayne/react-tooltip/commit/ed350920aeb0c1d8ca20cb5267544f966073e84d) make `npm test` pass (@mciparelli)
 - [16472c9](https://github.com/wwayne/react-tooltip/commit/16472c9c3a7b521ae611bc1587455e1b79f113bb) fix example as well (@mciparelli)
+- [ed35092](https://github.com/wwayne/react-tooltip/commit/ed350920aeb0c1d8ca20cb5267544f966073e84d) make `npm test` pass (@mciparelli)
 - [72120c9](https://github.com/wwayne/react-tooltip/commit/72120c942bebda226430b0dd1ecc8fe4120fe52c) build is being versioned, so I'm updating it too (@mciparelli)
 - [81af636](https://github.com/wwayne/react-tooltip/commit/81af63608ef389d595762f5730880f4d20503684) fixed classnames require call (@mciparelli)
 - [bfb61e5](https://github.com/wwayne/react-tooltip/commit/bfb61e5349e5f59626b103e9ed49471ee02aaba3) Update README.md (@wwayne)

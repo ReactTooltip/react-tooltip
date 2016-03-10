@@ -427,6 +427,8 @@ var ReactTooltip = function (_Component) {
   }, {
     key: 'getPosition',
     value: function getPosition(currentTarget) {
+      var _this5 = this;
+
       var place = this.state.place;
 
       var node = _reactDom2.default.findDOMNode(this);
@@ -437,19 +439,86 @@ var ReactTooltip = function (_Component) {
       var tipHeight = node.clientHeight;
       var targetWidth = currentTarget.clientWidth;
       var targetHeight = currentTarget.clientHeight;
+      var windoWidth = window.innerWidth;
+      var windowHeight = window.innerHeight;
       var x = undefined;
       var y = undefined;
+      var defaultTopY = targetTop - tipHeight - 8;
+      var defaultBottomY = targetTop + targetHeight + 8;
+      var defaultLeftX = targetLeft - tipWidth - 6;
+      var defaultRightX = targetLeft + targetWidth + 6;
+
+      var outsideTop = function outsideTop() {
+        return defaultTopY - 10 < 0;
+      };
+
+      var outsideBottom = function outsideBottom() {
+        return targetTop + targetHeight + tipHeight + 25 > windowHeight;
+      };
+
+      var outsideLeft = function outsideLeft() {
+        return defaultLeftX - 10 < 0;
+      };
+
+      var outsideRight = function outsideRight() {
+        return targetLeft + targetWidth + tipWidth + 25 > windoWidth;
+      };
+
+      var getTopPositionY = function getTopPositionY() {
+        if (outsideTop(defaultTopY) && !outsideBottom()) {
+          _this5.setState({
+            place: 'bottom'
+          });
+          return defaultBottomY;
+        }
+
+        return defaultTopY;
+      };
+
+      var getBottomPositionY = function getBottomPositionY() {
+        if (outsideBottom() && !outsideTop()) {
+          _this5.setState({
+            place: 'top'
+          });
+          return defaultTopY;
+        }
+
+        return defaultBottomY;
+      };
+
+      var getLeftPositionX = function getLeftPositionX() {
+        if (outsideLeft() && !outsideRight()) {
+          _this5.setState({
+            place: 'right'
+          });
+          return defaultRightX;
+        }
+
+        return defaultLeftX;
+      };
+
+      var getRightPositionX = function getRightPositionX() {
+        if (outsideRight() && !outsideLeft()) {
+          _this5.setState({
+            place: 'left'
+          });
+          return defaultLeftX;
+        }
+
+        return defaultRightX;
+      };
+
       if (place === 'top') {
         x = targetLeft - tipWidth / 2 + targetWidth / 2;
-        y = targetTop - tipHeight - 8;
+        y = getTopPositionY();
       } else if (place === 'bottom') {
         x = targetLeft - tipWidth / 2 + targetWidth / 2;
-        y = targetTop + targetHeight + 8;
+        y = getBottomPositionY();
       } else if (place === 'left') {
-        x = targetLeft - tipWidth - 6;
+        x = getLeftPositionX();
         y = targetTop + targetHeight / 2 - tipHeight / 2;
       } else if (place === 'right') {
-        x = targetLeft + targetWidth + 6;
+        x = getRightPositionX();
         y = targetTop + targetHeight / 2 - tipHeight / 2;
       }
 
