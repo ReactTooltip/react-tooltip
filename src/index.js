@@ -335,19 +335,86 @@ class ReactTooltip extends Component {
     const tipHeight = node.clientHeight
     const targetWidth = currentTarget.clientWidth
     const targetHeight = currentTarget.clientHeight
+    const windoWidth = window.innerWidth
+    const windowHeight = window.innerHeight
     let x
     let y
+    const defaultTopY = targetTop - tipHeight - 8
+    const defaultBottomY = targetTop + targetHeight + 8
+    const defaultLeftX = targetLeft - tipWidth - 6
+    const defaultRightX = targetLeft + targetWidth + 6
+
+    const outsideTop = () => {
+      return defaultTopY - 10 < 0
+    }
+
+    const outsideBottom = () => {
+      return targetTop + targetHeight + tipHeight + 25 > windowHeight
+    }
+
+    const outsideLeft = () => {
+      return defaultLeftX - 10 < 0
+    }
+
+    const outsideRight = () => {
+      return targetLeft + targetWidth + tipWidth + 25 > windoWidth
+    }
+
+    const getTopPositionY = () => {
+      if (outsideTop(defaultTopY) && !outsideBottom()) {
+        this.setState({
+          place: 'bottom'
+        })
+        return defaultBottomY
+      }
+
+      return defaultTopY
+    }
+
+    const getBottomPositionY = () => {
+      if (outsideBottom() && !outsideTop()) {
+        this.setState({
+          place: 'top'
+        })
+        return defaultTopY
+      }
+
+      return defaultBottomY
+    }
+
+    const getLeftPositionX = () => {
+      if (outsideLeft() && !outsideRight()) {
+        this.setState({
+          place: 'right'
+        })
+        return defaultRightX
+      }
+
+      return defaultLeftX
+    }
+
+    const getRightPositionX = () => {
+      if (outsideRight() && !outsideLeft()) {
+        this.setState({
+          place: 'left'
+        })
+        return defaultLeftX
+      }
+
+      return defaultRightX
+    }
+
     if (place === 'top') {
       x = targetLeft - (tipWidth / 2) + (targetWidth / 2)
-      y = targetTop - tipHeight - 8
+      y = getTopPositionY()
     } else if (place === 'bottom') {
       x = targetLeft - (tipWidth / 2) + (targetWidth / 2)
-      y = targetTop + targetHeight + 8
+      y = getBottomPositionY()
     } else if (place === 'left') {
-      x = targetLeft - tipWidth - 6
+      x = getLeftPositionX()
       y = targetTop + (targetHeight / 2) - (tipHeight / 2)
     } else if (place === 'right') {
-      x = targetLeft + targetWidth + 6
+      x = getRightPositionX()
       y = targetTop + (targetHeight / 2) - (tipHeight / 2)
     }
 
