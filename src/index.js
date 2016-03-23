@@ -299,7 +299,14 @@ class ReactTooltip extends Component {
   /**
    * When mouse leave, hide tooltip
    */
-  hideTooltip () {
+  hideTooltip (e) {
+    if (e && e.currentTarget) {
+      if(e.currentTarget.getAttribute('currentItem') === 'true') e.currentTarget.setAttribute('currentItem', 'false')
+    } else {
+      let items = Array.from(this.getTargetArray())
+      let currentItem = items.filter((item) => item.getAttribute('currentItem') === 'true')
+      if(currentItem[0]) currentItem[0].setAttribute('currentItem', 'false')
+    }
     const {delayHide} = this.state
     clearTimeout(this.delayShowLoop)
     setTimeout(() => {
