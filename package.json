@@ -51,8 +51,8 @@
     "react-dom": "global:ReactDOM"
   },
   "peerDependencies": {
-    "react": ">=0.14.0",
-    "react-dom": "0.14.*"
+    "react": "^0.14.0 || ^15.0.0",
+    "react-dom": "^0.14.0 || ^15.0.0"
   },
   "dependencies": {
     "classnames": "^1.2.0"
