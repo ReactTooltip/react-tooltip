@@ -195,14 +195,16 @@ class ReactTooltip extends Component {
    * Used in customer event
    */
   checkStatus (e) {
-    e.stopPropagation()
+    if (this.props.eventPropagationMode === 'bubble') {
+      e.stopPropagation()
+    }
     if (this.state.show && e.currentTarget.getAttribute('currentItem') === 'true') {
       this.hideTooltip(e)
     } else {
       e.currentTarget.setAttribute('currentItem', 'true')
       /* when click other place, the tooltip should be removed */
       window.removeEventListener('click', this.bindClickListener)
-      window.addEventListener('click', this.bindClickListener, false)
+      window.addEventListener('click', this.bindClickListener, this.props.eventPropagationMode === 'capture')
 
       this.showTooltip(e)
       this.setUntargetItems(e.currentTarget)
@@ -635,7 +637,12 @@ ReactTooltip.propTypes = {
   delayHide: PropTypes.number,
   delayShow: PropTypes.number,
   event: PropTypes.any,
-  watchWindow: PropTypes.bool
+  watchWindow: PropTypes.bool,
+  eventPropagationMode: PropTypes.oneOf(['bubble', 'capture'])
+}
+
+ReactTooltip.defaultProps = {
+  eventPropagationMode: 'bubble'
 }
 
 /* export default not fit for standalone, it will exports {default:...} */
