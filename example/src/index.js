@@ -47,7 +47,7 @@ const Test = React.createClass({
           <h4 className='title'>React Tooltip</h4>
           <div className='demonstration'>
             <a data-for='main' data-tip="Hello<br />multiline<br />tooltip">
-               ◕‿‿◕
+               ◕‿◕
             </a>
           </div>
           <div className='control-panel'>
