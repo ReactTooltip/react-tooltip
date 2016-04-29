@@ -1,5 +1,8 @@
 ## Change Log
 
+### 2.0.0 (2016/04/29 01:07 +00:00)
+- [#96](https://github.com/wwayne/react-tooltip/pull/96) New attribute isCapture, deprecate eventPropagationMode (@wwayne)
+
 ### 1.2.1 (2016/04/23 00:16 +00:00)
 - [#95](https://github.com/wwayne/react-tooltip/pull/95) Added ability to change event propagation mode from default "bubble" to "capture" (@aweber1)
 - [#93](https://github.com/wwayne/react-tooltip/pull/93) Upgrade classnames to `^2.2.0` (@petrbrzek)
