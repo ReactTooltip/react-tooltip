@@ -67,7 +67,8 @@ class ReactTooltip extends Component {
       html: false,
       delayHide: 0,
       delayShow: 0,
-      event: props.event || null
+      event: props.event || null,
+      isCapture: props.isCapture || false
     }
     this.delayShowLoop = null
   }
@@ -195,16 +196,23 @@ class ReactTooltip extends Component {
    * Used in customer event
    */
   checkStatus (e) {
-    if (this.props.eventPropagationMode === 'bubble') {
-      e.stopPropagation()
+    const {show} = this.state
+    let isCapture
+
+    if (e.currentTarget.getAttribute('data-iscapture')) {
+      isCapture = e.currentTarget.getAttribute('data-iscapture') === 'true'
+    } else {
+      isCapture = this.state.isCapture
     }
-    if (this.state.show && e.currentTarget.getAttribute('currentItem') === 'true') {
+
+    if (!isCapture) e.stopPropagation()
+    if (show && e.currentTarget.getAttribute('currentItem') === 'true') {
       this.hideTooltip(e)
     } else {
       e.currentTarget.setAttribute('currentItem', 'true')
       /* when click other place, the tooltip should be removed */
       window.removeEventListener('click', this.bindClickListener)
-      window.addEventListener('click', this.bindClickListener, this.props.eventPropagationMode === 'capture')
+      window.addEventListener('click', this.bindClickListener, isCapture)
 
       this.showTooltip(e)
       this.setUntargetItems(e.currentTarget)
@@ -638,11 +646,7 @@ ReactTooltip.propTypes = {
   delayShow: PropTypes.number,
   event: PropTypes.any,
   watchWindow: PropTypes.bool,
-  eventPropagationMode: PropTypes.oneOf(['bubble', 'capture'])
-}
-
-ReactTooltip.defaultProps = {
-  eventPropagationMode: 'bubble'
+  isCapture: PropTypes.bool
 }
 
 /* export default not fit for standalone, it will exports {default:...} */
