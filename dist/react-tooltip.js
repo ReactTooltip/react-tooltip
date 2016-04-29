@@ -100,7 +100,8 @@ var ReactTooltip = function (_Component) {
       html: false,
       delayHide: 0,
       delayShow: 0,
-      event: props.event || null
+      event: props.event || null,
+      isCapture: props.isCapture || false
     };
     _this.delayShowLoop = null;
     return _this;
@@ -264,16 +265,24 @@ var ReactTooltip = function (_Component) {
   }, {
     key: 'checkStatus',
     value: function checkStatus(e) {
-      if (this.props.eventPropagationMode === 'bubble') {
-        e.stopPropagation();
+      var show = this.state.show;
+
+      var isCapture = undefined;
+
+      if (e.currentTarget.getAttribute('data-iscapture')) {
+        isCapture = e.currentTarget.getAttribute('data-iscapture') === 'true';
+      } else {
+        isCapture = this.state.isCapture;
       }
-      if (this.state.show && e.currentTarget.getAttribute('currentItem') === 'true') {
+
+      if (!isCapture) e.stopPropagation();
+      if (show && e.currentTarget.getAttribute('currentItem') === 'true') {
         this.hideTooltip(e);
       } else {
         e.currentTarget.setAttribute('currentItem', 'true');
         /* when click other place, the tooltip should be removed */
         window.removeEventListener('click', this.bindClickListener);
-        window.addEventListener('click', this.bindClickListener, this.props.eventPropagationMode === 'capture');
+        window.addEventListener('click', this.bindClickListener, isCapture);
 
         this.showTooltip(e);
         this.setUntargetItems(e.currentTarget);
@@ -746,11 +755,7 @@ ReactTooltip.propTypes = {
   delayShow: _react.PropTypes.number,
   event: _react.PropTypes.any,
   watchWindow: _react.PropTypes.bool,
-  eventPropagationMode: _react.PropTypes.oneOf(['bubble', 'capture'])
-};
-
-ReactTooltip.defaultProps = {
-  eventPropagationMode: 'bubble'
+  isCapture: _react.PropTypes.bool
 };
 
 /* export default not fit for standalone, it will exports {default:...} */
