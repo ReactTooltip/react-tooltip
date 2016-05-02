@@ -59,6 +59,7 @@ Check example:  [React-tooltip Test](http://wwayne.com/react-tooltip)
    delayHide	|   data-delay-hide  |  Number  |   | `<p data-tip="tooltip" data-delay-hide='1000'></p>` or `<ReactTooltip delayHide={1000} />`
     delayShow	|   data-delay-show  |  Number  |   | `<p data-tip="tooltip" data-delay-show='1000'></p>` or `<ReactTooltip delayShow={1000} />`
    border  |   data-border  |  Bool  |  true, false | Add one pixel white border
+   hideOnClick  |   hide-on-click  |  Bool  |  true, false | Hide the tooltip when target is clicked
 
 ### Using react component as tooltip
 Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)

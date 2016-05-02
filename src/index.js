@@ -67,6 +67,7 @@ class ReactTooltip extends Component {
       html: false,
       delayHide: 0,
       delayShow: 0,
+      hideOnClick: false,
       event: props.event || null,
       isCapture: props.isCapture || false
     }
@@ -135,6 +136,11 @@ class ReactTooltip extends Component {
 
         targetArray[i].removeEventListener('mouseleave', this.hideTooltip)
         targetArray[i].addEventListener('mouseleave', this.hideTooltip, false)
+        
+        if(this.state.hideOnClick) {
+          targetArray[i].removeEventListener('click', this.hideTooltip)
+          targetArray[i].addEventListener('click', this.hideTooltip, false)
+        }
       }
     }
   }
@@ -151,6 +157,10 @@ class ReactTooltip extends Component {
         targetArray[i].removeEventListener('mouseenter', this.showTooltip)
         targetArray[i].removeEventListener('mousemove', this.updateTooltip)
         targetArray[i].removeEventListener('mouseleave', this.hideTooltip)
+        
+        if(this.state.hideOnClick) {
+          targetArray[i].removeEventListener('click', this.hideTooltip)
+        }
       }
     }
   }
@@ -269,6 +279,7 @@ class ReactTooltip extends Component {
       delayShow: e.currentTarget.getAttribute('data-delay-show') ? e.currentTarget.getAttribute('data-delay-show') : (this.props.delayShow ? this.props.delayShow : 0),
       delayHide: e.currentTarget.getAttribute('data-delay-hide') ? e.currentTarget.getAttribute('data-delay-hide') : (this.props.delayHide ? this.props.delayHide : 0),
       border: e.currentTarget.getAttribute('data-border') ? (e.currentTarget.getAttribute('data-border') === 'true') : (this.props.border ? this.props.border : false),
+      hideOnClick: e.currentTarget.hasAttribute('hide-on-click') ? !! e.currentTarget.getAttribute('hide-on-click') : !! this.props.hideOnClick,
       extraClass,
       multiline
     })
