@@ -89,7 +89,7 @@ const Test = React.createClass({
           <div className="section">
             <h4 className='title'>Advance features</h4>
             <p className="sub-title">Use everything as tooltip</p>
-          
+
             <div className="example-jsx">
               <div className="side">
                 <a data-tip data-for='happyFace'> d(`･∀･)b </a>
@@ -113,12 +113,12 @@ const Test = React.createClass({
                 "</ReactTooltip>"}</p>
               </div>
             </pre>
-          
+
             <div className="example-jsx">
               <div className="side"><a data-tip data-for='global'> σ`∀´)σ </a></div>
               <div className="side"><a data-tip data-for='global'> (〃∀〃) </a></div>
               <ReactTooltip id='global'>
-                <p>This is a globle react component tooltip</p>
+                <p>This is a global react component tooltip</p>
                 <p>You can put every thing here</p>
                 <ul>
                   <li>Word</li>
@@ -132,7 +132,7 @@ const Test = React.createClass({
                 <p>{"<a data-tip data-for='global'> σ`∀´)σ </a>\n" +
                   "<a data-tip data-for='global'> (〃∀〃) </a>\n" +
                   "<ReactTooltip id='global'>\n" +
-                    " <p>This is a globle react component tooltip</p>\n" +
+                    " <p>This is a global react component tooltip</p>\n" +
                     " <p>You can put every thing here</p>\n" +
                     " <ul>\n" +
                       " " + " " + " <li>Word</li>\n" +
@@ -149,7 +149,7 @@ const Test = React.createClass({
           <div className="section">
             <h4 className='title'>Customer event</h4>
             <p className="sub-title"></p>
-          
+
             <div className="example-jsx">
               <div className="side">
                 <a data-for='customer-event' data-tip='customer event' data-event='click' data-type='info'>( •̀д•́)</a>
