@@ -71,6 +71,7 @@ class ReactTooltip extends Component {
       isCapture: props.isCapture || false
     }
     this.delayShowLoop = null
+    this.delayHideLoop = null
   }
 
   /* Bind this with method */
@@ -103,6 +104,7 @@ class ReactTooltip extends Component {
 
   componentWillUnmount () {
     clearTimeout(this.delayShowLoop)
+    clearTimeout(this.delayHideLoop)
     this.unbindListener()
     this.removeScrollListener()
     this.mount = false
@@ -312,7 +314,8 @@ class ReactTooltip extends Component {
   hideTooltip () {
     const {delayHide} = this.state
     clearTimeout(this.delayShowLoop)
-    setTimeout(() => {
+    clearTimeout(this.delayHideLoop)
+    this.delayHideLoop = setTimeout(() => {
       this.setState({
         show: false
       })
