@@ -8,6 +8,7 @@ node_modules/
 example/
 test/
 bin/
+CHANGELOG.md
 
 // setting files
 .babelrc

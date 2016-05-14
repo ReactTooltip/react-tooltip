@@ -1,5 +1,10 @@
 ## Change Log
 
+### 2.0.1 (2016/05/14 00:32 +00:00)
+- [#102](https://github.com/wwayne/react-tooltip/pull/102) Clear hide timeout on component unmount (@oluckyman)
+- [#100](https://github.com/wwayne/react-tooltip/pull/100) correct spelling error (@SashaBayan)
+- [#99](https://github.com/wwayne/react-tooltip/pull/99) Simplify setting Sstate in the showTooltip (@Kiwka)
+
 ### 2.0.0 (2016/04/29 01:07 +00:00)
 - [#96](https://github.com/wwayne/react-tooltip/pull/96) New attribute isCapture, deprecate eventPropagationMode (@wwayne)
 
