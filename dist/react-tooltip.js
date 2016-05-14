@@ -104,6 +104,7 @@ var ReactTooltip = function (_Component) {
       isCapture: props.isCapture || false
     };
     _this.delayShowLoop = null;
+    _this.delayHideLoop = null;
     return _this;
   }
 
@@ -153,6 +154,7 @@ var ReactTooltip = function (_Component) {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       clearTimeout(this.delayShowLoop);
+      clearTimeout(this.delayHideLoop);
       this.unbindListener();
       this.removeScrollListener();
       this.mount = false;
@@ -338,14 +340,14 @@ var ReactTooltip = function (_Component) {
       this.setState({
         placeholder: tooltipText,
         multilineCount: multilineCount,
-        place: e.currentTarget.getAttribute('data-place') ? e.currentTarget.getAttribute('data-place') : this.props.place ? this.props.place : 'top',
-        type: e.currentTarget.getAttribute('data-type') ? e.currentTarget.getAttribute('data-type') : this.props.type ? this.props.type : 'dark',
-        effect: e.currentTarget.getAttribute('data-effect') ? e.currentTarget.getAttribute('data-effect') : this.props.effect ? this.props.effect : 'float',
-        offset: e.currentTarget.getAttribute('data-offset') ? e.currentTarget.getAttribute('data-offset') : this.props.offset ? this.props.offset : {},
-        html: e.currentTarget.getAttribute('data-html') ? e.currentTarget.getAttribute('data-html') : this.props.html ? this.props.html : false,
-        delayShow: e.currentTarget.getAttribute('data-delay-show') ? e.currentTarget.getAttribute('data-delay-show') : this.props.delayShow ? this.props.delayShow : 0,
-        delayHide: e.currentTarget.getAttribute('data-delay-hide') ? e.currentTarget.getAttribute('data-delay-hide') : this.props.delayHide ? this.props.delayHide : 0,
-        border: e.currentTarget.getAttribute('data-border') ? e.currentTarget.getAttribute('data-border') === 'true' : this.props.border ? this.props.border : false,
+        place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
+        type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
+        effect: e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
+        offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
+        html: e.currentTarget.getAttribute('data-html') || this.props.html || false,
+        delayShow: e.currentTarget.getAttribute('data-delay-show') || this.props.delayShow || 0,
+        delayHide: e.currentTarget.getAttribute('data-delay-hide') || this.props.delayHide || 0,
+        border: e.currentTarget.getAttribute('data-border') === 'true' || this.props.border || false,
         extraClass: extraClass,
         multiline: multiline
       });
@@ -407,7 +409,8 @@ var ReactTooltip = function (_Component) {
       var delayHide = this.state.delayHide;
 
       clearTimeout(this.delayShowLoop);
-      setTimeout(function () {
+      clearTimeout(this.delayHideLoop);
+      this.delayHideLoop = setTimeout(function () {
         _this4.setState({
           show: false
         });
