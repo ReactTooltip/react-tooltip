@@ -153,7 +153,7 @@ var ReactTooltip = function (_Component) {
       delayHide: 0,
       delayShow: 0,
       event: props.event || null,
-      eventoff: props.eventOff || null,
+      eventOff: props.eventOff || null,
       isCapture: props.isCapture || false
     };
     _this.delayShowLoop = null;

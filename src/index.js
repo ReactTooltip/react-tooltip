@@ -68,7 +68,7 @@ class ReactTooltip extends Component {
       delayHide: 0,
       delayShow: 0,
       event: props.event || null,
-      eventoff: props.eventOff || null,
+      eventOff: props.eventOff || null,
       isCapture: props.isCapture || false
     }
     this.delayShowLoop = null
