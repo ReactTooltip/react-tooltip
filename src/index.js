@@ -126,17 +126,17 @@ class ReactTooltip extends Component {
       }
       dataEvent = this.state.event || targetArray[i].getAttribute('data-event')
       if (dataEvent) {
-        dataEventOff = this.state.eventOff || targetArray[i].getAttribute('data-event-off');
+        dataEventOff = this.state.eventOff || targetArray[i].getAttribute('data-event-off')
         // if off event is specified, we will show tip on data-event and hide it on data-event-off
         if (dataEventOff) {
-          targetArray[i].removeEventListener(dataEvent, this.showTooltip);
-          targetArray[i].addEventListener(dataEvent, this.showTooltip, false);
+          targetArray[i].removeEventListener(dataEvent, this.showTooltip)
+          targetArray[i].addEventListener(dataEvent, this.showTooltip, false)
 
-          targetArray[i].removeEventListener(dataEventOff, this.hideTooltip);
-          targetArray[i].addEventListener(dataEventOff, this.hideTooltip, false);
+          targetArray[i].removeEventListener(dataEventOff, this.hideTooltip)
+          targetArray[i].addEventListener(dataEventOff, this.hideTooltip, false)
         } else {
-          targetArray[i].removeEventListener(dataEvent, this.checkStatus);
-          targetArray[i].addEventListener(dataEvent, this.checkStatus, false);
+          targetArray[i].removeEventListener(dataEvent, this.checkStatus)
+          targetArray[i].addEventListener(dataEvent, this.checkStatus, false)
         }
       } else {
         targetArray[i].removeEventListener('mouseenter', this.showTooltip)
