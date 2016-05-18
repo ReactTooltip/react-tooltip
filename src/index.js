@@ -267,7 +267,7 @@ class ReactTooltip extends Component {
       type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
       effect: e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
       offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
-      html: e.currentTarget.getAttribute('data-html') || this.props.html || false,
+      html: e.currentTarget.getAttribute('data-html') === 'true' || this.props.html || false,
       delayShow: e.currentTarget.getAttribute('data-delay-show') || this.props.delayShow || 0,
       delayHide: e.currentTarget.getAttribute('data-delay-hide') || this.props.delayHide || 0,
       border: e.currentTarget.getAttribute('data-border') === 'true' || this.props.border || false,
