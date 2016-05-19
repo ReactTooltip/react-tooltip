@@ -1,47 +1,52 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.ReactTooltip = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*!
-  Copyright (c) 2015 Jed Watson.
+  Copyright (c) 2016 Jed Watson.
   Licensed under the MIT License (MIT), see
   http://jedwatson.github.io/classnames
 */
+/* global define */
 
-function classNames() {
-	var classes = '';
-	var arg;
+(function () {
+	'use strict';
 
-	for (var i = 0; i < arguments.length; i++) {
-		arg = arguments[i];
-		if (!arg) {
-			continue;
-		}
+	var hasOwn = {}.hasOwnProperty;
 
-		if ('string' === typeof arg || 'number' === typeof arg) {
-			classes += ' ' + arg;
-		} else if (Object.prototype.toString.call(arg) === '[object Array]') {
-			classes += ' ' + classNames.apply(null, arg);
-		} else if ('object' === typeof arg) {
-			for (var key in arg) {
-				if (!arg.hasOwnProperty(key) || !arg[key]) {
-					continue;
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg)) {
+				classes.push(classNames.apply(null, arg));
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
 				}
-				classes += ' ' + key;
 			}
 		}
+
+		return classes.join(' ');
 	}
-	return classes.substr(1);
-}
 
-// safely export classNames for node / browserify
-if (typeof module !== 'undefined' && module.exports) {
-	module.exports = classNames;
-}
-
-// safely export classNames for RequireJS
-if (typeof define !== 'undefined' && define.amd) {
-	define('classnames', [], function() {
-		return classNames;
-	});
-}
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = classNames;
+	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
+		// register as 'classnames', consistent with npm package name
+		define('classnames', [], function () {
+			return classNames;
+		});
+	} else {
+		window.classNames = classNames;
+	}
+}());
 
 },{}],2:[function(require,module,exports){
 (function (global){
@@ -217,7 +222,7 @@ var ReactTooltip = function (_Component) {
     value: function bindListener() {
       var targetArray = this.getTargetArray();
 
-      var dataEvent = undefined;
+      var dataEvent = void 0;
       for (var i = 0; i < targetArray.length; i++) {
         if (targetArray[i].getAttribute('currentItem') === null) {
           targetArray[i].setAttribute('currentItem', 'false');
@@ -244,7 +249,7 @@ var ReactTooltip = function (_Component) {
     key: 'unbindListener',
     value: function unbindListener() {
       var targetArray = document.querySelectorAll('[data-tip]');
-      var dataEvent = undefined;
+      var dataEvent = void 0;
 
       for (var i = 0; i < targetArray.length; i++) {
         dataEvent = this.state.event || targetArray[i].getAttribute('data-event');
@@ -267,7 +272,7 @@ var ReactTooltip = function (_Component) {
     value: function getTargetArray() {
       var id = this.props.id;
 
-      var targetArray = undefined;
+      var targetArray = void 0;
 
       if (id === undefined) {
         targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
@@ -316,7 +321,7 @@ var ReactTooltip = function (_Component) {
     value: function checkStatus(e) {
       var show = this.state.show;
 
-      var isCapture = undefined;
+      var isCapture = void 0;
 
       if (e.currentTarget.getAttribute('data-iscapture')) {
         isCapture = e.currentTarget.getAttribute('data-iscapture') === 'true';
@@ -367,7 +372,7 @@ var ReactTooltip = function (_Component) {
       /* Detect multiline */
       var regexp = /<br\s*\/?>/;
       var multiline = e.currentTarget.getAttribute('data-multiline') ? e.currentTarget.getAttribute('data-multiline') : this.props.multiline ? this.props.multiline : false;
-      var tooltipText = undefined;
+      var tooltipText = void 0;
       var multilineCount = 0;
       if (!multiline || multiline === 'false' || !regexp.test(originTooltip)) {
         tooltipText = originTooltip;
@@ -391,7 +396,7 @@ var ReactTooltip = function (_Component) {
         type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
         effect: e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
         offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
-        html: e.currentTarget.getAttribute('data-html') || this.props.html || false,
+        html: e.currentTarget.getAttribute('data-html') === 'true' || this.props.html || false,
         delayShow: e.currentTarget.getAttribute('data-delay-show') || this.props.delayShow || 0,
         delayHide: e.currentTarget.getAttribute('data-delay-hide') || this.props.delayHide || 0,
         border: e.currentTarget.getAttribute('data-border') === 'true' || this.props.border || false,
@@ -502,8 +507,8 @@ var ReactTooltip = function (_Component) {
       var targetHeight = currentTarget.clientHeight;
       var windoWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
-      var x = undefined;
-      var y = undefined;
+      var x = void 0;
+      var y = void 0;
       var defaultTopY = targetTop - tipHeight - 8;
       var defaultBottomY = targetTop + targetHeight + 8;
       var defaultLeftX = targetLeft - tipWidth - 6;
@@ -775,8 +780,8 @@ var ReactTooltip = function (_Component) {
         }
         firstCount++;
       }
-      for (var i = string.length - 1; i >= 0; i--) {
-        if (string[i] !== ' ') {
+      for (var _i = string.length - 1; _i >= 0; _i--) {
+        if (string[_i] !== ' ') {
           break;
         }
         lastCount++;
