@@ -462,6 +462,25 @@ var ReactTooltip = function (_Component) {
       var defaultLeftX = targetLeft - tipWidth - 6;
       var defaultRightX = targetLeft + targetWidth + 6;
 
+      var parentTop = 0;
+      var parentLeft = 0;
+
+      if (this.props.checkParentTransform) {
+        var currentParent = currentTarget.parentElement;
+
+        while (currentParent) {
+          if (currentParent.style.transform.length > 0) {
+            break;
+          }
+          currentParent = currentParent.parentElement;
+        }
+
+        if (currentParent) {
+          parentTop = currentParent.getBoundingClientRect().top;
+          parentLeft = currentParent.getBoundingClientRect().left;
+        }
+      }
+
       var outsideTop = function outsideTop() {
         return defaultTopY - 10 < 0;
       };
@@ -523,17 +542,17 @@ var ReactTooltip = function (_Component) {
       };
 
       if (place === 'top') {
-        x = targetLeft - tipWidth / 2 + targetWidth / 2;
-        y = getTopPositionY();
+        x = targetLeft - tipWidth / 2 + targetWidth / 2 - parentLeft;
+        y = getTopPositionY() - parentTop;
       } else if (place === 'bottom') {
-        x = targetLeft - tipWidth / 2 + targetWidth / 2;
-        y = getBottomPositionY();
+        x = targetLeft - tipWidth / 2 + targetWidth / 2 - parentLeft;
+        y = getBottomPositionY() - parentTop;
       } else if (place === 'left') {
-        x = getLeftPositionX();
-        y = targetTop + targetHeight / 2 - tipHeight / 2;
+        x = getLeftPositionX() - parentLeft;
+        y = targetTop + targetHeight / 2 - tipHeight / 2 - parentTop;
       } else if (place === 'right') {
-        x = getRightPositionX();
-        y = targetTop + targetHeight / 2 - tipHeight / 2;
+        x = getRightPositionX() - parentLeft;
+        y = targetTop + targetHeight / 2 - tipHeight / 2 - parentTop;
       }
 
       return { x: x, y: y };
