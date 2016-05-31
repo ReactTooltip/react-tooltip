@@ -153,7 +153,6 @@ var ReactTooltip = function (_Component) {
       delayHide: 0,
       delayShow: 0,
       event: props.event || null,
-      eventOff: props.eventOff || null,
       isCapture: props.isCapture || false
     };
     _this.delayShowLoop = null;
@@ -224,25 +223,14 @@ var ReactTooltip = function (_Component) {
       var targetArray = this.getTargetArray();
 
       var dataEvent = void 0;
-      var dataEventOff = void 0;
       for (var i = 0; i < targetArray.length; i++) {
         if (targetArray[i].getAttribute('currentItem') === null) {
           targetArray[i].setAttribute('currentItem', 'false');
         }
         dataEvent = this.state.event || targetArray[i].getAttribute('data-event');
         if (dataEvent) {
-          dataEventOff = this.state.eventOff || targetArray[i].getAttribute('data-event-off');
-          // if off event is specified, we will show tip on data-event and hide it on data-event-off
-          if (dataEventOff) {
-            targetArray[i].removeEventListener(dataEvent, this.showTooltip);
-            targetArray[i].addEventListener(dataEvent, this.showTooltip, false);
-
-            targetArray[i].removeEventListener(dataEventOff, this.hideTooltip);
-            targetArray[i].addEventListener(dataEventOff, this.hideTooltip, false);
-          } else {
-            targetArray[i].removeEventListener(dataEvent, this.checkStatus);
-            targetArray[i].addEventListener(dataEvent, this.checkStatus, false);
-          }
+          targetArray[i].removeEventListener(dataEvent, this.checkStatus);
+          targetArray[i].addEventListener(dataEvent, this.checkStatus, false);
         } else {
           targetArray[i].removeEventListener('mouseenter', this.showTooltip);
           targetArray[i].addEventListener('mouseenter', this.showTooltip, false);
@@ -408,7 +396,7 @@ var ReactTooltip = function (_Component) {
         type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
         effect: e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
         offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
-        html: e.currentTarget.getAttribute('data-html') || this.props.html || false,
+        html: e.currentTarget.getAttribute('data-html') === 'true' || this.props.html || false,
         delayShow: e.currentTarget.getAttribute('data-delay-show') || this.props.delayShow || 0,
         delayHide: e.currentTarget.getAttribute('data-delay-hide') || this.props.delayHide || 0,
         border: e.currentTarget.getAttribute('data-border') === 'true' || this.props.border || false,
@@ -821,7 +809,6 @@ ReactTooltip.propTypes = {
   delayHide: _react.PropTypes.number,
   delayShow: _react.PropTypes.number,
   event: _react.PropTypes.any,
-  eventOff: _react.PropTypes.any,
   watchWindow: _react.PropTypes.bool,
   isCapture: _react.PropTypes.bool
 };
