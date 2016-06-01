@@ -1,5 +1,9 @@
 ## Change Log
 
+### 2.0.3 (2016/06/01 13:45 +00:00)
+- [#112](https://github.com/wwayne/react-tooltip/pull/112) Add custom event to hide tooltip (@wwayne)
+- [#103](https://github.com/wwayne/react-tooltip/pull/103) Allow user to specify separate off event for the tooltip (@ondy1985)
+
 ### 2.0.2 (2016/05/19 10:01 +00:00)
 - [#104](https://github.com/wwayne/react-tooltip/pull/104) Ensure data-html is converted to bool type (@antoniodgonzalez)
 
