@@ -51,6 +51,7 @@ Check example:  [React-tooltip Test](http://wwayne.com/react-tooltip)
     type	|   data-type  |  String  |  success, warning, error, info, light | tooltip's color theme
     effect	|   data-effect  |  String  |  float, solid | either float or pinned
     event |   data-event  |  String  |  e.g. click | custom event to trigger tooltip
+   eventOff |   data-event-off  |  String  |  e.g. click | custom event to hide tooltip
     isCapture | data-iscapture | Bool | true, false | when set to ture, custom event's propagation mode will be capture, default is false, `<p data-tip="tooltip" data-event='click' data-iscapture='true'></p>` or `<ReactTooltip isCapture={true} />` | 
     offset	|   data-offset  |  Object  |  top, right, bottom, left | `data-offset="{'top': 10, 'left': 10}"` for specific and `offset={{top: 10, left: 10}}` for global
    multiline	|   data-multiline  |  Bool  |  true, false | support `<br>`, `<br />` to make multiline
