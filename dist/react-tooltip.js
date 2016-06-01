@@ -464,21 +464,18 @@ var ReactTooltip = function (_Component) {
 
       var parentTop = 0;
       var parentLeft = 0;
+      var currentParent = currentTarget.parentElement;
 
-      if (this.props.checkParentTransform) {
-        var currentParent = currentTarget.parentElement;
-
-        while (currentParent) {
-          if (currentParent.style.transform.length > 0) {
-            break;
-          }
-          currentParent = currentParent.parentElement;
+      while (currentParent) {
+        if (currentParent.style.transform.length > 0) {
+          break;
         }
+        currentParent = currentParent.parentElement;
+      }
 
-        if (currentParent) {
-          parentTop = currentParent.getBoundingClientRect().top;
-          parentLeft = currentParent.getBoundingClientRect().left;
-        }
+      if (currentParent) {
+        parentTop = currentParent.getBoundingClientRect().top;
+        parentLeft = currentParent.getBoundingClientRect().left;
       }
 
       var outsideTop = function outsideTop() {

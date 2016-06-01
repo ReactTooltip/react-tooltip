@@ -359,21 +359,18 @@ class ReactTooltip extends Component {
 
     let parentTop = 0
     let parentLeft = 0
+    let currentParent = currentTarget.parentElement
 
-    if(this.props.checkParentTransform) {
-      let currentParent = currentTarget.parentElement
-
-      while(currentParent) {
-        if(currentParent.style.transform.length > 0) {
-          break
-        }
-        currentParent = currentParent.parentElement
+    while(currentParent) {
+      if(currentParent.style.transform.length > 0) {
+        break
       }
+      currentParent = currentParent.parentElement
+    }
 
-      if(currentParent) {
-        parentTop = currentParent.getBoundingClientRect().top
-        parentLeft = currentParent.getBoundingClientRect().left
-      }
+    if(currentParent) {
+      parentTop = currentParent.getBoundingClientRect().top
+      parentLeft = currentParent.getBoundingClientRect().left
     }
 
     const outsideTop = () => {
