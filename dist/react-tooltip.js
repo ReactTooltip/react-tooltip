@@ -101,6 +101,7 @@ var ReactTooltip = function (_Component) {
       delayHide: 0,
       delayShow: 0,
       event: props.event || null,
+      eventOff: props.eventOff || null,
       isCapture: props.isCapture || false
     };
     _this.delayShowLoop = null;
@@ -170,15 +171,23 @@ var ReactTooltip = function (_Component) {
     value: function bindListener() {
       var targetArray = this.getTargetArray();
 
-      var dataEvent = void 0;
+      var dataEvent = undefined;
+      var dataEventOff = undefined;
       for (var i = 0; i < targetArray.length; i++) {
         if (targetArray[i].getAttribute('currentItem') === null) {
           targetArray[i].setAttribute('currentItem', 'false');
         }
         dataEvent = this.state.event || targetArray[i].getAttribute('data-event');
         if (dataEvent) {
+          // if off event is specified, we will show tip on data-event and hide it on data-event-off
+          dataEventOff = this.state.eventOff || targetArray[i].getAttribute('data-event-off');
+
           targetArray[i].removeEventListener(dataEvent, this.checkStatus);
           targetArray[i].addEventListener(dataEvent, this.checkStatus, false);
+          if (dataEventOff) {
+            targetArray[i].removeEventListener(dataEventOff, this.hideTooltip);
+            targetArray[i].addEventListener(dataEventOff, this.hideTooltip, false);
+          }
         } else {
           targetArray[i].removeEventListener('mouseenter', this.showTooltip);
           targetArray[i].addEventListener('mouseenter', this.showTooltip, false);
@@ -197,7 +206,7 @@ var ReactTooltip = function (_Component) {
     key: 'unbindListener',
     value: function unbindListener() {
       var targetArray = document.querySelectorAll('[data-tip]');
-      var dataEvent = void 0;
+      var dataEvent = undefined;
 
       for (var i = 0; i < targetArray.length; i++) {
         dataEvent = this.state.event || targetArray[i].getAttribute('data-event');
@@ -220,7 +229,7 @@ var ReactTooltip = function (_Component) {
     value: function getTargetArray() {
       var id = this.props.id;
 
-      var targetArray = void 0;
+      var targetArray = undefined;
 
       if (id === undefined) {
         targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
@@ -269,7 +278,7 @@ var ReactTooltip = function (_Component) {
     value: function checkStatus(e) {
       var show = this.state.show;
 
-      var isCapture = void 0;
+      var isCapture = undefined;
 
       if (e.currentTarget.getAttribute('data-iscapture')) {
         isCapture = e.currentTarget.getAttribute('data-iscapture') === 'true';
@@ -320,7 +329,7 @@ var ReactTooltip = function (_Component) {
       /* Detect multiline */
       var regexp = /<br\s*\/?>/;
       var multiline = e.currentTarget.getAttribute('data-multiline') ? e.currentTarget.getAttribute('data-multiline') : this.props.multiline ? this.props.multiline : false;
-      var tooltipText = void 0;
+      var tooltipText = undefined;
       var multilineCount = 0;
       if (!multiline || multiline === 'false' || !regexp.test(originTooltip)) {
         tooltipText = originTooltip;
@@ -455,8 +464,8 @@ var ReactTooltip = function (_Component) {
       var targetHeight = currentTarget.clientHeight;
       var windoWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
-      var x = void 0;
-      var y = void 0;
+      var x = undefined;
+      var y = undefined;
       var defaultTopY = targetTop - tipHeight - 8;
       var defaultBottomY = targetTop + targetHeight + 8;
       var defaultLeftX = targetLeft - tipWidth - 6;
@@ -744,8 +753,8 @@ var ReactTooltip = function (_Component) {
         }
         firstCount++;
       }
-      for (var _i = string.length - 1; _i >= 0; _i--) {
-        if (string[_i] !== ' ') {
+      for (var i = string.length - 1; i >= 0; i--) {
+        if (string[i] !== ' ') {
           break;
         }
         lastCount++;
@@ -773,6 +782,7 @@ ReactTooltip.propTypes = {
   delayHide: _react.PropTypes.number,
   delayShow: _react.PropTypes.number,
   event: _react.PropTypes.any,
+  eventOff: _react.PropTypes.any,
   watchWindow: _react.PropTypes.bool,
   isCapture: _react.PropTypes.bool
 };

@@ -1,52 +1,47 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.ReactTooltip = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*!
-  Copyright (c) 2016 Jed Watson.
+  Copyright (c) 2015 Jed Watson.
   Licensed under the MIT License (MIT), see
   http://jedwatson.github.io/classnames
 */
-/* global define */
 
-(function () {
-	'use strict';
+function classNames() {
+	var classes = '';
+	var arg;
 
-	var hasOwn = {}.hasOwnProperty;
-
-	function classNames () {
-		var classes = [];
-
-		for (var i = 0; i < arguments.length; i++) {
-			var arg = arguments[i];
-			if (!arg) continue;
-
-			var argType = typeof arg;
-
-			if (argType === 'string' || argType === 'number') {
-				classes.push(arg);
-			} else if (Array.isArray(arg)) {
-				classes.push(classNames.apply(null, arg));
-			} else if (argType === 'object') {
-				for (var key in arg) {
-					if (hasOwn.call(arg, key) && arg[key]) {
-						classes.push(key);
-					}
-				}
-			}
+	for (var i = 0; i < arguments.length; i++) {
+		arg = arguments[i];
+		if (!arg) {
+			continue;
 		}
 
-		return classes.join(' ');
+		if ('string' === typeof arg || 'number' === typeof arg) {
+			classes += ' ' + arg;
+		} else if (Object.prototype.toString.call(arg) === '[object Array]') {
+			classes += ' ' + classNames.apply(null, arg);
+		} else if ('object' === typeof arg) {
+			for (var key in arg) {
+				if (!arg.hasOwnProperty(key) || !arg[key]) {
+					continue;
+				}
+				classes += ' ' + key;
+			}
+		}
 	}
+	return classes.substr(1);
+}
 
-	if (typeof module !== 'undefined' && module.exports) {
-		module.exports = classNames;
-	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
-		// register as 'classnames', consistent with npm package name
-		define('classnames', [], function () {
-			return classNames;
-		});
-	} else {
-		window.classNames = classNames;
-	}
-}());
+// safely export classNames for node / browserify
+if (typeof module !== 'undefined' && module.exports) {
+	module.exports = classNames;
+}
+
+// safely export classNames for RequireJS
+if (typeof define !== 'undefined' && define.amd) {
+	define('classnames', [], function() {
+		return classNames;
+	});
+}
 
 },{}],2:[function(require,module,exports){
 (function (global){
@@ -153,6 +148,7 @@ var ReactTooltip = function (_Component) {
       delayHide: 0,
       delayShow: 0,
       event: props.event || null,
+      eventOff: props.eventOff || null,
       isCapture: props.isCapture || false
     };
     _this.delayShowLoop = null;
@@ -222,15 +218,23 @@ var ReactTooltip = function (_Component) {
     value: function bindListener() {
       var targetArray = this.getTargetArray();
 
-      var dataEvent = void 0;
+      var dataEvent = undefined;
+      var dataEventOff = undefined;
       for (var i = 0; i < targetArray.length; i++) {
         if (targetArray[i].getAttribute('currentItem') === null) {
           targetArray[i].setAttribute('currentItem', 'false');
         }
         dataEvent = this.state.event || targetArray[i].getAttribute('data-event');
         if (dataEvent) {
+          // if off event is specified, we will show tip on data-event and hide it on data-event-off
+          dataEventOff = this.state.eventOff || targetArray[i].getAttribute('data-event-off');
+
           targetArray[i].removeEventListener(dataEvent, this.checkStatus);
           targetArray[i].addEventListener(dataEvent, this.checkStatus, false);
+          if (dataEventOff) {
+            targetArray[i].removeEventListener(dataEventOff, this.hideTooltip);
+            targetArray[i].addEventListener(dataEventOff, this.hideTooltip, false);
+          }
         } else {
           targetArray[i].removeEventListener('mouseenter', this.showTooltip);
           targetArray[i].addEventListener('mouseenter', this.showTooltip, false);
@@ -249,7 +253,7 @@ var ReactTooltip = function (_Component) {
     key: 'unbindListener',
     value: function unbindListener() {
       var targetArray = document.querySelectorAll('[data-tip]');
-      var dataEvent = void 0;
+      var dataEvent = undefined;
 
       for (var i = 0; i < targetArray.length; i++) {
         dataEvent = this.state.event || targetArray[i].getAttribute('data-event');
@@ -272,7 +276,7 @@ var ReactTooltip = function (_Component) {
     value: function getTargetArray() {
       var id = this.props.id;
 
-      var targetArray = void 0;
+      var targetArray = undefined;
 
       if (id === undefined) {
         targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
@@ -321,7 +325,7 @@ var ReactTooltip = function (_Component) {
     value: function checkStatus(e) {
       var show = this.state.show;
 
-      var isCapture = void 0;
+      var isCapture = undefined;
 
       if (e.currentTarget.getAttribute('data-iscapture')) {
         isCapture = e.currentTarget.getAttribute('data-iscapture') === 'true';
@@ -372,7 +376,7 @@ var ReactTooltip = function (_Component) {
       /* Detect multiline */
       var regexp = /<br\s*\/?>/;
       var multiline = e.currentTarget.getAttribute('data-multiline') ? e.currentTarget.getAttribute('data-multiline') : this.props.multiline ? this.props.multiline : false;
-      var tooltipText = void 0;
+      var tooltipText = undefined;
       var multilineCount = 0;
       if (!multiline || multiline === 'false' || !regexp.test(originTooltip)) {
         tooltipText = originTooltip;
@@ -507,8 +511,8 @@ var ReactTooltip = function (_Component) {
       var targetHeight = currentTarget.clientHeight;
       var windoWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
-      var x = void 0;
-      var y = void 0;
+      var x = undefined;
+      var y = undefined;
       var defaultTopY = targetTop - tipHeight - 8;
       var defaultBottomY = targetTop + targetHeight + 8;
       var defaultLeftX = targetLeft - tipWidth - 6;
@@ -780,8 +784,8 @@ var ReactTooltip = function (_Component) {
         }
         firstCount++;
       }
-      for (var _i = string.length - 1; _i >= 0; _i--) {
-        if (string[_i] !== ' ') {
+      for (var i = string.length - 1; i >= 0; i--) {
+        if (string[i] !== ' ') {
           break;
         }
         lastCount++;
@@ -809,6 +813,7 @@ ReactTooltip.propTypes = {
   delayHide: _react.PropTypes.number,
   delayShow: _react.PropTypes.number,
   event: _react.PropTypes.any,
+  eventOff: _react.PropTypes.any,
   watchWindow: _react.PropTypes.bool,
   isCapture: _react.PropTypes.bool
 };
