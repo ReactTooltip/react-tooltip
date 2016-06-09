@@ -1,6 +1,6 @@
 {
   "name": "react-tooltip",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "react tooltip component",
   "main": "index.js",
   "scripts": {
@@ -12,11 +12,11 @@
     "dev": "mkdir -p ./example/dist & npm run devjs & npm run devcss & http-server example -p 8888 -s -o",
     "deployjs": "babel src/index.js -o dist/react-tooltip.js && babel src/style.js -o dist/style.js && npm run deployminjs",
     "deployminjs": "babel src/index.js | uglifyjs > dist/react-tooltip.min.js",
-    "predeploycss": "cp src/index.scss dist/react-tooltip.scss",
+    
     "deploycss": "node-sass --output-style compressed src/index.scss dist/react-tooltip.min.css",
     "predeploy": "rm -rf dist",
     "deploy": "mkdir dist & npm run deployjs & npm run deploycss & npm run standjs",
-    "prestandjs": "rm -rf standalone",
+    
     "standjs": "mkdir standalone && browserify -t babelify -t browserify-shim src/index.js --standalone ReactTooltip -o standalone/react-tooltip.js & npm run standminjs",
     "standminjs": "browserify -t babelify -t browserify-shim src/index.js --standalone ReactTooltip | uglifyjs > standalone/react-tooltip.min.js",
     "poststandjs": "cp ./dist/style.js ./standalone/style.js"
