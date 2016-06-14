@@ -4,12 +4,18 @@ EXAMPLE_SRC  = example/src
 STANDALONE   = standalone
 SRC          = src
 DIST         = dist
+TEST         = test/*.test.js
+MOCHA_OPTS   = --compilers js:babel-core/register --require test/setup.js -b --timeout 20000 --reporter spec
 
 lint:
-	@echo linting...
+	@echo Linting...
 	@$(NODE_BIN)/standard --verbose | $(NODE_BIN)/snazzy src/index.js
 
-convertCss:
+test: lint
+	@echo Start testing...
+	@$(NODE_BIN)/mocha $(MOCHA_OPTS) $(TEST)
+
+convertCSS:
 	@echo Converting css...
 	@node bin/transferSass.js
 
@@ -24,7 +30,7 @@ dev:
 	@echo starting dev server...
 	@rm -rf $(EXAMPLE_DIST)
 	@mkdir -p $(EXAMPLE_DIST)
-	@make convertCss
+	@make convertCSS
 	@$(NODE_BIN)/watchify -t babelify $(EXAMPLE_SRC)/index.js -o $(EXAMPLE_DIST)/index.js -dv
 	@$(NODE_BIN)/node-sass $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
 	@$(NODE_BIN)/node-sass -w $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
@@ -44,10 +50,10 @@ deployCSS:
 deploy: lint
 	@echo Deploy...
 	@rm -rf dist && mkdir dist
-	@make convertCss
+	@make convertCSS
 	@make deployCSS
 	@make deployJS
 	@make genStand
 	@echo success!
 
-.PHONY: lint convertCss genStand dev deployJS deployCSS deploy
+.PHONY: lint convertCSS genStand dev deployJS deployCSS deploy
