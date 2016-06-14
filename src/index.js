@@ -13,51 +13,28 @@ import cssStyle from './style'
 
 @staticMethods @windowListener
 class ReactTooltip extends Component {
-  /**
-   * Class method
-   * @see ReactTooltip.hide() && ReactTooltup.rebuild()
-   */
-  // static hide () {
-  //   /**
-  //    * Check for ie
-  //    * @see http://stackoverflow.com/questions/26596123/internet-explorer-9-10-11-event-constructor-doesnt-work
-  //    */
-  //   if (typeof window.Event === 'function') {
-  //     window.dispatchEvent(new window.Event('__react_tooltip_hide_event'))
-  //   } else {
-  //     let event = document.createEvent('Event')
-  //     event.initEvent('__react_tooltip_hide_event', false, true)
-  //     window.dispatchEvent(event)
-  //   }
-  // }
 
-  // static rebuild () {
-  //   if (typeof window.Event === 'function') {
-  //     window.dispatchEvent(new window.Event('__react_tooltip_rebuild_event'))
-  //   } else {
-  //     let event = document.createEvent('Event')
-  //     event.initEvent('__react_tooltip_rebuild_event', false, true)
-  //     window.dispatchEvent(event)
-  //   }
-  // }
-
-  globalHide () {
-    if (this.mount) {
-      this.hideTooltip()
-    }
-  }
-
-  globalRebuild () {
-    if (this.mount) {
-      this.unbindListener()
-      this.bindListener()
-    }
+  static propTypes = {
+    children: PropTypes.any,
+    place: PropTypes.string,
+    type: PropTypes.string,
+    effect: PropTypes.string,
+    offset: PropTypes.object,
+    multiline: PropTypes.bool,
+    border: PropTypes.bool,
+    class: PropTypes.string,
+    id: PropTypes.string,
+    html: PropTypes.bool,
+    delayHide: PropTypes.number,
+    delayShow: PropTypes.number,
+    event: PropTypes.any,
+    eventOff: PropTypes.any,
+    watchWindow: PropTypes.bool,
+    isCapture: PropTypes.bool
   }
 
   constructor (props) {
     super(props)
-    this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkStatus', 'onWindowResize', 'bindClickListener', 'globalHide', 'globalRebuild')
-    this.mount = true
     this.state = {
       show: false,
       border: false,
@@ -78,28 +55,16 @@ class ReactTooltip extends Component {
       eventOff: props.eventOff || null,
       isCapture: props.isCapture || false
     }
+
+    this.mount = true
     this.delayShowLoop = null
     this.delayHideLoop = null
-  }
-
-  /* Bind this with method */
-  _bind (...handlers) {
-    handlers.forEach(handler => this[handler] = this[handler].bind(this))
   }
 
   componentDidMount () {
     this.bindListener()
     this.setStyleHeader()
     this.bindWindowEvents()
-    // /* Add window event listener for hide and rebuild */
-    // window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
-    // window.addEventListener('__react_tooltip_hide_event', this.globalHide, false)
-
-    // window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
-    // window.addEventListener('__react_tooltip_rebuild_event', this.globalRebuild, false)
-    // /* Add listener on window resize  */
-    // window.removeEventListener('resize', this.onWindowResize)
-    // window.addEventListener('resize', this.onWindowResize, false)
   }
 
   componentWillUpdate () {
@@ -118,61 +83,78 @@ class ReactTooltip extends Component {
     this.removeScrollListener()
     this.mount = false
     this.unbindWindowEvents()
-    // window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
-    // window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
-    // window.removeEventListener('resize', this.onWindowResize)
   }
 
- /* TODO: optimize, bind has been trigger too many times */
+  /*
+   * Rebind the tooltip
+   * Invoked by ReactTooltip.rebuild()
+   */
+  globalRebuild () {
+    if (this.mount) {
+      this.unbindListener()
+      this.bindListener()
+    }
+  }
+
+ /**
+  * Bind listener to the target elements
+  * These listeners used to trigger showing or hiding the tooltip
+  */
   bindListener () {
     let targetArray = this.getTargetArray()
 
     let dataEvent
     let dataEventOff
-    for (let i = 0; i < targetArray.length; i++) {
-      if (targetArray[i].getAttribute('currentItem') === null) {
-        targetArray[i].setAttribute('currentItem', 'false')
+    targetArray.forEach(target => {
+      if (target.getAttribute('currentItem') === null) {
+        target.setAttribute('currentItem', 'false')
       }
-      dataEvent = this.state.event || targetArray[i].getAttribute('data-event')
+
+      dataEvent = this.state.event || target.getAttribute('data-event')
+      dataEventOff = this.state.eventOff || target.getAttribute('data-event-off')
+
       if (dataEvent) {
-        // if off event is specified, we will show tip on data-event and hide it on data-event-off
-        dataEventOff = this.state.eventOff || targetArray[i].getAttribute('data-event-off')
-
-        targetArray[i].removeEventListener(dataEvent, this.checkStatus)
-        targetArray[i].addEventListener(dataEvent, this.checkStatus, false)
+        target.removeEventListener(dataEvent, this.checkStatus)
+        target.addEventListener(dataEvent, ::this.checkStatus, false)
         if (dataEventOff) {
-          targetArray[i].removeEventListener(dataEventOff, this.hideTooltip)
-          targetArray[i].addEventListener(dataEventOff, this.hideTooltip, false)
+          target.removeEventListener(dataEventOff, this.hideTooltip)
+          target.addEventListener(dataEventOff, ::this.hideTooltip, false)
         }
-      } else {
-        targetArray[i].removeEventListener('mouseenter', this.showTooltip)
-        targetArray[i].addEventListener('mouseenter', this.showTooltip, false)
-
-        if (this.state.effect === 'float') {
-          targetArray[i].removeEventListener('mousemove', this.updateTooltip)
-          targetArray[i].addEventListener('mousemove', this.updateTooltip, false)
-        }
-
-        targetArray[i].removeEventListener('mouseleave', this.hideTooltip)
-        targetArray[i].addEventListener('mouseleave', this.hideTooltip, false)
+        return
       }
-    }
+
+      target.removeEventListener('mouseenter', this.showTooltip)
+      target.addEventListener('mouseenter', ::this.showTooltip, false)
+
+      if (this.state.effect === 'float') {
+        target.removeEventListener('mousemove', this.updateTooltip)
+        target.addEventListener('mousemove', ::this.updateTooltip, false)
+      }
+
+      target.removeEventListener('mouseleave', this.hideTooltip)
+      target.addEventListener('mouseleave', ::this.hideTooltip, false)
+    })
   }
 
+  /**
+   * Unbind listeners on target elements
+   */
   unbindListener () {
     let targetArray = document.querySelectorAll('[data-tip]')
     let dataEvent
 
-    for (let i = 0; i < targetArray.length; i++) {
-      dataEvent = this.state.event || targetArray[i].getAttribute('data-event')
+    targetArray.forEach(target => {
+      dataEvent = this.state.event || target.getAttribute('data-event')
       if (dataEvent) {
-        targetArray[i].removeEventListener(dataEvent, this.checkStatus)
-      } else {
-        targetArray[i].removeEventListener('mouseenter', this.showTooltip)
-        targetArray[i].removeEventListener('mousemove', this.updateTooltip)
-        targetArray[i].removeEventListener('mouseleave', this.hideTooltip)
+        target.removeEventListener(dataEvent, this.checkStatus)
+        if (dataEventOff) target.removeEventListener(dataEventOff, this.hideTooltip)
+        return
       }
-    }
+
+      target.removeEventListener('mouseenter', this.showTooltip)
+      target.removeEventListener('mousemove', this.updateTooltip)
+      target.removeEventListener('mouseleave', this.hideTooltip)
+    })
   }
 
   /**
@@ -232,7 +214,7 @@ class ReactTooltip extends Component {
       e.currentTarget.setAttribute('currentItem', 'true')
       /* when click other place, the tooltip should be removed */
       window.removeEventListener('click', this.bindClickListener)
-      window.addEventListener('click', this.bindClickListener, isCapture)
+      window.addEventListener('click', ::this.bindClickListener, isCapture)
 
       this.showTooltip(e)
       this.setUntargetItems(e.currentTarget)
@@ -251,7 +233,7 @@ class ReactTooltip extends Component {
   }
 
   bindClickListener () {
-    this.globalHide()
+    this.hideTooltip()
     window.removeEventListener('click', this.bindClickListener)
   }
 
@@ -331,6 +313,9 @@ class ReactTooltip extends Component {
    */
   hideTooltip () {
     const {delayHide} = this.state
+
+    if (!this.mount) return
+
     clearTimeout(this.delayShowLoop)
     clearTimeout(this.delayHideLoop)
     this.delayHideLoop = setTimeout(() => {
@@ -346,7 +331,7 @@ class ReactTooltip extends Component {
    * or tooltip will always existed
    */
   addScrollListener () {
-    window.addEventListener('scroll', this.hideTooltip)
+    window.addEventListener('scroll', ::this.hideTooltip)
   }
 
   removeScrollListener () {
@@ -666,25 +651,6 @@ class ReactTooltip extends Component {
     return newString.join('')
   }
 
-}
-
-ReactTooltip.propTypes = {
-  children: PropTypes.any,
-  place: PropTypes.string,
-  type: PropTypes.string,
-  effect: PropTypes.string,
-  offset: PropTypes.object,
-  multiline: PropTypes.bool,
-  border: PropTypes.bool,
-  class: PropTypes.string,
-  id: PropTypes.string,
-  html: PropTypes.bool,
-  delayHide: PropTypes.number,
-  delayShow: PropTypes.number,
-  event: PropTypes.any,
-  eventOff: PropTypes.any,
-  watchWindow: PropTypes.bool,
-  isCapture: PropTypes.bool
 }
 
 /* export default not fit for standalone, it will exports {default:...} */

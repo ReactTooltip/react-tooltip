@@ -15,14 +15,15 @@ describe('Global methods', () => {
   it('should be hided by invoking ReactTooltip.hide', () => {
     const wrapper = mount(<ReactTooltip />)
     wrapper.setState({ show: true })
-    expect(wrapper).to.have.state('show', true)
+    sinon.spy(ReactTooltip.prototype, 'hideTooltip')
     ReactTooltip.hide()
     setImmediate(() => {
+      expect(ReactTooltip.prototype.hideTooltip.calledOnce).to.equal(true)
       expect(wrapper).to.have.state('show', false)
     })
   })
 
-  it('should be rebuild by invoking ReactTooltip.rebuild', () => {
+  it('should invoke globalRebuild when using ReactTooltip.rebuild', () => {
     sinon.spy(ReactTooltip.prototype, 'globalRebuild')
     ReactTooltip.rebuild()
     setImmediate(() => {
