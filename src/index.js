@@ -3,36 +3,43 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import classname from 'classnames'
+
+/* Decoraters */
+import staticMethods from './decorators/staticMethods'
+import windowListener from './decorators/windowListener'
+
+/* CSS */
 import cssStyle from './style'
 
+@staticMethods @windowListener
 class ReactTooltip extends Component {
   /**
    * Class method
    * @see ReactTooltip.hide() && ReactTooltup.rebuild()
    */
-  static hide () {
-    /**
-     * Check for ie
-     * @see http://stackoverflow.com/questions/26596123/internet-explorer-9-10-11-event-constructor-doesnt-work
-     */
-    if (typeof window.Event === 'function') {
-      window.dispatchEvent(new window.Event('__react_tooltip_hide_event'))
-    } else {
-      let event = document.createEvent('Event')
-      event.initEvent('__react_tooltip_hide_event', false, true)
-      window.dispatchEvent(event)
-    }
-  }
+  // static hide () {
+  //   /**
+  //    * Check for ie
+  //    * @see http://stackoverflow.com/questions/26596123/internet-explorer-9-10-11-event-constructor-doesnt-work
+  //    */
+  //   if (typeof window.Event === 'function') {
+  //     window.dispatchEvent(new window.Event('__react_tooltip_hide_event'))
+  //   } else {
+  //     let event = document.createEvent('Event')
+  //     event.initEvent('__react_tooltip_hide_event', false, true)
+  //     window.dispatchEvent(event)
+  //   }
+  // }
 
-  static rebuild () {
-    if (typeof window.Event === 'function') {
-      window.dispatchEvent(new window.Event('__react_tooltip_rebuild_event'))
-    } else {
-      let event = document.createEvent('Event')
-      event.initEvent('__react_tooltip_rebuild_event', false, true)
-      window.dispatchEvent(event)
-    }
-  }
+  // static rebuild () {
+  //   if (typeof window.Event === 'function') {
+  //     window.dispatchEvent(new window.Event('__react_tooltip_rebuild_event'))
+  //   } else {
+  //     let event = document.createEvent('Event')
+  //     event.initEvent('__react_tooltip_rebuild_event', false, true)
+  //     window.dispatchEvent(event)
+  //   }
+  // }
 
   globalHide () {
     if (this.mount) {
@@ -83,15 +90,16 @@ class ReactTooltip extends Component {
   componentDidMount () {
     this.bindListener()
     this.setStyleHeader()
-    /* Add window event listener for hide and rebuild */
-    window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
-    window.addEventListener('__react_tooltip_hide_event', this.globalHide, false)
+    this.bindWindowEvents()
+    // /* Add window event listener for hide and rebuild */
+    // window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
+    // window.addEventListener('__react_tooltip_hide_event', this.globalHide, false)
 
-    window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
-    window.addEventListener('__react_tooltip_rebuild_event', this.globalRebuild, false)
-    /* Add listener on window resize  */
-    window.removeEventListener('resize', this.onWindowResize)
-    window.addEventListener('resize', this.onWindowResize, false)
+    // window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
+    // window.addEventListener('__react_tooltip_rebuild_event', this.globalRebuild, false)
+    // /* Add listener on window resize  */
+    // window.removeEventListener('resize', this.onWindowResize)
+    // window.addEventListener('resize', this.onWindowResize, false)
   }
 
   componentWillUpdate () {
@@ -109,9 +117,10 @@ class ReactTooltip extends Component {
     this.unbindListener()
     this.removeScrollListener()
     this.mount = false
-    window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
-    window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
-    window.removeEventListener('resize', this.onWindowResize)
+    this.unbindWindowEvents()
+    // window.removeEventListener('__react_tooltip_hide_event', this.globalHide)
+    // window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild)
+    // window.removeEventListener('resize', this.onWindowResize)
   }
 
  /* TODO: optimize, bind has been trigger too many times */
