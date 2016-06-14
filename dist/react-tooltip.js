@@ -171,8 +171,8 @@ var ReactTooltip = function (_Component) {
     value: function bindListener() {
       var targetArray = this.getTargetArray();
 
-      var dataEvent = undefined;
-      var dataEventOff = undefined;
+      var dataEvent = void 0;
+      var dataEventOff = void 0;
       for (var i = 0; i < targetArray.length; i++) {
         if (targetArray[i].getAttribute('currentItem') === null) {
           targetArray[i].setAttribute('currentItem', 'false');
@@ -206,7 +206,7 @@ var ReactTooltip = function (_Component) {
     key: 'unbindListener',
     value: function unbindListener() {
       var targetArray = document.querySelectorAll('[data-tip]');
-      var dataEvent = undefined;
+      var dataEvent = void 0;
 
       for (var i = 0; i < targetArray.length; i++) {
         dataEvent = this.state.event || targetArray[i].getAttribute('data-event');
@@ -229,7 +229,7 @@ var ReactTooltip = function (_Component) {
     value: function getTargetArray() {
       var id = this.props.id;
 
-      var targetArray = undefined;
+      var targetArray = void 0;
 
       if (id === undefined) {
         targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
@@ -278,7 +278,7 @@ var ReactTooltip = function (_Component) {
     value: function checkStatus(e) {
       var show = this.state.show;
 
-      var isCapture = undefined;
+      var isCapture = void 0;
 
       if (e.currentTarget.getAttribute('data-iscapture')) {
         isCapture = e.currentTarget.getAttribute('data-iscapture') === 'true';
@@ -329,7 +329,7 @@ var ReactTooltip = function (_Component) {
       /* Detect multiline */
       var regexp = /<br\s*\/?>/;
       var multiline = e.currentTarget.getAttribute('data-multiline') ? e.currentTarget.getAttribute('data-multiline') : this.props.multiline ? this.props.multiline : false;
-      var tooltipText = undefined;
+      var tooltipText = void 0;
       var multilineCount = 0;
       if (!multiline || multiline === 'false' || !regexp.test(originTooltip)) {
         tooltipText = originTooltip;
@@ -464,12 +464,28 @@ var ReactTooltip = function (_Component) {
       var targetHeight = currentTarget.clientHeight;
       var windoWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
-      var x = undefined;
-      var y = undefined;
+      var x = void 0;
+      var y = void 0;
       var defaultTopY = targetTop - tipHeight - 8;
       var defaultBottomY = targetTop + targetHeight + 8;
       var defaultLeftX = targetLeft - tipWidth - 6;
       var defaultRightX = targetLeft + targetWidth + 6;
+
+      var parentTop = 0;
+      var parentLeft = 0;
+      var currentParent = currentTarget.parentElement;
+
+      while (currentParent) {
+        if (currentParent.style.transform.length > 0) {
+          break;
+        }
+        currentParent = currentParent.parentElement;
+      }
+
+      if (currentParent) {
+        parentTop = currentParent.getBoundingClientRect().top;
+        parentLeft = currentParent.getBoundingClientRect().left;
+      }
 
       var outsideTop = function outsideTop() {
         return defaultTopY - 10 < 0;
@@ -532,17 +548,17 @@ var ReactTooltip = function (_Component) {
       };
 
       if (place === 'top') {
-        x = targetLeft - tipWidth / 2 + targetWidth / 2;
-        y = getTopPositionY();
+        x = targetLeft - tipWidth / 2 + targetWidth / 2 - parentLeft;
+        y = getTopPositionY() - parentTop;
       } else if (place === 'bottom') {
-        x = targetLeft - tipWidth / 2 + targetWidth / 2;
-        y = getBottomPositionY();
+        x = targetLeft - tipWidth / 2 + targetWidth / 2 - parentLeft;
+        y = getBottomPositionY() - parentTop;
       } else if (place === 'left') {
-        x = getLeftPositionX();
-        y = targetTop + targetHeight / 2 - tipHeight / 2;
+        x = getLeftPositionX() - parentLeft;
+        y = targetTop + targetHeight / 2 - tipHeight / 2 - parentTop;
       } else if (place === 'right') {
-        x = getRightPositionX();
-        y = targetTop + targetHeight / 2 - tipHeight / 2;
+        x = getRightPositionX() - parentLeft;
+        y = targetTop + targetHeight / 2 - tipHeight / 2 - parentTop;
       }
 
       return { x: x, y: y };
@@ -737,8 +753,8 @@ var ReactTooltip = function (_Component) {
         }
         firstCount++;
       }
-      for (var i = string.length - 1; i >= 0; i--) {
-        if (string[i] !== ' ') {
+      for (var _i = string.length - 1; _i >= 0; _i--) {
+        if (string[_i] !== ' ') {
           break;
         }
         lastCount++;
