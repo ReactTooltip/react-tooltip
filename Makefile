@@ -26,15 +26,23 @@ genStand:
 	@$(NODE_BIN)/browserify -t babelify -t browserify-shim $(SRC)/index.js --standalone ReactTooltip | $(NODE_BIN)/uglifyjs > $(STANDALONE)/react-tooltip.min.js
 	@cp $(DIST)/style.js $(STANDALONE)/style.js
 
+devJS:
+	@$(NODE_BIN)/watchify -t babelify $(EXAMPLE_SRC)/index.js -o $(EXAMPLE_DIST)/index.js -dv
+
+devCSS:
+	@$(NODE_BIN)/node-sass $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
+	@$(NODE_BIN)/node-sass -w $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
+
+devServer:
+	@echo Listening 8888...
+	@$(NODE_BIN)/http-server example -p 8888 -s
+
 dev:
 	@echo starting dev server...
 	@rm -rf $(EXAMPLE_DIST)
 	@mkdir -p $(EXAMPLE_DIST)
 	@make convertCSS
-	@$(NODE_BIN)/watchify -t babelify $(EXAMPLE_SRC)/index.js -o $(EXAMPLE_DIST)/index.js -dv
-	@$(NODE_BIN)/node-sass $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
-	@$(NODE_BIN)/node-sass -w $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
-	@$(NODE_BIN)/http-server example -p 8888 -s -o
+	@$(NODE_BIN)/concurrently --kill-others "make devJS" "make devCSS" "make devServer"
 
 deployJS:
 	@echo Generating deploy JS files...
@@ -56,4 +64,4 @@ deploy: lint
 	@make genStand
 	@echo success!
 
-.PHONY: lint convertCSS genStand dev deployJS deployCSS deploy
+.PHONY: lint convertCSS genStand devJS devCSS devServer dev deployJS deployCSS deploy

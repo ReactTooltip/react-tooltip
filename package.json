@@ -59,6 +59,7 @@
     "chai": "^3.5.0",
     "chai-enzyme": "^0.5.0",
     "cheerio": "^0.20.0",
+    "concurrently": "^2.1.0",
     "enzyme": "^2.3.0",
     "http-server": "^0.8.0",
     "jsdom": "^9.2.1",

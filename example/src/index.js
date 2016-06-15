@@ -2,7 +2,7 @@
 
 import React from 'react'
 import {render} from 'react-dom'
-import ReactTooltip from '../../src/index'
+import ReactTooltip from '../../src'
 
 const Test = React.createClass({
 
@@ -152,14 +152,23 @@ const Test = React.createClass({
 
             <div className="example-jsx">
               <div className="side">
-                <a data-for='customer-event' data-tip='customer event' data-event='click' data-type='info'>( •̀д•́)</a>
+                <a data-for='customer-event' data-tip='customer show' data-event='click'>( •̀д•́)</a>
                 <ReactTooltip id='customer-event' />
+              </div>
+
+              <div className="side">
+                <a data-for='customer-off-event' data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>
+                <ReactTooltip id='customer-off-event'/>
               </div>
             </div>
             <br />
             <pre className='example-pre'>
               <div>
-                <p>{"<a data-tip='customer event' data-event='click' data-type='info'>( •̀д•́)</a>\n" +
+                <p>{"<a data-tip='customer show' data-event='click'>( •̀д•́)</a>\n" +
+                "<ReactTooltip />"}</p>
+              </div>
+              <div>
+                <p>{"<a data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>\n" +
                 "<ReactTooltip/>"}</p>
               </div>
             </pre>
