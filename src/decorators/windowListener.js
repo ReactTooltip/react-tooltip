@@ -13,6 +13,10 @@ export default function (target) {
     window.removeEventListener(CONSTANT.GLOBAL.REBUILD, this.globalRebuild)
     window.addEventListener(CONSTANT.GLOBAL.REBUILD, ::this.globalRebuild, false)
 
+    // ReactTooltip.show
+    window.removeEventListener(CONSTANT.GLOBAL.SHOW, this.globalShow)
+    window.addEventListener(CONSTANT.GLOBAL.SHOW, ::this.globalShow, false)
+
     // Resize
     window.removeEventListener('resize', this.onWindowResize)
     window.addEventListener('resize', ::this.onWindowResize, false)
@@ -21,6 +25,15 @@ export default function (target) {
   target.prototype.unbindWindowEvents = function () {
     window.removeEventListener(CONSTANT.GLOBAL.HIDE, this.hideTooltip)
     window.removeEventListener(CONSTANT.GLOBAL.REBUILD, this.globalRebuild)
+    window.removeEventListener(CONSTANT.GLOBAL.REBUILD, this.globalShow)
     window.removeEventListener('resize', this.onWindowResize)
+  }
+
+  /**
+   * invoked by resize event of window
+   */
+  target.prototype.onWindowResize = function () {
+    if (!this.mount) return
+    this.hideTooltip()
   }
 }

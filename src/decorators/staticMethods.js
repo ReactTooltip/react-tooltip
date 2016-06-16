@@ -34,4 +34,24 @@ export default function (target) {
   target.rebuild = () => {
     dispatchGlobalEvent(CONSTANT.GLOBAL.REBUILD)
   }
+
+  target.prototype.globalRebuild = function () {
+    if (this.mount) {
+      this.unbindListener()
+      this.bindListener()
+    }
+  }
+
+  /**
+   * show a specific tooltip
+   * @trigger ReactTooltip.show()
+   */
+  target.show = (id) => {
+    dispatchGlobalEvent(CONSTANT.GLOBAL.SHOW)
+  }
+
+  target.prototype.globalShow = function () {
+    // id comes from I don't know
+    this.getTargetArray(id)
+  }
 }
