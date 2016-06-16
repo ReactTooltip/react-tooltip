@@ -2,7 +2,7 @@
 
 import React from 'react'
 import {render} from 'react-dom'
-import ReactTooltip from '../../src/index'
+import ReactTooltip from '../../src'
 
 const Test = React.createClass({
 
@@ -152,15 +152,72 @@ const Test = React.createClass({
 
             <div className="example-jsx">
               <div className="side">
-                <a data-for='customer-event' data-tip='customer event' data-event='click' data-type='info'>( •̀д•́)</a>
-                <ReactTooltip id='customer-event' />
+                <a data-for='customer-event' data-tip='customer show' data-event='click focus'>( •̀д•́)</a>
+                <ReactTooltip id='customer-event' globalEventOff='click'/>
+              </div>
+
+              <div className="side">
+                <a data-for='customer-off-event' data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>
+                <ReactTooltip id='customer-off-event'/>
               </div>
             </div>
             <br />
             <pre className='example-pre'>
               <div>
-                <p>{"<a data-tip='customer event' data-event='click' data-type='info'>( •̀д•́)</a>\n" +
+                <p>{"<a data-tip='customer show' data-event='click focus'>( •̀д•́)</a>\n" +
+                "<ReactTooltip globalEventOff='click' />"}</p>
+              </div>
+              <div>
+                <p>{"<a data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>\n" +
                 "<ReactTooltip/>"}</p>
+              </div>
+            </pre>
+          </div>
+
+          <div className="section">
+            <h4 className='title'>Theme and delay</h4>
+            <p className="sub-title"></p>
+
+            <div className="example-jsx">
+              <div className="side">
+                <a data-for='customer-class' data-tip='hover on me will keep the tootlip'>(･ω´･ )</a>
+                <ReactTooltip id='customer-class' class='extraClass' delayHide={1000} effect='solid'/>
+              </div>
+
+              <div className="side">
+                <a data-for='customer-theme' data-tip='custom theme'>(･ω´･ )</a>
+                <ReactTooltip id='customer-theme' class='customeTheme'/>
+              </div>
+            </div>
+            <br />
+            <pre className='example-pre'>
+              <div>
+                <p>{"<a data-tip='hover on me will keep the tootlip'>(･ω´･ )́)</a>\n" +
+                "<ReactTooltip class='extraClass' delayHide={1000} effect='solid'/>\n" +
+                ".extraClass {\n" +
+                  " font-size: 20px !important;\n" +
+                  " pointer-events: auto !important;\n" +
+                  " &:hover {\n" +
+                    "visibility: visible !important;\n" +
+                    "opacity: 1 !important;\n" +
+                  " }\n" +
+                "}"}</p>
+              </div>
+
+              <div>
+                <p>{"<a data-tip='custom theme'>(･ω´･ )́)</a>\n" +
+                "<ReactTooltip class='customeTheme'/>\n" +
+                " .customeTheme {\n" +
+                  " color: #ff6e00 !important;\n" +
+                  " background-color: orange !important;\n" +
+                  " &.place-top {\n" +
+                    " &:after {\n" +
+                      " border-top-color: orange !important;\n" +
+                      " border-top-style: solid !important;\n" +
+                      " border-top-width: 6px !important;\n" +
+                    " }\n" +
+                  " }\n" +
+                "}"}</p>
               </div>
             </pre>
           </div>

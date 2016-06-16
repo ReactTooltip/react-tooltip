@@ -206,3 +206,25 @@ html, body{
     line-height: 30px;
   }
 }
+
+// Extra class for demonstration
+.extraClass {
+  font-size: 20px !important;
+  pointer-events: auto !important;
+  &:hover {
+    visibility: visible !important;
+    opacity: 1 !important;
+ }
+}
+
+.customeTheme {
+  color: #ff6e00 !important;
+  background-color: orange !important;
+  &.place-top {
+    &:after {
+      border-top-color: orange !important;
+      border-top-style: solid !important;
+      border-top-width: 6px !important;
+    }
+  }
+}
