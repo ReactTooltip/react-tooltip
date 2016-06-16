@@ -9,7 +9,7 @@
 const checkStatus = function (dataEventOff, e) {
   const {show} = this.state
   const dataIsCapture = e.currentTarget.getAttribute('data-iscapture')
-  const isCapture = dataIsCapture && dataIsCapture === 'true' || this.state.isCapture
+  const isCapture = dataIsCapture && dataIsCapture === 'true' || this.props.isCapture
   const currentItem = e.currentTarget.getAttribute('currentItem')
 
   if (!isCapture) e.stopPropagation()
@@ -41,14 +41,18 @@ export default function (target) {
   /* Bind listener for custom event */
   target.prototype.customBindListener = function (ele) {
     const {event, eventOff} = this.state
-    const dataEvent = event || ele.getAttribute('data-event')
-    const dataEventOff = eventOff || ele.getAttribute('data-event-off')
+    const dataEvent = ele.getAttribute('data-event') || event
+    const dataEventOff = ele.getAttribute('data-event-off') || eventOff
 
-    ele.removeEventListener(dataEvent, checkStatus)
-    ele.addEventListener(dataEvent, checkStatus.bind(this, dataEventOff), false)
+    dataEvent.split(' ').forEach(event => {
+      ele.removeEventListener(event, checkStatus)
+      ele.addEventListener(event, checkStatus.bind(this, dataEventOff), false)
+    })
     if (dataEventOff) {
-      ele.removeEventListener(dataEventOff, this.hideTooltip)
-      ele.addEventListener(dataEventOff, ::this.hideTooltip, false)
+      dataEventOff.split(' ').forEach(event => {
+        ele.removeEventListener(event, this.hideTooltip)
+        ele.addEventListener(event, ::this.hideTooltip, false)
+      })
     }
   }
 

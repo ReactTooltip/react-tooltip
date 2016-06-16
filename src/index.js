@@ -8,6 +8,7 @@ import classname from 'classnames'
 import staticMethods from './decorators/staticMethods'
 import windowListener from './decorators/windowListener'
 import customEvent from './decorators/customEvent'
+import isCapture from './decorators/isCapture'
 
 /* Utils */
 import getPosition from './utils/getPosition'
@@ -16,8 +17,7 @@ import getTipContent from './utils/getTipContent'
 /* CSS */
 import cssStyle from './style'
 
-/* TODO: attribute to enable global click to hide the tooltip */
-@staticMethods @windowListener @customEvent
+@staticMethods @windowListener @customEvent @isCapture
 class ReactTooltip extends Component {
 
   static propTypes = {
@@ -33,10 +33,11 @@ class ReactTooltip extends Component {
     html: PropTypes.bool,
     delayHide: PropTypes.number,
     delayShow: PropTypes.number,
-    event: PropTypes.any,
-    eventOff: PropTypes.any,
+    event: PropTypes.string,
+    eventOff: PropTypes.string,
     watchWindow: PropTypes.bool,
-    isCapture: PropTypes.bool
+    isCapture: PropTypes.bool,
+    globalEventOff: PropTypes.string
   }
 
   constructor (props) {
@@ -55,7 +56,6 @@ class ReactTooltip extends Component {
       delayShow: 0,
       event: props.event || null,
       eventOff: props.eventOff || null,
-      isCapture: props.isCapture || false,
       currentEvent: null, // Current mouse event
       currentTarget: null // Current target of mouse event
     }
@@ -106,10 +106,11 @@ class ReactTooltip extends Component {
    * These listeners used to trigger showing or hiding the tooltip
    */
   bindListener () {
-    const {id} = this.props
+    const {id, globalEventOff} = this.props
     let targetArray = this.getTargetArray(id)
 
     targetArray.forEach(target => {
+      const isCaptureMode = this.isCapture(target)
       if (target.getAttribute('currentItem') === null) {
         target.setAttribute('currentItem', 'false')
       }
@@ -120,22 +121,28 @@ class ReactTooltip extends Component {
       }
 
       target.removeEventListener('mouseenter', this.showTooltip)
-      target.addEventListener('mouseenter', ::this.showTooltip, false)
+      target.addEventListener('mouseenter', ::this.showTooltip, isCaptureMode)
       if (this.state.effect === 'float') {
         target.removeEventListener('mousemove', this.updateTooltip)
-        target.addEventListener('mousemove', ::this.updateTooltip, false)
+        target.addEventListener('mousemove', ::this.updateTooltip, isCaptureMode)
       }
 
       target.removeEventListener('mouseleave', this.hideTooltip)
-      target.addEventListener('mouseleave', ::this.hideTooltip, false)
+      target.addEventListener('mouseleave', ::this.hideTooltip, isCaptureMode)
     })
+
+    // Global event to hide tooltip
+    if (globalEventOff) {
+      window.removeEventListener(globalEventOff, this.hideTooltip)
+      window.addEventListener(globalEventOff, ::this.hideTooltip, false)
+    }
   }
 
   /**
    * Unbind listeners on target elements
    */
   unbindListener () {
-    const {id} = this.props
+    const {id, globalEventOff} = this.props
     const targetArray = this.getTargetArray(id)
 
     targetArray.forEach(target => {
@@ -148,6 +155,8 @@ class ReactTooltip extends Component {
       target.removeEventListener('mousemove', this.updateTooltip)
       target.removeEventListener('mouseleave', this.hideTooltip)
     })
+
+    if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip)
   }
 
   /**
@@ -173,7 +182,7 @@ class ReactTooltip extends Component {
       border: e.currentTarget.getAttribute('data-border') === 'true' || this.props.border || false,
       extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || ''
     }, () => {
-      this.addScrollListener()
+      this.addScrollListener(e)
       this.updateTooltip(e)
     })
   }
@@ -224,8 +233,9 @@ class ReactTooltip extends Component {
    * Add scroll eventlistener when tooltip show
    * automatically hide the tooltip when scrolling
    */
-  addScrollListener () {
-    window.addEventListener('scroll', ::this.hideTooltip)
+  addScrollListener (e) {
+    const isCaptureMode = this.isCapture(e.currentTarget)
+    window.addEventListener('scroll', ::this.hideTooltip, isCaptureMode)
   }
 
   removeScrollListener () {

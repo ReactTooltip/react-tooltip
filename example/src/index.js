@@ -152,8 +152,8 @@ const Test = React.createClass({
 
             <div className="example-jsx">
               <div className="side">
-                <a data-for='customer-event' data-tip='customer show' data-event='click'>( •̀д•́)</a>
-                <ReactTooltip id='customer-event' />
+                <a data-for='customer-event' data-tip='customer show' data-event='click focus'>( •̀д•́)</a>
+                <ReactTooltip id='customer-event' globalEventOff='click'/>
               </div>
 
               <div className="side">
@@ -164,8 +164,8 @@ const Test = React.createClass({
             <br />
             <pre className='example-pre'>
               <div>
-                <p>{"<a data-tip='customer show' data-event='click'>( •̀д•́)</a>\n" +
-                "<ReactTooltip />"}</p>
+                <p>{"<a data-tip='customer show' data-event='click focus'>( •̀д•́)</a>\n" +
+                "<ReactTooltip globalEventOff='click' />"}</p>
               </div>
               <div>
                 <p>{"<a data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>\n" +
