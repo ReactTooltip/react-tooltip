@@ -66,7 +66,7 @@ class ReactTooltip extends Component {
   }
 
   componentDidMount () {
-    this.setStyleHeader() // Set default style to the <link>
+    this.setStyleHeader() // Set the style to the <link>
     this.bindListener() // Bind listener for tooltip
     this.bindWindowEvents() // Bind global event for static method
   }
@@ -172,10 +172,10 @@ class ReactTooltip extends Component {
       delayHide: e.currentTarget.getAttribute('data-delay-hide') || this.props.delayHide || 0,
       border: e.currentTarget.getAttribute('data-border') === 'true' || this.props.border || false,
       extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || ''
+    }, () => {
+      this.addScrollListener()
+      this.updateTooltip(e)
     })
-
-    this.addScrollListener()
-    this.updateTooltip(e)
   }
 
   /**
@@ -244,7 +244,6 @@ class ReactTooltip extends Component {
         this.updatePosition()
       })
     }
-
     // Set tooltip position
     node.style.left = result.position.left + 'px'
     node.style.top = result.position.top + 'px'
@@ -283,11 +282,14 @@ class ReactTooltip extends Component {
 
     if (html) {
       return (
-        <div className={`${tooltipClass} ${extraClass}`} data-id='tooltip' dangerouslySetInnerHTML={{__html: placeholder}}></div>
+        <div className={`${tooltipClass} ${extraClass}`}
+          data-id='tooltip'
+          dangerouslySetInnerHTML={{__html: placeholder}}></div>
       )
     } else {
       return (
-        <div className={`${tooltipClass} ${extraClass}`} data-id='tooltip'>{placeholder}</div>
+        <div className={`${tooltipClass} ${extraClass}`}
+          data-id='tooltip'>{placeholder}</div>
       )
     }
   }
