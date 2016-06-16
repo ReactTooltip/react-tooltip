@@ -1,5 +1,9 @@
 ## Change Log
 
+### 3.0.0 (2016/06/16 12:39 +00:00)
+- [#115](https://github.com/wwayne/react-tooltip/pull/115) Improve structure (@wwayne)
+- [#106](https://github.com/wwayne/react-tooltip/pull/106) Workaround for fixed elements inside transformed elements (@nd0ut)
+
 ### 2.0.3 (2016/06/01 13:45 +00:00)
 - [#112](https://github.com/wwayne/react-tooltip/pull/112) Add custom event to hide tooltip (@wwayne)
 - [#103](https://github.com/wwayne/react-tooltip/pull/103) Allow user to specify separate off event for the tooltip (@ondy1985)
