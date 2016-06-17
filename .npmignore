@@ -12,4 +12,4 @@ CHANGELOG.md
 
 // setting files
 .babelrc
-circle.yml
+.travis.yml

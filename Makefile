@@ -24,7 +24,6 @@ genStand:
 	@rm -rf $(STANDALONE) && mkdir $(STANDALONE)
 	@$(NODE_BIN)/browserify -t babelify -t browserify-shim $(SRC)/index.js --standalone ReactTooltip -o $(STANDALONE)/react-tooltip.js
 	@$(NODE_BIN)/browserify -t babelify -t browserify-shim $(SRC)/index.js --standalone ReactTooltip | $(NODE_BIN)/uglifyjs > $(STANDALONE)/react-tooltip.min.js
-	@cp $(DIST)/style.js $(STANDALONE)/style.js
 
 devJS:
 	@$(NODE_BIN)/watchify -t babelify $(EXAMPLE_SRC)/index.js -o $(EXAMPLE_DIST)/index.js -dv
@@ -46,20 +45,12 @@ dev:
 
 deployJS:
 	@echo Generating deploy JS files...
-	@$(NODE_BIN)/babel $(SRC)/index.js -o $(DIST)/react-tooltip.js
-	@$(NODE_BIN)/babel $(SRC)/style.js -o $(DIST)/style.js
-	@$(NODE_BIN)/babel $(SRC)/index.js | $(NODE_BIN)/uglifyjs > $(DIST)/react-tooltip.min.js
-
-deployCSS:
-	@echo Generating deploy CSS files...
-	@cp $(SRC)/index.scss $(DIST)/react-tooltip.scss
-	@$(NODE_BIN)/node-sass --output-style compressed $(SRC)/index.scss $(DIST)/react-tooltip.min.css
+	@$(NODE_BIN)/babel $(SRC) --out-dir $(DIST)
 
 deploy: lint
 	@echo Deploy...
 	@rm -rf dist && mkdir dist
 	@make convertCSS
-	@make deployCSS
 	@make deployJS
 	@make genStand
 	@echo success!
