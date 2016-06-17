@@ -7,13 +7,13 @@
 [download-image]: https://img.shields.io/npm/dm/react-tooltip.svg?style=flat-square
 [download-url]: https://npmjs.org/package/react-tooltip
 
-### Installation
+## Installation
 
 ```sh
 npm install react-tooltip
 ```
 
-### Usage
+## Usage
 **Using NPM**
 
 1 . Require react-tooltip after installation
@@ -37,7 +37,7 @@ var ReactTooltip = require("react-tooltip")
 
 You can import `node_modules/react-tooltip/standalone/react-tooltip.min.js` into your page, please make sure that you have already imported `react` and `react-dom` into your page.
 
-### Options
+## Options
 Notes:
 * The tooltip is using `type: dark` `place: top` `effect: float` as **default** attribute, you don't have to add these options if you don't want to change default
 * The option you set on `<ReactTooltip />` component will be implemented on every tooltip in a same page: `<ReactTooltip effect="solid" />`
@@ -62,7 +62,7 @@ class	|   data-class  |  String  |   | extra custom class, can use !important to
  delayShow	|   data-delay-show  |  Number  |   | `<p data-tip="tooltip" data-delay-show='1000'></p>` or `<ReactTooltip delayShow={1000} />`
  border  |   data-border  |  Bool  |  true, false | Add one pixel white border
 
-### Using react component as tooltip
+## Using react component as tooltip
 Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
 
 ##### Note:
@@ -70,13 +70,16 @@ Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
 2. **data-for** correspond to the **id** of `<ReactTooltip />`
 3. When using react component as tooltip, you can have many `<ReactTooltip />` in a page but they should have different **id**
 
-### Static Methods
+## Static Methods
 `ReactTooltip.hide()`: Hide the tooltip manually
 
 `ReactTooltip.rebuild()`: Rebinding tooltip to the corresponding elements
 
 I suggest always put `<ReactTooltip />` in the Highest level or smart component of Redux, so you might need these static
 method to control tooltip's behaviour in some situations
+
+## Article
+[How I insert sass into react component](https://medium.com/@wwayne_me/how-i-insert-sass-into-my-npm-react-component-b46b9811c226#.gi4hxu44a)
 
 ### License
 
