@@ -1,5 +1,8 @@
 ## Change Log
 
+### 3.0.3 (2016/06/17 10:21 +00:00)
+- [#117](https://github.com/wwayne/react-tooltip/pull/117) Improve deploy process (@wwayne)
+
 ### 3.0.0 (2016/06/16 12:39 +00:00)
 - [#115](https://github.com/wwayne/react-tooltip/pull/115) Improve structure (@wwayne)
 - [#106](https://github.com/wwayne/react-tooltip/pull/106) Workaround for fixed elements inside transformed elements (@nd0ut)
