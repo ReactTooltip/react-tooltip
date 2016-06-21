@@ -514,7 +514,7 @@ var ReactTooltip = function (_Component) {
       var tipHeight = node.clientHeight;
       var targetWidth = currentTarget.clientWidth;
       var targetHeight = currentTarget.clientHeight;
-      var windoWidth = window.innerWidth;
+      var windowWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
       var x = void 0;
       var y = void 0;
@@ -534,7 +534,7 @@ var ReactTooltip = function (_Component) {
         currentParent = currentParent.parentElement;
       }
 
-      if (currentParent) {
+      if (currentParent && currentParent.style.position !== 'fixed') {
         parentTop = currentParent.getBoundingClientRect().top;
         parentLeft = currentParent.getBoundingClientRect().left;
       }
@@ -552,7 +552,7 @@ var ReactTooltip = function (_Component) {
       };
 
       var outsideRight = function outsideRight() {
-        return targetLeft + targetWidth + tipWidth + 25 > windoWidth;
+        return targetLeft + targetWidth + tipWidth + 25 > windowWidth;
       };
 
       var getTopPositionY = function getTopPositionY() {

@@ -261,9 +261,7 @@ class ReactTooltip extends Component {
     } else {
       tooltipText = originTooltip.split(regexp).map((d, i) => {
         multilineCount += 1
-        return (
-          <span key={i} className='multi-line'>{d}</span>
-        )
+        return (<span key={i} className='multi-line'>{d}</span>)
       })
     }
     /* Define extra class */
@@ -357,7 +355,7 @@ class ReactTooltip extends Component {
     const tipHeight = node.clientHeight
     const targetWidth = currentTarget.clientWidth
     const targetHeight = currentTarget.clientHeight
-    const windoWidth = window.innerWidth
+    const windowWidth = window.innerWidth
     const windowHeight = window.innerHeight
     let x
     let y
@@ -377,7 +375,7 @@ class ReactTooltip extends Component {
       currentParent = currentParent.parentElement
     }
 
-    if (currentParent) {
+    if (currentParent && currentParent.style.position !== 'fixed') {
       parentTop = currentParent.getBoundingClientRect().top
       parentLeft = currentParent.getBoundingClientRect().left
     }
@@ -395,7 +393,7 @@ class ReactTooltip extends Component {
     }
 
     const outsideRight = () => {
-      return targetLeft + targetWidth + tipWidth + 25 > windoWidth
+      return targetLeft + targetWidth + tipWidth + 25 > windowWidth
     }
 
     const getTopPositionY = () => {
