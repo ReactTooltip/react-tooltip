@@ -124,6 +124,7 @@ exports.default = function (target) {
 
 var checkStatus = function checkStatus(dataEventOff, e) {
   var show = this.state.show;
+  var id = this.props.id;
 
   var dataIsCapture = e.currentTarget.getAttribute('data-iscapture');
   var isCapture = dataIsCapture && dataIsCapture === 'true' || this.props.isCapture;
@@ -134,7 +135,7 @@ var checkStatus = function checkStatus(dataEventOff, e) {
     if (!dataEventOff) this.hideTooltip(e);
   } else {
     e.currentTarget.setAttribute('currentItem', 'true');
-    setUntargetItems(e.currentTarget, this.getTargetArray());
+    setUntargetItems(e.currentTarget, this.getTargetArray(id));
     this.showTooltip(e);
   }
 };

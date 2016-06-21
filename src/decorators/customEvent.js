@@ -8,6 +8,7 @@
 
 const checkStatus = function (dataEventOff, e) {
   const {show} = this.state
+  const {id} = this.props
   const dataIsCapture = e.currentTarget.getAttribute('data-iscapture')
   const isCapture = dataIsCapture && dataIsCapture === 'true' || this.props.isCapture
   const currentItem = e.currentTarget.getAttribute('currentItem')
@@ -17,7 +18,7 @@ const checkStatus = function (dataEventOff, e) {
     if (!dataEventOff) this.hideTooltip(e)
   } else {
     e.currentTarget.setAttribute('currentItem', 'true')
-    setUntargetItems(e.currentTarget, this.getTargetArray())
+    setUntargetItems(e.currentTarget, this.getTargetArray(id))
     this.showTooltip(e)
   }
 }
