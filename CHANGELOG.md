@@ -1,6 +1,9 @@
 ## Change Log
 
-### 3.0.3 (2016/06/17 10:21 +00:00)
+### 3.0.5 (2016/06/21 00:32 +00:00)
+- [#120](https://github.com/wwayne/react-tooltip/pull/120) Fix custom event with specific id (@wwayne)
+
+### 3.0.4 (2016/06/17 10:28 +00:00)
 - [#117](https://github.com/wwayne/react-tooltip/pull/117) Improve deploy process (@wwayne)
 
 ### 3.0.0 (2016/06/16 12:39 +00:00)
