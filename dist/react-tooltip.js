@@ -482,10 +482,10 @@ var ReactTooltip = function (_Component) {
         currentParent = currentParent.parentElement;
       }
 
-      if (currentParent && currentParent.style.position !== 'fixed') {
-        parentTop = currentParent.getBoundingClientRect().top;
-        parentLeft = currentParent.getBoundingClientRect().left;
-      }
+      if (currentParent) /* && currentParent.style.position !== 'fixed' && currentParent.style.position !== 'absolute') */{
+          parentTop = currentParent.getBoundingClientRect().top;
+          parentLeft = currentParent.getBoundingClientRect().left;
+        }
 
       var outsideTop = function outsideTop() {
         return defaultTopY - 10 < 0;

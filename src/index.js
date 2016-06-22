@@ -375,7 +375,7 @@ class ReactTooltip extends Component {
       currentParent = currentParent.parentElement
     }
 
-    if (currentParent && currentParent.style.position !== 'fixed') {
+    if (currentParent)/* && currentParent.style.position !== 'fixed' && currentParent.style.position !== 'absolute') */ {
       parentTop = currentParent.getBoundingClientRect().top
       parentLeft = currentParent.getBoundingClientRect().left
     }
