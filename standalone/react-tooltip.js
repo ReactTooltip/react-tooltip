@@ -591,8 +591,8 @@ var ReactTooltip = function (_Component) {
       }
 
       if (currentParent) {
-        // IF browser is IE (in standards mode...) with fixed/absolute parents, we don't set the parent origin.
-        if (_detectBrowser2.default.name !== 'ie' || currentParent.style.position !== 'fixed' || currentParent.style.position !== 'absolute') {
+        // If browser is IE (in standards mode...) with fixed/absolute parents, we don't set the parent origin.
+        if (_detectBrowser2.default.name !== 'ie' || currentParent.style.position === 'fixed' || currentParent.style.position === 'absolute') {
           parentTop = currentParent.getBoundingClientRect().top;
           parentLeft = currentParent.getBoundingClientRect().left;
         }
