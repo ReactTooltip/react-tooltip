@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import classname from 'classnames'
 import cssStyle from './style'
+import browser from 'detect-browser'
 
 class ReactTooltip extends Component {
   /**
@@ -375,9 +376,12 @@ class ReactTooltip extends Component {
       currentParent = currentParent.parentElement
     }
 
-    if (currentParent)/* && currentParent.style.position !== 'fixed' && currentParent.style.position !== 'absolute') */ {
-      parentTop = currentParent.getBoundingClientRect().top
-      parentLeft = currentParent.getBoundingClientRect().left
+    if (currentParent) {
+      // IF browser is IE (in standards mode...) with fixed/absolute parents, we don't set the parent origin.
+      if (browser.name !== 'ie' || (currentParent.style.position !== 'fixed' || currentParent.style.position !== 'absolute')) {
+        parentTop = currentParent.getBoundingClientRect().top
+        parentLeft = currentParent.getBoundingClientRect().left
+      }
     }
 
     const outsideTop = () => {

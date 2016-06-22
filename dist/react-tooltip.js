@@ -18,6 +18,10 @@ var _style = require('./style');
 
 var _style2 = _interopRequireDefault(_style);
 
+var _detectBrowser = require('detect-browser');
+
+var _detectBrowser2 = _interopRequireDefault(_detectBrowser);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -482,10 +486,13 @@ var ReactTooltip = function (_Component) {
         currentParent = currentParent.parentElement;
       }
 
-      if (currentParent) /* && currentParent.style.position !== 'fixed' && currentParent.style.position !== 'absolute') */{
+      if (currentParent) {
+        // IF browser is IE (in standards mode...) with fixed/absolute parents, we don't set the parent origin.
+        if (_detectBrowser2.default.name !== 'ie' || currentParent.style.position !== 'fixed' || currentParent.style.position !== 'absolute') {
           parentTop = currentParent.getBoundingClientRect().top;
           parentLeft = currentParent.getBoundingClientRect().left;
         }
+      }
 
       var outsideTop = function outsideTop() {
         return defaultTopY - 10 < 0;
