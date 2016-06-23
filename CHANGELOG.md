@@ -1,5 +1,8 @@
 ## Change Log
 
+### 3.0.6 (2016/06/23 01:08 +00:00)
+- [#122](https://github.com/wwayne/react-tooltip/pull/122) Fixed "Wrong query selector for data-tip #121" (@neciu)
+
 ### 3.0.5 (2016/06/21 00:32 +00:00)
 - [#120](https://github.com/wwayne/react-tooltip/pull/120) Fix custom event with specific id (@wwayne)
 
