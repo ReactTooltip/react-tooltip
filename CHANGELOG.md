@@ -1,5 +1,8 @@
 ## Change Log
 
+### 3.0.7 (2016/06/24 13:58 +00:00)
+- [#124](https://github.com/wwayne/react-tooltip/pull/124) Consider both vertical and horizontal into place re-calculation (@wwayne)
+
 ### 3.0.6 (2016/06/23 01:08 +00:00)
 - [#122](https://github.com/wwayne/react-tooltip/pull/122) Fixed "Wrong query selector for data-tip #121" (@neciu)
 
