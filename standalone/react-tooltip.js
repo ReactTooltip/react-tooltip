@@ -714,54 +714,133 @@ exports.default = function (e, target, node, place, effect, offset) {
   var extraOffset_Y = _calculateOffset.extraOffset_Y;
 
 
-  var widnowWidth = window.innerWidth;
+  var windowWidth = window.innerWidth;
   var windowHeight = window.innerHeight;
 
   // Get the edge offset of the tooltip
   var getTipOffsetLeft = function getTipOffsetLeft(place) {
-    var offset_X = defaultOffset[place].x;
+    var offset_X = defaultOffset[place].l;
+    return mouseX + offset_X + extraOffset_X;
+  };
+  var getTipOffsetRight = function getTipOffsetRight(place) {
+    var offset_X = defaultOffset[place].r;
     return mouseX + offset_X + extraOffset_X;
   };
   var getTipOffsetTop = function getTipOffsetTop(place) {
-    var offset_Y = defaultOffset[place].y;
+    var offset_Y = defaultOffset[place].t;
+    return mouseY + offset_Y + extraOffset_Y;
+  };
+  var getTipOffsetBottom = function getTipOffsetBottom(place) {
+    var offset_Y = defaultOffset[place].b;
     return mouseY + offset_Y + extraOffset_Y;
   };
 
   // Judge if the tooltip has over the window(screen)
+  var outsideVertical = function outsideVertical() {
+    // Check for horazontal tooltip, if their vertical out of screen
+    var result = false;
+    var newPlace = void 0;
+    if (getTipOffsetTop('left') < 0 && getTipOffsetBottom('left') <= windowHeight) {
+      result = true;
+      newPlace = 'bottom';
+    } else if (getTipOffsetBottom('left') > windowHeight && getTipOffsetTop('left') >= 0) {
+      result = true;
+      newPlace = 'top';
+    }
+    if (result && outsideHorizontal().result) result = false;
+    return { result: result, newPlace: newPlace };
+  };
   var outsideLeft = function outsideLeft() {
-    // if switch to right will out of screen, return false because switch placement doesn't make sense
-    return getTipOffsetLeft('left') < 0 && getTipOffsetLeft('right') <= widnowWidth;
+    // For horizontal tooltip, if vertical out of screen, change the vertical place
+
+    var _outsideVertical = outsideVertical();
+
+    var result = _outsideVertical.result;
+    var newPlace = _outsideVertical.newPlace;
+
+    if (!result && getTipOffsetLeft('left') < 0 && getTipOffsetRight('right') <= windowWidth) {
+      result = true;
+      newPlace = 'right';
+    }
+    return { result: result, newPlace: newPlace };
   };
   var outsideRight = function outsideRight() {
-    return getTipOffsetLeft('right') > widnowWidth && getTipOffsetLeft('left') >= 0;
+    var _outsideVertical2 = outsideVertical();
+
+    var result = _outsideVertical2.result;
+    var newPlace = _outsideVertical2.newPlace;
+
+    if (!result && getTipOffsetRight('right') > windowWidth && getTipOffsetLeft('left') >= 0) {
+      result = true;
+      newPlace = 'left';
+    }
+    return { result: result, newPlace: newPlace };
+  };
+
+  var outsideHorizontal = function outsideHorizontal() {
+    var result = false;
+    var newPlace = void 0;
+    if (getTipOffsetLeft('top') < 0 && getTipOffsetRight('top') <= windowWidth) {
+      result = true;
+      newPlace = 'right';
+    } else if (getTipOffsetRight('top') > windowWidth && getTipOffsetLeft('top') >= 0) {
+      result = true;
+      newPlace = 'left';
+    }
+
+    if (result && outsideVertical().result) result = false;
+    return { result: result, newPlace: newPlace };
   };
   var outsideTop = function outsideTop() {
-    return getTipOffsetTop('top') < 0 && getTipOffsetTop('bottom') + tipHeight <= windowHeight;
+    var _outsideHorizontal = outsideHorizontal();
+
+    var result = _outsideHorizontal.result;
+    var newPlace = _outsideHorizontal.newPlace;
+
+    if (!result && getTipOffsetTop('top') < 0 && getTipOffsetBottom('bottom') <= windowHeight) {
+      result = true;
+      newPlace = 'bottom';
+    }
+    return { result: result, newPlace: newPlace };
   };
   var outsideBottom = function outsideBottom() {
-    return getTipOffsetTop('bottom') + tipHeight > windowHeight && getTipOffsetTop('top') >= 0;
+    var _outsideHorizontal2 = outsideHorizontal();
+
+    var result = _outsideHorizontal2.result;
+    var newPlace = _outsideHorizontal2.newPlace;
+
+    if (!result && getTipOffsetBottom('bottom') > windowHeight && getTipOffsetTop('top') >= 0) {
+      result = true;
+      newPlace = 'top';
+    }
+    return { result: result, newPlace: newPlace };
   };
 
   // Return new state to change the placement to the reverse if possible
-  if (place === 'left' && outsideLeft()) {
+  var outsideLeftResult = outsideLeft();
+  var outsideRightResult = outsideRight();
+  var outsideTopResult = outsideTop();
+  var outsideBottomResult = outsideBottom();
+
+  if (place === 'left' && outsideLeftResult.result) {
     return {
       isNewState: true,
-      newState: { place: 'right' }
+      newState: { place: outsideLeftResult.newPlace }
     };
-  } else if (place === 'right' && outsideRight()) {
+  } else if (place === 'right' && outsideRightResult.result) {
     return {
       isNewState: true,
-      newState: { place: 'left' }
+      newState: { place: outsideRightResult.newPlace }
     };
-  } else if (place === 'top' && outsideTop()) {
+  } else if (place === 'top' && outsideTopResult.result) {
     return {
       isNewState: true,
-      newState: { place: 'bottom' }
+      newState: { place: outsideTopResult.newPlace }
     };
-  } else if (place === 'bottom' && outsideBottom()) {
+  } else if (place === 'bottom' && outsideBottomResult.result) {
     return {
       isNewState: true,
-      newState: { place: 'top' }
+      newState: { place: outsideBottomResult.newPlace }
     };
   }
 
@@ -818,19 +897,59 @@ var getDefaultPosition = function getDefaultPosition(effect, targetWidth, target
   var right = void 0;
   var bottom = void 0;
   var left = void 0;
-  var disToMouse = 15;
-  var triangleHeight = 5;
+  var disToMouse = 8;
+  var triangleHeight = 2;
 
   if (effect === 'float') {
-    top = { x: -(tipWidth / 2), y: -(tipHeight + disToMouse - triangleHeight) };
-    bottom = { x: -(tipWidth / 2), y: disToMouse };
-    left = { x: -(tipWidth + disToMouse - triangleHeight), y: -(tipHeight / 2) };
-    right = { x: disToMouse, y: -(tipHeight / 2) };
+    top = {
+      l: -(tipWidth / 2),
+      r: tipWidth / 2,
+      t: -(tipHeight + disToMouse + triangleHeight),
+      b: -disToMouse
+    };
+    bottom = {
+      l: -(tipWidth / 2),
+      r: tipWidth / 2,
+      t: disToMouse,
+      b: tipHeight + disToMouse + triangleHeight
+    };
+    left = {
+      l: -(tipWidth + disToMouse + triangleHeight),
+      r: -disToMouse,
+      t: -(tipHeight / 2),
+      b: tipHeight / 2
+    };
+    right = {
+      l: disToMouse,
+      r: tipWidth + disToMouse + triangleHeight,
+      t: -(tipHeight / 2),
+      b: tipHeight / 2
+    };
   } else if (effect === 'solid') {
-    top = { x: -(tipWidth / 2), y: -(targetHeight / 2 + tipHeight) };
-    bottom = { x: -(tipWidth / 2), y: targetHeight / 2 };
-    left = { x: -(tipWidth + targetWidth / 2), y: -(tipHeight / 2) };
-    right = { x: targetWidth / 2, y: -(tipHeight / 2) };
+    top = {
+      l: -(tipWidth / 2),
+      r: tipWidth / 2,
+      t: -(targetHeight / 2 + tipHeight + triangleHeight),
+      b: -(targetHeight / 2)
+    };
+    bottom = {
+      l: -(tipWidth / 2),
+      r: tipWidth / 2,
+      t: targetHeight / 2,
+      b: targetHeight / 2 + tipHeight + triangleHeight
+    };
+    left = {
+      l: -(tipWidth + targetWidth / 2 + triangleHeight),
+      r: -(targetWidth / 2),
+      t: -(tipHeight / 2),
+      b: tipHeight / 2
+    };
+    right = {
+      l: targetWidth / 2,
+      r: tipWidth + targetWidth / 2 + triangleHeight,
+      t: -(tipHeight / 2),
+      b: tipHeight / 2
+    };
   }
 
   return { top: top, bottom: bottom, left: left, right: right };
