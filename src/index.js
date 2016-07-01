@@ -248,6 +248,7 @@ class ReactTooltip extends Component {
     const node = ReactDOM.findDOMNode(this)
 
     const result = getPosition(currentEvent, currentTarget, node, place, effect, offset)
+
     if (result.isNewState) {
       // Switch to reverse placement
       return this.setState(result.newState, () => {
