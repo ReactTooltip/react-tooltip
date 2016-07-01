@@ -44,30 +44,37 @@ export default function (e, target, node, place, effect, offset) {
 
   // Judge if the tooltip has over the window(screen)
   const outsideVertical = () => {
-     // Check for horazontal tooltip, if their vertical out of screen
     let result = false
     let newPlace
-    if (getTipOffsetTop('left') < 0 && getTipOffsetBottom('left') <= windowHeight) {
+    if (getTipOffsetTop('left') < 0 &&
+      getTipOffsetBottom('left') <= windowHeight &&
+      getTipOffsetBottom('bottom') <= windowHeight) {
       result = true
       newPlace = 'bottom'
-    } else if (getTipOffsetBottom('left') > windowHeight && getTipOffsetTop('left') >= 0) {
+    } else if (getTipOffsetBottom('left') > windowHeight &&
+      getTipOffsetTop('left') >= 0 &&
+      getTipOffsetTop('top') >= 0) {
       result = true
       newPlace = 'top'
     }
-    if (result && outsideHorizontal().result) result = false
     return {result, newPlace}
   }
   const outsideLeft = () => {
-    // For horizontal tooltip, if vertical out of screen, change the vertical place
-    let {result, newPlace} = outsideVertical()
+    let {result, newPlace} = outsideVertical() // Deal with vertical as first priority
+    if (result && outsideHorizontal().result) {
+      return {result: false} // No need to change, if change to vertical will out of space
+    }
     if (!result && getTipOffsetLeft('left') < 0 && getTipOffsetRight('right') <= windowWidth) {
-      result = true
+      result = true // If vertical ok, but let out of side and right won't out of side
       newPlace = 'right'
     }
     return {result, newPlace}
   }
   const outsideRight = () => {
     let {result, newPlace} = outsideVertical()
+    if (result && outsideHorizontal().result) {
+      return {result: false} // No need to change, if change to vertical will out of space
+    }
     if (!result && getTipOffsetRight('right') > windowWidth && getTipOffsetLeft('left') >= 0) {
       result = true
       newPlace = 'left'
@@ -78,19 +85,24 @@ export default function (e, target, node, place, effect, offset) {
   const outsideHorizontal = () => {
     let result = false
     let newPlace
-    if (getTipOffsetLeft('top') < 0 && getTipOffsetRight('top') <= windowWidth) {
+    if (getTipOffsetLeft('top') < 0 &&
+      getTipOffsetRight('top') <= windowWidth &&
+      getTipOffsetRight('right') <= windowWidth) {
       result = true
       newPlace = 'right'
-    } else if (getTipOffsetRight('top') > windowWidth && getTipOffsetLeft('top') >= 0) {
+    } else if (getTipOffsetRight('top') > windowWidth &&
+      getTipOffsetLeft('top') >= 0 &&
+      getTipOffsetLeft('left') >= 0) {
       result = true
       newPlace = 'left'
     }
-
-    if (result && outsideVertical().result) result = false
     return {result, newPlace}
   }
   const outsideTop = () => {
     let {result, newPlace} = outsideHorizontal()
+    if (result && outsideVertical().result) {
+      return {result: false}
+    }
     if (!result && getTipOffsetTop('top') < 0 && getTipOffsetBottom('bottom') <= windowHeight) {
       result = true
       newPlace = 'bottom'
@@ -99,6 +111,9 @@ export default function (e, target, node, place, effect, offset) {
   }
   const outsideBottom = () => {
     let {result, newPlace} = outsideHorizontal()
+    if (result && outsideVertical().result) {
+      return {result: false}
+    }
     if (!result && getTipOffsetBottom('bottom') > windowHeight && getTipOffsetTop('top') >= 0) {
       result = true
       newPlace = 'top'
