@@ -1,5 +1,9 @@
 ## Change Log
 
+### 3.0.8 (2016/07/01 09:29 +00:00)
+- [#127](https://github.com/wwayne/react-tooltip/pull/127) Fix stack overflow in some edge case of position calculation (@wwayne)
+- [#125](https://github.com/wwayne/react-tooltip/pull/125) Update page <title> for example page (@brandly)
+
 ### 3.0.7 (2016/06/24 13:58 +00:00)
 - [#124](https://github.com/wwayne/react-tooltip/pull/124) Consider both vertical and horizontal into place re-calculation (@wwayne)
 

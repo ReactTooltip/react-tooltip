@@ -604,6 +604,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var node = _reactDom2.default.findDOMNode(this);
 
       var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset);
+
       if (result.isNewState) {
         // Switch to reverse placement
         return this.setState(result.newState, function () {
@@ -737,29 +738,28 @@ exports.default = function (e, target, node, place, effect, offset) {
 
   // Judge if the tooltip has over the window(screen)
   var outsideVertical = function outsideVertical() {
-    // Check for horazontal tooltip, if their vertical out of screen
     var result = false;
     var newPlace = void 0;
-    if (getTipOffsetTop('left') < 0 && getTipOffsetBottom('left') <= windowHeight) {
+    if (getTipOffsetTop('left') < 0 && getTipOffsetBottom('left') <= windowHeight && getTipOffsetBottom('bottom') <= windowHeight) {
       result = true;
       newPlace = 'bottom';
-    } else if (getTipOffsetBottom('left') > windowHeight && getTipOffsetTop('left') >= 0) {
+    } else if (getTipOffsetBottom('left') > windowHeight && getTipOffsetTop('left') >= 0 && getTipOffsetTop('top') >= 0) {
       result = true;
       newPlace = 'top';
     }
-    if (result && outsideHorizontal().result) result = false;
     return { result: result, newPlace: newPlace };
   };
   var outsideLeft = function outsideLeft() {
-    // For horizontal tooltip, if vertical out of screen, change the vertical place
-
     var _outsideVertical = outsideVertical();
 
     var result = _outsideVertical.result;
-    var newPlace = _outsideVertical.newPlace;
+    var newPlace = _outsideVertical.newPlace; // Deal with vertical as first priority
 
+    if (result && outsideHorizontal().result) {
+      return { result: false }; // No need to change, if change to vertical will out of space
+    }
     if (!result && getTipOffsetLeft('left') < 0 && getTipOffsetRight('right') <= windowWidth) {
-      result = true;
+      result = true; // If vertical ok, but let out of side and right won't out of side
       newPlace = 'right';
     }
     return { result: result, newPlace: newPlace };
@@ -770,6 +770,9 @@ exports.default = function (e, target, node, place, effect, offset) {
     var result = _outsideVertical2.result;
     var newPlace = _outsideVertical2.newPlace;
 
+    if (result && outsideHorizontal().result) {
+      return { result: false }; // No need to change, if change to vertical will out of space
+    }
     if (!result && getTipOffsetRight('right') > windowWidth && getTipOffsetLeft('left') >= 0) {
       result = true;
       newPlace = 'left';
@@ -780,15 +783,13 @@ exports.default = function (e, target, node, place, effect, offset) {
   var outsideHorizontal = function outsideHorizontal() {
     var result = false;
     var newPlace = void 0;
-    if (getTipOffsetLeft('top') < 0 && getTipOffsetRight('top') <= windowWidth) {
+    if (getTipOffsetLeft('top') < 0 && getTipOffsetRight('top') <= windowWidth && getTipOffsetRight('right') <= windowWidth) {
       result = true;
       newPlace = 'right';
-    } else if (getTipOffsetRight('top') > windowWidth && getTipOffsetLeft('top') >= 0) {
+    } else if (getTipOffsetRight('top') > windowWidth && getTipOffsetLeft('top') >= 0 && getTipOffsetLeft('left') >= 0) {
       result = true;
       newPlace = 'left';
     }
-
-    if (result && outsideVertical().result) result = false;
     return { result: result, newPlace: newPlace };
   };
   var outsideTop = function outsideTop() {
@@ -797,6 +798,9 @@ exports.default = function (e, target, node, place, effect, offset) {
     var result = _outsideHorizontal.result;
     var newPlace = _outsideHorizontal.newPlace;
 
+    if (result && outsideVertical().result) {
+      return { result: false };
+    }
     if (!result && getTipOffsetTop('top') < 0 && getTipOffsetBottom('bottom') <= windowHeight) {
       result = true;
       newPlace = 'bottom';
@@ -809,6 +813,9 @@ exports.default = function (e, target, node, place, effect, offset) {
     var result = _outsideHorizontal2.result;
     var newPlace = _outsideHorizontal2.newPlace;
 
+    if (result && outsideVertical().result) {
+      return { result: false };
+    }
     if (!result && getTipOffsetBottom('bottom') > windowHeight && getTipOffsetTop('top') >= 0) {
       result = true;
       newPlace = 'top';
