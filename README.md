@@ -41,7 +41,7 @@ You can import `node_modules/react-tooltip/standalone/react-tooltip.min.js` into
 Notes:
 * The tooltip is using `type: dark` `place: top` `effect: float` as **default** attribute, you don't have to add these options if you don't want to change default
 * The option you set on `<ReactTooltip />` component will be implemented on every tooltip in a same page: `<ReactTooltip effect="solid" />`
-* The option you set on specific elecment, for example: `<a data-type="warning"></a>` will only make effect on this specific tooltip
+* The option you set on specific element, for example: `<a data-type="warning"></a>` will only make effect on this specific tooltip
 
 Check example:  [React-tooltip Test](http://wwayne.com/react-tooltip)
 
