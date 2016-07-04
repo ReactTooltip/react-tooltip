@@ -37,7 +37,8 @@ class ReactTooltip extends Component {
     eventOff: PropTypes.string,
     watchWindow: PropTypes.bool,
     isCapture: PropTypes.bool,
-    globalEventOff: PropTypes.string
+    globalEventOff: PropTypes.string,
+    handle: PropTypes.string
   }
 
   constructor (props) {
@@ -57,7 +58,8 @@ class ReactTooltip extends Component {
       event: props.event || null,
       eventOff: props.eventOff || null,
       currentEvent: null, // Current mouse event
-      currentTarget: null // Current target of mouse event
+      currentTarget: null, // Current target of mouse event
+      handle: props.handle || 'data-tip' // Custom attribute for tooltip
     }
 
     this.mount = true
@@ -89,9 +91,9 @@ class ReactTooltip extends Component {
     let targetArray
 
     if (!id) {
-      targetArray = document.querySelectorAll('[data-tip]:not([data-for])')
+      targetArray = document.querySelectorAll(`[${this.state.handle}]:not([data-for])`)
     } else {
-      targetArray = document.querySelectorAll(`[data-tip][data-for="${id}"]`)
+      targetArray = document.querySelectorAll(`[${this.state.handle}][data-for="${id}"]`)
     }
 
     // targetArray is a NodeList, convert it to a real array
@@ -166,7 +168,7 @@ class ReactTooltip extends Component {
     // Get the tooltip content
     // calculate in this phrase so that tip width height can be detected
     const {children, multiline} = this.props
-    const originTooltip = e.currentTarget.getAttribute('data-tip')
+    const originTooltip = e.currentTarget.getAttribute(this.state.handle)
     const isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false
     const placeholder = getTipContent(originTooltip, children, isMultiline)
 

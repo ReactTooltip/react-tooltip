@@ -61,12 +61,13 @@ class	|   data-class  |  String  |   | extra custom class, can use !important to
  delayHide	|   data-delay-hide  |  Number  |   | `<p data-tip="tooltip" data-delay-hide='1000'></p>` or `<ReactTooltip delayHide={1000} />`
  delayShow	|   data-delay-show  |  Number  |   | `<p data-tip="tooltip" data-delay-show='1000'></p>` or `<ReactTooltip delayShow={1000} />`
  border  |   data-border  |  Bool  |  true, false | Add one pixel white border
+ handle	|    |  String  |  e.g data-tip | Use a custom attribute to locate the tooltip's contents
 
 ## Using react component as tooltip
 Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
 
 ##### Note:
-1. **data-tip** is necessary, because `<ReactTooltip />` find tooltip via this attribute
+1. **data-tip** is necessary (or the custom `handle` set), because `<ReactTooltip />` find tooltip via this attribute
 2. **data-for** correspond to the **id** of `<ReactTooltip />`
 3. When using react component as tooltip, you can have many `<ReactTooltip />` in a page but they should have different **id**
 
