@@ -41,7 +41,7 @@ You can import `node_modules/react-tooltip/standalone/react-tooltip.min.js` into
 Notes:
 * The tooltip is using `type: dark` `place: top` `effect: float` as **default** attribute, you don't have to add these options if you don't want to change default
 * The option you set on `<ReactTooltip />` component will be implemented on every tooltip in a same page: `<ReactTooltip effect="solid" />`
-* The option you set on specific elecment, for example: `<a data-type="warning"></a>` will only make effect on this specific tooltip
+* The option you set on specific element, for example: `<a data-type="warning"></a>` will only make effect on this specific tooltip
 
 Check example:  [React-tooltip Test](http://wwayne.com/react-tooltip)
 
@@ -53,7 +53,7 @@ Global|Specific	|Type	|Values  |  Description
  event |   data-event  |  String  |  e.g. click | custom event to trigger tooltip
  eventOff |   data-event-off  |  String  |  e.g. click | custom event to hide tooltip (only makes effect after setting event attribute)
  globalEventOff | | 'string'| e.g. click| global event to hide tooltip (global only)
- isCapture | data-iscapture | Bool | true, false | when set to ture, custom event's propagation mode will be capture
+ isCapture | data-iscapture | Bool | true, false | when set to true, custom event's propagation mode will be capture
  offset	|   data-offset  |  Object  |  top, right, bottom, left | `data-offset="{'top': 10, 'left': 10}"` for specific and `offset={{top: 10, left: 10}}` for global
 multiline	|   data-multiline  |  Bool  |  true, false | support `<br>`, `<br />` to make multiline
 class	|   data-class  |  String  |   | extra custom class, can use !important to overwrite react-tooltip's default class
