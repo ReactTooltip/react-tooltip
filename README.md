@@ -52,7 +52,7 @@ Global|Specific	|Type	|Values  |  Description
  effect|   data-effect  |  String  |  float, solid | behaviour of tooltip
  event |   data-event  |  String  |  e.g. click | custom event to trigger tooltip
  eventOff |   data-event-off  |  String  |  e.g. click | custom event to hide tooltip (only makes effect after setting event attribute)
- globalEventOff | | 'string'| e.g. click| global event to hide tooltip (global only)
+ globalEventOff | | String| e.g. click| global event to hide tooltip (global only)
  isCapture | data-iscapture | Bool | true, false | when set to true, custom event's propagation mode will be capture
  offset	|   data-offset  |  Object  |  top, right, bottom, left | `data-offset="{'top': 10, 'left': 10}"` for specific and `offset={{top: 10, left: 10}}` for global
 multiline	|   data-multiline  |  Bool  |  true, false | support `<br>`, `<br />` to make multiline
