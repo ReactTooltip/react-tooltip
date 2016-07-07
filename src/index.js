@@ -37,7 +37,8 @@ class ReactTooltip extends Component {
     eventOff: PropTypes.string,
     watchWindow: PropTypes.bool,
     isCapture: PropTypes.bool,
-    globalEventOff: PropTypes.string
+    globalEventOff: PropTypes.string,
+    getContent: PropTypes.func
   }
 
   constructor (props) {
@@ -165,10 +166,18 @@ class ReactTooltip extends Component {
   showTooltip (e) {
     // Get the tooltip content
     // calculate in this phrase so that tip width height can be detected
-    const {children, multiline} = this.props
+    const {children, multiline, getContent} = this.props
     const originTooltip = e.currentTarget.getAttribute('data-tip')
     const isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false
-    const placeholder = getTipContent(originTooltip, children, isMultiline)
+
+    let content
+    if (children) {
+      content = children
+    } else if (getContent) {
+      content = getContent()
+    }
+
+    const placeholder = getTipContent(originTooltip, content, isMultiline)
 
     this.setState({
       placeholder,
