@@ -228,12 +228,12 @@ const Test = React.createClass({
 
             <div className="example-jsx">
               <div className="side">
-                <a data-for='getContent' data-tip>=͟͟͞͞( •̀д•́)</a>
+                <a data-for='getContent' data-tip>=( •̀д•́)</a>
                 <ReactTooltip id='getContent' getContent={() => Math.floor(Math.random() * 100)}/>
               </div>
 
               <div className="side">
-                <a data-for='overTime' data-tip>=͟͟͞͞( •̀д•́)</a>
+                <a data-for='overTime' data-tip>=( •̀д•́)</a>
                 <ReactTooltip id='overTime'
                   getContent={[() => {return new Date().toISOString()}, 1000]}/>
               </div>
@@ -241,12 +241,12 @@ const Test = React.createClass({
             <br />
             <pre className='example-pre'>
               <div>
-                <p>{"<a data-for='getContent' data-tip>=͟͟͞͞( •̀д•́)</a>\n" +
+                <p>{"<a data-for='getContent' data-tip>=( •̀д•́)</a>\n" +
                 "<ReactTooltip id='getContent' getContent={() => Math.floor(Math.random() * 100)} />"}</p>
               </div>
 
               <div>
-                <p>{"<a data-for='overTime' data-tip>=͟͟͞͞( •̀д•́)</a>\n" +
+                <p>{"<a data-for='overTime' data-tip>=( •̀д•́)</a>\n" +
                 "<ReactTooltip id='overTime' getContent={[() => {return new Date().toISOString()}, 1000]}/>"}</p>
               </div>
             </pre>
