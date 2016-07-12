@@ -61,6 +61,7 @@ class	|   data-class  |  String  |   | extra custom class, can use !important to
  delayHide	|   data-delay-hide  |  Number  |   | `<p data-tip="tooltip" data-delay-hide='1000'></p>` or `<ReactTooltip delayHide={1000} />`
  delayShow	|   data-delay-show  |  Number  |   | `<p data-tip="tooltip" data-delay-show='1000'></p>` or `<ReactTooltip delayShow={1000} />`
  border  |   data-border  |  Bool  |  true, false | Add one pixel white border
+ getContent | null | Func or Array | () => {}, [() => {}, Interval] | Generate the tip content dynamically
 
 ## Using react component as tooltip
 Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
