@@ -1,8 +1,9 @@
 ## Change Log
 
-### 3.0.8 (2016/07/01 09:29 +00:00)
-- [#127](https://github.com/wwayne/react-tooltip/pull/127) Fix stack overflow in some edge case of position calculation (@wwayne)
-- [#125](https://github.com/wwayne/react-tooltip/pull/125) Update page title for example page (@brandly)
+### 3.0.9 (2016/07/12 00:23 +00:00)
+- [#132](https://github.com/wwayne/react-tooltip/pull/132) Make getContent to support dynamical generate content while hover (@wwayne)
+- [#131](https://github.com/wwayne/react-tooltip/pull/131) Add possibility to recalculate content on show tooltip (@pokidovea)
+- [#128](https://github.com/wwayne/react-tooltip/pull/128) Correct Typos in README.md (@gottsohn)
 
 ### 3.0.7 (2016/06/24 13:58 +00:00)
 - [#124](https://github.com/wwayne/react-tooltip/pull/124) Consider both vertical and horizontal into place re-calculation (@wwayne)

@@ -357,6 +357,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     _this.mount = true;
     _this.delayShowLoop = null;
     _this.delayHideLoop = null;
+    _this.intervalUpdateContent = null;
     return _this;
   }
 
@@ -372,8 +373,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     value: function componentWillUnmount() {
       this.mount = false;
 
-      clearTimeout(this.delayShowLoop);
-      clearTimeout(this.delayHideLoop);
+      this.clearTimer();
 
       this.unbindListener();
       this.removeScrollListener();
@@ -492,10 +492,21 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var _props3 = this.props;
       var children = _props3.children;
       var multiline = _props3.multiline;
+      var getContent = _props3.getContent;
 
       var originTooltip = e.currentTarget.getAttribute('data-tip');
       var isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false;
-      var placeholder = (0, _getTipContent2.default)(originTooltip, children, isMultiline);
+
+      var content = children;
+      if (getContent) {
+        if (Array.isArray(getContent)) {
+          content = getContent[0] && getContent[0]();
+        } else {
+          content = getContent();
+        }
+      }
+
+      var placeholder = (0, _getTipContent2.default)(originTooltip, content, isMultiline);
 
       this.setState({
         placeholder: placeholder,
@@ -511,6 +522,17 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       }, function () {
         _this4.addScrollListener(e);
         _this4.updateTooltip(e);
+
+        if (getContent && Array.isArray(getContent)) {
+          _this4.intervalUpdateContent = setInterval(function () {
+            var getContent = _this4.props.getContent;
+
+            var placeholder = (0, _getTipContent2.default)(originTooltip, getContent[0](), isMultiline);
+            _this4.setState({
+              placeholder: placeholder
+            });
+          }, getContent[1]);
+        }
       });
     }
 
@@ -560,8 +582,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       if (!this.mount) return;
 
-      clearTimeout(this.delayShowLoop);
-      clearTimeout(this.delayHideLoop);
+      this.clearTimer();
       this.delayHideLoop = setTimeout(function () {
         _this6.setState({
           show: false
@@ -631,6 +652,18 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
         document.getElementsByTagName('head')[0].appendChild(tag);
       }
     }
+
+    /**
+     * CLear all kinds of timeout of interval
+     */
+
+  }, {
+    key: 'clearTimer',
+    value: function clearTimer() {
+      clearTimeout(this.delayShowLoop);
+      clearTimeout(this.delayHideLoop);
+      clearInterval(this.intervalUpdateContent);
+    }
   }, {
     key: 'render',
     value: function render() {
@@ -674,7 +707,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   eventOff: _react.PropTypes.string,
   watchWindow: _react.PropTypes.bool,
   isCapture: _react.PropTypes.bool,
-  globalEventOff: _react.PropTypes.string
+  globalEventOff: _react.PropTypes.string,
+  getContent: _react.PropTypes.any
 }, _temp)) || _class) || _class) || _class) || _class;
 
 /* export default not fit for standalone, it will exports {default:...} */
