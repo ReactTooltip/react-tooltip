@@ -38,7 +38,7 @@ class ReactTooltip extends Component {
     watchWindow: PropTypes.bool,
     isCapture: PropTypes.bool,
     globalEventOff: PropTypes.string,
-    getContent: PropTypes.func
+    getContent: PropTypes.any
   }
 
   constructor (props) {
@@ -64,6 +64,7 @@ class ReactTooltip extends Component {
     this.mount = true
     this.delayShowLoop = null
     this.delayHideLoop = null
+    this.intervalUpdateContent = null
   }
 
   componentDidMount () {
@@ -75,8 +76,7 @@ class ReactTooltip extends Component {
   componentWillUnmount () {
     this.mount = false
 
-    clearTimeout(this.delayShowLoop)
-    clearTimeout(this.delayHideLoop)
+    this.clearTimer()
 
     this.unbindListener()
     this.removeScrollListener()
@@ -170,11 +170,13 @@ class ReactTooltip extends Component {
     const originTooltip = e.currentTarget.getAttribute('data-tip')
     const isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false
 
-    let content
-    if (children) {
-      content = children
-    } else if (getContent) {
-      content = getContent()
+    let content = children
+    if (getContent) {
+      if (Array.isArray(getContent)) {
+        content = getContent[0] && getContent[0]()
+      } else {
+        content = getContent()
+      }
     }
 
     const placeholder = getTipContent(originTooltip, content, isMultiline)
@@ -193,6 +195,16 @@ class ReactTooltip extends Component {
     }, () => {
       this.addScrollListener(e)
       this.updateTooltip(e)
+
+      if (getContent && Array.isArray(getContent)) {
+        this.intervalUpdateContent = setInterval(() => {
+          const {getContent} = this.props
+          const placeholder = getTipContent(originTooltip, getContent[0](), isMultiline)
+          this.setState({
+            placeholder
+          })
+        }, getContent[1])
+      }
     })
   }
 
@@ -228,8 +240,7 @@ class ReactTooltip extends Component {
 
     if (!this.mount) return
 
-    clearTimeout(this.delayShowLoop)
-    clearTimeout(this.delayHideLoop)
+    this.clearTimer()
     this.delayHideLoop = setTimeout(() => {
       this.setState({
         show: false
@@ -280,6 +291,15 @@ class ReactTooltip extends Component {
       tag.innerHTML = cssStyle
       document.getElementsByTagName('head')[0].appendChild(tag)
     }
+  }
+
+  /**
+   * CLear all kinds of timeout of interval
+   */
+  clearTimer () {
+    clearTimeout(this.delayShowLoop)
+    clearTimeout(this.delayHideLoop)
+    clearInterval(this.intervalUpdateContent)
   }
 
   render () {
