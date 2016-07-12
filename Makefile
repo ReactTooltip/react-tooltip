@@ -1,4 +1,4 @@
-NODE_BIN 		 = node_modules/.bin
+NODE_BIN     = node_modules/.bin
 EXAMPLE_DIST = example/dist
 EXAMPLE_SRC  = example/src
 STANDALONE   = standalone
