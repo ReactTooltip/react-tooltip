@@ -91,7 +91,7 @@ const Test = React.createClass({
             <p className="sub-title">Use everything as tooltip</p>
 
             <div className="example-jsx">
-              <div className="side">
+              <div className="side"  style={{ transform: 'translate3d(5px, 5px, 5px)' }}>
                 <a data-tip data-for='happyFace'> d(`･∀･)b </a>
                 <ReactTooltip id='happyFace' type="error"><span>Show happy face</span></ReactTooltip>
               </div>
