@@ -1028,7 +1028,7 @@ var calculateOffset = function calculateOffset(offset) {
 
 // Get the offset of the parent elements
 var getParent = function getParent(currentTarget) {
-  var currentParent = currentTarget.parentElement;
+  var currentParent = currentTarget;
   while (currentParent) {
     if (currentParent.style.transform.length > 0) break;
     currentParent = currentParent.parentElement;
