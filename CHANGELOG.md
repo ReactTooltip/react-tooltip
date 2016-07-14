@@ -1,5 +1,8 @@
 ## Change Log
 
+### 3.0.11 (2016/07/14 06:57 +00:00)
+- [#135](https://github.com/wwayne/react-tooltip/pull/135) Transform 3d (@wwayne)
+
 ### 3.0.9 (2016/07/12 00:23 +00:00)
 - [#132](https://github.com/wwayne/react-tooltip/pull/132) Make getContent to support dynamical generate content while hover (@wwayne)
 - [#131](https://github.com/wwayne/react-tooltip/pull/131) Add possibility to recalculate content on show tooltip (@pokidovea)

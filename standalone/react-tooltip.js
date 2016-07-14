@@ -752,7 +752,13 @@ exports.default = function (e, target, node, place, effect, offset) {
   var windowWidth = window.innerWidth;
   var windowHeight = window.innerHeight;
 
+  var _getParent = getParent(target);
+
+  var parentTop = _getParent.parentTop;
+  var parentLeft = _getParent.parentLeft;
+
   // Get the edge offset of the tooltip
+
   var getTipOffsetLeft = function getTipOffsetLeft(place) {
     var offset_X = defaultOffset[place].l;
     return mouseX + offset_X + extraOffset_X;
@@ -889,8 +895,8 @@ exports.default = function (e, target, node, place, effect, offset) {
   return {
     isNewState: false,
     position: {
-      left: getTipOffsetLeft(place),
-      top: getTipOffsetTop(place)
+      left: getTipOffsetLeft(place) - parentLeft,
+      top: getTipOffsetTop(place) - parentTop
     }
   };
 };
@@ -938,8 +944,9 @@ var getDefaultPosition = function getDefaultPosition(effect, targetWidth, target
   var right = void 0;
   var bottom = void 0;
   var left = void 0;
-  var disToMouse = 8;
+  var disToMouse = 3;
   var triangleHeight = 2;
+  var cursorHeight = 12; // Optimize for float bottom only, cause the cursor will hide the tooltip
 
   if (effect === 'float') {
     top = {
@@ -951,8 +958,8 @@ var getDefaultPosition = function getDefaultPosition(effect, targetWidth, target
     bottom = {
       l: -(tipWidth / 2),
       r: tipWidth / 2,
-      t: disToMouse,
-      b: tipHeight + disToMouse + triangleHeight
+      t: disToMouse + cursorHeight,
+      b: tipHeight + disToMouse + triangleHeight + cursorHeight
     };
     left = {
       l: -(tipWidth + disToMouse + triangleHeight),
@@ -1017,6 +1024,20 @@ var calculateOffset = function calculateOffset(offset) {
   }
 
   return { extraOffset_X: extraOffset_X, extraOffset_Y: extraOffset_Y };
+};
+
+// Get the offset of the parent elements
+var getParent = function getParent(currentTarget) {
+  var currentParent = currentTarget.parentElement;
+  while (currentParent) {
+    if (currentParent.style.transform.length > 0) break;
+    currentParent = currentParent.parentElement;
+  }
+
+  var parentTop = currentParent && currentParent.getBoundingClientRect().top || 0;
+  var parentLeft = currentParent && currentParent.getBoundingClientRect().left || 0;
+
+  return { parentTop: parentTop, parentLeft: parentLeft };
 };
 
 },{}],10:[function(require,module,exports){
