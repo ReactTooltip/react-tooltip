@@ -4,7 +4,7 @@
 - [#136](https://github.com/wwayne/react-tooltip/pull/136) Check if current element is under transform (@CremAlex)
 - [#135](https://github.com/wwayne/react-tooltip/pull/135) Transform 3d (@wwayne)
 
-### 3.0.9 (2016/07/12 00:23 +00:00)
+### 3.0.10 (2016/07/12 00:28 +00:00)
 - [#132](https://github.com/wwayne/react-tooltip/pull/132) Make getContent to support dynamical generate content while hover (@wwayne)
 - [#131](https://github.com/wwayne/react-tooltip/pull/131) Add possibility to recalculate content on show tooltip (@pokidovea)
 - [#128](https://github.com/wwayne/react-tooltip/pull/128) Correct Typos in README.md (@gottsohn)
