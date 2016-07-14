@@ -1,6 +1,6 @@
 ## Change Log
 
-### 3.0.12 (2016/07/14 09:46 +00:00)
+### 3.0.13 (2016/07/14 09:53 +00:00)
 - [#136](https://github.com/wwayne/react-tooltip/pull/136) Check if current element is under transform (@CremAlex)
 - [#135](https://github.com/wwayne/react-tooltip/pull/135) Transform 3d (@wwayne)
 
