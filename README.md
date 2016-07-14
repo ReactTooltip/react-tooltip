@@ -79,6 +79,14 @@ Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
 I suggest always put `<ReactTooltip />` in the Highest level or smart component of Redux, so you might need these static
 method to control tooltip's behaviour in some situations
 
+## Trouble Shooting
+#### Using tooltip within the modal (e.g. [react-modal](https://github.com/reactjs/react-modal))
+The component was designed to set a `<Reactooltip />` one place then use tooltip everywhere, but a lot of people stuck in using this component with modal, you can check the discussion [here](https://github.com/wwayne/react-tooltip/issues/130), the summarization of solving the problem is as following:
+
+1. Put `<Reactootlip />` out of the `<Modal>`
+2. Use `React.rebuild()` when opening the modal
+3. If your modal's z-index happens to higher than the tooltip, use the attribute `class` to custom your tooltip's z-index
+
 ## Article
 [How I insert sass into react component](https://medium.com/@wwayne_me/how-i-insert-sass-into-my-npm-react-component-b46b9811c226#.gi4hxu44a)
 

@@ -24,6 +24,8 @@ export default function (e, target, node, place, effect, offset) {
   const windowWidth = window.innerWidth
   const windowHeight = window.innerHeight
 
+  const {parentTop, parentLeft} = getParent(target)
+
   // Get the edge offset of the tooltip
   const getTipOffsetLeft = (place) => {
     const offset_X = defaultOffset[place].l
@@ -153,8 +155,8 @@ export default function (e, target, node, place, effect, offset) {
   return {
     isNewState: false,
     position: {
-      left: getTipOffsetLeft(place),
-      top: getTipOffsetTop(place)
+      left: getTipOffsetLeft(place) - parentLeft,
+      top: getTipOffsetTop(place) - parentTop
     }
   }
 }
@@ -186,8 +188,9 @@ const getDefaultPosition = (effect, targetWidth, targetHeight, tipWidth, tipHeig
   let right
   let bottom
   let left
-  const disToMouse = 8
+  const disToMouse = 3
   const triangleHeight = 2
+  const cursorHeight = 12 // Optimize for float bottom only, cause the cursor will hide the tooltip
 
   if (effect === 'float') {
     top = {
@@ -199,8 +202,8 @@ const getDefaultPosition = (effect, targetWidth, targetHeight, tipWidth, tipHeig
     bottom = {
       l: -(tipWidth / 2),
       r: tipWidth / 2,
-      t: disToMouse,
-      b: tipHeight + disToMouse + triangleHeight
+      t: disToMouse + cursorHeight,
+      b: tipHeight + disToMouse + triangleHeight + cursorHeight
     }
     left = {
       l: -(tipWidth + disToMouse + triangleHeight),
@@ -265,4 +268,18 @@ const calculateOffset = (offset) => {
   }
 
   return {extraOffset_X, extraOffset_Y}
+}
+
+// Get the offset of the parent elements
+const getParent = (currentTarget) => {
+  let currentParent = currentTarget.parentElement
+  while (currentParent) {
+    if (currentParent.style.transform.length > 0) break
+    currentParent = currentParent.parentElement
+  }
+
+  const parentTop = currentParent && currentParent.getBoundingClientRect().top || 0
+  const parentLeft = currentParent && currentParent.getBoundingClientRect().left || 0
+
+  return {parentTop, parentLeft}
 }
