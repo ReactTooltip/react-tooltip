@@ -358,6 +358,10 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     _this.delayShowLoop = null;
     _this.delayHideLoop = null;
     _this.intervalUpdateContent = null;
+
+    _this.boundShowTooltip = _this.showTooltip.bind(_this);
+    _this.boundUpdateTooltip = _this.updateTooltip.bind(_this);
+    _this.boundHideTooltip = _this.hideTooltip.bind(_this);
     return _this;
   }
 
@@ -431,15 +435,14 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           return;
         }
 
-        target.removeEventListener('mouseenter', _this2.showTooltip);
-        target.addEventListener('mouseenter', _this2.showTooltip.bind(_this2), isCaptureMode);
-        if (_this2.state.effect === 'float') {
-          target.removeEventListener('mousemove', _this2.updateTooltip);
-          target.addEventListener('mousemove', _this2.updateTooltip.bind(_this2), isCaptureMode);
-        }
+        target.removeEventListener('mouseenter', _this2.boundShowTooltip);
+        target.addEventListener('mouseenter', _this2.boundShowTooltip, isCaptureMode);
 
-        target.removeEventListener('mouseleave', _this2.hideTooltip);
-        target.addEventListener('mouseleave', _this2.hideTooltip.bind(_this2), isCaptureMode);
+        target.removeEventListener('mousemove', _this2.boundUpdateTooltip);
+        target.addEventListener('mousemove', _this2.boundUpdateTooltip, isCaptureMode);
+
+        target.removeEventListener('mouseleave', _this2.boundHideTooltip);
+        target.addEventListener('mouseleave', _this2.boundHideTooltip, isCaptureMode);
       });
 
       // Global event to hide tooltip
@@ -470,12 +473,12 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           return;
         }
 
-        target.removeEventListener('mouseenter', _this3.showTooltip);
-        target.removeEventListener('mousemove', _this3.updateTooltip);
-        target.removeEventListener('mouseleave', _this3.hideTooltip);
+        target.removeEventListener('mouseenter', _this3.boundShowTooltip);
+        target.removeEventListener('mousemove', _this3.boundUpdateTooltip);
+        target.removeEventListener('mouseleave', _this3.boundHideTooltip);
       });
 
-      if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip);
+      if (globalEventOff) window.removeEventListener(globalEventOff, this.boundHideTooltip);
     }
 
     /**
@@ -545,6 +548,10 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     value: function updateTooltip(e) {
       var _this5 = this;
 
+      if (e.type === 'mousemove' && this.state.effect === 'solid') {
+        return;
+      }
+
       var _state = this.state;
       var delayShow = _state.delayShow;
       var show = _state.show;
@@ -600,12 +607,12 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     key: 'addScrollListener',
     value: function addScrollListener(e) {
       var isCaptureMode = this.isCapture(e.currentTarget);
-      window.addEventListener('scroll', this.hideTooltip.bind(this), isCaptureMode);
+      window.addEventListener('scroll', this.boundHideTooltip, isCaptureMode);
     }
   }, {
     key: 'removeScrollListener',
     value: function removeScrollListener() {
-      window.removeEventListener('scroll', this.hideTooltip);
+      window.removeEventListener('scroll', this.boundHideTooltip);
     }
 
     // Calculation the position
