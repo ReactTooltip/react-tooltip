@@ -65,6 +65,10 @@ class ReactTooltip extends Component {
     this.delayShowLoop = null
     this.delayHideLoop = null
     this.intervalUpdateContent = null
+
+    this.boundShowTooltip = ::this.showTooltip
+    this.boundUpdateTooltip = ::this.updateTooltip
+    this.boundHideTooltip = ::this.hideTooltip
   }
 
   componentDidMount () {
@@ -121,15 +125,14 @@ class ReactTooltip extends Component {
         return
       }
 
-      target.removeEventListener('mouseenter', this.showTooltip)
-      target.addEventListener('mouseenter', ::this.showTooltip, isCaptureMode)
-      if (this.state.effect === 'float') {
-        target.removeEventListener('mousemove', this.updateTooltip)
-        target.addEventListener('mousemove', ::this.updateTooltip, isCaptureMode)
-      }
+      target.removeEventListener('mouseenter', this.boundShowTooltip)
+      target.addEventListener('mouseenter', this.boundShowTooltip, isCaptureMode)
 
-      target.removeEventListener('mouseleave', this.hideTooltip)
-      target.addEventListener('mouseleave', ::this.hideTooltip, isCaptureMode)
+      target.removeEventListener('mousemove', this.boundUpdateTooltip)
+      target.addEventListener('mousemove', this.boundUpdateTooltip, isCaptureMode)
+
+      target.removeEventListener('mouseleave', this.boundHideTooltip)
+      target.addEventListener('mouseleave', this.boundHideTooltip, isCaptureMode)
     })
 
     // Global event to hide tooltip
@@ -152,12 +155,12 @@ class ReactTooltip extends Component {
         return
       }
 
-      target.removeEventListener('mouseenter', this.showTooltip)
-      target.removeEventListener('mousemove', this.updateTooltip)
-      target.removeEventListener('mouseleave', this.hideTooltip)
+      target.removeEventListener('mouseenter', this.boundShowTooltip)
+      target.removeEventListener('mousemove', this.boundUpdateTooltip)
+      target.removeEventListener('mouseleave', this.boundHideTooltip)
     })
 
-    if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip)
+    if (globalEventOff) window.removeEventListener(globalEventOff, this.boundHideTooltip)
   }
 
   /**
@@ -212,6 +215,10 @@ class ReactTooltip extends Component {
    * When mouse hover, updatetooltip
    */
   updateTooltip (e) {
+    if (e.type === 'mousemove' && this.state.effect === 'solid') {
+      return
+    }
+
     const {delayShow, show} = this.state
     let {placeholder} = this.state
     const delayTime = show ? 0 : parseInt(delayShow, 10)
@@ -255,11 +262,11 @@ class ReactTooltip extends Component {
    */
   addScrollListener (e) {
     const isCaptureMode = this.isCapture(e.currentTarget)
-    window.addEventListener('scroll', ::this.hideTooltip, isCaptureMode)
+    window.addEventListener('scroll', this.boundHideTooltip, isCaptureMode)
   }
 
   removeScrollListener () {
-    window.removeEventListener('scroll', this.hideTooltip)
+    window.removeEventListener('scroll', this.boundHideTooltip)
   }
 
   // Calculation the position
