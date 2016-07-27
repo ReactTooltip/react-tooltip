@@ -155,8 +155,8 @@ export default function (e, target, node, place, effect, offset) {
   return {
     isNewState: false,
     position: {
-      left: getTipOffsetLeft(place) - parentLeft,
-      top: getTipOffsetTop(place) - parentTop
+      left: parseInt(getTipOffsetLeft(place) - parentLeft, 10),
+      top: parseInt(getTipOffsetTop(place) - parentTop, 10)
     }
   }
 }
