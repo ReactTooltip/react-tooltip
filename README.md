@@ -62,6 +62,7 @@ class	|   data-class  |  String  |   | extra custom class, can use !important to
  delayShow	|   data-delay-show  |  Number  |   | `<p data-tip="tooltip" data-delay-show='1000'></p>` or `<ReactTooltip delayShow={1000} />`
  border  |   data-border  |  Bool  |  true, false | Add one pixel white border
  getContent | null | Func or Array | () => {}, [() => {}, Interval] | Generate the tip content dynamically
+ countTransform | data-count-transform | Bool | True, False | Tell tooltip if it needs to count parents' transform into position calculation, the default is true, but it should be set to false when using with react-list
 
 ## Using react component as tooltip
 Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
