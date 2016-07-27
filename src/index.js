@@ -202,7 +202,6 @@ class ReactTooltip extends Component {
 
     // If it is focus event, switch to `solid` effect
     const isFocus = e instanceof window.FocusEvent
-
     this.setState({
       placeholder,
       place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
@@ -246,8 +245,7 @@ class ReactTooltip extends Component {
     const delayTime = show ? 0 : parseInt(delayShow, 10)
     const eventTarget = e.currentTarget
 
-    clearTimeout(this.delayShowLoop)
-    this.delayShowLoop = setTimeout(() => {
+    const updateState = () => {
       if (typeof placeholder === 'string') placeholder = placeholder.trim()
       if (Array.isArray(placeholder) && placeholder.length > 0 || placeholder) {
         this.setState({
@@ -258,7 +256,14 @@ class ReactTooltip extends Component {
           this.updatePosition()
         })
       }
-    }, delayTime)
+    }
+
+    if (delayShow) {
+      clearTimeout(this.delayShowLoop)
+      this.delayShowLoop = setTimeout(updateState, delayTime)
+    } else {
+      updateState()
+    }
   }
 
   /**
@@ -269,14 +274,21 @@ class ReactTooltip extends Component {
 
     if (!this.mount) return
 
-    this.clearTimer()
-    this.delayHideLoop = setTimeout(() => {
+    const resetState = (resetPlace) => {
+      const newPlace = resetPlace ? '' : this.state.place
       this.setState({
         show: false,
-        place: ''
+        place: newPlace
       })
       this.removeScrollListener()
-    }, parseInt(delayHide, 10))
+    }
+
+    if (delayHide) {
+      this.clearTimer()
+      this.delayHideLoop = setTimeout(resetState, parseInt(delayHide, 10))
+    } else {
+      resetState(true)
+    }
   }
 
   /**
