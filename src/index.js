@@ -44,7 +44,7 @@ class ReactTooltip extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      place: 'top', // Direction of tooltip
+      place: '', // Direction of tooltip
       type: 'dark', // Color theme of tooltip
       effect: 'float', // float or fixed
       show: false,
@@ -199,8 +199,8 @@ class ReactTooltip extends Component {
     }
     const placeholder = getTipContent(originTooltip, content, isMultiline)
 
-    // If e is instance of FocusEvent, switch to `solid` effect
-    const isFocus = e instanceof FocusEvent
+    // If it is focus event, switch to `solid` effect
+    const isFocus = e instanceof window.FocusEvent
 
     this.setState({
       placeholder,
@@ -264,7 +264,8 @@ class ReactTooltip extends Component {
     this.clearTimer()
     this.delayHideLoop = setTimeout(() => {
       this.setState({
-        show: false
+        show: false,
+        place: ''
       })
       this.removeScrollListener()
     }, parseInt(delayHide, 10))
