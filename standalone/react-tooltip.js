@@ -532,7 +532,6 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       // If it is focus event, switch to `solid` effect
       var isFocus = e instanceof window.FocusEvent;
-
       this.setState({
         placeholder: placeholder,
         place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
@@ -579,8 +578,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var delayTime = show ? 0 : parseInt(delayShow, 10);
       var eventTarget = e.currentTarget;
 
-      clearTimeout(this.delayShowLoop);
-      this.delayShowLoop = setTimeout(function () {
+      var updateState = function updateState() {
         if (typeof placeholder === 'string') placeholder = placeholder.trim();
         if (Array.isArray(placeholder) && placeholder.length > 0 || placeholder) {
           _this6.setState({
@@ -591,7 +589,14 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
             _this6.updatePosition();
           });
         }
-      }, delayTime);
+      };
+
+      if (delayShow) {
+        clearTimeout(this.delayShowLoop);
+        this.delayShowLoop = setTimeout(updateState, delayTime);
+      } else {
+        updateState();
+      }
     }
 
     /**
@@ -608,14 +613,21 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       if (!this.mount) return;
 
-      this.clearTimer();
-      this.delayHideLoop = setTimeout(function () {
+      var resetState = function resetState(resetPlace) {
+        var newPlace = resetPlace ? '' : _this7.state.place;
         _this7.setState({
           show: false,
-          place: ''
+          place: newPlace
         });
         _this7.removeScrollListener();
-      }, parseInt(delayHide, 10));
+      };
+
+      if (delayHide) {
+        this.clearTimer();
+        this.delayHideLoop = setTimeout(resetState, parseInt(delayHide, 10));
+      } else {
+        resetState(true);
+      }
     }
 
     /**

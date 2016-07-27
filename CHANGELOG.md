@@ -1,5 +1,8 @@
 ## Change Log
 
+### 3.1.1 (2016/07/27 13:03 +00:00)
+- [#151](https://github.com/wwayne/react-tooltip/pull/151) Update postion calculation so that it can calculate continous tootlip (@wwayne)
+
 ### 3.1.0 (2016/07/27 08:49 +00:00)
 - [#149](https://github.com/wwayne/react-tooltip/pull/149) Update algorithm for get positon to fix the shake problem #146 (@wwayne)
 - [#145](https://github.com/wwayne/react-tooltip/pull/145) fix typo (@meandavejustice)
