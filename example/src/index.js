@@ -147,24 +147,24 @@ const Test = React.createClass({
 
         <section className="advance">
           <div className="section">
-            <h4 className='title'>Customer event</h4>
+            <h4 className='title'>Custom event</h4>
             <p className="sub-title"></p>
 
             <div className="example-jsx">
               <div className="side">
-                <a data-for='customer-event' data-tip='customer show' data-event='click focus'>( •̀д•́)</a>
-                <ReactTooltip id='customer-event' globalEventOff='click'/>
+                <a data-for='custom-event' data-tip='custom show' data-event='click focus'>( •̀д•́)</a>
+                <ReactTooltip id='custom-event' globalEventOff='click'/>
               </div>
 
               <div className="side">
-                <a data-for='customer-off-event' data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>
-                <ReactTooltip id='customer-off-event'/>
+                <a data-for='custom-off-event' data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>
+                <ReactTooltip id='custom-off-event'/>
               </div>
             </div>
             <br />
             <pre className='example-pre'>
               <div>
-                <p>{"<a data-tip='customer show' data-event='click focus'>( •̀д•́)</a>\n" +
+                <p>{"<a data-tip='custom show' data-event='click focus'>( •̀д•́)</a>\n" +
                 "<ReactTooltip globalEventOff='click' />"}</p>
               </div>
               <div>
@@ -180,13 +180,13 @@ const Test = React.createClass({
 
             <div className="example-jsx">
               <div className="side">
-                <a data-for='customer-class' data-tip='hover on me will keep the tootlip'>(･ω´･ )</a>
-                <ReactTooltip id='customer-class' class='extraClass' delayHide={1000} effect='solid'/>
+                <a data-for='custom-class' data-tip='hover on me will keep the tootlip'>(･ω´･ )</a>
+                <ReactTooltip id='custom-class' class='extraClass' delayHide={1000} effect='solid'/>
               </div>
 
               <div className="side">
-                <a data-for='customer-theme' data-tip='custom theme'>(･ω´･ )</a>
-                <ReactTooltip id='customer-theme' class='customeTheme'/>
+                <a data-for='custom-theme' data-tip='custom theme'>(･ω´･ )</a>
+                <ReactTooltip id='custom-theme' class='customeTheme'/>
               </div>
             </div>
             <br />

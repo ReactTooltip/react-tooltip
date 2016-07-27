@@ -38,7 +38,8 @@ class ReactTooltip extends Component {
     watchWindow: PropTypes.bool,
     isCapture: PropTypes.bool,
     globalEventOff: PropTypes.string,
-    getContent: PropTypes.any
+    getContent: PropTypes.any,
+    countTransform: PropTypes.bool
   }
 
   constructor (props) {
@@ -208,11 +209,18 @@ class ReactTooltip extends Component {
       type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
       effect: isFocus && 'solid' || e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
       offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
-      html: e.currentTarget.getAttribute('data-html') === 'true' || this.props.html || false,
+      html: e.currentTarget.getAttribute('data-html')
+        ? e.currentTarget.getAttribute('data-html') === 'true'
+        : (this.props.html || false),
       delayShow: e.currentTarget.getAttribute('data-delay-show') || this.props.delayShow || 0,
       delayHide: e.currentTarget.getAttribute('data-delay-hide') || this.props.delayHide || 0,
-      border: e.currentTarget.getAttribute('data-border') === 'true' || this.props.border || false,
-      extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || ''
+      border: e.currentTarget.getAttribute('data-border')
+        ? e.currentTarget.getAttribute('data-border') === 'true'
+        : (this.props.border || false),
+      extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || '',
+      countTransform: e.currentTarget.getAttribute('data-count-transform')
+        ? e.currentTarget.getAttribute('data-count-transform') === 'true'
+        : (this.props.countTransform != null ? this.props.countTransform : true)
     }, () => {
       this.addScrollListener(e)
       this.updateTooltip(e)
@@ -286,10 +294,10 @@ class ReactTooltip extends Component {
 
   // Calculation the position
   updatePosition () {
-    const {currentEvent, currentTarget, place, effect, offset} = this.state
+    const {currentEvent, currentTarget, place, effect, offset, countTransform} = this.state
     const node = ReactDOM.findDOMNode(this)
 
-    const result = getPosition(currentEvent, currentTarget, node, place, effect, offset)
+    const result = getPosition(currentEvent, currentTarget, node, place, effect, offset, countTransform)
 
     if (result.isNewState) {
       // Switch to reverse placement
