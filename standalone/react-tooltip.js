@@ -74,7 +74,7 @@ exports.default = function (target) {
   target.prototype.isCustomEvent = function (ele) {
     var event = this.state.event;
 
-    return event || ele.getAttribute('data-event');
+    return event || !!ele.getAttribute('data-event');
   };
 
   /* Bind listener for custom event */
@@ -89,13 +89,14 @@ exports.default = function (target) {
     var dataEventOff = ele.getAttribute('data-event-off') || eventOff;
 
     dataEvent.split(' ').forEach(function (event) {
-      ele.removeEventListener(event, checkStatus);
-      ele.addEventListener(event, checkStatus.bind(_this, dataEventOff), false);
+      ele.removeEventListener(event, customListener);
+      customListener = checkStatus.bind(_this, dataEventOff);
+      ele.addEventListener(event, customListener, false);
     });
     if (dataEventOff) {
       dataEventOff.split(' ').forEach(function (event) {
         ele.removeEventListener(event, _this.hideTooltip);
-        ele.addEventListener(event, _this.hideTooltip.bind(_this), false);
+        ele.addEventListener(event, _this.hideTooltip, false);
       });
     }
   };
@@ -109,7 +110,7 @@ exports.default = function (target) {
     var dataEvent = event || ele.getAttribute('data-event');
     var dataEventOff = eventOff || ele.getAttribute('data-event-off');
 
-    ele.removeEventListener(dataEvent, checkStatus);
+    ele.removeEventListener(dataEvent, customListener);
     if (dataEventOff) ele.removeEventListener(dataEventOff, this.hideTooltip);
   };
 };
@@ -149,6 +150,8 @@ var setUntargetItems = function setUntargetItems(currentTarget, targetArray) {
     }
   }
 };
+
+var customListener = void 0;
 
 },{}],4:[function(require,module,exports){
 'use strict';
@@ -230,21 +233,20 @@ exports.default = function (target) {
   target.prototype.bindWindowEvents = function () {
     // ReactTooltip.hide
     window.removeEventListener(_constant2.default.GLOBAL.HIDE, this.hideTooltip);
-    window.addEventListener(_constant2.default.GLOBAL.HIDE, this.hideTooltip.bind(this), false);
+    window.addEventListener(_constant2.default.GLOBAL.HIDE, this.hideTooltip, false);
 
     // ReactTooltip.rebuild
     window.removeEventListener(_constant2.default.GLOBAL.REBUILD, this.globalRebuild);
-    window.addEventListener(_constant2.default.GLOBAL.REBUILD, this.globalRebuild.bind(this), false);
+    window.addEventListener(_constant2.default.GLOBAL.REBUILD, this.globalRebuild, false);
 
     // Resize
     window.removeEventListener('resize', this.onWindowResize);
-    window.addEventListener('resize', this.onWindowResize.bind(this), false);
+    window.addEventListener('resize', this.onWindowResize, false);
   };
 
   target.prototype.unbindWindowEvents = function () {
     window.removeEventListener(_constant2.default.GLOBAL.HIDE, this.hideTooltip);
     window.removeEventListener(_constant2.default.GLOBAL.REBUILD, this.globalRebuild);
-    window.removeEventListener(_constant2.default.GLOBAL.REBUILD, this.globalShow);
     window.removeEventListener('resize', this.onWindowResize);
   };
 
@@ -337,7 +339,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactTooltip).call(this, props));
 
     _this.state = {
-      place: 'top', // Direction of tooltip
+      place: '', // Direction of tooltip
       type: 'dark', // Color theme of tooltip
       effect: 'float', // float or fixed
       show: false,
@@ -354,6 +356,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       currentTarget: null // Current target of mouse event
     };
 
+    _this.bind(['showTooltip', 'updateTooltip', 'hideTooltip', 'globalRebuild', 'onWindowResize']);
+
     _this.mount = true;
     _this.delayShowLoop = null;
     _this.delayHideLoop = null;
@@ -361,7 +365,21 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     return _this;
   }
 
+  /**
+   * For unify the bind and unbind listener
+   */
+
+
   _createClass(ReactTooltip, [{
+    key: 'bind',
+    value: function bind(methodArray) {
+      var _this2 = this;
+
+      methodArray.forEach(function (method) {
+        _this2[method] = _this2[method].bind(_this2);
+      });
+    }
+  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       this.setStyleHeader(); // Set the style to the <link>
@@ -412,7 +430,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'bindListener',
     value: function bindListener() {
-      var _this2 = this;
+      var _this3 = this;
 
       var _props = this.props;
       var id = _props.id;
@@ -421,31 +439,28 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var targetArray = this.getTargetArray(id);
 
       targetArray.forEach(function (target) {
-        var isCaptureMode = _this2.isCapture(target);
+        var isCaptureMode = _this3.isCapture(target);
         if (target.getAttribute('currentItem') === null) {
           target.setAttribute('currentItem', 'false');
         }
+        _this3.unbindBasicListener(target);
 
-        if (_this2.isCustomEvent(target)) {
-          _this2.customBindListener(target);
+        if (_this3.isCustomEvent(target)) {
+          _this3.customBindListener(target);
           return;
         }
 
-        target.removeEventListener('mouseenter', _this2.showTooltip);
-        target.addEventListener('mouseenter', _this2.showTooltip.bind(_this2), isCaptureMode);
-        if (_this2.state.effect === 'float') {
-          target.removeEventListener('mousemove', _this2.updateTooltip);
-          target.addEventListener('mousemove', _this2.updateTooltip.bind(_this2), isCaptureMode);
+        target.addEventListener('mouseenter', _this3.showTooltip, isCaptureMode);
+        if (_this3.state.effect === 'float') {
+          target.addEventListener('mousemove', _this3.updateTooltip, isCaptureMode);
         }
-
-        target.removeEventListener('mouseleave', _this2.hideTooltip);
-        target.addEventListener('mouseleave', _this2.hideTooltip.bind(_this2), isCaptureMode);
+        target.addEventListener('mouseleave', _this3.hideTooltip, isCaptureMode);
       });
 
       // Global event to hide tooltip
       if (globalEventOff) {
         window.removeEventListener(globalEventOff, this.hideTooltip);
-        window.addEventListener(globalEventOff, this.hideTooltip.bind(this), false);
+        window.addEventListener(globalEventOff, this.hideTooltip, false);
       }
     }
 
@@ -456,26 +471,33 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'unbindListener',
     value: function unbindListener() {
-      var _this3 = this;
+      var _this4 = this;
 
       var _props2 = this.props;
       var id = _props2.id;
       var globalEventOff = _props2.globalEventOff;
 
       var targetArray = this.getTargetArray(id);
-
       targetArray.forEach(function (target) {
-        if (_this3.isCustomEvent(target)) {
-          _this3.customUnbindListener(target);
-          return;
-        }
-
-        target.removeEventListener('mouseenter', _this3.showTooltip);
-        target.removeEventListener('mousemove', _this3.updateTooltip);
-        target.removeEventListener('mouseleave', _this3.hideTooltip);
+        _this4.unbindBasicListener(target);
+        if (_this4.isCustomEvent(target)) _this4.customUnbindListener(target);
       });
 
       if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip);
+    }
+
+    /**
+     * Invoke this before bind listener and ummount the compont
+     * it is necessary to invloke this even when binding custom event
+     * so that the tooltip can switch between custom and default listener
+     */
+
+  }, {
+    key: 'unbindBasicListener',
+    value: function unbindBasicListener(target) {
+      target.removeEventListener('mouseenter', this.showTooltip);
+      target.removeEventListener('mousemove', this.updateTooltip);
+      target.removeEventListener('mouseleave', this.hideTooltip);
     }
 
     /**
@@ -485,7 +507,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'showTooltip',
     value: function showTooltip(e) {
-      var _this4 = this;
+      var _this5 = this;
 
       // Get the tooltip content
       // calculate in this phrase so that tip width height can be detected
@@ -497,6 +519,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var originTooltip = e.currentTarget.getAttribute('data-tip');
       var isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false;
 
+      // Generate tootlip content
       var content = children;
       if (getContent) {
         if (Array.isArray(getContent)) {
@@ -505,30 +528,33 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           content = getContent();
         }
       }
-
       var placeholder = (0, _getTipContent2.default)(originTooltip, content, isMultiline);
+
+      // If it is focus event, switch to `solid` effect
+      var isFocus = e instanceof window.FocusEvent;
 
       this.setState({
         placeholder: placeholder,
         place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
         type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
-        effect: e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
+        effect: isFocus && 'solid' || e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
         offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
-        html: e.currentTarget.getAttribute('data-html') === 'true' || this.props.html || false,
+        html: e.currentTarget.getAttribute('data-html') ? e.currentTarget.getAttribute('data-html') === 'true' : this.props.html || false,
         delayShow: e.currentTarget.getAttribute('data-delay-show') || this.props.delayShow || 0,
         delayHide: e.currentTarget.getAttribute('data-delay-hide') || this.props.delayHide || 0,
-        border: e.currentTarget.getAttribute('data-border') === 'true' || this.props.border || false,
-        extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || ''
+        border: e.currentTarget.getAttribute('data-border') ? e.currentTarget.getAttribute('data-border') === 'true' : this.props.border || false,
+        extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || '',
+        countTransform: e.currentTarget.getAttribute('data-count-transform') ? e.currentTarget.getAttribute('data-count-transform') === 'true' : this.props.countTransform != null ? this.props.countTransform : true
       }, function () {
-        _this4.addScrollListener(e);
-        _this4.updateTooltip(e);
+        _this5.addScrollListener(e);
+        _this5.updateTooltip(e);
 
         if (getContent && Array.isArray(getContent)) {
-          _this4.intervalUpdateContent = setInterval(function () {
-            var getContent = _this4.props.getContent;
+          _this5.intervalUpdateContent = setInterval(function () {
+            var getContent = _this5.props.getContent;
 
             var placeholder = (0, _getTipContent2.default)(originTooltip, getContent[0](), isMultiline);
-            _this4.setState({
+            _this5.setState({
               placeholder: placeholder
             });
           }, getContent[1]);
@@ -543,7 +569,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'updateTooltip',
     value: function updateTooltip(e) {
-      var _this5 = this;
+      var _this6 = this;
 
       var _state = this.state;
       var delayShow = _state.delayShow;
@@ -557,12 +583,12 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       this.delayShowLoop = setTimeout(function () {
         if (typeof placeholder === 'string') placeholder = placeholder.trim();
         if (Array.isArray(placeholder) && placeholder.length > 0 || placeholder) {
-          _this5.setState({
+          _this6.setState({
             currentEvent: e,
             currentTarget: eventTarget,
             show: true
           }, function () {
-            _this5.updatePosition();
+            _this6.updatePosition();
           });
         }
       }, delayTime);
@@ -575,7 +601,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'hideTooltip',
     value: function hideTooltip() {
-      var _this6 = this;
+      var _this7 = this;
 
       var delayHide = this.state.delayHide;
 
@@ -584,10 +610,11 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       this.clearTimer();
       this.delayHideLoop = setTimeout(function () {
-        _this6.setState({
-          show: false
+        _this7.setState({
+          show: false,
+          place: ''
         });
-        _this6.removeScrollListener();
+        _this7.removeScrollListener();
       }, parseInt(delayHide, 10));
     }
 
@@ -600,7 +627,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     key: 'addScrollListener',
     value: function addScrollListener(e) {
       var isCaptureMode = this.isCapture(e.currentTarget);
-      window.addEventListener('scroll', this.hideTooltip.bind(this), isCaptureMode);
+      window.addEventListener('scroll', this.hideTooltip, isCaptureMode);
     }
   }, {
     key: 'removeScrollListener',
@@ -613,7 +640,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'updatePosition',
     value: function updatePosition() {
-      var _this7 = this;
+      var _this8 = this;
 
       var _state2 = this.state;
       var currentEvent = _state2.currentEvent;
@@ -621,15 +648,16 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var place = _state2.place;
       var effect = _state2.effect;
       var offset = _state2.offset;
+      var countTransform = _state2.countTransform;
 
       var node = _reactDom2.default.findDOMNode(this);
 
-      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset);
+      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset, countTransform);
 
       if (result.isNewState) {
         // Switch to reverse placement
         return this.setState(result.newState, function () {
-          _this7.updatePosition();
+          _this8.updatePosition();
         });
       }
       // Set tooltip position
@@ -708,7 +736,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   watchWindow: _react.PropTypes.bool,
   isCapture: _react.PropTypes.bool,
   globalEventOff: _react.PropTypes.string,
-  getContent: _react.PropTypes.any
+  getContent: _react.PropTypes.any,
+  countTransform: _react.PropTypes.bool
 }, _temp)) || _class) || _class) || _class) || _class;
 
 /* export default not fit for standalone, it will exports {default:...} */
@@ -732,7 +761,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-exports.default = function (e, target, node, place, effect, offset) {
+exports.default = function (e, target, node, place, effect, offset, countTransform) {
   var tipWidth = node.clientWidth;
   var tipHeight = node.clientHeight;
 
@@ -752,10 +781,10 @@ exports.default = function (e, target, node, place, effect, offset) {
   var windowWidth = window.innerWidth;
   var windowHeight = window.innerHeight;
 
-  var _getParent = getParent(target);
+  var _ref = countTransform && getParent(target, countTransform) || { parentTop: 0, parentLeft: 0 };
 
-  var parentTop = _getParent.parentTop;
-  var parentLeft = _getParent.parentLeft;
+  var parentTop = _ref.parentTop;
+  var parentLeft = _ref.parentLeft;
 
   // Get the edge offset of the tooltip
 
@@ -895,8 +924,8 @@ exports.default = function (e, target, node, place, effect, offset) {
   return {
     isNewState: false,
     position: {
-      left: getTipOffsetLeft(place) - parentLeft,
-      top: getTipOffsetTop(place) - parentTop
+      left: parseInt(getTipOffsetLeft(place) - parentLeft, 10),
+      top: parseInt(getTipOffsetTop(place) - parentTop, 10)
     }
   };
 };

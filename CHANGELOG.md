@@ -1,5 +1,9 @@
 ## Change Log
 
+### 3.1.0 (2016/07/27 08:49 +00:00)
+- [#149](https://github.com/wwayne/react-tooltip/pull/149) Update algorithm for get positon to fix the shake problem #146 (@wwayne)
+- [#145](https://github.com/wwayne/react-tooltip/pull/145) fix typo (@meandavejustice)
+
 ### 3.0.13 (2016/07/14 09:53 +00:00)
 - [#136](https://github.com/wwayne/react-tooltip/pull/136) Check if current element is under transform (@CremAlex)
 - [#135](https://github.com/wwayne/react-tooltip/pull/135) Transform 3d (@wwayne)
