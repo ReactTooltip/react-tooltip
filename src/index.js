@@ -61,10 +61,27 @@ class ReactTooltip extends Component {
       currentTarget: null // Current target of mouse event
     }
 
+    this.bind([
+      'showTooltip',
+      'updateTooltip',
+      'hideTooltip',
+      'globalRebuild',
+      'onWindowResize'
+    ])
+
     this.mount = true
     this.delayShowLoop = null
     this.delayHideLoop = null
     this.intervalUpdateContent = null
+  }
+
+  /**
+   * For unify the bind and unbind listener
+   */
+  bind (methodArray) {
+    methodArray.forEach(method => {
+      this[method] = this[method].bind(this)
+    })
   }
 
   componentDidMount () {
@@ -115,27 +132,24 @@ class ReactTooltip extends Component {
       if (target.getAttribute('currentItem') === null) {
         target.setAttribute('currentItem', 'false')
       }
+      this.unbindBasicListener(target)
 
       if (this.isCustomEvent(target)) {
         this.customBindListener(target)
         return
       }
 
-      target.removeEventListener('mouseenter', this.showTooltip)
-      target.addEventListener('mouseenter', ::this.showTooltip, isCaptureMode)
+      target.addEventListener('mouseenter', this.showTooltip, isCaptureMode)
       if (this.state.effect === 'float') {
-        target.removeEventListener('mousemove', this.updateTooltip)
-        target.addEventListener('mousemove', ::this.updateTooltip, isCaptureMode)
+        target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
       }
-
-      target.removeEventListener('mouseleave', this.hideTooltip)
-      target.addEventListener('mouseleave', ::this.hideTooltip, isCaptureMode)
+      target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
     })
 
     // Global event to hide tooltip
     if (globalEventOff) {
       window.removeEventListener(globalEventOff, this.hideTooltip)
-      window.addEventListener(globalEventOff, ::this.hideTooltip, false)
+      window.addEventListener(globalEventOff, this.hideTooltip, false)
     }
   }
 
@@ -145,19 +159,23 @@ class ReactTooltip extends Component {
   unbindListener () {
     const {id, globalEventOff} = this.props
     const targetArray = this.getTargetArray(id)
-
     targetArray.forEach(target => {
-      if (this.isCustomEvent(target)) {
-        this.customUnbindListener(target)
-        return
-      }
-
-      target.removeEventListener('mouseenter', this.showTooltip)
-      target.removeEventListener('mousemove', this.updateTooltip)
-      target.removeEventListener('mouseleave', this.hideTooltip)
+      this.unbindBasicListener(target)
+      if (this.isCustomEvent(target)) this.customUnbindListener(target)
     })
 
     if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip)
+  }
+
+  /**
+   * Invoke this before bind listener and ummount the compont
+   * it is necessary to invloke this even when binding custom event
+   * so that the tooltip can switch between custom and default listener
+   */
+  unbindBasicListener (target) {
+    target.removeEventListener('mouseenter', this.showTooltip)
+    target.removeEventListener('mousemove', this.updateTooltip)
+    target.removeEventListener('mouseleave', this.hideTooltip)
   }
 
   /**
@@ -170,6 +188,7 @@ class ReactTooltip extends Component {
     const originTooltip = e.currentTarget.getAttribute('data-tip')
     const isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false
 
+    // Generate tootlip content
     let content = children
     if (getContent) {
       if (Array.isArray(getContent)) {
@@ -178,14 +197,16 @@ class ReactTooltip extends Component {
         content = getContent()
       }
     }
-
     const placeholder = getTipContent(originTooltip, content, isMultiline)
+
+    // If e is instance of FocusEvent, switch to `solid` effect
+    const isFocus = e instanceof FocusEvent
 
     this.setState({
       placeholder,
       place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
       type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
-      effect: e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
+      effect: isFocus && 'solid' || e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
       offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
       html: e.currentTarget.getAttribute('data-html') === 'true' || this.props.html || false,
       delayShow: e.currentTarget.getAttribute('data-delay-show') || this.props.delayShow || 0,
@@ -255,7 +276,7 @@ class ReactTooltip extends Component {
    */
   addScrollListener (e) {
     const isCaptureMode = this.isCapture(e.currentTarget)
-    window.addEventListener('scroll', ::this.hideTooltip, isCaptureMode)
+    window.addEventListener('scroll', this.hideTooltip, isCaptureMode)
   }
 
   removeScrollListener () {
