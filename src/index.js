@@ -45,7 +45,7 @@ class ReactTooltip extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      place: '', // Direction of tooltip
+      place: 'top', // Direction of tooltip
       type: 'dark', // Color theme of tooltip
       effect: 'float', // float or fixed
       show: false,
@@ -275,10 +275,8 @@ class ReactTooltip extends Component {
     if (!this.mount) return
 
     const resetState = (resetPlace) => {
-      const newPlace = resetPlace ? '' : this.state.place
       this.setState({
-        show: false,
-        place: newPlace
+        show: false
       })
       this.removeScrollListener()
     }
