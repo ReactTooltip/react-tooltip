@@ -1,5 +1,8 @@
 ## Change Log
 
+### 3.1.2 (2016/07/30 01:38 +00:00)
+- [#162](https://github.com/wwayne/react-tooltip/pull/162) Fix for #158, getposition error (@wwayne)
+
 ### 3.1.1 (2016/07/27 13:03 +00:00)
 - [#151](https://github.com/wwayne/react-tooltip/pull/151) Update postion calculation so that it can calculate continous tootlip (@wwayne)
 
