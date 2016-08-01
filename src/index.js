@@ -258,8 +258,8 @@ class ReactTooltip extends Component {
       }
     }
 
+    this.clearTimer()
     if (delayShow) {
-      clearTimeout(this.delayShowLoop)
       this.delayShowLoop = setTimeout(updateState, delayTime)
     } else {
       updateState()
@@ -274,18 +274,18 @@ class ReactTooltip extends Component {
 
     if (!this.mount) return
 
-    const resetState = (resetPlace) => {
+    const resetState = () => {
       this.setState({
         show: false
       })
       this.removeScrollListener()
     }
 
+    this.clearTimer()
     if (delayHide) {
-      this.clearTimer()
       this.delayHideLoop = setTimeout(resetState, parseInt(delayHide, 10))
     } else {
-      resetState(true)
+      resetState()
     }
   }
 
