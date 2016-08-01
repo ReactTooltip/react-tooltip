@@ -591,8 +591,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
         }
       };
 
+      this.clearTimer();
       if (delayShow) {
-        clearTimeout(this.delayShowLoop);
         this.delayShowLoop = setTimeout(updateState, delayTime);
       } else {
         updateState();
@@ -613,18 +613,18 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       if (!this.mount) return;
 
-      var resetState = function resetState(resetPlace) {
+      var resetState = function resetState() {
         _this7.setState({
           show: false
         });
         _this7.removeScrollListener();
       };
 
+      this.clearTimer();
       if (delayHide) {
-        this.clearTimer();
         this.delayHideLoop = setTimeout(resetState, parseInt(delayHide, 10));
       } else {
-        resetState(true);
+        resetState();
       }
     }
 

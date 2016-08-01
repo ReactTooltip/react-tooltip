@@ -1,5 +1,8 @@
 ## Change Log
 
+### 3.1.3 (2016/08/01 23:53 +00:00)
+- [#164](https://github.com/wwayne/react-tooltip/pull/164) Fix for delayShwo #163 (@wwayne)
+
 ### 3.1.2 (2016/07/30 01:38 +00:00)
 - [#162](https://github.com/wwayne/react-tooltip/pull/162) Fix for #158, getposition error (@wwayne)
 
