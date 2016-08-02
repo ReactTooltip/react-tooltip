@@ -39,7 +39,9 @@ class ReactTooltip extends Component {
     isCapture: PropTypes.bool,
     globalEventOff: PropTypes.string,
     getContent: PropTypes.any,
-    countTransform: PropTypes.bool
+    countTransform: PropTypes.bool,
+    onShowCall: PropTypes.func,
+    onHideCall: PropTypes.func
   }
 
   constructor (props) {
@@ -184,7 +186,7 @@ class ReactTooltip extends Component {
    */
   showTooltip (e) {
     if (this.props.onShowCall) {
-      this.props.onShowCall();
+      this.props.onShowCall()
     }
     // Get the tooltip content
     // calculate in this phrase so that tip width height can be detected
@@ -274,7 +276,7 @@ class ReactTooltip extends Component {
    */
   hideTooltip () {
     if (this.props.onHideCall) {
-      this.props.onHideCall();
+      this.props.onHideCall()
     }
     const {delayHide} = this.state
 
