@@ -183,7 +183,7 @@ class ReactTooltip extends Component {
    * When mouse enter, show the tooltip
    */
   showTooltip (e) {
-    if(this.props.onShowCall){
+    if (this.props.onShowCall) {
       this.props.onShowCall();
     }
     // Get the tooltip content
@@ -273,8 +273,7 @@ class ReactTooltip extends Component {
    * When mouse leave, hide tooltip
    */
   hideTooltip () {
-
-    if(this.props.onHideCall){
+    if (this.props.onHideCall) {
       this.props.onHideCall();
     }
     const {delayHide} = this.state

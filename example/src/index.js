@@ -40,10 +40,10 @@ const Test = React.createClass({
   },
 
   onShow(){
-    console.log("get's called when it is shown");
+    // console.log("get's called when it is shown");
   },
   onHide(){
-    console.log("get's called when hidden");
+    // console.log("get's called when hidden");
   },
 
   render () {
