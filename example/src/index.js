@@ -39,12 +39,19 @@ const Test = React.createClass({
     })
   },
 
+  onShow(){
+    console.log("get's called when it is shown");
+  },
+  onHide(){
+    console.log("get's called when hidden");
+  },
+
   render () {
     let { place, type, effect } = this.state
     return (
       <div>
         <section className='tooltip-example'>
-          <h4 className='title'>React Tooltip</h4>
+          <h4 className='title'>React Tooltip Nora Wiii</h4>
           <div className='demonstration'>
             <a data-for='main' data-tip="Hello<br />multiline<br />tooltip">
                ◕‿‿◕
@@ -83,7 +90,7 @@ const Test = React.createClass({
               </div>
             </pre>
           </div>
-          <ReactTooltip id='main' place={place} type={type} effect={effect} multiline={true}/>
+          <ReactTooltip id='main' place={place} type={type} effect={effect} onHideCall={this.onHide} onShowCall={this.onShow} multiline={true}/>
         </section>
         <section className="advance">
           <div className="section">
