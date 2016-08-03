@@ -251,6 +251,24 @@ const Test = React.createClass({
               </div>
             </pre>
           </div>
+          <div className="section">
+            <h4 className='title'>Triger tooltip open/closing with click</h4>
+            <div className="example-jsx">
+              <div className="side">
+                <a data-for='onclick' data-tip="Hello">
+                   (O__O)
+                </a>
+                <ReactTooltip id='onclick' place={place} type={type} effect={effect} onClickStayOpen={true}/>
+              </div>
+            </div>
+            <br />
+            <pre className='example-pre'>
+              <div>
+                <p>{"<a data-for='getContent' data-tip>=( O__O)</a>\n" +
+                "<ReactTooltip id='onclick' place={place} type={type} effect={effect} \n  onClickStayOpen={true}"}</p>
+              </div>
+            </pre>
+          </div>
         </section>
       </div>
     )
