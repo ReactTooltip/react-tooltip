@@ -152,8 +152,7 @@ class ReactTooltip extends Component {
         return
       }
 
-      //the user decides to open and close tooltip upon click.
-      
+      // the user decides to open and close tooltip upon click.
       if (this.props.onClickStayOpen) {
         target.addEventListener('click', this.clicked.bind(this), isCaptureMode)
       }
