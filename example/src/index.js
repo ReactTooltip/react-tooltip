@@ -260,7 +260,7 @@ const Test = React.createClass({
             </pre>
           </div>
           <div className="section">
-            <h4 className='title'>Callback functions for when mouse hovers on and off tooltip</h4>
+            <h4 className='title'>Hover callback functions</h4>
             <p className="sub-title">Function logs in the console</p>
             <div className="example-jsx">
               <div className="side">
