@@ -39,7 +39,8 @@ class ReactTooltip extends Component {
     isCapture: PropTypes.bool,
     globalEventOff: PropTypes.string,
     getContent: PropTypes.any,
-    countTransform: PropTypes.bool
+    countTransform: PropTypes.bool,
+    onClickStayOpen: PropTypes.bool
   }
 
   constructor (props) {
@@ -120,10 +121,19 @@ class ReactTooltip extends Component {
     })
   }
 
+  clicked (e) {
+    if (this.state.show) {
+      this.hideTooltip(e)
+    } else {
+      this.showTooltip(e)
+    }
+  }
+
   /**
    * Bind listener to the target elements
    * These listeners used to trigger showing or hiding the tooltip
    */
+
   bindListener () {
     const {id, globalEventOff} = this.props
     let targetArray = this.getTargetArray(id)
@@ -133,18 +143,23 @@ class ReactTooltip extends Component {
       if (target.getAttribute('currentItem') === null) {
         target.setAttribute('currentItem', 'false')
       }
+
       this.unbindBasicListener(target)
 
       if (this.isCustomEvent(target)) {
         this.customBindListener(target)
         return
       }
-
-      target.addEventListener('mouseenter', this.showTooltip, isCaptureMode)
-      if (this.state.effect === 'float') {
-        target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
+      
+      if (this.props.onClickStayOpen) {
+        target.addEventListener('click', this.clicked.bind(this), isCaptureMode)
+      } else {
+        target.addEventListener('mouseenter', this.showTooltip, isCaptureMode)
+        if (this.state.effect === 'float') {
+          target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
+        }
+        target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
       }
-      target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
     })
 
     // Global event to hide tooltip
