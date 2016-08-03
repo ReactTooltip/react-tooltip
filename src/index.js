@@ -153,6 +153,7 @@ class ReactTooltip extends Component {
       }
 
       //the user decides to open and close tooltip upon click.
+      
       if (this.props.onClickStayOpen) {
         target.addEventListener('click', this.clicked.bind(this), isCaptureMode)
       }
@@ -161,7 +162,7 @@ class ReactTooltip extends Component {
         if (this.state.effect === 'float') {
           target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
         }
-        target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)        
+        target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)  
       }
     })
 
