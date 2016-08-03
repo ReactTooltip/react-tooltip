@@ -141,7 +141,6 @@ class ReactTooltip extends Component {
 
     targetArray.forEach(target => {
       const isCaptureMode = this.isCapture(target)
-      
       if (target.getAttribute('currentItem') === null) {
         target.setAttribute('currentItem', 'false')
       }
