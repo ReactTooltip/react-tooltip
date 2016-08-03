@@ -1,5 +1,9 @@
 ## Change Log
 
+### 3.1.4 (2016/08/03 13:52 +00:00)
+- [#173](https://github.com/wwayne/react-tooltip/pull/173) Add new attribute afterShow and afterHide (@wwayne)
+- [#172](https://github.com/wwayne/react-tooltip/pull/172) Add support for aria- and role props #159 (@wwayne)
+
 ### 3.1.3 (2016/08/01 23:53 +00:00)
 - [#164](https://github.com/wwayne/react-tooltip/pull/164) Fix for delayShwo #163 (@wwayne)
 

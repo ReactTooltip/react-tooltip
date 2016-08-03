@@ -269,6 +269,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 (function (global){
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _class, _class2, _temp;
@@ -318,6 +320,8 @@ var _getTipContent = require('./utils/getTipContent');
 
 var _getTipContent2 = _interopRequireDefault(_getTipContent);
 
+var _aria = require('./utils/aria');
+
 var _style = require('./style');
 
 var _style2 = _interopRequireDefault(_style);
@@ -353,7 +357,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       event: props.event || null,
       eventOff: props.eventOff || null,
       currentEvent: null, // Current mouse event
-      currentTarget: null // Current target of mouse event
+      currentTarget: null, // Current target of mouse event
+      ariaProps: (0, _aria.parseAria)(props) // aria- and role attributes
     };
 
     _this.bind(['showTooltip', 'updateTooltip', 'hideTooltip', 'globalRebuild', 'onWindowResize']);
@@ -385,6 +390,20 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       this.setStyleHeader(); // Set the style to the <link>
       this.bindListener(); // Bind listener for tooltip
       this.bindWindowEvents(); // Bind global event for static method
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(props) {
+      var ariaProps = this.state.ariaProps;
+
+      var newAriaProps = (0, _aria.parseAria)(props);
+
+      var isChanged = Object.keys(newAriaProps).some(function (props) {
+        return newAriaProps[props] !== ariaProps[props];
+      });
+      if (isChanged) {
+        this.setState({ ariaProps: newAriaProps });
+      }
     }
   }, {
     key: 'componentWillUnmount',
@@ -573,6 +592,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var _state = this.state;
       var delayShow = _state.delayShow;
       var show = _state.show;
+      var afterShow = this.props.afterShow;
       var placeholder = this.state.placeholder;
 
       var delayTime = show ? 0 : parseInt(delayShow, 10);
@@ -581,17 +601,21 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var updateState = function updateState() {
         if (typeof placeholder === 'string') placeholder = placeholder.trim();
         if (Array.isArray(placeholder) && placeholder.length > 0 || placeholder) {
-          _this6.setState({
-            currentEvent: e,
-            currentTarget: eventTarget,
-            show: true
-          }, function () {
-            _this6.updatePosition();
-          });
+          (function () {
+            var isInvisible = !_this6.state.show;
+            _this6.setState({
+              currentEvent: e,
+              currentTarget: eventTarget,
+              show: true
+            }, function () {
+              _this6.updatePosition();
+              if (isInvisible && afterShow) afterShow();
+            });
+          })();
         }
       };
 
-      this.clearTimer();
+      clearTimeout(this.delayShowLoop);
       if (delayShow) {
         this.delayShowLoop = setTimeout(updateState, delayTime);
       } else {
@@ -609,15 +633,19 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var _this7 = this;
 
       var delayHide = this.state.delayHide;
+      var afterHide = this.props.afterHide;
 
 
       if (!this.mount) return;
 
       var resetState = function resetState() {
+        var isVisible = _this7.state.show;
         _this7.setState({
           show: false
+        }, function () {
+          _this7.removeScrollListener();
+          if (isVisible && afterHide) afterHide();
         });
-        _this7.removeScrollListener();
       };
 
       this.clearTimer();
@@ -709,18 +737,21 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var placeholder = _state3.placeholder;
       var extraClass = _state3.extraClass;
       var html = _state3.html;
+      var ariaProps = _state3.ariaProps;
 
       var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
 
       if (html) {
-        return _react2.default.createElement('div', { className: tooltipClass + ' ' + extraClass,
+        return _react2.default.createElement('div', _extends({ className: tooltipClass + ' ' + extraClass
+        }, ariaProps, {
           'data-id': 'tooltip',
-          dangerouslySetInnerHTML: { __html: placeholder } });
+          dangerouslySetInnerHTML: { __html: placeholder } }));
       } else {
         return _react2.default.createElement(
           'div',
-          { className: tooltipClass + ' ' + extraClass,
-            'data-id': 'tooltip' },
+          _extends({ className: tooltipClass + ' ' + extraClass
+          }, ariaProps, {
+            'data-id': 'tooltip' }),
           placeholder
         );
       }
@@ -747,7 +778,9 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   isCapture: _react.PropTypes.bool,
   globalEventOff: _react.PropTypes.string,
   getContent: _react.PropTypes.any,
-  countTransform: _react.PropTypes.bool
+  countTransform: _react.PropTypes.bool,
+  afterShow: _react.PropTypes.func,
+  afterHide: _react.PropTypes.func
 }, _temp)) || _class) || _class) || _class) || _class;
 
 /* export default not fit for standalone, it will exports {default:...} */
@@ -756,7 +789,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 module.exports = ReactTooltip;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./decorators/customEvent":3,"./decorators/isCapture":4,"./decorators/staticMethods":5,"./decorators/windowListener":6,"./style":8,"./utils/getPosition":9,"./utils/getTipContent":10,"classnames":1}],8:[function(require,module,exports){
+},{"./decorators/customEvent":3,"./decorators/isCapture":4,"./decorators/staticMethods":5,"./decorators/windowListener":6,"./style":8,"./utils/aria":9,"./utils/getPosition":10,"./utils/getTipContent":11,"classnames":1}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -765,6 +798,32 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = '.__react_component_tooltip{border-radius:3px;display:inline-block;font-size:13px;left:-999em;opacity:0;padding:8px 21px;position:fixed;pointer-events:none;transition:opacity 0.3s ease-out;top:-999em;visibility:hidden;z-index:999}.__react_component_tooltip:before,.__react_component_tooltip:after{content:"";width:0;height:0;position:absolute}.__react_component_tooltip.show{opacity:0.9;margin-top:0px;margin-left:0px;visibility:visible}.__react_component_tooltip.type-dark{color:#fff;background-color:#222}.__react_component_tooltip.type-dark.place-top:after{border-top-color:#222;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-dark.place-bottom:after{border-bottom-color:#222;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-dark.place-left:after{border-left-color:#222;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-dark.place-right:after{border-right-color:#222;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-dark.border{border:1px solid #fff}.__react_component_tooltip.type-dark.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-dark.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-dark.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-dark.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-success{color:#fff;background-color:#8DC572}.__react_component_tooltip.type-success.place-top:after{border-top-color:#8DC572;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-success.place-bottom:after{border-bottom-color:#8DC572;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-success.place-left:after{border-left-color:#8DC572;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-success.place-right:after{border-right-color:#8DC572;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-success.border{border:1px solid #fff}.__react_component_tooltip.type-success.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-success.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-success.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-success.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-warning{color:#fff;background-color:#F0AD4E}.__react_component_tooltip.type-warning.place-top:after{border-top-color:#F0AD4E;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-warning.place-bottom:after{border-bottom-color:#F0AD4E;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-warning.place-left:after{border-left-color:#F0AD4E;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-warning.place-right:after{border-right-color:#F0AD4E;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-warning.border{border:1px solid #fff}.__react_component_tooltip.type-warning.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-warning.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-warning.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-warning.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-error{color:#fff;background-color:#BE6464}.__react_component_tooltip.type-error.place-top:after{border-top-color:#BE6464;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-error.place-bottom:after{border-bottom-color:#BE6464;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-error.place-left:after{border-left-color:#BE6464;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-error.place-right:after{border-right-color:#BE6464;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-error.border{border:1px solid #fff}.__react_component_tooltip.type-error.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-error.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-error.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-error.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-info{color:#fff;background-color:#337AB7}.__react_component_tooltip.type-info.place-top:after{border-top-color:#337AB7;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-info.place-bottom:after{border-bottom-color:#337AB7;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-info.place-left:after{border-left-color:#337AB7;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-info.place-right:after{border-right-color:#337AB7;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-info.border{border:1px solid #fff}.__react_component_tooltip.type-info.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-info.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-info.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-info.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-light{color:#222;background-color:#fff}.__react_component_tooltip.type-light.place-top:after{border-top-color:#fff;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-light.place-bottom:after{border-bottom-color:#fff;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-light.place-left:after{border-left-color:#fff;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-light.place-right:after{border-right-color:#fff;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-light.border{border:1px solid #222}.__react_component_tooltip.type-light.border.place-top:before{border-top:8px solid #222}.__react_component_tooltip.type-light.border.place-bottom:before{border-bottom:8px solid #222}.__react_component_tooltip.type-light.border.place-left:before{border-left:8px solid #222}.__react_component_tooltip.type-light.border.place-right:before{border-right:8px solid #222}.__react_component_tooltip.place-top{margin-top:-10px}.__react_component_tooltip.place-top:before{border-left:10px solid transparent;border-right:10px solid transparent;bottom:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-top:after{border-left:8px solid transparent;border-right:8px solid transparent;bottom:-6px;left:50%;margin-left:-8px}.__react_component_tooltip.place-bottom{margin-top:10px}.__react_component_tooltip.place-bottom:before{border-left:10px solid transparent;border-right:10px solid transparent;top:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-bottom:after{border-left:8px solid transparent;border-right:8px solid transparent;top:-6px;left:50%;margin-left:-8px}.__react_component_tooltip.place-left{margin-left:-10px}.__react_component_tooltip.place-left:before{border-top:6px solid transparent;border-bottom:6px solid transparent;right:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-left:after{border-top:5px solid transparent;border-bottom:5px solid transparent;right:-6px;top:50%;margin-top:-4px}.__react_component_tooltip.place-right{margin-left:10px}.__react_component_tooltip.place-right:before{border-top:6px solid transparent;border-bottom:6px solid transparent;left:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-right:after{border-top:5px solid transparent;border-bottom:5px solid transparent;left:-6px;top:50%;margin-top:-4px}.__react_component_tooltip .multi-line{display:block;padding:2px 0px;text-align:center}';
 
 },{}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.parseAria = parseAria;
+/**
+ * Support aria- and role in ReactTooltip
+ *
+ * @params props {Object}
+ * @return {Object}
+ */
+function parseAria(props) {
+  var ariaObj = {};
+  Object.keys(props).filter(function (prop) {
+    // aria-xxx and role is acceptable
+    return (/(^aria-\w+$|^role$)/.test(prop)
+    );
+  }).forEach(function (prop) {
+    ariaObj[prop] = props[prop];
+  });
+
+  return ariaObj;
+}
+
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1079,7 +1138,7 @@ var getParent = function getParent(currentTarget) {
   return { parentTop: parentTop, parentLeft: parentLeft };
 };
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 (function (global){
 'use strict';
 
