@@ -261,7 +261,7 @@ const Test = React.createClass({
           </div>
           <div className="section">
             <h4 className='title'>Callback functions for when mouse hovers on and off tooltip</h4>
-            <p className="sub-title">unction logs in the console</p>
+            <p className="sub-title">Function logs in the console</p>
             <div className="example-jsx">
               <div className="side">
                 <a data-for='callbacks' data-tip="Hello">
@@ -274,7 +274,7 @@ const Test = React.createClass({
             <pre className='example-pre'>
               <div>
                 <p>{"<a data-for='getContent' data-tip>=( T__T)</a>\n" +
-                "<ReactTooltip id='callbacks' place={place} type={type} effect={effect} onHideCallback={this.onHide} onHoverCallback={this.onShow} multiline={true}/>"}</p>
+                "<ReactTooltip id='callbacks' place={place} type={type} effect={effect} \n onHideCallback={this.onHide} onHoverCallback={this.onShow} multiline={true}/>"}</p>
               </div>
             </pre>
           </div>
