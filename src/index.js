@@ -161,7 +161,7 @@ class ReactTooltip extends Component {
         if (this.state.effect === 'float') {
           target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
         }
-        target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)  
+        target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
       }
     })
 
