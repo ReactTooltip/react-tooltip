@@ -126,7 +126,7 @@ class ReactTooltip extends Component {
     if (this.state.show) {
       this.hideTooltip(e)
     }
-    else if (!this.state.show) {
+    else {
       this.showTooltip(e)
     }
   }
@@ -141,7 +141,7 @@ class ReactTooltip extends Component {
 
     targetArray.forEach(target => {
       const isCaptureMode = this.isCapture(target)
-  
+      
       if (target.getAttribute('currentItem') === null) {
         target.setAttribute('currentItem', 'false')
       }
@@ -157,7 +157,7 @@ class ReactTooltip extends Component {
       if (this.props.onClickStayOpen) {
         target.addEventListener('click', this.clicked.bind(this), isCaptureMode)
       }
-      else if(!this.props.onClickStayOpen) {
+      else {
         target.addEventListener('mouseenter', this.showTooltip, isCaptureMode)
         if (this.state.effect === 'float') {
           target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
@@ -165,6 +165,7 @@ class ReactTooltip extends Component {
         target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)        
       }
     })
+
     // Global event to hide tooltip
     if (globalEventOff) {
       window.removeEventListener(globalEventOff, this.hideTooltip)
