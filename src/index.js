@@ -126,7 +126,7 @@ class ReactTooltip extends Component {
     if (this.state.show) {
       this.hideTooltip(e)
     }
-    else {
+    else if (!this.state.show) {
       this.showTooltip(e)
     }
   }
@@ -157,7 +157,7 @@ class ReactTooltip extends Component {
       if (this.props.onClickStayOpen) {
         target.addEventListener('click', this.clicked.bind(this), isCaptureMode)
       }
-      else {
+      else if(!this.props.onClickStayOpen) {
         target.addEventListener('mouseenter', this.showTooltip, isCaptureMode)
         if (this.state.effect === 'float') {
           target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
