@@ -40,8 +40,7 @@ class ReactTooltip extends Component {
     globalEventOff: PropTypes.string,
     getContent: PropTypes.any,
     countTransform: PropTypes.bool,
-    onShowCall: PropTypes.func,
-    onHideCall: PropTypes.func
+    onClickStayOpen: PropTypes.bool
   }
 
   constructor (props) {
@@ -122,19 +121,31 @@ class ReactTooltip extends Component {
     })
   }
 
+  /** shows and hides tooltip when clicked **/
+  clicked (e) {
+    if(this.state.show){
+      this.hideTooltip(e);
+    }
+    else{
+      this.showTooltip(e);
+    }
+  }
   /**
    * Bind listener to the target elements
    * These listeners used to trigger showing or hiding the tooltip
    */
+
   bindListener () {
     const {id, globalEventOff} = this.props
     let targetArray = this.getTargetArray(id)
 
     targetArray.forEach(target => {
       const isCaptureMode = this.isCapture(target)
+      
       if (target.getAttribute('currentItem') === null) {
         target.setAttribute('currentItem', 'false')
       }
+
       this.unbindBasicListener(target)
 
       if (this.isCustomEvent(target)) {
@@ -142,11 +153,20 @@ class ReactTooltip extends Component {
         return
       }
 
-      target.addEventListener('mouseenter', this.showTooltip, isCaptureMode)
-      if (this.state.effect === 'float') {
-        target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
+      //the user decides to open and close tooltip upon click.
+      if (this.props.onClickStayOpen) {
+        target.addEventListener('click', this.clicked.bind(this), isCaptureMode)
       }
-      target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
+      else {
+        target.addEventListener('mouseenter', this.showTooltip, isCaptureMode)
+        if (this.state.effect === 'float') {
+          target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
+        }
+        target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)        
+      }
+      
+
+
     })
 
     // Global event to hide tooltip
@@ -185,9 +205,6 @@ class ReactTooltip extends Component {
    * When mouse enter, show the tooltip
    */
   showTooltip (e) {
-    if (this.props.onShowCall) {
-      this.props.onShowCall()
-    }
     // Get the tooltip content
     // calculate in this phrase so that tip width height can be detected
     const {children, multiline, getContent} = this.props
@@ -271,13 +288,11 @@ class ReactTooltip extends Component {
     }
   }
 
+
   /**
    * When mouse leave, hide tooltip
    */
   hideTooltip () {
-    if (this.props.onHideCall) {
-      this.props.onHideCall()
-    }
     const {delayHide} = this.state
 
     if (!this.mount) return
