@@ -39,6 +39,14 @@ const Test = React.createClass({
     })
   },
 
+  onHover () {
+    console.log("get's called hovers over")
+  },
+
+  offHover () {
+    console.log("get's called when hovers off")
+  },
+
   render () {
     let { place, type, effect } = this.state
     return (
@@ -248,6 +256,25 @@ const Test = React.createClass({
               <div>
                 <p>{"<a data-for='overTime' data-tip>=( •̀д•́)</a>\n" +
                 "<ReactTooltip id='overTime' getContent={[() => {return new Date().toISOString()}, 1000]}/>"}</p>
+              </div>
+            </pre>
+          </div>
+          <div className="section">
+            <h4 className='title'>Callback functions for when mouse hovers on and off tooltip</h4>
+            <p className="sub-title">unction logs in the console</p>
+            <div className="example-jsx">
+              <div className="side">
+                <a data-for='callbacks' data-tip="Hello">
+                   (T__T)
+                </a>
+                <ReactTooltip id='callbacks' place={place} type={type} effect={effect} offHoverCallback={this.offHover} onHoverCallback={this.onHover}/>
+              </div>
+            </div>
+            <br />
+            <pre className='example-pre'>
+              <div>
+                <p>{"<a data-for='getContent' data-tip>=( T__T)</a>\n" +
+                "<ReactTooltip id='callbacks' place={place} type={type} effect={effect} onHideCallback={this.onHide} onHoverCallback={this.onShow} multiline={true}/>"}</p>
               </div>
             </pre>
           </div>

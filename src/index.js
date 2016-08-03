@@ -39,7 +39,9 @@ class ReactTooltip extends Component {
     isCapture: PropTypes.bool,
     globalEventOff: PropTypes.string,
     getContent: PropTypes.any,
-    countTransform: PropTypes.bool
+    countTransform: PropTypes.bool,
+    onHoverCallback: PropTypes.func,
+    offHoverCallback: PropTypes.func
   }
 
   constructor (props) {
@@ -183,6 +185,9 @@ class ReactTooltip extends Component {
    * When mouse enter, show the tooltip
    */
   showTooltip (e) {
+    if (this.props.onHoverCallback) {
+      this.props.onHoverCallback()
+    }
     // Get the tooltip content
     // calculate in this phrase so that tip width height can be detected
     const {children, multiline, getContent} = this.props
@@ -270,6 +275,9 @@ class ReactTooltip extends Component {
    * When mouse leave, hide tooltip
    */
   hideTooltip () {
+    if (this.props.offHoverCallback) {
+      this.props.offHoverCallback()
+    }
     const {delayHide} = this.state
 
     if (!this.mount) return
