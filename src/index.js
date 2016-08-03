@@ -123,11 +123,11 @@ class ReactTooltip extends Component {
 
   /** shows and hides tooltip when clicked **/
   clicked (e) {
-    if(this.state.show){
-      this.hideTooltip(e);
+    if (this.state.show) {
+      this.hideTooltip(e)
     }
-    else{
-      this.showTooltip(e);
+    else {
+      this.showTooltip(e)
     }
   }
   /**
@@ -164,11 +164,7 @@ class ReactTooltip extends Component {
         }
         target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)        
       }
-      
-
-
     })
-
     // Global event to hide tooltip
     if (globalEventOff) {
       window.removeEventListener(globalEventOff, this.hideTooltip)
@@ -288,7 +284,6 @@ class ReactTooltip extends Component {
     }
   }
 
-
   /**
    * When mouse leave, hide tooltip
    */
@@ -311,7 +306,7 @@ class ReactTooltip extends Component {
       resetState()
     }
   }
-
+on
   /**
    * Add scroll eventlistener when tooltip show
    * automatically hide the tooltip when scrolling
