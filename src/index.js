@@ -133,7 +133,6 @@ class ReactTooltip extends Component {
    * Bind listener to the target elements
    * These listeners used to trigger showing or hiding the tooltip
    */
-
   bindListener () {
     const {id, globalEventOff} = this.props
     let targetArray = this.getTargetArray(id)
@@ -150,7 +149,7 @@ class ReactTooltip extends Component {
         this.customBindListener(target)
         return
       }
-      
+
       if (this.props.onClickStayOpen) {
         target.addEventListener('click', this.clicked.bind(this), isCaptureMode)
       } else {
