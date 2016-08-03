@@ -19,7 +19,7 @@ npm install react-tooltip
 1 . Require react-tooltip after installation
 
 ```js
-var ReactTooltip = require("react-tooltip")
+import ReactTooltip from 'react-tooltip'
 ```
 
 2 . Add data-tip = "your placeholder" to your element
@@ -63,6 +63,8 @@ class	|   data-class  |  String  |   | extra custom class, can use !important to
  border  |   data-border  |  Bool  |  true, false | Add one pixel white border
  getContent | null | Func or Array | () => {}, [() => {}, Interval] | Generate the tip content dynamically
  countTransform | data-count-transform | Bool | True, False | Tell tooltip if it needs to count parents' transform into position calculation, the default is true, but it should be set to false when using with react-list
+ afterShow | null | Func | () => {} | Function that will be called after tooltip show
+ afterHide | null | Func | () => {} | Function that will be called after tooltip hide
 
 ## Using react component as tooltip
 Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)

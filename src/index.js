@@ -40,7 +40,9 @@ class ReactTooltip extends Component {
     isCapture: PropTypes.bool,
     globalEventOff: PropTypes.string,
     getContent: PropTypes.any,
-    countTransform: PropTypes.bool
+    countTransform: PropTypes.bool,
+    afterShow: PropTypes.func,
+    afterHide: PropTypes.func
   }
 
   constructor (props) {
@@ -255,6 +257,7 @@ class ReactTooltip extends Component {
    */
   updateTooltip (e) {
     const {delayShow, show} = this.state
+    const {afterShow} = this.props
     let {placeholder} = this.state
     const delayTime = show ? 0 : parseInt(delayShow, 10)
     const eventTarget = e.currentTarget
@@ -262,17 +265,19 @@ class ReactTooltip extends Component {
     const updateState = () => {
       if (typeof placeholder === 'string') placeholder = placeholder.trim()
       if (Array.isArray(placeholder) && placeholder.length > 0 || placeholder) {
+        const isInvisible = !this.state.show
         this.setState({
           currentEvent: e,
           currentTarget: eventTarget,
           show: true
         }, () => {
           this.updatePosition()
+          if (isInvisible && afterShow) afterShow()
         })
       }
     }
 
-    this.clearTimer()
+    clearTimeout(this.delayShowLoop)
     if (delayShow) {
       this.delayShowLoop = setTimeout(updateState, delayTime)
     } else {
@@ -285,14 +290,18 @@ class ReactTooltip extends Component {
    */
   hideTooltip () {
     const {delayHide} = this.state
+    const {afterHide} = this.props
 
     if (!this.mount) return
 
     const resetState = () => {
+      const isVisible = this.state.show
       this.setState({
         show: false
+      }, () => {
+        this.removeScrollListener()
+        if (isVisible && afterHide) afterHide()
       })
-      this.removeScrollListener()
     }
 
     this.clearTimer()
