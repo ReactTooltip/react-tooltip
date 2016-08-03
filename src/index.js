@@ -13,6 +13,7 @@ import isCapture from './decorators/isCapture'
 /* Utils */
 import getPosition from './utils/getPosition'
 import getTipContent from './utils/getTipContent'
+import { parseAria } from './utils/aria'
 
 /* CSS */
 import cssStyle from './style'
@@ -59,7 +60,8 @@ class ReactTooltip extends Component {
       event: props.event || null,
       eventOff: props.eventOff || null,
       currentEvent: null, // Current mouse event
-      currentTarget: null // Current target of mouse event
+      currentTarget: null, // Current target of mouse event
+      ariaProps: parseAria(props) // aria- and role attributes
     }
 
     this.bind([
@@ -89,6 +91,18 @@ class ReactTooltip extends Component {
     this.setStyleHeader() // Set the style to the <link>
     this.bindListener() // Bind listener for tooltip
     this.bindWindowEvents() // Bind global event for static method
+  }
+
+  componentWillReceiveProps (props) {
+    const { ariaProps } = this.state
+    const newAriaProps = parseAria(props)
+
+    const isChanged = Object.keys(newAriaProps).some(props => {
+      return newAriaProps[props] !== ariaProps[props]
+    })
+    if (isChanged) {
+      this.setState({ ariaProps: newAriaProps })
+    }
   }
 
   componentWillUnmount () {
@@ -343,7 +357,7 @@ class ReactTooltip extends Component {
   }
 
   render () {
-    const {placeholder, extraClass, html} = this.state
+    const {placeholder, extraClass, html, ariaProps} = this.state
     let tooltipClass = classname(
       '__react_component_tooltip',
       {'show': this.state.show},
@@ -363,12 +377,14 @@ class ReactTooltip extends Component {
     if (html) {
       return (
         <div className={`${tooltipClass} ${extraClass}`}
+          {...ariaProps}
           data-id='tooltip'
           dangerouslySetInnerHTML={{__html: placeholder}}></div>
       )
     } else {
       return (
         <div className={`${tooltipClass} ${extraClass}`}
+          {...ariaProps}
           data-id='tooltip'>{placeholder}</div>
       )
     }

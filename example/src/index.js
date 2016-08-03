@@ -117,7 +117,7 @@ const Test = React.createClass({
             <div className="example-jsx">
               <div className="side"><a data-tip data-for='global'> σ`∀´)σ </a></div>
               <div className="side"><a data-tip data-for='global'> (〃∀〃) </a></div>
-              <ReactTooltip id='global'>
+              <ReactTooltip id='global' aria-haspopup="true" role="example">
                 <p>This is a global react component tooltip</p>
                 <p>You can put every thing here</p>
                 <ul>
@@ -131,7 +131,7 @@ const Test = React.createClass({
               <div>
                 <p>{"<a data-tip data-for='global'> σ`∀´)σ </a>\n" +
                   "<a data-tip data-for='global'> (〃∀〃) </a>\n" +
-                  "<ReactTooltip id='global'>\n" +
+                  "<ReactTooltip id='global' aria-haspopup='true' role='example'>\n" +
                     " <p>This is a global react component tooltip</p>\n" +
                     " <p>You can put every thing here</p>\n" +
                     " <ul>\n" +
