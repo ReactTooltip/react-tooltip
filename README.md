@@ -81,7 +81,7 @@ Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
 
 **ReactTooltip.show(target)**: Show specific tooltip manually, for example:
 
-```
+```js
 import {findDOMNode} from 'react-dom'
 import ReactTooltip from 'react-tooltip'
 

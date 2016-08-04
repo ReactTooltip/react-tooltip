@@ -1,5 +1,9 @@
 ## Change Log
 
+### 3.1.5 (2016/08/04 10:43 +00:00)
+- [#176](https://github.com/wwayne/react-tooltip/pull/176) Support ReactTooltip.show() #47 (@wwayne)
+- [#174](https://github.com/wwayne/react-tooltip/pull/174) Factor transform in css into position calculation #152 (@wwayne)
+
 ### 3.1.4 (2016/08/03 13:52 +00:00)
 - [#173](https://github.com/wwayne/react-tooltip/pull/173) Add new attribute afterShow and afterHide (@wwayne)
 - [#172](https://github.com/wwayne/react-tooltip/pull/172) Add support for aria- and role props #159 (@wwayne)

@@ -191,10 +191,27 @@ exports.default = function (target) {
     dispatchGlobalEvent(_constant2.default.GLOBAL.REBUILD);
   };
 
+  /**
+   * Show specific tooltip
+   * @trigger ReactTooltip.show()
+   */
+  target.show = function (target) {
+    dispatchGlobalEvent(_constant2.default.GLOBAL.SHOW, { target: target });
+  };
+
   target.prototype.globalRebuild = function () {
     if (this.mount) {
       this.unbindListener();
       this.bindListener();
+    }
+  };
+
+  target.prototype.globalShow = function (event) {
+    if (this.mount) {
+      // Create a fake event, specific show will limit the type to `solid`
+      // only `float` type cares e.clientX e.clientY
+      var e = { currentTarget: event.detail.target };
+      this.showTooltip(e, true);
     }
   };
 };
@@ -205,16 +222,16 @@ var _constant2 = _interopRequireDefault(_constant);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var dispatchGlobalEvent = function dispatchGlobalEvent(eventName) {
+var dispatchGlobalEvent = function dispatchGlobalEvent(eventName, opts) {
   // Compatibale with IE
   // @see http://stackoverflow.com/questions/26596123/internet-explorer-9-10-11-event-constructor-doesnt-work
   var event = void 0;
 
-  if (typeof window.Event === 'function') {
-    event = new window.Event(eventName);
+  if (typeof window.CustomEvent === 'function') {
+    event = new window.CustomEvent(eventName, { detail: opts });
   } else {
     event = document.createEvent('Event');
-    event.initEvent(eventName, false, true);
+    event.initEvent(eventName, false, true, opts);
   }
 
   window.dispatchEvent(event);
@@ -239,6 +256,10 @@ exports.default = function (target) {
     window.removeEventListener(_constant2.default.GLOBAL.REBUILD, this.globalRebuild);
     window.addEventListener(_constant2.default.GLOBAL.REBUILD, this.globalRebuild, false);
 
+    // ReactTooltip.show
+    window.removeEventListener(_constant2.default.GLOBAL.SHOW, this.globalShow);
+    window.addEventListener(_constant2.default.GLOBAL.SHOW, this.globalShow, false);
+
     // Resize
     window.removeEventListener('resize', this.onWindowResize);
     window.addEventListener('resize', this.onWindowResize, false);
@@ -247,6 +268,7 @@ exports.default = function (target) {
   target.prototype.unbindWindowEvents = function () {
     window.removeEventListener(_constant2.default.GLOBAL.HIDE, this.hideTooltip);
     window.removeEventListener(_constant2.default.GLOBAL.REBUILD, this.globalRebuild);
+    window.removeEventListener(_constant2.default.GLOBAL.SHOW, this.globalShow);
     window.removeEventListener('resize', this.onWindowResize);
   };
 
@@ -361,7 +383,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       ariaProps: (0, _aria.parseAria)(props) // aria- and role attributes
     };
 
-    _this.bind(['showTooltip', 'updateTooltip', 'hideTooltip', 'globalRebuild', 'onWindowResize']);
+    _this.bind(['showTooltip', 'updateTooltip', 'hideTooltip', 'globalRebuild', 'globalShow', 'onWindowResize']);
 
     _this.mount = true;
     _this.delayShowLoop = null;
@@ -525,9 +547,17 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
   }, {
     key: 'showTooltip',
-    value: function showTooltip(e) {
+    value: function showTooltip(e, isGlobalCall) {
       var _this5 = this;
 
+      if (isGlobalCall) {
+        // Don't trigger other elements belongs to other ReactTooltip
+        var targetArray = this.getTargetArray(this.props.id);
+        var isMyElement = targetArray.some(function (ele) {
+          return ele === e.currentTarget;
+        });
+        if (!isMyElement || this.state.show) return;
+      }
       // Get the tooltip content
       // calculate in this phrase so that tip width height can be detected
       var _props3 = this.props;
@@ -549,13 +579,13 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       }
       var placeholder = (0, _getTipContent2.default)(originTooltip, content, isMultiline);
 
-      // If it is focus event, switch to `solid` effect
-      var isFocus = e instanceof window.FocusEvent;
+      // If it is focus event or called by ReactTooltip.show, switch to `solid` effect
+      var switchToSolid = e instanceof window.FocusEvent || isGlobalCall;
       this.setState({
         placeholder: placeholder,
         place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
         type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
-        effect: isFocus && 'solid' || e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
+        effect: switchToSolid && 'solid' || e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
         offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
         html: e.currentTarget.getAttribute('data-html') ? e.currentTarget.getAttribute('data-html') === 'true' : this.props.html || false,
         delayShow: e.currentTarget.getAttribute('data-delay-show') || this.props.delayShow || 0,
@@ -1128,7 +1158,7 @@ var calculateOffset = function calculateOffset(offset) {
 var getParent = function getParent(currentTarget) {
   var currentParent = currentTarget;
   while (currentParent) {
-    if (currentParent.style.transform.length > 0) break;
+    if (window.getComputedStyle(currentParent).getPropertyValue('transform') !== 'none') break;
     currentParent = currentParent.parentElement;
   }
 
