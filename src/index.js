@@ -71,6 +71,7 @@ class ReactTooltip extends Component {
       'updateTooltip',
       'hideTooltip',
       'globalRebuild',
+      'globalShow',
       'onWindowResize'
     ])
 
@@ -198,7 +199,13 @@ class ReactTooltip extends Component {
   /**
    * When mouse enter, show the tooltip
    */
-  showTooltip (e) {
+  showTooltip (e, isGlobalCall) {
+    if (isGlobalCall) {
+      // Don't trigger other elements belongs to other ReactTooltip
+      const targetArray = this.getTargetArray(this.props.id)
+      const isMyElement = targetArray.some(ele => ele === e.currentTarget)
+      if (!isMyElement || this.state.show) return
+    }
     // Get the tooltip content
     // calculate in this phrase so that tip width height can be detected
     const {children, multiline, getContent} = this.props
@@ -216,13 +223,13 @@ class ReactTooltip extends Component {
     }
     const placeholder = getTipContent(originTooltip, content, isMultiline)
 
-    // If it is focus event, switch to `solid` effect
-    const isFocus = e instanceof window.FocusEvent
+    // If it is focus event or called by ReactTooltip.show, switch to `solid` effect
+    const switchToSolid = e instanceof window.FocusEvent || isGlobalCall
     this.setState({
       placeholder,
       place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
       type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
-      effect: isFocus && 'solid' || e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
+      effect: switchToSolid && 'solid' || e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
       offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
       html: e.currentTarget.getAttribute('data-html')
         ? e.currentTarget.getAttribute('data-html') === 'true'
