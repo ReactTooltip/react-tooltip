@@ -249,11 +249,13 @@ class ReactTooltip extends Component {
 
       if (getContent && Array.isArray(getContent)) {
         this.intervalUpdateContent = setInterval(() => {
-          const {getContent} = this.props
-          const placeholder = getTipContent(originTooltip, getContent[0](), isMultiline)
-          this.setState({
-            placeholder
-          })
+          if (this.mount) {
+            const {getContent} = this.props
+            const placeholder = getTipContent(originTooltip, getContent[0](), isMultiline)
+            this.setState({
+              placeholder
+            })
+          }
         }, getContent[1])
       }
     })
