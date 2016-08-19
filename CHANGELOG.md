@@ -1,5 +1,9 @@
 ## Change Log
 
+### 3.1.6 (2016/08/19 02:07 +00:00)
+- [#181](https://github.com/wwayne/react-tooltip/pull/181) Judge if the component has been mounted mount in getContent #180 (@wwayne)
+- [#179](https://github.com/wwayne/react-tooltip/pull/179) Add bower.json (@mikkopiu)
+
 ### 3.1.5 (2016/08/04 10:43 +00:00)
 - [#176](https://github.com/wwayne/react-tooltip/pull/176) Support ReactTooltip.show() #47 (@wwayne)
 - [#174](https://github.com/wwayne/react-tooltip/pull/174) Factor transform in css into position calculation #152 (@wwayne)

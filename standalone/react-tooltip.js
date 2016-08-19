@@ -599,12 +599,14 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
         if (getContent && Array.isArray(getContent)) {
           _this5.intervalUpdateContent = setInterval(function () {
-            var getContent = _this5.props.getContent;
+            if (_this5.mount) {
+              var _getContent = _this5.props.getContent;
 
-            var placeholder = (0, _getTipContent2.default)(originTooltip, getContent[0](), isMultiline);
-            _this5.setState({
-              placeholder: placeholder
-            });
+              var _placeholder = (0, _getTipContent2.default)(originTooltip, _getContent[0](), isMultiline);
+              _this5.setState({
+                placeholder: _placeholder
+              });
+            }
           }, getContent[1]);
         }
       });
