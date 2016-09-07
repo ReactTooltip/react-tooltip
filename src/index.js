@@ -42,7 +42,8 @@ class ReactTooltip extends Component {
     getContent: PropTypes.any,
     countTransform: PropTypes.bool,
     afterShow: PropTypes.func,
-    afterHide: PropTypes.func
+    afterHide: PropTypes.func,
+    disable: PropTypes.bool
   }
 
   constructor (props) {
@@ -200,6 +201,11 @@ class ReactTooltip extends Component {
    * When mouse enter, show the tooltip
    */
   showTooltip (e, isGlobalCall) {
+    const disabled = e.currentTarget.getAttribute('data-tip-disable')
+      ? e.currentTarget.getAttribute('data-tip-disable') === 'true'
+      : (this.props.disable || false)
+    if (disabled) return
+
     if (isGlobalCall) {
       // Don't trigger other elements belongs to other ReactTooltip
       const targetArray = this.getTargetArray(this.props.id)

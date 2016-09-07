@@ -65,6 +65,7 @@ class	|   data-class  |  String  |   | extra custom class, can use !important to
  countTransform | data-count-transform | Bool | True, False | Tell tooltip if it needs to count parents' transform into position calculation, the default is true, but it should be set to false when using with react-list
  afterShow | null | Func | () => {} | Function that will be called after tooltip show
  afterHide | null | Func | () => {} | Function that will be called after tooltip hide
+ disable | data-tip-disable | Bool | true, false | Disable the tooltip behaviour, default is false
 
 ## Using react component as tooltip
 Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
