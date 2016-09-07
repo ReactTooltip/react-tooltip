@@ -550,6 +550,9 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     value: function showTooltip(e, isGlobalCall) {
       var _this5 = this;
 
+      var disabled = e.currentTarget.getAttribute('data-tip-disable') ? e.currentTarget.getAttribute('data-tip-disable') === 'true' : this.props.disable || false;
+      if (disabled) return;
+
       if (isGlobalCall) {
         // Don't trigger other elements belongs to other ReactTooltip
         var targetArray = this.getTargetArray(this.props.id);
@@ -812,7 +815,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   getContent: _react.PropTypes.any,
   countTransform: _react.PropTypes.bool,
   afterShow: _react.PropTypes.func,
-  afterHide: _react.PropTypes.func
+  afterHide: _react.PropTypes.func,
+  disable: _react.PropTypes.bool
 }, _temp)) || _class) || _class) || _class) || _class;
 
 /* export default not fit for standalone, it will exports {default:...} */

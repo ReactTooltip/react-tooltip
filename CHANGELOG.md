@@ -1,5 +1,9 @@
 ## Change Log
 
+### 3.1.7 (2016/09/07 00:46 +00:00)
+- [#187](https://github.com/wwayne/react-tooltip/pull/187) Add disable option (@wwayne)
+- [#183](https://github.com/wwayne/react-tooltip/pull/183) Remove react-dom from Bower dependencies (@mikkopiu)
+
 ### 3.1.6 (2016/08/19 02:07 +00:00)
 - [#181](https://github.com/wwayne/react-tooltip/pull/181) Judge if the component has been mounted mount in getContent #180 (@wwayne)
 - [#179](https://github.com/wwayne/react-tooltip/pull/179) Add bower.json (@mikkopiu)
