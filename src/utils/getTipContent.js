@@ -14,7 +14,7 @@
 import React from 'react'
 
 export default function (tip, children, multiline) {
-  if (children) return children
+  if (typeof children !== 'undefined') return children
 
   const regexp = /<br\s*\/?>/
   if (!multiline || multiline === 'false' || !regexp.test(tip)) {
