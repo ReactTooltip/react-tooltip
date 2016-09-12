@@ -312,7 +312,8 @@ class ReactTooltip extends Component {
     const resetState = () => {
       const isVisible = this.state.show
       this.setState({
-        show: false
+        show: false,
+        placeholder: ''
       }, () => {
         this.removeScrollListener()
         if (isVisible && afterHide) afterHide()
