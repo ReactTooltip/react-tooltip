@@ -362,7 +362,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   function ReactTooltip(props) {
     _classCallCheck(this, ReactTooltip);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactTooltip).call(this, props));
+    var _this = _possibleConstructorReturn(this, (ReactTooltip.__proto__ || Object.getPrototypeOf(ReactTooltip)).call(this, props));
 
     _this.state = {
       place: 'top', // Direction of tooltip
@@ -573,7 +573,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       // Generate tootlip content
       var content = children;
-      if (getContent) {
+      if (typeof getContent !== 'undefined') {
         if (Array.isArray(getContent)) {
           content = getContent[0] && getContent[0]();
         } else {

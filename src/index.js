@@ -220,7 +220,7 @@ class ReactTooltip extends Component {
 
     // Generate tootlip content
     let content = children
-    if (getContent) {
+    if (typeof getContent !== 'undefined') {
       if (Array.isArray(getContent)) {
         content = getContent[0] && getContent[0]()
       } else {
