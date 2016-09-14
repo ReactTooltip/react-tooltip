@@ -44,8 +44,13 @@ class ReactTooltip extends Component {
     afterShow: PropTypes.func,
     afterHide: PropTypes.func,
     disable: PropTypes.bool,
-    scrollHide: PropTypes.bool
-  }
+    scrollHide: PropTypes.bool,
+    resizeHide: PropTypes.bool
+  };
+
+  static defaultProps = {
+    resizeHide: true
+  };
 
   constructor (props) {
     super(props)
@@ -96,7 +101,7 @@ class ReactTooltip extends Component {
   componentDidMount () {
     this.setStyleHeader() // Set the style to the <link>
     this.bindListener() // Bind listener for tooltip
-    this.bindWindowEvents() // Bind global event for static method
+    this.bindWindowEvents(this.props.resizeHide) // Bind global event for static method
   }
 
   componentWillReceiveProps (props) {
