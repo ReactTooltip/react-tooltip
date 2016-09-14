@@ -150,7 +150,7 @@ const Test = React.createClass({
             <div className="example-jsx">
               <div className="side">
                 <a data-for='custom-event' data-tip='custom show' data-event='click focus'>( •̀д•́)</a>
-                <ReactTooltip id='custom-event' globalEventOff='click'/>
+                <ReactTooltip id='custom-event' globalEventOff='click' />
               </div>
               <div className="side">
                 <a data-for='custom-off-event' data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>
