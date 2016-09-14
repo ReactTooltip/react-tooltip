@@ -1,5 +1,10 @@
 ## Change Log
 
+### 3.1.8 (2016/09/14 13:37 +00:00)
+- [#194](https://github.com/wwayne/react-tooltip/pull/194) Add resizeHide option (@wwayne)
+- [#193](https://github.com/wwayne/react-tooltip/pull/193) hide specific tooltip (@wwayne)
+- [#192](https://github.com/wwayne/react-tooltip/pull/192) Create scroll hide option (@wwayne)
+
 ### 3.1.7 (2016/09/07 00:46 +00:00)
 - [#187](https://github.com/wwayne/react-tooltip/pull/187) Add disable option (@wwayne)
 - [#183](https://github.com/wwayne/react-tooltip/pull/183) Remove react-dom from Bower dependencies (@mikkopiu)
