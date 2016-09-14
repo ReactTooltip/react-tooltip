@@ -43,7 +43,8 @@ class ReactTooltip extends Component {
     countTransform: PropTypes.bool,
     afterShow: PropTypes.func,
     afterHide: PropTypes.func,
-    disable: PropTypes.bool
+    disable: PropTypes.bool,
+    scrollHide: PropTypes.bool
   }
 
   constructor (props) {
@@ -231,6 +232,15 @@ class ReactTooltip extends Component {
 
     // If it is focus event or called by ReactTooltip.show, switch to `solid` effect
     const switchToSolid = e instanceof window.FocusEvent || isGlobalCall
+
+    // if it need to skip adding hide listener to scroll
+    let scrollHide = true
+    if (e.currentTarget.getAttribute('data-scroll-hide')) {
+      scrollHide = e.currentTarget.getAttribute('data-scroll-hide') === 'true'
+    } else if (this.props.scrollHide != null) {
+      scrollHide = this.props.scrollHide
+    }
+
     this.setState({
       placeholder,
       place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
@@ -250,7 +260,7 @@ class ReactTooltip extends Component {
         ? e.currentTarget.getAttribute('data-count-transform') === 'true'
         : (this.props.countTransform != null ? this.props.countTransform : true)
     }, () => {
-      this.addScrollListener(e)
+      if (scrollHide) this.addScrollListener(e)
       this.updateTooltip(e)
 
       if (getContent && Array.isArray(getContent)) {

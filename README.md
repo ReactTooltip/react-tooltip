@@ -66,6 +66,7 @@ class	|   data-class  |  String  |   | extra custom class, can use !important to
  afterShow | null | Func | () => {} | Function that will be called after tooltip show
  afterHide | null | Func | () => {} | Function that will be called after tooltip hide
  disable | data-tip-disable | Bool | true, false | Disable the tooltip behaviour, default is false
+ scrollHide | data-scroll-hide | Bool | true, false | Hide the tooltip when scrolling, default is true
 
 ## Using react component as tooltip
 Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
