@@ -74,6 +74,7 @@ class ReactTooltip extends Component {
       'hideTooltip',
       'globalRebuild',
       'globalShow',
+      'globalHide',
       'onWindowResize'
     ])
 
@@ -313,12 +314,16 @@ class ReactTooltip extends Component {
   /**
    * When mouse leave, hide tooltip
    */
-  hideTooltip () {
+  hideTooltip (e, hasTarget) {
+    if (!this.mount) return
+    if (hasTarget) {
+      // Don't trigger other elements belongs to other ReactTooltip
+      const targetArray = this.getTargetArray(this.props.id)
+      const isMyElement = targetArray.some(ele => ele === e.currentTarget)
+      if (!isMyElement || !this.state.show) return
+    }
     const {delayHide} = this.state
     const {afterHide} = this.props
-
-    if (!this.mount) return
-
     const resetState = () => {
       const isVisible = this.state.show
       this.setState({

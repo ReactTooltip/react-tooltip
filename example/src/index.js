@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react'
-import {render} from 'react-dom'
+import {render, findDOMNode} from 'react-dom'
 import ReactTooltip from '../../src'
 
 const Test = React.createClass({
@@ -153,8 +153,14 @@ const Test = React.createClass({
                 <ReactTooltip id='custom-event' globalEventOff='click' />
               </div>
               <div className="side">
-                <a data-for='custom-off-event' data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>
+                <a data-for='custom-off-event' ref='target' data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>
                 <ReactTooltip id='custom-off-event'/>
+                {/*
+                  <div>
+                    <button onClick={() => { ReactTooltip.show(findDOMNode(this.refs.target)) }}>Show toolip</button>
+                    <button onClick={() => { ReactTooltip.hide(findDOMNode(this.refs.target)) }}>Hide toolip</button>
+                  </div>
+                */}
               </div>
             </div>
             <br />

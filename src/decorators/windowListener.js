@@ -6,8 +6,8 @@ import CONSTANT from '../constant'
 export default function (target) {
   target.prototype.bindWindowEvents = function () {
     // ReactTooltip.hide
-    window.removeEventListener(CONSTANT.GLOBAL.HIDE, this.hideTooltip)
-    window.addEventListener(CONSTANT.GLOBAL.HIDE, this.hideTooltip, false)
+    window.removeEventListener(CONSTANT.GLOBAL.HIDE, this.globalHide)
+    window.addEventListener(CONSTANT.GLOBAL.HIDE, this.globalHide, false)
 
     // ReactTooltip.rebuild
     window.removeEventListener(CONSTANT.GLOBAL.REBUILD, this.globalRebuild)
@@ -23,7 +23,7 @@ export default function (target) {
   }
 
   target.prototype.unbindWindowEvents = function () {
-    window.removeEventListener(CONSTANT.GLOBAL.HIDE, this.hideTooltip)
+    window.removeEventListener(CONSTANT.GLOBAL.HIDE, this.globalHide)
     window.removeEventListener(CONSTANT.GLOBAL.REBUILD, this.globalRebuild)
     window.removeEventListener(CONSTANT.GLOBAL.SHOW, this.globalShow)
     window.removeEventListener('resize', this.onWindowResize)
