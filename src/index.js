@@ -72,7 +72,7 @@ class ReactTooltip extends Component {
       currentEvent: null, // Current mouse event
       currentTarget: null, // Current target of mouse event
       ariaProps: parseAria(props), // aria- and role attributes
-      afterUnfreeze: ()=>{}
+      afterUnfreeze: () => {}
     }
 
     this.bind([
@@ -107,7 +107,7 @@ class ReactTooltip extends Component {
   }
 
   componentWillReceiveProps (props) {
-    if(!props.frozen && this.props.frozen){
+    if (!props.frozen && this.props.frozen) {
       this.state.afterUnfreeze()
     }
     const { ariaProps } = this.state
@@ -294,7 +294,7 @@ class ReactTooltip extends Component {
    */
   updateTooltip (e) {
     const {delayShow, show} = this.state
-    const {afterShow,frozen} = this.props
+    const {afterShow, frozen} = this.props
     let {placeholder} = this.state
     const delayTime = show ? 0 : parseInt(delayShow, 10)
     const eventTarget = e.currentTarget
@@ -315,7 +315,7 @@ class ReactTooltip extends Component {
     }
 
     clearTimeout(this.delayShowLoop)
-    if (frozen){
+    if (frozen) {
       this.setState({afterUnfreeze: updateState})
     } else if (delayShow) {
       this.delayShowLoop = setTimeout(updateState, delayTime)
@@ -336,7 +336,7 @@ class ReactTooltip extends Component {
       if (!isMyElement || !this.state.show) return
     }
     const {delayHide} = this.state
-    const {afterHide,frozen} = this.props
+    const {afterHide, frozen} = this.props
     const resetState = () => {
       const isVisible = this.state.show
       this.setState({
@@ -415,7 +415,7 @@ class ReactTooltip extends Component {
     let tooltipClass = classname(
       '__react_component_tooltip',
       {'show': this.state.show},
-      {'frozen':this.props.frozen},
+      {'frozen': this.props.frozen},
       {'border': this.state.border},
       {'place-top': this.state.place === 'top'},
       {'place-bottom': this.state.place === 'bottom'},
