@@ -44,6 +44,7 @@ class ReactTooltip extends Component {
     afterShow: PropTypes.func,
     afterHide: PropTypes.func,
     disable: PropTypes.bool,
+    frozen: PropTypes.bool,
     scrollHide: PropTypes.bool,
     resizeHide: PropTypes.bool
   };
@@ -70,7 +71,8 @@ class ReactTooltip extends Component {
       eventOff: props.eventOff || null,
       currentEvent: null, // Current mouse event
       currentTarget: null, // Current target of mouse event
-      ariaProps: parseAria(props) // aria- and role attributes
+      ariaProps: parseAria(props), // aria- and role attributes
+      afterUnfreeze: ()=>{}
     }
 
     this.bind([
@@ -105,6 +107,9 @@ class ReactTooltip extends Component {
   }
 
   componentWillReceiveProps (props) {
+    if(!props.frozen && this.props.frozen){
+      this.state.afterUnfreeze()
+    }
     const { ariaProps } = this.state
     const newAriaProps = parseAria(props)
 
@@ -211,7 +216,8 @@ class ReactTooltip extends Component {
     const disabled = e.currentTarget.getAttribute('data-tip-disable')
       ? e.currentTarget.getAttribute('data-tip-disable') === 'true'
       : (this.props.disable || false)
-    if (disabled) return
+    const {frozen} = this.props
+    if (disabled || frozen) return
 
     if (isGlobalCall) {
       // Don't trigger other elements belongs to other ReactTooltip
@@ -288,7 +294,7 @@ class ReactTooltip extends Component {
    */
   updateTooltip (e) {
     const {delayShow, show} = this.state
-    const {afterShow} = this.props
+    const {afterShow,frozen} = this.props
     let {placeholder} = this.state
     const delayTime = show ? 0 : parseInt(delayShow, 10)
     const eventTarget = e.currentTarget
@@ -309,7 +315,9 @@ class ReactTooltip extends Component {
     }
 
     clearTimeout(this.delayShowLoop)
-    if (delayShow) {
+    if (frozen){
+      this.setState({afterUnfreeze: updateState})
+    } else if (delayShow) {
       this.delayShowLoop = setTimeout(updateState, delayTime)
     } else {
       updateState()
@@ -328,7 +336,7 @@ class ReactTooltip extends Component {
       if (!isMyElement || !this.state.show) return
     }
     const {delayHide} = this.state
-    const {afterHide} = this.props
+    const {afterHide,frozen} = this.props
     const resetState = () => {
       const isVisible = this.state.show
       this.setState({
@@ -340,7 +348,9 @@ class ReactTooltip extends Component {
     }
 
     this.clearTimer()
-    if (delayHide) {
+    if (frozen) {
+      this.setState({afterUnfreeze: resetState})
+    } else if (delayHide) {
       this.delayHideLoop = setTimeout(resetState, parseInt(delayHide, 10))
     } else {
       resetState()
@@ -360,7 +370,7 @@ class ReactTooltip extends Component {
     window.removeEventListener('scroll', this.hideTooltip)
   }
 
-  // Calculation the position
+  // Calculate the position
   updatePosition () {
     const {currentEvent, currentTarget, place, effect, offset, countTransform} = this.state
     const node = ReactDOM.findDOMNode(this)
@@ -405,6 +415,7 @@ class ReactTooltip extends Component {
     let tooltipClass = classname(
       '__react_component_tooltip',
       {'show': this.state.show},
+      {'frozen':this.props.frozen},
       {'border': this.state.border},
       {'place-top': this.state.place === 'top'},
       {'place-bottom': this.state.place === 'bottom'},

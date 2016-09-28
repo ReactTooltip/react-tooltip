@@ -80,6 +80,9 @@
     margin-left: 0px;
     visibility: visible;
   }
+  &.frozen {
+    pointer-events: auto;
+  }
   &.type-dark {
     color: #fff;
     @include type(#222);
