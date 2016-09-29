@@ -24,7 +24,7 @@ export default function (e, target, node, place, effect, offset, countTransform)
   const windowWidth = window.innerWidth
   const windowHeight = window.innerHeight
 
-  const {parentTop, parentLeft} = countTransform && getParent(target, countTransform) || {parentTop: 0, parentLeft: 0}
+  const {parentTop, parentLeft} = countTransform && getParent(node, countTransform) || {parentTop: 0, parentLeft: 0}
 
   // Get the edge offset of the tooltip
   const getTipOffsetLeft = (place) => {
