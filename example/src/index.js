@@ -45,7 +45,7 @@ const Test = React.createClass({
       <div>
         <section className='tooltip-example'>
           <h4 className='title'>React Tooltip</h4>
-          <div style={{marginTop: 40, transform: "translateY(-20px)"}} className='demonstration'>
+          <div className='demonstration'>
             <a data-for='main' data-tip="Hello<br />multiline<br />tooltip">
                ◕‿‿◕
             </a>
@@ -83,9 +83,7 @@ const Test = React.createClass({
               </div>
             </pre>
           </div>
-          <div style={{transform: "translateY(40px)"}}>
-            <ReactTooltip id='main' place={place} type={type} effect={effect} multiline={true}/>
-          </div>
+          <ReactTooltip id='main' place={place} type={type} effect={effect} multiline={true}/>
         </section>
         <section className="advance">
           <div className="section">
