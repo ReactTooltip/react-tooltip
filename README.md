@@ -118,8 +118,8 @@ The component was designed to set a `<Reactooltip />` one place then use tooltip
 >I suggest always put `<ReactTooltip />` in the Highest level or smart component of Redux, so you might need these static
 method to control tooltip's behaviour in some situations
 
-### 2. Hide tooltip when getContent returns null or undefined
-When you set `getContent={() => {return null}}` or `getContent={() => {return}}` you will find the tooltip will dispaly `true`, that's because React will set the value of data-* to be 'true' automatically if there is no value to be set. So you have to set `data-tip=''` in this situaction.
+### 2. Hide tooltip when getContent returns undefined
+When you set `getContent={() => { return }}` you will find the tooltip will dispaly `true`, that's because React will set the value of data-* to be 'true' automatically if there is no value to be set. So you have to set `data-tip=''` in this situaction.
 
 ```
 <p data-tip='' data-for='test'></p>
