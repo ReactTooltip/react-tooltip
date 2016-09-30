@@ -1,5 +1,9 @@
 ## Change Log
 
+### 3.2.0 (2016/09/30 01:09 +00:00)
+- [#200](https://github.com/wwayne/react-tooltip/pull/200) Remove countTransform because the way of transform calculation is cha… (@wwayne)
+- [#195](https://github.com/wwayne/react-tooltip/pull/195) Use node parent when calculating offset (@iamdoron)
+
 ### 3.1.8 (2016/09/14 13:37 +00:00)
 - [#194](https://github.com/wwayne/react-tooltip/pull/194) Add resizeHide option (@wwayne)
 - [#193](https://github.com/wwayne/react-tooltip/pull/193) hide specific tooltip (@wwayne)

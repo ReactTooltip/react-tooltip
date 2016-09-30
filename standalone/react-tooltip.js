@@ -371,7 +371,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   function ReactTooltip(props) {
     _classCallCheck(this, ReactTooltip);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactTooltip).call(this, props));
+    var _this = _possibleConstructorReturn(this, (ReactTooltip.__proto__ || Object.getPrototypeOf(ReactTooltip)).call(this, props));
 
     _this.state = {
       place: 'top', // Direction of tooltip
@@ -612,8 +612,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
         delayShow: e.currentTarget.getAttribute('data-delay-show') || this.props.delayShow || 0,
         delayHide: e.currentTarget.getAttribute('data-delay-hide') || this.props.delayHide || 0,
         border: e.currentTarget.getAttribute('data-border') ? e.currentTarget.getAttribute('data-border') === 'true' : this.props.border || false,
-        extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || '',
-        countTransform: e.currentTarget.getAttribute('data-count-transform') ? e.currentTarget.getAttribute('data-count-transform') === 'true' : this.props.countTransform != null ? this.props.countTransform : true
+        extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || ''
       }, function () {
         if (scrollHide) _this5.addScrollListener(e);
         _this5.updateTooltip(e);
@@ -745,11 +744,10 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var place = _state2.place;
       var effect = _state2.effect;
       var offset = _state2.offset;
-      var countTransform = _state2.countTransform;
 
       var node = _reactDom2.default.findDOMNode(this);
 
-      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset, countTransform);
+      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset);
 
       if (result.isNewState) {
         // Switch to reverse placement
@@ -837,7 +835,6 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   isCapture: _react.PropTypes.bool,
   globalEventOff: _react.PropTypes.string,
   getContent: _react.PropTypes.any,
-  countTransform: _react.PropTypes.bool,
   afterShow: _react.PropTypes.func,
   afterHide: _react.PropTypes.func,
   disable: _react.PropTypes.bool,
@@ -894,7 +891,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-exports.default = function (e, target, node, place, effect, offset, countTransform) {
+exports.default = function (e, target, node, place, effect, offset) {
   var tipWidth = node.clientWidth;
   var tipHeight = node.clientHeight;
 
@@ -914,10 +911,10 @@ exports.default = function (e, target, node, place, effect, offset, countTransfo
   var windowWidth = window.innerWidth;
   var windowHeight = window.innerHeight;
 
-  var _ref = countTransform && getParent(target, countTransform) || { parentTop: 0, parentLeft: 0 };
+  var _getParent = getParent(node);
 
-  var parentTop = _ref.parentTop;
-  var parentLeft = _ref.parentLeft;
+  var parentTop = _getParent.parentTop;
+  var parentLeft = _getParent.parentLeft;
 
   // Get the edge offset of the tooltip
 
