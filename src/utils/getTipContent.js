@@ -18,6 +18,7 @@ export default function (tip, children, multiline) {
 
   const regexp = /<br\s*\/?>/
   if (!multiline || multiline === 'false' || !regexp.test(tip)) {
+    // No trim(), so that user can keep their input
     return tip
   }
 
