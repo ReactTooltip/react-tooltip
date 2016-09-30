@@ -181,6 +181,7 @@ const Test = React.createClass({
             <div className="example-jsx">
               <div className="side">
                 <a data-for='custom-class' data-tip='hover on me will keep the tootlip'>(･ω´･ )</a>
+                {/* <a data-for='custom-class' data-tip='' data-tip-disable='true'>empty testing</a> */}
                 <ReactTooltip id='custom-class' class='extraClass' delayHide={1000} effect='solid'/>
               </div>
               <div className="side">
