@@ -222,7 +222,7 @@ class ReactTooltip extends Component {
     const isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false
 
     // Generate tootlip content
-    let content = children
+    let content
     if (getContent) {
       if (Array.isArray(getContent)) {
         content = getContent[0] && getContent[0]()
@@ -230,8 +230,8 @@ class ReactTooltip extends Component {
         content = getContent()
       }
     }
-    const placeholder = getTipContent(originTooltip, content, isMultiline)
-    const isEmptyTip = typeof placeholder === 'string' && placeholder === ''
+    const placeholder = getTipContent(originTooltip, children, content, isMultiline)
+    const isEmptyTip = typeof placeholder === 'string' && placeholder === '' || placeholder === null
 
     // If it is focus event or called by ReactTooltip.show, switch to `solid` effect
     const switchToSolid = e instanceof window.FocusEvent || isGlobalCall
