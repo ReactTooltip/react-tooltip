@@ -40,7 +40,6 @@ class ReactTooltip extends Component {
     isCapture: PropTypes.bool,
     globalEventOff: PropTypes.string,
     getContent: PropTypes.any,
-    countTransform: PropTypes.bool,
     afterShow: PropTypes.func,
     afterHide: PropTypes.func,
     disable: PropTypes.bool,
@@ -261,10 +260,7 @@ class ReactTooltip extends Component {
       border: e.currentTarget.getAttribute('data-border')
         ? e.currentTarget.getAttribute('data-border') === 'true'
         : (this.props.border || false),
-      extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || '',
-      countTransform: e.currentTarget.getAttribute('data-count-transform')
-        ? e.currentTarget.getAttribute('data-count-transform') === 'true'
-        : (this.props.countTransform != null ? this.props.countTransform : true)
+      extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || ''
     }, () => {
       if (scrollHide) this.addScrollListener(e)
       this.updateTooltip(e)
@@ -362,10 +358,10 @@ class ReactTooltip extends Component {
 
   // Calculation the position
   updatePosition () {
-    const {currentEvent, currentTarget, place, effect, offset, countTransform} = this.state
+    const {currentEvent, currentTarget, place, effect, offset} = this.state
     const node = ReactDOM.findDOMNode(this)
 
-    const result = getPosition(currentEvent, currentTarget, node, place, effect, offset, countTransform)
+    const result = getPosition(currentEvent, currentTarget, node, place, effect, offset)
 
     if (result.isNewState) {
       // Switch to reverse placement
