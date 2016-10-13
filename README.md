@@ -1,32 +1,35 @@
-# react-tooltip
-[![Version](http://img.shields.io/npm/v/react-tooltip.svg)](https://www.npmjs.org/package/react-tooltip)
+# simple-react-tooltip
+<!-- [![Version](http://img.shields.io/npm/v/react-tooltip.svg)](https://www.npmjs.org/package/react-tooltip)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 [![npm download][download-image]][download-url]
 [![Build Status](https://travis-ci.org/wwayne/react-tooltip.svg?branch=master)](https://travis-ci.org/wwayne/react-tooltip)
-
+ -->
 [download-image]: https://img.shields.io/npm/dm/react-tooltip.svg?style=flat-square
 [download-url]: https://npmjs.org/package/react-tooltip
+
+## Author Credits
+Forked from [react-tooltip](https://github.com/wwayne/react-tooltip) and Original author [Wang Zixiao](https://github.com/wwayne)
 
 ## Installation
 
 ```sh
-npm install react-tooltip
+npm install simple-react-tooltip
 ```
 
 ## Usage
 **Using NPM**
 
-1 . Require react-tooltip after installation
+1 . Require simple-react-tooltip after installation
 
 ```js
-import ReactTooltip from 'react-tooltip'
+import ReactTooltip from 'simple-react-tooltip'
 ```
 
 2 . Add data-tip = "your placeholder" to your element
 
 	<p data-tip="hello world">Tooltip</p>
 
-3 . Including react-tooltip component
+3 . Including simple-react-tooltip component
 
 
 ```js
@@ -35,7 +38,7 @@ import ReactTooltip from 'react-tooltip'
 
 **Standalone**
 
-You can import `node_modules/react-tooltip/standalone/react-tooltip.min.js` into your page, please make sure that you have already imported `react` and `react-dom` into your page.
+You can import `node_modules/simple-react-tooltip/standalone/react-tooltip.min.js` into your page, please make sure that you have already imported `react` and `react-dom` into your page.
 
 ## Options
 Notes:
@@ -43,7 +46,7 @@ Notes:
 * The option you set on `<ReactTooltip />` component will be implemented on every tooltip in a same page: `<ReactTooltip effect="solid" />`
 * The option you set on specific element, for example: `<a data-type="warning"></a>` will only make effect on this specific tooltip
 
-Check example:  [React-tooltip Test](http://wwayne.com/react-tooltip)
+Check example:  [Simple-React-tooltip Test](http://wwayne.com/react-tooltip)
 
 Global|Specific	|Type	|Values  |  Description
 |:---|:---|:---|:---|:----

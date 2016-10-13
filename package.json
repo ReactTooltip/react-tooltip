@@ -1,5 +1,5 @@
 {
-  "name": "react-tooltip",
+  "name": "simple-react-tooltip",
   "version": "3.2.1",
   "description": "react tooltip component",
   "main": "dist/index.js",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wwayne/react-tooltip"
+    "url": "https://github.com/marudhupandiyang/react-tooltip"
   },
   "keywords": [
     "react",
@@ -27,12 +27,12 @@
     "tooltip",
     "react-tooltip"
   ],
-  "author": "wwayne",
+  "author": "panther",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wwayne/react-tooltip/issues"
+    "url": "https://github.com/marudhupandiyang/react-tooltip/issues"
   },
-  "homepage": "https://github.com/wwayne/react-tooltip",
+  "homepage": "https://github.com/marudhupandiyang/react-tooltip",
   "browserify-shim": {
     "react": "global:React",
     "react-dom": "global:ReactDOM"
@@ -42,7 +42,8 @@
     "react-dom": "^0.14.0 || ^15.0.0"
   },
   "dependencies": {
-    "classnames": "^2.2.0"
+    "classnames": "^2.2.0",
+    "react": "^15.3.2"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
