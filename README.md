@@ -4,8 +4,9 @@
 [![npm download][download-image]][download-url]
 [![Build Status](https://travis-ci.org/wwayne/react-tooltip.svg?branch=master)](https://travis-ci.org/wwayne/react-tooltip)
  -->
-[download-image]: https://img.shields.io/npm/dm/react-tooltip.svg?style=flat-square
-[download-url]: https://npmjs.org/package/react-tooltip
+
+Simple React tooltip that is inspired from `react-tooltip`. The only change for now is that the dynamic reposition of the tooltip is disabled.
+The `place` you set to the tooltip will be taken into consideration. If you don't specify one default value is taken into account.
 
 ## Author Credits
 Forked from [react-tooltip](https://github.com/wwayne/react-tooltip) and Original author [Wang Zixiao](https://github.com/wwayne)
@@ -75,9 +76,10 @@ class	|   data-class  |  String  |   | extra custom class, can use !important to
 Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
 
 ##### Note:
-1. **data-tip** is necessary, because `<ReactTooltip />` find tooltip via this attribute
-2. **data-for** correspond to the **id** of `<ReactTooltip />`
-3. When using react component as tooltip, you can have many `<ReactTooltip />` in a page but they should have different **id**
+1. Try to specify a **place** always or default value of **top** is taken into consideration.
+2. **data-tip** is necessary, because `<ReactTooltip />` find tooltip via this attribute
+3. **data-for** correspond to the **id** of `<ReactTooltip />`
+4. When using react component as tooltip, you can have many `<ReactTooltip />` in a page but they should have different **id**
 
 ## Static Methods
 ###ReactTooltip.hide(target)
