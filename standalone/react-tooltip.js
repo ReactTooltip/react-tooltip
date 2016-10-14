@@ -391,7 +391,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       currentTarget: null, // Current target of mouse event
       ariaProps: (0, _aria.parseAria)(props), // aria- and role attributes
       isEmptyTip: false,
-      disable: false
+      disable: false,
+      alterLocationIfCantFitIn: false
     };
 
     _this.bind(['showTooltip', 'updateTooltip', 'hideTooltip', 'globalRebuild', 'globalShow', 'globalHide', 'onWindowResize']);
@@ -754,9 +755,10 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var place = _state3.place;
       var effect = _state3.effect;
       var offset = _state3.offset;
+      var alterLocationIfCantFitIn = _state3.alterLocationIfCantFitIn;
 
       var node = _reactDom2.default.findDOMNode(this);
-      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset);
+      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset, alterLocationIfCantFitIn);
 
       if (result.isNewState) {
         // Switch to reverse placement
@@ -901,7 +903,25 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-exports.default = function (e, target, node, place, effect, offset) {
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /**
+                                                                                                                                                                                                                                                                               * Calculate the position of tooltip
+                                                                                                                                                                                                                                                                               *
+                                                                                                                                                                                                                                                                               * @params
+                                                                                                                                                                                                                                                                               * - `e` {Event} the event of current mouse
+                                                                                                                                                                                                                                                                               * - `target` {Element} the currentTarget of the event
+                                                                                                                                                                                                                                                                               * - `node` {DOM} the react-tooltip object
+                                                                                                                                                                                                                                                                               * - `place` {String} top / right / bottom / left
+                                                                                                                                                                                                                                                                               * - `effect` {String} float / solid
+                                                                                                                                                                                                                                                                               * - `offset` {Object} the offset to default position
+                                                                                                                                                                                                                                                                               *
+                                                                                                                                                                                                                                                                               * @return {Object
+                                                                                                                                                                                                                                                                               * - `isNewState` {Bool} required
+                                                                                                                                                                                                                                                                               * - `newState` {Object}
+                                                                                                                                                                                                                                                                               * - `position` {OBject} {left: {Number}, top: {Number}}
+                                                                                                                                                                                                                                                                               */
+
+
+exports.default = function (e, target, node, place, effect, offset, alterLocationIfCantFitIn) {
   var tipWidth = node.clientWidth;
   var tipHeight = node.clientHeight;
 
@@ -945,121 +965,136 @@ exports.default = function (e, target, node, place, effect, offset) {
     return mouseY + offset_Y + extraOffset_Y;
   };
 
-  // Judge if the tooltip has over the window(screen)
-  var outsideVertical = function outsideVertical() {
-    var result = false;
-    var newPlace = void 0;
-    if (getTipOffsetTop('left') < 0 && getTipOffsetBottom('left') <= windowHeight && getTipOffsetBottom('bottom') <= windowHeight) {
-      result = true;
-      newPlace = 'bottom';
-    } else if (getTipOffsetBottom('left') > windowHeight && getTipOffsetTop('left') >= 0 && getTipOffsetTop('top') >= 0) {
-      result = true;
-      newPlace = 'top';
-    }
-    return { result: result, newPlace: newPlace };
-  };
-  var outsideLeft = function outsideLeft() {
-    var _outsideVertical = outsideVertical();
+  if (alterLocationIfCantFitIn) {
+    var _ret = function () {
+      // if we need to detect the dynamic position of tooltip based on window size ?
 
-    var result = _outsideVertical.result;
-    var newPlace = _outsideVertical.newPlace; // Deal with vertical as first priority
+      // Judge if the tooltip has over the window(screen)
+      var outsideVertical = function outsideVertical() {
+        var result = false;
+        var newPlace = void 0;
+        if (getTipOffsetTop('left') < 0 && getTipOffsetBottom('left') <= windowHeight && getTipOffsetBottom('bottom') <= windowHeight) {
+          result = true;
+          newPlace = 'bottom';
+        } else if (getTipOffsetBottom('left') > windowHeight && getTipOffsetTop('left') >= 0 && getTipOffsetTop('top') >= 0) {
+          result = true;
+          newPlace = 'top';
+        }
+        return { result: result, newPlace: newPlace };
+      };
+      var outsideLeft = function outsideLeft() {
+        var _outsideVertical = outsideVertical();
 
-    if (result && outsideHorizontal().result) {
-      return { result: false }; // No need to change, if change to vertical will out of space
-    }
-    if (!result && getTipOffsetLeft('left') < 0 && getTipOffsetRight('right') <= windowWidth) {
-      result = true; // If vertical ok, but let out of side and right won't out of side
-      newPlace = 'right';
-    }
-    return { result: result, newPlace: newPlace };
-  };
-  var outsideRight = function outsideRight() {
-    var _outsideVertical2 = outsideVertical();
+        var result = _outsideVertical.result;
+        var newPlace = _outsideVertical.newPlace; // Deal with vertical as first priority
 
-    var result = _outsideVertical2.result;
-    var newPlace = _outsideVertical2.newPlace;
+        if (result && outsideHorizontal().result) {
+          return { result: false }; // No need to change, if change to vertical will out of space
+        }
+        if (!result && getTipOffsetLeft('left') < 0 && getTipOffsetRight('right') <= windowWidth) {
+          result = true; // If vertical ok, but let out of side and right won't out of side
+          newPlace = 'right';
+        }
+        return { result: result, newPlace: newPlace };
+      };
+      var outsideRight = function outsideRight() {
+        var _outsideVertical2 = outsideVertical();
 
-    if (result && outsideHorizontal().result) {
-      return { result: false }; // No need to change, if change to vertical will out of space
-    }
-    if (!result && getTipOffsetRight('right') > windowWidth && getTipOffsetLeft('left') >= 0) {
-      result = true;
-      newPlace = 'left';
-    }
-    return { result: result, newPlace: newPlace };
-  };
+        var result = _outsideVertical2.result;
+        var newPlace = _outsideVertical2.newPlace;
 
-  var outsideHorizontal = function outsideHorizontal() {
-    var result = false;
-    var newPlace = void 0;
-    if (getTipOffsetLeft('top') < 0 && getTipOffsetRight('top') <= windowWidth && getTipOffsetRight('right') <= windowWidth) {
-      result = true;
-      newPlace = 'right';
-    } else if (getTipOffsetRight('top') > windowWidth && getTipOffsetLeft('top') >= 0 && getTipOffsetLeft('left') >= 0) {
-      result = true;
-      newPlace = 'left';
-    }
-    return { result: result, newPlace: newPlace };
-  };
-  var outsideTop = function outsideTop() {
-    var _outsideHorizontal = outsideHorizontal();
+        if (result && outsideHorizontal().result) {
+          return { result: false }; // No need to change, if change to vertical will out of space
+        }
+        if (!result && getTipOffsetRight('right') > windowWidth && getTipOffsetLeft('left') >= 0) {
+          result = true;
+          newPlace = 'left';
+        }
+        return { result: result, newPlace: newPlace };
+      };
 
-    var result = _outsideHorizontal.result;
-    var newPlace = _outsideHorizontal.newPlace;
+      var outsideHorizontal = function outsideHorizontal() {
+        var result = false;
+        var newPlace = void 0;
+        if (getTipOffsetLeft('top') < 0 && getTipOffsetRight('top') <= windowWidth && getTipOffsetRight('right') <= windowWidth) {
+          result = true;
+          newPlace = 'right';
+        } else if (getTipOffsetRight('top') > windowWidth && getTipOffsetLeft('top') >= 0 && getTipOffsetLeft('left') >= 0) {
+          result = true;
+          newPlace = 'left';
+        }
+        return { result: result, newPlace: newPlace };
+      };
+      var outsideTop = function outsideTop() {
+        var _outsideHorizontal = outsideHorizontal();
 
-    if (result && outsideVertical().result) {
-      return { result: false };
-    }
-    if (!result && getTipOffsetTop('top') < 0 && getTipOffsetBottom('bottom') <= windowHeight) {
-      result = true;
-      newPlace = 'bottom';
-    }
-    return { result: result, newPlace: newPlace };
-  };
-  var outsideBottom = function outsideBottom() {
-    var _outsideHorizontal2 = outsideHorizontal();
+        var result = _outsideHorizontal.result;
+        var newPlace = _outsideHorizontal.newPlace;
 
-    var result = _outsideHorizontal2.result;
-    var newPlace = _outsideHorizontal2.newPlace;
+        if (result && outsideVertical().result) {
+          return { result: false };
+        }
+        if (!result && getTipOffsetTop('top') < 0 && getTipOffsetBottom('bottom') <= windowHeight) {
+          result = true;
+          newPlace = 'bottom';
+        }
+        return { result: result, newPlace: newPlace };
+      };
+      var outsideBottom = function outsideBottom() {
+        var _outsideHorizontal2 = outsideHorizontal();
 
-    if (result && outsideVertical().result) {
-      return { result: false };
-    }
-    if (!result && getTipOffsetBottom('bottom') > windowHeight && getTipOffsetTop('top') >= 0) {
-      result = true;
-      newPlace = 'top';
-    }
-    return { result: result, newPlace: newPlace };
-  };
+        var result = _outsideHorizontal2.result;
+        var newPlace = _outsideHorizontal2.newPlace;
 
-  // Return new state to change the placement to the reverse if possible
-  var outsideLeftResult = outsideLeft();
-  var outsideRightResult = outsideRight();
-  var outsideTopResult = outsideTop();
-  var outsideBottomResult = outsideBottom();
+        if (result && outsideVertical().result) {
+          return { result: false };
+        }
+        if (!result && getTipOffsetBottom('bottom') > windowHeight && getTipOffsetTop('top') >= 0) {
+          result = true;
+          newPlace = 'top';
+        }
+        return { result: result, newPlace: newPlace };
+      };
 
-  if (place === 'left' && outsideLeftResult.result) {
-    return {
-      isNewState: true,
-      newState: { place: outsideLeftResult.newPlace }
-    };
-  } else if (place === 'right' && outsideRightResult.result) {
-    return {
-      isNewState: true,
-      newState: { place: outsideRightResult.newPlace }
-    };
-  } else if (place === 'top' && outsideTopResult.result) {
-    return {
-      isNewState: true,
-      newState: { place: outsideTopResult.newPlace }
-    };
-  } else if (place === 'bottom' && outsideBottomResult.result) {
-    return {
-      isNewState: true,
-      newState: { place: outsideBottomResult.newPlace }
-    };
+      // Return new state to change the placement to the reverse if possible
+      var outsideLeftResult = outsideLeft();
+      var outsideRightResult = outsideRight();
+      var outsideTopResult = outsideTop();
+      var outsideBottomResult = outsideBottom();
+
+      if (place === 'left' && outsideLeftResult.result) {
+        return {
+          v: {
+            isNewState: true,
+            newState: { place: outsideLeftResult.newPlace }
+          }
+        };
+      } else if (place === 'right' && outsideRightResult.result) {
+        return {
+          v: {
+            isNewState: true,
+            newState: { place: outsideRightResult.newPlace }
+          }
+        };
+      } else if (place === 'top' && outsideTopResult.result) {
+        return {
+          v: {
+            isNewState: true,
+            newState: { place: outsideTopResult.newPlace }
+          }
+        };
+      } else if (place === 'bottom' && outsideBottomResult.result) {
+        return {
+          v: {
+            isNewState: true,
+            newState: { place: outsideBottomResult.newPlace }
+          }
+        };
+      }
+    }();
+
+    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
   }
-
   // Return tooltip offset position
   return {
     isNewState: false,
@@ -1092,22 +1127,6 @@ var getCurrentOffset = function getCurrentOffset(e, currentTarget, effect) {
 
 // List all possibility of tooltip final offset
 // This is useful in judging if it is necessary for tooltip to switch position when out of window
-/**
- * Calculate the position of tooltip
- *
- * @params
- * - `e` {Event} the event of current mouse
- * - `target` {Element} the currentTarget of the event
- * - `node` {DOM} the react-tooltip object
- * - `place` {String} top / right / bottom / left
- * - `effect` {String} float / solid
- * - `offset` {Object} the offset to default position
- *
- * @return {Object
- * - `isNewState` {Bool} required
- * - `newState` {Object}
- * - `position` {OBject} {left: {Number}, top: {Number}}
- */
 var getDefaultPosition = function getDefaultPosition(effect, targetWidth, targetHeight, tipWidth, tipHeight) {
   var top = void 0;
   var right = void 0;
