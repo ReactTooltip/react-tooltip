@@ -22,6 +22,10 @@ var _detectBrowser = require('detect-browser');
 
 var _detectBrowser2 = _interopRequireDefault(_detectBrowser);
 
+var _scrollparent = require('scrollparent');
+
+var _scrollparent2 = _interopRequireDefault(_scrollparent);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -84,9 +88,9 @@ var ReactTooltip = function (_Component) {
   function ReactTooltip(props) {
     _classCallCheck(this, ReactTooltip);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactTooltip).call(this, props));
+    var _this = _possibleConstructorReturn(this, (ReactTooltip.__proto__ || Object.getPrototypeOf(ReactTooltip)).call(this, props));
 
-    _this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkStatus', 'onWindowResize', 'bindClickListener', 'globalHide', 'globalRebuild');
+    _this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkMouseOut', 'checkStatus', 'onWindowResize', 'bindClickListener', 'globalHide', 'globalRebuild');
     _this.mount = true;
     _this.state = {
       show: false,
@@ -203,6 +207,9 @@ var ReactTooltip = function (_Component) {
 
           targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
           targetArray[i].addEventListener('mouseleave', this.hideTooltip, false);
+
+          targetArray[i].removeEventListener('mouseout', this.checkMouseOut);
+          targetArray[i].addEventListener('mouseout', this.checkMouseOut, false);
         }
       }
     }
@@ -220,6 +227,7 @@ var ReactTooltip = function (_Component) {
           targetArray[i].removeEventListener('mouseenter', this.showTooltip);
           targetArray[i].removeEventListener('mousemove', this.updateTooltip);
           targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
+          targetArray[i].removeEventListener('mouseout', this.checkMouseOut);
         }
       }
     }
@@ -257,7 +265,6 @@ var ReactTooltip = function (_Component) {
       for (var i = 0; i < targetArray.length; i++) {
         if (targetArray[i].getAttribute('currentItem') === 'true') {
           // todo: timer for performance
-
           var _getPosition = this.getPosition(targetArray[i]);
 
           var x = _getPosition.x;
@@ -352,6 +359,7 @@ var ReactTooltip = function (_Component) {
       extraClass = this.props.class ? this.props.class + ' ' + extraClass : extraClass;
       this.setState({
         placeholder: tooltipText,
+        currentTarget: e.currentTarget,
         multilineCount: multilineCount,
         place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
         type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
@@ -432,6 +440,23 @@ var ReactTooltip = function (_Component) {
     }
 
     /**
+     * When mouse out, hide tooltip
+     */
+
+  }, {
+    key: 'checkMouseOut',
+    value: function checkMouseOut() {
+      if (!e) var e = window.event;
+      var tg = e.currentTarget;
+      var reltg = e.relatedTarget ? e.relatedTarget : e.toElement;
+      while (reltg != tg && reltg.nodeName != 'BODY') {
+        reltg = reltg.parentNode;
+      }if (reltg !== tg) {
+        this.hideTooltip();
+      }
+    }
+
+    /**
      * Add scroll eventlistener when tooltip show
      * or tooltip will always existed
      */
@@ -439,12 +464,14 @@ var ReactTooltip = function (_Component) {
   }, {
     key: 'addScrollListener',
     value: function addScrollListener() {
-      window.addEventListener('scroll', this.hideTooltip);
+      (0, _scrollparent2.default)(this.state.currentTarget).addEventListener('scroll', this.hideTooltip);
     }
   }, {
     key: 'removeScrollListener',
     value: function removeScrollListener() {
-      window.removeEventListener('scroll', this.hideTooltip);
+      if (this.state.currentTarget) {
+        (0, _scrollparent2.default)(this.state.currentTarget).removeEventListener('scroll', this.hideTooltip);
+      }
     }
 
     /**

@@ -49,20 +49,19 @@
     "react": "global:React",
     "react-dom": "global:ReactDOM"
   },
-  "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0",
-    "react-dom": "^0.14.0 || ^15.0.0"
-  },
   "dependencies": {
     "classnames": "^2.2.0",
-    "detect-browser": "^1.3.3"
+    "detect-browser": "^1.3.3",
+    "scrollparent": "^1.0.2"
   },
   "devDependencies": {
-    "babel-cli": "^6.5.1",
+    "babel-cli": "^6.16.0",
     "babel-eslint": "^4.1.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-runtime": "^6.5.0",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.16.0",
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
     "browserify-shim": "^3.8.12",
@@ -71,6 +70,8 @@
     "cash-rm": "^0.2.0",
     "http-server": "^0.8.0",
     "node-sass": "^3.3.2",
+    "react": "^0.14.0 || ^15.0.0",
+    "react-dom": "^0.14.0 || ^15.0.0",
     "snazzy": "^2.0.1",
     "standard": "^5.2.2",
     "tape": "^4.2.0",

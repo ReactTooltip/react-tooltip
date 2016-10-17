@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom'
 import classname from 'classnames'
 import cssStyle from './style'
 import browser from 'detect-browser'
+import scrollparent from 'scrollparent'
 
 class ReactTooltip extends Component {
   /**
@@ -50,7 +51,7 @@ class ReactTooltip extends Component {
 
   constructor (props) {
     super(props)
-    this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkStatus', 'onWindowResize', 'bindClickListener', 'globalHide', 'globalRebuild')
+    this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkMouseOut', 'checkStatus', 'onWindowResize', 'bindClickListener', 'globalHide', 'globalRebuild')
     this.mount = true
     this.state = {
       show: false,
@@ -147,6 +148,9 @@ class ReactTooltip extends Component {
 
         targetArray[i].removeEventListener('mouseleave', this.hideTooltip)
         targetArray[i].addEventListener('mouseleave', this.hideTooltip, false)
+
+        targetArray[i].removeEventListener('mouseout', this.checkMouseOut)
+        targetArray[i].addEventListener('mouseout', this.checkMouseOut, false)
       }
     }
   }
@@ -163,6 +167,7 @@ class ReactTooltip extends Component {
         targetArray[i].removeEventListener('mouseenter', this.showTooltip)
         targetArray[i].removeEventListener('mousemove', this.updateTooltip)
         targetArray[i].removeEventListener('mouseleave', this.hideTooltip)
+        targetArray[i].removeEventListener('mouseout', this.checkMouseOut)
       }
     }
   }
@@ -270,6 +275,7 @@ class ReactTooltip extends Component {
     extraClass = this.props.class ? this.props.class + ' ' + extraClass : extraClass
     this.setState({
       placeholder: tooltipText,
+      currentTarget: e.currentTarget,
       multilineCount: multilineCount,
       place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
       type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
@@ -332,15 +338,31 @@ class ReactTooltip extends Component {
   }
 
   /**
+   * When mouse out, hide tooltip
+   */
+  checkMouseOut () {
+    if (!e) var e = window.event;
+    var tg = e.currentTarget;
+    var reltg = (e.relatedTarget) ? e.relatedTarget : e.toElement;
+    while (reltg != tg && reltg.nodeName != 'BODY')
+      reltg= reltg.parentNode
+    if (reltg !== tg) {
+      this.hideTooltip();
+    }
+  }
+
+  /**
    * Add scroll eventlistener when tooltip show
    * or tooltip will always existed
    */
   addScrollListener () {
-    window.addEventListener('scroll', this.hideTooltip)
+    scrollparent(this.state.currentTarget).addEventListener('scroll', this.hideTooltip)
   }
 
   removeScrollListener () {
-    window.removeEventListener('scroll', this.hideTooltip)
+    if(this.state.currentTarget) {
+      scrollparent(this.state.currentTarget).removeEventListener('scroll', this.hideTooltip)
+    }
   }
 
   /**
