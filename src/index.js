@@ -6,6 +6,7 @@ import classname from 'classnames'
 import cssStyle from './style'
 import browser from 'detect-browser'
 import scrollparent from 'scrollparent'
+import extend from 'extend'
 
 class ReactTooltip extends Component {
   /**
@@ -613,6 +614,8 @@ class ReactTooltip extends Component {
 
     node.style.left = getStyleLeft(place) + 'px'
     node.style.top = getStyleTop(place) + 'px'
+
+    extend(node.style, this.props.style ? this.props.style : {});
   }
 
   /**

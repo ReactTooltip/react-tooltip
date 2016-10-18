@@ -26,6 +26,10 @@ var _scrollparent = require('scrollparent');
 
 var _scrollparent2 = _interopRequireDefault(_scrollparent);
 
+var _extend = require('extend');
+
+var _extend2 = _interopRequireDefault(_extend);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -735,6 +739,8 @@ var ReactTooltip = function (_Component) {
 
       node.style.left = getStyleLeft(place) + 'px';
       node.style.top = getStyleTop(place) + 'px';
+
+      (0, _extend2.default)(node.style, this.props.style ? this.props.style : {});
     }
 
     /**
