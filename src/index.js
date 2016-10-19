@@ -54,8 +54,8 @@ class ReactTooltip extends Component {
   };
 
   static supportedWrappers = {
-    'div': div,
-    'span': span
+    'div': React.DOM.div,
+    'span': React.DOM.span
   };
 
   constructor (props) {
@@ -426,7 +426,7 @@ class ReactTooltip extends Component {
     )
 
     let wrapper = ReactTooltip.supportedWrappers[this.props.wrapper]
-    if (!wrapper) wrapper = div
+    if (!wrapper) wrapper = ReactTooltip.supportedWrappers['div']
 
     if (html) {
       return (

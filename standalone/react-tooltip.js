@@ -808,14 +808,18 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var isEmptyTip = _state4.isEmptyTip;
 
       var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show && !disable && !isEmptyTip }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
+
+      var wrapper = ReactTooltip.supportedWrappers[this.props.wrapper];
+      if (!wrapper) wrapper = ReactTooltip.supportedWrappers['div'];
+
       if (html) {
-        return _react2.default.createElement('div', _extends({ className: tooltipClass + ' ' + extraClass
+        return _react2.default.createElement('wrapper', _extends({ className: tooltipClass + ' ' + extraClass
         }, ariaProps, {
           'data-id': 'tooltip',
           dangerouslySetInnerHTML: { __html: placeholder } }));
       } else {
         return _react2.default.createElement(
-          'div',
+          'wrapper',
           _extends({ className: tooltipClass + ' ' + extraClass
           }, ariaProps, {
             'data-id': 'tooltip' }),
@@ -849,9 +853,14 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   afterHide: _react.PropTypes.func,
   disable: _react.PropTypes.bool,
   scrollHide: _react.PropTypes.bool,
-  resizeHide: _react.PropTypes.bool
+  resizeHide: _react.PropTypes.bool,
+  wrapper: _react.PropTypes.string
 }, _class2.defaultProps = {
-  resizeHide: true
+  resizeHide: true,
+  wrapper: 'div'
+}, _class2.supportedWrappers = {
+  'div': _react2.default.DOM.div,
+  'span': _react2.default.DOM.span
 }, _temp)) || _class) || _class) || _class) || _class;
 
 /* export default not fit for standalone, it will exports {default:...} */
