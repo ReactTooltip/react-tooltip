@@ -341,14 +341,19 @@ class ReactTooltip extends Component {
   /**
    * When mouse out, hide tooltip
    */
-  checkMouseOut () {
-    if (!e) var e = window.event;
-    var tg = e.currentTarget;
-    var reltg = (e.relatedTarget) ? e.relatedTarget : e.toElement;
-    while (reltg && reltg != tg && reltg.nodeName != 'BODY')
-      reltg= reltg.parentNode
-    if (!reltg || reltg !== tg) {
-      this.hideTooltip();
+  checkMouseOut (e) {
+    var event = typeof e !== 'undefined' ? e : null
+    if (!event) {event = window.event}
+    if (event) {
+      var tg = event.currentTarget
+      var reltg = (event.relatedTarget) ? event.relatedTarget : event.toElement
+      while (reltg && reltg != tg && reltg.nodeName != 'BODY')
+        reltg= reltg.parentNode
+      if (!reltg || reltg !== tg) {
+        this.hideTooltip()
+      }
+    } else {
+      this.hideTooltip()
     }
   }
 
