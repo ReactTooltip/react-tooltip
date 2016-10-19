@@ -345,9 +345,9 @@ class ReactTooltip extends Component {
     if (!e) var e = window.event;
     var tg = e.currentTarget;
     var reltg = (e.relatedTarget) ? e.relatedTarget : e.toElement;
-    while (reltg != tg && reltg.nodeName != 'BODY')
+    while (reltg && reltg != tg && reltg.nodeName != 'BODY')
       reltg= reltg.parentNode
-    if (reltg !== tg) {
+    if (!reltg || reltg !== tg) {
       this.hideTooltip();
     }
   }
