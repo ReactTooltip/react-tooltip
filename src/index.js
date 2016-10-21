@@ -45,6 +45,7 @@ class ReactTooltip extends Component {
     afterHide: PropTypes.func,
     disable: PropTypes.bool,
     frozen: PropTypes.bool,
+    onClickOutside: PropTypes.func,
     scrollHide: PropTypes.bool,
     resizeHide: PropTypes.bool
   };
@@ -182,6 +183,10 @@ class ReactTooltip extends Component {
       window.removeEventListener(globalEventOff, this.hideTooltip)
       window.addEventListener(globalEventOff, this.hideTooltip, false)
     }
+
+    if (this.props.onClickOutside) {
+      window.addEventListener('click', this.onClickOutsideFrozenTooltip)
+    }
   }
 
   /**
@@ -196,6 +201,7 @@ class ReactTooltip extends Component {
     })
 
     if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip)
+    window.removeEventListener('click', this.onClickOutsideFrozenTooltip)
   }
 
   /**
@@ -321,6 +327,14 @@ class ReactTooltip extends Component {
       this.delayShowLoop = setTimeout(updateState, delayTime)
     } else {
       updateState()
+    }
+  }
+
+  onClickOutsideFrozenTooltip = (e) => {
+    const {frozen, onClickOutside} = this.props
+    const {currentTarget} = this.state
+    if (frozen && onClickOutside && !ReactDOM.findDOMNode(this).contains(e.target) && e.target !== currentTarget) {
+      onClickOutside()
     }
   }
 
