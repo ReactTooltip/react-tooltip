@@ -62,7 +62,6 @@ class	|   data-class  |  String  |   | extra custom class, can use !important to
  delayShow	|   data-delay-show  |  Number  |   | `<p data-tip="tooltip" data-delay-show='1000'></p>` or `<ReactTooltip delayShow={1000} />`
  border  |   data-border  |  Bool  |  true, false | Add one pixel white border
  getContent | null | Func or Array | () => {}, [() => {}, Interval] | Generate the tip content dynamically
- countTransform | data-count-transform | Bool | True, False | Tell tooltip if it needs to count parents' transform into position calculation, the default is true, but it should be set to false when using with react-list
  afterShow | null | Func | () => {} | Function that will be called after tooltip show
  afterHide | null | Func | () => {} | Function that will be called after tooltip hide
  disable | data-tip-disable | Bool | true, false | Disable the tooltip behaviour, default is false
@@ -70,7 +69,7 @@ class	|   data-class  |  String  |   | extra custom class, can use !important to
  resizeHide | null | Bool | true, false | Hide the tooltip when resizing the window, default is true
 
 ## Using react component as tooltip
-Check the example [React-tooltip Test](http://wbazant.github.io/react-tooltip)
+Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
 
 ##### Note:
 1. **data-tip** is necessary, because `<ReactTooltip />` find tooltip via this attribute
@@ -109,7 +108,7 @@ import ReactTooltip from 'react-tooltip'
 ```
 
 ## Trouble Shooting
-### Using tooltip within the modal (e.g. [react-modal](https://github.com/reactjs/react-modal))
+### 1. Using tooltip within the modal (e.g. [react-modal](https://github.com/reactjs/react-modal))
 The component was designed to set a `<Reactooltip />` one place then use tooltip everywhere, but a lot of people stuck in using this component with modal, you can check the discussion [here](https://github.com/wwayne/react-tooltip/issues/130), the summarization of solving the problem is as following:
 
 1. Put `<ReactTooltip />` out of the `<Modal>`
@@ -118,6 +117,21 @@ The component was designed to set a `<Reactooltip />` one place then use tooltip
 
 >I suggest always put `<ReactTooltip />` in the Highest level or smart component of Redux, so you might need these static
 method to control tooltip's behaviour in some situations
+
+### 2. Hide tooltip when getContent returns undefined
+When you set `getContent={() => { return }}` you will find the tooltip will dispaly `true`, that's because React will set the value of data-* to be 'true' automatically if there is no value to be set. So you have to set `data-tip=''` in this situaction.
+
+```
+<p data-tip='' data-for='test'></p>
+<ReactTooltip id='test' getContent={() => { return null }}/>
+```
+
+Same for empty children, if you don't want show the tooltip when the children is empty
+
+```
+<p data-tip='' data-for='test'></p>
+<ReactTooltip id='test'>{}</ReactTooltip>
+```
 
 ## Article
 [How I insert sass into react component](https://medium.com/@wwayne_me/how-i-insert-sass-into-my-npm-react-component-b46b9811c226#.gi4hxu44a)
