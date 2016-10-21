@@ -14,7 +14,7 @@
  * - `newState` {Object}
  * - `position` {OBject} {left: {Number}, top: {Number}}
  */
-export default function (e, target, node, place, effect, offset, countTransform) {
+export default function (e, target, node, place, effect, offset) {
   const tipWidth = node.clientWidth
   const tipHeight = node.clientHeight
   const {mouseX, mouseY} = getCurrentOffset(e, target, effect)
@@ -24,7 +24,7 @@ export default function (e, target, node, place, effect, offset, countTransform)
   const windowWidth = window.innerWidth
   const windowHeight = window.innerHeight
 
-  const {parentTop, parentLeft} = countTransform && getParent(target, countTransform) || {parentTop: 0, parentLeft: 0}
+  const {parentTop, parentLeft} = getParent(node)
 
   // Get the edge offset of the tooltip
   const getTipOffsetLeft = (place) => {

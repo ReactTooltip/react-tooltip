@@ -25,7 +25,7 @@ Global	|Type	|Values  |  Description
  frozen	|   Bool  |  true, false | On change into frozen, the tooltip stops updating and lets you interact with it.
 
 ## Using react component as tooltip
-Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
+Check the example [React-tooltip Test](http://wbazant.github.io/react-tooltip)
 
 ### License
 
