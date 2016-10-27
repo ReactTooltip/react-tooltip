@@ -12,7 +12,8 @@ const dispatchGlobalEvent = (eventName, opts) => {
     event = new window.CustomEvent(eventName, { detail: opts })
   } else {
     event = document.createEvent('Event')
-    event.initEvent(eventName, false, true, opts)
+    event.initEvent(eventName, false, true)
+    event.detail = opts
   }
 
   window.dispatchEvent(event)
