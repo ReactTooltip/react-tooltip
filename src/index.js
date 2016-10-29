@@ -200,9 +200,10 @@ class ReactTooltip extends Component {
    * so that the tooltip can switch between custom and default listener
    */
   unbindBasicListener (target) {
-    target.removeEventListener('mouseenter', this.showTooltip)
-    target.removeEventListener('mousemove', this.updateTooltip)
-    target.removeEventListener('mouseleave', this.hideTooltip)
+    const isCaptureMode = this.isCapture(target)
+    target.removeEventListener('mouseenter', this.showTooltip, isCaptureMode)
+    target.removeEventListener('mousemove', this.updateTooltip, isCaptureMode)
+    target.removeEventListener('mouseleave', this.hideTooltip, isCaptureMode)
   }
 
   /**
