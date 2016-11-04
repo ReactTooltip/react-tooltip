@@ -452,12 +452,14 @@ class ReactTooltip extends Component {
         <div className={`${tooltipClass} ${extraClass}`}
           {...ariaProps}
           data-id='tooltip'
+          style={this.props.style}
           dangerouslySetInnerHTML={{__html: placeholder}}></div>
       )
     } else {
       return (
         <div className={`${tooltipClass} ${extraClass}`}
           {...ariaProps}
+          style={this.props.style}
           data-id='tooltip'>{placeholder}</div>
       )
     }
