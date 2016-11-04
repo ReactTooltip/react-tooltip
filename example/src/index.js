@@ -1,8 +1,8 @@
 'use strict'
 
 import React from 'react'
-import {render} from 'react-dom'
-import ReactTooltip from '../../src/index'
+import {render, findDOMNode} from 'react-dom'
+import ReactTooltip from '../../src'
 
 const Test = React.createClass({
 
@@ -91,7 +91,7 @@ const Test = React.createClass({
             <p className="sub-title">Use everything as tooltip</p>
 
             <div className="example-jsx">
-              <div className="side">
+              <div className="side"  style={{ transform: 'translate3d(5px, 5px, 5px)' }}>
                 <a data-tip data-for='happyFace'> d(`･∀･)b </a>
                 <ReactTooltip id='happyFace' type="error"><span>Show happy face</span></ReactTooltip>
               </div>
@@ -113,11 +113,10 @@ const Test = React.createClass({
                 "</ReactTooltip>"}</p>
               </div>
             </pre>
-
             <div className="example-jsx">
               <div className="side"><a data-tip data-for='global'> σ`∀´)σ </a></div>
               <div className="side"><a data-tip data-for='global'> (〃∀〃) </a></div>
-              <ReactTooltip id='global'>
+              <ReactTooltip id='global' aria-haspopup="true" role="example">
                 <p>This is a global react component tooltip</p>
                 <p>You can put every thing here</p>
                 <ul>
@@ -131,7 +130,7 @@ const Test = React.createClass({
               <div>
                 <p>{"<a data-tip data-for='global'> σ`∀´)σ </a>\n" +
                   "<a data-tip data-for='global'> (〃∀〃) </a>\n" +
-                  "<ReactTooltip id='global'>\n" +
+                  "<ReactTooltip id='global' aria-haspopup='true' role='example'>\n" +
                     " <p>This is a global react component tooltip</p>\n" +
                     " <p>You can put every thing here</p>\n" +
                     " <ul>\n" +
@@ -144,23 +143,106 @@ const Test = React.createClass({
             </pre>
           </div>
         </section>
-
         <section className="advance">
           <div className="section">
-            <h4 className='title'>Customer event</h4>
+            <h4 className='title'>Custom event</h4>
             <p className="sub-title"></p>
-
             <div className="example-jsx">
               <div className="side">
-                <a data-for='customer-event' data-tip='customer event' data-event='click' data-type='info'>( •̀д•́)</a>
-                <ReactTooltip id='customer-event' />
+                <a data-for='custom-event' data-tip='custom show' data-event='click focus'>( •̀д•́)</a>
+                <ReactTooltip id='custom-event' globalEventOff='click' />
+              </div>
+              <div className="side">
+                <a data-for='custom-off-event' ref='target' data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>
+                <ReactTooltip id='custom-off-event'/>
+                {/*
+                  <div>
+                    <button onClick={() => { ReactTooltip.show(findDOMNode(this.refs.target)) }}>Show toolip</button>
+                    <button onClick={() => { ReactTooltip.hide(findDOMNode(this.refs.target)) }}>Hide toolip</button>
+                  </div>
+                */}
               </div>
             </div>
             <br />
             <pre className='example-pre'>
               <div>
-                <p>{"<a data-tip='customer event' data-event='click' data-type='info'>( •̀д•́)</a>\n" +
+                <p>{"<a data-tip='custom show' data-event='click focus'>( •̀д•́)</a>\n" +
+                "<ReactTooltip globalEventOff='click' />"}</p>
+              </div>
+              <div>
+                <p>{"<a data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>\n" +
                 "<ReactTooltip/>"}</p>
+              </div>
+            </pre>
+          </div>
+          <div className="section">
+            <h4 className='title'>Theme and delay</h4>
+            <p className="sub-title"></p>
+            <div className="example-jsx">
+              <div className="side">
+                <a data-for='custom-class' data-tip='hover on me will keep the tootlip'>(･ω´･ )</a>
+                {/* <a data-for='custom-class' data-tip='' data-tip-disable='true'>empty testing</a> */}
+                <ReactTooltip id='custom-class' class='extraClass' delayHide={1000} effect='solid'/>
+              </div>
+              <div className="side">
+                <a data-for='custom-theme' data-tip='custom theme'>(･ω´･ )</a>
+                <ReactTooltip id='custom-theme' class='customeTheme'/>
+              </div>
+            </div>
+            <br />
+            <pre className='example-pre'>
+              <div>
+                <p>{"<a data-tip='hover on me will keep the tootlip'>(･ω´･ )́)</a>\n" +
+                "<ReactTooltip class='extraClass' delayHide={1000} effect='solid'/>\n" +
+                ".extraClass {\n" +
+                  " font-size: 20px !important;\n" +
+                  " pointer-events: auto !important;\n" +
+                  " &:hover {\n" +
+                    "visibility: visible !important;\n" +
+                    "opacity: 1 !important;\n" +
+                  " }\n" +
+                "}"}</p>
+              </div>
+              <div>
+                <p>{"<a data-tip='custom theme'>(･ω´･ )́)</a>\n" +
+                "<ReactTooltip class='customeTheme'/>\n" +
+                " .customeTheme {\n" +
+                  " color: #ff6e00 !important;\n" +
+                  " background-color: orange !important;\n" +
+                  " &.place-top {\n" +
+                    " &:after {\n" +
+                      " border-top-color: orange !important;\n" +
+                      " border-top-style: solid !important;\n" +
+                      " border-top-width: 6px !important;\n" +
+                    " }\n" +
+                  " }\n" +
+                "}"}</p>
+              </div>
+            </pre>
+          </div>
+          <div className="section">
+            <h4 className='title'>Update tip content over time</h4>
+            <p className="sub-title"></p>
+            <div className="example-jsx">
+              <div className="side">
+                <a data-for='getContent' data-tip>=( •̀д•́)</a>
+                <ReactTooltip id='getContent' getContent={() => Math.floor(Math.random() * 100)}/>
+              </div>
+              <div className="side">
+                <a data-for='overTime' data-tip>=( •̀д•́)</a>
+                <ReactTooltip id='overTime'
+                  getContent={[() => {return new Date().toISOString()}, 1000]}/>
+              </div>
+            </div>
+            <br />
+            <pre className='example-pre'>
+              <div>
+                <p>{"<a data-for='getContent' data-tip>=( •̀д•́)</a>\n" +
+                "<ReactTooltip id='getContent' getContent={() => Math.floor(Math.random() * 100)} />"}</p>
+              </div>
+              <div>
+                <p>{"<a data-for='overTime' data-tip>=( •̀д•́)</a>\n" +
+                "<ReactTooltip id='overTime' getContent={[() => {return new Date().toISOString()}, 1000]}/>"}</p>
               </div>
             </pre>
           </div>

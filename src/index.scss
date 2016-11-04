@@ -2,22 +2,30 @@
   background-color: $background-color;
   &.place-top {
     &:after {
-      border-top: 6px solid $background-color;
+      border-top-color: $background-color;
+      border-top-style: solid;
+      border-top-width: 6px;
     }
   }
   &.place-bottom {
     &:after {
-      border-bottom: 6px solid $background-color;
+      border-bottom-color: $background-color;
+      border-bottom-style: solid;
+      border-bottom-width: 6px;
     }
   }
   &.place-left {
     &:after {
-      border-left: 6px solid $background-color;
+      border-left-color: $background-color;
+      border-left-style: solid;
+      border-left-width: 6px;
     }
   }
   &.place-right {
     &:after {
-      border-right: 6px solid $background-color;
+      border-right-color: $background-color;
+      border-right-style: solid;
+      border-right-width: 6px;
     }
   }
 }
@@ -55,7 +63,7 @@
   padding: 8px 21px;
   position: fixed;
   pointer-events: none;
-  transition: opacity 0.3s ease-out , margin-top 0.3s ease-out, margin-left 0.3s ease-out;
+  transition: opacity 0.3s ease-out;
   top: -999em;
   visibility: hidden;
   z-index: 999;
@@ -188,4 +196,4 @@
     padding: 2px 0px;
     text-align: center;
   }
-} 
+}

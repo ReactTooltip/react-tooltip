@@ -1,5 +1,72 @@
 ## Change Log
 
+### 3.2.1 (2016/09/30 09:50 +00:00)
+- [#202](https://github.com/wwayne/react-tooltip/pull/202) Hide tooltip when getContent return null or undefined, same for empty… (@wwayne)
+- [#201](https://github.com/wwayne/react-tooltip/pull/201) Hide tooltip if the tip is empty or disabled (@wwayne)
+
+### 3.2.0 (2016/09/30 01:10 +00:00)
+- [#200](https://github.com/wwayne/react-tooltip/pull/200) Remove countTransform because the way of transform calculation is cha… (@wwayne)
+- [#195](https://github.com/wwayne/react-tooltip/pull/195) Use node parent when calculating offset (@iamdoron)
+
+### 3.1.8 (2016/09/14 13:37 +00:00)
+- [#194](https://github.com/wwayne/react-tooltip/pull/194) Add resizeHide option (@wwayne)
+- [#193](https://github.com/wwayne/react-tooltip/pull/193) hide specific tooltip (@wwayne)
+- [#192](https://github.com/wwayne/react-tooltip/pull/192) Create scroll hide option (@wwayne)
+
+### 3.1.7 (2016/09/07 00:46 +00:00)
+- [#187](https://github.com/wwayne/react-tooltip/pull/187) Add disable option (@wwayne)
+- [#183](https://github.com/wwayne/react-tooltip/pull/183) Remove react-dom from Bower dependencies (@mikkopiu)
+
+### 3.1.6 (2016/08/19 02:07 +00:00)
+- [#181](https://github.com/wwayne/react-tooltip/pull/181) Judge if the component has been mounted mount in getContent #180 (@wwayne)
+- [#179](https://github.com/wwayne/react-tooltip/pull/179) Add bower.json (@mikkopiu)
+
+### 3.1.5 (2016/08/04 10:43 +00:00)
+- [#176](https://github.com/wwayne/react-tooltip/pull/176) Support ReactTooltip.show() #47 (@wwayne)
+- [#174](https://github.com/wwayne/react-tooltip/pull/174) Factor transform in css into position calculation #152 (@wwayne)
+
+### 3.1.4 (2016/08/03 13:52 +00:00)
+- [#173](https://github.com/wwayne/react-tooltip/pull/173) Add new attribute afterShow and afterHide (@wwayne)
+- [#172](https://github.com/wwayne/react-tooltip/pull/172) Add support for aria- and role props #159 (@wwayne)
+
+### 3.1.3 (2016/08/01 23:53 +00:00)
+- [#164](https://github.com/wwayne/react-tooltip/pull/164) Fix for delayShwo #163 (@wwayne)
+
+### 3.1.2 (2016/07/30 01:38 +00:00)
+- [#162](https://github.com/wwayne/react-tooltip/pull/162) Fix for #158, getposition error (@wwayne)
+
+### 3.1.1 (2016/07/27 13:03 +00:00)
+- [#151](https://github.com/wwayne/react-tooltip/pull/151) Update postion calculation so that it can calculate continous tootlip (@wwayne)
+
+### 3.1.0 (2016/07/27 08:49 +00:00)
+- [#149](https://github.com/wwayne/react-tooltip/pull/149) Update algorithm for get positon to fix the shake problem #146 (@wwayne)
+- [#145](https://github.com/wwayne/react-tooltip/pull/145) fix typo (@meandavejustice)
+
+### 3.0.13 (2016/07/14 09:53 +00:00)
+- [#136](https://github.com/wwayne/react-tooltip/pull/136) Check if current element is under transform (@CremAlex)
+- [#135](https://github.com/wwayne/react-tooltip/pull/135) Transform 3d (@wwayne)
+
+### 3.0.10 (2016/07/12 00:28 +00:00)
+- [#132](https://github.com/wwayne/react-tooltip/pull/132) Make getContent to support dynamical generate content while hover (@wwayne)
+- [#131](https://github.com/wwayne/react-tooltip/pull/131) Add possibility to recalculate content on show tooltip (@pokidovea)
+- [#128](https://github.com/wwayne/react-tooltip/pull/128) Correct Typos in README.md (@gottsohn)
+
+### 3.0.7 (2016/06/24 13:58 +00:00)
+- [#124](https://github.com/wwayne/react-tooltip/pull/124) Consider both vertical and horizontal into place re-calculation (@wwayne)
+
+### 3.0.6 (2016/06/23 01:08 +00:00)
+- [#122](https://github.com/wwayne/react-tooltip/pull/122) Fixed "Wrong query selector for data-tip #121" (@neciu)
+
+### 3.0.5 (2016/06/21 00:32 +00:00)
+- [#120](https://github.com/wwayne/react-tooltip/pull/120) Fix custom event with specific id (@wwayne)
+
+### 3.0.4 (2016/06/17 10:28 +00:00)
+- [#117](https://github.com/wwayne/react-tooltip/pull/117) Improve deploy process (@wwayne)
+
+### 3.0.0 (2016/06/16 12:39 +00:00)
+- [#115](https://github.com/wwayne/react-tooltip/pull/115) Improve structure (@wwayne)
+- [#106](https://github.com/wwayne/react-tooltip/pull/106) Workaround for fixed elements inside transformed elements (@nd0ut)
+
 ### 2.0.3 (2016/06/01 13:45 +00:00)
 - [#112](https://github.com/wwayne/react-tooltip/pull/112) Add custom event to hide tooltip (@wwayne)
 - [#103](https://github.com/wwayne/react-tooltip/pull/103) Allow user to specify separate off event for the tooltip (@ondy1985)

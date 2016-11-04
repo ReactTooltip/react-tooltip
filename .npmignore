@@ -9,7 +9,8 @@ example/
 test/
 bin/
 CHANGELOG.md
+src/
 
 // setting files
 .babelrc
-circle.yml
+.travis.yml

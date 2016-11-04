@@ -49,201 +49,271 @@
 }());
 
 },{}],2:[function(require,module,exports){
-var detectBrowser = require('./lib/detectBrowser');
+'use strict';
 
-module.exports = detectBrowser(navigator.userAgent);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
 
-},{"./lib/detectBrowser":3}],3:[function(require,module,exports){
-module.exports = function detectBrowser(userAgentString) {
-  var browsers = [
-    [ 'edge', /Edge\/([0-9\._]+)/ ],
-    [ 'chrome', /(?!Chrom.*OPR)Chrom(?:e|ium)\/([0-9\.]+)(:?\s|$)/ ],
-    [ 'crios', /CriOS\/([0-9\.]+)(:?\s|$)/ ],
-    [ 'firefox', /Firefox\/([0-9\.]+)(?:\s|$)/ ],
-    [ 'opera', /Opera\/([0-9\.]+)(?:\s|$)/ ],
-    [ 'opera', /OPR\/([0-9\.]+)(:?\s|$)$/ ],
-    [ 'ie', /Trident\/7\.0.*rv\:([0-9\.]+)\).*Gecko$/ ],
-    [ 'ie', /MSIE\s([0-9\.]+);.*Trident\/[4-7].0/ ],
-    [ 'ie', /MSIE\s(7\.0)/ ],
-    [ 'bb10', /BB10;\sTouch.*Version\/([0-9\.]+)/ ],
-    [ 'android', /Android\s([0-9\.]+)/ ],
-    [ 'ios', /iPad.*Version\/([0-9\._]+)/ ],
-    [ 'ios',  /iPhone.*Version\/([0-9\._]+)/ ],
-    [ 'safari', /Version\/([0-9\._]+).*Safari/ ]
-  ];
+  GLOBAL: {
+    HIDE: '__react_tooltip_hide_event',
+    REBUILD: '__react_tooltip_rebuild_event',
+    SHOW: '__react_tooltip_show_event'
+  }
+};
 
-  var i = 0, mapped =[];
-  for (i = 0; i < browsers.length; i++) {
-    browsers[i] = createMatch(browsers[i]);
-    if (isMatch(browsers[i])) {
-      mapped.push(browsers[i]);
+},{}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (target) {
+  target.prototype.isCustomEvent = function (ele) {
+    var event = this.state.event;
+
+    return event || !!ele.getAttribute('data-event');
+  };
+
+  /* Bind listener for custom event */
+  target.prototype.customBindListener = function (ele) {
+    var _this = this;
+
+    var _state = this.state;
+    var event = _state.event;
+    var eventOff = _state.eventOff;
+
+    var dataEvent = ele.getAttribute('data-event') || event;
+    var dataEventOff = ele.getAttribute('data-event-off') || eventOff;
+
+    dataEvent.split(' ').forEach(function (event) {
+      ele.removeEventListener(event, customListener);
+      customListener = checkStatus.bind(_this, dataEventOff);
+      ele.addEventListener(event, customListener, false);
+    });
+    if (dataEventOff) {
+      dataEventOff.split(' ').forEach(function (event) {
+        ele.removeEventListener(event, _this.hideTooltip);
+        ele.addEventListener(event, _this.hideTooltip, false);
+      });
     }
-  }
+  };
 
-  var match = mapped[0];
-  var parts = match && match[3].split(/[._]/).slice(0,3);
+  /* Unbind listener for custom event */
+  target.prototype.customUnbindListener = function (ele) {
+    var _state2 = this.state;
+    var event = _state2.event;
+    var eventOff = _state2.eventOff;
 
-  while (parts && parts.length < 3) {
-    parts.push('0');
-  }
+    var dataEvent = event || ele.getAttribute('data-event');
+    var dataEventOff = eventOff || ele.getAttribute('data-event-off');
 
-  function createMatch(pair) {
-    return pair.concat(pair[1].exec(userAgentString));
-  }
-
-  function isMatch(pair) {
-    return !!pair[2];
-  }
-
-  // return the name and version
-  return {
-    name: match && match[0],
-    version: parts && parts.join('.'),
+    ele.removeEventListener(dataEvent, customListener);
+    if (dataEventOff) ele.removeEventListener(dataEventOff, this.hideTooltip);
   };
 };
+
+/**
+ * Custom events to control showing and hiding of tooltip
+ *
+ * @attributes
+ * - `event` {String}
+ * - `eventOff` {String}
+ */
+
+var checkStatus = function checkStatus(dataEventOff, e) {
+  var show = this.state.show;
+  var id = this.props.id;
+
+  var dataIsCapture = e.currentTarget.getAttribute('data-iscapture');
+  var isCapture = dataIsCapture && dataIsCapture === 'true' || this.props.isCapture;
+  var currentItem = e.currentTarget.getAttribute('currentItem');
+
+  if (!isCapture) e.stopPropagation();
+  if (show && currentItem === 'true') {
+    if (!dataEventOff) this.hideTooltip(e);
+  } else {
+    e.currentTarget.setAttribute('currentItem', 'true');
+    setUntargetItems(e.currentTarget, this.getTargetArray(id));
+    this.showTooltip(e);
+  }
+};
+
+var setUntargetItems = function setUntargetItems(currentTarget, targetArray) {
+  for (var i = 0; i < targetArray.length; i++) {
+    if (currentTarget !== targetArray[i]) {
+      targetArray[i].setAttribute('currentItem', 'false');
+    } else {
+      targetArray[i].setAttribute('currentItem', 'true');
+    }
+  }
+};
+
+var customListener = void 0;
 
 },{}],4:[function(require,module,exports){
 'use strict';
 
-var hasOwn = Object.prototype.hasOwnProperty;
-var toStr = Object.prototype.toString;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var isArray = function isArray(arr) {
-	if (typeof Array.isArray === 'function') {
-		return Array.isArray(arr);
-	}
-
-	return toStr.call(arr) === '[object Array]';
+exports.default = function (target) {
+  target.prototype.isCapture = function (currentTarget) {
+    var dataIsCapture = currentTarget.getAttribute('data-iscapture');
+    return dataIsCapture && dataIsCapture === 'true' || this.props.isCapture || false;
+  };
 };
-
-var isPlainObject = function isPlainObject(obj) {
-	if (!obj || toStr.call(obj) !== '[object Object]') {
-		return false;
-	}
-
-	var hasOwnConstructor = hasOwn.call(obj, 'constructor');
-	var hasIsPrototypeOf = obj.constructor && obj.constructor.prototype && hasOwn.call(obj.constructor.prototype, 'isPrototypeOf');
-	// Not own constructor property must be Object
-	if (obj.constructor && !hasOwnConstructor && !hasIsPrototypeOf) {
-		return false;
-	}
-
-	// Own properties are enumerated firstly, so to speed up,
-	// if last one is own, then all properties are own.
-	var key;
-	for (key in obj) {/**/}
-
-	return typeof key === 'undefined' || hasOwn.call(obj, key);
-};
-
-module.exports = function extend() {
-	var options, name, src, copy, copyIsArray, clone,
-		target = arguments[0],
-		i = 1,
-		length = arguments.length,
-		deep = false;
-
-	// Handle a deep copy situation
-	if (typeof target === 'boolean') {
-		deep = target;
-		target = arguments[1] || {};
-		// skip the boolean and the target
-		i = 2;
-	} else if ((typeof target !== 'object' && typeof target !== 'function') || target == null) {
-		target = {};
-	}
-
-	for (; i < length; ++i) {
-		options = arguments[i];
-		// Only deal with non-null/undefined values
-		if (options != null) {
-			// Extend the base object
-			for (name in options) {
-				src = target[name];
-				copy = options[name];
-
-				// Prevent never-ending loop
-				if (target !== copy) {
-					// Recurse if we're merging plain objects or arrays
-					if (deep && copy && (isPlainObject(copy) || (copyIsArray = isArray(copy)))) {
-						if (copyIsArray) {
-							copyIsArray = false;
-							clone = src && isArray(src) ? src : [];
-						} else {
-							clone = src && isPlainObject(src) ? src : {};
-						}
-
-						// Never move original objects, clone them
-						target[name] = extend(deep, clone, copy);
-
-					// Don't bring in undefined values
-					} else if (typeof copy !== 'undefined') {
-						target[name] = copy;
-					}
-				}
-			}
-		}
-	}
-
-	// Return the modified object
-	return target;
-};
-
 
 },{}],5:[function(require,module,exports){
-(function (root, factory) {
-  if (typeof define === "function" && define.amd) {
-    define([], factory);
-  } else if (typeof module === "object" && module.exports) {
-    module.exports = factory();
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (target) {
+  /**
+   * Hide all tooltip
+   * @trigger ReactTooltip.hide()
+   */
+  target.hide = function (target) {
+    dispatchGlobalEvent(_constant2.default.GLOBAL.HIDE, { target: target });
+  };
+
+  /**
+   * Rebuild all tooltip
+   * @trigger ReactTooltip.rebuild()
+   */
+  target.rebuild = function () {
+    dispatchGlobalEvent(_constant2.default.GLOBAL.REBUILD);
+  };
+
+  /**
+   * Show specific tooltip
+   * @trigger ReactTooltip.show()
+   */
+  target.show = function (target) {
+    dispatchGlobalEvent(_constant2.default.GLOBAL.SHOW, { target: target });
+  };
+
+  target.prototype.globalRebuild = function () {
+    if (this.mount) {
+      this.unbindListener();
+      this.bindListener();
+    }
+  };
+
+  target.prototype.globalShow = function (event) {
+    if (this.mount) {
+      // Create a fake event, specific show will limit the type to `solid`
+      // only `float` type cares e.clientX e.clientY
+      var e = { currentTarget: event.detail.target };
+      this.showTooltip(e, true);
+    }
+  };
+
+  target.prototype.globalHide = function (event) {
+    if (this.mount) {
+      var hasTarget = event && event.detail && event.detail.target && true || false;
+      this.hideTooltip({ currentTarget: hasTarget && event.detail.target }, hasTarget);
+    }
+  };
+};
+
+var _constant = require('../constant');
+
+var _constant2 = _interopRequireDefault(_constant);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var dispatchGlobalEvent = function dispatchGlobalEvent(eventName, opts) {
+  // Compatibale with IE
+  // @see http://stackoverflow.com/questions/26596123/internet-explorer-9-10-11-event-constructor-doesnt-work
+  var event = void 0;
+
+  if (typeof window.CustomEvent === 'function') {
+    event = new window.CustomEvent(eventName, { detail: opts });
   } else {
-    root.Scrollparent = factory();
+    event = document.createEvent('Event');
+    event.initEvent(eventName, false, true, opts);
   }
-}(this, function () {
-  var regex = /(auto|scroll)/;
 
-  var parents = function (node, ps) {
-    if (node.parentNode === null) { return ps; }
+  window.dispatchEvent(event);
+}; /**
+    * Static methods for react-tooltip
+    */
 
-    return parents(node.parentNode, ps.concat([node]));
-  };
+},{"../constant":2}],6:[function(require,module,exports){
+'use strict';
 
-  var style = function (node, prop) {
-    return getComputedStyle(node, null).getPropertyValue(prop);
-  };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-  var overflow = function (node) {
-    return style(node, "overflow") + style(node, "overflow-y") + style(node, "overflow-x");
-  };
+exports.default = function (target) {
+  target.prototype.bindWindowEvents = function (resizeHide) {
+    // ReactTooltip.hide
+    window.removeEventListener(_constant2.default.GLOBAL.HIDE, this.globalHide);
+    window.addEventListener(_constant2.default.GLOBAL.HIDE, this.globalHide, false);
 
-  var scroll = function (node) {
-   return regex.test(overflow(node));
-  };
+    // ReactTooltip.rebuild
+    window.removeEventListener(_constant2.default.GLOBAL.REBUILD, this.globalRebuild);
+    window.addEventListener(_constant2.default.GLOBAL.REBUILD, this.globalRebuild, false);
 
-  var scrollParent = function (node) {
-    if (!(node instanceof HTMLElement || node instanceof SVGElement)) {
-      return ;
+    // ReactTooltip.show
+    window.removeEventListener(_constant2.default.GLOBAL.SHOW, this.globalShow);
+    window.addEventListener(_constant2.default.GLOBAL.SHOW, this.globalShow, false);
+
+    // Resize
+    if (resizeHide) {
+      window.removeEventListener('resize', this.onWindowResize);
+      window.addEventListener('resize', this.onWindowResize, false);
     }
-
-    var ps = parents(node.parentNode, []);
-
-    for (var i = 0; i < ps.length; i += 1) {
-      if (scroll(ps[i])) {
-        return ps[i];
-      }
-    }
-
-    return document.body;
   };
 
-  return scrollParent;
-}));
+  target.prototype.unbindWindowEvents = function () {
+    window.removeEventListener(_constant2.default.GLOBAL.HIDE, this.globalHide);
+    window.removeEventListener(_constant2.default.GLOBAL.REBUILD, this.globalRebuild);
+    window.removeEventListener(_constant2.default.GLOBAL.SHOW, this.globalShow);
+    window.removeEventListener('resize', this.onWindowResize);
+  };
 
-},{}],6:[function(require,module,exports){
+  /**
+   * invoked by resize event of window
+   */
+  target.prototype.onWindowResize = function () {
+    if (!this.mount) return;
+    this.hideTooltip();
+  };
+};
+
+var _constant = require('../constant');
+
+var _constant2 = _interopRequireDefault(_constant);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+},{"../constant":2}],7:[function(require,module,exports){
 (function (global){
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _class, _class2, _temp;
+
+/* Decoraters */
+
+
+/* Utils */
+
+
+/* CSS */
+
 
 var _react = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 
@@ -257,21 +327,35 @@ var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
+var _staticMethods = require('./decorators/staticMethods');
+
+var _staticMethods2 = _interopRequireDefault(_staticMethods);
+
+var _windowListener = require('./decorators/windowListener');
+
+var _windowListener2 = _interopRequireDefault(_windowListener);
+
+var _customEvent = require('./decorators/customEvent');
+
+var _customEvent2 = _interopRequireDefault(_customEvent);
+
+var _isCapture = require('./decorators/isCapture');
+
+var _isCapture2 = _interopRequireDefault(_isCapture);
+
+var _getPosition = require('./utils/getPosition');
+
+var _getPosition2 = _interopRequireDefault(_getPosition);
+
+var _getTipContent = require('./utils/getTipContent');
+
+var _getTipContent2 = _interopRequireDefault(_getTipContent);
+
+var _aria = require('./utils/aria');
+
 var _style = require('./style');
 
 var _style2 = _interopRequireDefault(_style);
-
-var _detectBrowser = require('detect-browser');
-
-var _detectBrowser2 = _interopRequireDefault(_detectBrowser);
-
-var _scrollparent = require('scrollparent');
-
-var _scrollparent2 = _interopRequireDefault(_scrollparent);
-
-var _extend = require('extend');
-
-var _extend2 = _interopRequireDefault(_extend);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -281,75 +365,21 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ReactTooltip = function (_Component) {
+var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.default)(_class = (0, _customEvent2.default)(_class = (0, _isCapture2.default)(_class = (_temp = _class2 = function (_Component) {
   _inherits(ReactTooltip, _Component);
-
-  _createClass(ReactTooltip, [{
-    key: 'globalHide',
-    value: function globalHide() {
-      if (this.mount) {
-        this.hideTooltip();
-      }
-    }
-  }, {
-    key: 'globalRebuild',
-    value: function globalRebuild() {
-      if (this.mount) {
-        this.unbindListener();
-        this.bindListener();
-      }
-    }
-  }], [{
-    key: 'hide',
-
-    /**
-     * Class method
-     * @see ReactTooltip.hide() && ReactTooltup.rebuild()
-     */
-    value: function hide() {
-      /**
-       * Check for ie
-       * @see http://stackoverflow.com/questions/26596123/internet-explorer-9-10-11-event-constructor-doesnt-work
-       */
-      if (typeof window.Event === 'function') {
-        window.dispatchEvent(new window.Event('__react_tooltip_hide_event'));
-      } else {
-        var event = document.createEvent('Event');
-        event.initEvent('__react_tooltip_hide_event', false, true);
-        window.dispatchEvent(event);
-      }
-    }
-  }, {
-    key: 'rebuild',
-    value: function rebuild() {
-      if (typeof window.Event === 'function') {
-        window.dispatchEvent(new window.Event('__react_tooltip_rebuild_event'));
-      } else {
-        var event = document.createEvent('Event');
-        event.initEvent('__react_tooltip_rebuild_event', false, true);
-        window.dispatchEvent(event);
-      }
-    }
-  }]);
 
   function ReactTooltip(props) {
     _classCallCheck(this, ReactTooltip);
 
     var _this = _possibleConstructorReturn(this, (ReactTooltip.__proto__ || Object.getPrototypeOf(ReactTooltip)).call(this, props));
 
-    _this._bind('showTooltip', 'updateTooltip', 'hideTooltip', 'checkMouseOut', 'checkStatus', 'onWindowResize', 'bindClickListener', 'globalHide', 'globalRebuild');
-    _this.mount = true;
     _this.state = {
+      place: 'top', // Direction of tooltip
+      type: 'dark', // Color theme of tooltip
+      effect: 'float', // float or fixed
       show: false,
       border: false,
-      multilineCount: 0,
       placeholder: '',
-      x: 'NONE',
-      y: 'NONE',
-      place: '',
-      type: '',
-      effect: '',
-      multiline: false,
       offset: {},
       extraClass: '',
       html: false,
@@ -357,271 +387,253 @@ var ReactTooltip = function (_Component) {
       delayShow: 0,
       event: props.event || null,
       eventOff: props.eventOff || null,
-      isCapture: props.isCapture || false
+      currentEvent: null, // Current mouse event
+      currentTarget: null, // Current target of mouse event
+      ariaProps: (0, _aria.parseAria)(props), // aria- and role attributes
+      isEmptyTip: false,
+      disable: false
     };
+
+    _this.bind(['showTooltip', 'updateTooltip', 'hideTooltip', 'globalRebuild', 'globalShow', 'globalHide', 'onWindowResize']);
+
+    _this.mount = true;
     _this.delayShowLoop = null;
     _this.delayHideLoop = null;
+    _this.intervalUpdateContent = null;
     return _this;
   }
 
-  /* Bind this with method */
+  /**
+   * For unify the bind and unbind listener
+   */
 
 
   _createClass(ReactTooltip, [{
-    key: '_bind',
-    value: function _bind() {
+    key: 'bind',
+    value: function bind(methodArray) {
       var _this2 = this;
 
-      for (var _len = arguments.length, handlers = Array(_len), _key = 0; _key < _len; _key++) {
-        handlers[_key] = arguments[_key];
-      }
-
-      handlers.forEach(function (handler) {
-        return _this2[handler] = _this2[handler].bind(_this2);
+      methodArray.forEach(function (method) {
+        _this2[method] = _this2[method].bind(_this2);
       });
     }
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.bindListener();
-      this.setStyleHeader();
-      /* Add window event listener for hide and rebuild */
-      window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
-      window.addEventListener('__react_tooltip_hide_event', this.globalHide, false);
+      this.setStyleHeader(); // Set the style to the <link>
+      this.bindListener(); // Bind listener for tooltip
+      this.bindWindowEvents(this.props.resizeHide); // Bind global event for static method
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(props) {
+      var ariaProps = this.state.ariaProps;
 
-      window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
-      window.addEventListener('__react_tooltip_rebuild_event', this.globalRebuild, false);
-      /* Add listener on window resize  */
-      window.removeEventListener('resize', this.onWindowResize);
-      window.addEventListener('resize', this.onWindowResize, false);
-    }
-  }, {
-    key: 'componentWillUpdate',
-    value: function componentWillUpdate() {
-      this.unbindListener();
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      this.updatePosition();
-      this.bindListener();
+      var newAriaProps = (0, _aria.parseAria)(props);
+
+      var isChanged = Object.keys(newAriaProps).some(function (props) {
+        return newAriaProps[props] !== ariaProps[props];
+      });
+      if (isChanged) {
+        this.setState({ ariaProps: newAriaProps });
+      }
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      clearTimeout(this.delayShowLoop);
-      clearTimeout(this.delayHideLoop);
+      this.mount = false;
+
+      this.clearTimer();
+
       this.unbindListener();
       this.removeScrollListener();
-      this.mount = false;
-      window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
-      window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
-      window.removeEventListener('resize', this.onWindowResize);
-    }
-
-    /* TODO: optimize, bind has been trigger too many times */
-
-  }, {
-    key: 'bindListener',
-    value: function bindListener() {
-      var targetArray = this.getTargetArray();
-
-      var dataEvent = void 0;
-      var dataEventOff = void 0;
-      for (var i = 0; i < targetArray.length; i++) {
-        if (targetArray[i].getAttribute('currentItem') === null) {
-          targetArray[i].setAttribute('currentItem', 'false');
-        }
-        dataEvent = this.state.event || targetArray[i].getAttribute('data-event');
-        if (dataEvent) {
-          // if off event is specified, we will show tip on data-event and hide it on data-event-off
-          dataEventOff = this.state.eventOff || targetArray[i].getAttribute('data-event-off');
-
-          targetArray[i].removeEventListener(dataEvent, this.checkStatus);
-          targetArray[i].addEventListener(dataEvent, this.checkStatus, false);
-          if (dataEventOff) {
-            targetArray[i].removeEventListener(dataEventOff, this.hideTooltip);
-            targetArray[i].addEventListener(dataEventOff, this.hideTooltip, false);
-          }
-        } else {
-          targetArray[i].removeEventListener('mouseenter', this.showTooltip);
-          targetArray[i].addEventListener('mouseenter', this.showTooltip, false);
-
-          if (this.state.effect === 'float') {
-            targetArray[i].removeEventListener('mousemove', this.updateTooltip);
-            targetArray[i].addEventListener('mousemove', this.updateTooltip, false);
-          }
-
-          targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
-          targetArray[i].addEventListener('mouseleave', this.hideTooltip, false);
-
-          targetArray[i].removeEventListener('mouseout', this.checkMouseOut);
-          targetArray[i].addEventListener('mouseout', this.checkMouseOut, false);
-        }
-      }
-    }
-  }, {
-    key: 'unbindListener',
-    value: function unbindListener() {
-      var targetArray = document.querySelectorAll('[data-tip]');
-      var dataEvent = void 0;
-
-      for (var i = 0; i < targetArray.length; i++) {
-        dataEvent = this.state.event || targetArray[i].getAttribute('data-event');
-        if (dataEvent) {
-          targetArray[i].removeEventListener(dataEvent, this.checkStatus);
-        } else {
-          targetArray[i].removeEventListener('mouseenter', this.showTooltip);
-          targetArray[i].removeEventListener('mousemove', this.updateTooltip);
-          targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
-          targetArray[i].removeEventListener('mouseout', this.checkMouseOut);
-        }
-      }
+      this.unbindWindowEvents();
     }
 
     /**
-     * Get all tooltip targets
+     * Pick out corresponded target elements
      */
 
   }, {
     key: 'getTargetArray',
-    value: function getTargetArray() {
-      var id = this.props.id;
-
+    value: function getTargetArray(id) {
       var targetArray = void 0;
 
-      if (id === undefined) {
+      if (!id) {
         targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
       } else {
         targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]');
       }
 
-      return targetArray;
+      // targetArray is a NodeList, convert it to a real array
+      // I hope I can use Object.values...
+      return Object.keys(targetArray).filter(function (key) {
+        return key !== 'length';
+      }).map(function (key) {
+        return targetArray[key];
+      });
     }
 
     /**
-     * listener on window resize
+     * Bind listener to the target elements
+     * These listeners used to trigger showing or hiding the tooltip
      */
 
   }, {
-    key: 'onWindowResize',
-    value: function onWindowResize() {
-      if (!this.mount) return;
-      var targetArray = this.getTargetArray();
+    key: 'bindListener',
+    value: function bindListener() {
+      var _this3 = this;
 
-      for (var i = 0; i < targetArray.length; i++) {
-        if (targetArray[i].getAttribute('currentItem') === 'true') {
-          // todo: timer for performance
-          var _getPosition = this.getPosition(targetArray[i]);
+      var _props = this.props;
+      var id = _props.id;
+      var globalEventOff = _props.globalEventOff;
 
-          var x = _getPosition.x;
-          var y = _getPosition.y;
+      var targetArray = this.getTargetArray(id);
 
-          _reactDom2.default.findDOMNode(this).style.left = x + 'px';
-          _reactDom2.default.findDOMNode(this).style.top = y + 'px';
-          /* this.setState({
-           x,
-           y
-           }) */
+      targetArray.forEach(function (target) {
+        var isCaptureMode = _this3.isCapture(target);
+        if (target.getAttribute('currentItem') === null) {
+          target.setAttribute('currentItem', 'false');
         }
+        _this3.unbindBasicListener(target);
+
+        if (_this3.isCustomEvent(target)) {
+          _this3.customBindListener(target);
+          return;
+        }
+
+        target.addEventListener('mouseenter', _this3.showTooltip, isCaptureMode);
+        if (_this3.state.effect === 'float') {
+          target.addEventListener('mousemove', _this3.updateTooltip, isCaptureMode);
+        }
+        target.addEventListener('mouseleave', _this3.hideTooltip, isCaptureMode);
+      });
+
+      // Global event to hide tooltip
+      if (globalEventOff) {
+        window.removeEventListener(globalEventOff, this.hideTooltip);
+        window.addEventListener(globalEventOff, this.hideTooltip, false);
       }
     }
 
     /**
-     * Used in customer event
+     * Unbind listeners on target elements
      */
 
   }, {
-    key: 'checkStatus',
-    value: function checkStatus(e) {
-      var show = this.state.show;
+    key: 'unbindListener',
+    value: function unbindListener() {
+      var _this4 = this;
 
-      var isCapture = void 0;
+      var _props2 = this.props;
+      var id = _props2.id;
+      var globalEventOff = _props2.globalEventOff;
 
-      if (e.currentTarget.getAttribute('data-iscapture')) {
-        isCapture = e.currentTarget.getAttribute('data-iscapture') === 'true';
-      } else {
-        isCapture = this.state.isCapture;
-      }
+      var targetArray = this.getTargetArray(id);
+      targetArray.forEach(function (target) {
+        _this4.unbindBasicListener(target);
+        if (_this4.isCustomEvent(target)) _this4.customUnbindListener(target);
+      });
 
-      if (!isCapture) e.stopPropagation();
-      if (show && e.currentTarget.getAttribute('currentItem') === 'true') {
-        this.hideTooltip(e);
-      } else {
-        e.currentTarget.setAttribute('currentItem', 'true');
-        /* when click other place, the tooltip should be removed */
-        window.removeEventListener('click', this.bindClickListener);
-        window.addEventListener('click', this.bindClickListener, isCapture);
-
-        this.showTooltip(e);
-        this.setUntargetItems(e.currentTarget);
-      }
-    }
-  }, {
-    key: 'setUntargetItems',
-    value: function setUntargetItems(currentTarget) {
-      var targetArray = this.getTargetArray();
-      for (var i = 0; i < targetArray.length; i++) {
-        if (currentTarget !== targetArray[i]) {
-          targetArray[i].setAttribute('currentItem', 'false');
-        } else {
-          targetArray[i].setAttribute('currentItem', 'true');
-        }
-      }
-    }
-  }, {
-    key: 'bindClickListener',
-    value: function bindClickListener() {
-      this.globalHide();
-      window.removeEventListener('click', this.bindClickListener);
+      if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip);
     }
 
     /**
-     * When mouse enter, show update
+     * Invoke this before bind listener and ummount the compont
+     * it is necessary to invloke this even when binding custom event
+     * so that the tooltip can switch between custom and default listener
+     */
+
+  }, {
+    key: 'unbindBasicListener',
+    value: function unbindBasicListener(target) {
+      target.removeEventListener('mouseenter', this.showTooltip);
+      target.removeEventListener('mousemove', this.updateTooltip);
+      target.removeEventListener('mouseleave', this.hideTooltip);
+    }
+
+    /**
+     * When mouse enter, show the tooltip
      */
 
   }, {
     key: 'showTooltip',
-    value: function showTooltip(e) {
-      var originTooltip = e.currentTarget.getAttribute('data-tip');
-      /* Detect multiline */
-      var regexp = /<br\s*\/?>/;
-      var multiline = e.currentTarget.getAttribute('data-multiline') ? e.currentTarget.getAttribute('data-multiline') : this.props.multiline ? this.props.multiline : false;
-      var tooltipText = void 0;
-      var multilineCount = 0;
-      if (!multiline || multiline === 'false' || !regexp.test(originTooltip)) {
-        tooltipText = originTooltip;
-      } else {
-        tooltipText = originTooltip.split(regexp).map(function (d, i) {
-          multilineCount += 1;
-          return _react2.default.createElement(
-            'span',
-            { key: i, className: 'multi-line' },
-            d
-          );
+    value: function showTooltip(e, isGlobalCall) {
+      var _this5 = this;
+
+      if (isGlobalCall) {
+        // Don't trigger other elements belongs to other ReactTooltip
+        var targetArray = this.getTargetArray(this.props.id);
+        var isMyElement = targetArray.some(function (ele) {
+          return ele === e.currentTarget;
         });
+        if (!isMyElement || this.state.show) return;
       }
-      /* Define extra class */
-      var extraClass = e.currentTarget.getAttribute('data-class') ? e.currentTarget.getAttribute('data-class') : '';
-      extraClass = this.props.class ? this.props.class + ' ' + extraClass : extraClass;
+      // Get the tooltip content
+      // calculate in this phrase so that tip width height can be detected
+      var _props3 = this.props;
+      var children = _props3.children;
+      var multiline = _props3.multiline;
+      var getContent = _props3.getContent;
+
+      var originTooltip = e.currentTarget.getAttribute('data-tip');
+      var isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false;
+
+      // Generate tootlip content
+      var content = void 0;
+      if (getContent) {
+        if (Array.isArray(getContent)) {
+          content = getContent[0] && getContent[0]();
+        } else {
+          content = getContent();
+        }
+      }
+      var placeholder = (0, _getTipContent2.default)(originTooltip, children, content, isMultiline);
+      var isEmptyTip = typeof placeholder === 'string' && placeholder === '' || placeholder === null;
+
+      // If it is focus event or called by ReactTooltip.show, switch to `solid` effect
+      var switchToSolid = e instanceof window.FocusEvent || isGlobalCall;
+
+      // if it need to skip adding hide listener to scroll
+      var scrollHide = true;
+      if (e.currentTarget.getAttribute('data-scroll-hide')) {
+        scrollHide = e.currentTarget.getAttribute('data-scroll-hide') === 'true';
+      } else if (this.props.scrollHide != null) {
+        scrollHide = this.props.scrollHide;
+      }
+
       this.setState({
-        placeholder: tooltipText,
-        currentTarget: e.currentTarget,
-        multilineCount: multilineCount,
+        placeholder: placeholder,
+        isEmptyTip: isEmptyTip,
         place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
         type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
-        effect: e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
+        effect: switchToSolid && 'solid' || e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
         offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
-        html: e.currentTarget.getAttribute('data-html') === 'true' || this.props.html || false,
+        html: e.currentTarget.getAttribute('data-html') ? e.currentTarget.getAttribute('data-html') === 'true' : this.props.html || false,
         delayShow: e.currentTarget.getAttribute('data-delay-show') || this.props.delayShow || 0,
         delayHide: e.currentTarget.getAttribute('data-delay-hide') || this.props.delayHide || 0,
-        border: e.currentTarget.getAttribute('data-border') === 'true' || this.props.border || false,
-        extraClass: extraClass,
-        multiline: multiline
-      });
+        border: e.currentTarget.getAttribute('data-border') ? e.currentTarget.getAttribute('data-border') === 'true' : this.props.border || false,
+        extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || '',
+        disable: e.currentTarget.getAttribute('data-tip-disable') ? e.currentTarget.getAttribute('data-tip-disable') === 'true' : this.props.disable || false
+      }, function () {
+        if (scrollHide) _this5.addScrollListener(e);
+        _this5.updateTooltip(e);
 
-      this.addScrollListener();
-      this.updateTooltip(e);
+        if (getContent && Array.isArray(getContent)) {
+          _this5.intervalUpdateContent = setInterval(function () {
+            if (_this5.mount) {
+              var _getContent = _this5.props.getContent;
+
+              var _placeholder = (0, _getTipContent2.default)(originTooltip, _getContent[0](), isMultiline);
+              var _isEmptyTip = typeof _placeholder === 'string' && _placeholder === '';
+              _this5.setState({
+                placeholder: _placeholder,
+                isEmptyTip: _isEmptyTip
+              });
+            }
+          }, getContent[1]);
+        }
+      });
     }
 
     /**
@@ -631,38 +643,42 @@ var ReactTooltip = function (_Component) {
   }, {
     key: 'updateTooltip',
     value: function updateTooltip(e) {
-      var _this3 = this;
+      var _this6 = this;
 
       var _state = this.state;
       var delayShow = _state.delayShow;
       var show = _state.show;
+      var isEmptyTip = _state.isEmptyTip;
+      var disable = _state.disable;
+      var afterShow = this.props.afterShow;
+      var placeholder = this.state.placeholder;
 
       var delayTime = show ? 0 : parseInt(delayShow, 10);
       var eventTarget = e.currentTarget;
 
-      clearTimeout(this.delayShowLoop);
-      this.delayShowLoop = setTimeout(function () {
-        if (_this3.trim(_this3.state.placeholder).length > 0) {
-          if (_this3.state.effect === 'float') {
-            _this3.setState({
-              show: true,
-              x: e.clientX,
-              y: e.clientY
+      if (isEmptyTip || disable) return; // if the tooltip is empty, disable the tooltip
+      var updateState = function updateState() {
+        if (Array.isArray(placeholder) && placeholder.length > 0 || placeholder) {
+          (function () {
+            var isInvisible = !_this6.state.show;
+            _this6.setState({
+              currentEvent: e,
+              currentTarget: eventTarget,
+              show: true
+            }, function () {
+              _this6.updatePosition();
+              if (isInvisible && afterShow) afterShow();
             });
-          } else if (_this3.state.effect === 'solid') {
-            var _getPosition2 = _this3.getPosition(eventTarget);
-
-            var x = _getPosition2.x;
-            var y = _getPosition2.y;
-
-            _this3.setState({
-              show: true,
-              x: x,
-              y: y
-            });
-          }
+          })();
         }
-      }, delayTime);
+      };
+
+      clearTimeout(this.delayShowLoop);
+      if (delayShow) {
+        this.delayShowLoop = setTimeout(updateState, delayTime);
+      } else {
+        updateState();
+      }
     }
 
     /**
@@ -671,331 +687,91 @@ var ReactTooltip = function (_Component) {
 
   }, {
     key: 'hideTooltip',
-    value: function hideTooltip() {
-      var _this4 = this;
+    value: function hideTooltip(e, hasTarget) {
+      var _this7 = this;
 
-      var delayHide = this.state.delayHide;
+      var _state2 = this.state;
+      var delayHide = _state2.delayHide;
+      var isEmptyTip = _state2.isEmptyTip;
+      var disable = _state2.disable;
+      var afterHide = this.props.afterHide;
 
-      clearTimeout(this.delayShowLoop);
-      clearTimeout(this.delayHideLoop);
-      this.delayHideLoop = setTimeout(function () {
-        _this4.setState({
-          show: false
+      if (!this.mount) return;
+      if (isEmptyTip || disable) return; // if the tooltip is empty, disable the tooltip
+      if (hasTarget) {
+        // Don't trigger other elements belongs to other ReactTooltip
+        var targetArray = this.getTargetArray(this.props.id);
+        var isMyElement = targetArray.some(function (ele) {
+          return ele === e.currentTarget;
         });
-        _this4.removeScrollListener();
-      }, parseInt(delayHide, 10));
-    }
-
-    /**
-     * When mouse out, hide tooltip
-     */
-
-  }, {
-    key: 'checkMouseOut',
-    value: function checkMouseOut(e) {
-      var event = typeof e !== 'undefined' ? e : null;
-      if (!event) {
-        event = window.event;
+        if (!isMyElement || !this.state.show) return;
       }
-      if (event) {
-        var tg = event.currentTarget;
-        var reltg = event.relatedTarget ? event.relatedTarget : event.toElement;
-        while (reltg && reltg != tg && reltg.nodeName != 'BODY') {
-          reltg = reltg.parentNode;
-        }if (!reltg || reltg !== tg) {
-          this.hideTooltip();
-        }
+      var resetState = function resetState() {
+        var isVisible = _this7.state.show;
+        _this7.setState({
+          show: false
+        }, function () {
+          _this7.removeScrollListener();
+          if (isVisible && afterHide) afterHide();
+        });
+      };
+
+      this.clearTimer();
+      if (delayHide) {
+        this.delayHideLoop = setTimeout(resetState, parseInt(delayHide, 10));
       } else {
-        this.hideTooltip();
+        resetState();
       }
     }
 
     /**
      * Add scroll eventlistener when tooltip show
-     * or tooltip will always existed
+     * automatically hide the tooltip when scrolling
      */
 
   }, {
     key: 'addScrollListener',
-    value: function addScrollListener() {
-      (0, _scrollparent2.default)(this.state.currentTarget).addEventListener('scroll', this.hideTooltip);
+    value: function addScrollListener(e) {
+      var isCaptureMode = this.isCapture(e.currentTarget);
+      window.addEventListener('scroll', this.hideTooltip, isCaptureMode);
     }
   }, {
     key: 'removeScrollListener',
     value: function removeScrollListener() {
-      if (this.state.currentTarget) {
-        (0, _scrollparent2.default)(this.state.currentTarget).removeEventListener('scroll', this.hideTooltip);
-      }
+      window.removeEventListener('scroll', this.hideTooltip);
     }
 
-    /**
-     * Get tooltip poisition by current target
-     */
-
-  }, {
-    key: 'getPosition',
-    value: function getPosition(currentTarget) {
-      var _this5 = this;
-
-      var place = this.state.place;
-
-      var node = _reactDom2.default.findDOMNode(this);
-      var boundingClientRect = currentTarget.getBoundingClientRect();
-      var targetTop = boundingClientRect.top;
-      var targetLeft = boundingClientRect.left;
-      var tipWidth = node.clientWidth;
-      var tipHeight = node.clientHeight;
-      var targetWidth = currentTarget.clientWidth;
-      var targetHeight = currentTarget.clientHeight;
-      var windowWidth = window.innerWidth;
-      var windowHeight = window.innerHeight;
-      var x = void 0;
-      var y = void 0;
-      var defaultTopY = targetTop - tipHeight - 8;
-      var defaultBottomY = targetTop + targetHeight + 8;
-      var defaultLeftX = targetLeft - tipWidth - 6;
-      var defaultRightX = targetLeft + targetWidth + 6;
-
-      var parentTop = 0;
-      var parentLeft = 0;
-      var currentParent = currentTarget.parentElement;
-
-      while (currentParent) {
-        if (currentParent.style.transform.length > 0) {
-          break;
-        }
-        currentParent = currentParent.parentElement;
-      }
-
-      if (currentParent) {
-        // If browser is IE (in standards mode...) with fixed/absolute parents, we don't set the parent origin.
-        // && currentParent.style.position !== 'absolute') ???
-        if (_detectBrowser2.default.name !== 'ie' || currentParent.style.position !== 'fixed') {
-          parentTop = currentParent.getBoundingClientRect().top;
-          parentLeft = currentParent.getBoundingClientRect().left;
-        }
-      }
-
-      var outsideTop = function outsideTop() {
-        return defaultTopY - 10 < 0;
-      };
-
-      var outsideBottom = function outsideBottom() {
-        return targetTop + targetHeight + tipHeight + 25 > windowHeight;
-      };
-
-      var outsideLeft = function outsideLeft() {
-        return defaultLeftX - 10 < 0;
-      };
-
-      var outsideRight = function outsideRight() {
-        return targetLeft + targetWidth + tipWidth + 25 > windowWidth;
-      };
-
-      var getTopPositionY = function getTopPositionY() {
-        if (outsideTop(defaultTopY) && !outsideBottom()) {
-          _this5.setState({
-            place: 'bottom'
-          });
-          return defaultBottomY;
-        }
-
-        return defaultTopY;
-      };
-
-      var getBottomPositionY = function getBottomPositionY() {
-        if (outsideBottom() && !outsideTop()) {
-          _this5.setState({
-            place: 'top'
-          });
-          return defaultTopY;
-        }
-
-        return defaultBottomY;
-      };
-
-      var getLeftPositionX = function getLeftPositionX() {
-        if (outsideLeft() && !outsideRight()) {
-          _this5.setState({
-            place: 'right'
-          });
-          return defaultRightX;
-        }
-
-        return defaultLeftX;
-      };
-
-      var getRightPositionX = function getRightPositionX() {
-        if (outsideRight() && !outsideLeft()) {
-          _this5.setState({
-            place: 'left'
-          });
-          return defaultLeftX;
-        }
-
-        return defaultRightX;
-      };
-
-      if (place === 'top') {
-        x = targetLeft - tipWidth / 2 + targetWidth / 2 - parentLeft;
-        y = getTopPositionY() - parentTop;
-      } else if (place === 'bottom') {
-        x = targetLeft - tipWidth / 2 + targetWidth / 2 - parentLeft;
-        y = getBottomPositionY() - parentTop;
-      } else if (place === 'left') {
-        x = getLeftPositionX() - parentLeft;
-        y = targetTop + targetHeight / 2 - tipHeight / 2 - parentTop;
-      } else if (place === 'right') {
-        x = getRightPositionX() - parentLeft;
-        y = targetTop + targetHeight / 2 - tipHeight / 2 - parentTop;
-      }
-
-      return { x: x, y: y };
-    }
-
-    /**
-     * Execute in componentDidUpdate, can't put this into render() to support server rendering
-     */
+    // Calculation the position
 
   }, {
     key: 'updatePosition',
     value: function updatePosition() {
+      var _this8 = this;
+
+      var _state3 = this.state;
+      var currentEvent = _state3.currentEvent;
+      var currentTarget = _state3.currentTarget;
+      var place = _state3.place;
+      var effect = _state3.effect;
+      var offset = _state3.offset;
+
       var node = _reactDom2.default.findDOMNode(this);
+      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset);
 
-      var tipWidth = node.clientWidth;
-      var tipHeight = node.clientHeight;
-      var _state2 = this.state;
-      var effect = _state2.effect;
-      var place = _state2.place;
-      var offset = _state2.offset;
-
-      var offsetFromEffect = {};
-
-      /**
-       * List all situations for different placement,
-       * then tooltip can judge switch to which side if window space is not enough
-       * @note only support for float at the moment
-       */
-      var placements = ['top', 'bottom', 'left', 'right'];
-      placements.forEach(function (key) {
-        offsetFromEffect[key] = { x: 0, y: 0 };
-      });
-
-      if (effect === 'float') {
-        offsetFromEffect.top = {
-          x: -(tipWidth / 2),
-          y: -tipHeight
-        };
-        offsetFromEffect.bottom = {
-          x: -(tipWidth / 2),
-          y: 15
-        };
-        offsetFromEffect.left = {
-          x: -(tipWidth + 15),
-          y: -(tipHeight / 2)
-        };
-        offsetFromEffect.right = {
-          x: 10,
-          y: -(tipHeight / 2)
-        };
+      if (result.isNewState) {
+        // Switch to reverse placement
+        return this.setState(result.newState, function () {
+          _this8.updatePosition();
+        });
       }
-
-      var xPosition = 0;
-      var yPosition = 0;
-
-      /* If user set offset attribute, we have to consider it into out position calculating */
-      if (Object.prototype.toString.apply(offset) === '[object String]') {
-        offset = JSON.parse(offset.toString().replace(/\'/g, '\"'));
-      }
-      for (var key in offset) {
-        if (key === 'top') {
-          yPosition -= parseInt(offset[key], 10);
-        } else if (key === 'bottom') {
-          yPosition += parseInt(offset[key], 10);
-        } else if (key === 'left') {
-          xPosition -= parseInt(offset[key], 10);
-        } else if (key === 'right') {
-          xPosition += parseInt(offset[key], 10);
-        }
-      }
-
-      /* If our tooltip goes outside the window we want to try and change its place to be inside the window */
-      var x = this.state.x;
-      var y = this.state.y;
-      var windoWidth = window.innerWidth;
-      var windowHeight = window.innerHeight;
-
-      var getStyleLeft = function getStyleLeft(place) {
-        var offsetEffectX = effect === 'solid' ? 0 : place ? offsetFromEffect[place].x : 0;
-        return x + offsetEffectX + xPosition;
-      };
-      var getStyleTop = function getStyleTop(place) {
-        var offsetEffectY = effect === 'solid' ? 0 : place ? offsetFromEffect[place].y : 0;
-        return y + offsetEffectY + yPosition;
-      };
-
-      var outsideLeft = function outsideLeft(place) {
-        var styleLeft = getStyleLeft(place);
-        return styleLeft < 0 && x + offsetFromEffect['right'].x + xPosition <= windoWidth;
-      };
-      var outsideRight = function outsideRight(place) {
-        var styleLeft = getStyleLeft(place);
-        return styleLeft + tipWidth > windoWidth && x + offsetFromEffect['left'].x + xPosition >= 0;
-      };
-      var outsideTop = function outsideTop(place) {
-        var styleTop = getStyleTop(place);
-        return styleTop < 0 && y + offsetFromEffect['bottom'].y + yPosition + tipHeight < windowHeight;
-      };
-      var outsideBottom = function outsideBottom(place) {
-        var styleTop = getStyleTop(place);
-        return styleTop + tipHeight >= windowHeight && y + offsetFromEffect['top'].y + yPosition >= 0;
-      };
-
-      /* We want to make sure the place we switch to will not go outside either */
-      var outside = function outside(place) {
-        return outsideTop(place) || outsideRight(place) || outsideBottom(place) || outsideLeft(place);
-      };
-
-      /* We check each side and switch if the new place will be in bounds */
-      if (outsideLeft(place)) {
-        if (!outside('right')) {
-          this.setState({
-            place: 'right'
-          });
-          return;
-        }
-      } else if (outsideRight(place)) {
-        if (!outside('left')) {
-          this.setState({
-            place: 'left'
-          });
-          return;
-        }
-      } else if (outsideTop(place)) {
-        if (!outside('bottom')) {
-          this.setState({
-            place: 'bottom'
-          });
-          return;
-        }
-      } else if (outsideBottom(place)) {
-        if (!outside('top')) {
-          this.setState({
-            place: 'top'
-          });
-          return;
-        }
-      }
-
-      node.style.left = getStyleLeft(place) + 'px';
-      node.style.top = getStyleTop(place) + 'px';
-
-      (0, _extend2.default)(node.style, this.props.style ? this.props.style : {});
+      // Set tooltip position
+      node.style.left = result.position.left + 'px';
+      node.style.top = result.position.top + 'px';
     }
 
     /**
      * Set style tag in header
-     * Insert style by this way
+     * in this way we can insert default css
      */
 
   }, {
@@ -1008,58 +784,49 @@ var ReactTooltip = function (_Component) {
         document.getElementsByTagName('head')[0].appendChild(tag);
       }
     }
+
+    /**
+     * CLear all kinds of timeout of interval
+     */
+
+  }, {
+    key: 'clearTimer',
+    value: function clearTimer() {
+      clearTimeout(this.delayShowLoop);
+      clearTimeout(this.delayHideLoop);
+      clearInterval(this.intervalUpdateContent);
+    }
   }, {
     key: 'render',
     value: function render() {
-      var _state3 = this.state;
-      var placeholder = _state3.placeholder;
-      var extraClass = _state3.extraClass;
-      var html = _state3.html;
+      var _state4 = this.state;
+      var placeholder = _state4.placeholder;
+      var extraClass = _state4.extraClass;
+      var html = _state4.html;
+      var ariaProps = _state4.ariaProps;
+      var disable = _state4.disable;
+      var isEmptyTip = _state4.isEmptyTip;
 
-      var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
-
+      var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show && !disable && !isEmptyTip }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
       if (html) {
-        return _react2.default.createElement('div', { className: tooltipClass + ' ' + extraClass, 'data-id': 'tooltip', dangerouslySetInnerHTML: { __html: placeholder } });
+        return _react2.default.createElement('div', _extends({ className: tooltipClass + ' ' + extraClass
+        }, ariaProps, {
+          'data-id': 'tooltip',
+          dangerouslySetInnerHTML: { __html: placeholder } }));
       } else {
-        var content = this.props.children ? this.props.children : placeholder;
         return _react2.default.createElement(
           'div',
-          { className: tooltipClass + ' ' + extraClass, 'data-id': 'tooltip' },
-          content
+          _extends({ className: tooltipClass + ' ' + extraClass
+          }, ariaProps, {
+            'data-id': 'tooltip' }),
+          placeholder
         );
       }
-    }
-  }, {
-    key: 'trim',
-    value: function trim(string) {
-      if (Object.prototype.toString.call(string) !== '[object String]') {
-        return string;
-      }
-      var newString = string.split('');
-      var firstCount = 0;
-      var lastCount = 0;
-      for (var i = 0; i < string.length; i++) {
-        if (string[i] !== ' ') {
-          break;
-        }
-        firstCount++;
-      }
-      for (var _i = string.length - 1; _i >= 0; _i--) {
-        if (string[_i] !== ' ') {
-          break;
-        }
-        lastCount++;
-      }
-      newString.splice(0, firstCount);
-      newString.splice(-lastCount, lastCount);
-      return newString.join('');
     }
   }]);
 
   return ReactTooltip;
-}(_react.Component);
-
-ReactTooltip.propTypes = {
+}(_react.Component), _class2.propTypes = {
   children: _react.PropTypes.any,
   place: _react.PropTypes.string,
   type: _react.PropTypes.string,
@@ -1072,23 +839,411 @@ ReactTooltip.propTypes = {
   html: _react.PropTypes.bool,
   delayHide: _react.PropTypes.number,
   delayShow: _react.PropTypes.number,
-  event: _react.PropTypes.any,
-  eventOff: _react.PropTypes.any,
+  event: _react.PropTypes.string,
+  eventOff: _react.PropTypes.string,
   watchWindow: _react.PropTypes.bool,
-  isCapture: _react.PropTypes.bool
-};
+  isCapture: _react.PropTypes.bool,
+  globalEventOff: _react.PropTypes.string,
+  getContent: _react.PropTypes.any,
+  afterShow: _react.PropTypes.func,
+  afterHide: _react.PropTypes.func,
+  disable: _react.PropTypes.bool,
+  scrollHide: _react.PropTypes.bool,
+  resizeHide: _react.PropTypes.bool
+}, _class2.defaultProps = {
+  resizeHide: true
+}, _temp)) || _class) || _class) || _class) || _class;
 
 /* export default not fit for standalone, it will exports {default:...} */
+
+
 module.exports = ReactTooltip;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./style":7,"classnames":1,"detect-browser":2,"extend":4,"scrollparent":5}],7:[function(require,module,exports){
+},{"./decorators/customEvent":3,"./decorators/isCapture":4,"./decorators/staticMethods":5,"./decorators/windowListener":6,"./style":8,"./utils/aria":9,"./utils/getPosition":10,"./utils/getTipContent":11,"classnames":1}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '.__react_component_tooltip{border-radius:3px;display:inline-block;font-size:13px;left:-999em;opacity:0;padding:8px 21px;position:fixed;pointer-events:none;transition:opacity 0.3s ease-out , margin-top 0.3s ease-out, margin-left 0.3s ease-out;top:-999em;visibility:hidden;z-index:999}.__react_component_tooltip:before,.__react_component_tooltip:after{content:"";width:0;height:0;position:absolute}.__react_component_tooltip.show{opacity:0.9;margin-top:0px;margin-left:0px;visibility:visible}.__react_component_tooltip.type-dark{color:#fff;background-color:#222}.__react_component_tooltip.type-dark.place-top:after{border-top:6px solid #222}.__react_component_tooltip.type-dark.place-bottom:after{border-bottom:6px solid #222}.__react_component_tooltip.type-dark.place-left:after{border-left:6px solid #222}.__react_component_tooltip.type-dark.place-right:after{border-right:6px solid #222}.__react_component_tooltip.type-dark.border{border:1px solid #fff}.__react_component_tooltip.type-dark.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-dark.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-dark.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-dark.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-success{color:#fff;background-color:#8DC572}.__react_component_tooltip.type-success.place-top:after{border-top:6px solid #8DC572}.__react_component_tooltip.type-success.place-bottom:after{border-bottom:6px solid #8DC572}.__react_component_tooltip.type-success.place-left:after{border-left:6px solid #8DC572}.__react_component_tooltip.type-success.place-right:after{border-right:6px solid #8DC572}.__react_component_tooltip.type-success.border{border:1px solid #fff}.__react_component_tooltip.type-success.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-success.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-success.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-success.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-warning{color:#fff;background-color:#F0AD4E}.__react_component_tooltip.type-warning.place-top:after{border-top:6px solid #F0AD4E}.__react_component_tooltip.type-warning.place-bottom:after{border-bottom:6px solid #F0AD4E}.__react_component_tooltip.type-warning.place-left:after{border-left:6px solid #F0AD4E}.__react_component_tooltip.type-warning.place-right:after{border-right:6px solid #F0AD4E}.__react_component_tooltip.type-warning.border{border:1px solid #fff}.__react_component_tooltip.type-warning.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-warning.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-warning.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-warning.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-error{color:#fff;background-color:#BE6464}.__react_component_tooltip.type-error.place-top:after{border-top:6px solid #BE6464}.__react_component_tooltip.type-error.place-bottom:after{border-bottom:6px solid #BE6464}.__react_component_tooltip.type-error.place-left:after{border-left:6px solid #BE6464}.__react_component_tooltip.type-error.place-right:after{border-right:6px solid #BE6464}.__react_component_tooltip.type-error.border{border:1px solid #fff}.__react_component_tooltip.type-error.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-error.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-error.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-error.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-info{color:#fff;background-color:#337AB7}.__react_component_tooltip.type-info.place-top:after{border-top:6px solid #337AB7}.__react_component_tooltip.type-info.place-bottom:after{border-bottom:6px solid #337AB7}.__react_component_tooltip.type-info.place-left:after{border-left:6px solid #337AB7}.__react_component_tooltip.type-info.place-right:after{border-right:6px solid #337AB7}.__react_component_tooltip.type-info.border{border:1px solid #fff}.__react_component_tooltip.type-info.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-info.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-info.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-info.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-light{color:#222;background-color:#fff}.__react_component_tooltip.type-light.place-top:after{border-top:6px solid #fff}.__react_component_tooltip.type-light.place-bottom:after{border-bottom:6px solid #fff}.__react_component_tooltip.type-light.place-left:after{border-left:6px solid #fff}.__react_component_tooltip.type-light.place-right:after{border-right:6px solid #fff}.__react_component_tooltip.type-light.border{border:1px solid #222}.__react_component_tooltip.type-light.border.place-top:before{border-top:8px solid #222}.__react_component_tooltip.type-light.border.place-bottom:before{border-bottom:8px solid #222}.__react_component_tooltip.type-light.border.place-left:before{border-left:8px solid #222}.__react_component_tooltip.type-light.border.place-right:before{border-right:8px solid #222}.__react_component_tooltip.place-top{margin-top:-10px}.__react_component_tooltip.place-top:before{border-left:10px solid transparent;border-right:10px solid transparent;bottom:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-top:after{border-left:8px solid transparent;border-right:8px solid transparent;bottom:-6px;left:50%;margin-left:-8px}.__react_component_tooltip.place-bottom{margin-top:10px}.__react_component_tooltip.place-bottom:before{border-left:10px solid transparent;border-right:10px solid transparent;top:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-bottom:after{border-left:8px solid transparent;border-right:8px solid transparent;top:-6px;left:50%;margin-left:-8px}.__react_component_tooltip.place-left{margin-left:-10px}.__react_component_tooltip.place-left:before{border-top:6px solid transparent;border-bottom:6px solid transparent;right:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-left:after{border-top:5px solid transparent;border-bottom:5px solid transparent;right:-6px;top:50%;margin-top:-4px}.__react_component_tooltip.place-right{margin-left:10px}.__react_component_tooltip.place-right:before{border-top:6px solid transparent;border-bottom:6px solid transparent;left:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-right:after{border-top:5px solid transparent;border-bottom:5px solid transparent;left:-6px;top:50%;margin-top:-4px}.__react_component_tooltip .multi-line{display:block;padding:2px 0px;text-align:center}';
+exports.default = '.__react_component_tooltip{border-radius:3px;display:inline-block;font-size:13px;left:-999em;opacity:0;padding:8px 21px;position:fixed;pointer-events:none;transition:opacity 0.3s ease-out;top:-999em;visibility:hidden;z-index:999}.__react_component_tooltip:before,.__react_component_tooltip:after{content:"";width:0;height:0;position:absolute}.__react_component_tooltip.show{opacity:0.9;margin-top:0px;margin-left:0px;visibility:visible}.__react_component_tooltip.type-dark{color:#fff;background-color:#222}.__react_component_tooltip.type-dark.place-top:after{border-top-color:#222;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-dark.place-bottom:after{border-bottom-color:#222;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-dark.place-left:after{border-left-color:#222;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-dark.place-right:after{border-right-color:#222;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-dark.border{border:1px solid #fff}.__react_component_tooltip.type-dark.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-dark.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-dark.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-dark.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-success{color:#fff;background-color:#8DC572}.__react_component_tooltip.type-success.place-top:after{border-top-color:#8DC572;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-success.place-bottom:after{border-bottom-color:#8DC572;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-success.place-left:after{border-left-color:#8DC572;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-success.place-right:after{border-right-color:#8DC572;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-success.border{border:1px solid #fff}.__react_component_tooltip.type-success.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-success.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-success.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-success.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-warning{color:#fff;background-color:#F0AD4E}.__react_component_tooltip.type-warning.place-top:after{border-top-color:#F0AD4E;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-warning.place-bottom:after{border-bottom-color:#F0AD4E;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-warning.place-left:after{border-left-color:#F0AD4E;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-warning.place-right:after{border-right-color:#F0AD4E;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-warning.border{border:1px solid #fff}.__react_component_tooltip.type-warning.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-warning.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-warning.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-warning.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-error{color:#fff;background-color:#BE6464}.__react_component_tooltip.type-error.place-top:after{border-top-color:#BE6464;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-error.place-bottom:after{border-bottom-color:#BE6464;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-error.place-left:after{border-left-color:#BE6464;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-error.place-right:after{border-right-color:#BE6464;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-error.border{border:1px solid #fff}.__react_component_tooltip.type-error.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-error.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-error.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-error.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-info{color:#fff;background-color:#337AB7}.__react_component_tooltip.type-info.place-top:after{border-top-color:#337AB7;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-info.place-bottom:after{border-bottom-color:#337AB7;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-info.place-left:after{border-left-color:#337AB7;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-info.place-right:after{border-right-color:#337AB7;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-info.border{border:1px solid #fff}.__react_component_tooltip.type-info.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-info.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-info.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-info.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-light{color:#222;background-color:#fff}.__react_component_tooltip.type-light.place-top:after{border-top-color:#fff;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-light.place-bottom:after{border-bottom-color:#fff;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-light.place-left:after{border-left-color:#fff;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-light.place-right:after{border-right-color:#fff;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-light.border{border:1px solid #222}.__react_component_tooltip.type-light.border.place-top:before{border-top:8px solid #222}.__react_component_tooltip.type-light.border.place-bottom:before{border-bottom:8px solid #222}.__react_component_tooltip.type-light.border.place-left:before{border-left:8px solid #222}.__react_component_tooltip.type-light.border.place-right:before{border-right:8px solid #222}.__react_component_tooltip.place-top{margin-top:-10px}.__react_component_tooltip.place-top:before{border-left:10px solid transparent;border-right:10px solid transparent;bottom:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-top:after{border-left:8px solid transparent;border-right:8px solid transparent;bottom:-6px;left:50%;margin-left:-8px}.__react_component_tooltip.place-bottom{margin-top:10px}.__react_component_tooltip.place-bottom:before{border-left:10px solid transparent;border-right:10px solid transparent;top:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-bottom:after{border-left:8px solid transparent;border-right:8px solid transparent;top:-6px;left:50%;margin-left:-8px}.__react_component_tooltip.place-left{margin-left:-10px}.__react_component_tooltip.place-left:before{border-top:6px solid transparent;border-bottom:6px solid transparent;right:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-left:after{border-top:5px solid transparent;border-bottom:5px solid transparent;right:-6px;top:50%;margin-top:-4px}.__react_component_tooltip.place-right{margin-left:10px}.__react_component_tooltip.place-right:before{border-top:6px solid transparent;border-bottom:6px solid transparent;left:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-right:after{border-top:5px solid transparent;border-bottom:5px solid transparent;left:-6px;top:50%;margin-top:-4px}.__react_component_tooltip .multi-line{display:block;padding:2px 0px;text-align:center}';
 
-},{}]},{},[6])(6)
+},{}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.parseAria = parseAria;
+/**
+ * Support aria- and role in ReactTooltip
+ *
+ * @params props {Object}
+ * @return {Object}
+ */
+function parseAria(props) {
+  var ariaObj = {};
+  Object.keys(props).filter(function (prop) {
+    // aria-xxx and role is acceptable
+    return (/(^aria-\w+$|^role$)/.test(prop)
+    );
+  }).forEach(function (prop) {
+    ariaObj[prop] = props[prop];
+  });
+
+  return ariaObj;
+}
+
+},{}],10:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (e, target, node, place, effect, offset) {
+  var tipWidth = node.clientWidth;
+  var tipHeight = node.clientHeight;
+
+  var _getCurrentOffset = getCurrentOffset(e, target, effect);
+
+  var mouseX = _getCurrentOffset.mouseX;
+  var mouseY = _getCurrentOffset.mouseY;
+
+  var defaultOffset = getDefaultPosition(effect, target.clientWidth, target.clientHeight, tipWidth, tipHeight);
+
+  var _calculateOffset = calculateOffset(offset);
+
+  var extraOffset_X = _calculateOffset.extraOffset_X;
+  var extraOffset_Y = _calculateOffset.extraOffset_Y;
+
+
+  var windowWidth = window.innerWidth;
+  var windowHeight = window.innerHeight;
+
+  var _getParent = getParent(node);
+
+  var parentTop = _getParent.parentTop;
+  var parentLeft = _getParent.parentLeft;
+
+  // Get the edge offset of the tooltip
+
+  var getTipOffsetLeft = function getTipOffsetLeft(place) {
+    var offset_X = defaultOffset[place].l;
+    return mouseX + offset_X + extraOffset_X;
+  };
+  var getTipOffsetRight = function getTipOffsetRight(place) {
+    var offset_X = defaultOffset[place].r;
+    return mouseX + offset_X + extraOffset_X;
+  };
+  var getTipOffsetTop = function getTipOffsetTop(place) {
+    var offset_Y = defaultOffset[place].t;
+    return mouseY + offset_Y + extraOffset_Y;
+  };
+  var getTipOffsetBottom = function getTipOffsetBottom(place) {
+    var offset_Y = defaultOffset[place].b;
+    return mouseY + offset_Y + extraOffset_Y;
+  };
+
+  // Judge if the tooltip has over the window(screen)
+  var outsideVertical = function outsideVertical() {
+    var result = false;
+    var newPlace = void 0;
+    if (getTipOffsetTop('left') < 0 && getTipOffsetBottom('left') <= windowHeight && getTipOffsetBottom('bottom') <= windowHeight) {
+      result = true;
+      newPlace = 'bottom';
+    } else if (getTipOffsetBottom('left') > windowHeight && getTipOffsetTop('left') >= 0 && getTipOffsetTop('top') >= 0) {
+      result = true;
+      newPlace = 'top';
+    }
+    return { result: result, newPlace: newPlace };
+  };
+  var outsideLeft = function outsideLeft() {
+    var _outsideVertical = outsideVertical();
+
+    var result = _outsideVertical.result;
+    var newPlace = _outsideVertical.newPlace; // Deal with vertical as first priority
+
+    if (result && outsideHorizontal().result) {
+      return { result: false }; // No need to change, if change to vertical will out of space
+    }
+    if (!result && getTipOffsetLeft('left') < 0 && getTipOffsetRight('right') <= windowWidth) {
+      result = true; // If vertical ok, but let out of side and right won't out of side
+      newPlace = 'right';
+    }
+    return { result: result, newPlace: newPlace };
+  };
+  var outsideRight = function outsideRight() {
+    var _outsideVertical2 = outsideVertical();
+
+    var result = _outsideVertical2.result;
+    var newPlace = _outsideVertical2.newPlace;
+
+    if (result && outsideHorizontal().result) {
+      return { result: false }; // No need to change, if change to vertical will out of space
+    }
+    if (!result && getTipOffsetRight('right') > windowWidth && getTipOffsetLeft('left') >= 0) {
+      result = true;
+      newPlace = 'left';
+    }
+    return { result: result, newPlace: newPlace };
+  };
+
+  var outsideHorizontal = function outsideHorizontal() {
+    var result = false;
+    var newPlace = void 0;
+    if (getTipOffsetLeft('top') < 0 && getTipOffsetRight('top') <= windowWidth && getTipOffsetRight('right') <= windowWidth) {
+      result = true;
+      newPlace = 'right';
+    } else if (getTipOffsetRight('top') > windowWidth && getTipOffsetLeft('top') >= 0 && getTipOffsetLeft('left') >= 0) {
+      result = true;
+      newPlace = 'left';
+    }
+    return { result: result, newPlace: newPlace };
+  };
+  var outsideTop = function outsideTop() {
+    var _outsideHorizontal = outsideHorizontal();
+
+    var result = _outsideHorizontal.result;
+    var newPlace = _outsideHorizontal.newPlace;
+
+    if (result && outsideVertical().result) {
+      return { result: false };
+    }
+    if (!result && getTipOffsetTop('top') < 0 && getTipOffsetBottom('bottom') <= windowHeight) {
+      result = true;
+      newPlace = 'bottom';
+    }
+    return { result: result, newPlace: newPlace };
+  };
+  var outsideBottom = function outsideBottom() {
+    var _outsideHorizontal2 = outsideHorizontal();
+
+    var result = _outsideHorizontal2.result;
+    var newPlace = _outsideHorizontal2.newPlace;
+
+    if (result && outsideVertical().result) {
+      return { result: false };
+    }
+    if (!result && getTipOffsetBottom('bottom') > windowHeight && getTipOffsetTop('top') >= 0) {
+      result = true;
+      newPlace = 'top';
+    }
+    return { result: result, newPlace: newPlace };
+  };
+
+  // Return new state to change the placement to the reverse if possible
+  var outsideLeftResult = outsideLeft();
+  var outsideRightResult = outsideRight();
+  var outsideTopResult = outsideTop();
+  var outsideBottomResult = outsideBottom();
+
+  if (place === 'left' && outsideLeftResult.result) {
+    return {
+      isNewState: true,
+      newState: { place: outsideLeftResult.newPlace }
+    };
+  } else if (place === 'right' && outsideRightResult.result) {
+    return {
+      isNewState: true,
+      newState: { place: outsideRightResult.newPlace }
+    };
+  } else if (place === 'top' && outsideTopResult.result) {
+    return {
+      isNewState: true,
+      newState: { place: outsideTopResult.newPlace }
+    };
+  } else if (place === 'bottom' && outsideBottomResult.result) {
+    return {
+      isNewState: true,
+      newState: { place: outsideBottomResult.newPlace }
+    };
+  }
+
+  // Return tooltip offset position
+  return {
+    isNewState: false,
+    position: {
+      left: parseInt(getTipOffsetLeft(place) - parentLeft, 10),
+      top: parseInt(getTipOffsetTop(place) - parentTop, 10)
+    }
+  };
+};
+
+// Get current mouse offset
+var getCurrentOffset = function getCurrentOffset(e, currentTarget, effect) {
+  var boundingClientRect = currentTarget.getBoundingClientRect();
+  var targetTop = boundingClientRect.top;
+  var targetLeft = boundingClientRect.left;
+  var targetWidth = currentTarget.clientWidth;
+  var targetHeight = currentTarget.clientHeight;
+
+  if (effect === 'float') {
+    return {
+      mouseX: e.clientX,
+      mouseY: e.clientY
+    };
+  }
+  return {
+    mouseX: targetLeft + targetWidth / 2,
+    mouseY: targetTop + targetHeight / 2
+  };
+};
+
+// List all possibility of tooltip final offset
+// This is useful in judging if it is necessary for tooltip to switch position when out of window
+/**
+ * Calculate the position of tooltip
+ *
+ * @params
+ * - `e` {Event} the event of current mouse
+ * - `target` {Element} the currentTarget of the event
+ * - `node` {DOM} the react-tooltip object
+ * - `place` {String} top / right / bottom / left
+ * - `effect` {String} float / solid
+ * - `offset` {Object} the offset to default position
+ *
+ * @return {Object
+ * - `isNewState` {Bool} required
+ * - `newState` {Object}
+ * - `position` {OBject} {left: {Number}, top: {Number}}
+ */
+var getDefaultPosition = function getDefaultPosition(effect, targetWidth, targetHeight, tipWidth, tipHeight) {
+  var top = void 0;
+  var right = void 0;
+  var bottom = void 0;
+  var left = void 0;
+  var disToMouse = 3;
+  var triangleHeight = 2;
+  var cursorHeight = 12; // Optimize for float bottom only, cause the cursor will hide the tooltip
+
+  if (effect === 'float') {
+    top = {
+      l: -(tipWidth / 2),
+      r: tipWidth / 2,
+      t: -(tipHeight + disToMouse + triangleHeight),
+      b: -disToMouse
+    };
+    bottom = {
+      l: -(tipWidth / 2),
+      r: tipWidth / 2,
+      t: disToMouse + cursorHeight,
+      b: tipHeight + disToMouse + triangleHeight + cursorHeight
+    };
+    left = {
+      l: -(tipWidth + disToMouse + triangleHeight),
+      r: -disToMouse,
+      t: -(tipHeight / 2),
+      b: tipHeight / 2
+    };
+    right = {
+      l: disToMouse,
+      r: tipWidth + disToMouse + triangleHeight,
+      t: -(tipHeight / 2),
+      b: tipHeight / 2
+    };
+  } else if (effect === 'solid') {
+    top = {
+      l: -(tipWidth / 2),
+      r: tipWidth / 2,
+      t: -(targetHeight / 2 + tipHeight + triangleHeight),
+      b: -(targetHeight / 2)
+    };
+    bottom = {
+      l: -(tipWidth / 2),
+      r: tipWidth / 2,
+      t: targetHeight / 2,
+      b: targetHeight / 2 + tipHeight + triangleHeight
+    };
+    left = {
+      l: -(tipWidth + targetWidth / 2 + triangleHeight),
+      r: -(targetWidth / 2),
+      t: -(tipHeight / 2),
+      b: tipHeight / 2
+    };
+    right = {
+      l: targetWidth / 2,
+      r: tipWidth + targetWidth / 2 + triangleHeight,
+      t: -(tipHeight / 2),
+      b: tipHeight / 2
+    };
+  }
+
+  return { top: top, bottom: bottom, left: left, right: right };
+};
+
+// Consider additional offset into position calculation
+var calculateOffset = function calculateOffset(offset) {
+  var extraOffset_X = 0;
+  var extraOffset_Y = 0;
+
+  if (Object.prototype.toString.apply(offset) === '[object String]') {
+    offset = JSON.parse(offset.toString().replace(/\'/g, '\"'));
+  }
+  for (var key in offset) {
+    if (key === 'top') {
+      extraOffset_Y -= parseInt(offset[key], 10);
+    } else if (key === 'bottom') {
+      extraOffset_Y += parseInt(offset[key], 10);
+    } else if (key === 'left') {
+      extraOffset_X -= parseInt(offset[key], 10);
+    } else if (key === 'right') {
+      extraOffset_X += parseInt(offset[key], 10);
+    }
+  }
+
+  return { extraOffset_X: extraOffset_X, extraOffset_Y: extraOffset_Y };
+};
+
+// Get the offset of the parent elements
+var getParent = function getParent(currentTarget) {
+  var currentParent = currentTarget;
+  while (currentParent) {
+    if (window.getComputedStyle(currentParent).getPropertyValue('transform') !== 'none') break;
+    currentParent = currentParent.parentElement;
+  }
+
+  var parentTop = currentParent && currentParent.getBoundingClientRect().top || 0;
+  var parentLeft = currentParent && currentParent.getBoundingClientRect().left || 0;
+
+  return { parentTop: parentTop, parentLeft: parentLeft };
+};
+
+},{}],11:[function(require,module,exports){
+(function (global){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (tip, children, getContent, multiline) {
+  if (children) return children;
+  if (getContent !== undefined && getContent !== null) return getContent; // getContent can be 0, '', etc.
+  if (getContent === null) return null; // Tip not exist and childern is null or undefined
+
+  var regexp = /<br\s*\/?>/;
+  if (!multiline || multiline === 'false' || !regexp.test(tip)) {
+    // No trim(), so that user can keep their input
+    return tip;
+  }
+
+  // Multiline tooltip content
+  return tip.split(regexp).map(function (d, i) {
+    return _react2.default.createElement(
+      'span',
+      { key: i, className: 'multi-line' },
+      d
+    );
+  });
+};
+
+var _react = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}]},{},[7])(7)
 });
