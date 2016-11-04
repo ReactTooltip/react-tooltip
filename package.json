@@ -14,6 +14,7 @@
       "dist/",
       "standalone/",
       "src/style.js",
+      "src/style.css",
       "example/"
     ]
   },

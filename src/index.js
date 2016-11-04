@@ -29,6 +29,7 @@ class ReactTooltip extends Component {
     offset: PropTypes.object,
     multiline: PropTypes.bool,
     border: PropTypes.bool,
+    insecure: PropTypes.bool,
     class: PropTypes.string,
     id: PropTypes.string,
     html: PropTypes.bool,
@@ -48,6 +49,7 @@ class ReactTooltip extends Component {
   };
 
   static defaultProps = {
+    insecure: true,
     resizeHide: true
   };
 
@@ -100,9 +102,12 @@ class ReactTooltip extends Component {
   }
 
   componentDidMount () {
-    this.setStyleHeader() // Set the style to the <link>
+    const { insecure, resizeHide } = this.props
+    if (insecure) {
+      this.setStyleHeader() // Set the style to the <link>
+    }
     this.bindListener() // Bind listener for tooltip
-    this.bindWindowEvents(this.props.resizeHide) // Bind global event for static method
+    this.bindWindowEvents(resizeHide) // Bind global event for static method
   }
 
   componentWillReceiveProps (props) {

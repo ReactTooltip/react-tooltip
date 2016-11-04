@@ -60,6 +60,7 @@ class	|   data-class  |  String  |   | extra custom class, can use !important to
  html	|   data-html  |  Bool  |  true, false  |  `<p data-tip="<p>HTML tooltip</p>" data-html={true}></p>` or `<ReactTooltip html={true} />`
  delayHide	|   data-delay-hide  |  Number  |   | `<p data-tip="tooltip" data-delay-hide='1000'></p>` or `<ReactTooltip delayHide={1000} />`
  delayShow	|   data-delay-show  |  Number  |   | `<p data-tip="tooltip" data-delay-show='1000'></p>` or `<ReactTooltip delayShow={1000} />`
+ insecure | null | Bool | true, false | Whether to inject the style header into the page dynamically (violates CSP style-src but is a convenient default)
  border  |   data-border  |  Bool  |  true, false | Add one pixel white border
  getContent | null | Func or Array | () => {}, [() => {}, Interval] | Generate the tip content dynamically
  afterShow | null | Func | () => {} | Function that will be called after tooltip show
