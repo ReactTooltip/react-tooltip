@@ -18,7 +18,6 @@ import { parseAria } from './utils/aria'
 /* CSS */
 import cssStyle from './style'
 import scrollparent from 'scrollparent'
-import extend from 'extend'
 
 @staticMethods @windowListener @customEvent @isCapture
 class ReactTooltip extends Component {
@@ -404,8 +403,6 @@ class ReactTooltip extends Component {
     // Set tooltip position
     node.style.left = result.position.left + 'px'
     node.style.top = result.position.top + 'px'
-
-    extend(node.style, this.props.style ? this.props.style : {})
   }
 
   /**

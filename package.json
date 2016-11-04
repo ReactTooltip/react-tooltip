@@ -43,7 +43,6 @@
   },
   "dependencies": {
     "classnames": "^2.2.0",
-    "extend": "^3.0.0",
     "scrollparent": "^1.0.2"
   },
   "devDependencies": {
