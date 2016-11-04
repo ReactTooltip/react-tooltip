@@ -551,12 +551,14 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
         return _react2.default.createElement('div', _extends({ className: tooltipClass + ' ' + extraClass
         }, ariaProps, {
           'data-id': 'tooltip',
+          style: this.props.style,
           dangerouslySetInnerHTML: { __html: placeholder } }));
       } else {
         return _react2.default.createElement(
           'div',
           _extends({ className: tooltipClass + ' ' + extraClass
           }, ariaProps, {
+            style: this.props.style,
             'data-id': 'tooltip' }),
           placeholder
         );
