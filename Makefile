@@ -30,6 +30,7 @@ devJS:
 
 devCSS:
 	@$(NODE_BIN)/node-sass $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
+	@$(NODE_BIN)/node-sass $(SRC)/index.scss $(EXAMPLE_DIST)/style.css
 	@$(NODE_BIN)/node-sass -w $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
 
 devServer:
