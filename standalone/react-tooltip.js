@@ -448,7 +448,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       disable: false
     };
 
-    _this.bind(['showTooltip', 'updateTooltip', 'hideTooltip', 'checkMouseOut', 'globalRebuild', 'globalShow', 'globalHide', 'onWindowResize']);
+    _this.bind(['showTooltip', 'updateTooltip', 'hideTooltip', 'globalRebuild', 'globalShow', 'globalHide', 'onWindowResize']);
 
     _this.mount = true;
     _this.delayShowLoop = null;
@@ -561,7 +561,6 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           target.addEventListener('mousemove', _this3.updateTooltip, isCaptureMode);
         }
         target.addEventListener('mouseleave', _this3.hideTooltip, isCaptureMode);
-        target.addEventListener('mouseout', _this3.checkMouseOut, isCaptureMode);
       });
 
       // Global event to hide tooltip
@@ -605,7 +604,6 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       target.removeEventListener('mouseenter', this.showTooltip);
       target.removeEventListener('mousemove', this.updateTooltip);
       target.removeEventListener('mouseleave', this.hideTooltip);
-      target.removeEventListener('mouseout', this.checkMouseOut);
     }
 
     /**
@@ -777,31 +775,6 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
         this.delayHideLoop = setTimeout(resetState, parseInt(delayHide, 10));
       } else {
         resetState();
-      }
-    }
-
-    /**
-    * When mouse out, hide tooltip
-    */
-
-  }, {
-    key: 'checkMouseOut',
-    value: function checkMouseOut(e) {
-      var event = typeof e !== 'undefined' ? e : null;
-      if (!event) {
-        event = window.event;
-      }
-      if (event) {
-        var tg = event.currentTarget;
-        var reltg = event.relatedTarget ? event.relatedTarget : event.toElement;
-        while (reltg && reltg !== tg && reltg.nodeName !== 'BODY') {
-          reltg = reltg.parentNode;
-          if (!reltg || reltg !== tg) {
-            this.hideTooltip();
-          }
-        }
-      } else {
-        this.hideTooltip();
       }
     }
 

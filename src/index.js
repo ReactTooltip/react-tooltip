@@ -80,7 +80,6 @@ class ReactTooltip extends Component {
       'showTooltip',
       'updateTooltip',
       'hideTooltip',
-      'checkMouseOut',
       'globalRebuild',
       'globalShow',
       'globalHide',
@@ -174,7 +173,6 @@ class ReactTooltip extends Component {
         target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
       }
       target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
-      target.addEventListener('mouseout', this.checkMouseOut, isCaptureMode)
     })
 
     // Global event to hide tooltip
@@ -207,7 +205,6 @@ class ReactTooltip extends Component {
     target.removeEventListener('mouseenter', this.showTooltip)
     target.removeEventListener('mousemove', this.updateTooltip)
     target.removeEventListener('mouseleave', this.hideTooltip)
-    target.removeEventListener('mouseout', this.checkMouseOut)
   }
 
   /**
@@ -350,26 +347,6 @@ class ReactTooltip extends Component {
       this.delayHideLoop = setTimeout(resetState, parseInt(delayHide, 10))
     } else {
       resetState()
-    }
-  }
-
-  /**
-  * When mouse out, hide tooltip
-  */
-  checkMouseOut (e) {
-    var event = typeof e !== 'undefined' ? e : null
-    if (!event) { event = window.event }
-    if (event) {
-      var tg = event.currentTarget
-      var reltg = (event.relatedTarget) ? event.relatedTarget : event.toElement
-      while (reltg && reltg !== tg && reltg.nodeName !== 'BODY') {
-        reltg = reltg.parentNode
-        if (!reltg || reltg !== tg) {
-          this.hideTooltip()
-        }
-      }
-    } else {
-      this.hideTooltip()
     }
   }
 
