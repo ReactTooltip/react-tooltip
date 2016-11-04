@@ -17,7 +17,6 @@ import { parseAria } from './utils/aria'
 
 /* CSS */
 import cssStyle from './style'
-import browser from 'detect-browser'
 import scrollparent from 'scrollparent'
 import extend from 'extend'
 
@@ -47,7 +46,8 @@ class ReactTooltip extends Component {
     afterHide: PropTypes.func,
     disable: PropTypes.bool,
     scrollHide: PropTypes.bool,
-    resizeHide: PropTypes.bool
+    resizeHide: PropTypes.bool,
+    style: PropTypes.object
   };
 
   static defaultProps = {
@@ -359,20 +359,20 @@ class ReactTooltip extends Component {
   */
   checkMouseOut (e) {
     var event = typeof e !== 'undefined' ? e : null
-    if (!event) {event = window.event}
+    if (!event) { event = window.event }
     if (event) {
       var tg = event.currentTarget
       var reltg = (event.relatedTarget) ? event.relatedTarget : event.toElement
-      while (reltg && reltg != tg && reltg.nodeName != 'BODY')
-        reltg= reltg.parentNode
+      while (reltg && reltg !== tg && reltg.nodeName !== 'BODY') {
+        reltg = reltg.parentNode
         if (!reltg || reltg !== tg) {
           this.hideTooltip()
         }
+      }
     } else {
       this.hideTooltip()
     }
   }
-
 
   /**
    * Add scroll eventlistener when tooltip show
@@ -380,11 +380,11 @@ class ReactTooltip extends Component {
    */
   addScrollListener (e) {
     const isCaptureMode = this.isCapture(e.currentTarget)
-    scrollparent(this.state.currentTarget).addEventListener('scroll', this.hideTooltip, isCaptureMode)
+    scrollparent(e.currentTarget).addEventListener('scroll', this.hideTooltip, isCaptureMode)
   }
 
   removeScrollListener () {
-    if(this.state.currentTarget) {
+    if (this.state.currentTarget) {
       scrollparent(this.state.currentTarget).removeEventListener('scroll', this.hideTooltip)
     }
   }
@@ -405,7 +405,7 @@ class ReactTooltip extends Component {
     node.style.left = result.position.left + 'px'
     node.style.top = result.position.top + 'px'
 
-    extend(node.style, this.props.style ? this.props.style : {});
+    extend(node.style, this.props.style ? this.props.style : {})
   }
 
   /**
