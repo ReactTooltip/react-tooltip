@@ -11,12 +11,19 @@ function transferSass () {
       console.log(err)
       return
     }
-    fs.writeFile(path.resolve(__dirname, '../src/style.js'), "export default '" + result.css.toString().replace(/\n/g, '') + "'", function (err) {
+    var cssSource = result.css.toString()
+    fs.writeFile(path.resolve(__dirname, '../src/style.js'), "export default '" + cssSource.replace(/\n/g, '') + "'", function (err) {
       if (err) {
         console.error(err)
       }
-      console.log('css file has been transformed successful')
-      process.exit()
+      console.log('css file has been transformed to JS successful')
+      fs.writeFile(path.resolve(__dirname, '../src/style.css'), cssSource, function (err) {
+        if (err) {
+          console.error(err)
+        }
+        console.log('css file has been transformed successful')
+        process.exit()
+      })
     })
   })
 }
