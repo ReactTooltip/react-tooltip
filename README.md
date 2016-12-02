@@ -23,8 +23,9 @@ import ReactTooltip from 'react-tooltip'
 ```
 
 2 . Add data-tip = "your placeholder" to your element
-
-	<p data-tip="hello world">Tooltip</p>
+```jsx
+<p data-tip="hello world">Tooltip</p>
+```
 
 3 . Including react-tooltip component
 
@@ -122,14 +123,14 @@ method to control tooltip's behaviour in some situations
 ### 2. Hide tooltip when getContent returns undefined
 When you set `getContent={() => { return }}` you will find the tooltip will dispaly `true`, that's because React will set the value of data-* to be 'true' automatically if there is no value to be set. So you have to set `data-tip=''` in this situaction.
 
-```
+```jsx
 <p data-tip='' data-for='test'></p>
 <ReactTooltip id='test' getContent={() => { return null }}/>
 ```
 
 Same for empty children, if you don't want show the tooltip when the children is empty
 
-```
+```jsx
 <p data-tip='' data-for='test'></p>
 <ReactTooltip id='test'>{}</ReactTooltip>
 ```
