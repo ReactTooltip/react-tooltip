@@ -24,6 +24,7 @@ genStand:
 	@rm -rf $(STANDALONE) && mkdir $(STANDALONE)
 	@$(NODE_BIN)/browserify -t babelify -t browserify-shim $(SRC)/index.js --standalone ReactTooltip -o $(STANDALONE)/react-tooltip.js
 	@$(NODE_BIN)/browserify -t babelify -t browserify-shim $(SRC)/index.js --standalone ReactTooltip | $(NODE_BIN)/uglifyjs > $(STANDALONE)/react-tooltip.min.js
+	@cp $(SRC)/style.css $(STANDALONE)
 
 devJS:
 	@$(NODE_BIN)/watchify -t babelify $(EXAMPLE_SRC)/index.js -o $(EXAMPLE_DIST)/index.js -dv
@@ -48,11 +49,16 @@ deployJS:
 	@echo Generating deploy JS files...
 	@$(NODE_BIN)/babel $(SRC) --out-dir $(DIST)
 
+deployCSS:
+	@echo Generating deploy CSS files...
+	@cp $(SRC)/style.css $(DIST)
+
 deploy: lint
 	@echo Deploy...
 	@rm -rf dist && mkdir dist
 	@make convertCSS
 	@make deployJS
+	@make deployCSS
 	@make genStand
 	@echo success!
 
