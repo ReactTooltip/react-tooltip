@@ -4,6 +4,12 @@ import React from 'react'
 import {render, findDOMNode} from 'react-dom'
 import ReactTooltip from '../../src'
 
+const customGlobalEventOffCallback = function(hideTooltip, event, hasTarget) {
+  if (event.keyCode === 27) {
+    hideTooltip(event, hasTarget)
+  }
+}
+
 const Test = React.createClass({
 
   getInitialState () {
@@ -172,6 +178,25 @@ const Test = React.createClass({
               <div>
                 <p>{"<a data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>\n" +
                 "<ReactTooltip/>"}</p>
+              </div>
+            </pre>
+          </div>
+          <div className="section">
+            <div className="example-jsx">
+              <div className="side">
+                <a data-for='custom-off-event-callback' ref='target' data-tip='custom hide callback on escape'>( •̀д•́)</a>
+                <ReactTooltip id='custom-off-event-callback' globalEventOff='keyup' globalEventOffCallback={customGlobalEventOffCallback}/>
+              </div>
+            </div>
+            <br />
+            <pre className='example-pre'>
+              <div>
+                <p>{"<a data-tip='custom show' data-event='click focus'>( •̀д•́)</a>\n" +
+                "\n" +
+                "const handler = function(hideTooltip, event) {\n" +
+                " if (event.keyCode === 27) hideTooltip(event)\n" +
+                "}\n" +
+                "<ReactTooltip globalEventOff='keyup' globalEventOffCallback={handler} />"}</p>
               </div>
             </pre>
           </div>

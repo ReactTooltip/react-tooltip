@@ -40,6 +40,7 @@ class ReactTooltip extends Component {
     watchWindow: PropTypes.bool,
     isCapture: PropTypes.bool,
     globalEventOff: PropTypes.string,
+    globalEventOffCallback: PropTypes.func,
     getContent: PropTypes.any,
     afterShow: PropTypes.func,
     afterHide: PropTypes.func,
@@ -156,7 +157,7 @@ class ReactTooltip extends Component {
    * These listeners used to trigger showing or hiding the tooltip
    */
   bindListener () {
-    const {id, globalEventOff} = this.props
+    const {id, globalEventOff, globalEventOffCallback} = this.props
     let targetArray = this.getTargetArray(id)
 
     targetArray.forEach(target => {
@@ -180,8 +181,13 @@ class ReactTooltip extends Component {
 
     // Global event to hide tooltip
     if (globalEventOff) {
-      window.removeEventListener(globalEventOff, this.hideTooltip)
-      window.addEventListener(globalEventOff, this.hideTooltip, false)
+      if (globalEventOffCallback) {
+        window.removeEventListener(globalEventOff, globalEventOffCallback.bind(this, this.hideTooltip))
+        window.addEventListener(globalEventOff, globalEventOffCallback.bind(this, this.hideTooltip), false)
+      } else {
+        window.removeEventListener(globalEventOff, this.hideTooltip)
+        window.addEventListener(globalEventOff, this.hideTooltip, false)
+      }
     }
   }
 
@@ -189,14 +195,17 @@ class ReactTooltip extends Component {
    * Unbind listeners on target elements
    */
   unbindListener () {
-    const {id, globalEventOff} = this.props
+    const {id, globalEventOff, globalEventOffCallback} = this.props
     const targetArray = this.getTargetArray(id)
     targetArray.forEach(target => {
       this.unbindBasicListener(target)
       if (this.isCustomEvent(target)) this.customUnbindListener(target)
     })
 
-    if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip)
+    if (globalEventOff) {
+      if (globalEventOffCallback) window.removeEventListener(globalEventOff, globalEventOffCallback.bind(this, this.hideTooltip))
+      else window.removeEventListener(globalEventOff, this.hideTooltip)
+    }
   }
 
   /**
