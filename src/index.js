@@ -250,6 +250,9 @@ class ReactTooltip extends Component {
       scrollHide = this.props.scrollHide
     }
 
+    // To prevent previously created timers from triggering
+    this.clearTimer()
+
     this.setState({
       placeholder,
       isEmptyTip,
