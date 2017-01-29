@@ -9,6 +9,7 @@ import staticMethods from './decorators/staticMethods'
 import windowListener from './decorators/windowListener'
 import customEvent from './decorators/customEvent'
 import isCapture from './decorators/isCapture'
+import getEffect from './decorators/getEffect'
 
 /* Utils */
 import getPosition from './utils/getPosition'
@@ -18,7 +19,7 @@ import { parseAria } from './utils/aria'
 /* CSS */
 import cssStyle from './style'
 
-@staticMethods @windowListener @customEvent @isCapture
+@staticMethods @windowListener @customEvent @isCapture @getEffect
 class ReactTooltip extends Component {
 
   static propTypes = {
@@ -161,6 +162,7 @@ class ReactTooltip extends Component {
 
     targetArray.forEach(target => {
       const isCaptureMode = this.isCapture(target)
+      const effect = this.getEffect(target)
       if (target.getAttribute('currentItem') === null) {
         target.setAttribute('currentItem', 'false')
       }
@@ -172,7 +174,7 @@ class ReactTooltip extends Component {
       }
 
       target.addEventListener('mouseenter', this.showTooltip, isCaptureMode)
-      if (this.state.effect === 'float') {
+      if (effect === 'float') {
         target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
       }
       target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
@@ -258,7 +260,7 @@ class ReactTooltip extends Component {
       isEmptyTip,
       place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
       type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
-      effect: switchToSolid && 'solid' || e.currentTarget.getAttribute('data-effect') || this.props.effect || 'float',
+      effect: switchToSolid && 'solid' || this.getEffect(e.currentTarget),
       offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
       html: e.currentTarget.getAttribute('data-html')
         ? e.currentTarget.getAttribute('data-html') === 'true'
