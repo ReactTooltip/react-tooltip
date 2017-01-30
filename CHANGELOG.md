@@ -1,6 +1,12 @@
 ## Change Log
 
-### 3.2.2 (2016/11/23 08:22 +00:00)
+### 3.2.3 (2017/01/30 02:59 +00:00)
+- [#247](https://github.com/wwayne/react-tooltip/pull/247) Fix delayHide issue #246 (@huumanoid)
+- [#238](https://github.com/wwayne/react-tooltip/pull/238) Update README.md (@nikbelikov)
+- [#233](https://github.com/wwayne/react-tooltip/pull/233) Added more syntax highlighting (@oyeanuj)
+- [#229](https://github.com/wwayne/react-tooltip/pull/229) Replaced Object.keys(...) by Object.getOwnPropertyNames(...) (@gauthierj)
+
+### 3.2.2 (2016/11/23 08:23 +00:00)
 - [#220](https://github.com/wwayne/react-tooltip/pull/220) Use parameter 'useCapture' for remove listener if it is registered as… (@achernetsky)
 - [#223](https://github.com/wwayne/react-tooltip/pull/223) Fix/security csp style src (@briantrice)
 - [#216](https://github.com/wwayne/react-tooltip/pull/216) Fix fire of global show event for IE (@SubVersive)
