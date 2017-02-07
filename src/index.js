@@ -46,12 +46,19 @@ class ReactTooltip extends Component {
     afterHide: PropTypes.func,
     disable: PropTypes.bool,
     scrollHide: PropTypes.bool,
-    resizeHide: PropTypes.bool
+    resizeHide: PropTypes.bool,
+    wrapper: PropTypes.string
   };
 
   static defaultProps = {
     insecure: true,
-    resizeHide: true
+    resizeHide: true,
+    wrapper: 'div'
+  };
+
+  static supportedWrappers = {
+    'div': React.DOM.div,
+    'span': React.DOM.span
   };
 
   constructor (props) {
@@ -428,18 +435,22 @@ class ReactTooltip extends Component {
       {'type-info': this.state.type === 'info'},
       {'type-light': this.state.type === 'light'}
     )
+
+    let wrapper = ReactTooltip.supportedWrappers[this.props.wrapper]
+    if (!wrapper) wrapper = ReactTooltip.supportedWrappers['div']
+
     if (html) {
       return (
-        <div className={`${tooltipClass} ${extraClass}`}
+        <wrapper className={`${tooltipClass} ${extraClass}`}
           {...ariaProps}
           data-id='tooltip'
-          dangerouslySetInnerHTML={{__html: placeholder}}></div>
+          dangerouslySetInnerHTML={{__html: placeholder}}></wrapper>
       )
     } else {
       return (
-        <div className={`${tooltipClass} ${extraClass}`}
+        <wrapper className={`${tooltipClass} ${extraClass}`}
           {...ariaProps}
-          data-id='tooltip'>{placeholder}</div>
+          data-id='tooltip'>{placeholder}</wrapper>
       )
     }
   }
