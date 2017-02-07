@@ -1,6 +1,9 @@
 ## Change Log
 
-### 3.2.3 (2017/01/30 02:59 +00:00)
+### 3.2.4 (2017/02/07 03:53 +00:00)
+- [#251](https://github.com/wwayne/react-tooltip/pull/251) Dropfen dynamic wrapper (@dropfen)
+
+### 3.2.3 (2017/01/30 03:00 +00:00)
 - [#247](https://github.com/wwayne/react-tooltip/pull/247) Fix delayHide issue #246 (@huumanoid)
 - [#238](https://github.com/wwayne/react-tooltip/pull/238) Update README.md (@nikbelikov)
 - [#233](https://github.com/wwayne/react-tooltip/pull/233) Added more syntax highlighting (@oyeanuj)
