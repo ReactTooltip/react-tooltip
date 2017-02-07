@@ -32,6 +32,7 @@ class ReactTooltip extends Component {
     border: PropTypes.bool,
     insecure: PropTypes.bool,
     class: PropTypes.string,
+    className: PropTypes.string,
     id: PropTypes.string,
     html: PropTypes.bool,
     delayHide: PropTypes.number,
@@ -277,7 +278,7 @@ class ReactTooltip extends Component {
       border: e.currentTarget.getAttribute('data-border')
         ? e.currentTarget.getAttribute('data-border') === 'true'
         : (this.props.border || false),
-      extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || '',
+      extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || this.props.className || '',
       disable: e.currentTarget.getAttribute('data-tip-disable')
         ? e.currentTarget.getAttribute('data-tip-disable') === 'true'
         : (this.props.disable || false)

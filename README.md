@@ -57,7 +57,7 @@ Global|Specific	|Type	|Values  |  Description
  isCapture | data-iscapture | Bool | true, false | when set to true, custom event's propagation mode will be capture
  offset	|   data-offset  |  Object  |  top, right, bottom, left | `data-offset="{'top': 10, 'left': 10}"` for specific and `offset={{top: 10, left: 10}}` for global
 multiline	|   data-multiline  |  Bool  |  true, false | support `<br>`, `<br />` to make multiline
-class	|   data-class  |  String  |   | extra custom class, can use !important to overwrite react-tooltip's default class
+className	|   data-class  |  String  |   | extra custom class, can use !important to overwrite react-tooltip's default class
  html	|   data-html  |  Bool  |  true, false  |  `<p data-tip="<p>HTML tooltip</p>" data-html={true}></p>` or `<ReactTooltip html={true} />`
  delayHide	|   data-delay-hide  |  Number  |   | `<p data-tip="tooltip" data-delay-hide='1000'></p>` or `<ReactTooltip delayHide={1000} />`
  delayShow	|   data-delay-show  |  Number  |   | `<p data-tip="tooltip" data-delay-show='1000'></p>` or `<ReactTooltip delayShow={1000} />`
@@ -116,7 +116,7 @@ The component was designed to set a `<Reactooltip />` one place then use tooltip
 
 1. Put `<ReactTooltip />` out of the `<Modal>`
 2. Use `ReactTooltip.rebuild()` when opening the modal
-3. If your modal's z-index happens to higher than the tooltip, use the attribute `class` to custom your tooltip's z-index
+3. If your modal's z-index happens to higher than the tooltip, use the attribute `className` to custom your tooltip's z-index
 
 >I suggest always put `<ReactTooltip />` in the Highest level or smart component of Redux, so you might need these static
 method to control tooltip's behaviour in some situations
