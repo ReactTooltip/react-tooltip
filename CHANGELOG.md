@@ -1,6 +1,10 @@
 ## Change Log
 
-### 3.2.4 (2017/02/07 03:53 +00:00)
+### 3.2.6 (2017/02/08 12:33 +00:00)
+- [#255](https://github.com/wwayne/react-tooltip/pull/255) (fix) Remove console logs (@flexpert)
+- [#254](https://github.com/wwayne/react-tooltip/pull/254) Add support for className prop (@jonbeller)
+
+### 3.2.4 (2017/02/07 03:57 +00:00)
 - [#251](https://github.com/wwayne/react-tooltip/pull/251) Dropfen dynamic wrapper (@dropfen)
 
 ### 3.2.3 (2017/01/30 03:00 +00:00)
