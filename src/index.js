@@ -186,6 +186,7 @@ class ReactTooltip extends Component {
         target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
       }
       target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
+      target.addEventListener('DOMNodeRemovedFromDocument', this.hideTooltip, isCaptureMode)
     })
 
     // Global event to hide tooltip
@@ -219,6 +220,7 @@ class ReactTooltip extends Component {
     target.removeEventListener('mouseenter', this.showTooltip, isCaptureMode)
     target.removeEventListener('mousemove', this.updateTooltip, isCaptureMode)
     target.removeEventListener('mouseleave', this.hideTooltip, isCaptureMode)
+    target.removeEventListener('DOMNodeRemovedFromDocument', this.hideTooltip, isCaptureMode)
   }
 
   /**
