@@ -16,6 +16,8 @@ import getPosition from './utils/getPosition'
 import getTipContent from './utils/getTipContent'
 import { parseAria } from './utils/aria'
 
+import createArrayFromMixed from 'fbjs/lib/createArrayFromMixed'
+
 /* CSS */
 import cssStyle from './style'
 
@@ -153,11 +155,7 @@ class ReactTooltip extends Component {
       targetArray = document.querySelectorAll(`[data-tip][data-for="${id}"]`)
     }
 
-    // targetArray is a NodeList, convert it to a real array
-    // I hope I can use Object.values...
-    return Object.getOwnPropertyNames(targetArray).map(key => {
-      return targetArray[key]
-    })
+    return createArrayFromMixed(targetArray)
   }
 
   /**
