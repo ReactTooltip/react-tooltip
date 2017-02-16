@@ -155,6 +155,7 @@ class ReactTooltip extends Component {
       targetArray = document.querySelectorAll(`[data-tip][data-for="${id}"]`)
     }
 
+    // targetArray is a NodeList, convert it to a real array
     return createArrayFromMixed(targetArray)
   }
 
