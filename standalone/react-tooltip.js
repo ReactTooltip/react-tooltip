@@ -81,9 +81,9 @@ exports.default = function (target) {
   target.prototype.customBindListener = function (ele) {
     var _this = this;
 
-    var _state = this.state;
-    var event = _state.event;
-    var eventOff = _state.eventOff;
+    var _state = this.state,
+        event = _state.event,
+        eventOff = _state.eventOff;
 
     var dataEvent = ele.getAttribute('data-event') || event;
     var dataEventOff = ele.getAttribute('data-event-off') || eventOff;
@@ -103,9 +103,9 @@ exports.default = function (target) {
 
   /* Unbind listener for custom event */
   target.prototype.customUnbindListener = function (ele) {
-    var _state2 = this.state;
-    var event = _state2.event;
-    var eventOff = _state2.eventOff;
+    var _state2 = this.state,
+        event = _state2.event,
+        eventOff = _state2.eventOff;
 
     var dataEvent = event || ele.getAttribute('data-event');
     var dataEventOff = eventOff || ele.getAttribute('data-event-off');
@@ -372,6 +372,10 @@ var _getTipContent2 = _interopRequireDefault(_getTipContent);
 
 var _aria = require('./utils/aria');
 
+var _nodeListToArray = require('./utils/nodeListToArray');
+
+var _nodeListToArray2 = _interopRequireDefault(_nodeListToArray);
+
 var _style = require('./style');
 
 var _style2 = _interopRequireDefault(_style);
@@ -439,9 +443,9 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _props = this.props;
-      var insecure = _props.insecure;
-      var resizeHide = _props.resizeHide;
+      var _props = this.props,
+          insecure = _props.insecure,
+          resizeHide = _props.resizeHide;
 
       if (insecure) {
         this.setStyleHeader(); // Set the style to the <link>
@@ -483,18 +487,13 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     key: 'getTargetArray',
     value: function getTargetArray(id) {
       var targetArray = void 0;
-
       if (!id) {
         targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
       } else {
         targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]');
       }
-
       // targetArray is a NodeList, convert it to a real array
-      // I hope I can use Object.values...
-      return Object.getOwnPropertyNames(targetArray).map(function (key) {
-        return targetArray[key];
-      });
+      return (0, _nodeListToArray2.default)(targetArray);
     }
 
     /**
@@ -507,9 +506,9 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     value: function bindListener() {
       var _this3 = this;
 
-      var _props2 = this.props;
-      var id = _props2.id;
-      var globalEventOff = _props2.globalEventOff;
+      var _props2 = this.props,
+          id = _props2.id,
+          globalEventOff = _props2.globalEventOff;
 
       var targetArray = this.getTargetArray(id);
 
@@ -549,9 +548,9 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     value: function unbindListener() {
       var _this4 = this;
 
-      var _props3 = this.props;
-      var id = _props3.id;
-      var globalEventOff = _props3.globalEventOff;
+      var _props3 = this.props,
+          id = _props3.id,
+          globalEventOff = _props3.globalEventOff;
 
       var targetArray = this.getTargetArray(id);
       targetArray.forEach(function (target) {
@@ -596,10 +595,10 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       }
       // Get the tooltip content
       // calculate in this phrase so that tip width height can be detected
-      var _props4 = this.props;
-      var children = _props4.children;
-      var multiline = _props4.multiline;
-      var getContent = _props4.getContent;
+      var _props4 = this.props,
+          children = _props4.children,
+          multiline = _props4.multiline,
+          getContent = _props4.getContent;
 
       var originTooltip = e.currentTarget.getAttribute('data-tip');
       var isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false;
@@ -673,11 +672,11 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     value: function updateTooltip(e) {
       var _this6 = this;
 
-      var _state = this.state;
-      var delayShow = _state.delayShow;
-      var show = _state.show;
-      var isEmptyTip = _state.isEmptyTip;
-      var disable = _state.disable;
+      var _state = this.state,
+          delayShow = _state.delayShow,
+          show = _state.show,
+          isEmptyTip = _state.isEmptyTip,
+          disable = _state.disable;
       var afterShow = this.props.afterShow;
       var placeholder = this.state.placeholder;
 
@@ -718,10 +717,10 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     value: function hideTooltip(e, hasTarget) {
       var _this7 = this;
 
-      var _state2 = this.state;
-      var delayHide = _state2.delayHide;
-      var isEmptyTip = _state2.isEmptyTip;
-      var disable = _state2.disable;
+      var _state2 = this.state,
+          delayHide = _state2.delayHide,
+          isEmptyTip = _state2.isEmptyTip,
+          disable = _state2.disable;
       var afterHide = this.props.afterHide;
 
       if (!this.mount) return;
@@ -776,12 +775,12 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     value: function updatePosition() {
       var _this8 = this;
 
-      var _state3 = this.state;
-      var currentEvent = _state3.currentEvent;
-      var currentTarget = _state3.currentTarget;
-      var place = _state3.place;
-      var effect = _state3.effect;
-      var offset = _state3.offset;
+      var _state3 = this.state,
+          currentEvent = _state3.currentEvent,
+          currentTarget = _state3.currentTarget,
+          place = _state3.place,
+          effect = _state3.effect,
+          offset = _state3.offset;
 
       var node = _reactDom2.default.findDOMNode(this);
       var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset);
@@ -827,13 +826,13 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'render',
     value: function render() {
-      var _state4 = this.state;
-      var placeholder = _state4.placeholder;
-      var extraClass = _state4.extraClass;
-      var html = _state4.html;
-      var ariaProps = _state4.ariaProps;
-      var disable = _state4.disable;
-      var isEmptyTip = _state4.isEmptyTip;
+      var _state4 = this.state,
+          placeholder = _state4.placeholder,
+          extraClass = _state4.extraClass,
+          html = _state4.html,
+          ariaProps = _state4.ariaProps,
+          disable = _state4.disable,
+          isEmptyTip = _state4.isEmptyTip;
 
       var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show && !disable && !isEmptyTip }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
 
@@ -900,7 +899,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 module.exports = ReactTooltip;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./decorators/customEvent":3,"./decorators/getEffect":4,"./decorators/isCapture":5,"./decorators/staticMethods":6,"./decorators/windowListener":7,"./style":9,"./utils/aria":10,"./utils/getPosition":11,"./utils/getTipContent":12,"classnames":1}],9:[function(require,module,exports){
+},{"./decorators/customEvent":3,"./decorators/getEffect":4,"./decorators/isCapture":5,"./decorators/staticMethods":6,"./decorators/windowListener":7,"./style":9,"./utils/aria":10,"./utils/getPosition":11,"./utils/getTipContent":12,"./utils/nodeListToArray":13,"classnames":1}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -945,28 +944,25 @@ exports.default = function (e, target, node, place, effect, offset) {
   var tipWidth = node.clientWidth;
   var tipHeight = node.clientHeight;
 
-  var _getCurrentOffset = getCurrentOffset(e, target, effect);
-
-  var mouseX = _getCurrentOffset.mouseX;
-  var mouseY = _getCurrentOffset.mouseY;
+  var _getCurrentOffset = getCurrentOffset(e, target, effect),
+      mouseX = _getCurrentOffset.mouseX,
+      mouseY = _getCurrentOffset.mouseY;
 
   var defaultOffset = getDefaultPosition(effect, target.clientWidth, target.clientHeight, tipWidth, tipHeight);
 
-  var _calculateOffset = calculateOffset(offset);
-
-  var extraOffset_X = _calculateOffset.extraOffset_X;
-  var extraOffset_Y = _calculateOffset.extraOffset_Y;
-
+  var _calculateOffset = calculateOffset(offset),
+      extraOffset_X = _calculateOffset.extraOffset_X,
+      extraOffset_Y = _calculateOffset.extraOffset_Y;
 
   var windowWidth = window.innerWidth;
   var windowHeight = window.innerHeight;
 
-  var _getParent = getParent(node);
-
-  var parentTop = _getParent.parentTop;
-  var parentLeft = _getParent.parentLeft;
+  var _getParent = getParent(node),
+      parentTop = _getParent.parentTop,
+      parentLeft = _getParent.parentLeft;
 
   // Get the edge offset of the tooltip
+
 
   var getTipOffsetLeft = function getTipOffsetLeft(place) {
     var offset_X = defaultOffset[place].l;
@@ -999,10 +995,10 @@ exports.default = function (e, target, node, place, effect, offset) {
     return { result: result, newPlace: newPlace };
   };
   var outsideLeft = function outsideLeft() {
-    var _outsideVertical = outsideVertical();
+    var _outsideVertical = outsideVertical(),
+        result = _outsideVertical.result,
+        newPlace = _outsideVertical.newPlace; // Deal with vertical as first priority
 
-    var result = _outsideVertical.result;
-    var newPlace = _outsideVertical.newPlace; // Deal with vertical as first priority
 
     if (result && outsideHorizontal().result) {
       return { result: false }; // No need to change, if change to vertical will out of space
@@ -1014,10 +1010,9 @@ exports.default = function (e, target, node, place, effect, offset) {
     return { result: result, newPlace: newPlace };
   };
   var outsideRight = function outsideRight() {
-    var _outsideVertical2 = outsideVertical();
-
-    var result = _outsideVertical2.result;
-    var newPlace = _outsideVertical2.newPlace;
+    var _outsideVertical2 = outsideVertical(),
+        result = _outsideVertical2.result,
+        newPlace = _outsideVertical2.newPlace;
 
     if (result && outsideHorizontal().result) {
       return { result: false }; // No need to change, if change to vertical will out of space
@@ -1042,10 +1037,9 @@ exports.default = function (e, target, node, place, effect, offset) {
     return { result: result, newPlace: newPlace };
   };
   var outsideTop = function outsideTop() {
-    var _outsideHorizontal = outsideHorizontal();
-
-    var result = _outsideHorizontal.result;
-    var newPlace = _outsideHorizontal.newPlace;
+    var _outsideHorizontal = outsideHorizontal(),
+        result = _outsideHorizontal.result,
+        newPlace = _outsideHorizontal.newPlace;
 
     if (result && outsideVertical().result) {
       return { result: false };
@@ -1057,10 +1051,9 @@ exports.default = function (e, target, node, place, effect, offset) {
     return { result: result, newPlace: newPlace };
   };
   var outsideBottom = function outsideBottom() {
-    var _outsideHorizontal2 = outsideHorizontal();
-
-    var result = _outsideHorizontal2.result;
-    var newPlace = _outsideHorizontal2.newPlace;
+    var _outsideHorizontal2 = outsideHorizontal(),
+        result = _outsideHorizontal2.result,
+        newPlace = _outsideHorizontal2.newPlace;
 
     if (result && outsideVertical().result) {
       return { result: false };
@@ -1285,5 +1278,22 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],13:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (nodeList) {
+  var length = nodeList.length;
+  if (nodeList.hasOwnProperty) {
+    return Array.prototype.slice.call(nodeList);
+  }
+  return new Array(length).fill().map(function (index) {
+    return nodeList[index];
+  });
+};
+
 },{}]},{},[8])(8)
 });

@@ -1,6 +1,10 @@
 ## Change Log
 
-### 3.2.6 (2017/02/08 12:33 +00:00)
+### 3.2.7 (2017/02/17 07:24 +00:00)
+- [#262](https://github.com/wwayne/react-tooltip/pull/262) Fix nodelist converte in safari (@wwayne)
+- [#260](https://github.com/wwayne/react-tooltip/pull/260) Fix NodeList to Array convertion (@huumanoid)
+
+### 3.2.6 (2017/02/08 12:34 +00:00)
 - [#255](https://github.com/wwayne/react-tooltip/pull/255) (fix) Remove console logs (@flexpert)
 - [#254](https://github.com/wwayne/react-tooltip/pull/254) Add support for className prop (@jonbeller)
 
