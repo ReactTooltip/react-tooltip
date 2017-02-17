@@ -15,8 +15,7 @@ import getEffect from './decorators/getEffect'
 import getPosition from './utils/getPosition'
 import getTipContent from './utils/getTipContent'
 import { parseAria } from './utils/aria'
-
-import createArrayFromMixed from 'fbjs/lib/createArrayFromMixed'
+import nodeListToArray from './utils/nodeListToArray'
 
 /* CSS */
 import cssStyle from './style'
@@ -148,15 +147,13 @@ class ReactTooltip extends Component {
    */
   getTargetArray (id) {
     let targetArray
-
     if (!id) {
       targetArray = document.querySelectorAll('[data-tip]:not([data-for])')
     } else {
       targetArray = document.querySelectorAll(`[data-tip][data-for="${id}"]`)
     }
-
     // targetArray is a NodeList, convert it to a real array
-    return createArrayFromMixed(targetArray)
+    return nodeListToArray(targetArray)
   }
 
   /**
