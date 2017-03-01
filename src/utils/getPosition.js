@@ -19,7 +19,7 @@ export default function (e, target, node, place, effect, offset) {
   const tipHeight = node.clientHeight
   const {mouseX, mouseY} = getCurrentOffset(e, target, effect)
   const defaultOffset = getDefaultPosition(effect, target.clientWidth, target.clientHeight, tipWidth, tipHeight)
-  const {extraOffset_X, extraOffset_Y} = calculateOffset(offset)
+  const {extraOffset_X, extraOffset_Y} = calculateOffset(offset, place)
 
   const windowWidth = window.innerWidth
   const windowHeight = window.innerHeight
@@ -248,7 +248,7 @@ const getDefaultPosition = (effect, targetWidth, targetHeight, tipWidth, tipHeig
 }
 
 // Consider additional offset into position calculation
-const calculateOffset = (offset) => {
+const calculateOffset = (offset, place) => {
   let extraOffset_X = 0
   let extraOffset_Y = 0
 
@@ -256,9 +256,9 @@ const calculateOffset = (offset) => {
     offset = JSON.parse(offset.toString().replace(/\'/g, '\"'))
   }
   for (let key in offset) {
-    if (key === 'top') {
+    if (key === 'top' && place === 'top') {
       extraOffset_Y -= parseInt(offset[key], 10)
-    } else if (key === 'bottom') {
+    } else if (key === 'bottom' && place === 'bottom') {
       extraOffset_Y += parseInt(offset[key], 10)
     } else if (key === 'left') {
       extraOffset_X -= parseInt(offset[key], 10)

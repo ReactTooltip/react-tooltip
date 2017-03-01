@@ -686,17 +686,15 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       if (isEmptyTip || disable) return; // if the tooltip is empty, disable the tooltip
       var updateState = function updateState() {
         if (Array.isArray(placeholder) && placeholder.length > 0 || placeholder) {
-          (function () {
-            var isInvisible = !_this6.state.show;
-            _this6.setState({
-              currentEvent: e,
-              currentTarget: eventTarget,
-              show: true
-            }, function () {
-              _this6.updatePosition();
-              if (isInvisible && afterShow) afterShow();
-            });
-          })();
+          var isInvisible = !_this6.state.show;
+          _this6.setState({
+            currentEvent: e,
+            currentTarget: eventTarget,
+            show: true
+          }, function () {
+            _this6.updatePosition();
+            if (isInvisible && afterShow) afterShow();
+          });
         }
       };
 
@@ -950,7 +948,7 @@ exports.default = function (e, target, node, place, effect, offset) {
 
   var defaultOffset = getDefaultPosition(effect, target.clientWidth, target.clientHeight, tipWidth, tipHeight);
 
-  var _calculateOffset = calculateOffset(offset),
+  var _calculateOffset = calculateOffset(offset, place),
       extraOffset_X = _calculateOffset.extraOffset_X,
       extraOffset_Y = _calculateOffset.extraOffset_Y;
 
@@ -1206,7 +1204,7 @@ var getDefaultPosition = function getDefaultPosition(effect, targetWidth, target
 };
 
 // Consider additional offset into position calculation
-var calculateOffset = function calculateOffset(offset) {
+var calculateOffset = function calculateOffset(offset, place) {
   var extraOffset_X = 0;
   var extraOffset_Y = 0;
 
@@ -1214,9 +1212,9 @@ var calculateOffset = function calculateOffset(offset) {
     offset = JSON.parse(offset.toString().replace(/\'/g, '\"'));
   }
   for (var key in offset) {
-    if (key === 'top') {
+    if (key === 'top' && place === 'top') {
       extraOffset_Y -= parseInt(offset[key], 10);
-    } else if (key === 'bottom') {
+    } else if (key === 'bottom' && place === 'bottom') {
       extraOffset_Y += parseInt(offset[key], 10);
     } else if (key === 'left') {
       extraOffset_X -= parseInt(offset[key], 10);
