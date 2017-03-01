@@ -15,6 +15,7 @@ import getEffect from './decorators/getEffect'
 import getPosition from './utils/getPosition'
 import getTipContent from './utils/getTipContent'
 import { parseAria } from './utils/aria'
+import nodeListToArray from './utils/nodeListToArray'
 
 /* CSS */
 import cssStyle from './style'
@@ -146,18 +147,13 @@ class ReactTooltip extends Component {
    */
   getTargetArray (id) {
     let targetArray
-
     if (!id) {
       targetArray = document.querySelectorAll('[data-tip]:not([data-for])')
     } else {
       targetArray = document.querySelectorAll(`[data-tip][data-for="${id}"]`)
     }
-
     // targetArray is a NodeList, convert it to a real array
-    // I hope I can use Object.values...
-    return Object.getOwnPropertyNames(targetArray).map(key => {
-      return targetArray[key]
-    })
+    return nodeListToArray(targetArray)
   }
 
   /**

@@ -57,6 +57,10 @@ var _getTipContent2 = _interopRequireDefault(_getTipContent);
 
 var _aria = require('./utils/aria');
 
+var _nodeListToArray = require('./utils/nodeListToArray');
+
+var _nodeListToArray2 = _interopRequireDefault(_nodeListToArray);
+
 var _style = require('./style');
 
 var _style2 = _interopRequireDefault(_style);
@@ -168,18 +172,13 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     key: 'getTargetArray',
     value: function getTargetArray(id) {
       var targetArray = void 0;
-
       if (!id) {
         targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
       } else {
         targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]');
       }
-
       // targetArray is a NodeList, convert it to a real array
-      // I hope I can use Object.values...
-      return Object.getOwnPropertyNames(targetArray).map(function (key) {
-        return targetArray[key];
-      });
+      return (0, _nodeListToArray2.default)(targetArray);
     }
 
     /**
