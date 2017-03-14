@@ -116,7 +116,8 @@ class ReactTooltip extends Component {
     if (insecure) {
       this.setStyleHeader() // Set the style to the <link>
     }
-    this.bindListener() // Bind listener for tooltip
+    //this.bindListener() // Bind listener for tooltip
+    this.bindBodyListener() // Bind listener for tooltip
     this.bindWindowEvents(resizeHide) // Bind global event for static method
   }
 
@@ -154,6 +155,43 @@ class ReactTooltip extends Component {
     }
     // targetArray is a NodeList, convert it to a real array
     return nodeListToArray(targetArray)
+  }
+
+  bindBodyListener() {
+    const {id} = this.props
+    const body = document.getElementsByTagName('body')[0]
+
+    const clone = (e) => {
+      const copy = {}
+      for (const key in e) {
+        copy[key] = e[key]
+      }
+      return copy
+    }
+
+    const listener = (callback, respectEffect, e) => {
+      const tip = e.target.dataset.tip
+      const _for = e.target.dataset.for
+
+      const target = e.target
+
+      if (tip != null
+        && (!respectEffect || true || this.getEffect(target) === 'float')
+        && (
+        (id == null && _for == null)
+          || (id != null && _for === id)
+      )) {
+        const x = clone(e)
+        x.currentTarget = target
+        callback(x)
+      }
+    }
+
+    body.addEventListener('mouseover', listener.bind(null, this.showTooltip, false))
+
+    body.addEventListener('mousemove', listener.bind(null, this.updateTooltip, true))
+
+    body.addEventListener('mouseout', listener.bind(null, this.hideTooltip, false))
   }
 
   /**
