@@ -10,6 +10,7 @@ import windowListener from './decorators/windowListener'
 import customEvent from './decorators/customEvent'
 import isCapture from './decorators/isCapture'
 import getEffect from './decorators/getEffect'
+import bodyMode from './decorators/bodyMode'
 
 /* Utils */
 import getPosition from './utils/getPosition'
@@ -20,7 +21,7 @@ import nodeListToArray from './utils/nodeListToArray'
 /* CSS */
 import cssStyle from './style'
 
-@staticMethods @windowListener @customEvent @isCapture @getEffect
+@staticMethods @windowListener @customEvent @isCapture @getEffect @bodyMode
 class ReactTooltip extends Component {
 
   static propTypes = {
@@ -100,10 +101,6 @@ class ReactTooltip extends Component {
     this.delayShowLoop = null
     this.delayHideLoop = null
     this.intervalUpdateContent = null
-
-    this.bodyUpdateTooltip = this.bodyListener.bind(this, this.updateTooltip, true)
-    this.bodyShowTooltip = this.bodyListener.bind(this, this.showTooltip, false)
-    this.bodyHideTooltip = this.bodyListener.bind(this, this.hideTooltip, false)
   }
 
   /**
@@ -142,11 +139,17 @@ class ReactTooltip extends Component {
   }
 
   componentWillUnmount () {
+    const { bodyMode } = this.props
+
     this.mount = false
 
     this.clearTimer()
 
-    this.unbindListener()
+    if (bodyMode) {
+      this.unbindBodyListener()
+    } else {
+      this.unbindListener()
+    }
     this.removeScrollListener()
     this.unbindWindowEvents()
   }
@@ -163,44 +166,6 @@ class ReactTooltip extends Component {
     }
     // targetArray is a NodeList, convert it to a real array
     return nodeListToArray(targetArray)
-  }
-
-  bodyListener(callback, respectEffect, e) {
-    const {id} = this.props
-
-    const clone = (e) => {
-      const copy = {}
-      for (const key in e) {
-        copy[key] = e[key]
-      }
-      return copy
-    }
-
-    const tip = e.target.dataset.tip
-    const _for = e.target.dataset.for
-
-    const target = e.target
-
-    if (tip != null
-      && (!respectEffect || this.getEffect(target) === 'float')
-      && (
-      (id == null && _for == null)
-        || (id != null && _for === id)
-    )) {
-      const x = clone(e)
-      x.currentTarget = target
-      callback(x)
-    }
-  }
-
-  bindBodyListener() {
-    const body = document.getElementsByTagName('body')[0]
-
-    body.addEventListener('mouseover', this.bodyShowTooltip)
-
-    body.addEventListener('mousemove', this.bodyUpdateTooltip)
-
-    body.addEventListener('mouseout', this.bodyHideTooltip)
   }
 
   /**
