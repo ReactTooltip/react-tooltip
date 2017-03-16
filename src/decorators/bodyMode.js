@@ -64,6 +64,8 @@ export default function (target) {
 
     if (event != null) customEvents[event] = true
     if (eventOff != null) customEventsOff[eventOff] = true
+    for (const event of this.state.possibleCustomEvents) customEvents[event] = true
+    for (const event of this.state.possibleCustomEventsOff) customEventsOff[event] = true
 
     this.unbindBodyListener(body)
 
