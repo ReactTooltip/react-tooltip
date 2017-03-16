@@ -54,12 +54,16 @@ export default function (target) {
 
   target.prototype.bindBodyListener = function () {
     const { id } = this.props
+    const { event, eventOff } = this.state
     const body = document.getElementsByTagName('body')[0]
 
     const targetArray = this.getTargetArray(id)
 
     const customEvents = findCustomEvents(targetArray, 'data-event')
     const customEventsOff = findCustomEvents(targetArray, 'data-event-off')
+
+    if (event != null) customEvents[event] = true
+    if (eventOff != null) customEventsOff[eventOff] = true
 
     this.unbindBodyListener(body)
 
@@ -71,7 +75,6 @@ export default function (target) {
 
     for (const event in customEvents) {
       listeners[event] = bodyListener.bind(this, (e) => {
-        const { eventOff } = this.state
         checkStatus.call(this, e.currentTarget.getAttribute('data-event-off') || eventOff, e)
       }, { customEvent: true })
     }
