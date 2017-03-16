@@ -100,6 +100,10 @@ class ReactTooltip extends Component {
     this.delayShowLoop = null
     this.delayHideLoop = null
     this.intervalUpdateContent = null
+
+    this.bodyUpdateTooltip = this.bodyListener.bind(this, this.updateTooltip, true)
+    this.bodyShowTooltip = this.bodyListener.bind(this, this.showTooltip, false)
+    this.bodyHideTooltip = this.bodyListener.bind(this, this.hideTooltip, false)
   }
 
   /**
@@ -161,9 +165,8 @@ class ReactTooltip extends Component {
     return nodeListToArray(targetArray)
   }
 
-  bindBodyListener() {
+  bodyListener(callback, respectEffect, e) {
     const {id} = this.props
-    const body = document.getElementsByTagName('body')[0]
 
     const clone = (e) => {
       const copy = {}
@@ -173,29 +176,31 @@ class ReactTooltip extends Component {
       return copy
     }
 
-    const listener = (callback, respectEffect, e) => {
-      const tip = e.target.dataset.tip
-      const _for = e.target.dataset.for
+    const tip = e.target.dataset.tip
+    const _for = e.target.dataset.for
 
-      const target = e.target
+    const target = e.target
 
-      if (tip != null
-        && (!respectEffect || this.getEffect(target) === 'float')
-        && (
-        (id == null && _for == null)
-          || (id != null && _for === id)
-      )) {
-        const x = clone(e)
-        x.currentTarget = target
-        callback(x)
-      }
+    if (tip != null
+      && (!respectEffect || this.getEffect(target) === 'float')
+      && (
+      (id == null && _for == null)
+        || (id != null && _for === id)
+    )) {
+      const x = clone(e)
+      x.currentTarget = target
+      callback(x)
     }
+  }
 
-    body.addEventListener('mouseover', listener.bind(null, this.showTooltip, false))
+  bindBodyListener() {
+    const body = document.getElementsByTagName('body')[0]
 
-    body.addEventListener('mousemove', listener.bind(null, this.updateTooltip, true))
+    body.addEventListener('mouseover', this.bodyShowTooltip)
 
-    body.addEventListener('mouseout', listener.bind(null, this.hideTooltip, false))
+    body.addEventListener('mousemove', this.bodyUpdateTooltip)
+
+    body.addEventListener('mouseout', this.bodyHideTooltip)
   }
 
   /**
