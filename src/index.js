@@ -171,6 +171,9 @@ class ReactTooltip extends Component {
         target.setAttribute('currentItem', 'false')
       }
       this.unbindBasicListener(target)
+      if (this.isCustomEvent(target)) {
+        this.customUnbindListener(target)
+      }
     })
 
     if (this.isBodyMode()) {

@@ -60,9 +60,11 @@ export default function (target) {
     const customEvents = findCustomEvents(targetArray, 'data-event')
     const customEventsOff = findCustomEvents(targetArray, 'data-event-off')
 
+    this.unbindBodyListener(body)
+
     const listeners = this.bodyModeListeners = {
       'mouseover': bodyListener.bind(this, this.showTooltip, {}),
-      'mousemove': bodyListener.bind(this, this.updateTooltip, {respectEffect: true}),
+      'mousemove': bodyListener.bind(this, this.updateTooltip, { respectEffect: true }),
       'mouseout': bodyListener.bind(this, this.hideTooltip, {})
     }
 
@@ -80,8 +82,8 @@ export default function (target) {
     }
   }
 
-  target.prototype.unbindBodyListener = function () {
-    const body = document.getElementsByTagName('body')[0]
+  target.prototype.unbindBodyListener = function (body) {
+    body = body || document.getElementsByTagName('body')[0]
 
     const listeners = this.bodyModeListeners
     for (const event in listeners) {
