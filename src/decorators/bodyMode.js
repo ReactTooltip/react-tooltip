@@ -8,18 +8,21 @@ export default function (target) {
     return this.props.bodyMode
   }
 
-  const clone = (e) => {
-    const copy = {}
+  const makeProxy = (e) => {
+    const proxy = {}
     for (const key in e) {
-      copy[key] = e[key]
+      if (typeof e[key] === 'function') {
+        proxy[key] = e[key].bind(e)
+      } else {
+        proxy[key] = e[key]
+      }
     }
-    return copy
+    return proxy
   }
 
   const bodyListener = function (callback, options, e) {
     const {respectEffect = false, customEvent = false} = options
     const {id} = this.props
-    const isCapture = this.isCapture(e.currentTarget)
 
     const tip = e.target.dataset.tip
     const _for = e.target.dataset.for
@@ -33,11 +36,9 @@ export default function (target) {
       (!respectEffect || this.getEffect(target) === 'float') &&
       ((id == null && _for == null) || (id != null && _for === id))
     ) {
-      const x = clone(e)
-      x.currentTarget = target
-      x.stopPropagation = () => {}
-      if (customEvent && !isCapture) e.stopPropagation()
-      callback(x)
+      const proxy = makeProxy(e)
+      proxy.currentTarget = target
+      callback(proxy)
     }
   }
 
