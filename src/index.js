@@ -112,12 +112,16 @@ class ReactTooltip extends Component {
   }
 
   componentDidMount () {
-    const { insecure, resizeHide } = this.props
+    const { insecure, resizeHide, bodyMode } = this.props
     if (insecure) {
       this.setStyleHeader() // Set the style to the <link>
     }
-    //this.bindListener() // Bind listener for tooltip
-    this.bindBodyListener() // Bind listener for tooltip
+
+    if (bodyMode) {
+      this.bindBodyListener() // Bind single body event listener
+    } else {
+      this.bindListener() // Bind listener for each element
+    }
     this.bindWindowEvents(resizeHide) // Bind global event for static method
   }
 
@@ -176,7 +180,7 @@ class ReactTooltip extends Component {
       const target = e.target
 
       if (tip != null
-        && (!respectEffect || true || this.getEffect(target) === 'float')
+        && (!respectEffect || this.getEffect(target) === 'float')
         && (
         (id == null && _for == null)
           || (id != null && _for === id)
