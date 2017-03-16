@@ -5,7 +5,6 @@ import {checkStatus} from './customEvent'
 
 export default function (target) {
   target.prototype.isBodyMode = function () {
-    return true
     return this.props.bodyMode
   }
 
@@ -30,12 +29,10 @@ export default function (target) {
       return
     }
 
-    if (tip != null
-      && (!respectEffect || this.getEffect(target) === 'float')
-      && (
-      (id == null && _for == null)
-        || (id != null && _for === id)
-    )) {
+    if (tip != null &&
+      (!respectEffect || this.getEffect(target) === 'float') &&
+      ((id == null && _for == null) || (id != null && _for === id))
+    ) {
       const x = clone(e)
       x.currentTarget = target
       x.stopPropagation = () => {}
@@ -92,5 +89,3 @@ export default function (target) {
     }
   }
 }
-
-
