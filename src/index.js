@@ -50,7 +50,8 @@ class ReactTooltip extends Component {
     disable: PropTypes.bool,
     scrollHide: PropTypes.bool,
     resizeHide: PropTypes.bool,
-    wrapper: PropTypes.string
+    wrapper: PropTypes.string,
+    bodyMode: PropTypes.bool
   };
 
   static defaultProps = {
