@@ -3,6 +3,10 @@
  */
 
 export default function (target) {
+  target.prototype.isBodyMode = function () {
+    return this.props.bodyMode
+  }
+
   const clone = (e) => {
     const copy = {}
     for (const key in e) {
