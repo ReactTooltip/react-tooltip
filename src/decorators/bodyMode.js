@@ -36,7 +36,7 @@ export default function (target) {
       const x = clone(e)
       x.currentTarget = target
       x.stopPropagation = () => {}
-      if (!isCapture) e.stopPropagation()
+      if (customEvent && !isCapture) e.stopPropagation()
       callback(x)
     }
   }
