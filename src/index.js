@@ -88,6 +88,7 @@ class ReactTooltip extends Component {
     this.bind([
       'showTooltip',
       'updateTooltip',
+      'checkSameTarget',
       'hideTooltip',
       'globalRebuild',
       'globalShow',
@@ -186,7 +187,7 @@ class ReactTooltip extends Component {
         target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
       }
       target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
-      target.addEventListener('DOMNodeRemovedFromDocument', this.hideTooltip, isCaptureMode)
+      target.addEventListener('DOMNodeRemovedFromDocument', this.checkSameTarget, isCaptureMode)
     })
 
     // Global event to hide tooltip
@@ -220,7 +221,7 @@ class ReactTooltip extends Component {
     target.removeEventListener('mouseenter', this.showTooltip, isCaptureMode)
     target.removeEventListener('mousemove', this.updateTooltip, isCaptureMode)
     target.removeEventListener('mouseleave', this.hideTooltip, isCaptureMode)
-    target.removeEventListener('DOMNodeRemovedFromDocument', this.hideTooltip, isCaptureMode)
+    target.removeEventListener('DOMNodeRemovedFromDocument', this.checkSameTarget, isCaptureMode)
   }
 
   /**
@@ -337,6 +338,12 @@ class ReactTooltip extends Component {
     }
   }
 
+  checkSameTarget (e, hasTarget) {
+    if (this.state.currentTarget === e.currentTarget) {
+      this.hideTooltip(e, hasTarget)
+    }
+  }
+
   /**
    * When mouse leave, hide tooltip
    */
@@ -445,15 +452,15 @@ class ReactTooltip extends Component {
     if (html) {
       return (
         <wrapper className={`${tooltipClass} ${extraClass}`}
-          {...ariaProps}
-          data-id='tooltip'
-          dangerouslySetInnerHTML={{__html: placeholder}}></wrapper>
+                 {...ariaProps}
+                 data-id='tooltip'
+                 dangerouslySetInnerHTML={{__html: placeholder}}></wrapper>
       )
     } else {
       return (
         <wrapper className={`${tooltipClass} ${extraClass}`}
-          {...ariaProps}
-          data-id='tooltip'>{placeholder}</wrapper>
+                 {...ariaProps}
+                 data-id='tooltip'>{placeholder}</wrapper>
       )
     }
   }
