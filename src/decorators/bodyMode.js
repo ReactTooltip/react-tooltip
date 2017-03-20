@@ -73,10 +73,11 @@ export default function (target) {
 
     this.unbindBodyListener(body)
 
-    const listeners = this.bodyModeListeners = {
-      'mouseover': bodyListener.bind(this, this.showTooltip, {}),
-      'mousemove': bodyListener.bind(this, this.updateTooltip, { respectEffect: true }),
-      'mouseout': bodyListener.bind(this, this.hideTooltip, {})
+    const listeners = this.bodyModeListeners = {}
+    if (event == null) {
+      listeners.mouseover = bodyListener.bind(this, this.showTooltip, {})
+      listeners.mousemove = bodyListener.bind(this, this.updateTooltip, { respectEffect: true })
+      listeners.mouseout = bodyListener.bind(this, this.hideTooltip, {})
     }
 
     for (const event in customEvents) {
