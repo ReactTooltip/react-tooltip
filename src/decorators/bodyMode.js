@@ -19,8 +19,8 @@ const bodyListener = function (callback, options, e) {
   const {respectEffect = false, customEvent = false} = options
   const {id} = this.props
 
-  const tip = e.target.dataset.tip
-  const _for = e.target.dataset.for
+  const tip = e.target.getAttribute('data-tip') || null
+  const forId = e.target.getAttribute('data-for') || null
 
   const target = e.target
   if (this.isCustomEvent(target) && !customEvent) {
@@ -28,7 +28,7 @@ const bodyListener = function (callback, options, e) {
   }
 
   const isTargetBelongsToTooltip =
-    (id == null && _for == null) || (id != null && _for === id)
+    (id == null && forId == null) || forId === id
 
   if (tip != null &&
     (!respectEffect || this.getEffect(target) === 'float') &&
