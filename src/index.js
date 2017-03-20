@@ -432,7 +432,7 @@ class ReactTooltip extends Component {
 
     let Wrapper = this.props.wrapper
     if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
-      Wrapper = 'div'
+      Wrapper = ReactTooltip.defaultProps.wrapper
     }
 
     if (html) {
