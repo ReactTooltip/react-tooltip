@@ -150,7 +150,8 @@ class ReactTooltip extends Component {
     if (!id) {
       targetArray = document.querySelectorAll('[data-tip]:not([data-for])')
     } else {
-      targetArray = document.querySelectorAll(`[data-tip][data-for="${id}"]`)
+      const escaped = id.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+      targetArray = document.querySelectorAll(`[data-tip][data-for="${escaped}"]`)
     }
     // targetArray is a NodeList, convert it to a real array
     return nodeListToArray(targetArray)
