@@ -338,9 +338,9 @@ class ReactTooltip extends Component {
     }
   }
 
-  checkSameTarget (e, hasTarget) {
+  checkSameTarget (e) {
     if (this.state.currentTarget === e.currentTarget) {
-      this.hideTooltip(e, hasTarget)
+      this.hideTooltip(e)
     }
   }
 
