@@ -54,7 +54,7 @@ const getBody = () => document.getElementsByTagName('body')[0]
 
 export default function (target) {
   target.prototype.isBodyMode = function () {
-    return this.props.bodyMode
+    return !!this.props.bodyMode
   }
 
   target.prototype.bindBodyListener = function (targetArray) {
