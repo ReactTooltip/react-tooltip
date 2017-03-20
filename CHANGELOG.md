@@ -1,6 +1,6 @@
 ## Change Log
 
-### 3.2.8 (2017/03/20 15:37 +00:00)
+### 3.2.9 (2017/03/20 15:37 +00:00)
 - [#236](https://github.com/wwayne/react-tooltip/pull/236) escape backslash in getTargetArray method (@rnons)
 
 ### 3.2.7 (2017/02/17 07:24 +00:00)
