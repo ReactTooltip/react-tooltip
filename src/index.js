@@ -52,8 +52,8 @@ class ReactTooltip extends Component {
     resizeHide: PropTypes.bool,
     wrapper: PropTypes.string,
     bodyMode: PropTypes.bool,
-    possibleCustomEvents: PropTypes.arrayOf(PropTypes.string),
-    possibleCustomEventsOff: PropTypes.arrayOf(PropTypes.string)
+    possibleCustomEvents: PropTypes.string,
+    possibleCustomEventsOff: PropTypes.string
   };
 
   static defaultProps = {
@@ -88,8 +88,8 @@ class ReactTooltip extends Component {
       ariaProps: parseAria(props), // aria- and role attributes
       isEmptyTip: false,
       disable: false,
-      possibleCustomEvents: props.possibleCustomEvents || [],
-      possibleCustomEventsOff: props.possibleCustomEventsOff || []
+      possibleCustomEvents: props.possibleCustomEvents || '',
+      possibleCustomEventsOff: props.possibleCustomEventsOff || ''
     }
 
     this.bind([

@@ -59,7 +59,8 @@ export default function (target) {
 
   target.prototype.bindBodyListener = function (targetArray) {
     const { id } = this.props
-    const { event, eventOff } = this.state
+    const { event, eventOff, possibleCustomEvents,
+      possibleCustomEventsOff } = this.state
     const body = getBody()
 
     const customEvents = findCustomEvents(targetArray, 'data-event')
@@ -67,8 +68,8 @@ export default function (target) {
 
     if (event != null) customEvents[event] = true
     if (eventOff != null) customEventsOff[eventOff] = true
-    for (const event of this.state.possibleCustomEvents) customEvents[event] = true
-    for (const event of this.state.possibleCustomEventsOff) customEventsOff[event] = true
+    possibleCustomEvents.split(' ').forEach(event => customEvents[event] = true)
+    possibleCustomEventsOff.split(' ').forEach(event => customEventsOff[event] = true)
 
     this.unbindBodyListener(body)
 
