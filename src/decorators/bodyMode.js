@@ -3,61 +3,65 @@
  */
 import {checkStatus} from './customEvent'
 
+const makeProxy = (e) => {
+  const proxy = {}
+  for (const key in e) {
+    if (typeof e[key] === 'function') {
+      proxy[key] = e[key].bind(e)
+    } else {
+      proxy[key] = e[key]
+    }
+  }
+  return proxy
+}
+
+const bodyListener = function (callback, options, e) {
+  const {respectEffect = false, customEvent = false} = options
+  const {id} = this.props
+
+  const tip = e.target.dataset.tip
+  const _for = e.target.dataset.for
+
+  const target = e.target
+  if (this.isCustomEvent(target) && !customEvent) {
+    return
+  }
+
+  const isTargetBelongsToTooltip =
+    (id == null && _for == null) || (id != null && _for === id)
+
+  if (tip != null &&
+    (!respectEffect || this.getEffect(target) === 'float') &&
+    isTargetBelongsToTooltip
+  ) {
+    const proxy = makeProxy(e)
+    proxy.currentTarget = target
+    callback(proxy)
+  }
+}
+
+const findCustomEvents = (targetArray, dataAttribute) => {
+  const events = {}
+  targetArray.forEach(target => {
+    const event = target.getAttribute(dataAttribute)
+    if (event) event.split(' ').forEach(event => events[event] = true)
+  })
+
+  return events
+}
+
+const getBody = () => document.getElementsByTagName('body')[0]
+
 export default function (target) {
   target.prototype.isBodyMode = function () {
     return this.props.bodyMode
   }
 
-  const makeProxy = (e) => {
-    const proxy = {}
-    for (const key in e) {
-      if (typeof e[key] === 'function') {
-        proxy[key] = e[key].bind(e)
-      } else {
-        proxy[key] = e[key]
-      }
-    }
-    return proxy
-  }
-
-  const bodyListener = function (callback, options, e) {
-    const {respectEffect = false, customEvent = false} = options
-    const {id} = this.props
-
-    const tip = e.target.dataset.tip
-    const _for = e.target.dataset.for
-
-    const target = e.target
-    if (!!target.getAttribute('data-event') && !customEvent) {
-      return
-    }
-
-    if (tip != null &&
-      (!respectEffect || this.getEffect(target) === 'float') &&
-      ((id == null && _for == null) || (id != null && _for === id))
-    ) {
-      const proxy = makeProxy(e)
-      proxy.currentTarget = target
-      callback(proxy)
-    }
-  }
-
-  const findCustomEvents = (targetArray, dataAttribute) => {
-    const events = {}
-    targetArray.forEach(target => {
-      const event = target.getAttribute(dataAttribute)
-      if (event) event.split(' ').forEach(event => events[event] = true)
-    })
-
-    return events
-  }
-
   target.prototype.bindBodyListener = function () {
     const { id } = this.props
     const { event, eventOff } = this.state
-    const body = document.getElementsByTagName('body')[0]
-
     const targetArray = this.getTargetArray(id)
+    const body = getBody()
 
     const customEvents = findCustomEvents(targetArray, 'data-event')
     const customEventsOff = findCustomEvents(targetArray, 'data-event-off')
@@ -77,7 +81,8 @@ export default function (target) {
 
     for (const event in customEvents) {
       listeners[event] = bodyListener.bind(this, (e) => {
-        checkStatus.call(this, e.currentTarget.getAttribute('data-event-off') || eventOff, e)
+        const targetEventOff = e.currentTarget.getAttribute('data-event-off') || eventOff
+        checkStatus.call(this, targetEventOff, e)
       }, { customEvent: true })
     }
     for (const event in customEventsOff) {
@@ -89,7 +94,7 @@ export default function (target) {
   }
 
   target.prototype.unbindBodyListener = function (body) {
-    body = body || document.getElementsByTagName('body')[0]
+    body = body || getBody()
 
     const listeners = this.bodyModeListeners
     for (const event in listeners) {
