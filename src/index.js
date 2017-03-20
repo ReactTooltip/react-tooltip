@@ -182,7 +182,7 @@ class ReactTooltip extends Component {
     })
 
     if (this.isBodyMode()) {
-      this.bindBodyListener()
+      this.bindBodyListener(targetArray)
     } else {
       targetArray.forEach(target => {
         const isCaptureMode = this.isCapture(target)

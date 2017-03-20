@@ -57,10 +57,9 @@ export default function (target) {
     return this.props.bodyMode
   }
 
-  target.prototype.bindBodyListener = function () {
+  target.prototype.bindBodyListener = function (targetArray) {
     const { id } = this.props
     const { event, eventOff } = this.state
-    const targetArray = this.getTargetArray(id)
     const body = getBody()
 
     const customEvents = findCustomEvents(targetArray, 'data-event')
