@@ -98,7 +98,7 @@ export default function (target) {
 
     const listeners = this.bodyModeListeners
     for (const event in listeners) {
-      body.removeEventListener(event, listeners(event))
+      body.removeEventListener(event, listeners[event])
     }
   }
 }
