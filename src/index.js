@@ -58,10 +58,7 @@ class ReactTooltip extends Component {
     wrapper: 'div'
   };
 
-  static supportedWrappers = {
-    'div': React.DOM.div,
-    'span': React.DOM.span
-  };
+  static supportedWrappers = ['div', 'span'];
 
   constructor (props) {
     super(props)
@@ -443,21 +440,23 @@ class ReactTooltip extends Component {
       {'type-light': this.state.type === 'light'}
     )
 
-    let wrapper = ReactTooltip.supportedWrappers[this.props.wrapper]
-    if (!wrapper) wrapper = ReactTooltip.supportedWrappers['div']
+    let Wrapper = this.props.wrapper
+    if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
+      Wrapper = ReactTooltip.defaultProps.wrapper
+    }
 
     if (html) {
       return (
-        <wrapper className={`${tooltipClass} ${extraClass}`}
+        <Wrapper className={`${tooltipClass} ${extraClass}`}
                  {...ariaProps}
                  data-id='tooltip'
-                 dangerouslySetInnerHTML={{__html: placeholder}}></wrapper>
+                 dangerouslySetInnerHTML={{__html: placeholder}}/>
       )
     } else {
       return (
-        <wrapper className={`${tooltipClass} ${extraClass}`}
+        <Wrapper className={`${tooltipClass} ${extraClass}`}
                  {...ariaProps}
-                 data-id='tooltip'>{placeholder}</wrapper>
+                 data-id='tooltip'>{placeholder}</Wrapper>
       )
     }
   }
