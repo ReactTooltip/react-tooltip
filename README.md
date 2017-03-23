@@ -30,7 +30,7 @@ import ReactTooltip from 'react-tooltip'
 <p data-tip="hello world">Tooltip</p>
 ```
 
-3 . Including react-tooltip component
+3 . Include react-tooltip component
 
 
 ```js
@@ -39,13 +39,13 @@ import ReactTooltip from 'react-tooltip'
 
 **Standalone**
 
-You can import `node_modules/react-tooltip/standalone/react-tooltip.min.js` into your page, please make sure that you have already imported `react` and `react-dom` into your page.
+You can import `node_modules/react-tooltip/standalone/react-tooltip.min.js` into your page. Please make sure that you have already imported `react` and `react-dom` into your page.
 
 ## Options
 Notes:
-* The tooltip is using `type: dark` `place: top` `effect: float` as **default** attribute, you don't have to add these options if you don't want to change default
+* The tooltip sets `type: dark` `place: top` `effect: float` as **default** attributes. You don't have to add these options if you don't want to change the defaults
 * The option you set on `<ReactTooltip />` component will be implemented on every tooltip in a same page: `<ReactTooltip effect="solid" />`
-* The option you set on specific element, for example: `<a data-type="warning"></a>` will only make effect on this specific tooltip
+* The option you set on a specific element, for example: `<a data-type="warning"></a>` will only affect this specific tooltip
 
 Check example:  [React-tooltip Test](http://wwayne.com/react-tooltip)
 
@@ -78,14 +78,14 @@ className	|   data-class  |  String  |   | extra custom class, can use !importan
 Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
 
 ##### Note:
-1. **data-tip** is necessary, because `<ReactTooltip />` find tooltip via this attribute
-2. **data-for** correspond to the **id** of `<ReactTooltip />`
-3. When using react component as tooltip, you can have many `<ReactTooltip />` in a page but they should have different **id**
+1. **data-tip** is necessary, because `<ReactTooltip />` finds the tooltip via this attribute
+2. **data-for** corresponds to the **id** of `<ReactTooltip />`
+3. When using react component as tooltip, you can have many `<ReactTooltip />` in a page but they should have different **id**s
 
 ## Static Methods
-###ReactTooltip.hide(target)
+### ReactTooltip.hide(target)
 
-> Hide the tooltip manually, the target is optional, if no target passed in, all exitent tooltip will be hiden
+> Hide the tooltip manually, the target is optional, if no target passed in, all existing tooltips will be hidden
 
 ```js
 import {findDOMNode} from 'react-dom'
@@ -96,11 +96,11 @@ import ReactTooltip from 'react-tooltip'
 <ReactTooltip />
 ```
 
-###ReactTooltip.rebuild()
+### ReactTooltip.rebuild()
 
 > Rebinding all tooltips
 
-###ReactTooltip.show(target)
+### ReactTooltip.show(target)
 
 > Show specific tooltip manually, for example:
 
@@ -113,19 +113,19 @@ import ReactTooltip from 'react-tooltip'
 <ReactTooltip />
 ```
 
-## Trouble Shooting
+## Troubleshooting
 ### 1. Using tooltip within the modal (e.g. [react-modal](https://github.com/reactjs/react-modal))
-The component was designed to set a `<Reactooltip />` one place then use tooltip everywhere, but a lot of people stuck in using this component with modal, you can check the discussion [here](https://github.com/wwayne/react-tooltip/issues/130), the summarization of solving the problem is as following:
+The component was designed to set `<ReactTooltip />` once and then use tooltip everywhere, but a lot of people get stuck when using this component in a modal. You can read the discussion [here](https://github.com/wwayne/react-tooltip/issues/130). To solve this problem:
 
-1. Put `<ReactTooltip />` out of the `<Modal>`
+1. Place `<ReactTooltip />` outside of the `<Modal>`
 2. Use `ReactTooltip.rebuild()` when opening the modal
-3. If your modal's z-index happens to higher than the tooltip, use the attribute `className` to custom your tooltip's z-index
+3. If your modal's z-index happens to be higher than the tooltip's, use the attribute `className` to custom your tooltip's z-index
 
->I suggest always put `<ReactTooltip />` in the Highest level or smart component of Redux, so you might need these static
+>I suggest always putting `<ReactTooltip />` in the Highest level or smart component of Redux, so you might need these static
 method to control tooltip's behaviour in some situations
 
 ### 2. Hide tooltip when getContent returns undefined
-When you set `getContent={() => { return }}` you will find the tooltip will dispaly `true`, that's because React will set the value of data-* to be 'true' automatically if there is no value to be set. So you have to set `data-tip=''` in this situaction.
+When you set `getContent={() => { return }}` you will find the tooltip will display `true`. That's because React will set the value of data-* to be 'true' automatically if there is no value to be set. So you have to set `data-tip=''` in this situation.
 
 ```jsx
 <p data-tip='' data-for='test'></p>
