@@ -86,6 +86,7 @@ class ReactTooltip extends Component {
     this.bind([
       'showTooltip',
       'updateTooltip',
+      'checkSameTarget',
       'hideTooltip',
       'globalRebuild',
       'globalShow',
@@ -147,7 +148,8 @@ class ReactTooltip extends Component {
     if (!id) {
       targetArray = document.querySelectorAll('[data-tip]:not([data-for])')
     } else {
-      targetArray = document.querySelectorAll(`[data-tip][data-for="${id}"]`)
+      const escaped = id.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+      targetArray = document.querySelectorAll(`[data-tip][data-for="${escaped}"]`)
     }
     // targetArray is a NodeList, convert it to a real array
     return nodeListToArray(targetArray)
@@ -179,6 +181,7 @@ class ReactTooltip extends Component {
         target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
       }
       target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
+      target.addEventListener('DOMNodeRemovedFromDocument', this.checkSameTarget, isCaptureMode)
     })
 
     // Global event to hide tooltip
@@ -212,6 +215,7 @@ class ReactTooltip extends Component {
     target.removeEventListener('mouseenter', this.showTooltip, isCaptureMode)
     target.removeEventListener('mousemove', this.updateTooltip, isCaptureMode)
     target.removeEventListener('mouseleave', this.hideTooltip, isCaptureMode)
+    target.removeEventListener('DOMNodeRemovedFromDocument', this.checkSameTarget, isCaptureMode)
   }
 
   /**
@@ -328,6 +332,12 @@ class ReactTooltip extends Component {
     }
   }
 
+  checkSameTarget (e) {
+    if (this.state.currentTarget === e.currentTarget) {
+      this.hideTooltip(e)
+    }
+  }
+
   /**
    * When mouse leave, hide tooltip
    */
@@ -438,15 +448,15 @@ class ReactTooltip extends Component {
     if (html) {
       return (
         <Wrapper className={`${tooltipClass} ${extraClass}`}
-          {...ariaProps}
-          data-id='tooltip'
-          dangerouslySetInnerHTML={{__html: placeholder}}/>
+                 {...ariaProps}
+                 data-id='tooltip'
+                 dangerouslySetInnerHTML={{__html: placeholder}}/>
       )
     } else {
       return (
         <Wrapper className={`${tooltipClass} ${extraClass}`}
-          {...ariaProps}
-          data-id='tooltip'>{placeholder}</Wrapper>
+                 {...ariaProps}
+                 data-id='tooltip'>{placeholder}</Wrapper>
       )
     }
   }

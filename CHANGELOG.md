@@ -1,5 +1,8 @@
 ## Change Log
 
+### 3.2.9 (2017/03/20 15:37 +00:00)
+- [#236](https://github.com/wwayne/react-tooltip/pull/236) escape backslash in getTargetArray method (@rnons)
+
 ### 3.2.7 (2017/02/17 07:24 +00:00)
 - [#262](https://github.com/wwayne/react-tooltip/pull/262) Fix nodelist converte in safari (@wwayne)
 - [#260](https://github.com/wwayne/react-tooltip/pull/260) Fix NodeList to Array convertion (@huumanoid)
