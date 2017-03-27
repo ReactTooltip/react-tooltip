@@ -169,7 +169,7 @@ class ReactTooltip extends Component {
     const {id, globalEventOff} = this.props
     let targetArray = this.getTargetArray(id)
 
-    this.trackRemoval()
+    this.bindRemovalTracker()
 
     targetArray.forEach(target => {
       const isCaptureMode = this.isCapture(target)
@@ -211,7 +211,7 @@ class ReactTooltip extends Component {
     })
 
     if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip)
-    this.releaseRemovalTracker()
+    this.unbindRemovalTracker()
   }
 
   /**

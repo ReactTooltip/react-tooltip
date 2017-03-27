@@ -1,12 +1,3 @@
-// http://stackoverflow.com/a/32726412/7571078
-const isDetached = (element) => {
-  if (element.parentNode === window.document) {
-    return false
-  }
-  if (element.parentNode == null) return true
-  return isDetached(element.parentNode)
-}
-
 // https://hacks.mozilla.org/2012/05/dom-mutationobserver-reacting-to-dom-changes-without-killing-browser-performance/
 const getMutationObserverClass = () => {
   return window.MutationObserver ||
@@ -14,63 +5,112 @@ const getMutationObserverClass = () => {
     window.MozMutationObserver
 }
 
-export default function (target) {
-  target.prototype.trackRemoval = function () {
-    if (this.removalObserver) {
-      this.releaseRemovalTracker()
+const isMutationObserverAvailable = () => {
+  return getMutationObserverClass() != null
+}
+
+class EventBasedRemovalTracker {
+  constructor (tooltip) {
+    this.tooltip = tooltip
+    this.listeners = []
+  }
+
+  attach (element) {
+    const {tooltip} = this
+
+    let listener = function (e) {
+      if (e.currentTarget === tooltip.state.currentTarget) {
+        tooltip.hideTooltip()
+        this.listeners.splice(this.listeners.indexOf(listener), 1)
+      }
+    }
+    listener = listener.bind(this)
+
+    this.listeners.push({
+      element,
+      listener
+    })
+
+    element.addEventListener('DOMNodeRemovedFromDocument', listener)
+  }
+
+  unbind () {
+    for (const {listener, element} of this.listeners) {
+      element.removeEventListener('DOMNodeRemovedFromDocument', listener)
+    }
+    this.listeners = []
+  }
+}
+
+class MutationBasedRemovalTracker {
+  constructor (tooltip) {
+    this.tooltip = tooltip
+
+    this.observer = null
+    this.inited = false
+    this.trackedElements = null
+  }
+
+  init () {
+    if (this.inited) {
+      this.unbind()
     }
 
-    this.tracked = []
+    this.trackedElements = []
 
     const MutationObserver = getMutationObserverClass()
     if (MutationObserver) {
-      const observer = this.removalObserver = new MutationObserver(() => {
-        for (const element of this.tracked) {
-          if (isDetached(element) && element === this.state.currentTarget) {
-            this.hideTooltip()
+      this.observer = new MutationObserver(() => {
+        for (const element of this.trackedElements) {
+          if (this.isDetached(element) && element === this.tooltip.state.currentTarget) {
+            this.tooltip.hideTooltip()
           }
         }
       })
-      observer.observe(window.document, { childList: true, subtree: true })
+      this.observer.observe(window.document, { childList: true, subtree: true })
+    }
+
+    this.inited = true
+  }
+
+  unbind () {
+    if (this.observer) {
+      this.observer.disconnect()
+      this.observer = null
+      this.trackedElements = null
+    }
+    this.inited = false
+  }
+
+  attach (element) {
+    this.trackedElements.push(element)
+  }
+
+  // http://stackoverflow.com/a/32726412/7571078
+  isDetached (element) {
+    if (element.parentNode === window.document) {
+      return false
+    }
+    if (element.parentNode == null) return true
+    return this.isDetached(element.parentNode)
+  }
+}
+
+export default function (target) {
+  target.prototype.bindRemovalTracker = function () {
+    if (isMutationObserverAvailable()) {
+      this.removalTracker = new MutationBasedRemovalTracker(this)
+      this.removalTracker.init()
+    } else {
+      this.removalTracker = new EventBasedRemovalTracker(this)
     }
   }
 
   target.prototype.attachRemovalTracker = function (element) {
-    this.tracked.push(element)
-
-    const isMutationObserverAvailable = getMutationObserverClass()
-    if (!isMutationObserverAvailable) {
-      this.listeners = this.listeners || []
-
-      let listener = function (e) {
-        if (e.currentTarget === this.state.currentTarget) {
-          this.hideTooltip()
-          const idx = this.listeners.indexOf(listener)
-          this.listeners.splice(idx, 1)
-        }
-      }
-      listener = listener.bind(this)
-
-      this.listeners.push({
-        element,
-        listener
-      })
-
-      element.addEventListener('DOMNodeRemovedFromDocument', listener)
-    }
+    this.removalTracker.attach(element)
   }
 
-  target.prototype.releaseRemovalTracker = function () {
-    if (this.removalObserver) {
-      this.removalObserver.disconnect()
-      this.removalObserver = null
-      this.tracked = []
-    }
-    if (this.listeners) {
-      for (const {listener, element} of this.listeners) {
-        element.removeEventListener('DOMNodeRemovedFromDocument', listener)
-      }
-      this.listeners = []
-    }
+  target.prototype.unbindRemovalTracker = function () {
+    this.removalTracker.unbind()
   }
 }
