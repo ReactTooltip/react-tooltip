@@ -10,6 +10,7 @@ import windowListener from './decorators/windowListener'
 import customEvent from './decorators/customEvent'
 import isCapture from './decorators/isCapture'
 import getEffect from './decorators/getEffect'
+import trackRemoval from './decorators/trackRemoval'
 
 /* Utils */
 import getPosition from './utils/getPosition'
@@ -20,7 +21,12 @@ import nodeListToArray from './utils/nodeListToArray'
 /* CSS */
 import cssStyle from './style'
 
-@staticMethods @windowListener @customEvent @isCapture @getEffect
+@staticMethods
+@windowListener
+@customEvent
+@isCapture
+@getEffect
+@trackRemoval
 class ReactTooltip extends Component {
 
   static propTypes = {
@@ -163,6 +169,8 @@ class ReactTooltip extends Component {
     const {id, globalEventOff} = this.props
     let targetArray = this.getTargetArray(id)
 
+    this.trackRemoval()
+
     targetArray.forEach(target => {
       const isCaptureMode = this.isCapture(target)
       const effect = this.getEffect(target)
@@ -181,7 +189,7 @@ class ReactTooltip extends Component {
         target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
       }
       target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
-      target.addEventListener('DOMNodeRemovedFromDocument', this.checkSameTarget, isCaptureMode)
+      this.attachRemovalTracker(target)
     })
 
     // Global event to hide tooltip
@@ -203,6 +211,7 @@ class ReactTooltip extends Component {
     })
 
     if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip)
+    this.releaseRemovalTracker()
   }
 
   /**
@@ -215,7 +224,6 @@ class ReactTooltip extends Component {
     target.removeEventListener('mouseenter', this.showTooltip, isCaptureMode)
     target.removeEventListener('mousemove', this.updateTooltip, isCaptureMode)
     target.removeEventListener('mouseleave', this.hideTooltip, isCaptureMode)
-    target.removeEventListener('DOMNodeRemovedFromDocument', this.checkSameTarget, isCaptureMode)
   }
 
   /**
