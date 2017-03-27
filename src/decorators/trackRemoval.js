@@ -112,5 +112,6 @@ export default function (target) {
 
   target.prototype.unbindRemovalTracker = function () {
     this.removalTracker.unbind()
+    this.removalTracker = null
   }
 }
