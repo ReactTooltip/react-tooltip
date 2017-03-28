@@ -10,6 +10,7 @@ import windowListener from './decorators/windowListener'
 import customEvent from './decorators/customEvent'
 import isCapture from './decorators/isCapture'
 import getEffect from './decorators/getEffect'
+import trackRemoval from './decorators/trackRemoval'
 
 /* Utils */
 import getPosition from './utils/getPosition'
@@ -20,7 +21,12 @@ import nodeListToArray from './utils/nodeListToArray'
 /* CSS */
 import cssStyle from './style'
 
-@staticMethods @windowListener @customEvent @isCapture @getEffect
+@staticMethods
+@windowListener
+@customEvent
+@isCapture
+@getEffect
+@trackRemoval
 class ReactTooltip extends Component {
 
   static propTypes = {
@@ -86,7 +92,6 @@ class ReactTooltip extends Component {
     this.bind([
       'showTooltip',
       'updateTooltip',
-      'checkSameTarget',
       'hideTooltip',
       'globalRebuild',
       'globalShow',
@@ -181,7 +186,6 @@ class ReactTooltip extends Component {
         target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
       }
       target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
-      target.addEventListener('DOMNodeRemovedFromDocument', this.checkSameTarget, isCaptureMode)
     })
 
     // Global event to hide tooltip
@@ -189,6 +193,9 @@ class ReactTooltip extends Component {
       window.removeEventListener(globalEventOff, this.hideTooltip)
       window.addEventListener(globalEventOff, this.hideTooltip, false)
     }
+
+    // Track removal of targetArray elements from DOM
+    this.bindRemovalTracker()
   }
 
   /**
@@ -203,6 +210,7 @@ class ReactTooltip extends Component {
     })
 
     if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip)
+    this.unbindRemovalTracker()
   }
 
   /**
@@ -215,7 +223,6 @@ class ReactTooltip extends Component {
     target.removeEventListener('mouseenter', this.showTooltip, isCaptureMode)
     target.removeEventListener('mousemove', this.updateTooltip, isCaptureMode)
     target.removeEventListener('mouseleave', this.hideTooltip, isCaptureMode)
-    target.removeEventListener('DOMNodeRemovedFromDocument', this.checkSameTarget, isCaptureMode)
   }
 
   /**
@@ -329,12 +336,6 @@ class ReactTooltip extends Component {
       this.delayShowLoop = setTimeout(updateState, delayTime)
     } else {
       updateState()
-    }
-  }
-
-  checkSameTarget (e) {
-    if (this.state.currentTarget === e.currentTarget) {
-      this.hideTooltip(e)
     }
   }
 
