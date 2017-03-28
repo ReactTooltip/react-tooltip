@@ -18,13 +18,12 @@ class EventBasedRemovalTracker {
   attach (element) {
     const {tooltip} = this
 
-    let listener = function (e) {
+    const listener = (e) => {
       if (e.currentTarget === tooltip.state.currentTarget) {
         tooltip.hideTooltip()
         this.listeners.splice(this.listeners.indexOf(listener), 1)
       }
     }
-    listener = listener.bind(this)
 
     this.listeners.push({
       element,
