@@ -92,7 +92,6 @@ class ReactTooltip extends Component {
     this.bind([
       'showTooltip',
       'updateTooltip',
-      'checkSameTarget',
       'hideTooltip',
       'globalRebuild',
       'globalShow',
@@ -169,8 +168,6 @@ class ReactTooltip extends Component {
     const {id, globalEventOff} = this.props
     let targetArray = this.getTargetArray(id)
 
-    this.bindRemovalTracker()
-
     targetArray.forEach(target => {
       const isCaptureMode = this.isCapture(target)
       const effect = this.getEffect(target)
@@ -196,6 +193,9 @@ class ReactTooltip extends Component {
       window.removeEventListener(globalEventOff, this.hideTooltip)
       window.addEventListener(globalEventOff, this.hideTooltip, false)
     }
+
+    // Track removal of targetArray elements from DOM
+    this.bindRemovalTracker()
   }
 
   /**
@@ -336,12 +336,6 @@ class ReactTooltip extends Component {
       this.delayShowLoop = setTimeout(updateState, delayTime)
     } else {
       updateState()
-    }
-  }
-
-  checkSameTarget (e) {
-    if (this.state.currentTarget === e.currentTarget) {
-      this.hideTooltip(e)
     }
   }
 

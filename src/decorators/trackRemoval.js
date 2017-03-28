@@ -1,3 +1,12 @@
+/**
+ * Tracking target removing from DOM.
+ * It's nessesary to hide tooltip when it's target disappears.
+ * Otherwise, the tooltip would be shown forever until another target
+ * is triggered.
+ *
+ * If MutationObserver is not available, this feature just doesn't work.
+ */
+
 // https://hacks.mozilla.org/2012/05/dom-mutationobserver-reacting-to-dom-changes-without-killing-browser-performance/
 const getMutationObserverClass = () => {
   return window.MutationObserver ||
@@ -5,62 +14,31 @@ const getMutationObserverClass = () => {
     window.MozMutationObserver
 }
 
-const isMutationObserverAvailable = () => {
-  return getMutationObserverClass() != null
-}
-
-class ObserverBasedRemovalTracker {
-  constructor (tooltip) {
-    this.tooltip = tooltip
-
-    this.observer = null
-    this.inited = false
-  }
-
-  init () {
-    if (this.inited) {
-      this.unbind()
-    }
-    this.inited = true
-
+export default function (target) {
+  target.prototype.bindRemovalTracker = function () {
     const MutationObserver = getMutationObserverClass()
-    if (!MutationObserver) {
-      return
-    }
+    if (MutationObserver == null) return
 
-    this.observer = new MutationObserver((mutations) => {
+    const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         for (const element of mutation.removedNodes) {
-          if (element === this.tooltip.state.currentTarget) {
-            this.tooltip.hideTooltip()
+          if (element === this.state.currentTarget) {
+            this.hideTooltip()
             return
           }
         }
       }
     })
 
-    this.observer.observe(window.document, { childList: true, subtree: true })
-  }
+    observer.observe(window.document, { childList: true, subtree: true })
 
-  unbind () {
-    if (this.observer) {
-      this.observer.disconnect()
-      this.observer = null
-    }
-    this.inited = false
-  }
-}
-
-export default function (target) {
-  target.prototype.bindRemovalTracker = function () {
-    if (isMutationObserverAvailable()) {
-      this.removalTracker = new ObserverBasedRemovalTracker(this)
-      this.removalTracker.init()
-    }
+    this.removalTracker = observer
   }
 
   target.prototype.unbindRemovalTracker = function () {
-    this.removalTracker.unbind()
-    this.removalTracker = null
+    if (this.removalTracker) {
+      this.removalTracker.disconnect()
+      this.removalTracker = null
+    }
   }
 }
