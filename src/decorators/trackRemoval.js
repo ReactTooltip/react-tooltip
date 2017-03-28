@@ -9,39 +9,7 @@ const isMutationObserverAvailable = () => {
   return getMutationObserverClass() != null
 }
 
-class EventBasedRemovalTracker {
-  constructor (tooltip) {
-    this.tooltip = tooltip
-    this.listeners = []
-  }
-
-  attach (element) {
-    const {tooltip} = this
-
-    const listener = (e) => {
-      if (e.currentTarget === tooltip.state.currentTarget) {
-        tooltip.hideTooltip()
-        this.listeners.splice(this.listeners.indexOf(listener), 1)
-      }
-    }
-
-    this.listeners.push({
-      element,
-      listener
-    })
-
-    element.addEventListener('DOMNodeRemovedFromDocument', listener)
-  }
-
-  unbind () {
-    for (const {listener, element} of this.listeners) {
-      element.removeEventListener('DOMNodeRemovedFromDocument', listener)
-    }
-    this.listeners = []
-  }
-}
-
-class MutationBasedRemovalTracker {
+class ObserverBasedRemovalTracker {
   constructor (tooltip) {
     this.tooltip = tooltip
 
@@ -86,16 +54,8 @@ class MutationBasedRemovalTracker {
 export default function (target) {
   target.prototype.bindRemovalTracker = function () {
     if (isMutationObserverAvailable()) {
-      this.removalTracker = new MutationBasedRemovalTracker(this)
+      this.removalTracker = new ObserverBasedRemovalTracker(this)
       this.removalTracker.init()
-    } else {
-      this.removalTracker = new EventBasedRemovalTracker(this)
-    }
-  }
-
-  target.prototype.attachRemovalTracker = function (element) {
-    if (this.removalTracker.attach) {
-      this.removalTracker.attach(element)
     }
   }
 

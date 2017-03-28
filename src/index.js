@@ -189,7 +189,6 @@ class ReactTooltip extends Component {
         target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
       }
       target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
-      this.attachRemovalTracker(target)
     })
 
     // Global event to hide tooltip
