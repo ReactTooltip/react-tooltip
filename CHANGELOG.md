@@ -1,6 +1,12 @@
 ## Change Log
 
-### 3.2.9 (2017/03/20 15:37 +00:00)
+### 3.2.10 (2017/03/28 20:39 +00:00)
+- [#278](https://github.com/wwayne/react-tooltip/pull/278) Make MutationObserver-based removal tracking (@huumanoid)
+- [#272](https://github.com/wwayne/react-tooltip/pull/272) Fix wrapper tag (@huumanoid)
+- [#259](https://github.com/wwayne/react-tooltip/pull/259) Track removal of DOM elements (@antoniogiordano)
+- [#270](https://github.com/wwayne/react-tooltip/pull/270) Fix typos and improve for clarity (@theholla)
+
+### 3.2.9 (2017/03/20 15:41 +00:00)
 - [#236](https://github.com/wwayne/react-tooltip/pull/236) escape backslash in getTargetArray method (@rnons)
 
 ### 3.2.7 (2017/02/17 07:24 +00:00)
