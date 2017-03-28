@@ -47,51 +47,39 @@ class MutationBasedRemovalTracker {
 
     this.observer = null
     this.inited = false
-    this.trackedElements = null
   }
 
   init () {
     if (this.inited) {
       this.unbind()
     }
-
-    this.trackedElements = []
+    this.inited = true
 
     const MutationObserver = getMutationObserverClass()
-    if (MutationObserver) {
-      this.observer = new MutationObserver(() => {
-        for (const element of this.trackedElements) {
-          if (this.isDetached(element) && element === this.tooltip.state.currentTarget) {
-            this.tooltip.hideTooltip()
-          }
-        }
-      })
-      this.observer.observe(window.document, { childList: true, subtree: true })
+    if (!MutationObserver) {
+      return
     }
 
-    this.inited = true
+    this.observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        for (const element of mutation.removedNodes) {
+          if (element === this.tooltip.state.currentTarget) {
+            this.tooltip.hideTooltip()
+            return
+          }
+        }
+      }
+    })
+
+    this.observer.observe(window.document, { childList: true, subtree: true })
   }
 
   unbind () {
     if (this.observer) {
       this.observer.disconnect()
       this.observer = null
-      this.trackedElements = null
     }
     this.inited = false
-  }
-
-  attach (element) {
-    this.trackedElements.push(element)
-  }
-
-  // http://stackoverflow.com/a/32726412/7571078
-  isDetached (element) {
-    if (element.parentNode === window.document) {
-      return false
-    }
-    if (element.parentNode == null) return true
-    return this.isDetached(element.parentNode)
   }
 }
 
@@ -106,7 +94,9 @@ export default function (target) {
   }
 
   target.prototype.attachRemovalTracker = function (element) {
-    this.removalTracker.attach(element)
+    if (this.removalTracker.attach) {
+      this.removalTracker.attach(element)
+    }
   }
 
   target.prototype.unbindRemovalTracker = function () {
