@@ -239,7 +239,7 @@ class ReactTooltip extends Component {
     }
     // Get the tooltip content
     // calculate in this phrase so that tip width height can be detected
-    const {multiline} = this.props
+    const {multiline, getContent} = this.props
     const originTooltip = e.currentTarget.getAttribute('data-tip')
     const isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false
 
@@ -276,6 +276,19 @@ class ReactTooltip extends Component {
     }, () => {
       if (scrollHide) this.addScrollListener(e)
       this.updateTooltip(e)
+
+      if (getContent && Array.isArray(getContent)) {
+        this.intervalUpdateContent = setInterval(() => {
+          if (this.mount) {
+            const {getContent} = this.props
+            const placeholder = getTipContent(originTooltip, getContent[0](), isMultiline)
+            const isEmptyTip = this.isEmptyTip(placeholder)
+            this.setState({
+              isEmptyTip
+            })
+          }
+        }, getContent[1])
+      }
     })
   }
 
