@@ -607,7 +607,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       // calculate in this phrase so that tip width height can be detected
       var _props4 = this.props,
           frozen = _props4.frozen,
-          multiline = _props4.multiline;
+          multiline = _props4.multiline,
+          getContent = _props4.getContent;
 
       var originTooltip = e.currentTarget.getAttribute('data-tip');
       var isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false;
@@ -641,6 +642,20 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       }, function () {
         if (scrollHide) _this5.addScrollListener(e);
         _this5.updateTooltip(e);
+
+        if (getContent && Array.isArray(getContent)) {
+          _this5.intervalUpdateContent = setInterval(function () {
+            if (_this5.mount) {
+              var _getContent = _this5.props.getContent;
+
+              var placeholder = (0, _getTipContent2.default)(originTooltip, _getContent[0](), isMultiline);
+              var isEmptyTip = _this5.isEmptyTip(placeholder);
+              _this5.setState({
+                isEmptyTip: isEmptyTip
+              });
+            }
+          }, getContent[1]);
+        }
       });
     }
 
