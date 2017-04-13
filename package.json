@@ -43,7 +43,8 @@
     "react-dom": "^0.14.0 || ^15.0.0"
   },
   "dependencies": {
-    "classnames": "^2.2.0"
+    "classnames": "^2.2.0",
+    "prop-types": "^15.5.8"
   },
   "engines": {
     "node": ">=4.2.1"
