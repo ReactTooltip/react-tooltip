@@ -1,6 +1,9 @@
 ## Change Log
 
-### 3.2.10 (2017/03/28 20:39 +00:00)
+### 3.3.0 (2017/04/14 03:32 +00:00)
+- [#287](https://github.com/wwayne/react-tooltip/pull/287) Use prop-types package instead of React.PropTypes (@ssilve1989)
+
+### 3.2.10 (2017/03/28 20:41 +00:00)
 - [#278](https://github.com/wwayne/react-tooltip/pull/278) Make MutationObserver-based removal tracking (@huumanoid)
 - [#272](https://github.com/wwayne/react-tooltip/pull/272) Fix wrapper tag (@huumanoid)
 - [#259](https://github.com/wwayne/react-tooltip/pull/259) Track removal of DOM elements (@antoniogiordano)
