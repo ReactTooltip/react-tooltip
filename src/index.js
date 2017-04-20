@@ -55,6 +55,7 @@ class ReactTooltip extends Component {
     afterHide: PropTypes.func,
     disable: PropTypes.bool,
     scrollHide: PropTypes.bool,
+    scrollHideSelector: PropTypes.string,
     resizeHide: PropTypes.bool,
     wrapper: PropTypes.string
   };
@@ -378,11 +379,24 @@ class ReactTooltip extends Component {
    */
   addScrollListener (e) {
     const isCaptureMode = this.isCapture(e.currentTarget)
-    window.addEventListener('scroll', this.hideTooltip, isCaptureMode)
+    this.getScrollHideListenerNode().addEventListener('scroll', this.hideTooltip, isCaptureMode)
   }
 
   removeScrollListener () {
-    window.removeEventListener('scroll', this.hideTooltip)
+    this.getScrollHideListenerNode().removeEventListener('scroll', this.hideTooltip)
+  }
+
+  /**
+   * Convenience function to safely get a custom DOM element to listen for
+   * scroll events, falling back to `window` as a default.
+   */
+  getScrollHideListenerNode () {
+    if (!this.props.scrollHideSelector) {
+      return window
+    } else {
+      const node = document.querySelector(this.props.scrollHideSelector)
+      return node || window
+    }
   }
 
   // Calculation the position

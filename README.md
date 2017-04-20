@@ -71,6 +71,7 @@ className	|   data-class  |  String  |   | extra custom class, can use !importan
  afterHide | null | Func | () => {} | Function that will be called after tooltip hide
  disable | data-tip-disable | Bool | true, false | Disable the tooltip behaviour, default is false
  scrollHide | data-scroll-hide | Bool | true, false | Hide the tooltip when scrolling, default is true
+ scrollHideSelector | data-scroll-hide-selector | String |  | custom selector to use when determining which DOM element is listening for scroll events to hide tooltip
  resizeHide | null | Bool | true, false | Hide the tooltip when resizing the window, default is true
  wrapper | null | String | div, span | Selecting the wrapper element of the react tooltip, default is div
 
