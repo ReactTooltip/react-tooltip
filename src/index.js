@@ -257,7 +257,7 @@ class ReactTooltip extends Component {
     // If it is focus event or called by ReactTooltip.show, switch to `solid` effect
     const switchToSolid = e instanceof window.FocusEvent || isGlobalCall
 
-    // if it need to skip adding hide listener to scroll
+    // if it needs to skip adding hide listener to scroll
     let scrollHide = true
     if (e.currentTarget.getAttribute('data-scroll-hide')) {
       scrollHide = e.currentTarget.getAttribute('data-scroll-hide') === 'true'
