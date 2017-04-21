@@ -439,7 +439,8 @@ class ReactTooltip extends Component {
       {'type-warning': this.state.type === 'warning'},
       {'type-error': this.state.type === 'error'},
       {'type-info': this.state.type === 'info'},
-      {'type-light': this.state.type === 'light'}
+      {'type-light': this.state.type === 'light'},
+      {'type-custom': this.state.type === ''}
     )
 
     let Wrapper = this.props.wrapper
