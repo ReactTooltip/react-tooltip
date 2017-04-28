@@ -93,11 +93,11 @@ const Test = React.createClass({
             <div className="example-jsx">
               <div className="side"  style={{ transform: 'translate3d(5px, 5px, 5px)' }}>
                 <a data-tip data-for='happyFace'> d(`･∀･)b </a>
-                <ReactTooltip id='happyFace' type="error"><span>Show happy face</span></ReactTooltip>
+                <ReactTooltip id='happyFace' type="error"><span>Show <u>happy</u> face</span></ReactTooltip>
               </div>
               <div className="side">
                 <a data-tip data-for='sadFace'> இдஇ </a>
-                <ReactTooltip id='sadFace' type="warning" effect="solid"><span>Show sad face</span></ReactTooltip>
+                <ReactTooltip id='sadFace' type="warning" effect="solid"><span>Show <u>sad</u> face</span></ReactTooltip>
               </div>
             </div>
             <br />
@@ -105,11 +105,11 @@ const Test = React.createClass({
               <div>
                 <p>{"<a data-tip data-for='happyFace'> d(`･∀･)b </a>\n" +
                 "<ReactTooltip id='happyFace' type='error'>\n" +
-                  " " + " " + "<span>Show happy face</span>\n" +
+                  " " + " " + "<span>Show <u>happy</u> face</span>\n" +
                 "</ReactTooltip>\n" +
                 "<a data-tip data-for='sadFace'> இдஇ </a>\n" +
                 "<ReactTooltip id='sadFace' type='warning' effect='solid'>\n" +
-                  " " + " " + "<span>Show sad face</span>\n" +
+                  " " + " " + "<span>Show <u>sad</u> face</span>\n" +
                 "</ReactTooltip>"}</p>
               </div>
             </pre>
