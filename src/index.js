@@ -182,7 +182,7 @@ class ReactTooltip extends Component {
         return
       }
 
-      target.addEventListener('mouseenter', this.showTooltip, isCaptureMode)
+      target.addEventListener('mousemove', this.showTooltip, isCaptureMode)
       if (effect === 'float') {
         target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
       }
@@ -221,7 +221,7 @@ class ReactTooltip extends Component {
    */
   unbindBasicListener (target) {
     const isCaptureMode = this.isCapture(target)
-    target.removeEventListener('mouseenter', this.showTooltip, isCaptureMode)
+    target.removeEventListener('mousemove', this.showTooltip, isCaptureMode)
     target.removeEventListener('mousemove', this.updateTooltip, isCaptureMode)
     target.removeEventListener('mouseleave', this.hideTooltip, isCaptureMode)
   }
