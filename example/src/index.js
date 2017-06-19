@@ -231,7 +231,7 @@ const Test = React.createClass({
               <div className="side">
                 <a data-for='overTime' data-tip>=( •̀д•́)</a>
                 <ReactTooltip id='overTime'
-                  getContent={[() => {return new Date().toISOString()}, 1000]}/>
+                  getContent={[() => {return 'Random length content'.slice(0, Math.floor(Math.random() * 21) + 1)}, 1000]}/>
               </div>
             </div>
             <br />
@@ -241,8 +241,10 @@ const Test = React.createClass({
                 "<ReactTooltip id='getContent' getContent={() => Math.floor(Math.random() * 100)} />"}</p>
               </div>
               <div>
-                <p>{"<a data-for='overTime' data-tip>=( •̀д•́)</a>\n" +
-                "<ReactTooltip id='overTime' getContent={[() => {return new Date().toISOString()}, 1000]}/>"}</p>
+                <p>{"<a data-for='overTime' data-tip>=( •̀д•́)</a>\naaaa" +
+                "<ReactTooltip id='overTime' getContent={[() => {\n" +
+                " return 'Random length content'.slice(0, Math.floor(Math.random() * 21) + 1)\n" +
+                "}, 1000]}/>"}</p>
               </div>
             </pre>
           </div>
