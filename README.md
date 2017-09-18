@@ -112,7 +112,7 @@ import {findDOMNode} from 'react-dom'
 import ReactTooltip from 'react-tooltip'
 
 <p ref='foo' data-tip='tooltip'></p>
-<button onClick={() => { ReactTooltip.show(this.refs.foo) }}></button>
+<button onClick={() => { ReactTooltip.show(findDOMNode(this.refs.foo)) }}></button>
 <ReactTooltip />
 ```
 
