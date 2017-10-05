@@ -1,4 +1,6 @@
 ## Change Log
+### 3.3.1 (2017/04/14 03:32 +00:00)
+- Missed building for 3.3.0
 
 ### 3.3.0 (2017/04/14 03:32 +00:00)
 - [#287](https://github.com/wwayne/react-tooltip/pull/287) Use prop-types package instead of React.PropTypes (@ssilve1989)
