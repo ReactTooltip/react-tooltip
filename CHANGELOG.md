@@ -1,8 +1,12 @@
 ## Change Log
-### 3.3.1 (2017/04/14 03:32 +00:00)
-- Missed building for 3.3.0
 
-### 3.3.0 (2017/04/14 03:32 +00:00)
+### 3.4.0 (2017/10/16 13:36 +00:00)
+- [#321](https://github.com/wwayne/react-tooltip/pull/321) React 16 support (@mikecousins)
+
+### 3.3.1 (2017/10/05 05:08 +00:00)
+- [#292](https://github.com/wwayne/react-tooltip/pull/292) Fix typo (@piperchester)
+
+### 3.3.0 (2017/04/14 03:34 +00:00)
 - [#287](https://github.com/wwayne/react-tooltip/pull/287) Use prop-types package instead of React.PropTypes (@ssilve1989)
 
 ### 3.2.10 (2017/03/28 20:41 +00:00)
@@ -79,7 +83,7 @@
 - [#145](https://github.com/wwayne/react-tooltip/pull/145) fix typo (@meandavejustice)
 
 ### 3.0.13 (2016/07/14 09:53 +00:00)
-- [#136](https://github.com/wwayne/react-tooltip/pull/136) Check if current element is under transform (@CremAlex)
+- [#136](https://github.com/wwayne/react-tooltip/pull/136) Check if current element is under transform (@CremaFR)
 - [#135](https://github.com/wwayne/react-tooltip/pull/135) Transform 3d (@wwayne)
 
 ### 3.0.10 (2016/07/12 00:28 +00:00)

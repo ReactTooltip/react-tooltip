@@ -1,43 +1,43 @@
 'use strict'
 
-import React from 'react'
+import React, { Component } from 'react'
 import {render, findDOMNode} from 'react-dom'
 import ReactTooltip from '../../src'
 
-const Test = React.createClass({
-
-  getInitialState () {
-    return {
+class Test extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       place: 'top',
       type: 'dark',
       effect: 'float',
       condition: false
     }
-  },
+  }
 
   changePlace (place) {
     this.setState({
       place: place
     })
-  },
+  }
 
   changeType (type) {
     this.setState({
       type: type
     })
-  },
+  }
 
   changeEffect (effect) {
     this.setState({
       effect: effect
     })
-  },
+  }
 
   _onClick () {
     this.setState({
       condition: true
     })
-  },
+  }
 
   render () {
     let { place, type, effect } = this.state
@@ -250,6 +250,6 @@ const Test = React.createClass({
       </div>
     )
   }
-})
+}
 
 render(<Test />, document.getElementById('main'))

@@ -1,10 +1,10 @@
 {
   "name": "react-tooltip",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "description": "react tooltip component",
   "main": "dist/index.js",
   "scripts": {
-    "test": "make test",
+    "test": "make lint",
     "start": "make dev",
     "deploy": "make deploy"
   },
@@ -43,8 +43,8 @@
     "react-dom": ">=0.14"
   },
   "dependencies": {
-    "classnames": "^2.2.0",
-    "prop-types": "^15.5.8"
+    "classnames": "^2.2.5",
+    "prop-types": "^15.6.0"
   },
   "engines": {
     "node": ">=4.2.1"
@@ -65,6 +65,7 @@
     "chai-enzyme": "^0.5.0",
     "concurrently": "^2.1.0",
     "enzyme": "^2.3.0",
+    "enzyme-adapter-react-16": "^1.0.1",
     "http-server": "^0.8.0",
     "jsdom": "^9.2.1",
     "mocha": "^2.5.3",
