@@ -295,7 +295,7 @@ class ReactTooltip extends Component {
         this.intervalUpdateContent = setInterval(() => {
           if (this.mount) {
             const {getContent} = this.props
-            const placeholder = getTipContent(originTooltip, getContent[0](), isMultiline)
+            const placeholder = getTipContent(originTooltip, '', getContent[0](), isMultiline)
             const isEmptyTip = typeof placeholder === 'string' && placeholder === ''
             this.setState({
               placeholder,
