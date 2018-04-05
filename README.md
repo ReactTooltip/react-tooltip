@@ -150,6 +150,6 @@ Same for empty children, if you don't want show the tooltip when the children is
 ## Authors
 see [AUTHORS](https://github.com/wwayne/react-tooltip/blob/master/AUTHORS.txt)
 
-### License
+## License
 
 MIT
