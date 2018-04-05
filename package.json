@@ -6,6 +6,7 @@
   "scripts": {
     "test": "make lint",
     "start": "make dev",
+    "build": "make deploy",
     "deploy": "make deploy"
   },
   "standard": {
