@@ -1,13 +1,14 @@
 {
   "name": "react-tooltip",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "description": "react tooltip component",
   "main": "dist/index.js",
   "scripts": {
     "test": "make lint",
     "start": "make dev",
     "build": "make deploy",
-    "deploy": "make deploy"
+    "deploy": "make deploy",
+    "github-changes": "github-changes -o wwayne -r react-tooltip -a --only-pulls --use-commit-body"
   },
   "standard": {
     "parser": "babel-eslint",
@@ -67,6 +68,7 @@
     "concurrently": "^2.1.0",
     "enzyme": "^2.3.0",
     "enzyme-adapter-react-16": "^1.0.1",
+    "github-changes": "^1.1.2",
     "http-server": "^0.8.0",
     "jsdom": "^9.2.1",
     "mocha": "^2.5.3",

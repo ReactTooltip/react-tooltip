@@ -1,6 +1,10 @@
 ## Change Log
 
-### 3.4.0 (2017/10/16 13:36 +00:00)
+### 3.4.1 (2018/04/05 17:15 +00:00)
+- [#369](https://github.com/wwayne/react-tooltip/pull/369) fix(index.js): add missing argument so tooltip hides. (@aronhelser)
+- [#372](https://github.com/wwayne/react-tooltip/pull/372) Travis: update node version to fix travis build. (@aronhelser)
+
+### 3.4.0 (2017/10/16 13:39 +00:00)
 - [#321](https://github.com/wwayne/react-tooltip/pull/321) React 16 support (@mikecousins)
 
 ### 3.3.1 (2017/10/05 05:08 +00:00)
