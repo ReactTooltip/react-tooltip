@@ -12,6 +12,7 @@ I learnt a lot from creating and maintaining react-toolip, but now I start putti
 
 ## Maintainers
 [huumanoid](https://github.com/huumanoid)
+
 [aronhelser](https://github.com/aronhelser)
 
 ## Installation
