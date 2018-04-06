@@ -1,43 +1,43 @@
 'use strict'
 
-import React from 'react'
+import React, { Component } from 'react'
 import {render, findDOMNode} from 'react-dom'
 import ReactTooltip from '../../src'
 
-const Test = React.createClass({
-
-  getInitialState () {
-    return {
+class Test extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       place: 'top',
       type: 'dark',
       effect: 'float',
       condition: false
     }
-  },
+  }
 
   changePlace (place) {
     this.setState({
       place: place
     })
-  },
+  }
 
   changeType (type) {
     this.setState({
       type: type
     })
-  },
+  }
 
   changeEffect (effect) {
     this.setState({
       effect: effect
     })
-  },
+  }
 
   _onClick () {
     this.setState({
       condition: true
     })
-  },
+  }
 
   render () {
     let { place, type, effect } = this.state
@@ -46,7 +46,7 @@ const Test = React.createClass({
         <section className='tooltip-example'>
           <h4 className='title'>React Tooltip</h4>
           <div className='demonstration'>
-            <a data-for='main' data-tip="Hello<br />multiline<br />tooltip">
+            <a data-for='main' data-tip="Hello<br />multiline<br />tooltip" data-iscapture="true">
                ◕‿‿◕
             </a>
           </div>
@@ -182,18 +182,18 @@ const Test = React.createClass({
               <div className="side">
                 <a data-for='custom-class' data-tip='hover on me will keep the tootlip'>(･ω´･ )</a>
                 {/* <a data-for='custom-class' data-tip='' data-tip-disable='true'>empty testing</a> */}
-                <ReactTooltip id='custom-class' class='extraClass' delayHide={1000} effect='solid'/>
+                <ReactTooltip id='custom-class' className='extraClass' delayHide={1000} effect='solid'/>
               </div>
               <div className="side">
                 <a data-for='custom-theme' data-tip='custom theme'>(･ω´･ )</a>
-                <ReactTooltip id='custom-theme' class='customeTheme'/>
+                <ReactTooltip id='custom-theme' className='customeTheme'/>
               </div>
             </div>
             <br />
             <pre className='example-pre'>
               <div>
                 <p>{"<a data-tip='hover on me will keep the tootlip'>(･ω´･ )́)</a>\n" +
-                "<ReactTooltip class='extraClass' delayHide={1000} effect='solid'/>\n" +
+                "<ReactTooltip className='extraClass' delayHide={1000} effect='solid'/>\n" +
                 ".extraClass {\n" +
                   " font-size: 20px !important;\n" +
                   " pointer-events: auto !important;\n" +
@@ -205,7 +205,7 @@ const Test = React.createClass({
               </div>
               <div>
                 <p>{"<a data-tip='custom theme'>(･ω´･ )́)</a>\n" +
-                "<ReactTooltip class='customeTheme'/>\n" +
+                "<ReactTooltip className='customeTheme'/>\n" +
                 " .customeTheme {\n" +
                   " color: #ff6e00 !important;\n" +
                   " background-color: orange !important;\n" +
@@ -250,6 +250,6 @@ const Test = React.createClass({
       </div>
     )
   }
-})
+}
 
 render(<Test />, document.getElementById('main'))

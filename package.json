@@ -1,12 +1,14 @@
 {
   "name": "react-tooltip",
-  "version": "3.2.1",
+  "version": "3.4.1",
   "description": "react tooltip component",
   "main": "dist/index.js",
   "scripts": {
-    "test": "make test",
+    "test": "make lint",
     "start": "make dev",
-    "deploy": "make deploy"
+    "build": "make deploy",
+    "deploy": "make deploy",
+    "github-changes": "github-changes -o wwayne -r react-tooltip -a --only-pulls --use-commit-body"
   },
   "standard": {
     "parser": "babel-eslint",
@@ -14,6 +16,7 @@
       "dist/",
       "standalone/",
       "src/style.js",
+      "src/style.css",
       "example/"
     ]
   },
@@ -38,11 +41,15 @@
     "react-dom": "global:ReactDOM"
   },
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0",
-    "react-dom": "^0.14.0 || ^15.0.0"
+    "react": ">=0.14",
+    "react-dom": ">=0.14"
   },
   "dependencies": {
-    "classnames": "^2.2.0"
+    "classnames": "^2.2.5",
+    "prop-types": "^15.6.0"
+  },
+  "engines": {
+    "node": ">=4.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
@@ -60,6 +67,8 @@
     "chai-enzyme": "^0.5.0",
     "concurrently": "^2.1.0",
     "enzyme": "^2.3.0",
+    "enzyme-adapter-react-16": "^1.0.1",
+    "github-changes": "^1.1.2",
     "http-server": "^0.8.0",
     "jsdom": "^9.2.1",
     "mocha": "^2.5.3",

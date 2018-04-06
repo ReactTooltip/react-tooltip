@@ -7,6 +7,14 @@
 [download-image]: https://img.shields.io/npm/dm/react-tooltip.svg?style=flat-square
 [download-url]: https://npmjs.org/package/react-tooltip
 
+## Looking for maintainers
+I learnt a lot from creating and maintaining react-toolip, but now I start putting my focus on other challenges, so just let me know by sending email to wayne.wang0821@gmail.com if you have interests in maintaining the project :)
+
+## Maintainers
+[huumanoid](https://github.com/huumanoid)
+
+[aronhelser](https://github.com/aronhelser)
+
 ## Installation
 
 ```sh
@@ -23,10 +31,11 @@ import ReactTooltip from 'react-tooltip'
 ```
 
 2 . Add data-tip = "your placeholder" to your element
+```jsx
+<p data-tip="hello world">Tooltip</p>
+```
 
-	<p data-tip="hello world">Tooltip</p>
-
-3 . Including react-tooltip component
+3 . Include react-tooltip component
 
 
 ```js
@@ -35,13 +44,13 @@ import ReactTooltip from 'react-tooltip'
 
 **Standalone**
 
-You can import `node_modules/react-tooltip/standalone/react-tooltip.min.js` into your page, please make sure that you have already imported `react` and `react-dom` into your page.
+You can import `node_modules/react-tooltip/standalone/react-tooltip.min.js` into your page. Please make sure that you have already imported `react` and `react-dom` into your page.
 
 ## Options
 Notes:
-* The tooltip is using `type: dark` `place: top` `effect: float` as **default** attribute, you don't have to add these options if you don't want to change default
+* The tooltip sets `type: dark` `place: top` `effect: float` as **default** attributes. You don't have to add these options if you don't want to change the defaults
 * The option you set on `<ReactTooltip />` component will be implemented on every tooltip in a same page: `<ReactTooltip effect="solid" />`
-* The option you set on specific element, for example: `<a data-type="warning"></a>` will only make effect on this specific tooltip
+* The option you set on a specific element, for example: `<a data-type="warning"></a>` will only affect this specific tooltip
 
 Check example:  [React-tooltip Test](http://wwayne.com/react-tooltip)
 
@@ -56,10 +65,11 @@ Global|Specific	|Type	|Values  |  Description
  isCapture | data-iscapture | Bool | true, false | when set to true, custom event's propagation mode will be capture
  offset	|   data-offset  |  Object  |  top, right, bottom, left | `data-offset="{'top': 10, 'left': 10}"` for specific and `offset={{top: 10, left: 10}}` for global
 multiline	|   data-multiline  |  Bool  |  true, false | support `<br>`, `<br />` to make multiline
-class	|   data-class  |  String  |   | extra custom class, can use !important to overwrite react-tooltip's default class
+className	|   data-class  |  String  |   | extra custom class, can use !important to overwrite react-tooltip's default class
  html	|   data-html  |  Bool  |  true, false  |  `<p data-tip="<p>HTML tooltip</p>" data-html={true}></p>` or `<ReactTooltip html={true} />`
  delayHide	|   data-delay-hide  |  Number  |   | `<p data-tip="tooltip" data-delay-hide='1000'></p>` or `<ReactTooltip delayHide={1000} />`
  delayShow	|   data-delay-show  |  Number  |   | `<p data-tip="tooltip" data-delay-show='1000'></p>` or `<ReactTooltip delayShow={1000} />`
+ insecure | null | Bool | true, false | Whether to inject the style header into the page dynamically (violates CSP style-src but is a convenient default)
  border  |   data-border  |  Bool  |  true, false | Add one pixel white border
  getContent | null | Func or Array | () => {}, [() => {}, Interval] | Generate the tip content dynamically
  afterShow | null | Func | () => {} | Function that will be called after tooltip show
@@ -67,19 +77,20 @@ class	|   data-class  |  String  |   | extra custom class, can use !important to
  disable | data-tip-disable | Bool | true, false | Disable the tooltip behaviour, default is false
  scrollHide | data-scroll-hide | Bool | true, false | Hide the tooltip when scrolling, default is true
  resizeHide | null | Bool | true, false | Hide the tooltip when resizing the window, default is true
+ wrapper | null | String | div, span | Selecting the wrapper element of the react tooltip, default is div
 
 ## Using react component as tooltip
 Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
 
 ##### Note:
-1. **data-tip** is necessary, because `<ReactTooltip />` find tooltip via this attribute
-2. **data-for** correspond to the **id** of `<ReactTooltip />`
-3. When using react component as tooltip, you can have many `<ReactTooltip />` in a page but they should have different **id**
+1. **data-tip** is necessary, because `<ReactTooltip />` finds the tooltip via this attribute
+2. **data-for** corresponds to the **id** of `<ReactTooltip />`
+3. When using react component as tooltip, you can have many `<ReactTooltip />` in a page but they should have different **id**s
 
 ## Static Methods
-###ReactTooltip.hide(target)
+### ReactTooltip.hide(target)
 
-> Hide the tooltip manually, the target is optional, if no target passed in, all exitent tooltip will be hiden
+> Hide the tooltip manually, the target is optional, if no target passed in, all existing tooltips will be hidden
 
 ```js
 import {findDOMNode} from 'react-dom'
@@ -90,11 +101,11 @@ import ReactTooltip from 'react-tooltip'
 <ReactTooltip />
 ```
 
-###ReactTooltip.rebuild()
+### ReactTooltip.rebuild()
 
 > Rebinding all tooltips
 
-###ReactTooltip.show(target)
+### ReactTooltip.show(target)
 
 > Show specific tooltip manually, for example:
 
@@ -107,28 +118,28 @@ import ReactTooltip from 'react-tooltip'
 <ReactTooltip />
 ```
 
-## Trouble Shooting
+## Troubleshooting
 ### 1. Using tooltip within the modal (e.g. [react-modal](https://github.com/reactjs/react-modal))
-The component was designed to set a `<Reactooltip />` one place then use tooltip everywhere, but a lot of people stuck in using this component with modal, you can check the discussion [here](https://github.com/wwayne/react-tooltip/issues/130), the summarization of solving the problem is as following:
+The component was designed to set `<ReactTooltip />` once and then use tooltip everywhere, but a lot of people get stuck when using this component in a modal. You can read the discussion [here](https://github.com/wwayne/react-tooltip/issues/130). To solve this problem:
 
-1. Put `<ReactTooltip />` out of the `<Modal>`
-2. Use `React.rebuild()` when opening the modal
-3. If your modal's z-index happens to higher than the tooltip, use the attribute `class` to custom your tooltip's z-index
+1. Place `<ReactTooltip />` outside of the `<Modal>`
+2. Use `ReactTooltip.rebuild()` when opening the modal
+3. If your modal's z-index happens to be higher than the tooltip's, use the attribute `className` to custom your tooltip's z-index
 
->I suggest always put `<ReactTooltip />` in the Highest level or smart component of Redux, so you might need these static
+>I suggest always putting `<ReactTooltip />` in the Highest level or smart component of Redux, so you might need these static
 method to control tooltip's behaviour in some situations
 
 ### 2. Hide tooltip when getContent returns undefined
-When you set `getContent={() => { return }}` you will find the tooltip will dispaly `true`, that's because React will set the value of data-* to be 'true' automatically if there is no value to be set. So you have to set `data-tip=''` in this situaction.
+When you set `getContent={() => { return }}` you will find the tooltip will display `true`. That's because React will set the value of data-* to be 'true' automatically if there is no value to be set. So you have to set `data-tip=''` in this situation.
 
-```
+```jsx
 <p data-tip='' data-for='test'></p>
 <ReactTooltip id='test' getContent={() => { return null }}/>
 ```
 
 Same for empty children, if you don't want show the tooltip when the children is empty
 
-```
+```jsx
 <p data-tip='' data-for='test'></p>
 <ReactTooltip id='test'>{}</ReactTooltip>
 ```
@@ -136,6 +147,9 @@ Same for empty children, if you don't want show the tooltip when the children is
 ## Article
 [How I insert sass into react component](https://medium.com/@wwayne_me/how-i-insert-sass-into-my-npm-react-component-b46b9811c226#.gi4hxu44a)
 
-### License
+## Authors
+see [AUTHORS](https://github.com/wwayne/react-tooltip/blob/master/AUTHORS.txt)
+
+## License
 
 MIT

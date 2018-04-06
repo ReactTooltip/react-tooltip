@@ -3,8 +3,15 @@ cache:
   directories:
     - node_modules
 node_js:
-  - "4"
+  - "8"
 notifications:
-  email: false
+  email:
+    recipients:
+      - aron.helser@kitware.com
+    on_success: change
+    on_failure: always
 install:
   - npm install
+
+script:
+  - npm run build

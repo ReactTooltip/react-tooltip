@@ -11,10 +11,6 @@ lint:
 	@echo Linting...
 	@$(NODE_BIN)/standard --verbose | $(NODE_BIN)/snazzy src/index.js
 
-test: lint
-	@echo Start testing...
-	@$(NODE_BIN)/mocha $(MOCHA_OPTS) $(TEST)
-
 convertCSS:
 	@echo Converting css...
 	@node bin/transferSass.js
@@ -30,6 +26,7 @@ devJS:
 
 devCSS:
 	@$(NODE_BIN)/node-sass $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
+	@$(NODE_BIN)/node-sass $(SRC)/index.scss $(EXAMPLE_DIST)/style.css
 	@$(NODE_BIN)/node-sass -w $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
 
 devServer:

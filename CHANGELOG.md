@@ -1,6 +1,50 @@
 ## Change Log
 
-### 3.2.1 (2016/09/30 09:50 +00:00)
+### 3.4.1 (2018/04/05 17:15 +00:00)
+- [#369](https://github.com/wwayne/react-tooltip/pull/369) fix(index.js): add missing argument so tooltip hides. (@aronhelser)
+- [#372](https://github.com/wwayne/react-tooltip/pull/372) Travis: update node version to fix travis build. (@aronhelser)
+
+### 3.4.0 (2017/10/16 13:39 +00:00)
+- [#321](https://github.com/wwayne/react-tooltip/pull/321) React 16 support (@mikecousins)
+
+### 3.3.1 (2017/10/05 05:08 +00:00)
+- [#292](https://github.com/wwayne/react-tooltip/pull/292) Fix typo (@piperchester)
+
+### 3.3.0 (2017/04/14 03:34 +00:00)
+- [#287](https://github.com/wwayne/react-tooltip/pull/287) Use prop-types package instead of React.PropTypes (@ssilve1989)
+
+### 3.2.10 (2017/03/28 20:41 +00:00)
+- [#278](https://github.com/wwayne/react-tooltip/pull/278) Make MutationObserver-based removal tracking (@huumanoid)
+- [#272](https://github.com/wwayne/react-tooltip/pull/272) Fix wrapper tag (@huumanoid)
+- [#259](https://github.com/wwayne/react-tooltip/pull/259) Track removal of DOM elements (@antoniogiordano)
+- [#270](https://github.com/wwayne/react-tooltip/pull/270) Fix typos and improve for clarity (@theholla)
+
+### 3.2.9 (2017/03/20 15:41 +00:00)
+- [#236](https://github.com/wwayne/react-tooltip/pull/236) escape backslash in getTargetArray method (@rnons)
+
+### 3.2.7 (2017/02/17 07:24 +00:00)
+- [#262](https://github.com/wwayne/react-tooltip/pull/262) Fix nodelist converte in safari (@wwayne)
+- [#260](https://github.com/wwayne/react-tooltip/pull/260) Fix NodeList to Array convertion (@huumanoid)
+
+### 3.2.6 (2017/02/08 12:34 +00:00)
+- [#255](https://github.com/wwayne/react-tooltip/pull/255) (fix) Remove console logs (@flexpert)
+- [#254](https://github.com/wwayne/react-tooltip/pull/254) Add support for className prop (@jonbeller)
+
+### 3.2.4 (2017/02/07 03:57 +00:00)
+- [#251](https://github.com/wwayne/react-tooltip/pull/251) Dropfen dynamic wrapper (@dropfen)
+
+### 3.2.3 (2017/01/30 03:00 +00:00)
+- [#247](https://github.com/wwayne/react-tooltip/pull/247) Fix delayHide issue #246 (@huumanoid)
+- [#238](https://github.com/wwayne/react-tooltip/pull/238) Update README.md (@nikbelikov)
+- [#233](https://github.com/wwayne/react-tooltip/pull/233) Added more syntax highlighting (@oyeanuj)
+- [#229](https://github.com/wwayne/react-tooltip/pull/229) Replaced Object.keys(...) by Object.getOwnPropertyNames(...) (@gauthierj)
+
+### 3.2.2 (2016/11/23 08:23 +00:00)
+- [#220](https://github.com/wwayne/react-tooltip/pull/220) Use parameter 'useCapture' for remove listener if it is registered as… (@achernetsky)
+- [#223](https://github.com/wwayne/react-tooltip/pull/223) Fix/security csp style src (@briantrice)
+- [#216](https://github.com/wwayne/react-tooltip/pull/216) Fix fire of global show event for IE (@SubVersive)
+
+### 3.2.1 (2016/09/30 09:51 +00:00)
 - [#202](https://github.com/wwayne/react-tooltip/pull/202) Hide tooltip when getContent return null or undefined, same for empty… (@wwayne)
 - [#201](https://github.com/wwayne/react-tooltip/pull/201) Hide tooltip if the tip is empty or disabled (@wwayne)
 
@@ -43,7 +87,7 @@
 - [#145](https://github.com/wwayne/react-tooltip/pull/145) fix typo (@meandavejustice)
 
 ### 3.0.13 (2016/07/14 09:53 +00:00)
-- [#136](https://github.com/wwayne/react-tooltip/pull/136) Check if current element is under transform (@CremAlex)
+- [#136](https://github.com/wwayne/react-tooltip/pull/136) Check if current element is under transform (@CremaFR)
 - [#135](https://github.com/wwayne/react-tooltip/pull/135) Transform 3d (@wwayne)
 
 ### 3.0.10 (2016/07/12 00:28 +00:00)
@@ -94,7 +138,7 @@
 ### v1.1.2 (2016/02/15 12:31 +00:00)
 - [#79](https://github.com/wwayne/react-tooltip/pull/79) Require the non-minified dist build in index (@idan)
 - [#73](https://github.com/wwayne/react-tooltip/pull/73) Clear timeout when unmounting. (@joelburget)
-- [#72](https://github.com/wwayne/react-tooltip/pull/72) clearing delayShowLoop-Timeout when component will unmount (@Monterra)
+- [#72](https://github.com/wwayne/react-tooltip/pull/72) clearing delayShowLoop-Timeout when component will unmount (@dsumer)
 
 ### v1.0.0 (2016/01/10 02:16 +00:00)
 - [#68](https://github.com/wwayne/react-tooltip/pull/68) better fix for Maximum call stack size exceeded (@enjalot)
