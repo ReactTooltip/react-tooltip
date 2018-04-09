@@ -1,6 +1,6 @@
 'use strict'
 
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import classname from 'classnames'
@@ -28,7 +28,7 @@ import cssStyle from './style'
 @isCapture
 @getEffect
 @trackRemoval
-class ReactTooltip extends Component {
+class ReactTooltip extends React.Component {
 
   static propTypes = {
     children: PropTypes.any,
@@ -450,6 +450,7 @@ class ReactTooltip extends Component {
     if (html) {
       return (
         <Wrapper className={`${tooltipClass} ${extraClass}`}
+                 id={this.props.id}
                  {...ariaProps}
                  data-id='tooltip'
                  dangerouslySetInnerHTML={{__html: placeholder}}/>
@@ -457,6 +458,7 @@ class ReactTooltip extends Component {
     } else {
       return (
         <Wrapper className={`${tooltipClass} ${extraClass}`}
+                 id={this.props.id}
                  {...ariaProps}
                  data-id='tooltip'>{placeholder}</Wrapper>
       )
