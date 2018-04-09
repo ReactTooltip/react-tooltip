@@ -407,11 +407,12 @@ class ReactTooltip extends React.Component {
    * in this way we can insert default css
    */
   setStyleHeader () {
-    if (!document.getElementsByTagName('head')[0].querySelector('style[id="react-tooltip"]')) {
+    const head = document.getElementsByTagName('head')[0]
+    if (!head.querySelector('style[id="react-tooltip"]')) {
       let tag = document.createElement('style')
       tag.id = 'react-tooltip'
       tag.innerHTML = cssStyle
-      document.getElementsByTagName('head')[0].appendChild(tag)
+      head.insertBefore(tag, head.firstChild)
     }
   }
 
