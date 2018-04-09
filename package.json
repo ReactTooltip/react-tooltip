@@ -1,6 +1,6 @@
 {
   "name": "react-tooltip",
-  "version": "3.4.1",
+  "version": "3.4.2",
   "description": "react tooltip component",
   "main": "dist/index.js",
   "scripts": {
@@ -73,6 +73,8 @@
     "jsdom": "^9.2.1",
     "mocha": "^2.5.3",
     "node-sass": "^3.7.0",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
     "react-addons-test-utils": "^15.1.0",
     "sinon": "^1.17.4",
     "snazzy": "^2.0.1",
