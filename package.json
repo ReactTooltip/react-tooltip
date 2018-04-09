@@ -69,7 +69,7 @@
     "enzyme": "^2.3.0",
     "enzyme-adapter-react-16": "^1.0.1",
     "github-changes": "^1.1.2",
-    "http-server": "^0.8.0",
+    "http-server": "^0.11.1",
     "jsdom": "^9.2.1",
     "mocha": "^2.5.3",
     "node-sass": "^3.7.0",
