@@ -20,8 +20,10 @@ export default function (target) {
     if (MutationObserver == null) return
 
     const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        for (const element of mutation.removedNodes) {
+      for (let m1 = 0; m1 < mutations.length; m1++) {
+        const mutation = mutations[m1]
+        for (let m2 = 0; m2 < mutation.removedNodes.length; m2++) {
+          const element = mutation.removedNodes[m2]
           if (element === this.state.currentTarget) {
             this.hideTooltip()
             return

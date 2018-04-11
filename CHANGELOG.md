@@ -1,6 +1,15 @@
 ## Change Log
 
-### 3.4.1 (2018/04/05 17:15 +00:00)
+### 3.4.3 (2018/04/11 15:12 +00:00)
+- [#207](https://github.com/wwayne/react-tooltip/pull/207) Return tooltip to original position when possible (@hassanbot)
+- [#301](https://github.com/wwayne/react-tooltip/pull/301) insert css as first to allow easy css styling without important (@roblan)
+
+### 3.4.2 (2018/04/09 18:58 +00:00)
+- [#373](https://github.com/wwayne/react-tooltip/pull/373) fix(example): 'made dev' works again, small fixes. (@aronhelser)
+- [#337](https://github.com/wwayne/react-tooltip/pull/337) Fix README show tip usage error (@gaohailang)
+- [#359](https://github.com/wwayne/react-tooltip/pull/359) License should use H2 as the previous sections do (@konekoya)
+
+### 3.4.1 (2018/04/05 17:24 +00:00)
 - [#369](https://github.com/wwayne/react-tooltip/pull/369) fix(index.js): add missing argument so tooltip hides. (@aronhelser)
 - [#372](https://github.com/wwayne/react-tooltip/pull/372) Travis: update node version to fix travis build. (@aronhelser)
 

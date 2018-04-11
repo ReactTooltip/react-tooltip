@@ -1,10 +1,10 @@
 'use strict'
 
-import React, { Component } from 'react'
-import {render, findDOMNode} from 'react-dom'
+import React from 'react'
+import ReactDOM from 'react-dom'
 import ReactTooltip from '../../src'
 
-class Test extends Component {
+class Test extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -157,8 +157,8 @@ class Test extends Component {
                 <ReactTooltip id='custom-off-event'/>
                 {/*
                   <div>
-                    <button onClick={() => { ReactTooltip.show(findDOMNode(this.refs.target)) }}>Show toolip</button>
-                    <button onClick={() => { ReactTooltip.hide(findDOMNode(this.refs.target)) }}>Hide toolip</button>
+                    <button onClick={() => { ReactTooltip.show(ReactDOM.findDOMNode(this.refs.target)) }}>Show toolip</button>
+                    <button onClick={() => { ReactTooltip.hide(ReactDOM.findDOMNode(this.refs.target)) }}>Hide toolip</button>
                   </div>
                 */}
               </div>
@@ -252,4 +252,4 @@ class Test extends Component {
   }
 }
 
-render(<Test />, document.getElementById('main'))
+ReactDOM.render(<Test />, document.getElementById('main'))

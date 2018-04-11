@@ -1427,52 +1427,13 @@ exports.default = function (target) {
     if (MutationObserver == null) return;
 
     var observer = new MutationObserver(function (mutations) {
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = mutations[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var mutation = _step.value;
-          var _iteratorNormalCompletion2 = true;
-          var _didIteratorError2 = false;
-          var _iteratorError2 = undefined;
-
-          try {
-            for (var _iterator2 = mutation.removedNodes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-              var element = _step2.value;
-
-              if (element === _this.state.currentTarget) {
-                _this.hideTooltip();
-                return;
-              }
-            }
-          } catch (err) {
-            _didIteratorError2 = true;
-            _iteratorError2 = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                _iterator2.return();
-              }
-            } finally {
-              if (_didIteratorError2) {
-                throw _iteratorError2;
-              }
-            }
-          }
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+      for (var m1 = 0; m1 < mutations.length; m1++) {
+        var mutation = mutations[m1];
+        for (var m2 = 0; m2 < mutation.removedNodes.length; m2++) {
+          var element = mutation.removedNodes[m2];
+          if (element === _this.state.currentTarget) {
+            _this.hideTooltip();
+            return;
           }
         }
       }
@@ -1640,8 +1601,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.default)(_class = (0, _customEvent2.default)(_class = (0, _isCapture2.default)(_class = (0, _getEffect2.default)(_class = (0, _trackRemoval2.default)(_class = (_temp = _class2 = function (_Component) {
-  _inherits(ReactTooltip, _Component);
+var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.default)(_class = (0, _customEvent2.default)(_class = (0, _isCapture2.default)(_class = (0, _getEffect2.default)(_class = (0, _trackRemoval2.default)(_class = (_temp = _class2 = function (_React$Component) {
+  _inherits(ReactTooltip, _React$Component);
 
   function ReactTooltip(props) {
     _classCallCheck(this, ReactTooltip);
@@ -1889,6 +1850,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       this.setState({
         placeholder: placeholder,
         isEmptyTip: isEmptyTip,
+        desiredPlace: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
         place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
         type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
         effect: switchToSolid && 'solid' || this.getEffect(e.currentTarget),
@@ -2034,11 +1996,12 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           currentEvent = _state3.currentEvent,
           currentTarget = _state3.currentTarget,
           place = _state3.place,
+          desiredPlace = _state3.desiredPlace,
           effect = _state3.effect,
           offset = _state3.offset;
 
       var node = _reactDom2.default.findDOMNode(this);
-      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset);
+      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, desiredPlace, effect, offset);
 
       if (result.isNewState) {
         // Switch to reverse placement
@@ -2059,11 +2022,12 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'setStyleHeader',
     value: function setStyleHeader() {
-      if (!document.getElementsByTagName('head')[0].querySelector('style[id="react-tooltip"]')) {
+      var head = document.getElementsByTagName('head')[0];
+      if (!head.querySelector('style[id="react-tooltip"]')) {
         var tag = document.createElement('style');
         tag.id = 'react-tooltip';
         tag.innerHTML = _style2.default;
-        document.getElementsByTagName('head')[0].appendChild(tag);
+        head.insertBefore(tag, head.firstChild);
       }
     }
 
@@ -2097,14 +2061,16 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       }
 
       if (html) {
-        return _react2.default.createElement(Wrapper, _extends({ className: tooltipClass + ' ' + extraClass
+        return _react2.default.createElement(Wrapper, _extends({ className: tooltipClass + ' ' + extraClass,
+          id: this.props.id
         }, ariaProps, {
           'data-id': 'tooltip',
           dangerouslySetInnerHTML: { __html: placeholder } }));
       } else {
         return _react2.default.createElement(
           Wrapper,
-          _extends({ className: tooltipClass + ' ' + extraClass
+          _extends({ className: tooltipClass + ' ' + extraClass,
+            id: this.props.id
           }, ariaProps, {
             'data-id': 'tooltip' }),
           placeholder
@@ -2114,7 +2080,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }]);
 
   return ReactTooltip;
-}(_react.Component), _class2.propTypes = {
+}(_react2.default.Component), _class2.propTypes = {
   children: _propTypes2.default.any,
   place: _propTypes2.default.string,
   type: _propTypes2.default.string,
@@ -2194,7 +2160,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-exports.default = function (e, target, node, place, effect, offset) {
+exports.default = function (e, target, node, place, desiredPlace, effect, offset) {
   var tipWidth = node.clientWidth;
   var tipHeight = node.clientHeight;
 
@@ -2347,6 +2313,31 @@ exports.default = function (e, target, node, place, effect, offset) {
       isNewState: true,
       newState: { place: outsideBottomResult.newPlace }
     };
+  }
+
+  // Change back to original place if possible
+  if (place !== desiredPlace) {
+    if (desiredPlace === 'top' && !outsideTopResult.result) {
+      return {
+        isNewState: true,
+        newState: { place: 'top' }
+      };
+    } else if (desiredPlace === 'left' && !outsideLeftResult.result) {
+      return {
+        isNewState: true,
+        newState: { place: 'left' }
+      };
+    } else if (desiredPlace === 'right' && !outsideRightResult.result) {
+      return {
+        isNewState: true,
+        newState: { place: 'right' }
+      };
+    } else if (desiredPlace === 'bottom' && !outsideBottomResult.result) {
+      return {
+        isNewState: true,
+        newState: { place: 'bottom' }
+      };
+    }
   }
 
   // Return tooltip offset position

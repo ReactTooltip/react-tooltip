@@ -1,6 +1,6 @@
 'use strict'
 
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import classname from 'classnames'
@@ -28,7 +28,7 @@ import cssStyle from './style'
 @isCapture
 @getEffect
 @trackRemoval
-class ReactTooltip extends Component {
+class ReactTooltip extends React.Component {
 
   static propTypes = {
     children: PropTypes.any,
@@ -281,6 +281,7 @@ class ReactTooltip extends Component {
     this.setState({
       originTooltip: originTooltip,
       isMultiline: isMultiline,
+      desiredPlace: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
       place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
       type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
       effect: switchToSolid && 'solid' || this.getEffect(e.currentTarget),
@@ -397,9 +398,9 @@ class ReactTooltip extends Component {
 
   // Calculation the position
   updatePosition () {
-    const {currentEvent, currentTarget, place, effect, offset} = this.state
+    const {currentEvent, currentTarget, place, desiredPlace, effect, offset} = this.state
     const node = ReactDOM.findDOMNode(this)
-    const result = getPosition(currentEvent, currentTarget, node, place, effect, offset)
+    const result = getPosition(currentEvent, currentTarget, node, place, desiredPlace, effect, offset)
 
     if (result.isNewState) {
       // Switch to reverse placement
@@ -417,11 +418,12 @@ class ReactTooltip extends Component {
    * in this way we can insert default css
    */
   setStyleHeader () {
-    if (!document.getElementsByTagName('head')[0].querySelector('style[id="react-tooltip"]')) {
+    const head = document.getElementsByTagName('head')[0]
+    if (!head.querySelector('style[id="react-tooltip"]')) {
       let tag = document.createElement('style')
       tag.id = 'react-tooltip'
       tag.innerHTML = cssStyle
-      document.getElementsByTagName('head')[0].appendChild(tag)
+      head.insertBefore(tag, head.firstChild)
     }
   }
 
@@ -462,6 +464,7 @@ class ReactTooltip extends Component {
     if (html) {
       return (
         <Wrapper className={`${tooltipClass} ${extraClass}`}
+                 id={this.props.id}
                  {...ariaProps}
                  data-id='tooltip'
                  dangerouslySetInnerHTML={{__html: placeholder}}/>
@@ -469,6 +472,7 @@ class ReactTooltip extends Component {
     } else {
       return (
         <Wrapper className={`${tooltipClass} ${extraClass}`}
+                 id={this.props.id}
                  {...ariaProps}
                  data-id='tooltip'>{placeholder}</Wrapper>
       )
