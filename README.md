@@ -147,8 +147,9 @@ Same for empty children, if you don't want show the tooltip when the children is
 ## Article
 [How I insert sass into react component](https://medium.com/@wwayne_me/how-i-insert-sass-into-my-npm-react-component-b46b9811c226#.gi4hxu44a)
 
-## Authors
-see [AUTHORS](https://github.com/wwayne/react-tooltip/blob/master/AUTHORS.txt)
+## Contributing
+
+We welcome your contribution! Fork the repo, make some changes, submit a pull-request! Our [contributing](contributing.md) doc has some details.
 
 ## License
 
