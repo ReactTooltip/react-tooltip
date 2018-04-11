@@ -271,6 +271,7 @@ class ReactTooltip extends React.Component {
     this.setState({
       placeholder,
       isEmptyTip,
+      desiredPlace: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
       place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
       type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
       effect: switchToSolid && 'solid' || this.getEffect(e.currentTarget),
@@ -387,9 +388,9 @@ class ReactTooltip extends React.Component {
 
   // Calculation the position
   updatePosition () {
-    const {currentEvent, currentTarget, place, effect, offset} = this.state
+    const {currentEvent, currentTarget, place, desiredPlace, effect, offset} = this.state
     const node = ReactDOM.findDOMNode(this)
-    const result = getPosition(currentEvent, currentTarget, node, place, effect, offset)
+    const result = getPosition(currentEvent, currentTarget, node, place, desiredPlace, effect, offset)
 
     if (result.isNewState) {
       // Switch to reverse placement
