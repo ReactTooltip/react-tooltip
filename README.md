@@ -7,10 +7,8 @@
 [download-image]: https://img.shields.io/npm/dm/react-tooltip.svg?style=flat-square
 [download-url]: https://npmjs.org/package/react-tooltip
 
-## Looking for maintainers
-I learnt a lot from creating and maintaining react-toolip, but now I start putting my focus on other challenges, so just let me know by sending email to wayne.wang0821@gmail.com if you have interests in maintaining the project :)
-
 ## Maintainers
+
 [huumanoid](https://github.com/huumanoid)
 
 [aronhelser](https://github.com/aronhelser)
