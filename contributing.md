@@ -2,6 +2,10 @@
 
 This doc needs help! Please submit your PR...
 
+## Commit messages
+
+We are using semantic-release to automate the release process, and this depends on a specific format for commit messages. Please run `npm run commit` to use `commitizen` to properly format your commit messages so they can be automatically processed and included in release notes.
+
 ## Pull request testing
 
 Some notes on testing and releasing.
@@ -11,7 +15,7 @@ Some notes on testing and releasing.
 
 ## Doing a release
 
-We really want to use semantic-release instead of this:
+We are using semantic-release instead of this:
 
 * `make deploy` updates the files in the `standalone` directory
 * update the version number in `package.json`
