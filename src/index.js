@@ -67,6 +67,8 @@ class ReactTooltip extends React.Component {
 
   static supportedWrappers = ['div', 'span'];
 
+  static displayName = 'ReactTooltip';
+
   constructor (props) {
     super(props)
     this.state = {
