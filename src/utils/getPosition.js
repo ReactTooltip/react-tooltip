@@ -15,10 +15,18 @@
  * - `position` {OBject} {left: {Number}, top: {Number}}
  */
 export default function (e, target, node, place, desiredPlace, effect, offset) {
-  const tipWidth = node.clientWidth
-  const tipHeight = node.clientHeight
+  const {
+    width: tipWidth,
+    height: tipHeight
+  } = getDimensions(node)
+
+  const {
+    width: targetWidth,
+    height: targetHeight
+  } = getDimensions(target)
+
   const {mouseX, mouseY} = getCurrentOffset(e, target, effect)
-  const defaultOffset = getDefaultPosition(effect, target.clientWidth, target.clientHeight, tipWidth, tipHeight)
+  const defaultOffset = getDefaultPosition(effect, targetWidth, targetHeight, tipWidth, tipHeight)
   const {extraOffset_X, extraOffset_Y} = calculateOffset(offset)
 
   const windowWidth = window.innerWidth
@@ -186,13 +194,23 @@ export default function (e, target, node, place, desiredPlace, effect, offset) {
   }
 }
 
+const getDimensions = (node) => {
+  const { height, width } = node.getBoundingClientRect()
+  return {
+    height: parseInt(height, 10),
+    width: parseInt(width, 10)
+  }
+}
+
 // Get current mouse offset
 const getCurrentOffset = (e, currentTarget, effect) => {
   const boundingClientRect = currentTarget.getBoundingClientRect()
   const targetTop = boundingClientRect.top
   const targetLeft = boundingClientRect.left
-  const targetWidth = currentTarget.clientWidth
-  const targetHeight = currentTarget.clientHeight
+  const {
+    width: targetWidth,
+    height: targetHeight
+  } = getDimensions(currentTarget)
 
   if (effect === 'float') {
     return {
