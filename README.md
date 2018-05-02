@@ -7,11 +7,11 @@
 [download-image]: https://img.shields.io/npm/dm/react-tooltip.svg?style=flat-square
 [download-url]: https://npmjs.org/package/react-tooltip
 
-## Looking for maintainers
-I learnt a lot from creating and maintaining react-toolip, but now I start putting my focus on other challenges, so just let me know by sending email to wayne.wang0821@gmail.com if you have interests in maintaining the project :)
-
 ## Maintainers
+
 [huumanoid](https://github.com/huumanoid)
+
+[aronhelser](https://github.com/aronhelser)
 
 ## Installation
 
@@ -112,7 +112,7 @@ import {findDOMNode} from 'react-dom'
 import ReactTooltip from 'react-tooltip'
 
 <p ref='foo' data-tip='tooltip'></p>
-<button onClick={() => { ReactTooltip.show(this.refs.foo) }}></button>
+<button onClick={() => { ReactTooltip.show(findDOMNode(this.refs.foo)) }}></button>
 <ReactTooltip />
 ```
 
@@ -145,9 +145,10 @@ Same for empty children, if you don't want show the tooltip when the children is
 ## Article
 [How I insert sass into react component](https://medium.com/@wwayne_me/how-i-insert-sass-into-my-npm-react-component-b46b9811c226#.gi4hxu44a)
 
-## Authors
-see [AUTHORS](https://github.com/wwayne/react-tooltip/blob/master/AUTHORS.txt)
+## Contributing
 
-### License
+We welcome your contribution! Fork the repo, make some changes, submit a pull-request! Our [contributing](contributing.md) doc has some details.
+
+## License
 
 MIT

@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.ReactTooltip = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.ReactTooltip = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 /*!
   Copyright (c) 2016 Jed Watson.
   Licensed under the MIT License (MIT), see
@@ -1427,52 +1427,13 @@ exports.default = function (target) {
     if (MutationObserver == null) return;
 
     var observer = new MutationObserver(function (mutations) {
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = mutations[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var mutation = _step.value;
-          var _iteratorNormalCompletion2 = true;
-          var _didIteratorError2 = false;
-          var _iteratorError2 = undefined;
-
-          try {
-            for (var _iterator2 = mutation.removedNodes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-              var element = _step2.value;
-
-              if (element === _this.state.currentTarget) {
-                _this.hideTooltip();
-                return;
-              }
-            }
-          } catch (err) {
-            _didIteratorError2 = true;
-            _iteratorError2 = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                _iterator2.return();
-              }
-            } finally {
-              if (_didIteratorError2) {
-                throw _iteratorError2;
-              }
-            }
-          }
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+      for (var m1 = 0; m1 < mutations.length; m1++) {
+        var mutation = mutations[m1];
+        for (var m2 = 0; m2 < mutation.removedNodes.length; m2++) {
+          var element = mutation.removedNodes[m2];
+          if (element === _this.state.currentTarget) {
+            _this.hideTooltip();
+            return;
           }
         }
       }
@@ -1640,8 +1601,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.default)(_class = (0, _customEvent2.default)(_class = (0, _isCapture2.default)(_class = (0, _getEffect2.default)(_class = (0, _trackRemoval2.default)(_class = (_temp = _class2 = function (_Component) {
-  _inherits(ReactTooltip, _Component);
+var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.default)(_class = (0, _customEvent2.default)(_class = (0, _isCapture2.default)(_class = (0, _getEffect2.default)(_class = (0, _trackRemoval2.default)(_class = (_temp = _class2 = function (_React$Component) {
+  _inherits(ReactTooltip, _React$Component);
 
   function ReactTooltip(props) {
     _classCallCheck(this, ReactTooltip);
@@ -1654,7 +1615,6 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       effect: 'float', // float or fixed
       show: false,
       border: false,
-      placeholder: '',
       offset: {},
       extraClass: '',
       html: false,
@@ -1666,10 +1626,12 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       currentTarget: null, // Current target of mouse event
       ariaProps: (0, _aria.parseAria)(props), // aria- and role attributes
       isEmptyTip: false,
-      disable: false
+      disable: false,
+      originTooltip: null,
+      isMultiline: false
     };
 
-    _this.bind(['showTooltip', 'updateTooltip', 'hideTooltip', 'globalRebuild', 'globalShow', 'globalHide', 'onWindowResize']);
+    _this.bind(['showTooltip', 'updateTooltip', 'hideTooltip', 'getTooltipContent', 'globalRebuild', 'globalShow', 'globalHide', 'onWindowResize']);
 
     _this.mount = true;
     _this.delayShowLoop = null;
@@ -1832,6 +1794,31 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       target.removeEventListener('mousemove', this.updateTooltip, isCaptureMode);
       target.removeEventListener('mouseleave', this.hideTooltip, isCaptureMode);
     }
+  }, {
+    key: 'getTooltipContent',
+    value: function getTooltipContent() {
+      var _props4 = this.props,
+          getContent = _props4.getContent,
+          children = _props4.children;
+
+      // Generate tooltip content
+
+      var content = void 0;
+      if (getContent) {
+        if (Array.isArray(getContent)) {
+          content = getContent[0] && getContent[0]();
+        } else {
+          content = getContent();
+        }
+      }
+
+      return (0, _getTipContent2.default)(this.state.originTooltip, children, content, this.state.isMultiline);
+    }
+  }, {
+    key: 'isEmptyTip',
+    value: function isEmptyTip(placeholder) {
+      return typeof placeholder === 'string' && placeholder === '' || placeholder === null;
+    }
 
     /**
      * When mouse enter, show the tooltip
@@ -1852,25 +1839,12 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       }
       // Get the tooltip content
       // calculate in this phrase so that tip width height can be detected
-      var _props4 = this.props,
-          children = _props4.children,
-          multiline = _props4.multiline,
-          getContent = _props4.getContent;
+      var _props5 = this.props,
+          multiline = _props5.multiline,
+          getContent = _props5.getContent;
 
       var originTooltip = e.currentTarget.getAttribute('data-tip');
       var isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false;
-
-      // Generate tootlip content
-      var content = void 0;
-      if (getContent) {
-        if (Array.isArray(getContent)) {
-          content = getContent[0] && getContent[0]();
-        } else {
-          content = getContent();
-        }
-      }
-      var placeholder = (0, _getTipContent2.default)(originTooltip, children, content, isMultiline);
-      var isEmptyTip = typeof placeholder === 'string' && placeholder === '' || placeholder === null;
 
       // If it is focus event or called by ReactTooltip.show, switch to `solid` effect
       var switchToSolid = e instanceof window.FocusEvent || isGlobalCall;
@@ -1887,8 +1861,9 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       this.clearTimer();
 
       this.setState({
-        placeholder: placeholder,
-        isEmptyTip: isEmptyTip,
+        originTooltip: originTooltip,
+        isMultiline: isMultiline,
+        desiredPlace: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
         place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
         type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
         effect: switchToSolid && 'solid' || this.getEffect(e.currentTarget),
@@ -1908,11 +1883,10 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
             if (_this5.mount) {
               var _getContent = _this5.props.getContent;
 
-              var _placeholder = (0, _getTipContent2.default)(originTooltip, _getContent[0](), isMultiline);
-              var _isEmptyTip = typeof _placeholder === 'string' && _placeholder === '';
+              var placeholder = (0, _getTipContent2.default)(originTooltip, '', _getContent[0](), isMultiline);
+              var isEmptyTip = _this5.isEmptyTip(placeholder);
               _this5.setState({
-                placeholder: _placeholder,
-                isEmptyTip: _isEmptyTip
+                isEmptyTip: isEmptyTip
               });
             }
           }, getContent[1]);
@@ -1932,15 +1906,14 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var _state = this.state,
           delayShow = _state.delayShow,
           show = _state.show,
-          isEmptyTip = _state.isEmptyTip,
           disable = _state.disable;
       var afterShow = this.props.afterShow;
-      var placeholder = this.state.placeholder;
 
+      var placeholder = this.getTooltipContent();
       var delayTime = show ? 0 : parseInt(delayShow, 10);
       var eventTarget = e.currentTarget;
 
-      if (isEmptyTip || disable) return; // if the tooltip is empty, disable the tooltip
+      if (this.isEmptyTip(placeholder) || disable) return; // if the tooltip is empty, disable the tooltip
       var updateState = function updateState() {
         if (Array.isArray(placeholder) && placeholder.length > 0 || placeholder) {
           var isInvisible = !_this6.state.show;
@@ -1974,12 +1947,12 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       var _state2 = this.state,
           delayHide = _state2.delayHide,
-          isEmptyTip = _state2.isEmptyTip,
           disable = _state2.disable;
       var afterHide = this.props.afterHide;
 
+      var placeholder = this.getTooltipContent();
       if (!this.mount) return;
-      if (isEmptyTip || disable) return; // if the tooltip is empty, disable the tooltip
+      if (this.isEmptyTip(placeholder) || disable) return; // if the tooltip is empty, disable the tooltip
       if (hasTarget) {
         // Don't trigger other elements belongs to other ReactTooltip
         var targetArray = this.getTargetArray(this.props.id);
@@ -2034,11 +2007,12 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           currentEvent = _state3.currentEvent,
           currentTarget = _state3.currentTarget,
           place = _state3.place,
+          desiredPlace = _state3.desiredPlace,
           effect = _state3.effect,
           offset = _state3.offset;
 
       var node = _reactDom2.default.findDOMNode(this);
-      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset);
+      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, desiredPlace, effect, offset);
 
       if (result.isNewState) {
         // Switch to reverse placement
@@ -2059,11 +2033,12 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'setStyleHeader',
     value: function setStyleHeader() {
-      if (!document.getElementsByTagName('head')[0].querySelector('style[id="react-tooltip"]')) {
+      var head = document.getElementsByTagName('head')[0];
+      if (!head.querySelector('style[id="react-tooltip"]')) {
         var tag = document.createElement('style');
         tag.id = 'react-tooltip';
         tag.innerHTML = _style2.default;
-        document.getElementsByTagName('head')[0].appendChild(tag);
+        head.insertBefore(tag, head.firstChild);
       }
     }
 
@@ -2082,13 +2057,13 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     key: 'render',
     value: function render() {
       var _state4 = this.state,
-          placeholder = _state4.placeholder,
           extraClass = _state4.extraClass,
           html = _state4.html,
           ariaProps = _state4.ariaProps,
-          disable = _state4.disable,
-          isEmptyTip = _state4.isEmptyTip;
+          disable = _state4.disable;
 
+      var placeholder = this.getTooltipContent();
+      var isEmptyTip = this.isEmptyTip(placeholder);
       var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show && !disable && !isEmptyTip }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
 
       var Wrapper = this.props.wrapper;
@@ -2097,14 +2072,16 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       }
 
       if (html) {
-        return _react2.default.createElement(Wrapper, _extends({ className: tooltipClass + ' ' + extraClass
+        return _react2.default.createElement(Wrapper, _extends({ className: tooltipClass + ' ' + extraClass,
+          id: this.props.id
         }, ariaProps, {
           'data-id': 'tooltip',
           dangerouslySetInnerHTML: { __html: placeholder } }));
       } else {
         return _react2.default.createElement(
           Wrapper,
-          _extends({ className: tooltipClass + ' ' + extraClass
+          _extends({ className: tooltipClass + ' ' + extraClass,
+            id: this.props.id
           }, ariaProps, {
             'data-id': 'tooltip' }),
           placeholder
@@ -2114,7 +2091,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }]);
 
   return ReactTooltip;
-}(_react.Component), _class2.propTypes = {
+}(_react2.default.Component), _class2.propTypes = {
   children: _propTypes2.default.any,
   place: _propTypes2.default.string,
   type: _propTypes2.default.string,
@@ -2145,7 +2122,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   insecure: true,
   resizeHide: true,
   wrapper: 'div'
-}, _class2.supportedWrappers = ['div', 'span'], _temp)) || _class) || _class) || _class) || _class) || _class) || _class;
+}, _class2.supportedWrappers = ['div', 'span'], _class2.displayName = 'ReactTooltip', _temp)) || _class) || _class) || _class) || _class) || _class) || _class;
 
 /* export default not fit for standalone, it will exports {default:...} */
 
@@ -2194,7 +2171,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-exports.default = function (e, target, node, place, effect, offset) {
+exports.default = function (e, target, node, place, desiredPlace, effect, offset) {
   var tipWidth = node.clientWidth;
   var tipHeight = node.clientHeight;
 
@@ -2347,6 +2324,31 @@ exports.default = function (e, target, node, place, effect, offset) {
       isNewState: true,
       newState: { place: outsideBottomResult.newPlace }
     };
+  }
+
+  // Change back to original place if possible
+  if (place !== desiredPlace) {
+    if (desiredPlace === 'top' && !outsideTopResult.result) {
+      return {
+        isNewState: true,
+        newState: { place: 'top' }
+      };
+    } else if (desiredPlace === 'left' && !outsideLeftResult.result) {
+      return {
+        isNewState: true,
+        newState: { place: 'left' }
+      };
+    } else if (desiredPlace === 'right' && !outsideRightResult.result) {
+      return {
+        isNewState: true,
+        newState: { place: 'right' }
+      };
+    } else if (desiredPlace === 'bottom' && !outsideBottomResult.result) {
+      return {
+        isNewState: true,
+        newState: { place: 'bottom' }
+      };
+    }
   }
 
   // Return tooltip offset position

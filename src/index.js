@@ -1,6 +1,6 @@
 'use strict'
 
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import classname from 'classnames'
@@ -28,7 +28,7 @@ import cssStyle from './style'
 @isCapture
 @getEffect
 @trackRemoval
-class ReactTooltip extends Component {
+class ReactTooltip extends React.Component {
 
   static propTypes = {
     children: PropTypes.any,
@@ -67,6 +67,8 @@ class ReactTooltip extends Component {
 
   static supportedWrappers = ['div', 'span'];
 
+  static displayName = 'ReactTooltip';
+
   constructor (props) {
     super(props)
     this.state = {
@@ -75,7 +77,6 @@ class ReactTooltip extends Component {
       effect: 'float', // float or fixed
       show: false,
       border: false,
-      placeholder: '',
       offset: {},
       extraClass: '',
       html: false,
@@ -87,13 +88,16 @@ class ReactTooltip extends Component {
       currentTarget: null, // Current target of mouse event
       ariaProps: parseAria(props), // aria- and role attributes
       isEmptyTip: false,
-      disable: false
+      disable: false,
+      originTooltip: null,
+      isMultiline: false
     }
 
     this.bind([
       'showTooltip',
       'updateTooltip',
       'hideTooltip',
+      'getTooltipContent',
       'globalRebuild',
       'globalShow',
       'globalHide',
@@ -226,23 +230,10 @@ class ReactTooltip extends Component {
     target.removeEventListener('mouseleave', this.hideTooltip, isCaptureMode)
   }
 
-  /**
-   * When mouse enter, show the tooltip
-   */
-  showTooltip (e, isGlobalCall) {
-    if (isGlobalCall) {
-      // Don't trigger other elements belongs to other ReactTooltip
-      const targetArray = this.getTargetArray(this.props.id)
-      const isMyElement = targetArray.some(ele => ele === e.currentTarget)
-      if (!isMyElement || this.state.show) return
-    }
-    // Get the tooltip content
-    // calculate in this phrase so that tip width height can be detected
-    const {children, multiline, getContent} = this.props
-    const originTooltip = e.currentTarget.getAttribute('data-tip')
-    const isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false
+  getTooltipContent () {
+    const {getContent, children} = this.props
 
-    // Generate tootlip content
+    // Generate tooltip content
     let content
     if (getContent) {
       if (Array.isArray(getContent)) {
@@ -251,8 +242,29 @@ class ReactTooltip extends Component {
         content = getContent()
       }
     }
-    const placeholder = getTipContent(originTooltip, children, content, isMultiline)
-    const isEmptyTip = typeof placeholder === 'string' && placeholder === '' || placeholder === null
+
+    return getTipContent(this.state.originTooltip, children, content, this.state.isMultiline)
+  }
+
+  isEmptyTip (placeholder) {
+    return typeof placeholder === 'string' && placeholder === '' || placeholder === null
+  }
+
+  /**
+   * When mouse enter, show the tooltip
+   */
+  showTooltip (e, isGlobalCall) {
+    if (isGlobalCall) {
+      // Don't trigger other elements belongs to other ReactTooltip
+      const targetArray = this.getTargetArray(this.props.id)
+      const isMyElement = targetArray.some(ele => ele === e.currentTarget)
+      if (!isMyElement) return
+    }
+    // Get the tooltip content
+    // calculate in this phrase so that tip width height can be detected
+    const {multiline, getContent} = this.props
+    const originTooltip = e.currentTarget.getAttribute('data-tip')
+    const isMultiline = e.currentTarget.getAttribute('data-multiline') || multiline || false
 
     // If it is focus event or called by ReactTooltip.show, switch to `solid` effect
     const switchToSolid = e instanceof window.FocusEvent || isGlobalCall
@@ -269,8 +281,9 @@ class ReactTooltip extends Component {
     this.clearTimer()
 
     this.setState({
-      placeholder,
-      isEmptyTip,
+      originTooltip: originTooltip,
+      isMultiline: isMultiline,
+      desiredPlace: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
       place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
       type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
       effect: switchToSolid && 'solid' || this.getEffect(e.currentTarget),
@@ -295,12 +308,12 @@ class ReactTooltip extends Component {
         this.intervalUpdateContent = setInterval(() => {
           if (this.mount) {
             const {getContent} = this.props
-            const placeholder = getTipContent(originTooltip, getContent[0](), isMultiline)
-            const isEmptyTip = typeof placeholder === 'string' && placeholder === ''
+            const placeholder = getTipContent(originTooltip, '', getContent[0](), isMultiline)
+            const isEmptyTip = this.isEmptyTip(placeholder)
             this.setState({
-              placeholder,
               isEmptyTip
             })
+            this.updatePosition()
           }
         }, getContent[1])
       }
@@ -311,13 +324,13 @@ class ReactTooltip extends Component {
    * When mouse hover, updatetooltip
    */
   updateTooltip (e) {
-    const {delayShow, show, isEmptyTip, disable} = this.state
+    const {delayShow, show, disable} = this.state
     const {afterShow} = this.props
-    let {placeholder} = this.state
+    const placeholder = this.getTooltipContent()
     const delayTime = show ? 0 : parseInt(delayShow, 10)
     const eventTarget = e.currentTarget
 
-    if (isEmptyTip || disable) return // if the tooltip is empty, disable the tooltip
+    if (this.isEmptyTip(placeholder) || disable) return // if the tooltip is empty, disable the tooltip
     const updateState = () => {
       if (Array.isArray(placeholder) && placeholder.length > 0 || placeholder) {
         const isInvisible = !this.state.show
@@ -344,10 +357,11 @@ class ReactTooltip extends Component {
    * When mouse leave, hide tooltip
    */
   hideTooltip (e, hasTarget) {
-    const {delayHide, isEmptyTip, disable} = this.state
+    const {delayHide, disable} = this.state
     const {afterHide} = this.props
+    const placeholder = this.getTooltipContent()
     if (!this.mount) return
-    if (isEmptyTip || disable) return // if the tooltip is empty, disable the tooltip
+    if (this.isEmptyTip(placeholder) || disable) return // if the tooltip is empty, disable the tooltip
     if (hasTarget) {
       // Don't trigger other elements belongs to other ReactTooltip
       const targetArray = this.getTargetArray(this.props.id)
@@ -387,9 +401,9 @@ class ReactTooltip extends Component {
 
   // Calculation the position
   updatePosition () {
-    const {currentEvent, currentTarget, place, effect, offset} = this.state
+    const {currentEvent, currentTarget, place, desiredPlace, effect, offset} = this.state
     const node = ReactDOM.findDOMNode(this)
-    const result = getPosition(currentEvent, currentTarget, node, place, effect, offset)
+    const result = getPosition(currentEvent, currentTarget, node, place, desiredPlace, effect, offset)
 
     if (result.isNewState) {
       // Switch to reverse placement
@@ -407,11 +421,12 @@ class ReactTooltip extends Component {
    * in this way we can insert default css
    */
   setStyleHeader () {
-    if (!document.getElementsByTagName('head')[0].querySelector('style[id="react-tooltip"]')) {
+    const head = document.getElementsByTagName('head')[0]
+    if (!head.querySelector('style[id="react-tooltip"]')) {
       let tag = document.createElement('style')
       tag.id = 'react-tooltip'
       tag.innerHTML = cssStyle
-      document.getElementsByTagName('head')[0].appendChild(tag)
+      head.insertBefore(tag, head.firstChild)
     }
   }
 
@@ -425,7 +440,9 @@ class ReactTooltip extends Component {
   }
 
   render () {
-    const {placeholder, extraClass, html, ariaProps, disable, isEmptyTip} = this.state
+    const {extraClass, html, ariaProps, disable} = this.state
+    const placeholder = this.getTooltipContent()
+    const isEmptyTip = this.isEmptyTip(placeholder)
     let tooltipClass = classname(
       '__react_component_tooltip',
       {'show': this.state.show && !disable && !isEmptyTip},
@@ -450,6 +467,7 @@ class ReactTooltip extends Component {
     if (html) {
       return (
         <Wrapper className={`${tooltipClass} ${extraClass}`}
+                 id={this.props.id}
                  {...ariaProps}
                  data-id='tooltip'
                  dangerouslySetInnerHTML={{__html: placeholder}}/>
@@ -457,6 +475,7 @@ class ReactTooltip extends Component {
     } else {
       return (
         <Wrapper className={`${tooltipClass} ${extraClass}`}
+                 id={this.props.id}
                  {...ariaProps}
                  data-id='tooltip'>{placeholder}</Wrapper>
       )

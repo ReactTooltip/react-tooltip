@@ -1,10 +1,10 @@
 'use strict'
 
-import React, { Component } from 'react'
-import {render, findDOMNode} from 'react-dom'
+import React from 'react'
+import ReactDOM from 'react-dom'
 import ReactTooltip from '../../src'
 
-class Test extends Component {
+class Test extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -157,8 +157,8 @@ class Test extends Component {
                 <ReactTooltip id='custom-off-event'/>
                 {/*
                   <div>
-                    <button onClick={() => { ReactTooltip.show(findDOMNode(this.refs.target)) }}>Show toolip</button>
-                    <button onClick={() => { ReactTooltip.hide(findDOMNode(this.refs.target)) }}>Hide toolip</button>
+                    <button onClick={() => { ReactTooltip.show(ReactDOM.findDOMNode(this.refs.target)) }}>Show toolip</button>
+                    <button onClick={() => { ReactTooltip.hide(ReactDOM.findDOMNode(this.refs.target)) }}>Hide toolip</button>
                   </div>
                 */}
               </div>
@@ -231,7 +231,7 @@ class Test extends Component {
               <div className="side">
                 <a data-for='overTime' data-tip>=( •̀д•́)</a>
                 <ReactTooltip id='overTime'
-                  getContent={[() => {return new Date().toISOString()}, 1000]}/>
+                  getContent={[() => {return 'Random length content'.slice(0, Math.floor(Math.random() * 21) + 1)}, 1000]}/>
               </div>
             </div>
             <br />
@@ -241,8 +241,43 @@ class Test extends Component {
                 "<ReactTooltip id='getContent' getContent={() => Math.floor(Math.random() * 100)} />"}</p>
               </div>
               <div>
-                <p>{"<a data-for='overTime' data-tip>=( •̀д•́)</a>\n" +
-                "<ReactTooltip id='overTime' getContent={[() => {return new Date().toISOString()}, 1000]}/>"}</p>
+                <p>{"<a data-for='overTime' data-tip>=( •̀д•́)</a>\naaaa" +
+                "<ReactTooltip id='overTime' getContent={[() => {\n" +
+                " return 'Random length content'.slice(0, Math.floor(Math.random() * 21) + 1)\n" +
+                "}, 1000]}/>"}</p>
+              </div>
+            </pre>
+          </div>
+          <div className="section">
+            <h4 className='title'>Test Scrolling</h4>
+            <p className="sub-title"></p>
+            <div className="example-jsx"  style={{ height: '200px' }}>
+              <div className="side" style={{ overflow: 'auto', height: '200px' }}>
+                <div data-for='scrollContent' data-tip data-iscapture='true' style={{ width: '5000px', height: '5000px' }}>
+                  Scroll me with the mouse wheel.<br/>
+                  The tootlip will hide.<br/>
+                  Make sure you set data-iscapture="true"
+                </div>
+                <ReactTooltip id='scrollContent' getContent={() => Math.floor(Math.random() * 100)}/>
+              </div>
+              <div className="side" style={{ overflow: 'auto', height: '200px' }}>
+                <div data-for='scrollTime' data-tip data-iscapture='true' data-scroll-hide='false' style={{ width: '5000px', height: '5000px' }}>
+                  Scroll me with the mouse wheel.<br/>
+                  The tootlip will stay visible.
+                </div>
+                <ReactTooltip id='scrollTime'
+                  getContent={[() => {return new Date().toISOString()}, 1000]}/>
+              </div>
+            </div>
+            <br />
+            <pre className='example-pre'>
+              <div>
+                <p>{"<div data-for='scrollContent' data-tip data-iscapture='true'\n style={{ width: '5000px', height: '5000px' }}>...</div>\n" +
+                "<ReactTooltip id='scrollContent' getContent={() => Math.floor(Math.random() * 100)}/>"}</p>
+              </div>
+              <div>
+                <p>{"<div data-for='scrollTime' data-tip data-iscapture='true' data-scroll-hide='false'\n style={{ width: '5000px', height: '5000px' }}>...</div>\n" +
+                "<ReactTooltip id='scrollTime' getContent={[() => {return new Date().toISOString()}, 1000]}/>"}</p>
               </div>
             </pre>
           </div>
@@ -252,4 +287,4 @@ class Test extends Component {
   }
 }
 
-render(<Test />, document.getElementById('main'))
+ReactDOM.render(<Test />, document.getElementById('main'))
