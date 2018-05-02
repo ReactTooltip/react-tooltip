@@ -8,6 +8,7 @@
     "start": "make dev",
     "build": "make deploy",
     "deploy": "make deploy",
+    "gh-pages": "gh-pages -d example",
     "github-changes": "github-changes -o wwayne -r react-tooltip -a --only-pulls --use-commit-body",
     "commit": "git cz",
     "semantic-release": "semantic-release"
@@ -77,6 +78,7 @@
     "concurrently": "^2.1.0",
     "enzyme": "^2.3.0",
     "enzyme-adapter-react-16": "^1.0.1",
+    "gh-pages": "1.1.0",
     "github-changes": "^1.1.2",
     "http-server": "^0.11.1",
     "jsdom": "^9.2.1",
