@@ -1835,7 +1835,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
         var isMyElement = targetArray.some(function (ele) {
           return ele === e.currentTarget;
         });
-        if (!isMyElement || this.state.show) return;
+        if (!isMyElement) return;
       }
       // Get the tooltip content
       // calculate in this phrase so that tip width height can be detected
@@ -1888,6 +1888,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
               _this5.setState({
                 isEmptyTip: isEmptyTip
               });
+              _this5.updatePosition();
             }
           }, getContent[1]);
         }
@@ -2172,14 +2173,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (e, target, node, place, desiredPlace, effect, offset) {
-  var tipWidth = node.clientWidth;
-  var tipHeight = node.clientHeight;
+  var _getDimensions = getDimensions(node),
+      tipWidth = _getDimensions.width,
+      tipHeight = _getDimensions.height;
+
+  var _getDimensions2 = getDimensions(target),
+      targetWidth = _getDimensions2.width,
+      targetHeight = _getDimensions2.height;
 
   var _getCurrentOffset = getCurrentOffset(e, target, effect),
       mouseX = _getCurrentOffset.mouseX,
       mouseY = _getCurrentOffset.mouseY;
 
-  var defaultOffset = getDefaultPosition(effect, target.clientWidth, target.clientHeight, tipWidth, tipHeight);
+  var defaultOffset = getDefaultPosition(effect, targetWidth, targetHeight, tipWidth, tipHeight);
 
   var _calculateOffset = calculateOffset(offset),
       extraOffset_X = _calculateOffset.extraOffset_X,
@@ -2361,28 +2367,18 @@ exports.default = function (e, target, node, place, desiredPlace, effect, offset
   };
 };
 
-// Get current mouse offset
-var getCurrentOffset = function getCurrentOffset(e, currentTarget, effect) {
-  var boundingClientRect = currentTarget.getBoundingClientRect();
-  var targetTop = boundingClientRect.top;
-  var targetLeft = boundingClientRect.left;
-  var targetWidth = currentTarget.clientWidth;
-  var targetHeight = currentTarget.clientHeight;
+var getDimensions = function getDimensions(node) {
+  var _node$getBoundingClie = node.getBoundingClientRect(),
+      height = _node$getBoundingClie.height,
+      width = _node$getBoundingClie.width;
 
-  if (effect === 'float') {
-    return {
-      mouseX: e.clientX,
-      mouseY: e.clientY
-    };
-  }
   return {
-    mouseX: targetLeft + targetWidth / 2,
-    mouseY: targetTop + targetHeight / 2
+    height: parseInt(height, 10),
+    width: parseInt(width, 10)
   };
 };
 
-// List all possibility of tooltip final offset
-// This is useful in judging if it is necessary for tooltip to switch position when out of window
+// Get current mouse offset
 /**
  * Calculate the position of tooltip
  *
@@ -2399,6 +2395,29 @@ var getCurrentOffset = function getCurrentOffset(e, currentTarget, effect) {
  * - `newState` {Object}
  * - `position` {OBject} {left: {Number}, top: {Number}}
  */
+var getCurrentOffset = function getCurrentOffset(e, currentTarget, effect) {
+  var boundingClientRect = currentTarget.getBoundingClientRect();
+  var targetTop = boundingClientRect.top;
+  var targetLeft = boundingClientRect.left;
+
+  var _getDimensions3 = getDimensions(currentTarget),
+      targetWidth = _getDimensions3.width,
+      targetHeight = _getDimensions3.height;
+
+  if (effect === 'float') {
+    return {
+      mouseX: e.clientX,
+      mouseY: e.clientY
+    };
+  }
+  return {
+    mouseX: targetLeft + targetWidth / 2,
+    mouseY: targetTop + targetHeight / 2
+  };
+};
+
+// List all possibility of tooltip final offset
+// This is useful in judging if it is necessary for tooltip to switch position when out of window
 var getDefaultPosition = function getDefaultPosition(effect, targetWidth, targetHeight, tipWidth, tipHeight) {
   var top = void 0;
   var right = void 0;
