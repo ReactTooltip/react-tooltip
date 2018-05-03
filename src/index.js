@@ -287,7 +287,7 @@ class Test extends React.Component {
             <div className="example-jsx">
               <div className="side">
                 <svg data-tip="=( •̀д•́)" data-for="svgTooltip" width="50" height="50">
-                  <circle cx="25" cy="25" r="22" fill="#fff" stroke="#000" stroke-width="4"/>
+                  <circle cx="25" cy="25" r="22" fill="#fff" stroke="#000" strokeWidth="4"/>
                 </svg>
                 <ReactTooltip id='svgTooltip'/>
               </div>
@@ -296,7 +296,7 @@ class Test extends React.Component {
             <pre className='example-pre'>
                <div>
                  <p>{"<svg data-tip='=( •̀д•́)' data-for='svgTooltip' width='50' height='50'>\n" +
-                 "  <circle cx='25' cy='25' r='22' fill='#fff' stroke='#000' stroke-width='8'/>\n" +
+                 "  <circle cx='25' cy='25' r='22' fill='#fff' stroke='#000' strokeWidth='8'/>\n" +
                  "</svg>\n" +
                  "<ReactTooltip id='svgTooltip' />"}</p>
                </div>
