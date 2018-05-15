@@ -249,6 +249,27 @@ class Test extends React.Component {
             </pre>
           </div>
           <div className="section">
+            <h4 className='title'>Compute or enrich tip content</h4>
+            <p className="sub-title"></p>
+            <div className="example-jsx">
+              <div className="side">
+                <a data-for='enrich' data-tip='sooooo cute'>(❂‿❂)</a>
+              </div>
+              <div className="side">
+                <a data-for='enrich' data-tip='really high'>(❂‿❂)</a>
+              </div>
+              <ReactTooltip id='enrich' getContent={(dataTip) => `This little buddy is ${dataTip}`}/>
+            </div>
+            <br />
+            <pre className='example-pre'>
+              <div>
+                <p>{"<a data-for='enrich' data-tip='sooooo cute'>(❂‿❂)</a>\n" +
+                "<a data-for='enrich' data-tip='really high'>(❂‿❂)</a>\n" + 
+                "<ReactTooltip id='enrich' getContent={(dataTip) => `This little buddy is ${dataTip}`}/>"}</p>
+              </div>
+            </pre>
+          </div>
+          <div className="section">
             <h4 className='title'>Test Scrolling</h4>
             <p className="sub-title"></p>
             <div className="example-jsx"  style={{ height: '200px' }}>

@@ -237,9 +237,9 @@ class ReactTooltip extends React.Component {
     let content
     if (getContent) {
       if (Array.isArray(getContent)) {
-        content = getContent[0] && getContent[0]()
+        content = getContent[0] && getContent[0](this.state.originTooltip)
       } else {
-        content = getContent()
+        content = getContent(this.state.originTooltip)
       }
     }
 
