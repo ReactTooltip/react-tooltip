@@ -33,7 +33,27 @@ const setUntargetItems = function (currentTarget, targetArray) {
   }
 }
 
-let customListener
+const customListeners = {
+  registry: new WeakMap(),
+  set (target, event, listener) {
+    if (this.registry.has(target)) {
+      const map = this.registry.get(target)
+      map[event] = listener
+      return this.registry
+    }
+
+    return this.registry.set(target, { [event]: listener })
+  },
+
+  get (target, event) {
+    const map = this.registry.get(target)
+    if (map !== undefined) {
+      return map[event]
+    }
+
+    return void 0
+  }
+}
 
 export default function (target) {
   target.prototype.isCustomEvent = function (ele) {
@@ -48,8 +68,9 @@ export default function (target) {
     const dataEventOff = ele.getAttribute('data-event-off') || eventOff
 
     dataEvent.split(' ').forEach(event => {
-      ele.removeEventListener(event, customListener)
-      customListener = checkStatus.bind(this, dataEventOff)
+      ele.removeEventListener(event, customListeners.get(ele, event))
+      const customListener = checkStatus.bind(this, dataEventOff)
+      customListeners.set(ele, event, customListener)
       ele.addEventListener(event, customListener, false)
     })
     if (dataEventOff) {
@@ -66,7 +87,7 @@ export default function (target) {
     const dataEvent = event || ele.getAttribute('data-event')
     const dataEventOff = eventOff || ele.getAttribute('data-event-off')
 
-    ele.removeEventListener(dataEvent, customListener)
+    ele.removeEventListener(dataEvent, customListeners.get(ele, event))
     if (dataEventOff) ele.removeEventListener(dataEventOff, this.hideTooltip)
   }
 }
