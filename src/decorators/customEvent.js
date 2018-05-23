@@ -34,24 +34,23 @@ const setUntargetItems = function (currentTarget, targetArray) {
 }
 
 const customListeners = {
-  registry: new WeakMap(),
+  id: '9b69f92e-d3fe-498b-b1b4-c5e63a51b0cf',
   set (target, event, listener) {
-    if (this.registry.has(target)) {
-      const map = this.registry.get(target)
+    if (this.id in target) {
+      const map = target[this.id]
       map[event] = listener
-      return this.registry
+    } else {
+      Object.defineProperty(target, this.id, {
+        configurable: true,
+        value: { [event]: listener }
+      })
     }
-
-    return this.registry.set(target, { [event]: listener })
   },
-
   get (target, event) {
-    const map = this.registry.get(target)
+    const map = target[this.id]
     if (map !== undefined) {
       return map[event]
     }
-
-    return void 0
   }
 }
 

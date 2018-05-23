@@ -1306,23 +1306,23 @@ var setUntargetItems = function setUntargetItems(currentTarget, targetArray) {
 };
 
 var customListeners = {
-  registry: new WeakMap(),
+  id: '9b69f92e-d3fe-498b-b1b4-c5e63a51b0cf',
   set: function set(target, event, listener) {
-    if (this.registry.has(target)) {
-      var map = this.registry.get(target);
+    if (this.id in target) {
+      var map = target[this.id];
       map[event] = listener;
-      return this.registry;
+    } else {
+      Object.defineProperty(target, this.id, {
+        configurable: true,
+        value: _defineProperty({}, event, listener)
+      });
     }
-
-    return this.registry.set(target, _defineProperty({}, event, listener));
   },
   get: function get(target, event) {
-    var map = this.registry.get(target);
+    var map = target[this.id];
     if (map !== undefined) {
       return map[event];
     }
-
-    return void 0;
   }
 };
 
