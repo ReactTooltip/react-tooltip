@@ -1240,8 +1240,9 @@ exports.default = function (target) {
     var dataEventOff = ele.getAttribute('data-event-off') || eventOff;
 
     dataEvent.split(' ').forEach(function (event) {
-      ele.removeEventListener(event, customListener);
-      customListener = checkStatus.bind(_this, dataEventOff);
+      ele.removeEventListener(event, customListeners.get(ele, event));
+      var customListener = checkStatus.bind(_this, dataEventOff);
+      customListeners.set(ele, event, customListener);
       ele.addEventListener(event, customListener, false);
     });
     if (dataEventOff) {
@@ -1261,10 +1262,12 @@ exports.default = function (target) {
     var dataEvent = event || ele.getAttribute('data-event');
     var dataEventOff = eventOff || ele.getAttribute('data-event-off');
 
-    ele.removeEventListener(dataEvent, customListener);
+    ele.removeEventListener(dataEvent, customListeners.get(ele, event));
     if (dataEventOff) ele.removeEventListener(dataEventOff, this.hideTooltip);
   };
 };
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 /**
  * Custom events to control showing and hiding of tooltip
@@ -1302,7 +1305,26 @@ var setUntargetItems = function setUntargetItems(currentTarget, targetArray) {
   }
 };
 
-var customListener = void 0;
+var customListeners = {
+  id: '9b69f92e-d3fe-498b-b1b4-c5e63a51b0cf',
+  set: function set(target, event, listener) {
+    if (this.id in target) {
+      var map = target[this.id];
+      map[event] = listener;
+    } else {
+      Object.defineProperty(target, this.id, {
+        configurable: true,
+        value: _defineProperty({}, event, listener)
+      });
+    }
+  },
+  get: function get(target, event) {
+    var map = target[this.id];
+    if (map !== undefined) {
+      return map[event];
+    }
+  }
+};
 
 },{}],14:[function(require,module,exports){
 'use strict';
@@ -1806,9 +1828,9 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var content = void 0;
       if (getContent) {
         if (Array.isArray(getContent)) {
-          content = getContent[0] && getContent[0]();
+          content = getContent[0] && getContent[0](this.state.originTooltip);
         } else {
-          content = getContent();
+          content = getContent(this.state.originTooltip);
         }
       }
 
