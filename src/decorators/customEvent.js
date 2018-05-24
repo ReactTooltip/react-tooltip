@@ -40,6 +40,7 @@ const customListeners = {
       const map = target[this.id]
       map[event] = listener
     } else {
+      // this is workaround for WeakMap, which is not supported in older browsers, such as IE
       Object.defineProperty(target, this.id, {
         configurable: true,
         value: { [event]: listener }
