@@ -1349,9 +1349,7 @@ Object.defineProperty(exports, "__esModule", {
 
 exports.default = function (target) {
   target.prototype.isCapture = function (currentTarget) {
-    if (!currentTarget) return false;
-    var dataIsCapture = currentTarget.getAttribute('data-iscapture');
-    return dataIsCapture && dataIsCapture === 'true' || this.props.isCapture || false;
+    return currentTarget && currentTarget.getAttribute('data-iscapture') === 'true' || this.props.isCapture || false;
   };
 };
 
