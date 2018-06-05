@@ -1349,8 +1349,7 @@ Object.defineProperty(exports, "__esModule", {
 
 exports.default = function (target) {
   target.prototype.isCapture = function (currentTarget) {
-    var dataIsCapture = currentTarget.getAttribute('data-iscapture');
-    return dataIsCapture && dataIsCapture === 'true' || this.props.isCapture || false;
+    return currentTarget && currentTarget.getAttribute('data-iscapture') === 'true' || this.props.isCapture || false;
   };
 };
 
@@ -1895,9 +1894,10 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
         delayHide: e.currentTarget.getAttribute('data-delay-hide') || this.props.delayHide || 0,
         border: e.currentTarget.getAttribute('data-border') ? e.currentTarget.getAttribute('data-border') === 'true' : this.props.border || false,
         extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || this.props.className || '',
-        disable: e.currentTarget.getAttribute('data-tip-disable') ? e.currentTarget.getAttribute('data-tip-disable') === 'true' : this.props.disable || false
+        disable: e.currentTarget.getAttribute('data-tip-disable') ? e.currentTarget.getAttribute('data-tip-disable') === 'true' : this.props.disable || false,
+        currentTarget: e.currentTarget
       }, function () {
-        if (scrollHide) _this5.addScrollListener(e);
+        if (scrollHide) _this5.addScrollListener(_this5.state.currentTarget);
         _this5.updateTooltip(e);
 
         if (getContent && Array.isArray(getContent)) {
@@ -1934,7 +1934,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       var placeholder = this.getTooltipContent();
       var delayTime = show ? 0 : parseInt(delayShow, 10);
-      var eventTarget = e.currentTarget;
+      var eventTarget = e.currentTarget || e.target;
 
       if (this.isEmptyTip(placeholder) || disable) return; // if the tooltip is empty, disable the tooltip
       var updateState = function updateState() {
@@ -2009,8 +2009,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
   }, {
     key: 'addScrollListener',
-    value: function addScrollListener(e) {
-      var isCaptureMode = this.isCapture(e.currentTarget);
+    value: function addScrollListener(currentTarget) {
+      var isCaptureMode = this.isCapture(currentTarget);
       window.addEventListener('scroll', this.hideTooltip, isCaptureMode);
     }
   }, {

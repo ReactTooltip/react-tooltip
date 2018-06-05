@@ -299,9 +299,10 @@ class ReactTooltip extends React.Component {
       extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || this.props.className || '',
       disable: e.currentTarget.getAttribute('data-tip-disable')
         ? e.currentTarget.getAttribute('data-tip-disable') === 'true'
-        : (this.props.disable || false)
+        : (this.props.disable || false),
+      currentTarget: e.currentTarget
     }, () => {
-      if (scrollHide) this.addScrollListener(e)
+      if (scrollHide) this.addScrollListener(this.state.currentTarget)
       this.updateTooltip(e)
 
       if (getContent && Array.isArray(getContent)) {
@@ -328,7 +329,7 @@ class ReactTooltip extends React.Component {
     const {afterShow} = this.props
     const placeholder = this.getTooltipContent()
     const delayTime = show ? 0 : parseInt(delayShow, 10)
-    const eventTarget = e.currentTarget
+    const eventTarget = e.currentTarget || e.target
 
     if (this.isEmptyTip(placeholder) || disable) return // if the tooltip is empty, disable the tooltip
     const updateState = () => {
@@ -390,8 +391,8 @@ class ReactTooltip extends React.Component {
    * Add scroll eventlistener when tooltip show
    * automatically hide the tooltip when scrolling
    */
-  addScrollListener (e) {
-    const isCaptureMode = this.isCapture(e.currentTarget)
+  addScrollListener (currentTarget) {
+    const isCaptureMode = this.isCapture(currentTarget)
     window.addEventListener('scroll', this.hideTooltip, isCaptureMode)
   }
 
