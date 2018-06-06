@@ -53,7 +53,7 @@ export default function (e, target, node, place, desiredPlace, effect, offset) {
   }
 
   //
-  // Functions to test whether the tooltip's sides are inside 
+  // Functions to test whether the tooltip's sides are inside
   // the client window for a given orientation p
   //
   //  _____________
@@ -93,9 +93,8 @@ export default function (e, target, node, place, desiredPlace, effect, offset) {
     isNewState = true
     newPlace = insideList[0]
   }
-  
-  if (isNewState)
-  {
+
+  if (isNewState) {
     return {
       isNewState: true,
       newState: {place: newPlace}
