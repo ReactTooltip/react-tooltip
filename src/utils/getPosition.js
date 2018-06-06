@@ -52,139 +52,56 @@ export default function (e, target, node, place, desiredPlace, effect, offset) {
     return mouseY + offset_Y + extraOffset_Y
   }
 
-  // Judge if the tooltip has over the window(screen)
-  const outsideVertical = () => {
-    let result = false
-    let newPlace
-    if (getTipOffsetTop('left') < 0 &&
-      getTipOffsetBottom('left') <= windowHeight &&
-      getTipOffsetBottom('bottom') <= windowHeight) {
-      result = true
-      newPlace = 'bottom'
-    } else if (getTipOffsetBottom('left') > windowHeight &&
-      getTipOffsetTop('left') >= 0 &&
-      getTipOffsetTop('top') >= 0) {
-      result = true
-      newPlace = 'top'
+  //
+  // Functions to test whether the tooltip's sides are inside 
+  // the client window for a given orientation p
+  //
+  //  _____________
+  // |             | <-- Right side
+  // | p = 'left'  |\
+  // |             |/  |\
+  // |_____________|   |_\  <-- Mouse
+  //      / \           |
+  //       |
+  //       |
+  //  Bottom side
+  //
+  let outsideLeft = p => getTipOffsetLeft(p) < 0
+  let outsideRight = p => getTipOffsetRight(p) > windowWidth
+  let outsideTop = p => getTipOffsetTop(p) < 0
+  let outsideBottom = p => getTipOffsetBottom(p) > windowHeight
+
+  // Check whether the tooltip with orientation p is completely inside the client window
+  let outside = p => outsideLeft(p) || outsideRight(p) || outsideTop(p) || outsideBottom(p)
+  let inside = p => !outside(p)
+
+  let placesList = ['left', 'right', 'top', 'bottom']
+  let insideList = []
+  for (let i = 0; i < 4; i++) {
+    let p = placesList[i]
+    if (inside(p)) {
+      insideList.push(p)
     }
-    return {result, newPlace}
-  }
-  const outsideLeft = () => {
-    let {result, newPlace} = outsideVertical() // Deal with vertical as first priority
-    if (result && outsideHorizontal().result) {
-      return {result: false} // No need to change, if change to vertical will out of space
-    }
-    if (!result && getTipOffsetLeft('left') < 0 && getTipOffsetRight('right') <= windowWidth) {
-      result = true // If vertical ok, but let out of side and right won't out of side
-      newPlace = 'right'
-    }
-    return {result, newPlace}
-  }
-  const outsideRight = () => {
-    let {result, newPlace} = outsideVertical()
-    if (result && outsideHorizontal().result) {
-      return {result: false} // No need to change, if change to vertical will out of space
-    }
-    if (!result && getTipOffsetRight('right') > windowWidth && getTipOffsetLeft('left') >= 0) {
-      result = true
-      newPlace = 'left'
-    }
-    return {result, newPlace}
   }
 
-  const outsideHorizontal = () => {
-    let result = false
-    let newPlace
-    if (getTipOffsetLeft('top') < 0 &&
-      getTipOffsetRight('top') <= windowWidth &&
-      getTipOffsetRight('right') <= windowWidth) {
-      result = true
-      newPlace = 'right'
-    } else if (getTipOffsetRight('top') > windowWidth &&
-      getTipOffsetLeft('top') >= 0 &&
-      getTipOffsetLeft('left') >= 0) {
-      result = true
-      newPlace = 'left'
-    }
-    return {result, newPlace}
+  let isNewState = false
+  let newPlace
+  if (inside(desiredPlace) && desiredPlace !== place) {
+    isNewState = true
+    newPlace = desiredPlace
+  } else if (insideList.length > 0 && outside(desiredPlace) && outside(place)) {
+    isNewState = true
+    newPlace = insideList[0]
   }
-  const outsideTop = () => {
-    let {result, newPlace} = outsideHorizontal()
-    if (result && outsideVertical().result) {
-      return {result: false}
-    }
-    if (!result && getTipOffsetTop('top') < 0 && getTipOffsetBottom('bottom') <= windowHeight) {
-      result = true
-      newPlace = 'bottom'
-    }
-    return {result, newPlace}
-  }
-  const outsideBottom = () => {
-    let {result, newPlace} = outsideHorizontal()
-    if (result && outsideVertical().result) {
-      return {result: false}
-    }
-    if (!result && getTipOffsetBottom('bottom') > windowHeight && getTipOffsetTop('top') >= 0) {
-      result = true
-      newPlace = 'top'
-    }
-    return {result, newPlace}
-  }
-
-  // Return new state to change the placement to the reverse if possible
-  const outsideLeftResult = outsideLeft()
-  const outsideRightResult = outsideRight()
-  const outsideTopResult = outsideTop()
-  const outsideBottomResult = outsideBottom()
-
-  if (place === 'left' && outsideLeftResult.result) {
+  
+  if (isNewState)
+  {
     return {
       isNewState: true,
-      newState: {place: outsideLeftResult.newPlace}
-    }
-  } else if (place === 'right' && outsideRightResult.result) {
-    return {
-      isNewState: true,
-      newState: {place: outsideRightResult.newPlace}
-    }
-  } else if (place === 'top' && outsideTopResult.result) {
-    return {
-      isNewState: true,
-      newState: {place: outsideTopResult.newPlace}
-    }
-  } else if (place === 'bottom' && outsideBottomResult.result) {
-    return {
-      isNewState: true,
-      newState: {place: outsideBottomResult.newPlace}
+      newState: {place: newPlace}
     }
   }
 
-  // Change back to original place if possible
-  if (place !== desiredPlace) {
-    if (desiredPlace === 'top' && !outsideTopResult.result) {
-      return {
-        isNewState: true,
-        newState: {place: 'top'}
-      }
-    } else if (desiredPlace === 'left' && !outsideLeftResult.result) {
-      return {
-        isNewState: true,
-        newState: {place: 'left'}
-      }
-    } else if (desiredPlace === 'right' && !outsideRightResult.result) {
-      return {
-        isNewState: true,
-        newState: {place: 'right'}
-      }
-    } else if (desiredPlace === 'bottom' && !outsideBottomResult.result) {
-      return {
-        isNewState: true,
-        newState: {place: 'bottom'}
-      }
-    }
-  }
-
-  // Return tooltip offset position
   return {
     isNewState: false,
     position: {
