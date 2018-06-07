@@ -75,7 +75,7 @@ export default function (e, target, node, place, desiredPlace, effect, offset) {
   let outside = p => outsideLeft(p) || outsideRight(p) || outsideTop(p) || outsideBottom(p)
   let inside = p => !outside(p)
 
-  let placesList = ['left', 'right', 'top', 'bottom']
+  let placesList = ['top', 'bottom', 'left', 'right']
   let insideList = []
   for (let i = 0; i < 4; i++) {
     let p = placesList[i]
