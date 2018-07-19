@@ -180,7 +180,7 @@ class Test extends React.Component {
             <p className="sub-title"></p>
             <div className="example-jsx">
               <div className="side">
-                <a data-for='custom-class' data-tip='hover on me will keep the tootlip'>(･ω´･ )</a>
+                <a data-for='custom-class' data-tip='hover on me will keep the tooltip'>(･ω´･ )</a>
                 {/* <a data-for='custom-class' data-tip='' data-tip-disable='true'>empty testing</a> */}
                 <ReactTooltip id='custom-class' className='extraClass' delayHide={1000} effect='solid'/>
               </div>
@@ -192,7 +192,7 @@ class Test extends React.Component {
             <br />
             <pre className='example-pre'>
               <div>
-                <p>{"<a data-tip='hover on me will keep the tootlip'>(･ω´･ )́)</a>\n" +
+                <p>{"<a data-tip='hover on me will keep the tooltip'>(･ω´･ )́)</a>\n" +
                 "<ReactTooltip className='extraClass' delayHide={1000} effect='solid'/>\n" +
                 ".extraClass {\n" +
                   " font-size: 20px !important;\n" +
@@ -276,7 +276,7 @@ class Test extends React.Component {
               <div className="side" style={{ overflow: 'auto', height: '200px' }}>
                 <div data-for='scrollContent' data-tip data-iscapture='true' style={{ width: '5000px', height: '5000px' }}>
                   Scroll me with the mouse wheel.<br/>
-                  The tootlip will hide.<br/>
+                  The tooltip will hide.<br/>
                   Make sure you set data-iscapture="true"
                 </div>
                 <ReactTooltip id='scrollContent' getContent={() => Math.floor(Math.random() * 100)}/>
@@ -284,7 +284,7 @@ class Test extends React.Component {
               <div className="side" style={{ overflow: 'auto', height: '200px' }}>
                 <div data-for='scrollTime' data-tip data-iscapture='true' data-scroll-hide='false' style={{ width: '5000px', height: '5000px' }}>
                   Scroll me with the mouse wheel.<br/>
-                  The tootlip will stay visible.
+                  The tooltip will stay visible.
                 </div>
                 <ReactTooltip id='scrollTime'
                   getContent={[() => {return new Date().toISOString()}, 1000]}/>
