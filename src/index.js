@@ -280,14 +280,21 @@ class ReactTooltip extends React.Component {
     // To prevent previously created timers from triggering
     this.clearTimer()
 
+    // Make sure the correct place is set
+    let node = ReactDOM.findDOMNode(this)
+    let desiredPlace = e.currentTarget.getAttribute('data-place') || this.props.place || 'top'
+    let effect = switchToSolid && 'solid' || this.getEffect(e.currentTarget)
+    let offset = e.currentTarget.getAttribute('data-offset') || this.props.offset || {}
+    let result = getPosition(e, e.currentTarget, ReactDOM.findDOMNode(this), desiredPlace, desiredPlace, effect, offset)
+
     this.setState({
       originTooltip: originTooltip,
       isMultiline: isMultiline,
-      desiredPlace: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
-      place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
+      desiredPlace: desiredPlace,
+      place: result.isNewState ? result.newState.place : desiredPlace,
       type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
-      effect: switchToSolid && 'solid' || this.getEffect(e.currentTarget),
-      offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
+      effect: effect,
+      offset: offset,
       html: e.currentTarget.getAttribute('data-html')
         ? e.currentTarget.getAttribute('data-html') === 'true'
         : (this.props.html || false),
