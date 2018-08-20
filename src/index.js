@@ -281,7 +281,6 @@ class ReactTooltip extends React.Component {
     this.clearTimer()
 
     // Make sure the correct place is set
-    let node = ReactDOM.findDOMNode(this)
     let desiredPlace = e.currentTarget.getAttribute('data-place') || this.props.place || 'top'
     let effect = switchToSolid && 'solid' || this.getEffect(e.currentTarget)
     let offset = e.currentTarget.getAttribute('data-offset') || this.props.offset || {}
