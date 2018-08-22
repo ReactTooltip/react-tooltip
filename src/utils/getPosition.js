@@ -9,10 +9,10 @@
  * - `effect` {String} float / solid
  * - `offset` {Object} the offset to default position
  *
- * @return {Object
+ * @return {Object}
  * - `isNewState` {Bool} required
  * - `newState` {Object}
- * - `position` {OBject} {left: {Number}, top: {Number}}
+ * - `position` {Object} {left: {Number}, top: {Number}}
  */
 export default function (e, target, node, place, desiredPlace, effect, offset) {
   const {
