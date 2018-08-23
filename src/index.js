@@ -427,6 +427,11 @@ class ReactTooltip extends React.Component {
       let tag = document.createElement('style')
       tag.id = 'react-tooltip'
       tag.innerHTML = cssStyle
+      /* eslint-disable */
+      if (typeof __webpack_nonce__ !== 'undefined' && __webpack_nonce__) {
+        tag.setAttribute('nonce', __webpack_nonce__)
+      }
+      /* eslint-enable */
       head.insertBefore(tag, head.firstChild)
     }
   }
