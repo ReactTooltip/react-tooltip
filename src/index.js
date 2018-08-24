@@ -44,6 +44,7 @@ class ReactTooltip extends React.Component {
     id: PropTypes.string,
     html: PropTypes.bool,
     delayHide: PropTypes.number,
+    delayUpdate: PropTypes.number,
     delayShow: PropTypes.number,
     event: PropTypes.string,
     eventOff: PropTypes.string,
@@ -101,12 +102,14 @@ class ReactTooltip extends React.Component {
       'globalRebuild',
       'globalShow',
       'globalHide',
-      'onWindowResize'
+      'onWindowResize',
+      'mouseOnToolTip'
     ])
 
     this.mount = true
     this.delayShowLoop = null
     this.delayHideLoop = null
+    this.delayReshow = null
     this.intervalUpdateContent = null
   }
 
@@ -150,6 +153,22 @@ class ReactTooltip extends React.Component {
     this.unbindWindowEvents()
   }
 
+    /**
+     * Return if the mouse is on the tooltip.
+     * @returns {boolean} true - mouse is on the tooltip
+     */
+  mouseOnToolTip () {
+    const {show} = this.state
+
+    if (show && this.tooltipRef) {
+      /* old IE work around */
+      if (!this.tooltipRef.matches) {
+        this.tooltipRef.matches = this.tooltipRef.msMatchesSelector
+      }
+      return this.tooltipRef.matches(':hover')
+    }
+    return false
+  }
   /**
    * Pick out corresponded target elements
    */
@@ -280,56 +299,71 @@ class ReactTooltip extends React.Component {
     // To prevent previously created timers from triggering
     this.clearTimer()
 
-    this.setState({
-      originTooltip: originTooltip,
-      isMultiline: isMultiline,
-      desiredPlace: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
-      place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
-      type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
-      effect: switchToSolid && 'solid' || this.getEffect(e.currentTarget),
-      offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
-      html: e.currentTarget.getAttribute('data-html')
-        ? e.currentTarget.getAttribute('data-html') === 'true'
-        : (this.props.html || false),
-      delayShow: e.currentTarget.getAttribute('data-delay-show') || this.props.delayShow || 0,
-      delayHide: e.currentTarget.getAttribute('data-delay-hide') || this.props.delayHide || 0,
-      border: e.currentTarget.getAttribute('data-border')
-        ? e.currentTarget.getAttribute('data-border') === 'true'
-        : (this.props.border || false),
-      extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || this.props.className || '',
-      disable: e.currentTarget.getAttribute('data-tip-disable')
-        ? e.currentTarget.getAttribute('data-tip-disable') === 'true'
-        : (this.props.disable || false),
-      currentTarget: e.currentTarget
-    }, () => {
-      if (scrollHide) this.addScrollListener(this.state.currentTarget)
-      this.updateTooltip(e)
+    var target = e.currentTarget
 
-      if (getContent && Array.isArray(getContent)) {
-        this.intervalUpdateContent = setInterval(() => {
-          if (this.mount) {
-            const {getContent} = this.props
-            const placeholder = getTipContent(originTooltip, '', getContent[0](), isMultiline)
-            const isEmptyTip = this.isEmptyTip(placeholder)
-            this.setState({
-              isEmptyTip
-            })
-            this.updatePosition()
-          }
-        }, getContent[1])
-      }
-    })
+    var reshowDelay = this.state.show ? target.getAttribute('data-delay-update') || this.props.delayUpdate : 0
+
+    var self = this
+
+    var updateState = function updateState () {
+      self.setState({
+        originTooltip: originTooltip,
+        isMultiline: isMultiline,
+        desiredPlace: target.getAttribute('data-place') || self.props.place || 'top',
+        place: target.getAttribute('data-place') || self.props.place || 'top',
+        type: target.getAttribute('data-type') || self.props.type || 'dark',
+        effect: switchToSolid && 'solid' || self.getEffect(target),
+        offset: target.getAttribute('data-offset') || self.props.offset || {},
+        html: target.getAttribute('data-html') ? target.getAttribute('data-html') === 'true' : self.props.html || false,
+        delayShow: target.getAttribute('data-delay-show') || self.props.delayShow || 0,
+        delayHide: target.getAttribute('data-delay-hide') || self.props.delayHide || 0,
+        delayUpdate: target.getAttribute('data-delay-update') || self.props.delayUpdate || 0,
+        border: target.getAttribute('data-border') ? target.getAttribute('data-border') === 'true' : self.props.border || false,
+        extraClass: target.getAttribute('data-class') || self.props.class || self.props.className || '',
+        disable: target.getAttribute('data-tip-disable') ? target.getAttribute('data-tip-disable') === 'true' : self.props.disable || false,
+        currentTarget: target
+      }, () => {
+        if (scrollHide) self.addScrollListener(self.state.currentTarget)
+        self.updateTooltip(e)
+
+        if (getContent && Array.isArray(getContent)) {
+          this.intervalUpdateContent = setInterval(() => {
+            if (self.mount) {
+              const {getContent} = this.props
+              const placeholder = getTipContent(originTooltip, '', getContent[0](), isMultiline)
+              const isEmptyTip = this.isEmptyTip(placeholder)
+              self.setState({
+                isEmptyTip
+              })
+              self.updatePosition()
+            }
+          }, getContent[1])
+        }
+      })
+    }
+
+    // If there is no delay call immediately, don't allow events to get in first.
+    if (reshowDelay) {
+      this.delayReshow = setTimeout(updateState, reshowDelay)
+    } else {
+      updateState()
+    }
   }
 
   /**
    * When mouse hover, updatetooltip
    */
   updateTooltip (e) {
-    const {delayShow, show, disable} = this.state
+    const {delayShow, disable} = this.state
     const {afterShow} = this.props
     const placeholder = this.getTooltipContent()
-    const delayTime = show ? 0 : parseInt(delayShow, 10)
+    const delayTime = parseInt(delayShow, 10)
     const eventTarget = e.currentTarget || e.target
+
+    // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
+    if (this.mouseOnToolTip()) {
+      return
+    }
 
     if (this.isEmptyTip(placeholder) || disable) return // if the tooltip is empty, disable the tooltip
     const updateState = () => {
@@ -354,6 +388,25 @@ class ReactTooltip extends React.Component {
     }
   }
 
+  /*
+  * If we're mousing over the tooltip remove it when we leave.
+   */
+  listenForTooltipExit () {
+    const {show} = this.state
+
+    if (show && this.tooltipRef) {
+      this.tooltipRef.addEventListener('mouseleave', this.hideTooltip)
+    }
+  }
+
+  removeListenerForTooltipExit () {
+    const {show} = this.state
+
+    if (show && this.tooltipRef) {
+      this.tooltipRef.removeEventListener('mouseleave', this.hideTooltip)
+    }
+  }
+
   /**
    * When mouse leave, hide tooltip
    */
@@ -369,8 +422,16 @@ class ReactTooltip extends React.Component {
       const isMyElement = targetArray.some(ele => ele === e.currentTarget)
       if (!isMyElement || !this.state.show) return
     }
+
     const resetState = () => {
       const isVisible = this.state.show
+      // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
+      if (this.mouseOnToolTip()) {
+        this.listenForTooltipExit()
+        return
+      }
+      this.removeListenerForTooltipExit()
+
       this.setState({
         show: false
       }, () => {
@@ -437,6 +498,7 @@ class ReactTooltip extends React.Component {
   clearTimer () {
     clearTimeout(this.delayShowLoop)
     clearTimeout(this.delayHideLoop)
+    clearTimeout(this.delayReshow)
     clearInterval(this.intervalUpdateContent)
   }
 
@@ -457,7 +519,8 @@ class ReactTooltip extends React.Component {
       {'type-warning': this.state.type === 'warning'},
       {'type-error': this.state.type === 'error'},
       {'type-info': this.state.type === 'info'},
-      {'type-light': this.state.type === 'light'}
+      {'type-light': this.state.type === 'light'},
+      {'allow_hover': this.props.delayUpdate}
     )
 
     let Wrapper = this.props.wrapper
@@ -469,6 +532,7 @@ class ReactTooltip extends React.Component {
       return (
         <Wrapper className={`${tooltipClass} ${extraClass}`}
                  id={this.props.id}
+                 ref={ref => this.tooltipRef = ref}
                  {...ariaProps}
                  data-id='tooltip'
                  dangerouslySetInnerHTML={{__html: placeholder}}/>
@@ -478,6 +542,7 @@ class ReactTooltip extends React.Component {
         <Wrapper className={`${tooltipClass} ${extraClass}`}
                  id={this.props.id}
                  {...ariaProps}
+                 ref={ref => this.tooltipRef = ref}
                  data-id='tooltip'>{placeholder}</Wrapper>
       )
     }
