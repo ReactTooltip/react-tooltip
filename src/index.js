@@ -327,11 +327,11 @@ class ReactTooltip extends React.Component {
         self.updateTooltip(e)
 
         if (getContent && Array.isArray(getContent)) {
-          this.intervalUpdateContent = setInterval(() => {
+          self.intervalUpdateContent = setInterval(() => {
             if (self.mount) {
-              const {getContent} = this.props
+              const {getContent} = self.props
               const placeholder = getTipContent(originTooltip, '', getContent[0](), isMultiline)
-              const isEmptyTip = this.isEmptyTip(placeholder)
+              const isEmptyTip = self.isEmptyTip(placeholder)
               self.setState({
                 isEmptyTip
               })

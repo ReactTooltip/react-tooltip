@@ -1908,8 +1908,6 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var self = this;
 
       var updateState = function updateState() {
-        var _this5 = this;
-
         self.setState({
           originTooltip: originTooltip,
           isMultiline: isMultiline,
@@ -1931,12 +1929,12 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           self.updateTooltip(e);
 
           if (getContent && Array.isArray(getContent)) {
-            _this5.intervalUpdateContent = setInterval(function () {
+            self.intervalUpdateContent = setInterval(function () {
               if (self.mount) {
-                var _getContent = _this5.props.getContent;
+                var _getContent = self.props.getContent;
 
                 var placeholder = (0, _getTipContent2.default)(originTooltip, '', _getContent[0](), isMultiline);
-                var isEmptyTip = _this5.isEmptyTip(placeholder);
+                var isEmptyTip = self.isEmptyTip(placeholder);
                 self.setState({
                   isEmptyTip: isEmptyTip
                 });
@@ -1962,7 +1960,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'updateTooltip',
     value: function updateTooltip(e) {
-      var _this6 = this;
+      var _this5 = this;
 
       var _state = this.state,
           delayShow = _state.delayShow,
@@ -1981,13 +1979,13 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       if (this.isEmptyTip(placeholder) || disable) return; // if the tooltip is empty, disable the tooltip
       var updateState = function updateState() {
         if (Array.isArray(placeholder) && placeholder.length > 0 || placeholder) {
-          var isInvisible = !_this6.state.show;
-          _this6.setState({
+          var isInvisible = !_this5.state.show;
+          _this5.setState({
             currentEvent: e,
             currentTarget: eventTarget,
             show: true
           }, function () {
-            _this6.updatePosition();
+            _this5.updatePosition();
             if (isInvisible && afterShow) afterShow();
           });
         }
@@ -2033,7 +2031,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'hideTooltip',
     value: function hideTooltip(e, hasTarget) {
-      var _this7 = this;
+      var _this6 = this;
 
       var _state2 = this.state,
           delayHide = _state2.delayHide,
@@ -2053,18 +2051,18 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       }
 
       var resetState = function resetState() {
-        var isVisible = _this7.state.show;
+        var isVisible = _this6.state.show;
         // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
-        if (_this7.mouseOnToolTip()) {
-          _this7.listenForTooltipExit();
+        if (_this6.mouseOnToolTip()) {
+          _this6.listenForTooltipExit();
           return;
         }
-        _this7.removeListenerForTooltipExit();
+        _this6.removeListenerForTooltipExit();
 
-        _this7.setState({
+        _this6.setState({
           show: false
         }, function () {
-          _this7.removeScrollListener();
+          _this6.removeScrollListener();
           if (isVisible && afterHide) afterHide();
         });
       };
@@ -2099,7 +2097,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'updatePosition',
     value: function updatePosition() {
-      var _this8 = this;
+      var _this7 = this;
 
       var _state3 = this.state,
           currentEvent = _state3.currentEvent,
@@ -2115,7 +2113,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       if (result.isNewState) {
         // Switch to reverse placement
         return this.setState(result.newState, function () {
-          _this8.updatePosition();
+          _this7.updatePosition();
         });
       }
       // Set tooltip position
@@ -2155,7 +2153,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'render',
     value: function render() {
-      var _this9 = this;
+      var _this8 = this;
 
       var _state4 = this.state,
           extraClass = _state4.extraClass,
@@ -2176,7 +2174,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
         return _react2.default.createElement(Wrapper, _extends({ className: tooltipClass + ' ' + extraClass,
           id: this.props.id,
           ref: function ref(_ref) {
-            return _this9.tooltipRef = _ref;
+            return _this8.tooltipRef = _ref;
           }
         }, ariaProps, {
           'data-id': 'tooltip',
@@ -2188,7 +2186,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
             id: this.props.id
           }, ariaProps, {
             ref: function ref(_ref2) {
-              return _this9.tooltipRef = _ref2;
+              return _this8.tooltipRef = _ref2;
             },
             'data-id': 'tooltip' }),
           placeholder
