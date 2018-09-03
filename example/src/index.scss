@@ -157,6 +157,18 @@ html, body{
     height: 0;
     visibility: hidden;
   }
+  .block {
+    float: left;
+    $width: 55px;
+
+    a {
+      text-align: center;
+      width: $width;
+      height: $width;
+      border: 1px solid #999;
+      border-radius: 0px
+    }
+  }
   .side {
     width: 50%;
     float: left;
