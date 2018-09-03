@@ -323,6 +323,67 @@ class Test extends React.Component {
                </div>
              </pre>
           </div>
+            <div className="section">
+                <h4 className='title'>Demonstrate using mouse in tooltip. </h4>
+                <p>Notice that the tooltip delays going away so you can get your mouse in it. You must set delayUpdate and delayHide for the tooltip to stay long enough to get your mouse over it.</p>
+                <p className="sub-title"></p>
+                <div className="example-jsx">
+                    <div className="block" >
+                        <a data-for='soclose' data-tip='1'>1 (❂‿❂)</a>
+                    </div>
+                    <div className="block">
+                        <a data-for='soclose' data-tip='2'>2 (❂‿❂)</a>
+                    </div>
+                    <div className="block" >
+                        <a data-for='soclose' data-tip='3'>3(❂‿❂)</a>
+                    </div>
+                    <div className="block">
+                        <a data-for='soclose' data-tip='4'>4(❂‿❂)</a>
+                    </div>
+                    <div className="block" >
+                        <a data-for='soclose' data-tip='5'>5(❂‿❂)</a>
+                    </div>
+                    <div className="block">
+                        <a data-for='soclose' data-tip='6'>6(❂‿❂)</a>
+                    </div>
+                    <div className="block" >
+                        <a data-for='soclose' data-tip='7'>7(❂‿❂)</a>
+                    </div>
+                    <div className="block">
+                        <a data-for='soclose' data-tip='8'>8(❂‿❂)</a>
+                    </div>
+
+                    <ReactTooltip id='soclose'
+                                  getContent={(dataTip) => <div><h3>This little buddy is {dataTip}</h3><p>Put mouse here</p></div> }
+                                  effect='solid'
+                                  delayHide={500}
+                                  delayShow={500}
+                                  delayUpdate={500}
+                                  place={'right'}
+                                  border={true}
+                                  type={'light'}
+
+                    />
+                </div>
+                <br />
+                <pre className='example-pre'>
+              <div>
+                <p>{"<a data-for='soclose' data-tip='sooooo cute'>(❂‿❂)</a>"}<p/>{"<a data-for='soclose' data-tip='2'>(❂‿❂)</a>..."}<p/>{
+                "<a data-for='soclose' data-tip='really high'>(❂‿❂)</a>\n" +
+                "<ReactTooltip id='soclose'\n" +
+                " getContent={(dataTip) => \n"}{
+                "  <div><h3>This little buddy is {dataTip}</h3><p>Put mouse here</p></div> }\n" +
+                " effect='solid'\n" +
+                " delayHide={500}\n" +
+                " delayShow={500}\n" +
+                " delayUpdate={500}\n" +
+                " place={'right'}\n" +
+                " border={true}\n" +
+                " type={'light'}"}</p>
+              </div>
+            </pre>
+            </div>
+
         </section>
       </div>
     )

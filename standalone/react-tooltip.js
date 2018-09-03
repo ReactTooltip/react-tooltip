@@ -1312,6 +1312,7 @@ var customListeners = {
       var map = target[this.id];
       map[event] = listener;
     } else {
+      // this is workaround for WeakMap, which is not supported in older browsers, such as IE
       Object.defineProperty(target, this.id, {
         configurable: true,
         value: _defineProperty({}, event, listener)
@@ -1652,11 +1653,12 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       isMultiline: false
     };
 
-    _this.bind(['showTooltip', 'updateTooltip', 'hideTooltip', 'getTooltipContent', 'globalRebuild', 'globalShow', 'globalHide', 'onWindowResize']);
+    _this.bind(['showTooltip', 'updateTooltip', 'hideTooltip', 'getTooltipContent', 'globalRebuild', 'globalShow', 'globalHide', 'onWindowResize', 'mouseOnToolTip']);
 
     _this.mount = true;
     _this.delayShowLoop = null;
     _this.delayHideLoop = null;
+    _this.delayReshow = null;
     _this.intervalUpdateContent = null;
     return _this;
   }
@@ -1714,6 +1716,26 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       this.unbindWindowEvents();
     }
 
+    /**
+     * Return if the mouse is on the tooltip.
+     * @returns {boolean} true - mouse is on the tooltip
+     */
+
+  }, {
+    key: 'mouseOnToolTip',
+    value: function mouseOnToolTip() {
+      var show = this.state.show;
+
+
+      if (show && this.tooltipRef) {
+        /* old IE work around */
+        if (!this.tooltipRef.matches) {
+          this.tooltipRef.matches = this.tooltipRef.msMatchesSelector;
+        }
+        return this.tooltipRef.matches(':hover');
+      }
+      return false;
+    }
     /**
      * Pick out corresponded target elements
      */
@@ -1848,8 +1870,6 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'showTooltip',
     value: function showTooltip(e, isGlobalCall) {
-      var _this5 = this;
-
       if (isGlobalCall) {
         // Don't trigger other elements belongs to other ReactTooltip
         var targetArray = this.getTargetArray(this.props.id);
@@ -1881,40 +1901,56 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       // To prevent previously created timers from triggering
       this.clearTimer();
 
-      this.setState({
-        originTooltip: originTooltip,
-        isMultiline: isMultiline,
-        desiredPlace: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
-        place: e.currentTarget.getAttribute('data-place') || this.props.place || 'top',
-        type: e.currentTarget.getAttribute('data-type') || this.props.type || 'dark',
-        effect: switchToSolid && 'solid' || this.getEffect(e.currentTarget),
-        offset: e.currentTarget.getAttribute('data-offset') || this.props.offset || {},
-        html: e.currentTarget.getAttribute('data-html') ? e.currentTarget.getAttribute('data-html') === 'true' : this.props.html || false,
-        delayShow: e.currentTarget.getAttribute('data-delay-show') || this.props.delayShow || 0,
-        delayHide: e.currentTarget.getAttribute('data-delay-hide') || this.props.delayHide || 0,
-        border: e.currentTarget.getAttribute('data-border') ? e.currentTarget.getAttribute('data-border') === 'true' : this.props.border || false,
-        extraClass: e.currentTarget.getAttribute('data-class') || this.props.class || this.props.className || '',
-        disable: e.currentTarget.getAttribute('data-tip-disable') ? e.currentTarget.getAttribute('data-tip-disable') === 'true' : this.props.disable || false,
-        currentTarget: e.currentTarget
-      }, function () {
-        if (scrollHide) _this5.addScrollListener(_this5.state.currentTarget);
-        _this5.updateTooltip(e);
+      var target = e.currentTarget;
 
-        if (getContent && Array.isArray(getContent)) {
-          _this5.intervalUpdateContent = setInterval(function () {
-            if (_this5.mount) {
-              var _getContent = _this5.props.getContent;
+      var reshowDelay = this.state.show ? target.getAttribute('data-delay-update') || this.props.delayUpdate : 0;
 
-              var placeholder = (0, _getTipContent2.default)(originTooltip, '', _getContent[0](), isMultiline);
-              var isEmptyTip = _this5.isEmptyTip(placeholder);
-              _this5.setState({
-                isEmptyTip: isEmptyTip
-              });
-              _this5.updatePosition();
-            }
-          }, getContent[1]);
-        }
-      });
+      var self = this;
+
+      var updateState = function updateState() {
+        self.setState({
+          originTooltip: originTooltip,
+          isMultiline: isMultiline,
+          desiredPlace: target.getAttribute('data-place') || self.props.place || 'top',
+          place: target.getAttribute('data-place') || self.props.place || 'top',
+          type: target.getAttribute('data-type') || self.props.type || 'dark',
+          effect: switchToSolid && 'solid' || self.getEffect(target),
+          offset: target.getAttribute('data-offset') || self.props.offset || {},
+          html: target.getAttribute('data-html') ? target.getAttribute('data-html') === 'true' : self.props.html || false,
+          delayShow: target.getAttribute('data-delay-show') || self.props.delayShow || 0,
+          delayHide: target.getAttribute('data-delay-hide') || self.props.delayHide || 0,
+          delayUpdate: target.getAttribute('data-delay-update') || self.props.delayUpdate || 0,
+          border: target.getAttribute('data-border') ? target.getAttribute('data-border') === 'true' : self.props.border || false,
+          extraClass: target.getAttribute('data-class') || self.props.class || self.props.className || '',
+          disable: target.getAttribute('data-tip-disable') ? target.getAttribute('data-tip-disable') === 'true' : self.props.disable || false,
+          currentTarget: target
+        }, function () {
+          if (scrollHide) self.addScrollListener(self.state.currentTarget);
+          self.updateTooltip(e);
+
+          if (getContent && Array.isArray(getContent)) {
+            self.intervalUpdateContent = setInterval(function () {
+              if (self.mount) {
+                var _getContent = self.props.getContent;
+
+                var placeholder = (0, _getTipContent2.default)(originTooltip, '', _getContent[0](), isMultiline);
+                var isEmptyTip = self.isEmptyTip(placeholder);
+                self.setState({
+                  isEmptyTip: isEmptyTip
+                });
+                self.updatePosition();
+              }
+            }, getContent[1]);
+          }
+        });
+      };
+
+      // If there is no delay call immediately, don't allow events to get in first.
+      if (reshowDelay) {
+        this.delayReshow = setTimeout(updateState, reshowDelay);
+      } else {
+        updateState();
+      }
     }
 
     /**
@@ -1924,28 +1960,32 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'updateTooltip',
     value: function updateTooltip(e) {
-      var _this6 = this;
+      var _this5 = this;
 
       var _state = this.state,
           delayShow = _state.delayShow,
-          show = _state.show,
           disable = _state.disable;
       var afterShow = this.props.afterShow;
 
       var placeholder = this.getTooltipContent();
-      var delayTime = show ? 0 : parseInt(delayShow, 10);
+      var delayTime = parseInt(delayShow, 10);
       var eventTarget = e.currentTarget || e.target;
+
+      // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
+      if (this.mouseOnToolTip()) {
+        return;
+      }
 
       if (this.isEmptyTip(placeholder) || disable) return; // if the tooltip is empty, disable the tooltip
       var updateState = function updateState() {
         if (Array.isArray(placeholder) && placeholder.length > 0 || placeholder) {
-          var isInvisible = !_this6.state.show;
-          _this6.setState({
+          var isInvisible = !_this5.state.show;
+          _this5.setState({
             currentEvent: e,
             currentTarget: eventTarget,
             show: true
           }, function () {
-            _this6.updatePosition();
+            _this5.updatePosition();
             if (isInvisible && afterShow) afterShow();
           });
         }
@@ -1959,6 +1999,31 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       }
     }
 
+    /*
+    * If we're mousing over the tooltip remove it when we leave.
+     */
+
+  }, {
+    key: 'listenForTooltipExit',
+    value: function listenForTooltipExit() {
+      var show = this.state.show;
+
+
+      if (show && this.tooltipRef) {
+        this.tooltipRef.addEventListener('mouseleave', this.hideTooltip);
+      }
+    }
+  }, {
+    key: 'removeListenerForTooltipExit',
+    value: function removeListenerForTooltipExit() {
+      var show = this.state.show;
+
+
+      if (show && this.tooltipRef) {
+        this.tooltipRef.removeEventListener('mouseleave', this.hideTooltip);
+      }
+    }
+
     /**
      * When mouse leave, hide tooltip
      */
@@ -1966,7 +2031,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'hideTooltip',
     value: function hideTooltip(e, hasTarget) {
-      var _this7 = this;
+      var _this6 = this;
 
       var _state2 = this.state,
           delayHide = _state2.delayHide,
@@ -1984,12 +2049,20 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
         });
         if (!isMyElement || !this.state.show) return;
       }
+
       var resetState = function resetState() {
-        var isVisible = _this7.state.show;
-        _this7.setState({
+        var isVisible = _this6.state.show;
+        // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
+        if (_this6.mouseOnToolTip()) {
+          _this6.listenForTooltipExit();
+          return;
+        }
+        _this6.removeListenerForTooltipExit();
+
+        _this6.setState({
           show: false
         }, function () {
-          _this7.removeScrollListener();
+          _this6.removeScrollListener();
           if (isVisible && afterHide) afterHide();
         });
       };
@@ -2024,7 +2097,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'updatePosition',
     value: function updatePosition() {
-      var _this8 = this;
+      var _this7 = this;
 
       var _state3 = this.state,
           currentEvent = _state3.currentEvent,
@@ -2040,7 +2113,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       if (result.isNewState) {
         // Switch to reverse placement
         return this.setState(result.newState, function () {
-          _this8.updatePosition();
+          _this7.updatePosition();
         });
       }
       // Set tooltip position
@@ -2074,11 +2147,14 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     value: function clearTimer() {
       clearTimeout(this.delayShowLoop);
       clearTimeout(this.delayHideLoop);
+      clearTimeout(this.delayReshow);
       clearInterval(this.intervalUpdateContent);
     }
   }, {
     key: 'render',
     value: function render() {
+      var _this8 = this;
+
       var _state4 = this.state,
           extraClass = _state4.extraClass,
           html = _state4.html,
@@ -2087,7 +2163,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       var placeholder = this.getTooltipContent();
       var isEmptyTip = this.isEmptyTip(placeholder);
-      var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show && !disable && !isEmptyTip }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
+      var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show && !disable && !isEmptyTip }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' }, { 'allow_hover': this.props.delayUpdate });
 
       var Wrapper = this.props.wrapper;
       if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
@@ -2096,7 +2172,10 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       if (html) {
         return _react2.default.createElement(Wrapper, _extends({ className: tooltipClass + ' ' + extraClass,
-          id: this.props.id
+          id: this.props.id,
+          ref: function ref(_ref) {
+            return _this8.tooltipRef = _ref;
+          }
         }, ariaProps, {
           'data-id': 'tooltip',
           dangerouslySetInnerHTML: { __html: placeholder } }));
@@ -2106,6 +2185,9 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           _extends({ className: tooltipClass + ' ' + extraClass,
             id: this.props.id
           }, ariaProps, {
+            ref: function ref(_ref2) {
+              return _this8.tooltipRef = _ref2;
+            },
             'data-id': 'tooltip' }),
           placeholder
         );
@@ -2128,6 +2210,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   id: _propTypes2.default.string,
   html: _propTypes2.default.bool,
   delayHide: _propTypes2.default.number,
+  delayUpdate: _propTypes2.default.number,
   delayShow: _propTypes2.default.number,
   event: _propTypes2.default.string,
   eventOff: _propTypes2.default.string,
@@ -2159,7 +2242,7 @@ module.exports = ReactTooltip;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '.__react_component_tooltip{border-radius:3px;display:inline-block;font-size:13px;left:-999em;opacity:0;padding:8px 21px;position:fixed;pointer-events:none;transition:opacity 0.3s ease-out;top:-999em;visibility:hidden;z-index:999}.__react_component_tooltip:before,.__react_component_tooltip:after{content:"";width:0;height:0;position:absolute}.__react_component_tooltip.show{opacity:0.9;margin-top:0px;margin-left:0px;visibility:visible}.__react_component_tooltip.type-dark{color:#fff;background-color:#222}.__react_component_tooltip.type-dark.place-top:after{border-top-color:#222;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-dark.place-bottom:after{border-bottom-color:#222;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-dark.place-left:after{border-left-color:#222;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-dark.place-right:after{border-right-color:#222;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-dark.border{border:1px solid #fff}.__react_component_tooltip.type-dark.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-dark.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-dark.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-dark.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-success{color:#fff;background-color:#8DC572}.__react_component_tooltip.type-success.place-top:after{border-top-color:#8DC572;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-success.place-bottom:after{border-bottom-color:#8DC572;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-success.place-left:after{border-left-color:#8DC572;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-success.place-right:after{border-right-color:#8DC572;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-success.border{border:1px solid #fff}.__react_component_tooltip.type-success.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-success.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-success.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-success.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-warning{color:#fff;background-color:#F0AD4E}.__react_component_tooltip.type-warning.place-top:after{border-top-color:#F0AD4E;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-warning.place-bottom:after{border-bottom-color:#F0AD4E;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-warning.place-left:after{border-left-color:#F0AD4E;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-warning.place-right:after{border-right-color:#F0AD4E;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-warning.border{border:1px solid #fff}.__react_component_tooltip.type-warning.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-warning.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-warning.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-warning.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-error{color:#fff;background-color:#BE6464}.__react_component_tooltip.type-error.place-top:after{border-top-color:#BE6464;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-error.place-bottom:after{border-bottom-color:#BE6464;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-error.place-left:after{border-left-color:#BE6464;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-error.place-right:after{border-right-color:#BE6464;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-error.border{border:1px solid #fff}.__react_component_tooltip.type-error.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-error.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-error.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-error.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-info{color:#fff;background-color:#337AB7}.__react_component_tooltip.type-info.place-top:after{border-top-color:#337AB7;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-info.place-bottom:after{border-bottom-color:#337AB7;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-info.place-left:after{border-left-color:#337AB7;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-info.place-right:after{border-right-color:#337AB7;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-info.border{border:1px solid #fff}.__react_component_tooltip.type-info.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-info.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-info.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-info.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-light{color:#222;background-color:#fff}.__react_component_tooltip.type-light.place-top:after{border-top-color:#fff;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-light.place-bottom:after{border-bottom-color:#fff;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-light.place-left:after{border-left-color:#fff;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-light.place-right:after{border-right-color:#fff;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-light.border{border:1px solid #222}.__react_component_tooltip.type-light.border.place-top:before{border-top:8px solid #222}.__react_component_tooltip.type-light.border.place-bottom:before{border-bottom:8px solid #222}.__react_component_tooltip.type-light.border.place-left:before{border-left:8px solid #222}.__react_component_tooltip.type-light.border.place-right:before{border-right:8px solid #222}.__react_component_tooltip.place-top{margin-top:-10px}.__react_component_tooltip.place-top:before{border-left:10px solid transparent;border-right:10px solid transparent;bottom:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-top:after{border-left:8px solid transparent;border-right:8px solid transparent;bottom:-6px;left:50%;margin-left:-8px}.__react_component_tooltip.place-bottom{margin-top:10px}.__react_component_tooltip.place-bottom:before{border-left:10px solid transparent;border-right:10px solid transparent;top:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-bottom:after{border-left:8px solid transparent;border-right:8px solid transparent;top:-6px;left:50%;margin-left:-8px}.__react_component_tooltip.place-left{margin-left:-10px}.__react_component_tooltip.place-left:before{border-top:6px solid transparent;border-bottom:6px solid transparent;right:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-left:after{border-top:5px solid transparent;border-bottom:5px solid transparent;right:-6px;top:50%;margin-top:-4px}.__react_component_tooltip.place-right{margin-left:10px}.__react_component_tooltip.place-right:before{border-top:6px solid transparent;border-bottom:6px solid transparent;left:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-right:after{border-top:5px solid transparent;border-bottom:5px solid transparent;left:-6px;top:50%;margin-top:-4px}.__react_component_tooltip .multi-line{display:block;padding:2px 0px;text-align:center}';
+exports.default = '.__react_component_tooltip{border-radius:3px;display:inline-block;font-size:13px;left:-999em;opacity:0;padding:8px 21px;position:fixed;pointer-events:none;transition:opacity 0.3s ease-out;top:-999em;visibility:hidden;z-index:999}.__react_component_tooltip.allow_hover{pointer-events:auto}.__react_component_tooltip:before,.__react_component_tooltip:after{content:"";width:0;height:0;position:absolute}.__react_component_tooltip.show{opacity:0.9;margin-top:0px;margin-left:0px;visibility:visible}.__react_component_tooltip.type-dark{color:#fff;background-color:#222}.__react_component_tooltip.type-dark.place-top:after{border-top-color:#222;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-dark.place-bottom:after{border-bottom-color:#222;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-dark.place-left:after{border-left-color:#222;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-dark.place-right:after{border-right-color:#222;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-dark.border{border:1px solid #fff}.__react_component_tooltip.type-dark.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-dark.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-dark.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-dark.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-success{color:#fff;background-color:#8DC572}.__react_component_tooltip.type-success.place-top:after{border-top-color:#8DC572;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-success.place-bottom:after{border-bottom-color:#8DC572;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-success.place-left:after{border-left-color:#8DC572;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-success.place-right:after{border-right-color:#8DC572;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-success.border{border:1px solid #fff}.__react_component_tooltip.type-success.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-success.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-success.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-success.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-warning{color:#fff;background-color:#F0AD4E}.__react_component_tooltip.type-warning.place-top:after{border-top-color:#F0AD4E;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-warning.place-bottom:after{border-bottom-color:#F0AD4E;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-warning.place-left:after{border-left-color:#F0AD4E;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-warning.place-right:after{border-right-color:#F0AD4E;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-warning.border{border:1px solid #fff}.__react_component_tooltip.type-warning.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-warning.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-warning.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-warning.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-error{color:#fff;background-color:#BE6464}.__react_component_tooltip.type-error.place-top:after{border-top-color:#BE6464;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-error.place-bottom:after{border-bottom-color:#BE6464;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-error.place-left:after{border-left-color:#BE6464;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-error.place-right:after{border-right-color:#BE6464;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-error.border{border:1px solid #fff}.__react_component_tooltip.type-error.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-error.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-error.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-error.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-info{color:#fff;background-color:#337AB7}.__react_component_tooltip.type-info.place-top:after{border-top-color:#337AB7;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-info.place-bottom:after{border-bottom-color:#337AB7;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-info.place-left:after{border-left-color:#337AB7;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-info.place-right:after{border-right-color:#337AB7;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-info.border{border:1px solid #fff}.__react_component_tooltip.type-info.border.place-top:before{border-top:8px solid #fff}.__react_component_tooltip.type-info.border.place-bottom:before{border-bottom:8px solid #fff}.__react_component_tooltip.type-info.border.place-left:before{border-left:8px solid #fff}.__react_component_tooltip.type-info.border.place-right:before{border-right:8px solid #fff}.__react_component_tooltip.type-light{color:#222;background-color:#fff}.__react_component_tooltip.type-light.place-top:after{border-top-color:#fff;border-top-style:solid;border-top-width:6px}.__react_component_tooltip.type-light.place-bottom:after{border-bottom-color:#fff;border-bottom-style:solid;border-bottom-width:6px}.__react_component_tooltip.type-light.place-left:after{border-left-color:#fff;border-left-style:solid;border-left-width:6px}.__react_component_tooltip.type-light.place-right:after{border-right-color:#fff;border-right-style:solid;border-right-width:6px}.__react_component_tooltip.type-light.border{border:1px solid #222}.__react_component_tooltip.type-light.border.place-top:before{border-top:8px solid #222}.__react_component_tooltip.type-light.border.place-bottom:before{border-bottom:8px solid #222}.__react_component_tooltip.type-light.border.place-left:before{border-left:8px solid #222}.__react_component_tooltip.type-light.border.place-right:before{border-right:8px solid #222}.__react_component_tooltip.place-top{margin-top:-10px}.__react_component_tooltip.place-top:before{border-left:10px solid transparent;border-right:10px solid transparent;bottom:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-top:after{border-left:8px solid transparent;border-right:8px solid transparent;bottom:-6px;left:50%;margin-left:-8px}.__react_component_tooltip.place-bottom{margin-top:10px}.__react_component_tooltip.place-bottom:before{border-left:10px solid transparent;border-right:10px solid transparent;top:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-bottom:after{border-left:8px solid transparent;border-right:8px solid transparent;top:-6px;left:50%;margin-left:-8px}.__react_component_tooltip.place-left{margin-left:-10px}.__react_component_tooltip.place-left:before{border-top:6px solid transparent;border-bottom:6px solid transparent;right:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-left:after{border-top:5px solid transparent;border-bottom:5px solid transparent;right:-6px;top:50%;margin-top:-4px}.__react_component_tooltip.place-right{margin-left:10px}.__react_component_tooltip.place-right:before{border-top:6px solid transparent;border-bottom:6px solid transparent;left:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-right:after{border-top:5px solid transparent;border-bottom:5px solid transparent;left:-6px;top:50%;margin-top:-4px}.__react_component_tooltip .multi-line{display:block;padding:2px 0px;text-align:center}';
 
 },{}],21:[function(require,module,exports){
 "use strict";
@@ -2240,146 +2323,67 @@ exports.default = function (e, target, node, place, desiredPlace, effect, offset
     return mouseY + offset_Y + extraOffset_Y;
   };
 
-  // Judge if the tooltip has over the window(screen)
-  var outsideVertical = function outsideVertical() {
-    var result = false;
-    var newPlace = void 0;
-    if (getTipOffsetTop('left') < 0 && getTipOffsetBottom('left') <= windowHeight && getTipOffsetBottom('bottom') <= windowHeight) {
-      result = true;
-      newPlace = 'bottom';
-    } else if (getTipOffsetBottom('left') > windowHeight && getTipOffsetTop('left') >= 0 && getTipOffsetTop('top') >= 0) {
-      result = true;
-      newPlace = 'top';
-    }
-    return { result: result, newPlace: newPlace };
+  //
+  // Functions to test whether the tooltip's sides are inside
+  // the client window for a given orientation p
+  //
+  //  _____________
+  // |             | <-- Right side
+  // | p = 'left'  |\
+  // |             |/  |\
+  // |_____________|   |_\  <-- Mouse
+  //      / \           |
+  //       |
+  //       |
+  //  Bottom side
+  //
+  var outsideLeft = function outsideLeft(p) {
+    return getTipOffsetLeft(p) < 0;
   };
-  var outsideLeft = function outsideLeft() {
-    var _outsideVertical = outsideVertical(),
-        result = _outsideVertical.result,
-        newPlace = _outsideVertical.newPlace; // Deal with vertical as first priority
-
-
-    if (result && outsideHorizontal().result) {
-      return { result: false // No need to change, if change to vertical will out of space
-      };
-    }
-    if (!result && getTipOffsetLeft('left') < 0 && getTipOffsetRight('right') <= windowWidth) {
-      result = true; // If vertical ok, but let out of side and right won't out of side
-      newPlace = 'right';
-    }
-    return { result: result, newPlace: newPlace };
+  var outsideRight = function outsideRight(p) {
+    return getTipOffsetRight(p) > windowWidth;
   };
-  var outsideRight = function outsideRight() {
-    var _outsideVertical2 = outsideVertical(),
-        result = _outsideVertical2.result,
-        newPlace = _outsideVertical2.newPlace;
-
-    if (result && outsideHorizontal().result) {
-      return { result: false // No need to change, if change to vertical will out of space
-      };
-    }
-    if (!result && getTipOffsetRight('right') > windowWidth && getTipOffsetLeft('left') >= 0) {
-      result = true;
-      newPlace = 'left';
-    }
-    return { result: result, newPlace: newPlace };
+  var outsideTop = function outsideTop(p) {
+    return getTipOffsetTop(p) < 0;
+  };
+  var outsideBottom = function outsideBottom(p) {
+    return getTipOffsetBottom(p) > windowHeight;
   };
 
-  var outsideHorizontal = function outsideHorizontal() {
-    var result = false;
-    var newPlace = void 0;
-    if (getTipOffsetLeft('top') < 0 && getTipOffsetRight('top') <= windowWidth && getTipOffsetRight('right') <= windowWidth) {
-      result = true;
-      newPlace = 'right';
-    } else if (getTipOffsetRight('top') > windowWidth && getTipOffsetLeft('top') >= 0 && getTipOffsetLeft('left') >= 0) {
-      result = true;
-      newPlace = 'left';
-    }
-    return { result: result, newPlace: newPlace };
+  // Check whether the tooltip with orientation p is completely inside the client window
+  var outside = function outside(p) {
+    return outsideLeft(p) || outsideRight(p) || outsideTop(p) || outsideBottom(p);
   };
-  var outsideTop = function outsideTop() {
-    var _outsideHorizontal = outsideHorizontal(),
-        result = _outsideHorizontal.result,
-        newPlace = _outsideHorizontal.newPlace;
-
-    if (result && outsideVertical().result) {
-      return { result: false };
-    }
-    if (!result && getTipOffsetTop('top') < 0 && getTipOffsetBottom('bottom') <= windowHeight) {
-      result = true;
-      newPlace = 'bottom';
-    }
-    return { result: result, newPlace: newPlace };
-  };
-  var outsideBottom = function outsideBottom() {
-    var _outsideHorizontal2 = outsideHorizontal(),
-        result = _outsideHorizontal2.result,
-        newPlace = _outsideHorizontal2.newPlace;
-
-    if (result && outsideVertical().result) {
-      return { result: false };
-    }
-    if (!result && getTipOffsetBottom('bottom') > windowHeight && getTipOffsetTop('top') >= 0) {
-      result = true;
-      newPlace = 'top';
-    }
-    return { result: result, newPlace: newPlace };
+  var inside = function inside(p) {
+    return !outside(p);
   };
 
-  // Return new state to change the placement to the reverse if possible
-  var outsideLeftResult = outsideLeft();
-  var outsideRightResult = outsideRight();
-  var outsideTopResult = outsideTop();
-  var outsideBottomResult = outsideBottom();
-
-  if (place === 'left' && outsideLeftResult.result) {
-    return {
-      isNewState: true,
-      newState: { place: outsideLeftResult.newPlace }
-    };
-  } else if (place === 'right' && outsideRightResult.result) {
-    return {
-      isNewState: true,
-      newState: { place: outsideRightResult.newPlace }
-    };
-  } else if (place === 'top' && outsideTopResult.result) {
-    return {
-      isNewState: true,
-      newState: { place: outsideTopResult.newPlace }
-    };
-  } else if (place === 'bottom' && outsideBottomResult.result) {
-    return {
-      isNewState: true,
-      newState: { place: outsideBottomResult.newPlace }
-    };
-  }
-
-  // Change back to original place if possible
-  if (place !== desiredPlace) {
-    if (desiredPlace === 'top' && !outsideTopResult.result) {
-      return {
-        isNewState: true,
-        newState: { place: 'top' }
-      };
-    } else if (desiredPlace === 'left' && !outsideLeftResult.result) {
-      return {
-        isNewState: true,
-        newState: { place: 'left' }
-      };
-    } else if (desiredPlace === 'right' && !outsideRightResult.result) {
-      return {
-        isNewState: true,
-        newState: { place: 'right' }
-      };
-    } else if (desiredPlace === 'bottom' && !outsideBottomResult.result) {
-      return {
-        isNewState: true,
-        newState: { place: 'bottom' }
-      };
+  var placesList = ['top', 'bottom', 'left', 'right'];
+  var insideList = [];
+  for (var i = 0; i < 4; i++) {
+    var p = placesList[i];
+    if (inside(p)) {
+      insideList.push(p);
     }
   }
 
-  // Return tooltip offset position
+  var isNewState = false;
+  var newPlace = void 0;
+  if (inside(desiredPlace) && desiredPlace !== place) {
+    isNewState = true;
+    newPlace = desiredPlace;
+  } else if (insideList.length > 0 && outside(desiredPlace) && outside(place)) {
+    isNewState = true;
+    newPlace = insideList[0];
+  }
+
+  if (isNewState) {
+    return {
+      isNewState: true,
+      newState: { place: newPlace }
+    };
+  }
+
   return {
     isNewState: false,
     position: {
@@ -2412,10 +2416,10 @@ var getDimensions = function getDimensions(node) {
  * - `effect` {String} float / solid
  * - `offset` {Object} the offset to default position
  *
- * @return {Object
+ * @return {Object}
  * - `isNewState` {Bool} required
  * - `newState` {Object}
- * - `position` {OBject} {left: {Number}, top: {Number}}
+ * - `position` {Object} {left: {Number}, top: {Number}}
  */
 var getCurrentOffset = function getCurrentOffset(e, currentTarget, effect) {
   var boundingClientRect = currentTarget.getBoundingClientRect();
