@@ -2134,6 +2134,11 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
         var tag = document.createElement('style');
         tag.id = 'react-tooltip';
         tag.innerHTML = _style2.default;
+        /* eslint-disable */
+        if (typeof __webpack_nonce__ !== 'undefined' && __webpack_nonce__) {
+          tag.setAttribute('nonce', __webpack_nonce__);
+        }
+        /* eslint-enable */
         head.insertBefore(tag, head.firstChild);
       }
     }
