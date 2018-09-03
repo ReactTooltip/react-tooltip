@@ -137,6 +137,14 @@ html, body {
     clear: both;
     height: 0;
     visibility: hidden; }
+  .example-jsx .block {
+    float: left; }
+    .example-jsx .block a {
+      text-align: center;
+      width: 55px;
+      height: 55px;
+      border: 1px solid #999;
+      border-radius: 0px; }
   .example-jsx .side {
     width: 50%;
     float: left;

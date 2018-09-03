@@ -11,6 +11,8 @@
   top: -999em;
   visibility: hidden;
   z-index: 999; }
+  .__react_component_tooltip.allow_hover {
+    pointer-events: auto; }
   .__react_component_tooltip:before, .__react_component_tooltip:after {
     content: "";
     width: 0;
