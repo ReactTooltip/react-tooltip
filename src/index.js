@@ -4,6 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import classname from 'classnames'
+import sanitizeHtml from 'sanitize-html'
 
 /* Decoraters */
 import staticMethods from './decorators/staticMethods'
@@ -540,7 +541,7 @@ class ReactTooltip extends React.Component {
                  ref={ref => this.tooltipRef = ref}
                  {...ariaProps}
                  data-id='tooltip'
-                 dangerouslySetInnerHTML={{__html: placeholder}}/>
+                 dangerouslySetInnerHTML={{__html: sanitizeHtml(placeholder)}}/>
       )
     } else {
       return (
