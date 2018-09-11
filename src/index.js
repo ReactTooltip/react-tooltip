@@ -297,6 +297,13 @@ class ReactTooltip extends React.Component {
       scrollHide = this.props.scrollHide
     }
 
+    // Make sure the correct place is set
+    let desiredPlace = e.currentTarget.getAttribute('data-place') || this.props.place || 'top'
+    let effect = switchToSolid && 'solid' || this.getEffect(e.currentTarget)
+    let offset = e.currentTarget.getAttribute('data-offset') || this.props.offset || {}
+    let result = getPosition(e, e.currentTarget, ReactDOM.findDOMNode(this), desiredPlace, desiredPlace, effect, offset)
+    let place = result.isNewState ? result.newState.place : desiredPlace
+
     // To prevent previously created timers from triggering
     this.clearTimer()
 
@@ -310,11 +317,11 @@ class ReactTooltip extends React.Component {
       self.setState({
         originTooltip: originTooltip,
         isMultiline: isMultiline,
-        desiredPlace: target.getAttribute('data-place') || self.props.place || 'top',
-        place: target.getAttribute('data-place') || self.props.place || 'top',
+        desiredPlace: desiredPlace,
+        place: place,
         type: target.getAttribute('data-type') || self.props.type || 'dark',
-        effect: switchToSolid && 'solid' || self.getEffect(target),
-        offset: target.getAttribute('data-offset') || self.props.offset || {},
+        effect: effect,
+        offset: offset,
         html: target.getAttribute('data-html') ? target.getAttribute('data-html') === 'true' : self.props.html || false,
         delayShow: target.getAttribute('data-delay-show') || self.props.delayShow || 0,
         delayHide: target.getAttribute('data-delay-hide') || self.props.delayHide || 0,
