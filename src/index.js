@@ -74,7 +74,8 @@ class ReactTooltip extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      place: 'top', // Direction of tooltip
+      place: props.place || 'top', // Direction of tooltip
+      desiredPlace: props.place || 'top',
       type: 'dark', // Color theme of tooltip
       effect: 'float', // float or fixed
       show: false,
