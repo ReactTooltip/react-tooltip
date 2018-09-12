@@ -264,7 +264,7 @@ class Test extends React.Component {
             <pre className='example-pre'>
               <div>
                 <p>{"<a data-for='enrich' data-tip='sooooo cute'>(❂‿❂)</a>\n" +
-                "<a data-for='enrich' data-tip='really high'>(❂‿❂)</a>\n" + 
+                "<a data-for='enrich' data-tip='really high'>(❂‿❂)</a>\n" +
                 "<ReactTooltip id='enrich' getContent={(dataTip) => `This little buddy is ${dataTip}`}/>"}</p>
               </div>
             </pre>
@@ -335,22 +335,22 @@ class Test extends React.Component {
                         <a data-for='soclose' data-tip='2'>2 (❂‿❂)</a>
                     </div>
                     <div className="block" >
-                        <a data-for='soclose' data-tip='3'>3(❂‿❂)</a>
+                        <a data-for='soclose' data-tip='3'>3 (❂‿❂)</a>
                     </div>
                     <div className="block">
-                        <a data-for='soclose' data-tip='4'>4(❂‿❂)</a>
+                        <a data-for='soclose' data-tip='4'>4 (❂‿❂)</a>
                     </div>
                     <div className="block" >
-                        <a data-for='soclose' data-tip='5'>5(❂‿❂)</a>
+                        <a data-for='soclose' data-tip='5'>5 (❂‿❂)</a>
                     </div>
                     <div className="block">
-                        <a data-for='soclose' data-tip='6'>6(❂‿❂)</a>
+                        <a data-for='soclose' data-tip='6'>6 (❂‿❂)</a>
                     </div>
                     <div className="block" >
-                        <a data-for='soclose' data-tip='7'>7(❂‿❂)</a>
+                        <a data-for='soclose' data-tip='7'>7 (❂‿❂)</a>
                     </div>
                     <div className="block">
-                        <a data-for='soclose' data-tip='8'>8(❂‿❂)</a>
+                        <a data-for='soclose' data-tip='8'>8 (❂‿❂)</a>
                     </div>
 
                     <ReactTooltip id='soclose'
@@ -368,10 +368,11 @@ class Test extends React.Component {
                 <br />
                 <pre className='example-pre'>
               <div>
-                <p>{"<a data-for='soclose' data-tip='sooooo cute'>(❂‿❂)</a>"}<p/>{"<a data-for='soclose' data-tip='2'>(❂‿❂)</a>..."}<p/>{
-                "<a data-for='soclose' data-tip='really high'>(❂‿❂)</a>\n" +
-                "<ReactTooltip id='soclose'\n" +
-                " getContent={(dataTip) => \n"}{
+                <p>{"<a data-for='soclose' data-tip='1'>1 (❂‿❂)</a>"}</p>
+                <p>{"<a data-for='soclose' data-tip='2'>2 (❂‿❂)</a>..."}</p>
+                <p>{"<a data-for='soclose' data-tip='8'>8 (❂‿❂)</a>"}</p>
+                <p>{"<ReactTooltip id='soclose'\n" +
+                " getContent={(dataTip) => \n" +
                 "  <div><h3>This little buddy is {dataTip}</h3><p>Put mouse here</p></div> }\n" +
                 " effect='solid'\n" +
                 " delayHide={500}\n" +
