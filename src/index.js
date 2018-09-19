@@ -217,7 +217,7 @@ class ReactTooltip extends React.Component {
     // Global event to hide tooltip
     if (globalEventOff) {
       window.removeEventListener(globalEventOff, this.hideTooltip)
-      window.addEventListener(globalEventOff, this.hideTooltip, false)
+      window.addEventListener(globalEventOff, this.hideTooltip, isCaptureMode)
     }
 
     // Track removal of targetArray elements from DOM
