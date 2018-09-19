@@ -191,7 +191,7 @@ class ReactTooltip extends React.Component {
    * These listeners used to trigger showing or hiding the tooltip
    */
   bindListener () {
-    const {id, globalEventOff} = this.props
+    const {id, globalEventOff, isCapture} = this.props
     let targetArray = this.getTargetArray(id)
 
     targetArray.forEach(target => {
@@ -217,7 +217,7 @@ class ReactTooltip extends React.Component {
     // Global event to hide tooltip
     if (globalEventOff) {
       window.removeEventListener(globalEventOff, this.hideTooltip)
-      window.addEventListener(globalEventOff, this.hideTooltip, isCaptureMode)
+      window.addEventListener(globalEventOff, this.hideTooltip, isCapture)
     }
 
     // Track removal of targetArray elements from DOM
