@@ -385,7 +385,7 @@ class ReactTooltip extends React.Component {
           show: true
         }, () => {
           this.updatePosition()
-          if (isInvisible && afterShow) afterShow()
+          if (isInvisible && afterShow) afterShow(e)
         })
       }
     }
@@ -446,7 +446,7 @@ class ReactTooltip extends React.Component {
         show: false
       }, () => {
         this.removeScrollListener()
-        if (isVisible && afterHide) afterHide()
+        if (isVisible && afterHide) afterHide(e)
       })
     }
 
