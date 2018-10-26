@@ -79,7 +79,7 @@ className	|   data-class  |  String  |   | extra custom class, can use !importan
  wrapper | null | String | div, span | Selecting the wrapper element of the react tooltip, default is div
 
 ## Using react component as tooltip
-Check the example [React-tooltip Test](https://react-tooltip.netlify.com/
+Check the example [React-tooltip Test](https://react-tooltip.netlify.com/)
 
 ##### Note:
 1. **data-tip** is necessary, because `<ReactTooltip />` finds the tooltip via this attribute
