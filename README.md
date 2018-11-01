@@ -50,7 +50,7 @@ Notes:
 * The option you set on `<ReactTooltip />` component will be implemented on every tooltip in a same page: `<ReactTooltip effect="solid" />`
 * The option you set on a specific element, for example: `<a data-type="warning"></a>` will only affect this specific tooltip
 
-Check example:  [React-tooltip Test](http://wwayne.com/react-tooltip)
+Check example:  [React-tooltip Test](https://react-tooltip.netlify.com/)
 
 Global|Specific	|Type	|Values  |  Description
 |:---|:---|:---|:---|:----
@@ -79,7 +79,7 @@ className	|   data-class  |  String  |   | extra custom class, can use !importan
  wrapper | null | String | div, span | Selecting the wrapper element of the react tooltip, default is div
 
 ## Using react component as tooltip
-Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
+Check the example [React-tooltip Test](https://react-tooltip.netlify.com/)
 
 ##### Note:
 1. **data-tip** is necessary, because `<ReactTooltip />` finds the tooltip via this attribute
