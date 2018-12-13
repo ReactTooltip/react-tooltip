@@ -167,11 +167,11 @@ class ReactTooltip extends React.Component {
       /* old IE or Firefox work around */
       if (!this.tooltipRef.matches) {
         /* old IE work around */
-        if(this.tooltipRef.msMatchesSelector) {
-          this.tooltipRef.matches = this.tooltipRef.msMatchesSelector;
+        if (this.tooltipRef.msMatchesSelector) {
+          this.tooltipRef.matches = this.tooltipRef.msMatchesSelector
         } else {
           /* old Firefox work around */
-          this.tooltipRef.matches = this.tooltipRef.mozMatchesSelector;
+          this.tooltipRef.matches = this.tooltipRef.mozMatchesSelector
         }
       }
       return this.tooltipRef.matches(':hover')
