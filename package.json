@@ -54,8 +54,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "prop-types": "^15.6.0",
-    "sanitize-html-react": "^1.13.0"
+    "prop-types": "^15.6.0"
   },
   "engines": {
     "node": ">=4.2.1"

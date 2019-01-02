@@ -4,7 +4,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import classname from 'classnames'
-import sanitizeHtml from 'sanitize-html-react'
 
 /* Decoraters */
 import staticMethods from './decorators/staticMethods'
@@ -58,8 +57,7 @@ class ReactTooltip extends React.Component {
     disable: PropTypes.bool,
     scrollHide: PropTypes.bool,
     resizeHide: PropTypes.bool,
-    wrapper: PropTypes.string,
-    sanitizeHtmlOptions: PropTypes.any
+    wrapper: PropTypes.string
   };
 
   static defaultProps = {
@@ -556,7 +554,7 @@ class ReactTooltip extends React.Component {
                  ref={ref => this.tooltipRef = ref}
                  {...ariaProps}
                  data-id='tooltip'
-                 dangerouslySetInnerHTML={{__html: sanitizeHtml(placeholder, this.props.sanitizeHtmlOptions)}}/>
+                 dangerouslySetInnerHTML={{__html: placeholder}}/>
       )
     } else {
       return (
