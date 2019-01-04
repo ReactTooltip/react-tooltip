@@ -71,8 +71,8 @@ className	|   data-class  |  String  |   | extra custom class, can use !importan
  insecure | null | Bool | true, false | Whether to inject the style header into the page dynamically (violates CSP style-src but is a convenient default)
  border  |   data-border  |  Bool  |  true, false | Add one pixel white border
  getContent | null | Func or Array | (dataTip) => {}, [(dataTip) => {}, Interval] | Generate the tip content dynamically
- afterShow | null | Func | () => {} | Function that will be called after tooltip show
- afterHide | null | Func | () => {} | Function that will be called after tooltip hide
+ afterShow | null | Func | (evt) => {} | Function that will be called after tooltip show, with event that triggered show
+ afterHide | null | Func | (evt) => {} | Function that will be called after tooltip hide, with event that triggered hide
  disable | data-tip-disable | Bool | true, false | Disable the tooltip behaviour, default is false
  scrollHide | data-scroll-hide | Bool | true, false | Hide the tooltip when scrolling, default is true
  resizeHide | null | Bool | true, false | Hide the tooltip when resizing the window, default is true
