@@ -241,7 +241,7 @@ class Test extends React.Component {
                 "<ReactTooltip id='getContent' getContent={() => Math.floor(Math.random() * 100)} />"}</p>
               </div>
               <div>
-                <p>{"<a data-for='overTime' data-tip>=( •̀д•́)</a>\naaaa" +
+                <p>{"<a data-for='overTime' data-tip>=( •̀д•́)</a>\n" +
                 "<ReactTooltip id='overTime' getContent={[() => {\n" +
                 " return 'Random length content'.slice(0, Math.floor(Math.random() * 21) + 1)\n" +
                 "}, 1000]}/>"}</p>
@@ -304,13 +304,27 @@ class Test extends React.Component {
           </div>
           <div className="section">
             <h4 className='title'>Test SVG</h4>
+            <p>Note: if you dynamically change elements in the SVG, add:</p>
+            <pre>
+            {"  componentDidUpdate() {\n" +
+             "    ReactTooltip.rebuild()\n" +
+             "  }"
+            }
+            </pre>
             <p className="sub-title"></p>
             <div className="example-jsx">
-              <div className="side">
+              <div className="side" style={{"textAlign": "center"}}>
                 <svg data-tip="=( •̀д•́)" data-for="svgTooltip" width="50" height="50">
                   <circle cx="25" cy="25" r="22" fill="#fff" stroke="#000" strokeWidth="4"/>
                 </svg>
                 <ReactTooltip id='svgTooltip'/>
+              </div>
+              <div className="side" style={{"textAlign": "center"}}>
+                <svg width="75" height="50">
+                  <circle data-tip="=( •̀‿•́)" data-for="svgTooltip2" cx="25" cy="25" r="22" fill="#fff" stroke="#000" strokeWidth="4"/>
+                  <circle data-tip="=( ❂‿❂)" data-for="svgTooltip2" cx="50" cy="25" r="16" fill="#ddd" stroke="#444" strokeWidth="4"/>
+                </svg>
+                <ReactTooltip id='svgTooltip2'/>
               </div>
             </div>
             <br/>
@@ -320,6 +334,13 @@ class Test extends React.Component {
                  "  <circle cx='25' cy='25' r='22' fill='#fff' stroke='#000' strokeWidth='8'/>\n" +
                  "</svg>\n" +
                  "<ReactTooltip id='svgTooltip' />"}</p>
+                 <p>{"<svg width='75' height='50'>\n" +
+                  "<circle data-tip='=( •̀‿•́)' data-for='svgTooltip2'\n" +
+                  "   cx='25' cy='25' r='22' fill='#fff' stroke='#000' strokeWidth='4'/>\n" +
+                  "<circle data-tip='=( ❂‿❂)' data-for='svgTooltip2'\n" +
+                  "   cx='50' cy='25' r='16' fill='#fdf' stroke='#404' strokeWidth='4'/>\n" +
+                "</svg>\n" +
+                "<ReactTooltip id='svgTooltip2'/>"}</p>
                </div>
              </pre>
           </div>
