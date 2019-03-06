@@ -67,7 +67,8 @@
   top: -999em;
   visibility: hidden;
   z-index: 999;
-  &.allow_hover {
+  &.allow_hover,
+  &.allow_click {
     pointer-events:auto;
   }
   &:before,
