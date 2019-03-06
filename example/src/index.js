@@ -404,6 +404,27 @@ class Test extends React.Component {
                 " type={'light'}"}</p>
               </div>
             </pre>
+
+            <p>When <em>clickable</em> property is set to <em>true</em>, tooltip can respond to mouse (or touch) events.</p>
+            <p className="sub-title"></p>
+            <div className="example-jsx">
+              <div className="block" >
+                <a data-tip data-for='clickme' data-event='click'> (❂‿❂) </a>
+              </div>
+
+              <ReactTooltip id="clickme" place="right" effect="solid" clickable={true}>
+                <input type="text" placeholder="Type something..." />
+              </ReactTooltip>
+            </div>
+            <br />
+            <pre className='example-pre'>
+              <div>
+                <p>{"<a data-tip data-for='clickme' data-event='click'> (❂‿❂) </a>"}</p>
+                <p>{"<ReactTooltip id='clickme' place='right' effect='solid' clickable={true}>\n" +
+                  "<input type='text' placeholder='Type something...' /> \n" +
+                  "</ReactTooltip>"}</p>
+              </div>
+            </pre>
             </div>
 
         </section>
