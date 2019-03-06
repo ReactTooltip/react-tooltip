@@ -77,6 +77,7 @@ className	|   data-class  |  String  |   | extra custom class, can use !importan
  scrollHide | data-scroll-hide | Bool | true, false | Hide the tooltip when scrolling, default is true
  resizeHide | null | Bool | true, false | Hide the tooltip when resizing the window, default is true
  wrapper | null | String | div, span | Selecting the wrapper element of the react tooltip, default is div
+ clickable | null | Bool | true, false | Enables tooltip to respond to mouse (or touch) events, default is false
 
 ### Security Note
 

@@ -57,13 +57,15 @@ class ReactTooltip extends React.Component {
     disable: PropTypes.bool,
     scrollHide: PropTypes.bool,
     resizeHide: PropTypes.bool,
-    wrapper: PropTypes.string
+    wrapper: PropTypes.string,
+    clickable: PropTypes.bool
   };
 
   static defaultProps = {
     insecure: true,
     resizeHide: true,
-    wrapper: 'div'
+    wrapper: 'div',
+    clickable: false
   };
 
   static supportedWrappers = ['div', 'span'];
@@ -539,7 +541,8 @@ class ReactTooltip extends React.Component {
       {'type-error': this.state.type === 'error'},
       {'type-info': this.state.type === 'info'},
       {'type-light': this.state.type === 'light'},
-      {'allow_hover': this.props.delayUpdate}
+      {'allow_hover': this.props.delayUpdate},
+      {'allow_click': this.props.clickable}
     )
 
     let Wrapper = this.props.wrapper
