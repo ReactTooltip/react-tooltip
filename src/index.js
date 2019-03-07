@@ -2,7 +2,6 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import ReactDOM from 'react-dom'
 import classname from 'classnames'
 
 /* Decoraters */
@@ -309,7 +308,7 @@ class ReactTooltip extends React.Component {
     let desiredPlace = e.currentTarget.getAttribute('data-place') || this.props.place || 'top'
     let effect = switchToSolid && 'solid' || this.getEffect(e.currentTarget)
     let offset = e.currentTarget.getAttribute('data-offset') || this.props.offset || {}
-    let result = getPosition(e, e.currentTarget, ReactDOM.findDOMNode(this), desiredPlace, desiredPlace, effect, offset)
+    let result = getPosition(e, e.currentTarget, this.tooltipRef, desiredPlace, desiredPlace, effect, offset)
     let place = result.isNewState ? result.newState.place : desiredPlace
 
     // To prevent previously created timers from triggering
@@ -480,7 +479,7 @@ class ReactTooltip extends React.Component {
   // Calculation the position
   updatePosition () {
     const {currentEvent, currentTarget, place, desiredPlace, effect, offset} = this.state
-    const node = ReactDOM.findDOMNode(this)
+    const node = this.tooltipRef
     const result = getPosition(currentEvent, currentTarget, node, place, desiredPlace, effect, offset)
 
     if (result.isNewState) {
