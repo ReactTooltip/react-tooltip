@@ -120,9 +120,10 @@ class ReactTooltip extends React.Component {
    * For unify the bind and unbind listener
    */
   bind (methodArray) {
-    methodArray.forEach(method => {
+    for (let i = 0; i < methodArray.length; i++) {
+      const method = methodArray[i]
       this[method] = this[method].bind(this)
-    })
+    }
   }
 
   componentDidMount () {
@@ -201,7 +202,8 @@ class ReactTooltip extends React.Component {
     const {id, globalEventOff, isCapture} = this.props
     let targetArray = this.getTargetArray(id)
 
-    targetArray.forEach(target => {
+    for (let i = 0; i < targetArray.length; i++) {
+      const target = targetArray[i]
       const isCaptureMode = this.isCapture(target)
       const effect = this.getEffect(target)
       if (target.getAttribute('currentItem') === null) {
@@ -219,7 +221,7 @@ class ReactTooltip extends React.Component {
         target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
       }
       target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
-    })
+    }
 
     // Global event to hide tooltip
     if (globalEventOff) {
@@ -237,10 +239,11 @@ class ReactTooltip extends React.Component {
   unbindListener () {
     const {id, globalEventOff} = this.props
     const targetArray = this.getTargetArray(id)
-    targetArray.forEach(target => {
+    for (let i = 0; i < targetArray.length; i++) {
+      const target = targetArray[i]
       this.unbindBasicListener(target)
       if (this.isCustomEvent(target)) this.customUnbindListener(target)
-    })
+    }
 
     if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip)
     this.unbindRemovalTracker()
