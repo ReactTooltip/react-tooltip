@@ -47,7 +47,7 @@ class Test extends React.Component {
           <h4 className='title'>React Tooltip</h4>
           <div className='demonstration'>
             <a data-for='main' data-tip="Hello<br />multiline<br />tooltip" data-iscapture="true">
-               ◕‿‿◕
+              ◕‿‿◕
             </a>
           </div>
           <div className='control-panel'>
@@ -104,13 +104,13 @@ class Test extends React.Component {
             <pre className='example-pre'>
               <div>
                 <p>{"<a data-tip data-for='happyFace'> d(`･∀･)b </a>\n" +
-                "<ReactTooltip id='happyFace' type='error'>\n" +
+                  "<ReactTooltip id='happyFace' type='error'>\n" +
                   " " + " " + "<span>Show happy face</span>\n" +
-                "</ReactTooltip>\n" +
-                "<a data-tip data-for='sadFace'> இдஇ </a>\n" +
-                "<ReactTooltip id='sadFace' type='warning' effect='solid'>\n" +
+                  "</ReactTooltip>\n" +
+                  "<a data-tip data-for='sadFace'> இдஇ </a>\n" +
+                  "<ReactTooltip id='sadFace' type='warning' effect='solid'>\n" +
                   " " + " " + "<span>Show sad face</span>\n" +
-                "</ReactTooltip>"}</p>
+                  "</ReactTooltip>"}</p>
               </div>
             </pre>
             <div className="example-jsx">
@@ -131,13 +131,13 @@ class Test extends React.Component {
                 <p>{"<a data-tip data-for='global'> σ`∀´)σ </a>\n" +
                   "<a data-tip data-for='global'> (〃∀〃) </a>\n" +
                   "<ReactTooltip id='global' aria-haspopup='true' role='example'>\n" +
-                    " <p>This is a global react component tooltip</p>\n" +
-                    " <p>You can put every thing here</p>\n" +
-                    " <ul>\n" +
-                      " " + " " + " <li>Word</li>\n" +
-                      " " + " " + " <li>Chart</li>\n" +
-                      " " + " " + " <li>Else</li>\n" +
-                    " </ul>\n" +
+                  " <p>This is a global react component tooltip</p>\n" +
+                  " <p>You can put every thing here</p>\n" +
+                  " <ul>\n" +
+                  " " + " " + " <li>Word</li>\n" +
+                  " " + " " + " <li>Chart</li>\n" +
+                  " " + " " + " <li>Else</li>\n" +
+                  " </ul>\n" +
                   "</ReactTooltip>"}</p>
               </div>
             </pre>
@@ -153,12 +153,12 @@ class Test extends React.Component {
                 <ReactTooltip id='custom-event' globalEventOff='click' />
               </div>
               <div className="side">
-                <a data-for='custom-off-event' ref='target' data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>
-                <ReactTooltip id='custom-off-event'/>
+                <a data-for='custom-off-event' ref={ref => this.targetRef = ref} data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>
+                <ReactTooltip id='custom-off-event' />
                 {/*
                   <div>
-                    <button onClick={() => { ReactTooltip.show(ReactDOM.findDOMNode(this.refs.target)) }}>Show toolip</button>
-                    <button onClick={() => { ReactTooltip.hide(ReactDOM.findDOMNode(this.refs.target)) }}>Hide toolip</button>
+                    <button onClick={() => { ReactTooltip.show(this.targetRef) }}>Show toolip</button>
+                    <button onClick={() => { ReactTooltip.hide(this.targetRef) }}>Hide toolip</button>
                   </div>
                 */}
               </div>
@@ -167,11 +167,11 @@ class Test extends React.Component {
             <pre className='example-pre'>
               <div>
                 <p>{"<a data-tip='custom show' data-event='click focus'>( •̀д•́)</a>\n" +
-                "<ReactTooltip globalEventOff='click' />"}</p>
+                  "<ReactTooltip globalEventOff='click' />"}</p>
               </div>
               <div>
                 <p>{"<a data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>\n" +
-                "<ReactTooltip/>"}</p>
+                  "<ReactTooltip/>"}</p>
               </div>
             </pre>
           </div>
@@ -193,30 +193,30 @@ class Test extends React.Component {
             <pre className='example-pre'>
               <div>
                 <p>{"<a data-tip='hover on me will keep the tooltip'>(･ω´･ )́)</a>\n" +
-                "<ReactTooltip className='extraClass' delayHide={1000} effect='solid'/>\n" +
-                ".extraClass {\n" +
+                  "<ReactTooltip className='extraClass' delayHide={1000} effect='solid'/>\n" +
+                  ".extraClass {\n" +
                   " font-size: 20px !important;\n" +
                   " pointer-events: auto !important;\n" +
                   " &:hover {\n" +
-                    "visibility: visible !important;\n" +
-                    "opacity: 1 !important;\n" +
+                  "visibility: visible !important;\n" +
+                  "opacity: 1 !important;\n" +
                   " }\n" +
-                "}"}</p>
+                  "}"}</p>
               </div>
               <div>
                 <p>{"<a data-tip='custom theme'>(･ω´･ )́)</a>\n" +
-                "<ReactTooltip className='customeTheme'/>\n" +
-                " .customeTheme {\n" +
+                  "<ReactTooltip className='customeTheme'/>\n" +
+                  " .customeTheme {\n" +
                   " color: #ff6e00 !important;\n" +
                   " background-color: orange !important;\n" +
                   " &.place-top {\n" +
-                    " &:after {\n" +
-                      " border-top-color: orange !important;\n" +
-                      " border-top-style: solid !important;\n" +
-                      " border-top-width: 6px !important;\n" +
-                    " }\n" +
+                  " &:after {\n" +
+                  " border-top-color: orange !important;\n" +
+                  " border-top-style: solid !important;\n" +
+                  " border-top-width: 6px !important;\n" +
                   " }\n" +
-                "}"}</p>
+                  " }\n" +
+                  "}"}</p>
               </div>
             </pre>
           </div>
@@ -238,13 +238,13 @@ class Test extends React.Component {
             <pre className='example-pre'>
               <div>
                 <p>{"<a data-for='getContent' data-tip>=( •̀д•́)</a>\n" +
-                "<ReactTooltip id='getContent' getContent={() => Math.floor(Math.random() * 100)} />"}</p>
+                  "<ReactTooltip id='getContent' getContent={() => Math.floor(Math.random() * 100)} />"}</p>
               </div>
               <div>
                 <p>{"<a data-for='overTime' data-tip>=( •̀д•́)</a>\n" +
-                "<ReactTooltip id='overTime' getContent={[() => {\n" +
-                " return 'Random length content'.slice(0, Math.floor(Math.random() * 21) + 1)\n" +
-                "}, 1000]}/>"}</p>
+                  "<ReactTooltip id='overTime' getContent={[() => {\n" +
+                  " return 'Random length content'.slice(0, Math.floor(Math.random() * 21) + 1)\n" +
+                  "}, 1000]}/>"}</p>
               </div>
             </pre>
           </div>
@@ -264,8 +264,8 @@ class Test extends React.Component {
             <pre className='example-pre'>
               <div>
                 <p>{"<a data-for='enrich' data-tip='sooooo cute'>(❂‿❂)</a>\n" +
-                "<a data-for='enrich' data-tip='really high'>(❂‿❂)</a>\n" +
-                "<ReactTooltip id='enrich' getContent={(dataTip) => `This little buddy is ${dataTip}`}/>"}</p>
+                  "<a data-for='enrich' data-tip='really high'>(❂‿❂)</a>\n" +
+                  "<ReactTooltip id='enrich' getContent={(dataTip) => `This little buddy is ${dataTip}`}/>"}</p>
               </div>
             </pre>
           </div>
@@ -294,11 +294,11 @@ class Test extends React.Component {
             <pre className='example-pre'>
               <div>
                 <p>{"<div data-for='scrollContent' data-tip data-iscapture='true'\n style={{ width: '5000px', height: '5000px' }}>...</div>\n" +
-                "<ReactTooltip id='scrollContent' getContent={() => Math.floor(Math.random() * 100)}/>"}</p>
+                  "<ReactTooltip id='scrollContent' getContent={() => Math.floor(Math.random() * 100)}/>"}</p>
               </div>
               <div>
                 <p>{"<div data-for='scrollTime' data-tip data-iscapture='true' data-scroll-hide='false'\n style={{ width: '5000px', height: '5000px' }}>...</div>\n" +
-                "<ReactTooltip id='scrollTime' getContent={[() => {return new Date().toISOString()}, 1000]}/>"}</p>
+                  "<ReactTooltip id='scrollTime' getContent={[() => {return new Date().toISOString()}, 1000]}/>"}</p>
               </div>
             </pre>
           </div>
@@ -306,10 +306,10 @@ class Test extends React.Component {
             <h4 className='title'>Test SVG</h4>
             <p>Note: if you dynamically change elements in the SVG, add:</p>
             <pre>
-            {"  componentDidUpdate() {\n" +
-             "    ReactTooltip.rebuild()\n" +
-             "  }"
-            }
+              {"  componentDidUpdate() {\n" +
+                "    ReactTooltip.rebuild()\n" +
+                "  }"
+              }
             </pre>
             <p className="sub-title"></p>
             <div className="example-jsx">
@@ -329,79 +329,79 @@ class Test extends React.Component {
             </div>
             <br/>
             <pre className='example-pre'>
-               <div>
-                 <p>{"<svg data-tip='=( •̀д•́)' data-for='svgTooltip' width='50' height='50'>\n" +
-                 "  <circle cx='25' cy='25' r='22' fill='#fff' stroke='#000' strokeWidth='8'/>\n" +
-                 "</svg>\n" +
-                 "<ReactTooltip id='svgTooltip' />"}</p>
-                 <p>{"<svg width='75' height='50'>\n" +
+              <div>
+                <p>{"<svg data-tip='=( •̀д•́)' data-for='svgTooltip' width='50' height='50'>\n" +
+                  "  <circle cx='25' cy='25' r='22' fill='#fff' stroke='#000' strokeWidth='8'/>\n" +
+                  "</svg>\n" +
+                  "<ReactTooltip id='svgTooltip' />"}</p>
+                <p>{"<svg width='75' height='50'>\n" +
                   "<circle data-tip='=( •̀‿•́)' data-for='svgTooltip2'\n" +
                   "   cx='25' cy='25' r='22' fill='#fff' stroke='#000' strokeWidth='4'/>\n" +
                   "<circle data-tip='=( ❂‿❂)' data-for='svgTooltip2'\n" +
                   "   cx='50' cy='25' r='16' fill='#fdf' stroke='#404' strokeWidth='4'/>\n" +
-                "</svg>\n" +
-                "<ReactTooltip id='svgTooltip2'/>"}</p>
-               </div>
-             </pre>
+                  "</svg>\n" +
+                  "<ReactTooltip id='svgTooltip2'/>"}</p>
+              </div>
+            </pre>
           </div>
-            <div className="section">
-                <h4 className='title'>Demonstrate using mouse in tooltip. </h4>
-                <p>Notice that the tooltip delays going away so you can get your mouse in it. You must set delayUpdate and delayHide for the tooltip to stay long enough to get your mouse over it.</p>
-                <p className="sub-title"></p>
-                <div className="example-jsx">
-                    <div className="block" >
-                        <a data-for='soclose' data-tip='1'>1 (❂‿❂)</a>
-                    </div>
-                    <div className="block">
-                        <a data-for='soclose' data-tip='2'>2 (❂‿❂)</a>
-                    </div>
-                    <div className="block" >
-                        <a data-for='soclose' data-tip='3'>3 (❂‿❂)</a>
-                    </div>
-                    <div className="block">
-                        <a data-for='soclose' data-tip='4'>4 (❂‿❂)</a>
-                    </div>
-                    <div className="block" >
-                        <a data-for='soclose' data-tip='5'>5 (❂‿❂)</a>
-                    </div>
-                    <div className="block">
-                        <a data-for='soclose' data-tip='6'>6 (❂‿❂)</a>
-                    </div>
-                    <div className="block" >
-                        <a data-for='soclose' data-tip='7'>7 (❂‿❂)</a>
-                    </div>
-                    <div className="block">
-                        <a data-for='soclose' data-tip='8'>8 (❂‿❂)</a>
-                    </div>
+          <div className="section">
+            <h4 className='title'>Demonstrate using mouse in tooltip. </h4>
+            <p>Notice that the tooltip delays going away so you can get your mouse in it. You must set delayUpdate and delayHide for the tooltip to stay long enough to get your mouse over it.</p>
+            <p className="sub-title"></p>
+            <div className="example-jsx">
+              <div className="block" >
+                <a data-for='soclose' data-tip='1'>1 (❂‿❂)</a>
+              </div>
+              <div className="block">
+                <a data-for='soclose' data-tip='2'>2 (❂‿❂)</a>
+              </div>
+              <div className="block" >
+                <a data-for='soclose' data-tip='3'>3 (❂‿❂)</a>
+              </div>
+              <div className="block">
+                <a data-for='soclose' data-tip='4'>4 (❂‿❂)</a>
+              </div>
+              <div className="block" >
+                <a data-for='soclose' data-tip='5'>5 (❂‿❂)</a>
+              </div>
+              <div className="block">
+                <a data-for='soclose' data-tip='6'>6 (❂‿❂)</a>
+              </div>
+              <div className="block" >
+                <a data-for='soclose' data-tip='7'>7 (❂‿❂)</a>
+              </div>
+              <div className="block">
+                <a data-for='soclose' data-tip='8'>8 (❂‿❂)</a>
+              </div>
 
-                    <ReactTooltip id='soclose'
-                                  getContent={(dataTip) => <div><h3>This little buddy is {dataTip}</h3><p>Put mouse here</p></div> }
-                                  effect='solid'
-                                  delayHide={500}
-                                  delayShow={500}
-                                  delayUpdate={500}
-                                  place={'right'}
-                                  border={true}
-                                  type={'light'}
+              <ReactTooltip id='soclose'
+                getContent={(dataTip) => <div><h3>This little buddy is {dataTip}</h3><p>Put mouse here</p></div> }
+                effect='solid'
+                delayHide={500}
+                delayShow={500}
+                delayUpdate={500}
+                place={'right'}
+                border={true}
+                type={'light'}
 
-                    />
-                </div>
-                <br />
-                <pre className='example-pre'>
+              />
+            </div>
+            <br />
+            <pre className='example-pre'>
               <div>
                 <p>{"<a data-for='soclose' data-tip='1'>1 (❂‿❂)</a>"}</p>
                 <p>{"<a data-for='soclose' data-tip='2'>2 (❂‿❂)</a>..."}</p>
                 <p>{"<a data-for='soclose' data-tip='8'>8 (❂‿❂)</a>"}</p>
                 <p>{"<ReactTooltip id='soclose'\n" +
-                " getContent={(dataTip) => \n" +
-                "  <div><h3>This little buddy is {dataTip}</h3><p>Put mouse here</p></div> }\n" +
-                " effect='solid'\n" +
-                " delayHide={500}\n" +
-                " delayShow={500}\n" +
-                " delayUpdate={500}\n" +
-                " place={'right'}\n" +
-                " border={true}\n" +
-                " type={'light'}"}</p>
+                  " getContent={(dataTip) => \n" +
+                  "  <div><h3>This little buddy is {dataTip}</h3><p>Put mouse here</p></div> }\n" +
+                  " effect='solid'\n" +
+                  " delayHide={500}\n" +
+                  " delayShow={500}\n" +
+                  " delayUpdate={500}\n" +
+                  " place={'right'}\n" +
+                  " border={true}\n" +
+                  " type={'light'}"}</p>
               </div>
             </pre>
 
@@ -425,7 +425,7 @@ class Test extends React.Component {
                   "</ReactTooltip>"}</p>
               </div>
             </pre>
-            </div>
+          </div>
 
         </section>
       </div>
