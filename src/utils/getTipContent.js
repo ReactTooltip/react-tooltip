@@ -16,7 +16,7 @@ import React from 'react'
 export default function (tip, children, getContent, multiline) {
   if (children) return children
   if (getContent !== undefined && getContent !== null) return getContent // getContent can be 0, '', etc.
-  if (getContent === null) return null // Tip not exist and childern is null or undefined
+  if (getContent === null) return null // Tip not exist and children is null or undefined
 
   const regexp = /<br\s*\/?>/
   if (!multiline || multiline === 'false' || !regexp.test(tip)) {

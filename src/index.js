@@ -4,7 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classname from 'classnames'
 
-/* Decoraters */
+/* Decorators */
 import staticMethods from './decorators/staticMethods'
 import windowListener from './decorators/windowListener'
 import customEvent from './decorators/customEvent'
@@ -246,8 +246,8 @@ class ReactTooltip extends React.Component {
   }
 
   /**
-   * Invoke this before bind listener and ummount the compont
-   * it is necessary to invloke this even when binding custom event
+   * Invoke this before bind listener and unmount the component
+   * it is necessary to invoke this even when binding custom event
    * so that the tooltip can switch between custom and default listener
    */
   unbindBasicListener (target) {
@@ -366,7 +366,7 @@ class ReactTooltip extends React.Component {
   }
 
   /**
-   * When mouse hover, updatetooltip
+   * When mouse hover, update tool tip
    */
   updateTooltip (e) {
     const {delayShow, disable} = this.state
@@ -464,7 +464,7 @@ class ReactTooltip extends React.Component {
   }
 
   /**
-   * Add scroll eventlistener when tooltip show
+   * Add scroll event listener when tooltip show
    * automatically hide the tooltip when scrolling
    */
   addScrollListener (currentTarget) {

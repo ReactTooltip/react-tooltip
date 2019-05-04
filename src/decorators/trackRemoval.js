@@ -1,6 +1,6 @@
 /**
  * Tracking target removing from DOM.
- * It's nessesary to hide tooltip when it's target disappears.
+ * It's necessary to hide tooltip when it's target disappears.
  * Otherwise, the tooltip would be shown forever until another target
  * is triggered.
  *
