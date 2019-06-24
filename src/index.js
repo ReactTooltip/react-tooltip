@@ -133,15 +133,18 @@ class ReactTooltip extends React.Component {
     this.bindWindowEvents(resizeHide) // Bind global event for static method
   }
 
-  componentWillReceiveProps (props) {
-    const { ariaProps } = this.state
-    const newAriaProps = parseAria(props)
-
+  static getDerivedStateFromProps (nextProps, prevState) {
+    const { ariaProps } = prevState
+    const newAriaProps = parseAria(nextProps)
     const isChanged = Object.keys(newAriaProps).some(props => {
       return newAriaProps[props] !== ariaProps[props]
     })
-    if (isChanged) {
-      this.setState({ ariaProps: newAriaProps })
+    if (!isChanged) {
+      return null
+    }
+    return {
+      ...prevState,
+      ariaProps: newAriaProps
     }
   }
 
