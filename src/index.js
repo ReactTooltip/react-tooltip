@@ -57,6 +57,7 @@ class ReactTooltip extends React.Component {
     scrollHide: PropTypes.bool,
     resizeHide: PropTypes.bool,
     wrapper: PropTypes.string,
+    overridePosition: PropTypes.func,
     clickable: PropTypes.bool
   };
 
@@ -309,6 +310,10 @@ class ReactTooltip extends React.Component {
     let effect = switchToSolid && 'solid' || this.getEffect(e.currentTarget)
     let offset = e.currentTarget.getAttribute('data-offset') || this.props.offset || {}
     let result = getPosition(e, e.currentTarget, this.tooltipRef, desiredPlace, desiredPlace, effect, offset)
+    if (this.props.overridePosition) {
+      result = this.props.overridePosition(result, e.currentTarget, this.tooltipRef, desiredPlace, desiredPlace, effect, offset)
+    }
+
     let place = result.isNewState ? result.newState.place : desiredPlace
 
     // To prevent previously created timers from triggering
@@ -480,7 +485,10 @@ class ReactTooltip extends React.Component {
   updatePosition () {
     const {currentEvent, currentTarget, place, desiredPlace, effect, offset} = this.state
     const node = this.tooltipRef
-    const result = getPosition(currentEvent, currentTarget, node, place, desiredPlace, effect, offset)
+    let result = getPosition(currentEvent, currentTarget, node, place, desiredPlace, effect, offset)
+    if (this.props.overridePosition) {
+      result = this.props.overridePosition(result, currentEvent, currentTarget, node, place, desiredPlace, effect, offset)
+    }
 
     if (result.isNewState) {
       // Switch to reverse placement
