@@ -53,11 +53,11 @@ class ReactTooltip extends React.Component {
     getContent: PropTypes.any,
     afterShow: PropTypes.func,
     afterHide: PropTypes.func,
+    overridePosition: PropTypes.func,
     disable: PropTypes.bool,
     scrollHide: PropTypes.bool,
     resizeHide: PropTypes.bool,
     wrapper: PropTypes.string,
-    overridePosition: PropTypes.func,
     clickable: PropTypes.bool
   };
 
@@ -310,8 +310,8 @@ class ReactTooltip extends React.Component {
     let effect = switchToSolid && 'solid' || this.getEffect(e.currentTarget)
     let offset = e.currentTarget.getAttribute('data-offset') || this.props.offset || {}
     let result = getPosition(e, e.currentTarget, this.tooltipRef, desiredPlace, desiredPlace, effect, offset)
-    if (this.props.overridePosition) {
-      result = this.props.overridePosition(result, e.currentTarget, this.tooltipRef, desiredPlace, desiredPlace, effect, offset)
+    if (result.position && this.props.overridePosition) {
+      result.position = this.props.overridePosition(result.position, e.currentTarget, this.tooltipRef, desiredPlace, desiredPlace, effect, offset)
     }
 
     let place = result.isNewState ? result.newState.place : desiredPlace
@@ -487,7 +487,7 @@ class ReactTooltip extends React.Component {
     const node = this.tooltipRef
     let result = getPosition(currentEvent, currentTarget, node, place, desiredPlace, effect, offset)
     if (this.props.overridePosition) {
-      result = this.props.overridePosition(result, currentEvent, currentTarget, node, place, desiredPlace, effect, offset)
+      result.position = this.props.overridePosition(result.position, currentEvent, currentTarget, node, place, desiredPlace, effect, offset)
     }
 
     if (result.isNewState) {
