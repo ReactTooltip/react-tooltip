@@ -100,6 +100,7 @@ class ReactTooltip extends React.Component {
       'showTooltip',
       'updateTooltip',
       'hideTooltip',
+      'hideTooltipOnScroll',
       'getTooltipContent',
       'globalRebuild',
       'globalShow',
@@ -425,8 +426,10 @@ class ReactTooltip extends React.Component {
   /**
    * When mouse leave, hide tooltip
    */
-  hideTooltip (e, hasTarget) {
-    const {delayHide, disable} = this.state
+  hideTooltip (e, hasTarget, options = { isScroll: false }) {
+    const {disable} = this.state
+    const {isScroll} = options
+    const delayHide = isScroll ? 0 : this.state.delayHide
     const {afterHide} = this.props
     const placeholder = this.getTooltipContent()
     if (!this.mount) return
@@ -464,16 +467,23 @@ class ReactTooltip extends React.Component {
   }
 
   /**
+   * When scroll, hide tooltip
+   */
+  hideTooltipOnScroll (event, hasTarget) {
+    this.hideTooltip(event, hasTarget, { isScroll: true })
+  }
+
+  /**
    * Add scroll event listener when tooltip show
    * automatically hide the tooltip when scrolling
    */
   addScrollListener (currentTarget) {
     const isCaptureMode = this.isCapture(currentTarget)
-    window.addEventListener('scroll', this.hideTooltip, isCaptureMode)
+    window.addEventListener('scroll', this.hideTooltipOnScroll, isCaptureMode)
   }
 
   removeScrollListener () {
-    window.removeEventListener('scroll', this.hideTooltip)
+    window.removeEventListener('scroll', this.hideTooltipOnScroll)
   }
 
   // Calculation the position
