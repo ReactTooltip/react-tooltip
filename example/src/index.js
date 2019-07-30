@@ -46,7 +46,7 @@ class Test extends React.Component {
         <section className='tooltip-example'>
           <h4 className='title'>React Tooltip</h4>
           <div className='demonstration'>
-            <a data-for='main' data-tip="Hello<br />multiline<br />tooltip" data-iscapture="true">
+            <a tabIndex={0} data-for='main' data-tip="Hello<br />multiline<br />tooltip" data-iscapture="true">
               ◕‿‿◕
             </a>
           </div>

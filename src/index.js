@@ -214,16 +214,20 @@ class ReactTooltip extends React.Component {
       }
 
       target.addEventListener('mouseenter', this.showTooltip, isCaptureMode)
+      target.addEventListener('focus', this.showTooltip, isCaptureMode)
       if (effect === 'float') {
         target.addEventListener('mousemove', this.updateTooltip, isCaptureMode)
       }
       target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode)
+      target.addEventListener('blur', this.hideTooltip, isCaptureMode)
     })
 
     // Global event to hide tooltip
     if (globalEventOff) {
       window.removeEventListener(globalEventOff, this.hideTooltip)
       window.addEventListener(globalEventOff, this.hideTooltip, isCapture)
+    } else {
+      this.bindKeyUpEventListener()
     }
 
     // Track removal of targetArray elements from DOM
@@ -243,6 +247,7 @@ class ReactTooltip extends React.Component {
 
     if (globalEventOff) window.removeEventListener(globalEventOff, this.hideTooltip)
     this.unbindRemovalTracker()
+    this.unbindKeyUpEventListener()
   }
 
   /**
@@ -253,8 +258,26 @@ class ReactTooltip extends React.Component {
   unbindBasicListener (target) {
     const isCaptureMode = this.isCapture(target)
     target.removeEventListener('mouseenter', this.showTooltip, isCaptureMode)
+    target.removeEventListener('focus', this.showTooltip, isCaptureMode)
     target.removeEventListener('mousemove', this.updateTooltip, isCaptureMode)
     target.removeEventListener('mouseleave', this.hideTooltip, isCaptureMode)
+    target.removeEventListener('blur', this.hideTooltip, isCaptureMode)
+  }
+
+  bindKeyUpEventListener () {
+    const {isCapture} = this.props
+    window.removeEventListener('keyup', this.handleKeyUp)
+    window.addEventListener('keyup', this.handleKeyUp, isCapture)
+  }
+
+  unbindKeyUpEventListener () {
+    window.removeEventListener('keyup', this.handleKeyUp)
+  }
+
+  handleKeyUp = (e) => {
+    if (e.key === 'Esc' || e.key === 'Escape') {
+      this.hideTooltip(e)
+    }
   }
 
   getTooltipContent () {
