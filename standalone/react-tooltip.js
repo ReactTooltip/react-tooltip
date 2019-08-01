@@ -2076,6 +2076,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var afterHide = this.props.afterHide;
 
       var placeholder = this.getTooltipContent();
+
       if (!this.mount) return;
       if (this.isEmptyTip(placeholder) || disable) return; // if the tooltip is empty, disable the tooltip
       if (hasTarget) {
@@ -2090,7 +2091,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var resetState = function resetState() {
         var isVisible = _this6.state.show;
         // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
-        if (_this6.mouseOnToolTip()) {
+        if (!_this6.props.ignoreMouseOverOnHide && _this6.mouseOnToolTip()) {
           _this6.listenForTooltipExit();
           return;
         }
@@ -2266,12 +2267,14 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   scrollHide: _propTypes2.default.bool,
   resizeHide: _propTypes2.default.bool,
   wrapper: _propTypes2.default.string,
-  clickable: _propTypes2.default.bool
+  clickable: _propTypes2.default.bool,
+  ignoreMouseOverOnHide: _propTypes2.default.bool
 }, _class2.defaultProps = {
   insecure: true,
   resizeHide: true,
   wrapper: 'div',
-  clickable: false
+  clickable: false,
+  ignoreMouseOverOnHide: false
 }, _class2.supportedWrappers = ['div', 'span'], _class2.displayName = 'ReactTooltip', _temp)) || _class) || _class) || _class) || _class) || _class) || _class;
 
 /* export default not fit for standalone, it will exports {default:...} */

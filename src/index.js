@@ -57,14 +57,16 @@ class ReactTooltip extends React.Component {
     scrollHide: PropTypes.bool,
     resizeHide: PropTypes.bool,
     wrapper: PropTypes.string,
-    clickable: PropTypes.bool
+    clickable: PropTypes.bool,
+    ignoreMouseOverOnHide: PropTypes.bool
   };
 
   static defaultProps = {
     insecure: true,
     resizeHide: true,
     wrapper: 'div',
-    clickable: false
+    clickable: false,
+    ignoreMouseOverOnHide: false
   };
 
   static supportedWrappers = ['div', 'span'];
@@ -452,6 +454,7 @@ class ReactTooltip extends React.Component {
     const {delayHide, disable} = this.state
     const {afterHide} = this.props
     const placeholder = this.getTooltipContent()
+
     if (!this.mount) return
     if (this.isEmptyTip(placeholder) || disable) return // if the tooltip is empty, disable the tooltip
     if (hasTarget) {
@@ -464,7 +467,7 @@ class ReactTooltip extends React.Component {
     const resetState = () => {
       const isVisible = this.state.show
       // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
-      if (this.mouseOnToolTip()) {
+      if (!this.props.ignoreMouseOverOnHide && this.mouseOnToolTip()) {
         this.listenForTooltipExit()
         return
       }
