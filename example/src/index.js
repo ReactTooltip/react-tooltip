@@ -427,6 +427,72 @@ class Test extends React.Component {
             </pre>
           </div>
 
+          <div className="section">
+            <h4 className='title'>Override position</h4>
+            <p className="sub-title">
+              Try to resize/zoom in window - tooltip in this sample will try to
+              magnet to window borders, top left border is priority here. Idea is following:
+              sometimes you have custom border cases, like custom scrolls, small windows,
+              iframes, react-tooltip itself can not cover everything, so up to you if you want to customize
+              default behavior, or may be just limit it like in this example.
+            </p>
+            <div className="example-jsx">
+              <div className="side" style={{display: 'flex', width: '100%'}}>
+                <a data-tip data-for='overridePosition'>( •̀д•́) override</a>
+                <ReactTooltip id='overridePosition' overridePosition={ ({ left, top },
+                                                                        currentEvent, currentTarget, node) => {
+                  const d = document.documentElement;
+
+                  left = Math.min(d.clientWidth - node.clientWidth, left);
+                  top = Math.min(d.clientHeight - node.clientHeight, top);
+
+                  left = Math.max(0, left);
+                  top = Math.max(0, top);
+
+                  return { top, left }
+                } }>
+                  <div>header</div>
+                  <img src="http://lorempixel.com/100/1500" alt="lorem image 100x1500" />
+                  <div>footer</div>
+                </ReactTooltip>
+                <a data-tip data-for='noOverridePosition'>( •̀д•́) noOverride</a>
+                <ReactTooltip id='noOverridePosition'>
+                  <div>header</div>
+                  <img src="http://lorempixel.com/100/1500" alt="lorem image 100x1500" />
+                  <div>footer</div>
+                </ReactTooltip>
+              </div>
+            </div>
+            <br />
+            <pre className='example-pre'>
+              <div>
+                <p>{ `
+<a data-tip data-for='overridePosition'>( •̀д•́) override</a>
+<ReactTooltip id='overridePosition' overridePosition={ ({ left, top },
+                                                        currentEvent, currentTarget, node) => {
+  const d = document.documentElement;
+
+  left = Math.min(d.clientWidth - node.clientWidth, left);
+  top = Math.min(d.clientHeight - node.clientHeight, top);
+
+  left = Math.max(0, left);
+  top = Math.max(0, top);
+
+  return { top, left }
+} }>
+  <div>header</div>
+  <img src="http://lorempixel.com/100/1500" alt="lorem image 100x1500" />
+  <div>footer</div>
+</ReactTooltip>
+<a data-tip data-for='noOverridePosition'>( •̀д•́) noOverride</a>
+<ReactTooltip id='noOverridePosition'>
+  <div>header</div>
+  <img src="http://lorempixel.com/100/1500" alt="lorem image 100x1500" />
+  <div>footer</div>
+</ReactTooltip>` }</p>
+              </div>
+            </pre>
+          </div>
         </section>
       </div>
     )
