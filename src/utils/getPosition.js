@@ -15,6 +15,16 @@
  * - `position` {Object} {left: {Number}, top: {Number}}
  */
 export default function (e, target, node, place, desiredPlace, effect, offset) {
+  if (!target || !node) {
+    return {
+      isNewState: false,
+      position: {
+        left: 0,
+        top: 0
+      }
+    }
+  }
+
   const {
     width: tipWidth,
     height: tipHeight

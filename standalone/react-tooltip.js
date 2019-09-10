@@ -2329,6 +2329,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (e, target, node, place, desiredPlace, effect, offset) {
+  if (!target || !node) {
+    return {
+      isNewState: false,
+      position: {
+        left: 0,
+        top: 0
+      }
+    };
+  }
+
   var _getDimensions = getDimensions(node),
       tipWidth = _getDimensions.width,
       tipHeight = _getDimensions.height;
