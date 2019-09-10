@@ -25,14 +25,14 @@ export default function (e, target, node, place, desiredPlace, effect, offset) {
     height: targetHeight
   } = getDimensions(target)
 
-  const {mouseX, mouseY} = getCurrentOffset(e, target, effect)
+  const { mouseX, mouseY } = getCurrentOffset(e, target, effect)
   const defaultOffset = getDefaultPosition(effect, targetWidth, targetHeight, tipWidth, tipHeight)
-  const {extraOffset_X, extraOffset_Y} = calculateOffset(offset)
+  const { extraOffset_X, extraOffset_Y } = calculateOffset(offset)
 
   const windowWidth = window.innerWidth
   const windowHeight = window.innerHeight
 
-  const {parentTop, parentLeft} = getParent(node)
+  const { parentTop, parentLeft } = getParent(node)
 
   // Get the edge offset of the tooltip
   const getTipOffsetLeft = (place) => {
@@ -97,7 +97,7 @@ export default function (e, target, node, place, desiredPlace, effect, offset) {
   if (isNewState) {
     return {
       isNewState: true,
-      newState: {place: newPlace}
+      newState: { place: newPlace }
     }
   }
 
@@ -111,6 +111,13 @@ export default function (e, target, node, place, desiredPlace, effect, offset) {
 }
 
 const getDimensions = (node) => {
+  if (!node) {
+    return {
+      height: 0,
+      width: 0
+    }
+  }
+
   const { height, width } = node.getBoundingClientRect()
   return {
     height: parseInt(height, 10),
@@ -203,7 +210,7 @@ const getDefaultPosition = (effect, targetWidth, targetHeight, tipWidth, tipHeig
     }
   }
 
-  return {top, bottom, left, right}
+  return { top, bottom, left, right }
 }
 
 // Consider additional offset into position calculation
@@ -226,19 +233,21 @@ const calculateOffset = (offset) => {
     }
   }
 
-  return {extraOffset_X, extraOffset_Y}
+  return { extraOffset_X, extraOffset_Y }
 }
 
 // Get the offset of the parent elements
 const getParent = (currentTarget) => {
   let currentParent = currentTarget
   while (currentParent) {
-    if (window.getComputedStyle(currentParent).getPropertyValue('transform') !== 'none') break
+    if (window.getComputedStyle(currentParent).getPropertyValue('transform') !== 'none') {
+      break
+    }
     currentParent = currentParent.parentElement
   }
 
   const parentTop = currentParent && currentParent.getBoundingClientRect().top || 0
   const parentLeft = currentParent && currentParent.getBoundingClientRect().left || 0
 
-  return {parentTop, parentLeft}
+  return { parentTop, parentLeft }
 }
