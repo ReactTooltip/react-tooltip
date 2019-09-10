@@ -48,7 +48,10 @@ export default function (target) {
     if (this.mount) {
       this.unbindListener()
       this.bindListener()
-      this.updatePosition()
+
+      if (!this.props.scrollHide) {
+        this.updatePosition()
+      }
     }
   }
 
