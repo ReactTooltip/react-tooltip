@@ -1390,7 +1390,10 @@ exports.default = function (target) {
     if (this.mount) {
       this.unbindListener();
       this.bindListener();
-      this.updatePosition();
+
+      if (!this.props.scrollHide) {
+        this.updatePosition();
+      }
     }
   };
 
@@ -2442,6 +2445,13 @@ exports.default = function (e, target, node, place, desiredPlace, effect, offset
 };
 
 var getDimensions = function getDimensions(node) {
+  if (!node) {
+    return {
+      height: 0,
+      width: 0
+    };
+  }
+
   var _node$getBoundingClie = node.getBoundingClientRect(),
       height = _node$getBoundingClie.height,
       width = _node$getBoundingClie.width;
@@ -2583,7 +2593,9 @@ var calculateOffset = function calculateOffset(offset) {
 var getParent = function getParent(currentTarget) {
   var currentParent = currentTarget;
   while (currentParent) {
-    if (window.getComputedStyle(currentParent).getPropertyValue('transform') !== 'none') break;
+    if (window.getComputedStyle(currentParent).getPropertyValue('transform') !== 'none') {
+      break;
+    }
     currentParent = currentParent.parentElement;
   }
 
