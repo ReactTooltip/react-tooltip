@@ -1,6 +1,28 @@
 ## Change Log
 
-### v3.9.0 (2018/11/07 00:43 +00:00)
+### v3.11.1 (2019/09/06 15:54 +00:00)
+- [#504](https://github.com/wwayne/react-tooltip/pull/504) fix(src/index.js): Overwrite `delayHide` on scroll (@tihuan)
+
+### v3.11.0 (2019/08/29 16:40 +00:00)
+- [#502](https://github.com/wwayne/react-tooltip/pull/502) feat(overridePosition): Add "overridePosition" property to handle border cases and customize position (@sonnenhaft)
+
+### v3.10.1 (2019/08/29 16:35 +00:00)
+- [#487](https://github.com/wwayne/react-tooltip/pull/487) fix(index.js): Replaced the deprecated `componentWillPeceiveProps`. (@jackall3n)
+- [#491](https://github.com/wwayne/react-tooltip/pull/491) docs: Spelling mistakes correction (@k88manish)
+- [#475](https://github.com/wwayne/react-tooltip/pull/475) Refactor(findDOMNode, string ref): replace deprecated findDOMNode and string ref (@EndiM)
+
+### v3.10.0 (2019/03/06 17:21 +00:00)
+- [#473](https://github.com/wwayne/react-tooltip/pull/473) Feat(clickable-prop): add clickable prop to enable pointer events (@EndiM)
+
+### v3.9.2 (2019/01/04 16:45 +00:00)
+- [#466](https://github.com/wwayne/react-tooltip/pull/466) fix(event): expose the original event to `afterShow` and `afterHide` (@aronhelser)
+- [#465](https://github.com/wwayne/react-tooltip/pull/465) doc(example): expand SVG example to include elements (@aronhelser)
+
+### v3.9.1 (2019/01/02 15:21 +00:00)
+- [#464](https://github.com/wwayne/react-tooltip/pull/464) fix(html): remove sanitize-html-react, reduce package size (@aronhelser)
+- [#461](https://github.com/wwayne/react-tooltip/pull/461) Support for older versions of firefox (@787acr)
+
+### v3.9.0 (2018/11/07 00:46 +00:00)
 - [#452](https://github.com/wwayne/react-tooltip/pull/452) docs(README.md): Updates demo url (@tjFogarty)
 - [#439](https://github.com/wwayne/react-tooltip/pull/439) added support for passing options to sanitizeHtml (@icheishvili)
 - [#433](https://github.com/wwayne/react-tooltip/pull/433) Use capture mode with globalEventOff (@apandichi)
@@ -83,7 +105,7 @@
 - [#254](https://github.com/wwayne/react-tooltip/pull/254) Add support for className prop (@jonbeller)
 
 ### 3.2.4 (2017/02/07 03:57 +00:00)
-- [#251](https://github.com/wwayne/react-tooltip/pull/251) Dropfen dynamic wrapper (@dropfen)
+- [#251](https://github.com/wwayne/react-tooltip/pull/251) Dropfen dynamic wrapper (@wwayne)
 
 ### 3.2.3 (2017/01/30 03:00 +00:00)
 - [#247](https://github.com/wwayne/react-tooltip/pull/247) Fix delayHide issue #246 (@huumanoid)
@@ -214,7 +236,7 @@
 - [#19](https://github.com/wwayne/react-tooltip/pull/19) remove querySelector and use findDOMNode instead (@bezreyhan)
 
 ### v0.3.0 (2015/06/17 08:46 +00:00)
-- [#15](https://github.com/wwayne/react-tooltip/pull/15) Adding support for server-side rendering (@bluejamesbond)
+- [#15](https://github.com/wwayne/react-tooltip/pull/15) Adding support for server-side rendering (@mathew-kurian)
 - [#8](https://github.com/wwayne/react-tooltip/pull/8) Change curly brackets to quotes (single) (@af7)
 - [#6](https://github.com/wwayne/react-tooltip/pull/6) Fix bug with mouse hover triggerring on tooltip children (@tom-s)
 - [#5](https://github.com/wwayne/react-tooltip/pull/5) fixed classnames require call (@mciparelli)
