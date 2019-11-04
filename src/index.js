@@ -569,10 +569,11 @@ class ReactTooltip extends React.Component {
     if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
       Wrapper = ReactTooltip.defaultProps.wrapper
     }
+    const wrapperClassName = [tooltipClass, extraClass].filter(Boolean).join(' ')
 
     if (html) {
       return (
-        <Wrapper className={`${tooltipClass} ${extraClass}`}
+        <Wrapper className={wrapperClassName}
                  id={this.props.id}
                  ref={ref => this.tooltipRef = ref}
                  {...ariaProps}
@@ -581,7 +582,7 @@ class ReactTooltip extends React.Component {
       )
     } else {
       return (
-        <Wrapper className={`${tooltipClass} ${extraClass}`}
+        <Wrapper className={wrapperClassName}
                  id={this.props.id}
                  {...ariaProps}
                  ref={ref => this.tooltipRef = ref}
