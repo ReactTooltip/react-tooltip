@@ -1633,7 +1633,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
     _this.handleKeyUp = function (e) {
       if (e.key === 'Esc' || e.key === 'Escape') {
-        _this.hideTooltip(e, false, _this.props.forceHideOnEscape);
+        _this.hideTooltip(e);
       }
     };
 
@@ -2071,7 +2071,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
   }, {
     key: 'hideTooltip',
-    value: function hideTooltip(e, hasTarget, forceHide) {
+    value: function hideTooltip(e, hasTarget) {
       var _this6 = this;
 
       var _state2 = this.state,
@@ -2095,12 +2095,10 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var resetState = function resetState() {
         var isVisible = _this6.state.show;
 
-        if (!forceHide) {
-          // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
-          if (!_this6.props.ignoreMouseOverOnHide && _this6.mouseOnToolTip()) {
-            _this6.listenForTooltipExit();
-            return;
-          }
+        // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
+        if (!_this6.props.forceHideOnEscape && !_this6.props.ignoreMouseOverOnHide && _this6.mouseOnToolTip()) {
+          _this6.listenForTooltipExit();
+          return;
         }
 
         _this6.removeListenerForTooltipExit();

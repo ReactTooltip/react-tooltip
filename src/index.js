@@ -280,7 +280,7 @@ class ReactTooltip extends React.Component {
 
   handleKeyUp = (e) => {
     if (e.key === 'Esc' || e.key === 'Escape') {
-      this.hideTooltip(e, false, this.props.forceHideOnEscape)
+      this.hideTooltip(e)
     }
   }
 
@@ -452,7 +452,7 @@ class ReactTooltip extends React.Component {
   /**
    * When mouse leave, hide tooltip
    */
-  hideTooltip (e, hasTarget, forceHide) {
+  hideTooltip (e, hasTarget) {
     const {delayHide, disable} = this.state
     const {afterHide} = this.props
     const placeholder = this.getTooltipContent()
@@ -469,12 +469,10 @@ class ReactTooltip extends React.Component {
     const resetState = () => {
       const isVisible = this.state.show
 
-      if (!forceHide) {
-        // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
-        if (!this.props.ignoreMouseOverOnHide && this.mouseOnToolTip()) {
-          this.listenForTooltipExit()
-          return
-        }
+      // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
+      if (!this.props.forceHideOnEscape && !this.props.ignoreMouseOverOnHide && this.mouseOnToolTip()) {
+        this.listenForTooltipExit()
+        return
       }
 
       this.removeListenerForTooltipExit()
