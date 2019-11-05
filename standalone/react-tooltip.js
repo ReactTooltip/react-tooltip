@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.ReactTooltip = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.ReactTooltip = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 /*!
   Copyright (c) 2016 Jed Watson.
   Licensed under the MIT License (MIT), see
@@ -1633,7 +1633,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
     _this.handleKeyUp = function (e) {
       if (e.key === 'Esc' || e.key === 'Escape') {
-        _this.hideTooltip(e);
+        _this.hideTooltip(e, false, _this.props.forceHideOnEscape);
       }
     };
 
@@ -2071,7 +2071,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
   }, {
     key: 'hideTooltip',
-    value: function hideTooltip(e, hasTarget) {
+    value: function hideTooltip(e, hasTarget, forceHide) {
       var _this6 = this;
 
       var _state2 = this.state,
@@ -2094,11 +2094,15 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       var resetState = function resetState() {
         var isVisible = _this6.state.show;
-        // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
-        if (!_this6.props.ignoreMouseOverOnHide && _this6.mouseOnToolTip()) {
-          _this6.listenForTooltipExit();
-          return;
+
+        if (!forceHide) {
+          // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
+          if (!_this6.props.ignoreMouseOverOnHide && _this6.mouseOnToolTip()) {
+            _this6.listenForTooltipExit();
+            return;
+          }
         }
+
         _this6.removeListenerForTooltipExit();
 
         _this6.setState({
@@ -2272,13 +2276,15 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   resizeHide: _propTypes2.default.bool,
   wrapper: _propTypes2.default.string,
   clickable: _propTypes2.default.bool,
-  ignoreMouseOverOnHide: _propTypes2.default.bool
+  ignoreMouseOverOnHide: _propTypes2.default.bool,
+  forceHideOnEscape: _propTypes2.default.bool
 }, _class2.defaultProps = {
   insecure: true,
   resizeHide: true,
   wrapper: 'div',
   clickable: false,
-  ignoreMouseOverOnHide: false
+  ignoreMouseOverOnHide: false,
+  forceHideOnEscape: false
 }, _class2.supportedWrappers = ['div', 'span'], _class2.displayName = 'ReactTooltip', _temp)) || _class) || _class) || _class) || _class) || _class) || _class;
 
 /* export default not fit for standalone, it will exports {default:...} */
