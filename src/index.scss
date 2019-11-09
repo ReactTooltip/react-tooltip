@@ -126,6 +126,13 @@
       @include border(#222);
     }
   }
+  &.type-custom { // TODO: make dynamic
+    color: green;
+    @include type(green);
+    &.border {
+      @include border(green);
+    }
+  }
   // Place
   &.place-top {
     margin-top: -10px;

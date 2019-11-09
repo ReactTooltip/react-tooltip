@@ -555,12 +555,7 @@ class ReactTooltip extends React.Component {
       {'place-bottom': this.state.place === 'bottom'},
       {'place-left': this.state.place === 'left'},
       {'place-right': this.state.place === 'right'},
-      {'type-dark': this.state.type === 'dark'},
-      {'type-success': this.state.type === 'success'},
-      {'type-warning': this.state.type === 'warning'},
-      {'type-error': this.state.type === 'error'},
-      {'type-info': this.state.type === 'info'},
-      {'type-light': this.state.type === 'light'},
+      {['type-' + this.state.type]: this.state.type},
       {'allow_hover': this.props.delayUpdate},
       {'allow_click': this.props.clickable}
     )
