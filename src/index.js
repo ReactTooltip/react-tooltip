@@ -20,6 +20,8 @@ import nodeListToArray from './utils/nodeListToArray'
 
 /* CSS */
 import cssStyle from './style'
+import { css } from 'aphrodite'
+import { getTooltipStyle } from './decorators/styler'
 
 @staticMethods
 @windowListener
@@ -560,15 +562,19 @@ class ReactTooltip extends React.Component {
       {'allow_click': this.props.clickable}
     )
 
+    // TODO: doing Radium wrapping here - gotta wrap the returns
+    let tooltipStyle = getTooltipStyle('white', 'black', 'red')
+
     let Wrapper = this.props.wrapper
     if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
       Wrapper = ReactTooltip.defaultProps.wrapper
     }
+
     const wrapperClassName = [tooltipClass, extraClass].filter(Boolean).join(' ')
 
     if (html) {
       return (
-        <Wrapper className={wrapperClassName}
+        <Wrapper className={`${css(Object.values(tooltipStyle))} ${wrapperClassName}`}
                  id={this.props.id}
                  ref={ref => this.tooltipRef = ref}
                  {...ariaProps}
@@ -577,7 +583,7 @@ class ReactTooltip extends React.Component {
       )
     } else {
       return (
-        <Wrapper className={wrapperClassName}
+        <Wrapper className={`${css(Object.values(tooltipStyle))} ${wrapperClassName}`}
                  id={this.props.id}
                  {...ariaProps}
                  ref={ref => this.tooltipRef = ref}
