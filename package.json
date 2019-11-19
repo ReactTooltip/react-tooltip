@@ -56,7 +56,7 @@
     "react-dom": ">=0.14"
   },
   "dependencies": {
-    "aphrodite": "^2.4.0",
+    "aphrodite-jss": "^2.1.0",
     "classnames": "^2.2.5",
     "prop-types": "^15.6.0"
   },

@@ -1,2571 +1,114 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.ReactTooltip = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-(function (process){
 'use strict';
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var stringHash = _interopDefault(require('string-hash'));
-var asap = _interopDefault(require('asap'));
-
-function _typeof(obj) {
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof = function (obj) {
-      return typeof obj;
-    };
-  } else {
-    _typeof = function (obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-  }
-
-  return _typeof(obj);
-}
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-    var ownKeys = Object.keys(source);
-
-    if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
-    }
-
-    ownKeys.forEach(function (key) {
-      _defineProperty(target, key, source[key]);
-    });
-  }
-
-  return target;
-}
-
-function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
-}
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-    return arr2;
-  }
-}
-
-function _iterableToArray(iter) {
-  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
-}
-
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance");
-}
-
-/* @flow */
-/* ::
-type ObjectMap = { [id:string]: any };
-*/
-
-var UPPERCASE_RE = /([A-Z])/g;
-
-var UPPERCASE_RE_TO_KEBAB = function UPPERCASE_RE_TO_KEBAB(match
-/* : string */
-) {
-  return (
-    /* : string */
-    "-".concat(match.toLowerCase())
-  );
-};
-
-var kebabifyStyleName = function kebabifyStyleName(string
-/* : string */
-)
-/* : string */
-{
-  var result = string.replace(UPPERCASE_RE, UPPERCASE_RE_TO_KEBAB);
-
-  if (result[0] === 'm' && result[1] === 's' && result[2] === '-') {
-    return "-".concat(result);
-  }
-
-  return result;
-};
-/**
- * CSS properties which accept numbers but are not in units of "px".
- * Taken from React's CSSProperty.js
- */
-
-var isUnitlessNumber = {
-  animationIterationCount: true,
-  borderImageOutset: true,
-  borderImageSlice: true,
-  borderImageWidth: true,
-  boxFlex: true,
-  boxFlexGroup: true,
-  boxOrdinalGroup: true,
-  columnCount: true,
-  flex: true,
-  flexGrow: true,
-  flexPositive: true,
-  flexShrink: true,
-  flexNegative: true,
-  flexOrder: true,
-  gridRow: true,
-  gridColumn: true,
-  fontWeight: true,
-  lineClamp: true,
-  lineHeight: true,
-  opacity: true,
-  order: true,
-  orphans: true,
-  tabSize: true,
-  widows: true,
-  zIndex: true,
-  zoom: true,
-  // SVG-related properties
-  fillOpacity: true,
-  floodOpacity: true,
-  stopOpacity: true,
-  strokeDasharray: true,
-  strokeDashoffset: true,
-  strokeMiterlimit: true,
-  strokeOpacity: true,
-  strokeWidth: true
-};
-/**
- * Taken from React's CSSProperty.js
- *
- * @param {string} prefix vendor-specific prefix, eg: Webkit
- * @param {string} key style name, eg: transitionDuration
- * @return {string} style name prefixed with `prefix`, properly camelCased, eg:
- * WebkitTransitionDuration
- */
-
-function prefixKey(prefix, key) {
-  return prefix + key.charAt(0).toUpperCase() + key.substring(1);
-}
-/**
- * Support style names that may come passed in prefixed by adding permutations
- * of vendor prefixes.
- * Taken from React's CSSProperty.js
- */
-
-
-var prefixes = ['Webkit', 'ms', 'Moz', 'O']; // Using Object.keys here, or else the vanilla for-in loop makes IE8 go into an
-// infinite loop, because it iterates over the newly added props too.
-// Taken from React's CSSProperty.js
-
-Object.keys(isUnitlessNumber).forEach(function (prop) {
-  prefixes.forEach(function (prefix) {
-    isUnitlessNumber[prefixKey(prefix, prop)] = isUnitlessNumber[prop];
-  });
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-var stringifyValue = function stringifyValue(key
-/* : string */
-, prop
-/* : any */
-)
-/* : string */
-{
-  if (typeof prop === "number") {
-    if (isUnitlessNumber[key]) {
-      return "" + prop;
-    } else {
-      return prop + "px";
-    }
-  } else {
-    return '' + prop;
-  }
+exports.version = exports.toString = exports.reset = exports.StyleSheet = exports.css = undefined;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports['default'] = aphroditeJss;
+
+var _jss = require('jss');
+
+var _jssPresetDefault = require('jss-preset-default');
+
+var _jssPresetDefault2 = _interopRequireDefault(_jssPresetDefault);
+
+var _murmurhash3_gc = require('murmurhash-js/murmurhash3_gc');
+
+var _murmurhash3_gc2 = _interopRequireDefault(_murmurhash3_gc);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var meta = 'aphrodite-jss';
+var isNotFalsy = function isNotFalsy(val) {
+  return !!val;
 };
-var stringifyAndImportantifyValue = function stringifyAndImportantifyValue(key
-/* : string */
-, prop
-/* : any */
-) {
-  return (
-    /* : string */
-    importantify(stringifyValue(key, prop))
-  );
-}; // Turn a string into a hash string of base-36 values (using letters and numbers)
-// eslint-disable-next-line no-unused-vars
-
-var hashString = function hashString(string
-/* : string */
-, key
-/* : ?string */
-) {
-  return (
-    /* string */
-    stringHash(string).toString(36)
-  );
-}; // Hash a javascript object using JSON.stringify. This is very fast, about 3
-// microseconds on my computer for a sample object:
-// http://jsperf.com/test-hashfnv32a-hash/5
-//
-// Note that this uses JSON.stringify to stringify the objects so in order for
-// this to produce consistent hashes browsers need to have a consistent
-// ordering of objects. Ben Alpert says that Facebook depends on this, so we
-// can probably depend on this too.
-
-var hashObject = function hashObject(object
-/* : ObjectMap */
-) {
-  return (
-    /* : string */
-    hashString(JSON.stringify(object))
-  );
-}; // Given a single style value string like the "b" from "a: b;", adds !important
-// to generate "b !important".
-
-var importantify = function importantify(string
-/* : string */
-) {
-  return (
-    /* : string */
-    // Bracket string character access is very fast, and in the default case we
-    // normally don't expect there to be "!important" at the end of the string
-    // so we can use this simple check to take an optimized path. If there
-    // happens to be a "!" in this position, we follow up with a more thorough
-    // check.
-    string[string.length - 10] === '!' && string.slice(-11) === ' !important' ? string : "".concat(string, " !important")
-  );
+var getClassName = function getClassName(rule) {
+  return rule.className;
+};
+var generateClassName = function generateClassName(name, str) {
+  return name + '-' + (0, _murmurhash3_gc2['default'])(name + str + meta);
+};
+var mergeStyles = function mergeStyles(style, rule) {
+  return _extends({}, style, rule.style);
 };
 
-/* @flow */
-var MAP_EXISTS = typeof Map !== 'undefined';
-
-var OrderedElements =
-/*#__PURE__*/
-function () {
-  /* ::
-  elements: {[string]: any};
-  keyOrder: string[];
-  */
-  function OrderedElements() {
-    this.elements = {};
-    this.keyOrder = [];
-  }
-
-  var _proto = OrderedElements.prototype;
-
-  _proto.forEach = function forEach(callback
-  /* : (string, any) => void */
-  ) {
-    for (var i = 0; i < this.keyOrder.length; i++) {
-      // (value, key) to match Map's API
-      callback(this.elements[this.keyOrder[i]], this.keyOrder[i]);
-    }
+function aphroditeJss(jss, options) {
+  var renderSheet = function renderSheet() {
+    return jss.createStyleSheet(null, _extends({ meta: meta }, options)).attach();
   };
 
-  _proto.set = function set(key
-  /* : string */
-  , value
-  /* : any */
-  , shouldReorder
-  /* : ?boolean */
-  ) {
-    if (!this.elements.hasOwnProperty(key)) {
-      this.keyOrder.push(key);
-    } else if (shouldReorder) {
-      var index = this.keyOrder.indexOf(key);
-      this.keyOrder.splice(index, 1);
-      this.keyOrder.push(key);
+  var sheet = renderSheet();
+
+  function css() {
+    for (var _len = arguments.length, rules = Array(_len), _key = 0; _key < _len; _key++) {
+      rules[_key] = arguments[_key];
     }
 
-    if (value == null) {
-      this.elements[key] = value;
-      return;
-    }
+    // Filter falsy values to allow `css(a, test && c)`.
+    rules = rules.filter(isNotFalsy);
 
-    if (MAP_EXISTS && value instanceof Map || value instanceof OrderedElements) {
-      // We have found a nested Map, so we need to recurse so that all
-      // of the nested objects and Maps are merged properly.
-      var nested = this.elements.hasOwnProperty(key) ? this.elements[key] : new OrderedElements();
-      value.forEach(function (value, key) {
-        nested.set(key, value, shouldReorder);
-      });
-      this.elements[key] = nested;
-      return;
-    }
+    if (!rules.length) return '';
 
-    if (!Array.isArray(value) && _typeof(value) === 'object') {
-      // We have found a nested object, so we need to recurse so that all
-      // of the nested objects and Maps are merged properly.
-      var _nested = this.elements.hasOwnProperty(key) ? this.elements[key] : new OrderedElements();
+    // A joined class name from all rules.
+    var className = rules.map(getClassName).join('--');
 
-      var keys = Object.keys(value);
+    if (sheet.getRule(className)) return className;
 
-      for (var i = 0; i < keys.length; i += 1) {
-        _nested.set(keys[i], value[keys[i]], shouldReorder);
+    var style = rules.reduce(mergeStyles, {});
+    sheet.addRule(className, style, { selector: '.' + className });
+
+    return className;
+  }
+
+  function register(styles) {
+    return Object.keys(styles).reduce(function (map, name) {
+      if (name[0] === '@') {
+        sheet.addRule(name, styles[name]);
+        return map;
       }
-
-      this.elements[key] = _nested;
-      return;
-    }
-
-    this.elements[key] = value;
-  };
-
-  _proto.get = function get(key
-  /* : string */
-  )
-  /* : any */
-  {
-    return this.elements[key];
-  };
-
-  _proto.has = function has(key
-  /* : string */
-  )
-  /* : boolean */
-  {
-    return this.elements.hasOwnProperty(key);
-  };
-
-  _proto.addStyleType = function addStyleType(styleType
-  /* : any */
-  )
-  /* : void */
-  {
-    var _this = this;
-
-    if (MAP_EXISTS && styleType instanceof Map || styleType instanceof OrderedElements) {
-      styleType.forEach(function (value, key) {
-        _this.set(key, value, true);
-      });
-    } else {
-      var keys = Object.keys(styleType);
-
-      for (var i = 0; i < keys.length; i++) {
-        this.set(keys[i], styleType[keys[i]], true);
-      }
-    }
-  };
-
-  return OrderedElements;
-}();
-
-function unwrapExports (x) {
-	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x.default : x;
-}
-
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
-
-function getCjsExportFromNamespace (n) {
-	return n && n.default || n;
-}
-
-var capitalizeString_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = capitalizeString;
-function capitalizeString(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-});
-
-unwrapExports(capitalizeString_1);
-
-var prefixProperty_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = prefixProperty;
-
-
-
-var _capitalizeString2 = _interopRequireDefault(capitalizeString_1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function prefixProperty(prefixProperties, property, style) {
-  if (prefixProperties.hasOwnProperty(property)) {
-    var newStyle = {};
-    var requiredPrefixes = prefixProperties[property];
-    var capitalizedProperty = (0, _capitalizeString2.default)(property);
-    var keys = Object.keys(style);
-    for (var i = 0; i < keys.length; i++) {
-      var styleProperty = keys[i];
-      if (styleProperty === property) {
-        for (var j = 0; j < requiredPrefixes.length; j++) {
-          newStyle[requiredPrefixes[j] + capitalizedProperty] = style[property];
-        }
-      }
-      newStyle[styleProperty] = style[styleProperty];
-    }
-    return newStyle;
-  }
-  return style;
-}
-});
-
-unwrapExports(prefixProperty_1);
-
-var prefixValue_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = prefixValue;
-function prefixValue(plugins, property, value, style, metaData) {
-  for (var i = 0, len = plugins.length; i < len; ++i) {
-    var processedValue = plugins[i](property, value, style, metaData);
-
-    // we can stop processing if a value is returned
-    // as all plugin criteria are unique
-    if (processedValue) {
-      return processedValue;
-    }
-  }
-}
-});
-
-unwrapExports(prefixValue_1);
-
-var addNewValuesOnly_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = addNewValuesOnly;
-function addIfNew(list, value) {
-  if (list.indexOf(value) === -1) {
-    list.push(value);
-  }
-}
-
-function addNewValuesOnly(list, values) {
-  if (Array.isArray(values)) {
-    for (var i = 0, len = values.length; i < len; ++i) {
-      addIfNew(list, values[i]);
-    }
-  } else {
-    addIfNew(list, values);
-  }
-}
-});
-
-unwrapExports(addNewValuesOnly_1);
-
-var isObject_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = isObject;
-function isObject(value) {
-  return value instanceof Object && !Array.isArray(value);
-}
-});
-
-unwrapExports(isObject_1);
-
-var createPrefixer_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = createPrefixer;
-
-
-
-var _prefixProperty2 = _interopRequireDefault(prefixProperty_1);
-
-
-
-var _prefixValue2 = _interopRequireDefault(prefixValue_1);
-
-
-
-var _addNewValuesOnly2 = _interopRequireDefault(addNewValuesOnly_1);
-
-
-
-var _isObject2 = _interopRequireDefault(isObject_1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function createPrefixer(_ref) {
-  var prefixMap = _ref.prefixMap,
-      plugins = _ref.plugins;
-
-  return function prefix(style) {
-    for (var property in style) {
-      var value = style[property];
-
-      // handle nested objects
-      if ((0, _isObject2.default)(value)) {
-        style[property] = prefix(value);
-        // handle array values
-      } else if (Array.isArray(value)) {
-        var combinedValue = [];
-
-        for (var i = 0, len = value.length; i < len; ++i) {
-          var processedValue = (0, _prefixValue2.default)(plugins, property, value[i], style, prefixMap);
-          (0, _addNewValuesOnly2.default)(combinedValue, processedValue || value[i]);
-        }
-
-        // only modify the value if it was touched
-        // by any plugin to prevent unnecessary mutations
-        if (combinedValue.length > 0) {
-          style[property] = combinedValue;
-        }
-      } else {
-        var _processedValue = (0, _prefixValue2.default)(plugins, property, value, style, prefixMap);
-
-        // only modify the value if it was touched
-        // by any plugin to prevent unnecessary mutations
-        if (_processedValue) {
-          style[property] = _processedValue;
-        }
-
-        style = (0, _prefixProperty2.default)(prefixMap, property, style);
-      }
-    }
-
-    return style;
-  };
-}
-});
-
-var createPrefixer = unwrapExports(createPrefixer_1);
-
-var backgroundClip_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = backgroundClip;
-
-// https://developer.mozilla.org/en-US/docs/Web/CSS/background-clip#Browser_compatibility
-function backgroundClip(property, value) {
-  if (typeof value === 'string' && value === 'text') {
-    return ['-webkit-text', 'text'];
-  }
-}
-});
-
-var backgroundClip = unwrapExports(backgroundClip_1);
-
-var isPrefixedValue_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = isPrefixedValue;
-var regex = /-webkit-|-moz-|-ms-/;
-
-function isPrefixedValue(value) {
-  return typeof value === 'string' && regex.test(value);
-}
-module.exports = exports['default'];
-});
-
-unwrapExports(isPrefixedValue_1);
-
-var calc_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = calc;
-
-
-
-var _isPrefixedValue2 = _interopRequireDefault(isPrefixedValue_1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var prefixes = ['-webkit-', '-moz-', ''];
-function calc(property, value) {
-  if (typeof value === 'string' && !(0, _isPrefixedValue2.default)(value) && value.indexOf('calc(') > -1) {
-    return prefixes.map(function (prefix) {
-      return value.replace(/calc\(/g, prefix + 'calc(');
-    });
-  }
-}
-});
-
-var calc = unwrapExports(calc_1);
-
-var crossFade_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = crossFade;
-
-
-
-var _isPrefixedValue2 = _interopRequireDefault(isPrefixedValue_1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// http://caniuse.com/#search=cross-fade
-var prefixes = ['-webkit-', ''];
-function crossFade(property, value) {
-  if (typeof value === 'string' && !(0, _isPrefixedValue2.default)(value) && value.indexOf('cross-fade(') > -1) {
-    return prefixes.map(function (prefix) {
-      return value.replace(/cross-fade\(/g, prefix + 'cross-fade(');
-    });
-  }
-}
-});
-
-var crossFade = unwrapExports(crossFade_1);
-
-var cursor_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = cursor;
-var prefixes = ['-webkit-', '-moz-', ''];
-
-var values = {
-  'zoom-in': true,
-  'zoom-out': true,
-  grab: true,
-  grabbing: true
-};
-
-function cursor(property, value) {
-  if (property === 'cursor' && values.hasOwnProperty(value)) {
-    return prefixes.map(function (prefix) {
-      return prefix + value;
-    });
-  }
-}
-});
-
-var cursor = unwrapExports(cursor_1);
-
-var filter_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = filter;
-
-
-
-var _isPrefixedValue2 = _interopRequireDefault(isPrefixedValue_1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// http://caniuse.com/#feat=css-filter-function
-var prefixes = ['-webkit-', ''];
-function filter(property, value) {
-  if (typeof value === 'string' && !(0, _isPrefixedValue2.default)(value) && value.indexOf('filter(') > -1) {
-    return prefixes.map(function (prefix) {
-      return value.replace(/filter\(/g, prefix + 'filter(');
-    });
-  }
-}
-});
-
-var filter = unwrapExports(filter_1);
-
-var flex_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = flex;
-var values = {
-  flex: ['-webkit-box', '-moz-box', '-ms-flexbox', '-webkit-flex', 'flex'],
-  'inline-flex': ['-webkit-inline-box', '-moz-inline-box', '-ms-inline-flexbox', '-webkit-inline-flex', 'inline-flex']
-};
-
-function flex(property, value) {
-  if (property === 'display' && values.hasOwnProperty(value)) {
-    return values[value];
-  }
-}
-});
-
-var flex = unwrapExports(flex_1);
-
-var flexboxIE_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = flexboxIE;
-var alternativeValues = {
-  'space-around': 'distribute',
-  'space-between': 'justify',
-  'flex-start': 'start',
-  'flex-end': 'end'
-};
-var alternativeProps = {
-  alignContent: 'msFlexLinePack',
-  alignSelf: 'msFlexItemAlign',
-  alignItems: 'msFlexAlign',
-  justifyContent: 'msFlexPack',
-  order: 'msFlexOrder',
-  flexGrow: 'msFlexPositive',
-  flexShrink: 'msFlexNegative',
-  flexBasis: 'msFlexPreferredSize'
-  // Full expanded syntax is flex-grow | flex-shrink | flex-basis.
-};var flexShorthandMappings = {
-  auto: '1 1 auto',
-  inherit: 'inherit',
-  initial: '0 1 auto',
-  none: '0 0 auto',
-  unset: 'unset'
-};
-var isUnitlessNumber = /^\d+(\.\d+)?$/;
-
-function flexboxIE(property, value, style) {
-  if (Object.prototype.hasOwnProperty.call(alternativeProps, property)) {
-    style[alternativeProps[property]] = alternativeValues[value] || value;
-  }
-  if (property === 'flex') {
-    // For certain values we can do straight mappings based on the spec
-    // for the expansions.
-    if (Object.prototype.hasOwnProperty.call(flexShorthandMappings, value)) {
-      style.msFlex = flexShorthandMappings[value];
-      return;
-    }
-    // Here we have no direct mapping, so we favor looking for a
-    // unitless positive number as that will be the most common use-case.
-    if (isUnitlessNumber.test(value)) {
-      style.msFlex = value + ' 1 0%';
-      return;
-    }
-
-    // The next thing we can look for is if there are multiple values.
-    var flexValues = value.split(/\s/);
-    // If we only have a single value that wasn't a positive unitless
-    // or a pre-mapped value, then we can assume it is a unit value.
-    switch (flexValues.length) {
-      case 1:
-        style.msFlex = '1 1 ' + value;
-        return;
-      case 2:
-        // If we have 2 units, then we expect that the first will
-        // always be a unitless number and represents flex-grow.
-        // The second unit will represent flex-shrink for a unitless
-        // value, or flex-basis otherwise.
-        if (isUnitlessNumber.test(flexValues[1])) {
-          style.msFlex = flexValues[0] + ' ' + flexValues[1] + ' 0%';
-        } else {
-          style.msFlex = flexValues[0] + ' 1 ' + flexValues[1];
-        }
-        return;
-      default:
-        style.msFlex = value;
-    }
-  }
-}
-});
-
-var flexboxIE = unwrapExports(flexboxIE_1);
-
-var flexboxOld_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = flexboxOld;
-var alternativeValues = {
-  'space-around': 'justify',
-  'space-between': 'justify',
-  'flex-start': 'start',
-  'flex-end': 'end',
-  'wrap-reverse': 'multiple',
-  wrap: 'multiple'
-};
-
-var alternativeProps = {
-  alignItems: 'WebkitBoxAlign',
-  justifyContent: 'WebkitBoxPack',
-  flexWrap: 'WebkitBoxLines',
-  flexGrow: 'WebkitBoxFlex'
-};
-
-function flexboxOld(property, value, style) {
-  if (property === 'flexDirection' && typeof value === 'string') {
-    if (value.indexOf('column') > -1) {
-      style.WebkitBoxOrient = 'vertical';
-    } else {
-      style.WebkitBoxOrient = 'horizontal';
-    }
-    if (value.indexOf('reverse') > -1) {
-      style.WebkitBoxDirection = 'reverse';
-    } else {
-      style.WebkitBoxDirection = 'normal';
-    }
-  }
-  if (alternativeProps.hasOwnProperty(property)) {
-    style[alternativeProps[property]] = alternativeValues[value] || value;
-  }
-}
-});
-
-var flexboxOld = unwrapExports(flexboxOld_1);
-
-var gradient_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = gradient;
-
-
-
-var _isPrefixedValue2 = _interopRequireDefault(isPrefixedValue_1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var prefixes = ['-webkit-', '-moz-', ''];
-
-var values = /linear-gradient|radial-gradient|repeating-linear-gradient|repeating-radial-gradient/gi;
-
-function gradient(property, value) {
-  if (typeof value === 'string' && !(0, _isPrefixedValue2.default)(value) && values.test(value)) {
-    return prefixes.map(function (prefix) {
-      return value.replace(values, function (grad) {
-        return prefix + grad;
-      });
-    });
-  }
-}
-});
-
-var gradient = unwrapExports(gradient_1);
-
-var grid_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-exports.default = grid;
-function isSimplePositionValue(value) {
-  return typeof value === 'number' && !isNaN(value);
-}
-
-var alignmentValues = ['center', 'end', 'start', 'stretch'];
-
-var displayValues = {
-  'inline-grid': ['-ms-inline-grid', 'inline-grid'],
-  grid: ['-ms-grid', 'grid']
-};
-
-var propertyConverters = {
-  alignSelf: function alignSelf(value, style) {
-    if (alignmentValues.indexOf(value) > -1) {
-      style.msGridRowAlign = value;
-    }
-  },
-
-  gridColumn: function gridColumn(value, style) {
-    if (isSimplePositionValue(value)) {
-      style.msGridColumn = value;
-    } else {
-      var _value$split$map = value.split('/').map(function (position) {
-        return +position;
-      }),
-          _value$split$map2 = _slicedToArray(_value$split$map, 2),
-          start = _value$split$map2[0],
-          end = _value$split$map2[1];
-
-      propertyConverters.gridColumnStart(start, style);
-      propertyConverters.gridColumnEnd(end, style);
-    }
-  },
-
-  gridColumnEnd: function gridColumnEnd(value, style) {
-    var msGridColumn = style.msGridColumn;
-
-    if (isSimplePositionValue(value) && isSimplePositionValue(msGridColumn)) {
-      style.msGridColumnSpan = value - msGridColumn;
-    }
-  },
-
-  gridColumnStart: function gridColumnStart(value, style) {
-    if (isSimplePositionValue(value)) {
-      style.msGridColumn = value;
-    }
-  },
-
-  gridRow: function gridRow(value, style) {
-    if (isSimplePositionValue(value)) {
-      style.msGridRow = value;
-    } else {
-      var _value$split$map3 = value.split('/').map(function (position) {
-        return +position;
-      }),
-          _value$split$map4 = _slicedToArray(_value$split$map3, 2),
-          start = _value$split$map4[0],
-          end = _value$split$map4[1];
-
-      propertyConverters.gridRowStart(start, style);
-      propertyConverters.gridRowEnd(end, style);
-    }
-  },
-
-  gridRowEnd: function gridRowEnd(value, style) {
-    var msGridRow = style.msGridRow;
-
-    if (isSimplePositionValue(value) && isSimplePositionValue(msGridRow)) {
-      style.msGridRowSpan = value - msGridRow;
-    }
-  },
-
-  gridRowStart: function gridRowStart(value, style) {
-    if (isSimplePositionValue(value)) {
-      style.msGridRow = value;
-    }
-  },
-
-  gridTemplateColumns: function gridTemplateColumns(value, style) {
-    style.msGridColumns = value;
-  },
-
-  gridTemplateRows: function gridTemplateRows(value, style) {
-    style.msGridRows = value;
-  },
-
-  justifySelf: function justifySelf(value, style) {
-    if (alignmentValues.indexOf(value) > -1) {
-      style.msGridColumnAlign = value;
-    }
-  }
-};
-
-function grid(property, value, style) {
-  if (property === 'display' && value in displayValues) {
-    return displayValues[value];
-  }
-
-  if (property in propertyConverters) {
-    var propertyConverter = propertyConverters[property];
-    propertyConverter(value, style);
-  }
-}
-});
-
-var grid = unwrapExports(grid_1);
-
-var imageSet_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = imageSet;
-
-
-
-var _isPrefixedValue2 = _interopRequireDefault(isPrefixedValue_1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// http://caniuse.com/#feat=css-image-set
-var prefixes = ['-webkit-', ''];
-function imageSet(property, value) {
-  if (typeof value === 'string' && !(0, _isPrefixedValue2.default)(value) && value.indexOf('image-set(') > -1) {
-    return prefixes.map(function (prefix) {
-      return value.replace(/image-set\(/g, prefix + 'image-set(');
-    });
-  }
-}
-});
-
-var imageSet = unwrapExports(imageSet_1);
-
-var logical_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = logical;
-var alternativeProps = {
-  marginBlockStart: ['WebkitMarginBefore'],
-  marginBlockEnd: ['WebkitMarginAfter'],
-  marginInlineStart: ['WebkitMarginStart', 'MozMarginStart'],
-  marginInlineEnd: ['WebkitMarginEnd', 'MozMarginEnd'],
-  paddingBlockStart: ['WebkitPaddingBefore'],
-  paddingBlockEnd: ['WebkitPaddingAfter'],
-  paddingInlineStart: ['WebkitPaddingStart', 'MozPaddingStart'],
-  paddingInlineEnd: ['WebkitPaddingEnd', 'MozPaddingEnd'],
-  borderBlockStart: ['WebkitBorderBefore'],
-  borderBlockStartColor: ['WebkitBorderBeforeColor'],
-  borderBlockStartStyle: ['WebkitBorderBeforeStyle'],
-  borderBlockStartWidth: ['WebkitBorderBeforeWidth'],
-  borderBlockEnd: ['WebkitBorderAfter'],
-  borderBlockEndColor: ['WebkitBorderAfterColor'],
-  borderBlockEndStyle: ['WebkitBorderAfterStyle'],
-  borderBlockEndWidth: ['WebkitBorderAfterWidth'],
-  borderInlineStart: ['WebkitBorderStart', 'MozBorderStart'],
-  borderInlineStartColor: ['WebkitBorderStartColor', 'MozBorderStartColor'],
-  borderInlineStartStyle: ['WebkitBorderStartStyle', 'MozBorderStartStyle'],
-  borderInlineStartWidth: ['WebkitBorderStartWidth', 'MozBorderStartWidth'],
-  borderInlineEnd: ['WebkitBorderEnd', 'MozBorderEnd'],
-  borderInlineEndColor: ['WebkitBorderEndColor', 'MozBorderEndColor'],
-  borderInlineEndStyle: ['WebkitBorderEndStyle', 'MozBorderEndStyle'],
-  borderInlineEndWidth: ['WebkitBorderEndWidth', 'MozBorderEndWidth']
-};
-
-function logical(property, value, style) {
-  if (Object.prototype.hasOwnProperty.call(alternativeProps, property)) {
-    var alternativePropList = alternativeProps[property];
-    for (var i = 0, len = alternativePropList.length; i < len; ++i) {
-      style[alternativePropList[i]] = value;
-    }
-  }
-}
-});
-
-var logical = unwrapExports(logical_1);
-
-var position_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = position;
-function position(property, value) {
-  if (property === 'position' && value === 'sticky') {
-    return ['-webkit-sticky', 'sticky'];
-  }
-}
-});
-
-var position = unwrapExports(position_1);
-
-var sizing_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = sizing;
-var prefixes = ['-webkit-', '-moz-', ''];
-
-var properties = {
-  maxHeight: true,
-  maxWidth: true,
-  width: true,
-  height: true,
-  columnWidth: true,
-  minWidth: true,
-  minHeight: true
-};
-var values = {
-  'min-content': true,
-  'max-content': true,
-  'fill-available': true,
-  'fit-content': true,
-  'contain-floats': true
-};
-
-function sizing(property, value) {
-  if (properties.hasOwnProperty(property) && values.hasOwnProperty(value)) {
-    return prefixes.map(function (prefix) {
-      return prefix + value;
-    });
-  }
-}
-});
-
-var sizing = unwrapExports(sizing_1);
-
-/* eslint-disable no-var, prefer-template */
-var uppercasePattern = /[A-Z]/g;
-var msPattern = /^ms-/;
-var cache = {};
-
-function toHyphenLower(match) {
-  return '-' + match.toLowerCase()
-}
-
-function hyphenateStyleName(name) {
-  if (cache.hasOwnProperty(name)) {
-    return cache[name]
-  }
-
-  var hName = name.replace(uppercasePattern, toHyphenLower);
-  return (cache[name] = msPattern.test(hName) ? '-' + hName : hName)
-}
-
-var hyphenateStyleName$1 = /*#__PURE__*/Object.freeze({
-  default: hyphenateStyleName
-});
-
-var _hyphenateStyleName = getCjsExportFromNamespace(hyphenateStyleName$1);
-
-var hyphenateProperty_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = hyphenateProperty;
-
-
-
-var _hyphenateStyleName2 = _interopRequireDefault(_hyphenateStyleName);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function hyphenateProperty(property) {
-  return (0, _hyphenateStyleName2.default)(property);
-}
-module.exports = exports['default'];
-});
-
-unwrapExports(hyphenateProperty_1);
-
-var transition_1 = createCommonjsModule(function (module, exports) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = transition;
-
-
-
-var _hyphenateProperty2 = _interopRequireDefault(hyphenateProperty_1);
-
-
-
-var _isPrefixedValue2 = _interopRequireDefault(isPrefixedValue_1);
-
-
-
-var _capitalizeString2 = _interopRequireDefault(capitalizeString_1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var properties = {
-  transition: true,
-  transitionProperty: true,
-  WebkitTransition: true,
-  WebkitTransitionProperty: true,
-  MozTransition: true,
-  MozTransitionProperty: true
-};
-
-
-var prefixMapping = {
-  Webkit: '-webkit-',
-  Moz: '-moz-',
-  ms: '-ms-'
-};
-
-function prefixValue(value, propertyPrefixMap) {
-  if ((0, _isPrefixedValue2.default)(value)) {
-    return value;
-  }
-
-  // only split multi values, not cubic beziers
-  var multipleValues = value.split(/,(?![^()]*(?:\([^()]*\))?\))/g);
-
-  for (var i = 0, len = multipleValues.length; i < len; ++i) {
-    var singleValue = multipleValues[i];
-    var values = [singleValue];
-    for (var property in propertyPrefixMap) {
-      var dashCaseProperty = (0, _hyphenateProperty2.default)(property);
-
-      if (singleValue.indexOf(dashCaseProperty) > -1 && dashCaseProperty !== 'order') {
-        var prefixes = propertyPrefixMap[property];
-        for (var j = 0, pLen = prefixes.length; j < pLen; ++j) {
-          // join all prefixes and create a new value
-          values.unshift(singleValue.replace(dashCaseProperty, prefixMapping[prefixes[j]] + dashCaseProperty));
-        }
-      }
-    }
-
-    multipleValues[i] = values.join(',');
-  }
-
-  return multipleValues.join(',');
-}
-
-function transition(property, value, style, propertyPrefixMap) {
-  // also check for already prefixed transitions
-  if (typeof value === 'string' && properties.hasOwnProperty(property)) {
-    var outputValue = prefixValue(value, propertyPrefixMap);
-    // if the property is already prefixed
-    var webkitOutput = outputValue.split(/,(?![^()]*(?:\([^()]*\))?\))/g).filter(function (val) {
-      return !/-moz-|-ms-/.test(val);
-    }).join(',');
-
-    if (property.indexOf('Webkit') > -1) {
-      return webkitOutput;
-    }
-
-    var mozOutput = outputValue.split(/,(?![^()]*(?:\([^()]*\))?\))/g).filter(function (val) {
-      return !/-webkit-|-ms-/.test(val);
-    }).join(',');
-
-    if (property.indexOf('Moz') > -1) {
-      return mozOutput;
-    }
-
-    style['Webkit' + (0, _capitalizeString2.default)(property)] = webkitOutput;
-    style['Moz' + (0, _capitalizeString2.default)(property)] = mozOutput;
-    return outputValue;
-  }
-}
-});
-
-var transition = unwrapExports(transition_1);
-
-var w = ["Webkit"];
-var m = ["Moz"];
-var ms = ["ms"];
-var wm = ["Webkit", "Moz"];
-var wms = ["Webkit", "ms"];
-var wmms = ["Webkit", "Moz", "ms"];
-var staticData = {
-  plugins: [backgroundClip, calc, crossFade, cursor, filter, flex, flexboxIE, flexboxOld, gradient, grid, imageSet, logical, position, sizing, transition],
-  prefixMap: {
-    "transform": wms,
-    "transformOrigin": wms,
-    "transformOriginX": wms,
-    "transformOriginY": wms,
-    "backfaceVisibility": w,
-    "perspective": w,
-    "perspectiveOrigin": w,
-    "transformStyle": w,
-    "transformOriginZ": w,
-    "animation": w,
-    "animationDelay": w,
-    "animationDirection": w,
-    "animationFillMode": w,
-    "animationDuration": w,
-    "animationIterationCount": w,
-    "animationName": w,
-    "animationPlayState": w,
-    "animationTimingFunction": w,
-    "appearance": wm,
-    "userSelect": wmms,
-    "fontKerning": w,
-    "textEmphasisPosition": w,
-    "textEmphasis": w,
-    "textEmphasisStyle": w,
-    "textEmphasisColor": w,
-    "boxDecorationBreak": w,
-    "clipPath": w,
-    "maskImage": w,
-    "maskMode": w,
-    "maskRepeat": w,
-    "maskPosition": w,
-    "maskClip": w,
-    "maskOrigin": w,
-    "maskSize": w,
-    "maskComposite": w,
-    "mask": w,
-    "maskBorderSource": w,
-    "maskBorderMode": w,
-    "maskBorderSlice": w,
-    "maskBorderWidth": w,
-    "maskBorderOutset": w,
-    "maskBorderRepeat": w,
-    "maskBorder": w,
-    "maskType": w,
-    "textDecorationStyle": wm,
-    "textDecorationSkip": wm,
-    "textDecorationLine": wm,
-    "textDecorationColor": wm,
-    "filter": w,
-    "fontFeatureSettings": wm,
-    "breakAfter": wmms,
-    "breakBefore": wmms,
-    "breakInside": wmms,
-    "columnCount": wm,
-    "columnFill": wm,
-    "columnGap": wm,
-    "columnRule": wm,
-    "columnRuleColor": wm,
-    "columnRuleStyle": wm,
-    "columnRuleWidth": wm,
-    "columns": wm,
-    "columnSpan": wm,
-    "columnWidth": wm,
-    "writingMode": wms,
-    "flex": wms,
-    "flexBasis": w,
-    "flexDirection": wms,
-    "flexGrow": w,
-    "flexFlow": wms,
-    "flexShrink": w,
-    "flexWrap": wms,
-    "alignContent": w,
-    "alignItems": w,
-    "alignSelf": w,
-    "justifyContent": w,
-    "order": w,
-    "transitionDelay": w,
-    "transitionDuration": w,
-    "transitionProperty": w,
-    "transitionTimingFunction": w,
-    "backdropFilter": w,
-    "scrollSnapType": wms,
-    "scrollSnapPointsX": wms,
-    "scrollSnapPointsY": wms,
-    "scrollSnapDestination": wms,
-    "scrollSnapCoordinate": wms,
-    "shapeImageThreshold": w,
-    "shapeImageMargin": w,
-    "shapeImageOutside": w,
-    "hyphens": wmms,
-    "flowInto": wms,
-    "flowFrom": wms,
-    "regionFragment": wms,
-    "textOrientation": w,
-    "boxSizing": m,
-    "textAlignLast": m,
-    "tabSize": m,
-    "wrapFlow": ms,
-    "wrapThrough": ms,
-    "wrapMargin": ms,
-    "touchAction": ms,
-    "textSizeAdjust": wms,
-    "borderImage": w,
-    "borderImageOutset": w,
-    "borderImageRepeat": w,
-    "borderImageSlice": w,
-    "borderImageSource": w,
-    "borderImageWidth": w
-  }
-};
-
-var prefixAll = createPrefixer(staticData);
-/* ::
-import type { SheetDefinition } from './index.js';
-type StringHandlers = { [id:string]: Function };
-type SelectorCallback = (selector: string) => string[];
-export type SelectorHandler = (
-    selector: string,
-    baseSelector: string,
-    callback: SelectorCallback
-) => string[] | string | null;
-*/
-
-/**
- * `selectorHandlers` are functions which handle special selectors which act
- * differently than normal style definitions. These functions look at the
- * current selector and can generate CSS for the styles in their subtree by
- * calling the callback with a new selector.
- *
- * For example, when generating styles with a base selector of '.foo' and the
- * following styles object:
- *
- *   {
- *     ':nth-child(2n)': {
- *       ':hover': {
- *         color: 'red'
- *       }
- *     }
- *   }
- *
- * when we reach the ':hover' style, we would call our selector handlers like
- *
- *   handler(':hover', '.foo:nth-child(2n)', callback)
- *
- * Since our `pseudoSelectors` handles ':hover' styles, that handler would call
- * the callback like
- *
- *   callback('.foo:nth-child(2n):hover')
- *
- * to generate its subtree `{ color: 'red' }` styles with a
- * '.foo:nth-child(2n):hover' selector. The callback would return an array of CSS
- * rules like
- *
- *   ['.foo:nth-child(2n):hover{color:red !important;}']
- *
- * and the handler would then return that resulting CSS.
- *
- * `defaultSelectorHandlers` is the list of default handlers used in a call to
- * `generateCSS`.
- *
- * @name SelectorHandler
- * @function
- * @param {string} selector: The currently inspected selector. ':hover' in the
- *     example above.
- * @param {string} baseSelector: The selector of the parent styles.
- *     '.foo:nth-child(2n)' in the example above.
- * @param {function} generateSubtreeStyles: A function which can be called to
- *     generate CSS for the subtree of styles corresponding to the selector.
- *     Accepts a new baseSelector to use for generating those styles.
- * @returns {string[] | string | null} The generated CSS for this selector, or
- *     null if we don't handle this selector.
- */
-
-var defaultSelectorHandlers
-/* : SelectorHandler[] */
-= [// Handle pseudo-selectors, like :hover and :nth-child(3n)
-function pseudoSelectors(selector, baseSelector, generateSubtreeStyles) {
-  if (selector[0] !== ":") {
-    return null;
-  }
-
-  return generateSubtreeStyles(baseSelector + selector);
-}, // Handle media queries (or font-faces)
-function mediaQueries(selector, baseSelector, generateSubtreeStyles) {
-  if (selector[0] !== "@") {
-    return null;
-  } // Generate the styles normally, and then wrap them in the media query.
-
-
-  var generated = generateSubtreeStyles(baseSelector);
-  return ["".concat(selector, "{").concat(generated.join(''), "}")];
-}];
-/**
- * Generate CSS for a selector and some styles.
- *
- * This function handles the media queries and pseudo selectors that can be used
- * in aphrodite styles.
- *
- * @param {string} selector: A base CSS selector for the styles to be generated
- *     with.
- * @param {Object} styleTypes: A list of properties of the return type of
- *     StyleSheet.create, e.g. [styles.red, styles.blue].
- * @param {Array.<SelectorHandler>} selectorHandlers: A list of selector
- *     handlers to use for handling special selectors. See
- *     `defaultSelectorHandlers`.
- * @param stringHandlers: See `generateCSSRuleset`
- * @param useImportant: See `generateCSSRuleset`
- *
- * To actually generate the CSS special-construct-less styles are passed to
- * `generateCSSRuleset`.
- *
- * For instance, a call to
- *
- *     generateCSS(".foo", [{
- *       color: "red",
- *       "@media screen": {
- *         height: 20,
- *         ":hover": {
- *           backgroundColor: "black"
- *         }
- *       },
- *       ":active": {
- *         fontWeight: "bold"
- *       }
- *     }], defaultSelectorHandlers);
- *
- * with the default `selectorHandlers` will make 5 calls to
- * `generateCSSRuleset`:
- *
- *     generateCSSRuleset(".foo", { color: "red" }, ...)
- *     generateCSSRuleset(".foo:active", { fontWeight: "bold" }, ...)
- *     // These 2 will be wrapped in @media screen {}
- *     generateCSSRuleset(".foo", { height: 20 }, ...)
- *     generateCSSRuleset(".foo:hover", { backgroundColor: "black" }, ...)
- */
-
-var generateCSS = function generateCSS(selector
-/* : string */
-, styleTypes
-/* : SheetDefinition[] */
-, selectorHandlers
-/* : SelectorHandler[] */
-, stringHandlers
-/* : StringHandlers */
-, useImportant
-/* : boolean */
-)
-/* : string[] */
-{
-  var merged = new OrderedElements();
-
-  for (var i = 0; i < styleTypes.length; i++) {
-    merged.addStyleType(styleTypes[i]);
-  }
-
-  var plainDeclarations = new OrderedElements();
-  var generatedStyles = []; // TODO(emily): benchmark this to see if a plain for loop would be faster.
-
-  merged.forEach(function (val, key) {
-    // For each key, see if one of the selector handlers will handle these
-    // styles.
-    var foundHandler = selectorHandlers.some(function (handler) {
-      var result = handler(key, selector, function (newSelector) {
-        return generateCSS(newSelector, [val], selectorHandlers, stringHandlers, useImportant);
-      });
-
-      if (result != null) {
-        // If the handler returned something, add it to the generated
-        // CSS and stop looking for another handler.
-        if (Array.isArray(result)) {
-          generatedStyles.push.apply(generatedStyles, _toConsumableArray(result));
-        } else {
-          // eslint-disable-next-line
-          console.warn('WARNING: Selector handlers should return an array of rules.' + 'Returning a string containing multiple rules is deprecated.', handler);
-          generatedStyles.push("@media all {".concat(result, "}"));
-        }
-
-        return true;
-      }
-    }); // If none of the handlers handled it, add it to the list of plain
-    // style declarations.
-
-    if (!foundHandler) {
-      plainDeclarations.set(key, val, true);
-    }
-  });
-  var generatedRuleset = generateCSSRuleset(selector, plainDeclarations, stringHandlers, useImportant, selectorHandlers);
-
-  if (generatedRuleset) {
-    generatedStyles.unshift(generatedRuleset);
-  }
-
-  return generatedStyles;
-};
-/**
- * Helper method of generateCSSRuleset to facilitate custom handling of certain
- * CSS properties. Used for e.g. font families.
- *
- * See generateCSSRuleset for usage and documentation of paramater types.
- */
-
-var runStringHandlers = function runStringHandlers(declarations
-/* : OrderedElements */
-, stringHandlers
-/* : StringHandlers */
-, selectorHandlers
-/* : SelectorHandler[] */
-)
-/* : void */
-{
-  if (!stringHandlers) {
-    return;
-  }
-
-  var stringHandlerKeys = Object.keys(stringHandlers);
-
-  for (var i = 0; i < stringHandlerKeys.length; i++) {
-    var key = stringHandlerKeys[i];
-
-    if (declarations.has(key)) {
-      // A declaration exists for this particular string handler, so we
-      // need to let the string handler interpret the declaration first
-      // before proceeding.
-      //
-      // TODO(emily): Pass in a callback which generates CSS, similar to
-      // how our selector handlers work, instead of passing in
-      // `selectorHandlers` and have them make calls to `generateCSS`
-      // themselves. Right now, this is impractical because our string
-      // handlers are very specialized and do complex things.
-      declarations.set(key, stringHandlers[key](declarations.get(key), selectorHandlers), // Preserve order here, since we are really replacing an
-      // unprocessed style with a processed style, not overriding an
-      // earlier style
-      false);
-    }
-  }
-};
-
-var transformRule = function transformRule(key
-/* : string */
-, value
-/* : string */
-, transformValue
-/* : function */
-) {
-  return (
-    /* : string */
-    "".concat(kebabifyStyleName(key), ":").concat(transformValue(key, value), ";")
-  );
-};
-
-var arrayToObjectKeysReducer = function arrayToObjectKeysReducer(acc, val) {
-  acc[val] = true;
-  return acc;
-};
-/**
- * Generate a CSS ruleset with the selector and containing the declarations.
- *
- * This function assumes that the given declarations don't contain any special
- * children (such as media queries, pseudo-selectors, or descendant styles).
- *
- * Note that this method does not deal with nesting used for e.g.
- * psuedo-selectors or media queries. That responsibility is left to  the
- * `generateCSS` function.
- *
- * @param {string} selector: the selector associated with the ruleset
- * @param {Object} declarations: a map from camelCased CSS property name to CSS
- *     property value.
- * @param {Object.<string, function>} stringHandlers: a map from camelCased CSS
- *     property name to a function which will map the given value to the value
- *     that is output.
- * @param {bool} useImportant: A boolean saying whether to append "!important"
- *     to each of the CSS declarations.
- * @returns {string} A string of raw CSS.
- *
- * Examples:
- *
- *    generateCSSRuleset(".blah", { color: "red" })
- *    -> ".blah{color: red !important;}"
- *    generateCSSRuleset(".blah", { color: "red" }, {}, false)
- *    -> ".blah{color: red}"
- *    generateCSSRuleset(".blah", { color: "red" }, {color: c => c.toUpperCase})
- *    -> ".blah{color: RED}"
- *    generateCSSRuleset(".blah:hover", { color: "red" })
- *    -> ".blah:hover{color: red}"
- */
-
-
-var generateCSSRuleset = function generateCSSRuleset(selector
-/* : string */
-, declarations
-/* : OrderedElements */
-, stringHandlers
-/* : StringHandlers */
-, useImportant
-/* : boolean */
-, selectorHandlers
-/* : SelectorHandler[] */
-)
-/* : string */
-{
-  // Mutates declarations
-  runStringHandlers(declarations, stringHandlers, selectorHandlers);
-  var originalElements = Object.keys(declarations.elements).reduce(arrayToObjectKeysReducer, Object.create(null)); // NOTE(emily): This mutates handledDeclarations.elements.
-
-  var prefixedElements = prefixAll(declarations.elements);
-  var elementNames = Object.keys(prefixedElements);
-
-  if (elementNames.length !== declarations.keyOrder.length) {
-    // There are some prefixed values, so we need to figure out how to sort
-    // them.
-    //
-    // Loop through prefixedElements, looking for anything that is not in
-    // sortOrder, which means it was added by prefixAll. This means that we
-    // need to figure out where it should appear in the sortOrder.
-    for (var i = 0; i < elementNames.length; i++) {
-      if (!originalElements[elementNames[i]]) {
-        // This element is not in the sortOrder, which means it is a prefixed
-        // value that was added by prefixAll. Let's try to figure out where it
-        // goes.
-        var originalStyle = void 0;
-
-        if (elementNames[i][0] === 'W') {
-          // This is a Webkit-prefixed style, like "WebkitTransition". Let's
-          // find its original style's sort order.
-          originalStyle = elementNames[i][6].toLowerCase() + elementNames[i].slice(7);
-        } else if (elementNames[i][1] === 'o') {
-          // This is a Moz-prefixed style, like "MozTransition". We check
-          // the second character to avoid colliding with Ms-prefixed
-          // styles. Let's find its original style's sort order.
-          originalStyle = elementNames[i][3].toLowerCase() + elementNames[i].slice(4);
-        } else {
-          // if (elementNames[i][1] === 's') {
-          // This is a Ms-prefixed style, like "MsTransition".
-          originalStyle = elementNames[i][2].toLowerCase() + elementNames[i].slice(3);
-        }
-
-        if (originalStyle && originalElements[originalStyle]) {
-          var originalIndex = declarations.keyOrder.indexOf(originalStyle);
-          declarations.keyOrder.splice(originalIndex, 0, elementNames[i]);
-        } else {
-          // We don't know what the original style was, so sort it to
-          // top. This can happen for styles that are added that don't
-          // have the same base name as the original style.
-          declarations.keyOrder.unshift(elementNames[i]);
-        }
-      }
-    }
-  }
-
-  var transformValue = useImportant === false ? stringifyValue : stringifyAndImportantifyValue;
-  var rules = [];
-
-  for (var _i = 0; _i < declarations.keyOrder.length; _i++) {
-    var key = declarations.keyOrder[_i];
-    var value = prefixedElements[key];
-
-    if (Array.isArray(value)) {
-      // inline-style-prefixer returns an array when there should be
-      // multiple rules for the same key. Here we flatten to multiple
-      // pairs with the same key.
-      for (var j = 0; j < value.length; j++) {
-        rules.push(transformRule(key, value[j], transformValue));
-      }
-    } else {
-      rules.push(transformRule(key, value, transformValue));
-    }
-  }
-
-  if (rules.length) {
-    return "".concat(selector, "{").concat(rules.join(""), "}");
-  } else {
-    return "";
-  }
-};
-
-/* ::
-import type { SheetDefinition, SheetDefinitions } from './index.js';
-import type { MaybeSheetDefinition } from './exports.js';
-import type { SelectorHandler } from './generate.js';
-*/
-// The current <style> tag we are inserting into, or null if we haven't
-// inserted anything yet. We could find this each time using
-// `document.querySelector("style[data-aphrodite"])`, but holding onto it is
-// faster.
-
-var styleTag
-/* : ?HTMLStyleElement */
-= null; // Inject a set of rules into a <style> tag in the head of the document. This
-// will automatically create a style tag and then continue to use it for
-// multiple injections. It will also use a style tag with the `data-aphrodite`
-// tag on it if that exists in the DOM. This could be used for e.g. reusing the
-// same style tag that server-side rendering inserts.
-
-var injectStyleTag = function injectStyleTag(cssRules
-/* : string[] */
-) {
-  if (styleTag == null) {
-    // Try to find a style tag with the `data-aphrodite` attribute first.
-    styleTag = document.querySelector("style[data-aphrodite]")
-    /* : any */
-    ; // If that doesn't work, generate a new style tag.
-
-    if (styleTag == null) {
-      // Taken from
-      // http://stackoverflow.com/questions/524696/how-to-create-a-style-tag-with-javascript
-      var head = document.head || document.getElementsByTagName('head')[0];
-      styleTag = document.createElement('style');
-      styleTag.type = 'text/css';
-      styleTag.setAttribute("data-aphrodite", "");
-      head.appendChild(styleTag);
-    }
-  } // $FlowFixMe
-
-
-  var sheet = styleTag.styleSheet || styleTag.sheet
-  /* : any */
-  ;
-
-  if (sheet.insertRule) {
-    var numRules = sheet.cssRules.length;
-    cssRules.forEach(function (rule) {
-      try {
-        sheet.insertRule(rule, numRules);
-        numRules += 1;
-      } catch (e) {// The selector for this rule wasn't compatible with the browser
-      }
-    });
-  } else {
-    styleTag.innerText = (styleTag.innerText || '') + cssRules.join('');
-  }
-}; // Custom handlers for stringifying CSS values that have side effects
-// (such as fontFamily, which can cause @font-face rules to be injected)
-
-
-var stringHandlers = {
-  // With fontFamily we look for objects that are passed in and interpret
-  // them as @font-face rules that we need to inject. The value of fontFamily
-  // can either be a string (as normal), an object (a single font face), or
-  // an array of objects and strings.
-  fontFamily: function fontFamily(val) {
-    if (Array.isArray(val)) {
-      var nameMap = {};
-      val.forEach(function (v) {
-        nameMap[fontFamily(v)] = true;
-      });
-      return Object.keys(nameMap).join(",");
-    } else if (_typeof(val) === "object") {
-      injectStyleOnce(val.src, "@font-face", [val], false);
-      return "\"".concat(val.fontFamily, "\"");
-    } else {
-      return val;
-    }
-  },
-  // With animationName we look for an object that contains keyframes and
-  // inject them as an `@keyframes` block, returning a uniquely generated
-  // name. The keyframes object should look like
-  //  animationName: {
-  //    from: {
-  //      left: 0,
-  //      top: 0,
-  //    },
-  //    '50%': {
-  //      left: 15,
-  //      top: 5,
-  //    },
-  //    to: {
-  //      left: 20,
-  //      top: 20,
-  //    }
-  //  }
-  // TODO(emily): `stringHandlers` doesn't let us rename the key, so I have
-  // to use `animationName` here. Improve that so we can call this
-  // `animation` instead of `animationName`.
-  animationName: function animationName(val, selectorHandlers) {
-    if (Array.isArray(val)) {
-      return val.map(function (v) {
-        return animationName(v, selectorHandlers);
-      }).join(",");
-    } else if (_typeof(val) === "object") {
-      // Generate a unique name based on the hash of the object. We can't
-      // just use the hash because the name can't start with a number.
-      // TODO(emily): this probably makes debugging hard, allow a custom
-      // name?
-      var name = "keyframe_".concat(hashObject(val)); // Since keyframes need 3 layers of nesting, we use `generateCSS` to
-      // build the inner layers and wrap it in `@keyframes` ourselves.
-
-      var finalVal = "@keyframes ".concat(name, "{"); // TODO see if we can find a way where checking for OrderedElements
-      // here is not necessary. Alternatively, perhaps we should have a
-      // utility method that can iterate over either a plain object, an
-      // instance of OrderedElements, or a Map, and then use that here and
-      // elsewhere.
-
-      if (val instanceof OrderedElements) {
-        val.forEach(function (valVal, valKey) {
-          finalVal += generateCSS(valKey, [valVal], selectorHandlers, stringHandlers, false).join('');
-        });
-      } else {
-        Object.keys(val).forEach(function (key) {
-          finalVal += generateCSS(key, [val[key]], selectorHandlers, stringHandlers, false).join('');
-        });
-      }
-
-      finalVal += '}';
-      injectGeneratedCSSOnce(name, [finalVal]);
-      return name;
-    } else {
-      return val;
-    }
-  }
-}; // This is a map from Aphrodite's generated class names to `true` (acting as a
-// set of class names)
-
-var alreadyInjected = {}; // This is the buffer of styles which have not yet been flushed.
-
-var injectionBuffer
-/* : string[] */
-= []; // A flag to tell if we are already buffering styles. This could happen either
-// because we scheduled a flush call already, so newly added styles will
-// already be flushed, or because we are statically buffering on the server.
-
-var isBuffering = false;
-
-var injectGeneratedCSSOnce = function injectGeneratedCSSOnce(key, generatedCSS) {
-  var _injectionBuffer;
-
-  if (alreadyInjected[key]) {
-    return;
-  }
-
-  if (!isBuffering) {
-    // We should never be automatically buffering on the server (or any
-    // place without a document), so guard against that.
-    if (typeof document === "undefined") {
-      throw new Error("Cannot automatically buffer without a document");
-    } // If we're not already buffering, schedule a call to flush the
-    // current styles.
-
-
-    isBuffering = true;
-    asap(flushToStyleTag);
-  }
-
-  (_injectionBuffer = injectionBuffer).push.apply(_injectionBuffer, _toConsumableArray(generatedCSS));
-
-  alreadyInjected[key] = true;
-};
-
-var injectStyleOnce = function injectStyleOnce(key
-/* : string */
-, selector
-/* : string */
-, definitions
-/* : SheetDefinition[] */
-, useImportant
-/* : boolean */
-) {
-  var selectorHandlers
-  /* : SelectorHandler[] */
-  = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
-
-  if (alreadyInjected[key]) {
-    return;
-  }
-
-  var generated = generateCSS(selector, definitions, selectorHandlers, stringHandlers, useImportant);
-  injectGeneratedCSSOnce(key, generated);
-};
-var reset = function reset() {
-  injectionBuffer = [];
-  alreadyInjected = {};
-  isBuffering = false;
-  styleTag = null;
-};
-var resetInjectedStyle = function resetInjectedStyle(key
-/* : string */
-) {
-  delete alreadyInjected[key];
-};
-var getBufferedStyles = function getBufferedStyles() {
-  return injectionBuffer;
-};
-var startBuffering = function startBuffering() {
-  if (isBuffering) {
-    throw new Error("Cannot buffer while already buffering");
-  }
-
-  isBuffering = true;
-};
-
-var flushToArray = function flushToArray() {
-  isBuffering = false;
-  var ret = injectionBuffer;
-  injectionBuffer = [];
-  return ret;
-};
-
-var flushToString = function flushToString() {
-  return flushToArray().join('');
-};
-var flushToStyleTag = function flushToStyleTag() {
-  var cssRules = flushToArray();
-
-  if (cssRules.length > 0) {
-    injectStyleTag(cssRules);
-  }
-};
-var getRenderedClassNames = function getRenderedClassNames()
-/* : string[] */
-{
-  return Object.keys(alreadyInjected);
-};
-var addRenderedClassNames = function addRenderedClassNames(classNames
-/* : string[] */
-) {
-  classNames.forEach(function (className) {
-    alreadyInjected[className] = true;
-  });
-};
-
-var isValidStyleDefinition = function isValidStyleDefinition(def
-/* : Object */
-) {
-  return "_definition" in def && "_name" in def && "_len" in def;
-};
-
-var processStyleDefinitions = function processStyleDefinitions(styleDefinitions
-/* : any[] */
-, classNameBits
-/* : string[] */
-, definitionBits
-/* : Object[] */
-, length
-/* : number */
-)
-/* : number */
-{
-  for (var i = 0; i < styleDefinitions.length; i += 1) {
-    // Filter out falsy values from the input, to allow for
-    // `css(a, test && c)`
-    if (styleDefinitions[i]) {
-      if (Array.isArray(styleDefinitions[i])) {
-        // We've encountered an array, so let's recurse
-        length += processStyleDefinitions(styleDefinitions[i], classNameBits, definitionBits, length);
-      } else if (isValidStyleDefinition(styleDefinitions[i])) {
-        classNameBits.push(styleDefinitions[i]._name);
-        definitionBits.push(styleDefinitions[i]._definition);
-        length += styleDefinitions[i]._len;
-      } else {
-        throw new Error("Invalid Style Definition: Styles should be defined using the StyleSheet.create method.");
-      }
-    }
-  }
-
-  return length;
-};
-/**
- * Inject styles associated with the passed style definition objects, and return
- * an associated CSS class name.
- *
- * @param {boolean} useImportant If true, will append !important to generated
- *     CSS output. e.g. {color: red} -> "color: red !important".
- * @param {(Object|Object[])[]} styleDefinitions style definition objects, or
- *     arbitrarily nested arrays of them, as returned as properties of the
- *     return value of StyleSheet.create().
- */
-
-
-var injectAndGetClassName = function injectAndGetClassName(useImportant
-/* : boolean */
-, styleDefinitions
-/* : MaybeSheetDefinition[] */
-, selectorHandlers
-/* : SelectorHandler[] */
-)
-/* : string */
-{
-  var classNameBits = [];
-  var definitionBits = []; // Mutates classNameBits and definitionBits and returns a length which we
-  // will append to the hash to decrease the chance of hash collisions.
-
-  var length = processStyleDefinitions(styleDefinitions, classNameBits, definitionBits, 0); // Break if there aren't any valid styles.
-
-  if (classNameBits.length === 0) {
-    return "";
-  }
-
-  var className;
-
-  if (process.env.NODE_ENV === 'production') {
-    className = classNameBits.length === 1 ? "_".concat(classNameBits[0]) : "_".concat(hashString(classNameBits.join())).concat((length % 36).toString(36));
-  } else {
-    className = classNameBits.join("-o_O-");
-  }
-
-  injectStyleOnce(className, ".".concat(className), definitionBits, useImportant, selectorHandlers);
-  return className;
-};
-
-/* ::
-import type { SelectorHandler } from './generate.js';
-export type SheetDefinition = { [id:string]: any };
-export type SheetDefinitions = SheetDefinition | SheetDefinition[];
-type RenderFunction = () => string;
-type Extension = {
-    selectorHandler: SelectorHandler
-};
-export type MaybeSheetDefinition = SheetDefinition | false | null | void
-*/
-
-var unminifiedHashFn = function unminifiedHashFn(str
-/* : string */
-, key
-/* : string */
-) {
-  return "".concat(key, "_").concat(hashString(str));
-}; // StyleSheet.create is in a hot path so we want to keep as much logic out of it
-// as possible. So, we figure out which hash function to use once, and only
-// switch it out via minify() as necessary.
-//
-// This is in an exported function to make it easier to test.
-
-
-var initialHashFn = function initialHashFn() {
-  return process.env.NODE_ENV === 'production' ? hashString : unminifiedHashFn;
-};
-var hashFn = initialHashFn();
-var StyleSheet = {
-  create: function create(sheetDefinition
-  /* : SheetDefinition */
-  )
-  /* : Object */
-  {
-    var mappedSheetDefinition = {};
-    var keys = Object.keys(sheetDefinition);
-
-    for (var i = 0; i < keys.length; i += 1) {
-      var key = keys[i];
-      var val = sheetDefinition[key];
-      var stringVal = JSON.stringify(val);
-      mappedSheetDefinition[key] = {
-        _len: stringVal.length,
-        _name: hashFn(stringVal, key),
-        _definition: val
+      map[name] = {
+        className: generateClassName(name, JSON.stringify(styles[name])),
+        style: styles[name]
       };
-    }
-
-    return mappedSheetDefinition;
-  },
-  rehydrate: function rehydrate() {
-    var renderedClassNames
-    /* : string[] */
-    = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-    addRenderedClassNames(renderedClassNames);
+      return map;
+    }, {});
   }
-};
-/**
- * Utilities for using Aphrodite server-side.
- *
- * This can be minified out in client-only bundles by replacing `typeof window`
- * with `"object"`, e.g. via Webpack's DefinePlugin:
- *
- *   new webpack.DefinePlugin({
- *     "typeof window": JSON.stringify("object")
- *   })
- */
 
-var StyleSheetServer = typeof window !== 'undefined' ? null : {
-  renderStatic: function renderStatic(renderFunc
-  /* : RenderFunction */
-  ) {
-    reset();
-    startBuffering();
-    var html = renderFunc();
-    var cssContent = flushToString();
-    return {
-      html: html,
-      css: {
-        content: cssContent,
-        renderedClassNames: getRenderedClassNames()
-      }
-    };
+  function reset() {
+    jss.removeStyleSheet(sheet);
+    sheet = renderSheet();
   }
-};
-/**
- * Utilities for using Aphrodite in tests.
- *
- * Not meant to be used in production.
- */
 
-var StyleSheetTestUtils = process.env.NODE_ENV === 'production' ? null : {
-  /**
-  * Prevent styles from being injected into the DOM.
-  *
-  * This is useful in situations where you'd like to test rendering UI
-  * components which use Aphrodite without any of the side-effects of
-  * Aphrodite happening. Particularly useful for testing the output of
-  * components when you have no DOM, e.g. testing in Node without a fake DOM.
-  *
-  * Should be paired with a subsequent call to
-  * clearBufferAndResumeStyleInjection.
-  */
-  suppressStyleInjection: function suppressStyleInjection() {
-    reset();
-    startBuffering();
-  },
-
-  /**
-  * Opposite method of preventStyleInject.
-  */
-  clearBufferAndResumeStyleInjection: function clearBufferAndResumeStyleInjection() {
-    reset();
-  },
-
-  /**
-  * Returns a string of buffered styles which have not been flushed
-  *
-  * @returns {string}  Buffer of styles which have not yet been flushed.
-  */
-  getBufferedStyles: function getBufferedStyles$1() {
-    return getBufferedStyles();
-  }
-};
-/**
- * Generate the Aphrodite API exports, with given `selectorHandlers` and
- * `useImportant` state.
- */
-
-function makeExports(useImportant
-/* : boolean */
-) {
-  var selectorHandlers
-  /* : SelectorHandler[] */
-  = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultSelectorHandlers;
   return {
-    StyleSheet: _objectSpread({}, StyleSheet, {
-      /**
-       * Returns a version of the exports of Aphrodite (i.e. an object
-       * with `css` and `StyleSheet` properties) which have some
-       * extensions included.
-       *
-       * @param {Array.<Object>} extensions: An array of extensions to
-       *     add to this instance of Aphrodite. Each object should have a
-       *     single property on it, defining which kind of extension to
-       *     add.
-       * @param {SelectorHandler} [extensions[].selectorHandler]: A
-       *     selector handler extension. See `defaultSelectorHandlers` in
-       *     generate.js.
-       *
-       * @returns {Object} An object containing the exports of the new
-       *     instance of Aphrodite.
-       */
-      extend: function extend(extensions
-      /* : Extension[] */
-      ) {
-        var extensionSelectorHandlers = extensions // Pull out extensions with a selectorHandler property
-        .map(function (extension) {
-          return extension.selectorHandler;
-        }) // Remove nulls (i.e. extensions without a selectorHandler property).
-        .filter(function (handler) {
-          return handler;
-        });
-        return makeExports(useImportant, selectorHandlers.concat(extensionSelectorHandlers));
-      }
-    }),
-    StyleSheetServer: StyleSheetServer,
-    StyleSheetTestUtils: StyleSheetTestUtils,
-    minify: function minify(shouldMinify
-    /* : boolean */
-    ) {
-      hashFn = shouldMinify ? hashString : unminifiedHashFn;
+    StyleSheet: { create: register },
+    toString: function toString() {
+      return sheet.toString();
     },
-    css: function css()
-    /* : MaybeSheetDefinition[] */
-    {
-      for (var _len = arguments.length, styleDefinitions = new Array(_len), _key = 0; _key < _len; _key++) {
-        styleDefinitions[_key] = arguments[_key];
-      }
-
-      return injectAndGetClassName(useImportant, styleDefinitions, selectorHandlers);
-    },
-    flushToStyleTag: flushToStyleTag,
-    injectAndGetClassName: injectAndGetClassName,
-    defaultSelectorHandlers: defaultSelectorHandlers,
+    css: css,
     reset: reset,
-    resetInjectedStyle: resetInjectedStyle
+    version: "2.1.0"
   };
 }
 
-exports.makeExports = makeExports;
+var _aphroditeJss = aphroditeJss((0, _jss.create)((0, _jssPresetDefault2['default'])()));
 
-}).call(this,require('_process'))
-},{"_process":7,"asap":3,"string-hash":16}],2:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-var __chunk_1 = require('./chunk-d8625444.js');
-require('string-hash');
-require('asap');
-
-var useImportant = true; // Add !important to all style definitions
-
-var Aphrodite = __chunk_1.makeExports(useImportant);
-var StyleSheet = Aphrodite.StyleSheet,
-    StyleSheetServer = Aphrodite.StyleSheetServer,
-    StyleSheetTestUtils = Aphrodite.StyleSheetTestUtils,
-    css = Aphrodite.css,
-    minify = Aphrodite.minify,
-    flushToStyleTag = Aphrodite.flushToStyleTag,
-    injectAndGetClassName = Aphrodite.injectAndGetClassName,
-    defaultSelectorHandlers = Aphrodite.defaultSelectorHandlers,
-    reset = Aphrodite.reset,
-    resetInjectedStyle = Aphrodite.resetInjectedStyle;
-
-exports.StyleSheet = StyleSheet;
-exports.StyleSheetServer = StyleSheetServer;
-exports.StyleSheetTestUtils = StyleSheetTestUtils;
+var css = _aphroditeJss.css,
+    StyleSheet = _aphroditeJss.StyleSheet,
+    reset = _aphroditeJss.reset,
+    toString = _aphroditeJss.toString,
+    version = _aphroditeJss.version;
 exports.css = css;
-exports.minify = minify;
-exports.flushToStyleTag = flushToStyleTag;
-exports.injectAndGetClassName = injectAndGetClassName;
-exports.defaultSelectorHandlers = defaultSelectorHandlers;
+exports.StyleSheet = StyleSheet;
 exports.reset = reset;
-exports.resetInjectedStyle = resetInjectedStyle;
-
-},{"./chunk-d8625444.js":1,"asap":3,"string-hash":16}],3:[function(require,module,exports){
-"use strict";
-
-// rawAsap provides everything we need except exception management.
-var rawAsap = require("./raw");
-// RawTasks are recycled to reduce GC churn.
-var freeTasks = [];
-// We queue errors to ensure they are thrown in right order (FIFO).
-// Array-as-queue is good enough here, since we are just dealing with exceptions.
-var pendingErrors = [];
-var requestErrorThrow = rawAsap.makeRequestCallFromTimer(throwFirstError);
-
-function throwFirstError() {
-    if (pendingErrors.length) {
-        throw pendingErrors.shift();
-    }
-}
-
-/**
- * Calls a task as soon as possible after returning, in its own event, with priority
- * over other events like animation, reflow, and repaint. An error thrown from an
- * event will not interrupt, nor even substantially slow down the processing of
- * other events, but will be rather postponed to a lower priority event.
- * @param {{call}} task A callable object, typically a function that takes no
- * arguments.
- */
-module.exports = asap;
-function asap(task) {
-    var rawTask;
-    if (freeTasks.length) {
-        rawTask = freeTasks.pop();
-    } else {
-        rawTask = new RawTask();
-    }
-    rawTask.task = task;
-    rawAsap(rawTask);
-}
-
-// We wrap tasks with recyclable task objects.  A task object implements
-// `call`, just like a function.
-function RawTask() {
-    this.task = null;
-}
-
-// The sole purpose of wrapping the task is to catch the exception and recycle
-// the task object after its single use.
-RawTask.prototype.call = function () {
-    try {
-        this.task.call();
-    } catch (error) {
-        if (asap.onerror) {
-            // This hook exists purely for testing purposes.
-            // Its name will be periodically randomized to break any code that
-            // depends on its existence.
-            asap.onerror(error);
-        } else {
-            // In a web browser, exceptions are not fatal. However, to avoid
-            // slowing down the queue of pending tasks, we rethrow the error in a
-            // lower priority turn.
-            pendingErrors.push(error);
-            requestErrorThrow();
-        }
-    } finally {
-        this.task = null;
-        freeTasks[freeTasks.length] = this;
-    }
-};
-
-},{"./raw":4}],4:[function(require,module,exports){
-(function (global){
-"use strict";
-
-// Use the fastest means possible to execute a task in its own turn, with
-// priority over other events including IO, animation, reflow, and redraw
-// events in browsers.
-//
-// An exception thrown by a task will permanently interrupt the processing of
-// subsequent tasks. The higher level `asap` function ensures that if an
-// exception is thrown by a task, that the task queue will continue flushing as
-// soon as possible, but if you use `rawAsap` directly, you are responsible to
-// either ensure that no exceptions are thrown from your task, or to manually
-// call `rawAsap.requestFlush` if an exception is thrown.
-module.exports = rawAsap;
-function rawAsap(task) {
-    if (!queue.length) {
-        requestFlush();
-        flushing = true;
-    }
-    // Equivalent to push, but avoids a function call.
-    queue[queue.length] = task;
-}
-
-var queue = [];
-// Once a flush has been requested, no further calls to `requestFlush` are
-// necessary until the next `flush` completes.
-var flushing = false;
-// `requestFlush` is an implementation-specific method that attempts to kick
-// off a `flush` event as quickly as possible. `flush` will attempt to exhaust
-// the event queue before yielding to the browser's own event loop.
-var requestFlush;
-// The position of the next task to execute in the task queue. This is
-// preserved between calls to `flush` so that it can be resumed if
-// a task throws an exception.
-var index = 0;
-// If a task schedules additional tasks recursively, the task queue can grow
-// unbounded. To prevent memory exhaustion, the task queue will periodically
-// truncate already-completed tasks.
-var capacity = 1024;
-
-// The flush function processes all tasks that have been scheduled with
-// `rawAsap` unless and until one of those tasks throws an exception.
-// If a task throws an exception, `flush` ensures that its state will remain
-// consistent and will resume where it left off when called again.
-// However, `flush` does not make any arrangements to be called again if an
-// exception is thrown.
-function flush() {
-    while (index < queue.length) {
-        var currentIndex = index;
-        // Advance the index before calling the task. This ensures that we will
-        // begin flushing on the next task the task throws an error.
-        index = index + 1;
-        queue[currentIndex].call();
-        // Prevent leaking memory for long chains of recursive calls to `asap`.
-        // If we call `asap` within tasks scheduled by `asap`, the queue will
-        // grow, but to avoid an O(n) walk for every task we execute, we don't
-        // shift tasks off the queue after they have been executed.
-        // Instead, we periodically shift 1024 tasks off the queue.
-        if (index > capacity) {
-            // Manually shift all values starting at the index back to the
-            // beginning of the queue.
-            for (var scan = 0, newLength = queue.length - index; scan < newLength; scan++) {
-                queue[scan] = queue[scan + index];
-            }
-            queue.length -= index;
-            index = 0;
-        }
-    }
-    queue.length = 0;
-    index = 0;
-    flushing = false;
-}
-
-// `requestFlush` is implemented using a strategy based on data collected from
-// every available SauceLabs Selenium web driver worker at time of writing.
-// https://docs.google.com/spreadsheets/d/1mG-5UYGup5qxGdEMWkhP6BWCz053NUb2E1QoUTU16uA/edit#gid=783724593
-
-// Safari 6 and 6.1 for desktop, iPad, and iPhone are the only browsers that
-// have WebKitMutationObserver but not un-prefixed MutationObserver.
-// Must use `global` or `self` instead of `window` to work in both frames and web
-// workers. `global` is a provision of Browserify, Mr, Mrs, or Mop.
-
-/* globals self */
-var scope = typeof global !== "undefined" ? global : self;
-var BrowserMutationObserver = scope.MutationObserver || scope.WebKitMutationObserver;
-
-// MutationObservers are desirable because they have high priority and work
-// reliably everywhere they are implemented.
-// They are implemented in all modern browsers.
-//
-// - Android 4-4.3
-// - Chrome 26-34
-// - Firefox 14-29
-// - Internet Explorer 11
-// - iPad Safari 6-7.1
-// - iPhone Safari 7-7.1
-// - Safari 6-7
-if (typeof BrowserMutationObserver === "function") {
-    requestFlush = makeRequestCallFromMutationObserver(flush);
-
-// MessageChannels are desirable because they give direct access to the HTML
-// task queue, are implemented in Internet Explorer 10, Safari 5.0-1, and Opera
-// 11-12, and in web workers in many engines.
-// Although message channels yield to any queued rendering and IO tasks, they
-// would be better than imposing the 4ms delay of timers.
-// However, they do not work reliably in Internet Explorer or Safari.
-
-// Internet Explorer 10 is the only browser that has setImmediate but does
-// not have MutationObservers.
-// Although setImmediate yields to the browser's renderer, it would be
-// preferrable to falling back to setTimeout since it does not have
-// the minimum 4ms penalty.
-// Unfortunately there appears to be a bug in Internet Explorer 10 Mobile (and
-// Desktop to a lesser extent) that renders both setImmediate and
-// MessageChannel useless for the purposes of ASAP.
-// https://github.com/kriskowal/q/issues/396
-
-// Timers are implemented universally.
-// We fall back to timers in workers in most engines, and in foreground
-// contexts in the following browsers.
-// However, note that even this simple case requires nuances to operate in a
-// broad spectrum of browsers.
-//
-// - Firefox 3-13
-// - Internet Explorer 6-9
-// - iPad Safari 4.3
-// - Lynx 2.8.7
-} else {
-    requestFlush = makeRequestCallFromTimer(flush);
-}
-
-// `requestFlush` requests that the high priority event queue be flushed as
-// soon as possible.
-// This is useful to prevent an error thrown in a task from stalling the event
-// queue if the exception handled by Node.js’s
-// `process.on("uncaughtException")` or by a domain.
-rawAsap.requestFlush = requestFlush;
-
-// To request a high priority event, we induce a mutation observer by toggling
-// the text of a text node between "1" and "-1".
-function makeRequestCallFromMutationObserver(callback) {
-    var toggle = 1;
-    var observer = new BrowserMutationObserver(callback);
-    var node = document.createTextNode("");
-    observer.observe(node, {characterData: true});
-    return function requestCall() {
-        toggle = -toggle;
-        node.data = toggle;
-    };
-}
-
-// The message channel technique was discovered by Malte Ubl and was the
-// original foundation for this library.
-// http://www.nonblocking.io/2011/06/windownexttick.html
-
-// Safari 6.0.5 (at least) intermittently fails to create message ports on a
-// page's first load. Thankfully, this version of Safari supports
-// MutationObservers, so we don't need to fall back in that case.
-
-// function makeRequestCallFromMessageChannel(callback) {
-//     var channel = new MessageChannel();
-//     channel.port1.onmessage = callback;
-//     return function requestCall() {
-//         channel.port2.postMessage(0);
-//     };
-// }
-
-// For reasons explained above, we are also unable to use `setImmediate`
-// under any circumstances.
-// Even if we were, there is another bug in Internet Explorer 10.
-// It is not sufficient to assign `setImmediate` to `requestFlush` because
-// `setImmediate` must be called *by name* and therefore must be wrapped in a
-// closure.
-// Never forget.
-
-// function makeRequestCallFromSetImmediate(callback) {
-//     return function requestCall() {
-//         setImmediate(callback);
-//     };
-// }
-
-// Safari 6.0 has a problem where timers will get lost while the user is
-// scrolling. This problem does not impact ASAP because Safari 6.0 supports
-// mutation observers, so that implementation is used instead.
-// However, if we ever elect to use timers in Safari, the prevalent work-around
-// is to add a scroll event listener that calls for a flush.
-
-// `setTimeout` does not call the passed callback if the delay is less than
-// approximately 7 in web workers in Firefox 8 through 18, and sometimes not
-// even then.
-
-function makeRequestCallFromTimer(callback) {
-    return function requestCall() {
-        // We dispatch a timeout with a specified delay of 0 for engines that
-        // can reliably accommodate that request. This will usually be snapped
-        // to a 4 milisecond delay, but once we're flushing, there's no delay
-        // between events.
-        var timeoutHandle = setTimeout(handleTimer, 0);
-        // However, since this timer gets frequently dropped in Firefox
-        // workers, we enlist an interval handle that will try to fire
-        // an event 20 times per second until it succeeds.
-        var intervalHandle = setInterval(handleTimer, 50);
-
-        function handleTimer() {
-            // Whichever timer succeeds will cancel both timers and
-            // execute the callback.
-            clearTimeout(timeoutHandle);
-            clearInterval(intervalHandle);
-            callback();
-        }
-    };
-}
-
-// This is for `asap.js` only.
-// Its name will be periodically randomized to break any code that depends on
-// its existence.
-rawAsap.makeRequestCallFromTimer = makeRequestCallFromTimer;
-
-// ASAP was originally a nextTick shim included in Q. This was factored out
-// into this ASAP package. It was later adapted to RSVP which made further
-// amendments. These decisions, particularly to marginalize MessageChannel and
-// to capture the MutationObserver implementation in a closure, were integrated
-// back into ASAP proper.
-// https://github.com/tildeio/rsvp.js/blob/cddf7232546a9cf858524b75cde6f9edf72620a7/lib/rsvp/asap.js
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],5:[function(require,module,exports){
+exports.toString = toString;
+exports.version = version;
+},{"jss":30,"jss-preset-default":21,"murmurhash-js/murmurhash3_gc":50}],2:[function(require,module,exports){
 /*!
-  Copyright (c) 2017 Jed Watson.
+  Copyright (c) 2016 Jed Watson.
   Licensed under the MIT License (MIT), see
   http://jedwatson.github.io/classnames
 */
@@ -2587,11 +130,8 @@ rawAsap.makeRequestCallFromTimer = makeRequestCallFromTimer;
 
 			if (argType === 'string' || argType === 'number') {
 				classes.push(arg);
-			} else if (Array.isArray(arg) && arg.length) {
-				var inner = classNames.apply(null, arg);
-				if (inner) {
-					classes.push(inner);
-				}
+			} else if (Array.isArray(arg)) {
+				classes.push(classNames.apply(null, arg));
 			} else if (argType === 'object') {
 				for (var key in arg) {
 					if (hasOwn.call(arg, key) && arg[key]) {
@@ -2605,7 +145,6 @@ rawAsap.makeRequestCallFromTimer = makeRequestCallFromTimer;
 	}
 
 	if (typeof module !== 'undefined' && module.exports) {
-		classNames.default = classNames;
 		module.exports = classNames;
 	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
 		// register as 'classnames', consistent with npm package name
@@ -2617,7 +156,4016 @@ rawAsap.makeRequestCallFromTimer = makeRequestCallFromTimer;
 	}
 }());
 
-},{}],6:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = camelize;
+var regExp = /[-\s]+(.)?/g;
+
+/**
+ * Convert dash separated strings to camel cased.
+ *
+ * @param {String} str
+ * @return {String}
+ */
+function camelize(str) {
+  return str.replace(regExp, toUpper);
+}
+
+function toUpper(match, c) {
+  return c ? c.toUpperCase() : '';
+}
+},{}],4:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.supportedValue = exports.supportedProperty = exports.prefix = undefined;
+
+var _prefix = require('./prefix');
+
+var _prefix2 = _interopRequireDefault(_prefix);
+
+var _supportedProperty = require('./supported-property');
+
+var _supportedProperty2 = _interopRequireDefault(_supportedProperty);
+
+var _supportedValue = require('./supported-value');
+
+var _supportedValue2 = _interopRequireDefault(_supportedValue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+exports['default'] = {
+  prefix: _prefix2['default'],
+  supportedProperty: _supportedProperty2['default'],
+  supportedValue: _supportedValue2['default']
+}; /**
+    * CSS Vendor prefix detection and property feature testing.
+    *
+    * @copyright Oleg Slobodskoi 2015
+    * @website https://github.com/jsstyles/css-vendor
+    * @license MIT
+    */
+
+exports.prefix = _prefix2['default'];
+exports.supportedProperty = _supportedProperty2['default'];
+exports.supportedValue = _supportedValue2['default'];
+},{"./prefix":5,"./supported-property":6,"./supported-value":7}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _isInBrowser = require('is-in-browser');
+
+var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var js = ''; /**
+              * Export javascript style and css style vendor prefixes.
+              * Based on "transform" support test.
+              */
+
+var css = '';
+
+// We should not do anything if required serverside.
+if (_isInBrowser2['default']) {
+  // Order matters. We need to check Webkit the last one because
+  // other vendors use to add Webkit prefixes to some properties
+  var jsCssMap = {
+    Moz: '-moz-',
+    // IE did it wrong again ...
+    ms: '-ms-',
+    O: '-o-',
+    Webkit: '-webkit-'
+  };
+  var style = document.createElement('p').style;
+  var testProp = 'Transform';
+
+  for (var key in jsCssMap) {
+    if (key + testProp in style) {
+      js = key;
+      css = jsCssMap[key];
+      break;
+    }
+  }
+}
+
+/**
+ * Vendor prefix string for the current browser.
+ *
+ * @type {{js: String, css: String}}
+ * @api public
+ */
+exports['default'] = { js: js, css: css };
+},{"is-in-browser":11}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = supportedProperty;
+
+var _isInBrowser = require('is-in-browser');
+
+var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
+
+var _prefix = require('./prefix');
+
+var _prefix2 = _interopRequireDefault(_prefix);
+
+var _camelize = require('./camelize');
+
+var _camelize2 = _interopRequireDefault(_camelize);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var el = void 0;
+var cache = {};
+
+if (_isInBrowser2['default']) {
+  el = document.createElement('p');
+
+  /**
+   * We test every property on vendor prefix requirement.
+   * Once tested, result is cached. It gives us up to 70% perf boost.
+   * http://jsperf.com/element-style-object-access-vs-plain-object
+   *
+   * Prefill cache with known css properties to reduce amount of
+   * properties we need to feature test at runtime.
+   * http://davidwalsh.name/vendor-prefix
+   */
+  var computed = window.getComputedStyle(document.documentElement, '');
+  for (var key in computed) {
+    if (!isNaN(key)) cache[computed[key]] = computed[key];
+  }
+}
+
+/**
+ * Test if a property is supported, returns supported property with vendor
+ * prefix if required. Returns `false` if not supported.
+ *
+ * @param {String} prop dash separated
+ * @return {String|Boolean}
+ * @api public
+ */
+function supportedProperty(prop) {
+  // For server-side rendering.
+  if (!el) return prop;
+
+  // We have not tested this prop yet, lets do the test.
+  if (cache[prop] != null) return cache[prop];
+
+  // Camelization is required because we can't test using
+  // css syntax for e.g. in FF.
+  // Test if property is supported as it is.
+  if ((0, _camelize2['default'])(prop) in el.style) {
+    cache[prop] = prop;
+  }
+  // Test if property is supported with vendor prefix.
+  else if (_prefix2['default'].js + (0, _camelize2['default'])('-' + prop) in el.style) {
+      cache[prop] = _prefix2['default'].css + prop;
+    } else {
+      cache[prop] = false;
+    }
+
+  return cache[prop];
+}
+},{"./camelize":3,"./prefix":5,"is-in-browser":11}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = supportedValue;
+
+var _isInBrowser = require('is-in-browser');
+
+var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
+
+var _prefix = require('./prefix');
+
+var _prefix2 = _interopRequireDefault(_prefix);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var cache = {};
+var el = void 0;
+
+if (_isInBrowser2['default']) el = document.createElement('p');
+
+/**
+ * Returns prefixed value if needed. Returns `false` if value is not supported.
+ *
+ * @param {String} property
+ * @param {String} value
+ * @return {String|Boolean}
+ * @api public
+ */
+function supportedValue(property, value) {
+  // For server-side rendering.
+  if (!el) return value;
+
+  // It is a string or a number as a string like '1'.
+  // We want only prefixable values here.
+  if (typeof value !== 'string' || !isNaN(parseInt(value, 10))) return value;
+
+  var cacheKey = property + value;
+
+  if (cache[cacheKey] != null) return cache[cacheKey];
+
+  // IE can even throw an error in some cases, for e.g. style.content = 'bar'
+  try {
+    // Test value as it is.
+    el.style[property] = value;
+  } catch (err) {
+    cache[cacheKey] = false;
+    return false;
+  }
+
+  // Value is supported as it is.
+  if (el.style[property] !== '') {
+    cache[cacheKey] = value;
+  } else {
+    // Test value with vendor prefix.
+    value = _prefix2['default'].css + value;
+
+    // Hardcode test to convert "flex" to "-ms-flexbox" for IE10.
+    if (value === '-ms-flex') value = '-ms-flexbox';
+
+    el.style[property] = value;
+
+    // Value is supported with vendor prefix.
+    if (el.style[property] !== '') cache[cacheKey] = value;
+  }
+
+  if (!cache[cacheKey]) cache[cacheKey] = false;
+
+  // Reset style value.
+  el.style[property] = '';
+
+  return cache[cacheKey];
+}
+},{"./prefix":5,"is-in-browser":11}],8:[function(require,module,exports){
+"use strict";
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ */
+
+function makeEmptyFunction(arg) {
+  return function () {
+    return arg;
+  };
+}
+
+/**
+ * This function accepts and discards inputs; it has no side effects. This is
+ * primarily useful idiomatically for overridable function endpoints which
+ * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
+ */
+var emptyFunction = function emptyFunction() {};
+
+emptyFunction.thatReturns = makeEmptyFunction;
+emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
+emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
+emptyFunction.thatReturnsNull = makeEmptyFunction(null);
+emptyFunction.thatReturnsThis = function () {
+  return this;
+};
+emptyFunction.thatReturnsArgument = function (arg) {
+  return arg;
+};
+
+module.exports = emptyFunction;
+},{}],9:[function(require,module,exports){
+(function (process){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+'use strict';
+
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
+var validateFormat = function validateFormat(format) {};
+
+if (process.env.NODE_ENV !== 'production') {
+  validateFormat = function validateFormat(format) {
+    if (format === undefined) {
+      throw new Error('invariant requires an error message argument');
+    }
+  };
+}
+
+function invariant(condition, format, a, b, c, d, e, f) {
+  validateFormat(format);
+
+  if (!condition) {
+    var error;
+    if (format === undefined) {
+      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+    } else {
+      var args = [a, b, c, d, e, f];
+      var argIndex = 0;
+      error = new Error(format.replace(/%s/g, function () {
+        return args[argIndex++];
+      }));
+      error.name = 'Invariant Violation';
+    }
+
+    error.framesToPop = 1; // we don't care about invariant's own frame
+    throw error;
+  }
+}
+
+module.exports = invariant;
+}).call(this,require('_process'))
+},{"_process":52}],10:[function(require,module,exports){
+(function (process){
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+'use strict';
+
+var emptyFunction = require('./emptyFunction');
+
+/**
+ * Similar to invariant but only logs a warning if the condition is not met.
+ * This can be used to log issues in development environments in critical
+ * paths. Removing the logging code for production environments will keep the
+ * same logic and follow the same code paths.
+ */
+
+var warning = emptyFunction;
+
+if (process.env.NODE_ENV !== 'production') {
+  var printWarning = function printWarning(format) {
+    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    var argIndex = 0;
+    var message = 'Warning: ' + format.replace(/%s/g, function () {
+      return args[argIndex++];
+    });
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  };
+
+  warning = function warning(condition, format) {
+    if (format === undefined) {
+      throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
+    }
+
+    if (format.indexOf('Failed Composite propType: ') === 0) {
+      return; // Ignore CompositeComponent proptype check.
+    }
+
+    if (!condition) {
+      for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+        args[_key2 - 2] = arguments[_key2];
+      }
+
+      printWarning.apply(undefined, [format].concat(args));
+    }
+  };
+}
+
+module.exports = warning;
+}).call(this,require('_process'))
+},{"./emptyFunction":8,"_process":52}],11:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var isBrowser = exports.isBrowser = (typeof window === "undefined" ? "undefined" : _typeof(window)) === "object" && (typeof document === "undefined" ? "undefined" : _typeof(document)) === 'object' && document.nodeType === 9;
+
+exports.default = isBrowser;
+},{}],12:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = camelCase;
+var regExp = /([A-Z])/g;
+
+/**
+ * Replace a string passed from String#replace.
+ * @param {String} str
+ * @return {String}
+ */
+function replace(str) {
+  return "-" + str.toLowerCase();
+}
+
+/**
+ * Convert camel cased property names to dash separated.
+ *
+ * @param {Object} style
+ * @return {Object}
+ */
+function convertCase(style) {
+  var converted = {};
+
+  for (var prop in style) {
+    converted[prop.replace(regExp, replace)] = style[prop];
+  }
+
+  if (style.fallbacks) {
+    if (Array.isArray(style.fallbacks)) converted.fallbacks = style.fallbacks.map(convertCase);else converted.fallbacks = convertCase(style.fallbacks);
+  }
+
+  return converted;
+}
+
+/**
+ * Allow camel cased property names by converting them back to dasherized.
+ *
+ * @param {Rule} rule
+ */
+function camelCase() {
+  function onProcessStyle(style) {
+    if (Array.isArray(style)) {
+      // Handle rules like @font-face, which can have multiple styles in an array
+      for (var index = 0; index < style.length; index++) {
+        style[index] = convertCase(style[index]);
+      }
+      return style;
+    }
+
+    return convertCase(style);
+  }
+
+  return { onProcessStyle: onProcessStyle };
+}
+},{}],13:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = jssCompose;
+
+var _warning = require('warning');
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Set selector.
+ *
+ * @param {Object} original rule
+ * @param {String} className class string
+ * @return {Boolean} flag, indicating function was successfull or not
+ */
+function registerClass(rule, className) {
+  // Skip falsy values
+  if (!className) return true;
+
+  // Support array of class names `{composes: ['foo', 'bar']}`
+  if (Array.isArray(className)) {
+    for (var index = 0; index < className.length; index++) {
+      var isSetted = registerClass(rule, className[index]);
+      if (!isSetted) return false;
+    }
+
+    return true;
+  }
+
+  // Support space separated class names `{composes: 'foo bar'}`
+  if (className.indexOf(' ') > -1) {
+    return registerClass(rule, className.split(' '));
+  }
+
+  var parent = rule.options.parent;
+
+  // It is a ref to a local rule.
+
+  if (className[0] === '$') {
+    var refRule = parent.getRule(className.substr(1));
+
+    if (!refRule) {
+      (0, _warning2.default)(false, '[JSS] Referenced rule is not defined. \r\n%s', rule);
+      return false;
+    }
+
+    if (refRule === rule) {
+      (0, _warning2.default)(false, '[JSS] Cyclic composition detected. \r\n%s', rule);
+      return false;
+    }
+
+    parent.classes[rule.key] += ' ' + parent.classes[refRule.key];
+
+    return true;
+  }
+
+  rule.options.parent.classes[rule.key] += ' ' + className;
+
+  return true;
+}
+
+/**
+ * Convert compose property to additional class, remove property from original styles.
+ *
+ * @param {Rule} rule
+ * @api public
+ */
+function jssCompose() {
+  function onProcessStyle(style, rule) {
+    if (!style.composes) return style;
+    registerClass(rule, style.composes);
+    // Remove composes property to prevent infinite loop.
+    delete style.composes;
+    return style;
+  }
+  return { onProcessStyle: onProcessStyle };
+}
+},{"warning":58}],14:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Generated jss-default-unit CSS property units
+ *
+ * @type object
+ */
+exports['default'] = {
+  'animation-delay': 'ms',
+  'animation-duration': 'ms',
+  'background-position': 'px',
+  'background-position-x': 'px',
+  'background-position-y': 'px',
+  'background-size': 'px',
+  border: 'px',
+  'border-bottom': 'px',
+  'border-bottom-left-radius': 'px',
+  'border-bottom-right-radius': 'px',
+  'border-bottom-width': 'px',
+  'border-left': 'px',
+  'border-left-width': 'px',
+  'border-radius': 'px',
+  'border-right': 'px',
+  'border-right-width': 'px',
+  'border-spacing': 'px',
+  'border-top': 'px',
+  'border-top-left-radius': 'px',
+  'border-top-right-radius': 'px',
+  'border-top-width': 'px',
+  'border-width': 'px',
+  'border-after-width': 'px',
+  'border-before-width': 'px',
+  'border-end-width': 'px',
+  'border-horizontal-spacing': 'px',
+  'border-start-width': 'px',
+  'border-vertical-spacing': 'px',
+  bottom: 'px',
+  'box-shadow': 'px',
+  'column-gap': 'px',
+  'column-rule': 'px',
+  'column-rule-width': 'px',
+  'column-width': 'px',
+  'flex-basis': 'px',
+  'font-size': 'px',
+  'font-size-delta': 'px',
+  height: 'px',
+  left: 'px',
+  'letter-spacing': 'px',
+  'logical-height': 'px',
+  'logical-width': 'px',
+  margin: 'px',
+  'margin-after': 'px',
+  'margin-before': 'px',
+  'margin-bottom': 'px',
+  'margin-left': 'px',
+  'margin-right': 'px',
+  'margin-top': 'px',
+  'max-height': 'px',
+  'max-width': 'px',
+  'margin-end': 'px',
+  'margin-start': 'px',
+  'mask-position-x': 'px',
+  'mask-position-y': 'px',
+  'mask-size': 'px',
+  'max-logical-height': 'px',
+  'max-logical-width': 'px',
+  'min-height': 'px',
+  'min-width': 'px',
+  'min-logical-height': 'px',
+  'min-logical-width': 'px',
+  motion: 'px',
+  'motion-offset': 'px',
+  outline: 'px',
+  'outline-offset': 'px',
+  'outline-width': 'px',
+  padding: 'px',
+  'padding-bottom': 'px',
+  'padding-left': 'px',
+  'padding-right': 'px',
+  'padding-top': 'px',
+  'padding-after': 'px',
+  'padding-before': 'px',
+  'padding-end': 'px',
+  'padding-start': 'px',
+  'perspective-origin-x': '%',
+  'perspective-origin-y': '%',
+  perspective: 'px',
+  right: 'px',
+  'shape-margin': 'px',
+  size: 'px',
+  'text-indent': 'px',
+  'text-stroke': 'px',
+  'text-stroke-width': 'px',
+  top: 'px',
+  'transform-origin': '%',
+  'transform-origin-x': '%',
+  'transform-origin-y': '%',
+  'transform-origin-z': '%',
+  'transition-delay': 'ms',
+  'transition-duration': 'ms',
+  'vertical-align': 'px',
+  width: 'px',
+  'word-spacing': 'px',
+  // Not existing properties.
+  // Used to avoid issues with jss-expand intergration.
+  'box-shadow-x': 'px',
+  'box-shadow-y': 'px',
+  'box-shadow-blur': 'px',
+  'box-shadow-spread': 'px',
+  'font-line-height': 'px',
+  'text-shadow-x': 'px',
+  'text-shadow-y': 'px',
+  'text-shadow-blur': 'px'
+};
+},{}],15:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports['default'] = defaultUnit;
+
+var _defaultUnits = require('./defaultUnits');
+
+var _defaultUnits2 = _interopRequireDefault(_defaultUnits);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/**
+ * Clones the object and adds a camel cased property version.
+ */
+function addCamelCasedVersion(obj) {
+  var regExp = /(-[a-z])/g;
+  var replace = function replace(str) {
+    return str[1].toUpperCase();
+  };
+  var newObj = {};
+  for (var key in obj) {
+    newObj[key] = obj[key];
+    newObj[key.replace(regExp, replace)] = obj[key];
+  }
+  return newObj;
+}
+
+var units = addCamelCasedVersion(_defaultUnits2['default']);
+
+/**
+ * Recursive deep style passing function
+ *
+ * @param {String} current property
+ * @param {(Object|Array|Number|String)} property value
+ * @param {Object} options
+ * @return {(Object|Array|Number|String)} resulting value
+ */
+function iterate(prop, value, options) {
+  if (!value) return value;
+
+  var convertedValue = value;
+
+  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+  if (type === 'object' && Array.isArray(value)) type = 'array';
+
+  switch (type) {
+    case 'object':
+      if (prop === 'fallbacks') {
+        for (var innerProp in value) {
+          value[innerProp] = iterate(innerProp, value[innerProp], options);
+        }
+        break;
+      }
+      for (var _innerProp in value) {
+        value[_innerProp] = iterate(prop + '-' + _innerProp, value[_innerProp], options);
+      }
+      break;
+    case 'array':
+      for (var i = 0; i < value.length; i++) {
+        value[i] = iterate(prop, value[i], options);
+      }
+      break;
+    case 'number':
+      if (value !== 0) {
+        convertedValue = value + (options[prop] || units[prop] || '');
+      }
+      break;
+    default:
+      break;
+  }
+
+  return convertedValue;
+}
+
+/**
+ * Add unit to numeric values.
+ */
+function defaultUnit() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  var camelCasedOptions = addCamelCasedVersion(options);
+
+  function onProcessStyle(style, rule) {
+    if (rule.type !== 'style') return style;
+
+    for (var prop in style) {
+      style[prop] = iterate(prop, style[prop], camelCasedOptions);
+    }
+
+    return style;
+  }
+
+  function onChangeValue(value, prop) {
+    return iterate(prop, value, camelCasedOptions);
+  }
+
+  return { onProcessStyle: onProcessStyle, onChangeValue: onChangeValue };
+}
+},{"./defaultUnits":14}],16:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.default = jssExpand;
+
+var _props = require('./props');
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/**
+ * Map values by given prop.
+ *
+ * @param {Array} array of values
+ * @param {String} original property
+ * @param {String} original rule
+ * @return {String} mapped values
+ */
+function mapValuesByProp(value, prop, rule) {
+  return value.map(function (item) {
+    return objectToString(item, prop, rule);
+  });
+}
+
+/**
+ * Convert array to string.
+ *
+ * @param {Array} array of values
+ * @param {String} original property
+ * @param {Object} sheme, for converting arrays in strings
+ * @param {Object} original rule
+ * @return {String} converted string
+ */
+function arrayToString(value, prop, scheme, rule) {
+  if (scheme[prop] == null) return value.join(',');
+  if (value.length === 0) return '';
+  if (Array.isArray(value[0])) return arrayToString(value[0], prop, scheme);
+  if (_typeof(value[0]) === 'object') return mapValuesByProp(value, prop, rule);
+  return value.join(' ');
+}
+
+/**
+ * Convert object to string.
+ *
+ * @param {Object} object of values
+ * @param {String} original property
+ * @param {Object} original rule
+ * @param {Boolean} is fallback prop
+ * @return {String} converted string
+ */
+function objectToString(value, prop, rule, isFallback) {
+  if (!(_props.propObj[prop] || _props.customPropObj[prop])) return '';
+
+  var result = [];
+
+  // Check if exists any non-standart property
+  if (_props.customPropObj[prop]) {
+    value = customPropsToStyle(value, rule, _props.customPropObj[prop], isFallback);
+  }
+
+  // Pass throught all standart props
+  if (Object.keys(value).length) {
+    for (var baseProp in _props.propObj[prop]) {
+      if (value[baseProp]) {
+        if (Array.isArray(value[baseProp])) {
+          result.push(arrayToString(value[baseProp], baseProp, _props.propArrayInObj));
+        } else result.push(value[baseProp]);
+        continue;
+      }
+
+      // Add default value from props config.
+      if (_props.propObj[prop][baseProp] != null) {
+        result.push(_props.propObj[prop][baseProp]);
+      }
+    }
+  }
+
+  return result.join(' ');
+}
+
+/**
+ * Convert custom properties values to styles adding them to rule directly
+ *
+ * @param {Object} object of values
+ * @param {Object} original rule
+ * @param {String} property, that contain partial custom properties
+ * @param {Boolean} is fallback prop
+ * @return {Object} value without custom properties, that was already added to rule
+ */
+function customPropsToStyle(value, rule, customProps, isFallback) {
+  for (var prop in customProps) {
+    var propName = customProps[prop];
+
+    // If current property doesn't exist already in rule - add new one
+    if (typeof value[prop] !== 'undefined' && (isFallback || !rule.prop(propName))) {
+      var appendedValue = styleDetector(_defineProperty({}, propName, value[prop]), rule)[propName];
+
+      // Add style directly in rule
+      if (isFallback) rule.style.fallbacks[propName] = appendedValue;else rule.style[propName] = appendedValue;
+    }
+    // Delete converted property to avoid double converting
+    delete value[prop];
+  }
+
+  return value;
+}
+
+/**
+ * Detect if a style needs to be converted.
+ *
+ * @param {Object} style
+ * @param {Object} rule
+ * @param {Boolean} is fallback prop
+ * @return {Object} convertedStyle
+ */
+function styleDetector(style, rule, isFallback) {
+  for (var prop in style) {
+    var value = style[prop];
+
+    if (Array.isArray(value)) {
+      // Check double arrays to avoid recursion.
+      if (!Array.isArray(value[0])) {
+        if (prop === 'fallbacks') {
+          for (var index = 0; index < style.fallbacks.length; index++) {
+            style.fallbacks[index] = styleDetector(style.fallbacks[index], rule, true);
+          }
+          continue;
+        }
+
+        style[prop] = arrayToString(value, prop, _props.propArray);
+        // Avoid creating properties with empty values
+        if (!style[prop]) delete style[prop];
+      }
+    } else if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+      if (prop === 'fallbacks') {
+        style.fallbacks = styleDetector(style.fallbacks, rule, true);
+        continue;
+      }
+
+      style[prop] = objectToString(value, prop, rule, isFallback);
+      // Avoid creating properties with empty values
+      if (!style[prop]) delete style[prop];
+    }
+
+    // Maybe a computed value resulting in an empty string
+    else if (style[prop] === '') delete style[prop];
+  }
+
+  return style;
+}
+
+/**
+ * Adds possibility to write expanded styles.
+ *
+ * @param {Rule} rule
+ * @api public
+ */
+function jssExpand() {
+  function onProcessStyle(style, rule) {
+    if (!style || rule.type !== 'style') return style;
+
+    if (Array.isArray(style)) {
+      // Pass rules one by one and reformat them
+      for (var index = 0; index < style.length; index++) {
+        style[index] = styleDetector(style[index], rule);
+      }
+      return style;
+    }
+
+    return styleDetector(style, rule);
+  }
+
+  return { onProcessStyle: onProcessStyle };
+}
+},{"./props":17}],17:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * A scheme for converting properties from array to regular style.
+ * All properties listed below will be transformed to a string separated by space.
+ */
+var propArray = exports.propArray = {
+  'background-size': true,
+  'background-position': true,
+  border: true,
+  'border-bottom': true,
+  'border-left': true,
+  'border-top': true,
+  'border-right': true,
+  'border-radius': true,
+  'box-shadow': true,
+  flex: true,
+  margin: true,
+  padding: true,
+  outline: true,
+  'transform-origin': true,
+  transform: true,
+  transition: true
+};
+
+/**
+ * A scheme for converting arrays to regular styles inside of objects.
+ * For e.g.: "{position: [0, 0]}" => "background-position: 0 0;".
+ */
+var propArrayInObj = exports.propArrayInObj = {
+  position: true, // background-position
+  size: true // background-size
+};
+
+/**
+ * A scheme for parsing and building correct styles from passed objects.
+ */
+var propObj = exports.propObj = {
+  padding: {
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0
+  },
+  margin: {
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0
+  },
+  background: {
+    attachment: null,
+    color: null,
+    image: null,
+    position: null,
+    repeat: null
+  },
+  border: {
+    width: null,
+    style: null,
+    color: null
+  },
+  'border-top': {
+    width: null,
+    style: null,
+    color: null
+  },
+  'border-right': {
+    width: null,
+    style: null,
+    color: null
+  },
+  'border-bottom': {
+    width: null,
+    style: null,
+    color: null
+  },
+  'border-left': {
+    width: null,
+    style: null,
+    color: null
+  },
+  outline: {
+    width: null,
+    style: null,
+    color: null
+  },
+  'list-style': {
+    type: null,
+    position: null,
+    image: null
+  },
+  transition: {
+    property: null,
+    duration: null,
+    'timing-function': null,
+    timingFunction: null, // Needed for avoiding comilation issues with jss-camel-case
+    delay: null
+  },
+  animation: {
+    name: null,
+    duration: null,
+    'timing-function': null,
+    timingFunction: null, // Needed to avoid compilation issues with jss-camel-case
+    delay: null,
+    'iteration-count': null,
+    iterationCount: null, // Needed to avoid compilation issues with jss-camel-case
+    direction: null,
+    'fill-mode': null,
+    fillMode: null, // Needed to avoid compilation issues with jss-camel-case
+    'play-state': null,
+    playState: null // Needed to avoid compilation issues with jss-camel-case
+  },
+  'box-shadow': {
+    x: 0,
+    y: 0,
+    blur: 0,
+    spread: 0,
+    color: null,
+    inset: null
+  },
+  'text-shadow': {
+    x: 0,
+    y: 0,
+    blur: null,
+    color: null
+  }
+};
+
+/**
+ * A scheme for converting non-standart properties inside object.
+ * For e.g.: include 'border-radius' property inside 'border' object.
+ */
+var customPropObj = exports.customPropObj = {
+  border: {
+    radius: 'border-radius'
+  },
+  background: {
+    size: 'background-size',
+    image: 'background-image'
+  },
+  font: {
+    style: 'font-style',
+    variant: 'font-variant',
+    weight: 'font-weight',
+    stretch: 'font-stretch',
+    size: 'font-size',
+    family: 'font-family',
+    lineHeight: 'line-height', // Needed to avoid compilation issues with jss-camel-case
+    'line-height': 'line-height'
+  },
+  flex: {
+    grow: 'flex-grow',
+    basis: 'flex-basis',
+    direction: 'flex-direction',
+    wrap: 'flex-wrap',
+    flow: 'flex-flow',
+    shrink: 'flex-shrink'
+  },
+  align: {
+    self: 'align-self',
+    items: 'align-items',
+    content: 'align-content'
+  }
+};
+},{}],18:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports['default'] = jssExtend;
+
+var _warning = require('warning');
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var isObject = function isObject(obj) {
+  return obj && (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && !Array.isArray(obj);
+};
+
+/**
+ * Recursively extend styles.
+ */
+function extend(style, rule, sheet) {
+  var newStyle = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
+  if (typeof style.extend === 'string') {
+    if (sheet) {
+      var refRule = sheet.getRule(style.extend);
+      if (refRule) {
+        if (refRule === rule) (0, _warning2['default'])(false, '[JSS] A rule tries to extend itself \r\n%s', rule);else if (refRule.options.parent) {
+          var originalStyle = refRule.options.parent.rules.raw[style.extend];
+          extend(originalStyle, rule, sheet, newStyle);
+        }
+      }
+    }
+  } else if (Array.isArray(style.extend)) {
+    for (var index = 0; index < style.extend.length; index++) {
+      extend(style.extend[index], rule, sheet, newStyle);
+    }
+  } else {
+    for (var prop in style.extend) {
+      if (prop === 'extend') {
+        extend(style.extend.extend, rule, sheet, newStyle);
+      } else if (isObject(style.extend[prop])) {
+        if (!newStyle[prop]) newStyle[prop] = {};
+        extend(style.extend[prop], rule, sheet, newStyle[prop]);
+      } else {
+        newStyle[prop] = style.extend[prop];
+      }
+    }
+  }
+  // Copy base style.
+  for (var _prop in style) {
+    if (_prop === 'extend') continue;
+    if (isObject(newStyle[_prop]) && isObject(style[_prop])) {
+      extend(style[_prop], rule, sheet, newStyle[_prop]);
+    } else if (isObject(style[_prop])) {
+      newStyle[_prop] = extend(style[_prop], rule, sheet);
+    } else {
+      newStyle[_prop] = style[_prop];
+    }
+  }
+
+  return newStyle;
+}
+
+/**
+ * Handle `extend` property.
+ *
+ * @param {Rule} rule
+ * @api public
+ */
+function jssExtend() {
+  function onProcessStyle(style, rule, sheet) {
+    return style.extend ? extend(style, rule, sheet) : style;
+  }
+
+  return { onProcessStyle: onProcessStyle };
+}
+},{"warning":58}],19:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+exports['default'] = jssGlobal;
+
+var _jss = require('jss');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var propKey = '@global';
+var prefixKey = '@global ';
+
+var GlobalContainerRule = function () {
+  function GlobalContainerRule(key, styles, options) {
+    _classCallCheck(this, GlobalContainerRule);
+
+    this.type = 'global';
+
+    this.key = key;
+    this.options = options;
+    this.rules = new _jss.RuleList(_extends({}, options, {
+      parent: this
+    }));
+
+    for (var selector in styles) {
+      this.rules.add(selector, styles[selector], { selector: selector });
+    }
+
+    this.rules.process();
+  }
+
+  /**
+   * Get a rule.
+   */
+
+
+  _createClass(GlobalContainerRule, [{
+    key: 'getRule',
+    value: function getRule(name) {
+      return this.rules.get(name);
+    }
+
+    /**
+     * Create and register rule, run plugins.
+     */
+
+  }, {
+    key: 'addRule',
+    value: function addRule(name, style, options) {
+      var rule = this.rules.add(name, style, options);
+      this.options.jss.plugins.onProcessRule(rule);
+      return rule;
+    }
+
+    /**
+     * Get index of a rule.
+     */
+
+  }, {
+    key: 'indexOf',
+    value: function indexOf(rule) {
+      return this.rules.indexOf(rule);
+    }
+
+    /**
+     * Generates a CSS string.
+     */
+
+  }, {
+    key: 'toString',
+    value: function toString() {
+      return this.rules.toString();
+    }
+  }]);
+
+  return GlobalContainerRule;
+}();
+
+var GlobalPrefixedRule = function () {
+  function GlobalPrefixedRule(name, style, options) {
+    _classCallCheck(this, GlobalPrefixedRule);
+
+    this.name = name;
+    this.options = options;
+    var selector = name.substr(prefixKey.length);
+    this.rule = options.jss.createRule(selector, style, _extends({}, options, {
+      parent: this,
+      selector: selector
+    }));
+  }
+
+  _createClass(GlobalPrefixedRule, [{
+    key: 'toString',
+    value: function toString(options) {
+      return this.rule.toString(options);
+    }
+  }]);
+
+  return GlobalPrefixedRule;
+}();
+
+var separatorRegExp = /\s*,\s*/g;
+
+function addScope(selector, scope) {
+  var parts = selector.split(separatorRegExp);
+  var scoped = '';
+  for (var i = 0; i < parts.length; i++) {
+    scoped += scope + ' ' + parts[i].trim();
+    if (parts[i + 1]) scoped += ', ';
+  }
+  return scoped;
+}
+
+function handleNestedGlobalContainerRule(rule) {
+  var options = rule.options,
+      style = rule.style;
+
+  var rules = style[propKey];
+
+  if (!rules) return;
+
+  for (var name in rules) {
+    options.sheet.addRule(name, rules[name], _extends({}, options, {
+      selector: addScope(name, rule.selector)
+    }));
+  }
+
+  delete style[propKey];
+}
+
+function handlePrefixedGlobalRule(rule) {
+  var options = rule.options,
+      style = rule.style;
+
+  for (var prop in style) {
+    if (prop.substr(0, propKey.length) !== propKey) continue;
+
+    var selector = addScope(prop.substr(propKey.length), rule.selector);
+    options.sheet.addRule(selector, style[prop], _extends({}, options, {
+      selector: selector
+    }));
+    delete style[prop];
+  }
+}
+
+/**
+ * Convert nested rules to separate, remove them from original styles.
+ *
+ * @param {Rule} rule
+ * @api public
+ */
+function jssGlobal() {
+  function onCreateRule(name, styles, options) {
+    if (name === propKey) {
+      return new GlobalContainerRule(name, styles, options);
+    }
+
+    if (name[0] === '@' && name.substr(0, prefixKey.length) === prefixKey) {
+      return new GlobalPrefixedRule(name, styles, options);
+    }
+
+    var parent = options.parent;
+
+
+    if (parent) {
+      if (parent.type === 'global' || parent.options.parent.type === 'global') {
+        options.global = true;
+      }
+    }
+
+    if (options.global) options.selector = name;
+
+    return null;
+  }
+
+  function onProcessRule(rule) {
+    if (rule.type !== 'style') return;
+
+    handleNestedGlobalContainerRule(rule);
+    handlePrefixedGlobalRule(rule);
+  }
+
+  return { onCreateRule: onCreateRule, onProcessRule: onProcessRule };
+}
+},{"jss":30}],20:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.default = jssNested;
+
+var _warning = require('warning');
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var separatorRegExp = /\s*,\s*/g;
+var parentRegExp = /&/g;
+var refRegExp = /\$([\w-]+)/g;
+
+/**
+ * Convert nested rules to separate, remove them from original styles.
+ *
+ * @param {Rule} rule
+ * @api public
+ */
+function jssNested() {
+  // Get a function to be used for $ref replacement.
+  function getReplaceRef(container) {
+    return function (match, key) {
+      var rule = container.getRule(key);
+      if (rule) return rule.selector;
+      (0, _warning2.default)(false, '[JSS] Could not find the referenced rule %s in %s.', key, container.options.meta || container);
+      return key;
+    };
+  }
+
+  var hasAnd = function hasAnd(str) {
+    return str.indexOf('&') !== -1;
+  };
+
+  function replaceParentRefs(nestedProp, parentProp) {
+    var parentSelectors = parentProp.split(separatorRegExp);
+    var nestedSelectors = nestedProp.split(separatorRegExp);
+
+    var result = '';
+
+    for (var i = 0; i < parentSelectors.length; i++) {
+      var parent = parentSelectors[i];
+
+      for (var j = 0; j < nestedSelectors.length; j++) {
+        var nested = nestedSelectors[j];
+        if (result) result += ', ';
+        // Replace all & by the parent or prefix & with the parent.
+        result += hasAnd(nested) ? nested.replace(parentRegExp, parent) : parent + ' ' + nested;
+      }
+    }
+
+    return result;
+  }
+
+  function getOptions(rule, container, options) {
+    // Options has been already created, now we only increase index.
+    if (options) return _extends({}, options, { index: options.index + 1 });
+
+    var nestingLevel = rule.options.nestingLevel;
+
+    nestingLevel = nestingLevel === undefined ? 1 : nestingLevel + 1;
+
+    return _extends({}, rule.options, {
+      nestingLevel: nestingLevel,
+      index: container.indexOf(rule) + 1
+    });
+  }
+
+  function onProcessStyle(style, rule) {
+    if (rule.type !== 'style') return style;
+    var container = rule.options.parent;
+    var options = void 0;
+    var replaceRef = void 0;
+    for (var prop in style) {
+      var isNested = hasAnd(prop);
+      var isNestedConditional = prop[0] === '@';
+
+      if (!isNested && !isNestedConditional) continue;
+
+      options = getOptions(rule, container, options);
+
+      if (isNested) {
+        var selector = replaceParentRefs(prop, rule.selector
+        // Lazily create the ref replacer function just once for
+        // all nested rules within the sheet.
+        );if (!replaceRef) replaceRef = getReplaceRef(container
+        // Replace all $refs.
+        );selector = selector.replace(refRegExp, replaceRef);
+
+        container.addRule(selector, style[prop], _extends({}, options, { selector: selector }));
+      } else if (isNestedConditional) {
+        // Place conditional right after the parent rule to ensure right ordering.
+        container.addRule(prop, _defineProperty({}, rule.key, style[prop]), options);
+      }
+
+      delete style[prop];
+    }
+
+    return style;
+  }
+
+  return { onProcessStyle: onProcessStyle };
+}
+},{"warning":58}],21:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _jssExtend = require('jss-extend');
+
+var _jssExtend2 = _interopRequireDefault(_jssExtend);
+
+var _jssNested = require('jss-nested');
+
+var _jssNested2 = _interopRequireDefault(_jssNested);
+
+var _jssCamelCase = require('jss-camel-case');
+
+var _jssCamelCase2 = _interopRequireDefault(_jssCamelCase);
+
+var _jssDefaultUnit = require('jss-default-unit');
+
+var _jssDefaultUnit2 = _interopRequireDefault(_jssDefaultUnit);
+
+var _jssVendorPrefixer = require('jss-vendor-prefixer');
+
+var _jssVendorPrefixer2 = _interopRequireDefault(_jssVendorPrefixer);
+
+var _jssPropsSort = require('jss-props-sort');
+
+var _jssPropsSort2 = _interopRequireDefault(_jssPropsSort);
+
+var _jssCompose = require('jss-compose');
+
+var _jssCompose2 = _interopRequireDefault(_jssCompose);
+
+var _jssExpand = require('jss-expand');
+
+var _jssExpand2 = _interopRequireDefault(_jssExpand);
+
+var _jssGlobal = require('jss-global');
+
+var _jssGlobal2 = _interopRequireDefault(_jssGlobal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  return {
+    plugins: [(0, _jssGlobal2.default)(options.global), (0, _jssExtend2.default)(options.extend), (0, _jssNested2.default)(options.nested), (0, _jssCompose2.default)(options.compose), (0, _jssCamelCase2.default)(options.camelCase), (0, _jssDefaultUnit2.default)(options.defaultUnit), (0, _jssExpand2.default)(options.expand), (0, _jssVendorPrefixer2.default)(options.vendorPrefixer), (0, _jssPropsSort2.default)(options.propsSort)]
+  };
+};
+},{"jss-camel-case":12,"jss-compose":13,"jss-default-unit":15,"jss-expand":16,"jss-extend":18,"jss-global":19,"jss-nested":20,"jss-props-sort":22,"jss-vendor-prefixer":23}],22:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = jssPropsSort;
+/**
+ * Sort props by length.
+ */
+function jssPropsSort() {
+  function sort(prop0, prop1) {
+    return prop0.length - prop1.length;
+  }
+
+  function onProcessStyle(style, rule) {
+    if (rule.type !== 'style') return style;
+
+    var newStyle = {};
+    var props = Object.keys(style).sort(sort);
+    for (var prop in props) {
+      newStyle[props[prop]] = style[props[prop]];
+    }
+    return newStyle;
+  }
+
+  return { onProcessStyle: onProcessStyle };
+}
+},{}],23:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = jssVendorPrefixer;
+
+var _cssVendor = require('css-vendor');
+
+var vendor = _interopRequireWildcard(_cssVendor);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
+/**
+ * Add vendor prefix to a property name when needed.
+ *
+ * @param {Rule} rule
+ * @api public
+ */
+function jssVendorPrefixer() {
+  function onProcessRule(rule) {
+    if (rule.type === 'keyframes') {
+      rule.key = '@' + vendor.prefix.css + rule.key.substr(1);
+    }
+  }
+
+  function onProcessStyle(style, rule) {
+    if (rule.type !== 'style') return style;
+
+    for (var prop in style) {
+      var value = style[prop];
+
+      var changeProp = false;
+      var supportedProp = vendor.supportedProperty(prop);
+      if (supportedProp && supportedProp !== prop) changeProp = true;
+
+      var changeValue = false;
+      var supportedValue = vendor.supportedValue(supportedProp, value);
+      if (supportedValue && supportedValue !== value) changeValue = true;
+
+      if (changeProp || changeValue) {
+        if (changeProp) delete style[prop];
+        style[supportedProp || prop] = supportedValue || value;
+      }
+    }
+
+    return style;
+  }
+
+  function onChangeValue(value, prop) {
+    return vendor.supportedValue(prop, value);
+  }
+
+  return { onProcessRule: onProcessRule, onProcessStyle: onProcessStyle, onChangeValue: onChangeValue };
+}
+},{"css-vendor":4}],24:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _StyleSheet = require('./StyleSheet');
+
+var _StyleSheet2 = _interopRequireDefault(_StyleSheet);
+
+var _PluginsRegistry = require('./PluginsRegistry');
+
+var _PluginsRegistry2 = _interopRequireDefault(_PluginsRegistry);
+
+var _rules = require('./plugins/rules');
+
+var _rules2 = _interopRequireDefault(_rules);
+
+var _sheets = require('./sheets');
+
+var _sheets2 = _interopRequireDefault(_sheets);
+
+var _createGenerateClassName = require('./utils/createGenerateClassName');
+
+var _createGenerateClassName2 = _interopRequireDefault(_createGenerateClassName);
+
+var _createRule2 = require('./utils/createRule');
+
+var _createRule3 = _interopRequireDefault(_createRule2);
+
+var _findRenderer = require('./utils/findRenderer');
+
+var _findRenderer2 = _interopRequireDefault(_findRenderer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Jss = function () {
+  function Jss(options) {
+    _classCallCheck(this, Jss);
+
+    this.version = "8.1.0";
+    this.plugins = new _PluginsRegistry2['default']();
+
+    // eslint-disable-next-line prefer-spread
+    this.use.apply(this, _rules2['default']);
+    this.setup(options);
+  }
+
+  _createClass(Jss, [{
+    key: 'setup',
+    value: function setup() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      var createGenerateClassName = options.createGenerateClassName || _createGenerateClassName2['default'];
+      this.generateClassName = createGenerateClassName();
+      this.options = _extends({}, options, {
+        createGenerateClassName: createGenerateClassName,
+        Renderer: (0, _findRenderer2['default'])(options)
+        // eslint-disable-next-line prefer-spread
+      });if (options.plugins) this.use.apply(this, options.plugins);
+      return this;
+    }
+
+    /**
+     * Create a Style Sheet.
+     */
+
+  }, {
+    key: 'createStyleSheet',
+    value: function createStyleSheet(styles) {
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+      var index = options.index;
+      if (typeof index !== 'number') {
+        index = _sheets2['default'].index === 0 ? 0 : _sheets2['default'].index + 1;
+      }
+      var sheet = new _StyleSheet2['default'](styles, _extends({}, options, {
+        jss: this,
+        generateClassName: options.generateClassName || this.generateClassName,
+        insertionPoint: this.options.insertionPoint,
+        Renderer: this.options.Renderer,
+        index: index
+      }));
+      this.plugins.onProcessSheet(sheet);
+      return sheet;
+    }
+
+    /**
+     * Detach the Style Sheet and remove it from the registry.
+     */
+
+  }, {
+    key: 'removeStyleSheet',
+    value: function removeStyleSheet(sheet) {
+      sheet.detach();
+      _sheets2['default'].remove(sheet);
+      return this;
+    }
+
+    /**
+     * Create a rule without a Style Sheet.
+     */
+
+  }, {
+    key: 'createRule',
+    value: function createRule(name) {
+      var style = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+      // Enable rule without name for inline styles.
+      if ((typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') {
+        options = style;
+        style = name;
+        name = undefined;
+      }
+
+      // Cast from RuleFactoryOptions to RuleOptions
+      // https://stackoverflow.com/questions/41328728/force-casting-in-flow
+      var ruleOptions = options;
+
+      ruleOptions.jss = this;
+      ruleOptions.Renderer = this.options.Renderer;
+      if (!ruleOptions.generateClassName) ruleOptions.generateClassName = this.generateClassName;
+      if (!ruleOptions.classes) ruleOptions.classes = {};
+      var rule = (0, _createRule3['default'])(name, style, ruleOptions);
+      this.plugins.onProcessRule(rule);
+
+      return rule;
+    }
+
+    /**
+     * Register plugin. Passed function will be invoked with a rule instance.
+     */
+
+  }, {
+    key: 'use',
+    value: function use() {
+      var _this = this;
+
+      for (var _len = arguments.length, plugins = Array(_len), _key = 0; _key < _len; _key++) {
+        plugins[_key] = arguments[_key];
+      }
+
+      plugins.forEach(function (plugin) {
+        return _this.plugins.use(plugin);
+      });
+      return this;
+    }
+  }]);
+
+  return Jss;
+}();
+
+exports['default'] = Jss;
+},{"./PluginsRegistry":25,"./StyleSheet":29,"./plugins/rules":31,"./sheets":40,"./utils/createGenerateClassName":42,"./utils/createRule":43,"./utils/findRenderer":44}],25:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _warning = require('warning');
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var PluginsRegistry = function () {
+  function PluginsRegistry() {
+    _classCallCheck(this, PluginsRegistry);
+
+    this.hooks = {
+      onCreateRule: [],
+      onProcessRule: [],
+      onProcessStyle: [],
+      onProcessSheet: [],
+      onChangeValue: []
+
+      /**
+       * Call `onCreateRule` hooks and return an object if returned by a hook.
+       */
+    };
+  }
+
+  _createClass(PluginsRegistry, [{
+    key: 'onCreateRule',
+    value: function onCreateRule(name, decl, options) {
+      for (var i = 0; i < this.hooks.onCreateRule.length; i++) {
+        var rule = this.hooks.onCreateRule[i](name, decl, options);
+        if (rule) return rule;
+      }
+      return null;
+    }
+
+    /**
+     * Call `onProcessRule` hooks.
+     */
+
+  }, {
+    key: 'onProcessRule',
+    value: function onProcessRule(rule) {
+      if (rule.isProcessed) return;
+      var sheet = rule.options.sheet;
+
+      for (var i = 0; i < this.hooks.onProcessRule.length; i++) {
+        this.hooks.onProcessRule[i](rule, sheet);
+      }
+
+      // $FlowFixMe
+      if (rule.style) this.onProcessStyle(rule.style, rule, sheet);
+
+      rule.isProcessed = true;
+    }
+
+    /**
+     * Call `onProcessStyle` hooks.
+     */
+
+  }, {
+    key: 'onProcessStyle',
+    value: function onProcessStyle(style, rule, sheet) {
+      var nextStyle = style;
+
+      for (var i = 0; i < this.hooks.onProcessStyle.length; i++) {
+        nextStyle = this.hooks.onProcessStyle[i](nextStyle, rule, sheet);
+        // $FlowFixMe
+        rule.style = nextStyle;
+      }
+    }
+
+    /**
+     * Call `onProcessSheet` hooks.
+     */
+
+  }, {
+    key: 'onProcessSheet',
+    value: function onProcessSheet(sheet) {
+      for (var i = 0; i < this.hooks.onProcessSheet.length; i++) {
+        this.hooks.onProcessSheet[i](sheet);
+      }
+    }
+
+    /**
+     * Call `onChangeValue` hooks.
+     */
+
+  }, {
+    key: 'onChangeValue',
+    value: function onChangeValue(value, prop, rule) {
+      var processedValue = value;
+      for (var i = 0; i < this.hooks.onChangeValue.length; i++) {
+        processedValue = this.hooks.onChangeValue[i](processedValue, prop, rule);
+      }
+      return processedValue;
+    }
+
+    /**
+     * Register a plugin.
+     * If function is passed, it is a shortcut for `{onProcessRule}`.
+     */
+
+  }, {
+    key: 'use',
+    value: function use(plugin) {
+      for (var name in plugin) {
+        if (this.hooks[name]) this.hooks[name].push(plugin[name]);else (0, _warning2['default'])(false, '[JSS] Unknown hook "%s".', name);
+      }
+    }
+  }]);
+
+  return PluginsRegistry;
+}();
+
+exports['default'] = PluginsRegistry;
+},{"warning":58}],26:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _createRule = require('./utils/createRule');
+
+var _createRule2 = _interopRequireDefault(_createRule);
+
+var _updateRule = require('./utils/updateRule');
+
+var _updateRule2 = _interopRequireDefault(_updateRule);
+
+var _linkRule = require('./utils/linkRule');
+
+var _linkRule2 = _interopRequireDefault(_linkRule);
+
+var _StyleRule = require('./rules/StyleRule');
+
+var _StyleRule2 = _interopRequireDefault(_StyleRule);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Contains rules objects and allows adding/removing etc.
+ * Is used for e.g. by `StyleSheet` or `ConditionalRule`.
+ */
+var RuleList = function () {
+
+  // Original styles object.
+  function RuleList(options) {
+    _classCallCheck(this, RuleList);
+
+    this.map = {};
+    this.raw = {};
+    this.index = [];
+
+    this.options = options;
+    this.classes = options.classes;
+  }
+
+  /**
+   * Create and register rule.
+   *
+   * Will not render after Style Sheet was rendered the first time.
+   */
+
+
+  // Used to ensure correct rules order.
+
+  // Rules registry for access by .get() method.
+  // It contains the same rule registered by name and by selector.
+
+
+  _createClass(RuleList, [{
+    key: 'add',
+    value: function add(name, decl, options) {
+      var _options = this.options,
+          parent = _options.parent,
+          sheet = _options.sheet,
+          jss = _options.jss,
+          Renderer = _options.Renderer,
+          generateClassName = _options.generateClassName;
+
+
+      options = _extends({
+        classes: this.classes,
+        parent: parent,
+        sheet: sheet,
+        jss: jss,
+        Renderer: Renderer,
+        generateClassName: generateClassName
+      }, options);
+
+      if (!options.selector && this.classes[name]) options.selector = '.' + this.classes[name];
+
+      this.raw[name] = decl;
+
+      var rule = (0, _createRule2['default'])(name, decl, options);
+      this.register(rule);
+
+      var index = options.index === undefined ? this.index.length : options.index;
+      this.index.splice(index, 0, rule);
+
+      return rule;
+    }
+
+    /**
+     * Get a rule.
+     */
+
+  }, {
+    key: 'get',
+    value: function get(name) {
+      return this.map[name];
+    }
+
+    /**
+     * Delete a rule.
+     */
+
+  }, {
+    key: 'remove',
+    value: function remove(rule) {
+      this.unregister(rule);
+      this.index.splice(this.indexOf(rule), 1);
+    }
+
+    /**
+     * Get index of a rule.
+     */
+
+  }, {
+    key: 'indexOf',
+    value: function indexOf(rule) {
+      return this.index.indexOf(rule);
+    }
+
+    /**
+     * Run `onProcessRule()` plugins on every rule.
+     */
+
+  }, {
+    key: 'process',
+    value: function process() {
+      var plugins = this.options.jss.plugins;
+      // We need to clone array because if we modify the index somewhere else during a loop
+      // we end up with very hard-to-track-down side effects.
+
+      this.index.slice(0).forEach(plugins.onProcessRule, plugins);
+    }
+
+    /**
+     * Register a rule in `.map` and `.classes` maps.
+     */
+
+  }, {
+    key: 'register',
+    value: function register(rule) {
+      this.map[rule.key] = rule;
+      if (rule instanceof _StyleRule2['default']) {
+        this.map[rule.selector] = rule;
+        this.classes[rule.key] = rule.selector.substr(1);
+      }
+    }
+
+    /**
+     * Unregister a rule.
+     */
+
+  }, {
+    key: 'unregister',
+    value: function unregister(rule) {
+      delete this.map[rule.key];
+      delete this.classes[rule.key];
+      if (rule instanceof _StyleRule2['default']) delete this.map[rule.selector];
+    }
+
+    /**
+     * Update the function values with a new data.
+     */
+
+  }, {
+    key: 'update',
+    value: function update(name, data) {
+      if (typeof name === 'string') {
+        (0, _updateRule2['default'])(this.get(name), data, RuleList);
+        return;
+      }
+
+      for (var index = 0; index < this.index.length; index++) {
+        (0, _updateRule2['default'])(this.index[index], name, RuleList);
+      }
+    }
+
+    /**
+     * Link renderable rules with CSSRuleList.
+     */
+
+  }, {
+    key: 'link',
+    value: function link(cssRules) {
+      for (var i = 0; i < cssRules.length; i++) {
+        var cssRule = cssRules[i];
+        var rule = this.get(this.options.sheet.renderer.getSelector(cssRule));
+        if (rule) (0, _linkRule2['default'])(rule, cssRule);
+      }
+    }
+
+    /**
+     * Convert rules to a CSS string.
+     */
+
+  }, {
+    key: 'toString',
+    value: function toString(options) {
+      var str = '';
+
+      for (var index = 0; index < this.index.length; index++) {
+        var rule = this.index[index];
+        var css = rule.toString(options);
+
+        // No need to render an empty rule.
+        if (!css) continue;
+
+        if (str) str += '\n';
+        str += css;
+      }
+
+      return str;
+    }
+  }]);
+
+  return RuleList;
+}();
+
+exports['default'] = RuleList;
+},{"./rules/StyleRule":38,"./utils/createRule":43,"./utils/linkRule":46,"./utils/updateRule":49}],27:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _warning = require('warning');
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * SheetsManager is like a WeakMap which is designed to count StyleSheet
+ * instances and attach/detach automatically.
+ */
+var SheetsManager = function () {
+  function SheetsManager() {
+    _classCallCheck(this, SheetsManager);
+
+    this.sheets = [];
+    this.refs = [];
+    this.keys = [];
+  }
+
+  _createClass(SheetsManager, [{
+    key: 'get',
+    value: function get(key) {
+      var index = this.keys.indexOf(key);
+      return this.sheets[index];
+    }
+  }, {
+    key: 'add',
+    value: function add(key, sheet) {
+      var sheets = this.sheets,
+          refs = this.refs,
+          keys = this.keys;
+
+      var index = sheets.indexOf(sheet);
+
+      if (index !== -1) return index;
+
+      sheets.push(sheet);
+      refs.push(0);
+      keys.push(key);
+
+      return sheets.length - 1;
+    }
+  }, {
+    key: 'manage',
+    value: function manage(key) {
+      var index = this.keys.indexOf(key);
+      var sheet = this.sheets[index];
+      if (this.refs[index] === 0) sheet.attach();
+      this.refs[index]++;
+      if (!this.keys[index]) this.keys.splice(index, 0, key);
+      return sheet;
+    }
+  }, {
+    key: 'unmanage',
+    value: function unmanage(key) {
+      var index = this.keys.indexOf(key);
+      if (index === -1) {
+        // eslint-ignore-next-line no-console
+        (0, _warning2['default'])('SheetsManager: can\'t find sheet to unmanage');
+        return;
+      }
+      if (this.refs[index] > 0) {
+        this.refs[index]--;
+        if (this.refs[index] === 0) this.sheets[index].detach();
+      }
+    }
+  }]);
+
+  return SheetsManager;
+}();
+
+exports['default'] = SheetsManager;
+},{"warning":58}],28:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Sheets registry to access them all at one place.
+ */
+var SheetsRegistry = function () {
+  function SheetsRegistry() {
+    _classCallCheck(this, SheetsRegistry);
+
+    this.registry = [];
+  }
+
+  _createClass(SheetsRegistry, [{
+    key: 'add',
+
+
+    /**
+     * Register a Style Sheet.
+     */
+    value: function add(sheet) {
+      var registry = this.registry;
+      var index = sheet.options.index;
+
+
+      if (registry.indexOf(sheet) !== -1) return;
+
+      if (registry.length === 0 || index >= this.index) {
+        registry.push(sheet);
+        return;
+      }
+
+      // Find a position.
+      for (var i = 0; i < registry.length; i++) {
+        if (registry[i].options.index > index) {
+          registry.splice(i, 0, sheet);
+          return;
+        }
+      }
+    }
+
+    /**
+     * Reset the registry.
+     */
+
+  }, {
+    key: 'reset',
+    value: function reset() {
+      this.registry = [];
+    }
+
+    /**
+     * Remove a Style Sheet.
+     */
+
+  }, {
+    key: 'remove',
+    value: function remove(sheet) {
+      var index = this.registry.indexOf(sheet);
+      this.registry.splice(index, 1);
+    }
+
+    /**
+     * Convert all attached sheets to a CSS string.
+     */
+
+  }, {
+    key: 'toString',
+    value: function toString(options) {
+      return this.registry.filter(function (sheet) {
+        return sheet.attached;
+      }).map(function (sheet) {
+        return sheet.toString(options);
+      }).join('\n');
+    }
+  }, {
+    key: 'index',
+
+
+    /**
+     * Current highest index number.
+     */
+    get: function get() {
+      return this.registry.length === 0 ? 0 : this.registry[this.registry.length - 1].options.index;
+    }
+  }]);
+
+  return SheetsRegistry;
+}();
+
+exports['default'] = SheetsRegistry;
+},{}],29:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _linkRule = require('./utils/linkRule');
+
+var _linkRule2 = _interopRequireDefault(_linkRule);
+
+var _RuleList = require('./RuleList');
+
+var _RuleList2 = _interopRequireDefault(_RuleList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var StyleSheet = function () {
+  function StyleSheet(styles, options) {
+    _classCallCheck(this, StyleSheet);
+
+    this.attached = false;
+    this.deployed = false;
+    this.linked = false;
+    this.classes = {};
+    this.options = _extends({}, options, {
+      sheet: this,
+      parent: this,
+      classes: this.classes
+    });
+    this.renderer = new options.Renderer(this);
+    this.rules = new _RuleList2['default'](this.options);
+
+    for (var name in styles) {
+      this.rules.add(name, styles[name]);
+    }
+
+    this.rules.process();
+  }
+
+  /**
+   * Attach renderable to the render tree.
+   */
+
+
+  _createClass(StyleSheet, [{
+    key: 'attach',
+    value: function attach() {
+      if (this.attached) return this;
+      if (!this.deployed) this.deploy();
+      this.renderer.attach();
+      if (!this.linked && this.options.link) this.link();
+      this.attached = true;
+      return this;
+    }
+
+    /**
+     * Remove renderable from render tree.
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      if (!this.attached) return this;
+      this.renderer.detach();
+      this.attached = false;
+      return this;
+    }
+
+    /**
+     * Add a rule to the current stylesheet.
+     * Will insert a rule also after the stylesheet has been rendered first time.
+     */
+
+  }, {
+    key: 'addRule',
+    value: function addRule(name, decl, options) {
+      var queue = this.queue;
+
+      // Plugins can create rules.
+      // In order to preserve the right order, we need to queue all `.addRule` calls,
+      // which happen after the first `rules.add()` call.
+
+      if (this.attached && !queue) this.queue = [];
+
+      var rule = this.rules.add(name, decl, options);
+      this.options.jss.plugins.onProcessRule(rule);
+
+      if (this.attached) {
+        if (!this.deployed) return rule;
+        // Don't insert rule directly if there is no stringified version yet.
+        // It will be inserted all together when .attach is called.
+        if (queue) queue.push(rule);else {
+          this.insertRule(rule);
+          if (this.queue) {
+            this.queue.forEach(this.insertRule, this);
+            this.queue = undefined;
+          }
+        }
+        return rule;
+      }
+
+      // We can't add rules to a detached style node.
+      // We will redeploy the sheet once user will attach it.
+      this.deployed = false;
+
+      return rule;
+    }
+
+    /**
+     * Insert rule into the StyleSheet
+     */
+
+  }, {
+    key: 'insertRule',
+    value: function insertRule(rule) {
+      var renderable = this.renderer.insertRule(rule);
+      if (renderable && this.options.link) (0, _linkRule2['default'])(rule, renderable);
+    }
+
+    /**
+     * Create and add rules.
+     * Will render also after Style Sheet was rendered the first time.
+     */
+
+  }, {
+    key: 'addRules',
+    value: function addRules(styles, options) {
+      var added = [];
+      for (var name in styles) {
+        added.push(this.addRule(name, styles[name], options));
+      }
+      return added;
+    }
+
+    /**
+     * Get a rule by name.
+     */
+
+  }, {
+    key: 'getRule',
+    value: function getRule(name) {
+      return this.rules.get(name);
+    }
+
+    /**
+     * Delete a rule by name.
+     * Returns `true`: if rule has been deleted from the DOM.
+     */
+
+  }, {
+    key: 'deleteRule',
+    value: function deleteRule(name) {
+      var rule = this.rules.get(name);
+
+      if (!rule) return false;
+
+      this.rules.remove(rule);
+
+      if (this.attached && rule.renderable) {
+        return this.renderer.deleteRule(rule.renderable);
+      }
+
+      return true;
+    }
+
+    /**
+     * Get index of a rule.
+     */
+
+  }, {
+    key: 'indexOf',
+    value: function indexOf(rule) {
+      return this.rules.indexOf(rule);
+    }
+
+    /**
+     * Deploy pure CSS string to a renderable.
+     */
+
+  }, {
+    key: 'deploy',
+    value: function deploy() {
+      this.renderer.deploy();
+      this.deployed = true;
+      return this;
+    }
+
+    /**
+     * Link renderable CSS rules from sheet with their corresponding models.
+     */
+
+  }, {
+    key: 'link',
+    value: function link() {
+      var cssRules = this.renderer.getRules();
+
+      // Is undefined when VirtualRenderer is used.
+      if (cssRules) this.rules.link(cssRules);
+      this.linked = true;
+      return this;
+    }
+
+    /**
+     * Update the function values with a new data.
+     */
+
+  }, {
+    key: 'update',
+    value: function update(name, data) {
+      this.rules.update(name, data);
+      return this;
+    }
+
+    /**
+     * Convert rules to a CSS string.
+     */
+
+  }, {
+    key: 'toString',
+    value: function toString(options) {
+      return this.rules.toString(options);
+    }
+  }]);
+
+  return StyleSheet;
+}();
+
+exports['default'] = StyleSheet;
+},{"./RuleList":26,"./utils/linkRule":46}],30:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.create = exports.sheets = exports.RuleList = exports.SheetsManager = exports.SheetsRegistry = exports.getDynamicStyles = undefined;
+
+var _getDynamicStyles = require('./utils/getDynamicStyles');
+
+Object.defineProperty(exports, 'getDynamicStyles', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_getDynamicStyles)['default'];
+  }
+});
+
+var _SheetsRegistry = require('./SheetsRegistry');
+
+Object.defineProperty(exports, 'SheetsRegistry', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_SheetsRegistry)['default'];
+  }
+});
+
+var _SheetsManager = require('./SheetsManager');
+
+Object.defineProperty(exports, 'SheetsManager', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_SheetsManager)['default'];
+  }
+});
+
+var _RuleList = require('./RuleList');
+
+Object.defineProperty(exports, 'RuleList', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_RuleList)['default'];
+  }
+});
+
+var _sheets = require('./sheets');
+
+Object.defineProperty(exports, 'sheets', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_sheets)['default'];
+  }
+});
+
+var _Jss = require('./Jss');
+
+var _Jss2 = _interopRequireDefault(_Jss);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/**
+ * Creates a new instance of Jss.
+ */
+var create = exports.create = function create(options) {
+  return new _Jss2['default'](options);
+};
+
+/**
+ * A global Jss instance.
+ */
+exports['default'] = create();
+},{"./Jss":24,"./RuleList":26,"./SheetsManager":27,"./SheetsRegistry":28,"./sheets":40,"./utils/getDynamicStyles":45}],31:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _SimpleRule = require('../rules/SimpleRule');
+
+var _SimpleRule2 = _interopRequireDefault(_SimpleRule);
+
+var _KeyframesRule = require('../rules/KeyframesRule');
+
+var _KeyframesRule2 = _interopRequireDefault(_KeyframesRule);
+
+var _ConditionalRule = require('../rules/ConditionalRule');
+
+var _ConditionalRule2 = _interopRequireDefault(_ConditionalRule);
+
+var _FontFaceRule = require('../rules/FontFaceRule');
+
+var _FontFaceRule2 = _interopRequireDefault(_FontFaceRule);
+
+var _ViewportRule = require('../rules/ViewportRule');
+
+var _ViewportRule2 = _interopRequireDefault(_ViewportRule);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var classes = {
+  '@charset': _SimpleRule2['default'],
+  '@import': _SimpleRule2['default'],
+  '@namespace': _SimpleRule2['default'],
+  '@keyframes': _KeyframesRule2['default'],
+  '@media': _ConditionalRule2['default'],
+  '@supports': _ConditionalRule2['default'],
+  '@font-face': _FontFaceRule2['default'],
+  '@viewport': _ViewportRule2['default'],
+  '@-ms-viewport': _ViewportRule2['default']
+
+  /**
+   * Generate plugins which will register all rules.
+   */
+};
+exports['default'] = Object.keys(classes).map(function (key) {
+  // https://jsperf.com/indexof-vs-substr-vs-regex-at-the-beginning-3
+  var re = new RegExp('^' + key);
+  var onCreateRule = function onCreateRule(name, decl, options) {
+    return re.test(name) ? new classes[key](name, decl, options) : null;
+  };
+  return { onCreateRule: onCreateRule };
+});
+},{"../rules/ConditionalRule":34,"../rules/FontFaceRule":35,"../rules/KeyframesRule":36,"../rules/SimpleRule":37,"../rules/ViewportRule":39}],32:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _warning = require('warning');
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _sheets = require('../sheets');
+
+var _sheets2 = _interopRequireDefault(_sheets);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Get a style property.
+ */
+function getStyle(rule, prop) {
+  try {
+    return rule.style.getPropertyValue(prop);
+  } catch (err) {
+    // IE may throw if property is unknown.
+    return '';
+  }
+}
+
+/**
+ * Set a style property.
+ */
+function setStyle(rule, prop, value) {
+  try {
+    rule.style.setProperty(prop, value);
+  } catch (err) {
+    // IE may throw if property is unknown.
+    return false;
+  }
+  return true;
+}
+
+function extractSelector(cssText) {
+  var from = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+  return cssText.substr(from, cssText.indexOf('{') - 1);
+}
+
+var CSSRuleTypes = {
+  STYLE_RULE: 1,
+  KEYFRAMES_RULE: 7
+
+  /**
+   * Get the selector.
+   */
+};function getSelector(rule) {
+  if (rule.type === CSSRuleTypes.STYLE_RULE) return rule.selectorText;
+  if (rule.type === CSSRuleTypes.KEYFRAMES_RULE) {
+    var name = rule.name;
+
+    if (name) return '@keyframes ' + name;
+
+    // There is no rule.name in the following browsers:
+    // - IE 9
+    // - Safari 7.1.8
+    // - Mobile Safari 9.0.0
+    var cssText = rule.cssText;
+
+    return '@' + extractSelector(cssText, cssText.indexOf('keyframes'));
+  }
+
+  return extractSelector(rule.cssText);
+}
+
+/**
+ * Set the selector.
+ */
+function setSelector(rule, selectorText) {
+  rule.selectorText = selectorText;
+
+  // Return false if setter was not successful.
+  // Currently works in chrome only.
+  return rule.selectorText === selectorText;
+}
+
+/**
+ * Gets the `head` element upon the first call and caches it.
+ */
+var getHead = function () {
+  var head = void 0;
+  return function () {
+    if (!head) head = document.head || document.getElementsByTagName('head')[0];
+    return head;
+  };
+}();
+
+/**
+ * Find attached sheet with an index higher than the passed one.
+ */
+function findHigherSheet(registry, options) {
+  for (var i = 0; i < registry.length; i++) {
+    var sheet = registry[i];
+    if (sheet.attached && sheet.options.index > options.index && sheet.options.insertionPoint === options.insertionPoint) {
+      return sheet;
+    }
+  }
+  return null;
+}
+
+/**
+ * Find attached sheet with the highest index.
+ */
+function findHighestSheet(registry, options) {
+  for (var i = registry.length - 1; i >= 0; i--) {
+    var sheet = registry[i];
+    if (sheet.attached && sheet.options.insertionPoint === options.insertionPoint) {
+      return sheet;
+    }
+  }
+  return null;
+}
+
+/**
+ * Find a comment with "jss" inside.
+ */
+function findCommentNode(text) {
+  var head = getHead();
+  for (var i = 0; i < head.childNodes.length; i++) {
+    var node = head.childNodes[i];
+    if (node.nodeType === 8 && node.nodeValue.trim() === text) {
+      return node;
+    }
+  }
+  return null;
+}
+
+/**
+ * Find a node before which we can insert the sheet.
+ */
+function findPrevNode(options) {
+  var registry = _sheets2['default'].registry;
+
+
+  if (registry.length > 0) {
+    // Try to insert before the next higher sheet.
+    var sheet = findHigherSheet(registry, options);
+    if (sheet) return sheet.renderer.element;
+
+    // Otherwise insert after the last attached.
+    sheet = findHighestSheet(registry, options);
+    if (sheet) return sheet.renderer.element.nextElementSibling;
+  }
+
+  // Try to find a comment placeholder if registry is empty.
+  var insertionPoint = options.insertionPoint;
+
+  if (insertionPoint && typeof insertionPoint === 'string') {
+    var comment = findCommentNode(insertionPoint);
+    if (comment) return comment.nextSibling;
+    // If user specifies an insertion point and it can't be found in the document -
+    // bad specificity issues may appear.
+    (0, _warning2['default'])(insertionPoint === 'jss', '[JSS] Insertion point "%s" not found.', insertionPoint);
+  }
+
+  return null;
+}
+
+/**
+ * Insert style element into the DOM.
+ */
+function insertStyle(style, options) {
+  var insertionPoint = options.insertionPoint;
+
+  var prevNode = findPrevNode(options);
+
+  if (prevNode) {
+    var parentNode = prevNode.parentNode;
+
+    if (parentNode) parentNode.insertBefore(style, prevNode);
+    return;
+  }
+
+  // Works with iframes and any node types.
+  if (insertionPoint && typeof insertionPoint.nodeType === 'number') {
+    // https://stackoverflow.com/questions/41328728/force-casting-in-flow
+    var insertionPointElement = insertionPoint;
+    var _parentNode = insertionPointElement.parentNode;
+
+    if (_parentNode) _parentNode.insertBefore(style, insertionPointElement.nextSibling);else (0, _warning2['default'])(false, '[JSS] Insertion point is not in the DOM.');
+    return;
+  }
+
+  getHead().insertBefore(style, prevNode);
+}
+
+var DomRenderer = function () {
+  function DomRenderer(sheet) {
+    _classCallCheck(this, DomRenderer);
+
+    this.getStyle = getStyle;
+    this.setStyle = setStyle;
+    this.setSelector = setSelector;
+    this.getSelector = getSelector;
+    this.hasInsertedRules = false;
+
+    // There is no sheet when the renderer is used from a standalone StyleRule.
+    if (sheet) _sheets2['default'].add(sheet);
+
+    this.sheet = sheet;
+
+    var _ref = this.sheet ? this.sheet.options : {},
+        media = _ref.media,
+        meta = _ref.meta,
+        element = _ref.element;
+
+    this.element = element || document.createElement('style');
+    this.element.type = 'text/css';
+    this.element.setAttribute('data-jss', '');
+    if (media) this.element.setAttribute('media', media);
+    if (meta) this.element.setAttribute('data-meta', meta);
+  }
+
+  /**
+   * Insert style element into render tree.
+   */
+
+
+  // HTMLStyleElement needs fixing https://github.com/facebook/flow/issues/2696
+
+
+  _createClass(DomRenderer, [{
+    key: 'attach',
+    value: function attach() {
+      // In the case the element node is external and it is already in the DOM.
+      if (this.element.parentNode || !this.sheet) return;
+
+      // When rules are inserted using `insertRule` API, after `sheet.detach().attach()`
+      // browsers remove those rules.
+      // TODO figure out if its a bug and if it is known.
+      // Workaround is to redeploy the sheet before attaching as a string.
+      if (this.hasInsertedRules) {
+        this.deploy();
+        this.hasInsertedRules = false;
+      }
+
+      insertStyle(this.element, this.sheet.options);
+    }
+
+    /**
+     * Remove style element from render tree.
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      this.element.parentNode.removeChild(this.element);
+    }
+
+    /**
+     * Inject CSS string into element.
+     */
+
+  }, {
+    key: 'deploy',
+    value: function deploy() {
+      if (!this.sheet) return;
+      this.element.textContent = '\n' + this.sheet.toString() + '\n';
+    }
+
+    /**
+     * Insert a rule into element.
+     */
+
+  }, {
+    key: 'insertRule',
+    value: function insertRule(rule) {
+      var sheet = this.element.sheet;
+      var cssRules = sheet.cssRules;
+
+      var index = cssRules.length;
+      var str = rule.toString();
+
+      if (!str) return false;
+
+      try {
+        sheet.insertRule(str, index);
+      } catch (err) {
+        (0, _warning2['default'])(false, '[JSS] Can not insert an unsupported rule \n\r%s', rule);
+        return false;
+      }
+
+      this.hasInsertedRules = true;
+
+      return cssRules[index];
+    }
+
+    /**
+     * Delete a rule.
+     */
+
+  }, {
+    key: 'deleteRule',
+    value: function deleteRule(rule) {
+      var sheet = this.element.sheet;
+      var cssRules = sheet.cssRules;
+
+      for (var _index = 0; _index < cssRules.length; _index++) {
+        if (rule === cssRules[_index]) {
+          sheet.deleteRule(_index);
+          return true;
+        }
+      }
+      return false;
+    }
+
+    /**
+     * Get all rules elements.
+     */
+
+  }, {
+    key: 'getRules',
+    value: function getRules() {
+      return this.element.sheet.cssRules;
+    }
+  }]);
+
+  return DomRenderer;
+}();
+
+exports['default'] = DomRenderer;
+},{"../sheets":40,"warning":58}],33:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/* eslint-disable class-methods-use-this */
+
+/**
+ * Rendering backend to do nothing in nodejs.
+ */
+var VirtualRenderer = function () {
+  function VirtualRenderer() {
+    _classCallCheck(this, VirtualRenderer);
+  }
+
+  _createClass(VirtualRenderer, [{
+    key: 'setStyle',
+    value: function setStyle() {
+      return true;
+    }
+  }, {
+    key: 'getStyle',
+    value: function getStyle() {
+      return '';
+    }
+  }, {
+    key: 'setSelector',
+    value: function setSelector() {
+      return true;
+    }
+  }, {
+    key: 'getSelector',
+    value: function getSelector() {
+      return '';
+    }
+  }, {
+    key: 'attach',
+    value: function attach() {}
+  }, {
+    key: 'detach',
+    value: function detach() {}
+  }, {
+    key: 'deploy',
+    value: function deploy() {}
+  }, {
+    key: 'insertRule',
+    value: function insertRule() {
+      return false;
+    }
+  }, {
+    key: 'deleteRule',
+    value: function deleteRule() {
+      return true;
+    }
+  }, {
+    key: 'getRules',
+    value: function getRules() {}
+  }]);
+
+  return VirtualRenderer;
+}();
+
+exports['default'] = VirtualRenderer;
+},{}],34:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _RuleList = require('../RuleList');
+
+var _RuleList2 = _interopRequireDefault(_RuleList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Conditional rule for @media, @supports
+ */
+var ConditionalRule = function () {
+  function ConditionalRule(key, styles, options) {
+    _classCallCheck(this, ConditionalRule);
+
+    this.type = 'conditional';
+    this.isProcessed = false;
+
+    this.key = key;
+    this.options = options;
+    this.rules = new _RuleList2['default'](_extends({}, options, { parent: this }));
+
+    for (var name in styles) {
+      this.rules.add(name, styles[name]);
+    }
+
+    this.rules.process();
+  }
+
+  /**
+   * Get a rule.
+   */
+
+
+  _createClass(ConditionalRule, [{
+    key: 'getRule',
+    value: function getRule(name) {
+      return this.rules.get(name);
+    }
+
+    /**
+     * Get index of a rule.
+     */
+
+  }, {
+    key: 'indexOf',
+    value: function indexOf(rule) {
+      return this.rules.indexOf(rule);
+    }
+
+    /**
+     * Create and register rule, run plugins.
+     */
+
+  }, {
+    key: 'addRule',
+    value: function addRule(name, style, options) {
+      var rule = this.rules.add(name, style, options);
+      this.options.jss.plugins.onProcessRule(rule);
+      return rule;
+    }
+
+    /**
+     * Generates a CSS string.
+     */
+
+  }, {
+    key: 'toString',
+    value: function toString() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { indent: 1 };
+
+      var inner = this.rules.toString(options);
+      return inner ? this.key + ' {\n' + inner + '\n}' : '';
+    }
+  }]);
+
+  return ConditionalRule;
+}();
+
+exports['default'] = ConditionalRule;
+},{"../RuleList":26}],35:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _toCss = require('../utils/toCss');
+
+var _toCss2 = _interopRequireDefault(_toCss);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var FontFaceRule = function () {
+  function FontFaceRule(key, style, options) {
+    _classCallCheck(this, FontFaceRule);
+
+    this.type = 'font-face';
+    this.isProcessed = false;
+
+    this.key = key;
+    this.style = style;
+    this.options = options;
+  }
+
+  /**
+   * Generates a CSS string.
+   */
+
+
+  _createClass(FontFaceRule, [{
+    key: 'toString',
+    value: function toString(options) {
+      if (Array.isArray(this.style)) {
+        var str = '';
+        for (var index = 0; index < this.style.length; index++) {
+          str += (0, _toCss2['default'])(this.key, this.style[index]);
+          if (this.style[index + 1]) str += '\n';
+        }
+        return str;
+      }
+
+      return (0, _toCss2['default'])(this.key, this.style, options);
+    }
+  }]);
+
+  return FontFaceRule;
+}();
+
+exports['default'] = FontFaceRule;
+},{"../utils/toCss":47}],36:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _RuleList = require('../RuleList');
+
+var _RuleList2 = _interopRequireDefault(_RuleList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Rule for @keyframes
+ */
+var KeyframesRule = function () {
+  function KeyframesRule(key, frames, options) {
+    _classCallCheck(this, KeyframesRule);
+
+    this.type = 'keyframes';
+    this.isProcessed = false;
+
+    this.key = key;
+    this.options = options;
+    this.rules = new _RuleList2['default'](_extends({}, options, { parent: this }));
+
+    for (var name in frames) {
+      this.rules.add(name, frames[name], _extends({}, this.options, {
+        parent: this,
+        selector: name
+      }));
+    }
+
+    this.rules.process();
+  }
+
+  /**
+   * Generates a CSS string.
+   */
+
+
+  _createClass(KeyframesRule, [{
+    key: 'toString',
+    value: function toString() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { indent: 1 };
+
+      var inner = this.rules.toString(options);
+      if (inner) inner += '\n';
+      return this.key + ' {\n' + inner + '}';
+    }
+  }]);
+
+  return KeyframesRule;
+}();
+
+exports['default'] = KeyframesRule;
+},{"../RuleList":26}],37:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SimpleRule = function () {
+  function SimpleRule(key, value, options) {
+    _classCallCheck(this, SimpleRule);
+
+    this.type = 'simple';
+    this.isProcessed = false;
+
+    this.key = key;
+    this.value = value;
+    this.options = options;
+  }
+
+  /**
+   * Generates a CSS string.
+   */
+  // eslint-disable-next-line no-unused-vars
+
+
+  _createClass(SimpleRule, [{
+    key: 'toString',
+    value: function toString(options) {
+      if (Array.isArray(this.value)) {
+        var str = '';
+        for (var index = 0; index < this.value.length; index++) {
+          str += this.key + ' ' + this.value[index] + ';';
+          if (this.value[index + 1]) str += '\n';
+        }
+        return str;
+      }
+
+      return this.key + ' ' + this.value + ';';
+    }
+  }]);
+
+  return SimpleRule;
+}();
+
+exports['default'] = SimpleRule;
+},{}],38:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _toCss = require('../utils/toCss');
+
+var _toCss2 = _interopRequireDefault(_toCss);
+
+var _toCssValue = require('../utils/toCssValue');
+
+var _toCssValue2 = _interopRequireDefault(_toCssValue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var StyleRule = function () {
+  function StyleRule(key, style, options) {
+    _classCallCheck(this, StyleRule);
+
+    this.type = 'style';
+    this.isProcessed = false;
+    var generateClassName = options.generateClassName,
+        sheet = options.sheet,
+        Renderer = options.Renderer,
+        selector = options.selector;
+
+    this.key = key;
+    this.options = options;
+    this.style = style;
+    this.selectorText = selector || '.' + generateClassName(this, sheet);
+    this.renderer = sheet ? sheet.renderer : new Renderer();
+  }
+
+  /**
+   * Set selector string.
+   * TODO rewrite this #419
+   * Attention: use this with caution. Most browsers didn't implement
+   * selectorText setter, so this may result in rerendering of entire Style Sheet.
+   */
+
+
+  _createClass(StyleRule, [{
+    key: 'prop',
+
+
+    /**
+     * Get or set a style property.
+     */
+    value: function prop(name, nextValue) {
+      var $name = typeof this.style[name] === 'function' ? '$' + name : name;
+      var currValue = this.style[$name];
+
+      // Its a setter.
+      if (nextValue != null) {
+        // Don't do anything if the value has not changed.
+        if (currValue !== nextValue) {
+          nextValue = this.options.jss.plugins.onChangeValue(nextValue, name, this);
+          Object.defineProperty(this.style, $name, {
+            value: nextValue,
+            writable: true
+          });
+          // Defined if StyleSheet option `link` is true.
+          if (this.renderable) this.renderer.setStyle(this.renderable, name, nextValue);
+        }
+        return this;
+      }
+
+      // Its a getter, read the value from the DOM if its not cached.
+      if (this.renderable && currValue == null) {
+        // Cache the value after we have got it from the DOM first time.
+        Object.defineProperty(this.style, $name, {
+          value: this.renderer.getStyle(this.renderable, name),
+          writable: true
+        });
+      }
+
+      return this.style[$name];
+    }
+
+    /**
+     * Apply rule to an element inline.
+     */
+
+  }, {
+    key: 'applyTo',
+    value: function applyTo(renderable) {
+      var json = this.toJSON();
+      for (var prop in json) {
+        this.renderer.setStyle(renderable, prop, json[prop]);
+      }return this;
+    }
+
+    /**
+     * Returns JSON representation of the rule.
+     * Fallbacks are not supported.
+     * Useful for inline styles.
+     */
+
+  }, {
+    key: 'toJSON',
+    value: function toJSON() {
+      var json = {};
+      for (var prop in this.style) {
+        var value = this.style[prop];
+        var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+        if (type === 'function') json[prop] = this.style['$' + prop];else if (type !== 'object') json[prop] = value;else if (Array.isArray(value)) json[prop] = (0, _toCssValue2['default'])(value);
+      }
+      return json;
+    }
+
+    /**
+     * Generates a CSS string.
+     */
+
+  }, {
+    key: 'toString',
+    value: function toString(options) {
+      return (0, _toCss2['default'])(this.selector, this.style, options);
+    }
+  }, {
+    key: 'selector',
+    set: function set(selector) {
+      var sheet = this.options.sheet;
+
+      // After we modify a selector, ref by old selector needs to be removed.
+
+      if (sheet) sheet.rules.unregister(this);
+
+      this.selectorText = selector;
+
+      if (!this.renderable) {
+        // Register the rule with new selector.
+        if (sheet) sheet.rules.register(this);
+        return;
+      }
+
+      var changed = this.renderer.setSelector(this.renderable, selector);
+
+      if (changed && sheet) {
+        sheet.rules.register(this);
+        return;
+      }
+
+      // If selector setter is not implemented, rerender the sheet.
+      // We need to delete renderable from the rule, because when sheet.deploy()
+      // calls rule.toString, it will get the old selector.
+      delete this.renderable;
+      if (sheet) {
+        sheet.rules.register(this);
+        sheet.deploy().link();
+      }
+    }
+
+    /**
+     * Get selector string.
+     */
+    ,
+    get: function get() {
+      if (this.renderable) {
+        return this.renderer.getSelector(this.renderable);
+      }
+
+      return this.selectorText;
+    }
+  }]);
+
+  return StyleRule;
+}();
+
+exports['default'] = StyleRule;
+},{"../utils/toCss":47,"../utils/toCssValue":48}],39:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _toCss = require('../utils/toCss');
+
+var _toCss2 = _interopRequireDefault(_toCss);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ViewportRule = function () {
+  function ViewportRule(key, style, options) {
+    _classCallCheck(this, ViewportRule);
+
+    this.type = 'viewport';
+    this.isProcessed = false;
+
+    this.key = key;
+    this.style = style;
+    this.options = options;
+  }
+
+  /**
+   * Generates a CSS string.
+   */
+
+
+  _createClass(ViewportRule, [{
+    key: 'toString',
+    value: function toString(options) {
+      return (0, _toCss2['default'])(this.key, this.style, options);
+    }
+  }]);
+
+  return ViewportRule;
+}();
+
+exports['default'] = ViewportRule;
+},{"../utils/toCss":47}],40:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _SheetsRegistry = require('./SheetsRegistry');
+
+var _SheetsRegistry2 = _interopRequireDefault(_SheetsRegistry);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/**
+ * This is a global sheets registry. Only DomRenderer will add sheets to it.
+ * On the server one should use an own SheetsRegistry instance and add the
+ * sheets to it, because you need to make sure to create a new registry for
+ * each request in order to not leak sheets across requests.
+ */
+exports['default'] = new _SheetsRegistry2['default']();
+},{"./SheetsRegistry":28}],41:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.default = cloneStyle;
+var isArray = Array.isArray;
+function cloneStyle(style) {
+  // Support empty values in case user ends up with them by accident.
+  if (style == null) return style;
+
+  // Support string value for SimpleRule.
+  var typeOfStyle = typeof style === 'undefined' ? 'undefined' : _typeof(style);
+  if (typeOfStyle === 'string' || typeOfStyle === 'number') return style;
+
+  // Support array for FontFaceRule.
+  if (isArray(style)) return style.map(cloneStyle);
+
+  var newStyle = {};
+  for (var name in style) {
+    var value = style[name];
+    if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+      newStyle[name] = cloneStyle(value);
+      continue;
+    }
+    newStyle[name] = value;
+  }
+
+  return newStyle;
+}
+},{}],42:[function(require,module,exports){
+(function (global){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+
+var globalRef = typeof window === 'undefined' ? global : window;
+
+var namespace = '__JSS_VERSION_COUNTER__';
+if (globalRef[namespace] == null) globalRef[namespace] = 0;
+// In case we have more than one JSS version.
+var jssCounter = globalRef[namespace]++;
+
+/**
+ * Returns a function which generates unique class names based on counters.
+ * When new generator function is created, rule counter is reseted.
+ * We need to reset the rule counter for SSR for each request.
+ */
+
+exports['default'] = function () {
+  var ruleCounter = 0;
+
+  return function (rule) {
+    return rule.key + '-' + jssCounter + '-' + ruleCounter++;
+  };
+};
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],43:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = createRule;
+
+var _warning = require('warning');
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _StyleRule = require('../rules/StyleRule');
+
+var _StyleRule2 = _interopRequireDefault(_StyleRule);
+
+var _cloneStyle = require('../utils/cloneStyle');
+
+var _cloneStyle2 = _interopRequireDefault(_cloneStyle);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/**
+ * Create a rule instance.
+ */
+function createRule() {
+  var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'unnamed';
+  var decl = arguments[1];
+  var options = arguments[2];
+  var jss = options.jss;
+
+  var declCopy = (0, _cloneStyle2['default'])(decl);
+
+  var rule = jss.plugins.onCreateRule(name, declCopy, options);
+  if (rule) return rule;
+
+  // It is an at-rule and it has no instance.
+  if (name[0] === '@') {
+    (0, _warning2['default'])(false, '[JSS] Unknown at-rule %s', name);
+  }
+
+  return new _StyleRule2['default'](name, declCopy, options);
+}
+},{"../rules/StyleRule":38,"../utils/cloneStyle":41,"warning":58}],44:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = findRenderer;
+
+var _isInBrowser = require('is-in-browser');
+
+var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
+
+var _DomRenderer = require('../renderers/DomRenderer');
+
+var _DomRenderer2 = _interopRequireDefault(_DomRenderer);
+
+var _VirtualRenderer = require('../renderers/VirtualRenderer');
+
+var _VirtualRenderer2 = _interopRequireDefault(_VirtualRenderer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/**
+ * Find proper renderer.
+ * Option `virtual` is used to force use of VirtualRenderer even if DOM is
+ * detected, used for testing only.
+ */
+function findRenderer() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  if (options.Renderer) return options.Renderer;
+  var useVirtual = options.virtual || !_isInBrowser2['default'];
+  return useVirtual ? _VirtualRenderer2['default'] : _DomRenderer2['default'];
+}
+},{"../renderers/DomRenderer":32,"../renderers/VirtualRenderer":33,"is-in-browser":11}],45:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/**
+ * Extracts a styles object with only props that contain function values.
+ */
+exports['default'] = function (styles) {
+  // eslint-disable-next-line no-shadow
+  function extract(styles) {
+    var to = null;
+
+    for (var key in styles) {
+      var value = styles[key];
+      var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+
+      if (type === 'function') {
+        if (!to) to = {};
+        to[key] = value;
+      } else if (type === 'object' && value !== null && !Array.isArray(value)) {
+        var extracted = extract(value);
+        if (extracted) {
+          if (!to) to = {};
+          to[key] = extracted;
+        }
+      }
+    }
+
+    return to;
+  }
+
+  return extract(styles);
+};
+},{}],46:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = linkRule;
+/**
+ * Link rule with CSSStyleRule and nested rules with corresponding nested cssRules if both exists.
+ */
+function linkRule(rule, cssRule) {
+  rule.renderable = cssRule;
+  if (rule.rules && cssRule.cssRules) rule.rules.link(cssRule.cssRules);
+}
+},{}],47:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = toCss;
+
+var _toCssValue = require('./toCssValue');
+
+var _toCssValue2 = _interopRequireDefault(_toCssValue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/**
+ * Indent a string.
+ * http://jsperf.com/array-join-vs-for
+ */
+function indentStr(str, indent) {
+  var result = '';
+  for (var index = 0; index < indent; index++) {
+    result += '  ';
+  }return result + str;
+}
+
+/**
+ * Converts a Rule to CSS string.
+ */
+
+function toCss(selector, style) {
+  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+  var result = '';
+
+  if (!style) return result;
+
+  var _options$indent = options.indent,
+      indent = _options$indent === undefined ? 0 : _options$indent;
+  var fallbacks = style.fallbacks;
+
+
+  indent++;
+
+  // Apply fallbacks first.
+  if (fallbacks) {
+    // Array syntax {fallbacks: [{prop: value}]}
+    if (Array.isArray(fallbacks)) {
+      for (var index = 0; index < fallbacks.length; index++) {
+        var fallback = fallbacks[index];
+        for (var prop in fallback) {
+          var value = fallback[prop];
+          if (value != null) {
+            result += '\n' + indentStr(prop + ': ' + (0, _toCssValue2['default'])(value) + ';', indent);
+          }
+        }
+      }
+    }
+    // Object syntax {fallbacks: {prop: value}}
+    else {
+        for (var _prop in fallbacks) {
+          var _value = fallbacks[_prop];
+          if (_value != null) {
+            result += '\n' + indentStr(_prop + ': ' + (0, _toCssValue2['default'])(_value) + ';', indent);
+          }
+        }
+      }
+  }
+
+  var hasFunctionValue = false;
+
+  for (var _prop2 in style) {
+    var _value2 = style[_prop2];
+    if (typeof _value2 === 'function') {
+      _value2 = style['$' + _prop2];
+      hasFunctionValue = true;
+    }
+    if (_value2 != null && _prop2 !== 'fallbacks') {
+      result += '\n' + indentStr(_prop2 + ': ' + (0, _toCssValue2['default'])(_value2) + ';', indent);
+    }
+  }
+
+  if (!result && !hasFunctionValue) return result;
+
+  indent--;
+  result = indentStr(selector + ' {' + result + '\n', indent) + indentStr('}', indent);
+
+  return result;
+}
+},{"./toCssValue":48}],48:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = toCssValue;
+var joinWithSpace = function joinWithSpace(value) {
+  return value.join(' ');
+};
+
+/**
+ * Converts array values to string.
+ *
+ * `margin: [['5px', '10px']]` > `margin: 5px 10px;`
+ * `border: ['1px', '2px']` > `border: 1px, 2px;`
+ */
+function toCssValue(value) {
+  if (!Array.isArray(value)) return value;
+
+  // Support space separated values.
+  if (Array.isArray(value[0])) {
+    return toCssValue(value.map(joinWithSpace));
+  }
+
+  return value.join(', ');
+}
+},{}],49:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports['default'] = function (rule, data, RuleList) {
+  if (rule.type === 'style') {
+    for (var prop in rule.style) {
+      var value = rule.style[prop];
+      if (typeof value === 'function') {
+        rule.prop(prop, value(data));
+      }
+    }
+  } else if (rule.rules instanceof RuleList) {
+    rule.rules.update(data);
+  }
+};
+},{}],50:[function(require,module,exports){
+/**
+ * JS Implementation of MurmurHash3 (r136) (as of May 20, 2011)
+ * 
+ * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
+ * @see http://github.com/garycourt/murmurhash-js
+ * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
+ * @see http://sites.google.com/site/murmurhash/
+ * 
+ * @param {string} key ASCII only
+ * @param {number} seed Positive integer only
+ * @return {number} 32-bit positive integer hash 
+ */
+
+function murmurhash3_32_gc(key, seed) {
+	var remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i;
+	
+	remainder = key.length & 3; // key.length % 4
+	bytes = key.length - remainder;
+	h1 = seed;
+	c1 = 0xcc9e2d51;
+	c2 = 0x1b873593;
+	i = 0;
+	
+	while (i < bytes) {
+	  	k1 = 
+	  	  ((key.charCodeAt(i) & 0xff)) |
+	  	  ((key.charCodeAt(++i) & 0xff) << 8) |
+	  	  ((key.charCodeAt(++i) & 0xff) << 16) |
+	  	  ((key.charCodeAt(++i) & 0xff) << 24);
+		++i;
+		
+		k1 = ((((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16))) & 0xffffffff;
+		k1 = (k1 << 15) | (k1 >>> 17);
+		k1 = ((((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16))) & 0xffffffff;
+
+		h1 ^= k1;
+        h1 = (h1 << 13) | (h1 >>> 19);
+		h1b = ((((h1 & 0xffff) * 5) + ((((h1 >>> 16) * 5) & 0xffff) << 16))) & 0xffffffff;
+		h1 = (((h1b & 0xffff) + 0x6b64) + ((((h1b >>> 16) + 0xe654) & 0xffff) << 16));
+	}
+	
+	k1 = 0;
+	
+	switch (remainder) {
+		case 3: k1 ^= (key.charCodeAt(i + 2) & 0xff) << 16;
+		case 2: k1 ^= (key.charCodeAt(i + 1) & 0xff) << 8;
+		case 1: k1 ^= (key.charCodeAt(i) & 0xff);
+		
+		k1 = (((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16)) & 0xffffffff;
+		k1 = (k1 << 15) | (k1 >>> 17);
+		k1 = (((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16)) & 0xffffffff;
+		h1 ^= k1;
+	}
+	
+	h1 ^= key.length;
+
+	h1 ^= h1 >>> 16;
+	h1 = (((h1 & 0xffff) * 0x85ebca6b) + ((((h1 >>> 16) * 0x85ebca6b) & 0xffff) << 16)) & 0xffffffff;
+	h1 ^= h1 >>> 13;
+	h1 = ((((h1 & 0xffff) * 0xc2b2ae35) + ((((h1 >>> 16) * 0xc2b2ae35) & 0xffff) << 16))) & 0xffffffff;
+	h1 ^= h1 >>> 16;
+
+	return h1 >>> 0;
+}
+
+if(typeof module !== "undefined") {
+  module.exports = murmurhash3_32_gc
+}
+},{}],51:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -2709,7 +4257,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],7:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -2895,7 +4443,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],8:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -2906,25 +4454,11 @@ process.umask = function() { return 0; };
 
 'use strict';
 
-var printWarning = function() {};
-
 if (process.env.NODE_ENV !== 'production') {
+  var invariant = require('fbjs/lib/invariant');
+  var warning = require('fbjs/lib/warning');
   var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
   var loggedTypeFailures = {};
-  var has = Function.call.bind(Object.prototype.hasOwnProperty);
-
-  printWarning = function(text) {
-    var message = 'Warning: ' + text;
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
-  };
 }
 
 /**
@@ -2941,7 +4475,7 @@ if (process.env.NODE_ENV !== 'production') {
 function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
   if (process.env.NODE_ENV !== 'production') {
     for (var typeSpecName in typeSpecs) {
-      if (has(typeSpecs, typeSpecName)) {
+      if (typeSpecs.hasOwnProperty(typeSpecName)) {
         var error;
         // Prop type validation may throw. In case they do, we don't want to
         // fail the render phase where it didn't fail before. So we log it.
@@ -2949,28 +4483,12 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
         try {
           // This is intentionally an invariant that gets caught. It's the same
           // behavior as without this statement except with a better message.
-          if (typeof typeSpecs[typeSpecName] !== 'function') {
-            var err = Error(
-              (componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' +
-              'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.'
-            );
-            err.name = 'Invariant Violation';
-            throw err;
-          }
+          invariant(typeof typeSpecs[typeSpecName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'the `prop-types` package, but received `%s`.', componentName || 'React class', location, typeSpecName, typeof typeSpecs[typeSpecName]);
           error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
         } catch (ex) {
           error = ex;
         }
-        if (error && !(error instanceof Error)) {
-          printWarning(
-            (componentName || 'React class') + ': type specification of ' +
-            location + ' `' + typeSpecName + '` is invalid; the type checker ' +
-            'function must return `null` or an `Error` but returned a ' + typeof error + '. ' +
-            'You may have forgotten to pass an argument to the type checker ' +
-            'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' +
-            'shape all require an argument).'
-          );
-        }
+        warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error);
         if (error instanceof Error && !(error.message in loggedTypeFailures)) {
           // Only monitor this failure once because there tends to be a lot of the
           // same error.
@@ -2978,30 +4496,17 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 
           var stack = getStack ? getStack() : '';
 
-          printWarning(
-            'Failed ' + location + ' type: ' + error.message + (stack != null ? stack : '')
-          );
+          warning(false, 'Failed %s type: %s%s', location, error.message, stack != null ? stack : '');
         }
       }
     }
   }
 }
 
-/**
- * Resets warning cache when testing.
- *
- * @private
- */
-checkPropTypes.resetWarningCache = function() {
-  if (process.env.NODE_ENV !== 'production') {
-    loggedTypeFailures = {};
-  }
-}
-
 module.exports = checkPropTypes;
 
 }).call(this,require('_process'))
-},{"./lib/ReactPropTypesSecret":12,"_process":7}],9:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":57,"_process":52,"fbjs/lib/invariant":9,"fbjs/lib/warning":10}],54:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -3011,11 +4516,9 @@ module.exports = checkPropTypes;
 
 'use strict';
 
+var emptyFunction = require('fbjs/lib/emptyFunction');
+var invariant = require('fbjs/lib/invariant');
 var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
-
-function emptyFunction() {}
-function emptyFunctionWithReset() {}
-emptyFunctionWithReset.resetWarningCache = emptyFunction;
 
 module.exports = function() {
   function shim(props, propName, componentName, location, propFullName, secret) {
@@ -3023,13 +4526,12 @@ module.exports = function() {
       // It is still safe when called from React.
       return;
     }
-    var err = new Error(
+    invariant(
+      false,
       'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
       'Use PropTypes.checkPropTypes() to call them. ' +
       'Read more at http://fb.me/use-check-prop-types'
     );
-    err.name = 'Invariant Violation';
-    throw err;
   };
   shim.isRequired = shim;
   function getShim() {
@@ -3049,25 +4551,22 @@ module.exports = function() {
     any: shim,
     arrayOf: getShim,
     element: shim,
-    elementType: shim,
     instanceOf: getShim,
     node: shim,
     objectOf: getShim,
     oneOf: getShim,
     oneOfType: getShim,
     shape: getShim,
-    exact: getShim,
-
-    checkPropTypes: emptyFunctionWithReset,
-    resetWarningCache: emptyFunction
+    exact: getShim
   };
 
+  ReactPropTypes.checkPropTypes = emptyFunction;
   ReactPropTypes.PropTypes = ReactPropTypes;
 
   return ReactPropTypes;
 };
 
-},{"./lib/ReactPropTypesSecret":12}],10:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":57,"fbjs/lib/emptyFunction":8,"fbjs/lib/invariant":9}],55:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -3078,33 +4577,13 @@ module.exports = function() {
 
 'use strict';
 
-var ReactIs = require('react-is');
+var emptyFunction = require('fbjs/lib/emptyFunction');
+var invariant = require('fbjs/lib/invariant');
+var warning = require('fbjs/lib/warning');
 var assign = require('object-assign');
 
 var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
 var checkPropTypes = require('./checkPropTypes');
-
-var has = Function.call.bind(Object.prototype.hasOwnProperty);
-var printWarning = function() {};
-
-if (process.env.NODE_ENV !== 'production') {
-  printWarning = function(text) {
-    var message = 'Warning: ' + text;
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
-  };
-}
-
-function emptyFunctionThatReturnsNull() {
-  return null;
-}
 
 module.exports = function(isValidElement, throwOnDirectAccess) {
   /* global Symbol */
@@ -3195,7 +4674,6 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
     any: createAnyTypeChecker(),
     arrayOf: createArrayOfTypeChecker,
     element: createElementTypeChecker(),
-    elementType: createElementTypeTypeChecker(),
     instanceOf: createInstanceTypeChecker,
     node: createNodeChecker(),
     objectOf: createObjectOfTypeChecker,
@@ -3249,13 +4727,12 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
       if (secret !== ReactPropTypesSecret) {
         if (throwOnDirectAccess) {
           // New behavior only for users of `prop-types` package
-          var err = new Error(
+          invariant(
+            false,
             'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
             'Use `PropTypes.checkPropTypes()` to call them. ' +
             'Read more at http://fb.me/use-check-prop-types'
           );
-          err.name = 'Invariant Violation';
-          throw err;
         } else if (process.env.NODE_ENV !== 'production' && typeof console !== 'undefined') {
           // Old behavior for people using React.PropTypes
           var cacheKey = componentName + ':' + propName;
@@ -3264,12 +4741,15 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
             // Avoid spamming the console because they are often not actionable except for lib authors
             manualPropTypeWarningCount < 3
           ) {
-            printWarning(
+            warning(
+              false,
               'You are manually calling a React.PropTypes validation ' +
-              'function for the `' + propFullName + '` prop on `' + componentName  + '`. This is deprecated ' +
+              'function for the `%s` prop on `%s`. This is deprecated ' +
               'and will throw in the standalone `prop-types` package. ' +
               'You may be seeing this warning due to a third-party PropTypes ' +
-              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.'
+              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.',
+              propFullName,
+              componentName
             );
             manualPropTypeCallCache[cacheKey] = true;
             manualPropTypeWarningCount++;
@@ -3313,7 +4793,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
   }
 
   function createAnyTypeChecker() {
-    return createChainableTypeChecker(emptyFunctionThatReturnsNull);
+    return createChainableTypeChecker(emptyFunction.thatReturnsNull);
   }
 
   function createArrayOfTypeChecker(typeChecker) {
@@ -3349,18 +4829,6 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
     return createChainableTypeChecker(validate);
   }
 
-  function createElementTypeTypeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      if (!ReactIs.isValidElementType(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement type.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
   function createInstanceTypeChecker(expectedClass) {
     function validate(props, propName, componentName, location, propFullName) {
       if (!(props[propName] instanceof expectedClass)) {
@@ -3375,17 +4843,8 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
   function createEnumTypeChecker(expectedValues) {
     if (!Array.isArray(expectedValues)) {
-      if (process.env.NODE_ENV !== 'production') {
-        if (arguments.length > 1) {
-          printWarning(
-            'Invalid arguments supplied to oneOf, expected an array, got ' + arguments.length + ' arguments. ' +
-            'A common mistake is to write oneOf(x, y, z) instead of oneOf([x, y, z]).'
-          );
-        } else {
-          printWarning('Invalid argument supplied to oneOf, expected an array.');
-        }
-      }
-      return emptyFunctionThatReturnsNull;
+      process.env.NODE_ENV !== 'production' ? warning(false, 'Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
+      return emptyFunction.thatReturnsNull;
     }
 
     function validate(props, propName, componentName, location, propFullName) {
@@ -3396,14 +4855,8 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
         }
       }
 
-      var valuesString = JSON.stringify(expectedValues, function replacer(key, value) {
-        var type = getPreciseType(value);
-        if (type === 'symbol') {
-          return String(value);
-        }
-        return value;
-      });
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + String(propValue) + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
+      var valuesString = JSON.stringify(expectedValues);
+      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + propValue + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
     }
     return createChainableTypeChecker(validate);
   }
@@ -3419,7 +4872,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
         return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
       }
       for (var key in propValue) {
-        if (has(propValue, key)) {
+        if (propValue.hasOwnProperty(key)) {
           var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
           if (error instanceof Error) {
             return error;
@@ -3433,18 +4886,21 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
   function createUnionTypeChecker(arrayOfTypeCheckers) {
     if (!Array.isArray(arrayOfTypeCheckers)) {
-      process.env.NODE_ENV !== 'production' ? printWarning('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
-      return emptyFunctionThatReturnsNull;
+      process.env.NODE_ENV !== 'production' ? warning(false, 'Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
+      return emptyFunction.thatReturnsNull;
     }
 
     for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
       var checker = arrayOfTypeCheckers[i];
       if (typeof checker !== 'function') {
-        printWarning(
+        warning(
+          false,
           'Invalid argument supplied to oneOfType. Expected an array of check functions, but ' +
-          'received ' + getPostfixForTypeWarning(checker) + ' at index ' + i + '.'
+          'received %s at index %s.',
+          getPostfixForTypeWarning(checker),
+          i
         );
-        return emptyFunctionThatReturnsNull;
+        return emptyFunction.thatReturnsNull;
       }
     }
 
@@ -3576,11 +5032,6 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
       return true;
     }
 
-    // falsy value can't be a Symbol
-    if (!propValue) {
-      return false;
-    }
-
     // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
     if (propValue['@@toStringTag'] === 'Symbol') {
       return true;
@@ -3655,14 +5106,13 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
   }
 
   ReactPropTypes.checkPropTypes = checkPropTypes;
-  ReactPropTypes.resetWarningCache = checkPropTypes.resetWarningCache;
   ReactPropTypes.PropTypes = ReactPropTypes;
 
   return ReactPropTypes;
 };
 
 }).call(this,require('_process'))
-},{"./checkPropTypes":8,"./lib/ReactPropTypesSecret":12,"_process":7,"object-assign":6,"react-is":15}],11:[function(require,module,exports){
+},{"./checkPropTypes":53,"./lib/ReactPropTypesSecret":57,"_process":52,"fbjs/lib/emptyFunction":8,"fbjs/lib/invariant":9,"fbjs/lib/warning":10,"object-assign":51}],56:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -3672,12 +5122,21 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
  */
 
 if (process.env.NODE_ENV !== 'production') {
-  var ReactIs = require('react-is');
+  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
+    Symbol.for &&
+    Symbol.for('react.element')) ||
+    0xeac7;
+
+  var isValidElement = function(object) {
+    return typeof object === 'object' &&
+      object !== null &&
+      object.$$typeof === REACT_ELEMENT_TYPE;
+  };
 
   // By explicitly using `prop-types` you are opting into new development behavior.
   // http://fb.me/prop-types-in-prod
   var throwOnDirectAccess = true;
-  module.exports = require('./factoryWithTypeCheckers')(ReactIs.isElement, throwOnDirectAccess);
+  module.exports = require('./factoryWithTypeCheckers')(isValidElement, throwOnDirectAccess);
 } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
@@ -3685,7 +5144,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./factoryWithThrowingShims":9,"./factoryWithTypeCheckers":10,"_process":7,"react-is":15}],12:[function(require,module,exports){
+},{"./factoryWithThrowingShims":54,"./factoryWithTypeCheckers":55,"_process":52}],57:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -3699,294 +5158,71 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],13:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 (function (process){
-/** @license React v16.11.0
- * react-is.development.js
+/**
+ * Copyright 2014-2015, Facebook, Inc.
+ * All rights reserved.
  *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
  */
 
 'use strict';
 
-
-
-if (process.env.NODE_ENV !== "production") {
-  (function() {
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-// The Symbol used to tag the ReactElement-like types. If there is no native Symbol
-// nor polyfill, then a plain number is used for performance.
-var hasSymbol = typeof Symbol === 'function' && Symbol.for;
-var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
-var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for('react.portal') : 0xeaca;
-var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for('react.fragment') : 0xeacb;
-var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeacc;
-var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
-var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
-var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
-// (unstable) APIs that have been removed. Can we remove the symbols?
-
-var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
-var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
-var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
-var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
-var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
-var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
-var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
-var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for('react.fundamental') : 0xead5;
-var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for('react.responder') : 0xead6;
-var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for('react.scope') : 0xead7;
-
-function isValidElementType(type) {
-  return typeof type === 'string' || typeof type === 'function' || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
-  type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE);
-}
-
 /**
- * Forked from fbjs/warning:
- * https://github.com/facebook/fbjs/blob/e66ba20ad5be433eb54423f2b097d829324d9de6/packages/fbjs/src/__forks__/warning.js
- *
- * Only change is we use console.warn instead of console.error,
- * and do nothing when 'console' is not supported.
- * This really simplifies the code.
- * ---
  * Similar to invariant but only logs a warning if the condition is not met.
  * This can be used to log issues in development environments in critical
  * paths. Removing the logging code for production environments will keep the
  * same logic and follow the same code paths.
  */
-var lowPriorityWarningWithoutStack = function () {};
 
-{
-  var printWarning = function (format) {
-    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
+var warning = function() {};
+
+if (process.env.NODE_ENV !== 'production') {
+  warning = function(condition, format, args) {
+    var len = arguments.length;
+    args = new Array(len > 2 ? len - 2 : 0);
+    for (var key = 2; key < len; key++) {
+      args[key - 2] = arguments[key];
     }
-
-    var argIndex = 0;
-    var message = 'Warning: ' + format.replace(/%s/g, function () {
-      return args[argIndex++];
-    });
-
-    if (typeof console !== 'undefined') {
-      console.warn(message);
-    }
-
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
-  };
-
-  lowPriorityWarningWithoutStack = function (condition, format) {
     if (format === undefined) {
-      throw new Error('`lowPriorityWarningWithoutStack(condition, format, ...args)` requires a warning ' + 'message argument');
+      throw new Error(
+        '`warning(condition, format, ...args)` requires a warning ' +
+        'message argument'
+      );
+    }
+
+    if (format.length < 10 || (/^[s\W]*$/).test(format)) {
+      throw new Error(
+        'The warning format should be able to uniquely identify this ' +
+        'warning. Please, use a more descriptive format than: ' + format
+      );
     }
 
     if (!condition) {
-      for (var _len2 = arguments.length, args = new Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-        args[_key2 - 2] = arguments[_key2];
+      var argIndex = 0;
+      var message = 'Warning: ' +
+        format.replace(/%s/g, function() {
+          return args[argIndex++];
+        });
+      if (typeof console !== 'undefined') {
+        console.error(message);
       }
-
-      printWarning.apply(void 0, [format].concat(args));
+      try {
+        // This error was thrown as a convenience so that you can use this stack
+        // to find the callsite that caused this warning to fire.
+        throw new Error(message);
+      } catch(x) {}
     }
   };
 }
 
-var lowPriorityWarningWithoutStack$1 = lowPriorityWarningWithoutStack;
-
-function typeOf(object) {
-  if (typeof object === 'object' && object !== null) {
-    var $$typeof = object.$$typeof;
-
-    switch ($$typeof) {
-      case REACT_ELEMENT_TYPE:
-        var type = object.type;
-
-        switch (type) {
-          case REACT_ASYNC_MODE_TYPE:
-          case REACT_CONCURRENT_MODE_TYPE:
-          case REACT_FRAGMENT_TYPE:
-          case REACT_PROFILER_TYPE:
-          case REACT_STRICT_MODE_TYPE:
-          case REACT_SUSPENSE_TYPE:
-            return type;
-
-          default:
-            var $$typeofType = type && type.$$typeof;
-
-            switch ($$typeofType) {
-              case REACT_CONTEXT_TYPE:
-              case REACT_FORWARD_REF_TYPE:
-              case REACT_PROVIDER_TYPE:
-                return $$typeofType;
-
-              default:
-                return $$typeof;
-            }
-
-        }
-
-      case REACT_LAZY_TYPE:
-      case REACT_MEMO_TYPE:
-      case REACT_PORTAL_TYPE:
-        return $$typeof;
-    }
-  }
-
-  return undefined;
-} // AsyncMode is deprecated along with isAsyncMode
-
-var AsyncMode = REACT_ASYNC_MODE_TYPE;
-var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
-var ContextConsumer = REACT_CONTEXT_TYPE;
-var ContextProvider = REACT_PROVIDER_TYPE;
-var Element = REACT_ELEMENT_TYPE;
-var ForwardRef = REACT_FORWARD_REF_TYPE;
-var Fragment = REACT_FRAGMENT_TYPE;
-var Lazy = REACT_LAZY_TYPE;
-var Memo = REACT_MEMO_TYPE;
-var Portal = REACT_PORTAL_TYPE;
-var Profiler = REACT_PROFILER_TYPE;
-var StrictMode = REACT_STRICT_MODE_TYPE;
-var Suspense = REACT_SUSPENSE_TYPE;
-var hasWarnedAboutDeprecatedIsAsyncMode = false; // AsyncMode should be deprecated
-
-function isAsyncMode(object) {
-  {
-    if (!hasWarnedAboutDeprecatedIsAsyncMode) {
-      hasWarnedAboutDeprecatedIsAsyncMode = true;
-      lowPriorityWarningWithoutStack$1(false, 'The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
-    }
-  }
-
-  return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
-}
-function isConcurrentMode(object) {
-  return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
-}
-function isContextConsumer(object) {
-  return typeOf(object) === REACT_CONTEXT_TYPE;
-}
-function isContextProvider(object) {
-  return typeOf(object) === REACT_PROVIDER_TYPE;
-}
-function isElement(object) {
-  return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
-}
-function isForwardRef(object) {
-  return typeOf(object) === REACT_FORWARD_REF_TYPE;
-}
-function isFragment(object) {
-  return typeOf(object) === REACT_FRAGMENT_TYPE;
-}
-function isLazy(object) {
-  return typeOf(object) === REACT_LAZY_TYPE;
-}
-function isMemo(object) {
-  return typeOf(object) === REACT_MEMO_TYPE;
-}
-function isPortal(object) {
-  return typeOf(object) === REACT_PORTAL_TYPE;
-}
-function isProfiler(object) {
-  return typeOf(object) === REACT_PROFILER_TYPE;
-}
-function isStrictMode(object) {
-  return typeOf(object) === REACT_STRICT_MODE_TYPE;
-}
-function isSuspense(object) {
-  return typeOf(object) === REACT_SUSPENSE_TYPE;
-}
-
-exports.typeOf = typeOf;
-exports.AsyncMode = AsyncMode;
-exports.ConcurrentMode = ConcurrentMode;
-exports.ContextConsumer = ContextConsumer;
-exports.ContextProvider = ContextProvider;
-exports.Element = Element;
-exports.ForwardRef = ForwardRef;
-exports.Fragment = Fragment;
-exports.Lazy = Lazy;
-exports.Memo = Memo;
-exports.Portal = Portal;
-exports.Profiler = Profiler;
-exports.StrictMode = StrictMode;
-exports.Suspense = Suspense;
-exports.isValidElementType = isValidElementType;
-exports.isAsyncMode = isAsyncMode;
-exports.isConcurrentMode = isConcurrentMode;
-exports.isContextConsumer = isContextConsumer;
-exports.isContextProvider = isContextProvider;
-exports.isElement = isElement;
-exports.isForwardRef = isForwardRef;
-exports.isFragment = isFragment;
-exports.isLazy = isLazy;
-exports.isMemo = isMemo;
-exports.isPortal = isPortal;
-exports.isProfiler = isProfiler;
-exports.isStrictMode = isStrictMode;
-exports.isSuspense = isSuspense;
-  })();
-}
+module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":7}],14:[function(require,module,exports){
-/** @license React v16.11.0
- * react-is.production.min.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-'use strict';Object.defineProperty(exports,"__esModule",{value:!0});
-var b="function"===typeof Symbol&&Symbol.for,c=b?Symbol.for("react.element"):60103,d=b?Symbol.for("react.portal"):60106,e=b?Symbol.for("react.fragment"):60107,f=b?Symbol.for("react.strict_mode"):60108,g=b?Symbol.for("react.profiler"):60114,h=b?Symbol.for("react.provider"):60109,k=b?Symbol.for("react.context"):60110,l=b?Symbol.for("react.async_mode"):60111,m=b?Symbol.for("react.concurrent_mode"):60111,n=b?Symbol.for("react.forward_ref"):60112,p=b?Symbol.for("react.suspense"):60113,q=b?Symbol.for("react.suspense_list"):
-60120,r=b?Symbol.for("react.memo"):60115,t=b?Symbol.for("react.lazy"):60116,v=b?Symbol.for("react.fundamental"):60117,w=b?Symbol.for("react.responder"):60118,x=b?Symbol.for("react.scope"):60119;function y(a){if("object"===typeof a&&null!==a){var u=a.$$typeof;switch(u){case c:switch(a=a.type,a){case l:case m:case e:case g:case f:case p:return a;default:switch(a=a&&a.$$typeof,a){case k:case n:case h:return a;default:return u}}case t:case r:case d:return u}}}function z(a){return y(a)===m}
-exports.typeOf=y;exports.AsyncMode=l;exports.ConcurrentMode=m;exports.ContextConsumer=k;exports.ContextProvider=h;exports.Element=c;exports.ForwardRef=n;exports.Fragment=e;exports.Lazy=t;exports.Memo=r;exports.Portal=d;exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;
-exports.isValidElementType=function(a){return"string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||a===q||"object"===typeof a&&null!==a&&(a.$$typeof===t||a.$$typeof===r||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n||a.$$typeof===v||a.$$typeof===w||a.$$typeof===x)};exports.isAsyncMode=function(a){return z(a)||y(a)===l};exports.isConcurrentMode=z;exports.isContextConsumer=function(a){return y(a)===k};exports.isContextProvider=function(a){return y(a)===h};
-exports.isElement=function(a){return"object"===typeof a&&null!==a&&a.$$typeof===c};exports.isForwardRef=function(a){return y(a)===n};exports.isFragment=function(a){return y(a)===e};exports.isLazy=function(a){return y(a)===t};exports.isMemo=function(a){return y(a)===r};exports.isPortal=function(a){return y(a)===d};exports.isProfiler=function(a){return y(a)===g};exports.isStrictMode=function(a){return y(a)===f};exports.isSuspense=function(a){return y(a)===p};
-
-},{}],15:[function(require,module,exports){
-(function (process){
-'use strict';
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports = require('./cjs/react-is.production.min.js');
-} else {
-  module.exports = require('./cjs/react-is.development.js');
-}
-
-}).call(this,require('_process'))
-},{"./cjs/react-is.development.js":13,"./cjs/react-is.production.min.js":14,"_process":7}],16:[function(require,module,exports){
-"use strict";
-
-function hash(str) {
-  var hash = 5381,
-      i    = str.length;
-
-  while(i) {
-    hash = (hash * 33) ^ str.charCodeAt(--i);
-  }
-
-  /* JavaScript does bitwise operations (like XOR, above) on 32-bit signed
-   * integers. Since we want the results to be always positive, convert the
-   * signed int to an unsigned by doing an unsigned bitshift. */
-  return hash >>> 0;
-}
-
-module.exports = hash;
-
-},{}],17:[function(require,module,exports){
+},{"_process":52}],59:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4001,7 +5237,7 @@ exports.default = {
   }
 };
 
-},{}],18:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4114,7 +5350,7 @@ var customListeners = {
   }
 };
 
-},{}],19:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4128,7 +5364,7 @@ exports.default = function (target) {
   };
 };
 
-},{}],20:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4141,7 +5377,7 @@ exports.default = function (target) {
   };
 };
 
-},{}],21:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4221,7 +5457,7 @@ var dispatchGlobalEvent = function dispatchGlobalEvent(eventName, opts) {
     * Static methods for react-tooltip
     */
 
-},{"../constant":17}],22:[function(require,module,exports){
+},{"../constant":59}],64:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4229,64 +5465,99 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getTooltipStyle = getTooltipStyle;
 
-var _aphrodite = require('aphrodite');
+var _aphroditeJss = require('aphrodite-jss');
 
 /**
  * Generates the tooltip style based on the element-specified "data-type" property.
  */
 function getTooltipStyle(textColor, backgroundColor, borderColor) {
-    return _aphrodite.StyleSheet.create({
 
-        'base': {
+    return _aphroditeJss.StyleSheet.create({
+
+        '__react_component_tooltip': {
             'color': textColor,
             'backgroundColor': backgroundColor,
-            'border': '6px solid ' + borderColor
-        },
-        'place-top': {
-            'backgroundColor': backgroundColor,
-            'border': '1px solid' + borderColor,
-            ':after': {
-                'borderTop': '6px solid ' + backgroundColor
+            'border': '6px solid ' + borderColor,
+
+            // TODO: JUST TEST WORKING EXAMPLE - REMOVE WHEN DONE
+            // '&.place-top' : {
+            //  	'width' : '5000px !important'
+            //  },
+            //  '&.place-top' : {
+            //  	'width' : '6000px !important'
+            //  },
+            //  // TODO: JUST TEST
+
+
+            '.place-top': {
+                '&:after': {
+                    'textAlign': 'right !important', // TODO: DEL DEBUG
+                    'borderTop': '6px solid violet !important', //'6px solid ' + backgroundColor, // TODO: REVERT TO SET COLOUR WHEN DONE DEV
+                    'fontWeight': 'bold' // TODO: DEL DEBUG
+                },
+                '&:before': {
+                    'textAlign': 'right !important', // TODO: DEL DEBUG
+                    'borderTop': '8px solid violet !important', //'8px solid ' + borderColor, // TODO: REVERT TO SET COLOUR WHEN DONE DEV
+                    'fontWeight': 'bold' // TODO: DEL DEBUG
+                }
             },
-            ':before': {
-                'borderTop': '8px solid ' + borderColor
+
+            '&.place-top': {
+                'marginTop': '-10px',
+                'backgroundColor': backgroundColor,
+                'border': '1px solid' + borderColor,
+
+                '&:before': {
+                    'borderLeft': '10px solid transparent',
+                    'borderRight': '10px solid transparent',
+                    'bottom': '-8px',
+                    'left': '50%',
+                    'marginLeft': '-10px'
+                },
+                '&:after': {
+                    'borderLeft': '8px solid transparent',
+                    'borderRight': '8px solid transparent',
+                    'bottom': '-6px',
+                    'left': '50%',
+                    'marginLeft': '-8px'
+                }
             }
-        },
-        'place-bottom': {
-            'backgroundColor': backgroundColor,
-            'border': '1px solid' + borderColor,
-            ':after': {
-                'borderBottom': '6px solid ' + backgroundColor
-            },
-            ':before': {
-                'borderBottom': '8px solid ' + borderColor
-            }
-        },
-        'place-left': {
-            'backgroundColor': backgroundColor,
-            'border': '1px solid' + borderColor,
-            ':after': {
-                'borderLeft': '6px solid ' + backgroundColor
-            },
-            ':before': {
-                'borderLeft': '8px solid ' + borderColor
-            }
-        },
-        'place-right': {
-            'backgroundColor': backgroundColor,
-            'border': '1px solid' + borderColor,
-            ':after': {
-                'borderRight': '6px solid ' + backgroundColor
-            },
-            ':before': {
-                'borderRight': '8px solid ' + borderColor
-            }
+            // '.place-bottom': {
+            //     'backgroundColor': backgroundColor,
+            //     'border': '1px solid' + borderColor,
+            //     ':after': {
+            //         'borderBottom': '6px solid ' + backgroundColor
+            //     },
+            //     ':before': {
+            //         'borderBottom': '8px solid ' + borderColor
+            //     }
+            // },
+            // '.place-left': {
+            //     'backgroundColor': backgroundColor,
+            //     'border': '1px solid' + borderColor,
+            //     ':after': {
+            //         'borderLeft': '6px solid ' + backgroundColor
+            //     },
+            //     ':before': {
+            //         'borderLeft': '8px solid ' + borderColor
+            //     }
+            // },
+            // '.place-right': {
+            //     'backgroundColor': backgroundColor,
+            //     'border': '1px solid' + borderColor,
+            //     ':after': {
+            //         'borderRight': '6px solid ' + backgroundColor
+            //     },
+            //     ':before': {
+            //         'borderRight': '8px solid ' + borderColor
+            //     }
+            // }
         }
 
     });
 }
 
-},{"aphrodite":2}],23:[function(require,module,exports){
+},{"aphrodite-jss":1}],65:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4340,7 +5611,7 @@ var getMutationObserverClass = function getMutationObserverClass() {
   return window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
 };
 
-},{}],24:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4390,7 +5661,7 @@ var _constant2 = _interopRequireDefault(_constant);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"../constant":17}],25:[function(require,module,exports){
+},{"../constant":59}],67:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -4463,7 +5734,7 @@ var _style = require('./style');
 
 var _style2 = _interopRequireDefault(_style);
 
-var _aphrodite = require('aphrodite');
+var _aphroditeJss = require('aphrodite-jss');
 
 var _styler = require('./decorators/styler');
 
@@ -5044,7 +6315,6 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var isEmptyTip = this.isEmptyTip(placeholder);
       var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show && !disable && !isEmptyTip }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, _defineProperty({}, 'type-' + this.state.type, this.state.type), { 'allow_hover': this.props.delayUpdate }, { 'allow_click': this.props.clickable });
 
-      // TODO: doing Radium wrapping here - gotta wrap the returns
       var tooltipStyle = (0, _styler.getTooltipStyle)('white', 'black', 'red');
 
       var Wrapper = this.props.wrapper;
@@ -5055,7 +6325,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var wrapperClassName = [tooltipClass, extraClass].filter(Boolean).join(' ');
 
       if (html) {
-        return _react2.default.createElement(Wrapper, _extends({ className: (0, _aphrodite.css)(Object.values(tooltipStyle)) + ' ' + wrapperClassName,
+        return _react2.default.createElement(Wrapper, _extends({ className: (0, _aphroditeJss.css)(tooltipStyle['__react_component_tooltip']) + ' ' + wrapperClassName,
           id: this.props.id,
           ref: function ref(_ref) {
             return _this8.tooltipRef = _ref;
@@ -5066,7 +6336,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       } else {
         return _react2.default.createElement(
           Wrapper,
-          _extends({ className: (0, _aphrodite.css)(Object.values(tooltipStyle)) + ' ' + wrapperClassName,
+          _extends({ className: (0, _aphroditeJss.css)(tooltipStyle['__react_component_tooltip']) + ' ' + wrapperClassName,
             id: this.props.id
           }, ariaProps, {
             ref: function ref(_ref2) {
@@ -5139,15 +6409,15 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 module.exports = ReactTooltip;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./decorators/customEvent":18,"./decorators/getEffect":19,"./decorators/isCapture":20,"./decorators/staticMethods":21,"./decorators/styler":22,"./decorators/trackRemoval":23,"./decorators/windowListener":24,"./style":26,"./utils/aria":27,"./utils/getPosition":28,"./utils/getTipContent":29,"./utils/nodeListToArray":30,"aphrodite":2,"classnames":5,"prop-types":11}],26:[function(require,module,exports){
+},{"./decorators/customEvent":60,"./decorators/getEffect":61,"./decorators/isCapture":62,"./decorators/staticMethods":63,"./decorators/styler":64,"./decorators/trackRemoval":65,"./decorators/windowListener":66,"./style":68,"./utils/aria":69,"./utils/getPosition":70,"./utils/getTipContent":71,"./utils/nodeListToArray":72,"aphrodite-jss":1,"classnames":2,"prop-types":56}],68:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '.__react_component_tooltip{border-radius:3px  !important;display:inline-block  !important;font-size:13px  !important;left:-999em;opacity:0;padding:8px 21px  !important;position:fixed  !important;pointer-events:none  !important;transition:opacity 0.3s ease-out  !important;top:-999em;visibility:hidden;z-index:999}.__react_component_tooltip.allow_hover,.__react_component_tooltip.allow_click{pointer-events:auto  !important}.__react_component_tooltip:before,.__react_component_tooltip:after{content:"";width:0;height:0;position:absolute}.__react_component_tooltip.show{opacity:0.9  !important;margin-top:0px  !important;margin-left:0px  !important;visibility:visible  !important}.__react_component_tooltip.place-top{margin-top:-10px}.__react_component_tooltip.place-top:before{border-left:10px solid transparent !important;border-right:10px solid transparent !important;bottom:-8px  !important;left:50%  !important;margin-left:-10px}.__react_component_tooltip.place-top:after{border-left:8px solid transparent !important;border-right:8px solid transparent !important;bottom:-6px  !important;left:50%  !important;margin-left:-8px}.__react_component_tooltip.place-bottom{margin-top:10px !important}.__react_component_tooltip.place-bottom:before{border-left:10px solid transparent !important;border-right:10px solid transparent !important;top:-8px !important;left:50% !important;margin-left:-10px !important}.__react_component_tooltip.place-bottom:after{border-left:8px solid transparent !important;border-right:8px solid transparent !important;top:-6px !important;left:50% !important;margin-left:-8px !important}.__react_component_tooltip.place-left{margin-left:-10px !important}.__react_component_tooltip.place-left:before{border-top:6px solid transparent !important;border-bottom:6px solid transparent !important;right:-8px  !important;top:50% !important;margin-top:-5px !important}.__react_component_tooltip.place-left:after{border-top:5px solid transparen !important;border-bottom:5px solid transparent !important;right:-6px !important;top:50% !important;margin-top:-4px !important}.__react_component_tooltip.place-right{margin-left:10px !important}.__react_component_tooltip.place-right:before{border-top:6px solid transparent !important;border-bottom:6px solid transparent !important;left:-8px !important;top:50% !important;margin-top:-5px !important}.__react_component_tooltip.place-right:after{border-top:5px solid transparent !important;border-bottom:5px solid transparent !important;left:-6px !important;top:50% !important;margin-top:-4px !important}.__react_component_tooltip .multi-line{display:block  !important;padding:2px 0px  !important;text-align:center  !important}';
+exports.default = '.__react_component_tooltip{border-radius:3px;display:inline-block;font-size:13px;left:-999em;opacity:0;padding:8px 21px;position:fixed;pointer-events:none;transition:opacity 0.3s ease-out;top:-999em;visibility:hidden;z-index:999}.__react_component_tooltip.allow_hover,.__react_component_tooltip.allow_click{pointer-events:auto}.__react_component_tooltip:before,.__react_component_tooltip:after{content:"";width:0;height:0;position:absolute}.__react_component_tooltip.show{opacity:0.9;margin-top:0px;margin-left:0px;visibility:visible}.__react_component_tooltip.place-bottom{margin-top:10px}.__react_component_tooltip.place-bottom:before{border-left:10px solid transparent;border-right:10px solid transparent;top:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-bottom:after{border-left:8px solid transparent;border-right:8px solid transparent;top:-6px;left:50%;margin-left:-8px}.__react_component_tooltip.place-left{margin-left:-10px}.__react_component_tooltip.place-left:before{border-top:6px solid transparent;border-bottom:6px solid transparent;right:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-left:after{border-top:5px solid transparen;border-bottom:5px solid transparent;right:-6px;top:50%;margin-top:-4px}.__react_component_tooltip.place-right{margin-left:10px}.__react_component_tooltip.place-right:before{border-top:6px solid transparent;border-bottom:6px solid transparent;left:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-right:after{border-top:5px solid transparent;border-bottom:5px solid transparent;left:-6px;top:50%;margin-top:-4px}.__react_component_tooltip .multi-line{display:block;padding:2px 0px;text-align:center}';
 
-},{}],27:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5173,7 +6443,7 @@ function parseAria(props) {
   return ariaObj;
 }
 
-},{}],28:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5448,7 +6718,7 @@ var getParent = function getParent(currentTarget) {
   return { parentTop: parentTop, parentLeft: parentLeft };
 };
 
-},{}],29:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -5484,7 +6754,7 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],30:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5501,5 +6771,5 @@ exports.default = function (nodeList) {
   });
 };
 
-},{}]},{},[25])(25)
+},{}]},{},[67])(67)
 });
