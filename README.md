@@ -9,9 +9,11 @@
 
 ## Maintainers
 
-[huumanoid](https://github.com/huumanoid)
+[aronhelser](https://github.com/aronhelser) Passive maintainer - accepting PRs and doing minor testing, but not fixing issues or doing active development.
 
-[aronhelser](https://github.com/aronhelser)
+[huumanoid](https://github.com/huumanoid) (inactive)
+
+We would gladly accept a new maintainer to help out!
 
 ## Installation
 
