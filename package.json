@@ -1,12 +1,22 @@
 {
   "name": "react-tooltip",
-  "version": "3.2.7",
+  "version": "0.0.0-semantic-release",
   "description": "react tooltip component",
   "main": "dist/index.js",
   "scripts": {
-    "test": "make test",
+    "test": "make lint",
     "start": "make dev",
-    "deploy": "make deploy"
+    "build": "make deploy",
+    "deploy": "make deploy",
+    "gh-pages": "gh-pages -d example",
+    "github-changes": "github-changes -o wwayne -r react-tooltip -a --only-pulls --use-commit-body",
+    "commit": "git cz",
+    "semantic-release": "semantic-release"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
   },
   "standard": {
     "parser": "babel-eslint",
@@ -39,11 +49,12 @@
     "react-dom": "global:ReactDOM"
   },
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0",
-    "react-dom": "^0.14.0 || ^15.0.0"
+    "react": ">=0.14",
+    "react-dom": ">=0.14"
   },
   "dependencies": {
-    "classnames": "^2.2.0"
+    "classnames": "^2.2.5",
+    "prop-types": "^15.6.0"
   },
   "engines": {
     "node": ">=4.2.1"
@@ -62,17 +73,25 @@
     "browserify-shim": "^3.8.12",
     "chai": "^3.5.0",
     "chai-enzyme": "^0.5.0",
+    "commitizen": "2.9.6",
     "concurrently": "^2.1.0",
+    "cz-conventional-changelog": "2.1.0",
     "enzyme": "^2.3.0",
-    "http-server": "^0.8.0",
+    "enzyme-adapter-react-16": "^1.0.1",
+    "gh-pages": "1.1.0",
+    "github-changes": "^1.1.2",
+    "http-server": "^0.11.1",
     "jsdom": "^9.2.1",
-    "mocha": "^2.5.3",
+    "mocha": "^5.2.0",
     "node-sass": "^3.7.0",
+    "react": "^16.1.1",
     "react-addons-test-utils": "^15.1.0",
+    "react-dom": "^16.1.1",
+    "semantic-release": "15.1.5",
     "sinon": "^1.17.4",
     "snazzy": "^2.0.1",
     "standard": "^5.2.2",
     "uglifyjs": "^2.4.10",
-    "watchify": "^3.2.1"
+    "watchify": "^3.11.0"
   }
 }

@@ -11,10 +11,6 @@ lint:
 	@echo Linting...
 	@$(NODE_BIN)/standard --verbose | $(NODE_BIN)/snazzy src/index.js
 
-test: lint
-	@echo Start testing...
-	@$(NODE_BIN)/mocha $(MOCHA_OPTS) $(TEST)
-
 convertCSS:
 	@echo Converting css...
 	@node bin/transferSass.js
@@ -32,6 +28,11 @@ devCSS:
 	@$(NODE_BIN)/node-sass $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
 	@$(NODE_BIN)/node-sass $(SRC)/index.scss $(EXAMPLE_DIST)/style.css
 	@$(NODE_BIN)/node-sass -w $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
+
+deployExample:
+	@$(NODE_BIN)/browserify -t babelify $(EXAMPLE_SRC)/index.js -o $(EXAMPLE_DIST)/index.js -dv
+	@$(NODE_BIN)/node-sass $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
+	@$(NODE_BIN)/node-sass $(SRC)/index.scss $(EXAMPLE_DIST)/style.css
 
 devServer:
 	@echo Listening 8888...
@@ -51,9 +52,11 @@ deployJS:
 deploy: lint
 	@echo Deploy...
 	@rm -rf dist && mkdir dist
+	@rm -rf $(EXAMPLE_DIST) && mkdir -p $(EXAMPLE_DIST)
+	@make deployExample
 	@make convertCSS
 	@make deployJS
 	@make genStand
 	@echo success!
 
-.PHONY: lint convertCSS genStand devJS devCSS devServer dev deployJS deployCSS deploy
+.PHONY: lint convertCSS genStand devJS devCSS devServer dev deployExample deployJS deployCSS deploy

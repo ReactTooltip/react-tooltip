@@ -1,5 +1,79 @@
 ## Change Log
 
+### v3.9.0 (2018/11/07 00:43 +00:00)
+- [#452](https://github.com/wwayne/react-tooltip/pull/452) docs(README.md): Updates demo url (@tjFogarty)
+- [#439](https://github.com/wwayne/react-tooltip/pull/439) added support for passing options to sanitizeHtml (@icheishvili)
+- [#433](https://github.com/wwayne/react-tooltip/pull/433) Use capture mode with globalEventOff (@apandichi)
+
+### v3.8.4 (2018/09/12 18:00 +00:00)
+- [#428](https://github.com/wwayne/react-tooltip/pull/428) fix(example): <p> warning from react, make text match code. (@aronhelser)
+
+### v3.8.3 (2018/09/12 13:47 +00:00)
+- [#426](https://github.com/wwayne/react-tooltip/pull/426) perf(Use sanitize-html-react instead of sanitize-html) (@jgerlier)
+- [#425](https://github.com/wwayne/react-tooltip/pull/425) fix(index.js): fix state initialization (@MtBlue81)
+
+### v3.8.2 (2018/09/11 17:55 +00:00)
+- [#413](https://github.com/wwayne/react-tooltip/pull/413) fix(index.js): Use correct orientation when mouse enters (@an4ger)
+
+### v3.8.1 (2018/09/06 14:07 +00:00)
+- [#422](https://github.com/wwayne/react-tooltip/pull/422) fix(tooltip): sanitize HTML to prevent XSS (@wichniowski)
+
+### v3.7.0 (2018/09/03 15:13 +00:00)
+- [#416](https://github.com/wwayne/react-tooltip/pull/416) feat(mouseover): Add ability to hover on tooltip. (@RobertGary1)
+- [#414](https://github.com/wwayne/react-tooltip/pull/414) Fixed jsdoc return typos (@AlexanderEllis)
+- [#399](https://github.com/wwayne/react-tooltip/pull/399) Fixes Typos (@jstettner)
+- [#391](https://github.com/wwayne/react-tooltip/pull/391) fix(positioning): make sure tooltip is oriented correctly when close to edge (@hassanbot)
+
+### v3.6.1 (2018/06/05 13:46 +00:00)
+- [#389](https://github.com/wwayne/react-tooltip/pull/389) fix(isCapture): guard use of currentTarget (@aronhelser)
+- [#384](https://github.com/wwayne/react-tooltip/pull/384) Detach custom event listener (@P0lip)
+
+### v3.6.0 (2018/05/15 18:03 +00:00)
+- [#360](https://github.com/wwayne/react-tooltip/pull/360) Compute or enrich tip content (@austil)
+
+### v3.5.1 (2018/05/03 18:11 +00:00)
+- [#380](https://github.com/wwayne/react-tooltip/pull/380) fix(examples): add SVG example (@P0lip)
+- [#379](https://github.com/wwayne/react-tooltip/pull/379) ci(gh-pages): Allow travis to publish new examples to github (@aronhelser)
+- [#366](https://github.com/wwayne/react-tooltip/pull/366) Make getPosition() calculate offsets correctly for svg elements (@P0lip)
+- [#310](https://github.com/wwayne/react-tooltip/pull/310) Update position with content (@stefanhayden)
+- [#368](https://github.com/wwayne/react-tooltip/pull/368) Fix issue where tooltip won't show for adjacent elements. (@tishihar94)
+- [#376](https://github.com/wwayne/react-tooltip/pull/376) Add displayName (@clehnert-psl)
+- [#375](https://github.com/wwayne/react-tooltip/pull/375) test(scrolling): Add example showing tooltip inside scrolling div (@aronhelser)
+
+### v3.5.0 (2018/04/11 18:04 +00:00)
+- [#281](https://github.com/wwayne/react-tooltip/pull/281) Get tooltip content dynamically in the render method (@alfonsomunozpomer)
+
+### v3.4.3 (2018/04/11 15:14 +00:00)
+- [#207](https://github.com/wwayne/react-tooltip/pull/207) Return tooltip to original position when possible (@hassanbot)
+- [#301](https://github.com/wwayne/react-tooltip/pull/301) insert css as first to allow easy css styling without important (@roblan)
+
+### 3.4.2 (2018/04/09 18:58 +00:00)
+- [#373](https://github.com/wwayne/react-tooltip/pull/373) fix(example): 'made dev' works again, small fixes. (@aronhelser)
+- [#337](https://github.com/wwayne/react-tooltip/pull/337) Fix README show tip usage error (@sivagao)
+- [#359](https://github.com/wwayne/react-tooltip/pull/359) License should use H2 as the previous sections do (@konekoya)
+
+### 3.4.1 (2018/04/05 17:24 +00:00)
+- [#369](https://github.com/wwayne/react-tooltip/pull/369) fix(index.js): add missing argument so tooltip hides. (@aronhelser)
+- [#372](https://github.com/wwayne/react-tooltip/pull/372) Travis: update node version to fix travis build. (@aronhelser)
+
+### 3.4.0 (2017/10/16 13:39 +00:00)
+- [#321](https://github.com/wwayne/react-tooltip/pull/321) React 16 support (@mikecousins)
+
+### 3.3.1 (2017/10/05 05:08 +00:00)
+- [#292](https://github.com/wwayne/react-tooltip/pull/292) Fix typo (@piperchester)
+
+### 3.3.0 (2017/04/14 03:34 +00:00)
+- [#287](https://github.com/wwayne/react-tooltip/pull/287) Use prop-types package instead of React.PropTypes (@ssilve1989)
+
+### 3.2.10 (2017/03/28 20:41 +00:00)
+- [#278](https://github.com/wwayne/react-tooltip/pull/278) Make MutationObserver-based removal tracking (@huumanoid)
+- [#272](https://github.com/wwayne/react-tooltip/pull/272) Fix wrapper tag (@huumanoid)
+- [#259](https://github.com/wwayne/react-tooltip/pull/259) Track removal of DOM elements (@antoniogiordano)
+- [#270](https://github.com/wwayne/react-tooltip/pull/270) Fix typos and improve for clarity (@theholla)
+
+### 3.2.9 (2017/03/20 15:41 +00:00)
+- [#236](https://github.com/wwayne/react-tooltip/pull/236) escape backslash in getTargetArray method (@rnons)
+
 ### 3.2.7 (2017/02/17 07:24 +00:00)
 - [#262](https://github.com/wwayne/react-tooltip/pull/262) Fix nodelist converte in safari (@wwayne)
 - [#260](https://github.com/wwayne/react-tooltip/pull/260) Fix NodeList to Array convertion (@huumanoid)
@@ -65,7 +139,7 @@
 - [#145](https://github.com/wwayne/react-tooltip/pull/145) fix typo (@meandavejustice)
 
 ### 3.0.13 (2016/07/14 09:53 +00:00)
-- [#136](https://github.com/wwayne/react-tooltip/pull/136) Check if current element is under transform (@CremAlex)
+- [#136](https://github.com/wwayne/react-tooltip/pull/136) Check if current element is under transform (@CremaFR)
 - [#135](https://github.com/wwayne/react-tooltip/pull/135) Transform 3d (@wwayne)
 
 ### 3.0.10 (2016/07/12 00:28 +00:00)

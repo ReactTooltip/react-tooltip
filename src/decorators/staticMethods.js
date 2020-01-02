@@ -4,7 +4,7 @@
 import CONSTANT from '../constant'
 
 const dispatchGlobalEvent = (eventName, opts) => {
-  // Compatibale with IE
+  // Compatible with IE
   // @see http://stackoverflow.com/questions/26596123/internet-explorer-9-10-11-event-constructor-doesnt-work
   let event
 
