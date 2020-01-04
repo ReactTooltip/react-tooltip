@@ -86,10 +86,11 @@ export default function (e, target, node, place, desiredPlace, effect, offset) {
 
   let isNewState = false
   let newPlace
-  if (inside(desiredPlace) && desiredPlace !== place) {
+  let shouldUpdatePlace = desiredPlace !== place
+  if (inside(desiredPlace) && shouldUpdatePlace) {
     isNewState = true
     newPlace = desiredPlace
-  } else if (insideList.length > 0 && outside(desiredPlace) && outside(place)) {
+  } else if (insideList.length > 0 && shouldUpdatePlace && outside(desiredPlace) && outside(place)) {
     isNewState = true
     newPlace = insideList[0]
   }
