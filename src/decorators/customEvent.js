@@ -6,11 +6,10 @@
  * - `eventOff` {String}
  */
 
-const checkStatus = function (dataEventOff, e) {
+export const checkStatus = function (dataEventOff, e) {
   const {show} = this.state
   const {id} = this.props
-  const dataIsCapture = e.currentTarget.getAttribute('data-iscapture')
-  const isCapture = dataIsCapture && dataIsCapture === 'true' || this.props.isCapture
+  const isCapture = this.isCapture(e.currentTarget)
   const currentItem = e.currentTarget.getAttribute('currentItem')
 
   if (!isCapture) e.stopPropagation()
