@@ -3,7 +3,7 @@ cache:
   directories:
     - node_modules
 node_js:
-  - "12"
+  - 12
 notifications:
   email:
     recipients:
@@ -11,17 +11,17 @@ notifications:
     on_success: change
     on_failure: always
 install:
-  - npm install
+  - yarn
 
 script:
-  - npm run build
+  - yarn build
   - git config --global user.name "Travis CI"
   - git config --global user.email "aron.helser@kitware.com"
   - export GIT_PUBLISH_URL=https://${GH_TOKEN}@github.com/wwayne/react-tooltip.git
-  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then npm run gh-pages -- --repo ${GIT_PUBLISH_URL}; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then yarn gh-pages -- --repo ${GIT_PUBLISH_URL}; fi
 
 after_success:
-  - npm run semantic-release
+  - yarn semantic-release
 
 branches:
   except:
