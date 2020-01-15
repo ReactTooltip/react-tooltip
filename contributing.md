@@ -2,6 +2,17 @@
 
 This doc needs help! Please submit your PR...
 
+## Building a fork locally
+Preconditions: 
+* npm installed and available on path
+* unix make is on path (for windows: install cygwin including make, add to path)
+
+## Building
+* Clone the git repository
+* Install Dependencies: `npm install`
+* Run the build: `npm run build`
+* If you want to see the examples, start the examples: `npm run start` and open URL http://localhost:8888 in a Browser
+
 ## Commit messages
 
 We are using semantic-release to automate the release process, and this depends on a specific format for commit messages. Please run `npm run commit` to use `commitizen` to properly format your commit messages so they can be automatically processed and included in release notes.

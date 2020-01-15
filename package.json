@@ -83,7 +83,7 @@
     "http-server": "^0.11.1",
     "jsdom": "^9.2.1",
     "mocha": "^5.2.0",
-    "node-sass": "^3.7.0",
+    "sass": "^1.24.3",
     "react": "^16.1.1",
     "react-addons-test-utils": "^15.1.0",
     "react-dom": "^16.1.1",
