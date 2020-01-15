@@ -14,8 +14,7 @@
     "gh-pages": "gh-pages -d example",
     "github-changes": "github-changes -o wwayne -r react-tooltip -a --only-pulls --use-commit-body",
     "commit": "git cz",
-    "semantic-release": "semantic-release",
-    "prepare": "echo preparing react-tooltip fork && npm run build"
+    "semantic-release": "semantic-release"
   },
   "config": {
     "commitizen": {
