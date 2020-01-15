@@ -1,8 +1,11 @@
 {
-  "name": "react-tooltip",
+  "name": "@idc-developer/react-tooltip",
   "version": "0.0.0-semantic-release",
   "description": "react tooltip component",
   "main": "dist/index.js",
+  "files": [
+    "dist/**/*.js"
+  ],
   "scripts": {
     "test": "make lint",
     "start": "make dev",
@@ -11,7 +14,8 @@
     "gh-pages": "gh-pages -d example",
     "github-changes": "github-changes -o wwayne -r react-tooltip -a --only-pulls --use-commit-body",
     "commit": "git cz",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "prepare": "echo preparing react-tooltip fork && npm run build"
   },
   "config": {
     "commitizen": {
@@ -30,7 +34,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wwayne/react-tooltip"
+    "url": "https://github.com/idc-developer/react-tooltip"
   },
   "keywords": [
     "react",
