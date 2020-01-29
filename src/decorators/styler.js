@@ -2,88 +2,71 @@ import { StyleSheet } from 'aphrodite-jss'
 /**
  * Generates the tooltip style based on the element-specified "data-type" property.
  */
-export function getTooltipStyle(textColor, backgroundColor, borderColor) {
+export function getTooltipStyle(colors) {
+    const textColor = colors.textColor
+    const backgroundColor = colors.backgroundColor
+    const arrowColor = colors.arrowColor
 
     return StyleSheet.create({
-
         '__react_component_tooltip': {
             'color': textColor,
             'backgroundColor': backgroundColor,
-            'border': '6px solid ' + borderColor,
 
-
-            // TODO: JUST TEST WORKING EXAMPLE - REMOVE WHEN DONE
-            // '&.place-top' : {
-            //  	'width' : '5000px !important'
-            //  },
-            //  '&.place-top' : {
-            //  	'width' : '6000px !important'
-            //  },
-            //  // TODO: JUST TEST
-
-            '&.place-top': {
-                'marginTop': '-10px',
-                'backgroundColor': backgroundColor,
-                'border': '1px solid' + borderColor,
-
-                '&:before': {
-                    'borderLeft': '10px solid transparent',
-                    'borderRight': '10px solid transparent',
-                    'bottom': '-8px',
-                    'left': '50%',
-                    'marginLeft': '-10px'
-                },
-                '&:after': {
-                    'borderLeft': '8px solid transparent',
-                    'borderRight': '8px solid transparent',
-                    'bottom': '-6px',
-                    'left': '50%',
-                    'marginLeft': '-8px'
-                },
+            '&.place-top' : {
+                'margin-top': '-10px'
+            },
+            '&.place-top:after' : {
+                'border-left' : '8px solid transparent',
+                'border-right' : '8px solid transparent',
+                'bottom' : '-6px',
+                'left' : '50%',
+                'margin-left' : '-8px',
+                'border-top-color' : arrowColor,
+                'border-top-style' : 'solid',
+                'border-top-width' : '6px'
             },
 
-            // TODO: WHERE DOES IT GO??? GOTTA BE SOMEWHERE! - check the existing example: https://react-tooltip.netlify.com/
-            ':after': {
-                'textAlign': 'right !important', // TODO: DEL DEBUG
-                'borderTop': '6px solid violet !important', //'6px solid ' + backgroundColor, // TODO: REVERT TO SET COLOUR WHEN DONE DEV
-                'fontWeight': 'bold' // TODO: DEL DEBUG
+            '&.place-bottom' : {
+                'margin-top': '10px'
             },
-            ':before': {
-                'textAlign': 'right !important', // TODO: DEL DEBUG
-                'borderTop': '8px solid violet !important', //'8px solid ' + borderColor, // TODO: REVERT TO SET COLOUR WHEN DONE DEV
-                'fontWeight': 'bold' // TODO: DEL DEBUG
+            '&.place-bottom:after' : {
+                'border-left' : '8px solid transparent',
+                'border-right' : '8px solid transparent',
+                'top' : '-6px',
+                'left' : '50%',
+                'margin-left' : '-8px',
+                'border-bottom-color' : arrowColor,
+                'border-bottom-style' : 'solid',
+                'border-bottom-width' : '6px'
+            },
+
+            '&.place-left' : {
+                'margin-left': '-10px'
+            },
+            '&.place-left:after' : {
+                'border-top' : '5px solid transparent',
+                'border-bottom' : '5px solid transparent',
+                'right' : '-6px',
+                'top' : '50%',
+                'margin-top' : '-4px',
+                'border-left-color' : arrowColor,
+                'border-left-style' : 'solid',
+                'border-left-width' : '6px'
+            },
+
+            '&.place-right' : {
+                'margin-left': '10px'
+            },
+            '&.place-right:after' : {
+                'border-top' : '5px solid transparent',
+                'border-bottom' : '5px solid transparent',
+                'left' : '-6px',
+                'top' : '50%',
+                'margin-top' : '-4px',
+                'border-right-color' : arrowColor,
+                'border-right-style' : 'solid',
+                'border-right-width' : '6px'
             }
-
-            // '.place-bottom': {
-            //     'backgroundColor': backgroundColor,
-            //     'border': '1px solid' + borderColor,
-            //     ':after': {
-            //         'borderBottom': '6px solid ' + backgroundColor
-            //     },
-            //     ':before': {
-            //         'borderBottom': '8px solid ' + borderColor
-            //     }
-            // },
-            // '.place-left': {
-            //     'backgroundColor': backgroundColor,
-            //     'border': '1px solid' + borderColor,
-            //     ':after': {
-            //         'borderLeft': '6px solid ' + backgroundColor
-            //     },
-            //     ':before': {
-            //         'borderLeft': '8px solid ' + borderColor
-            //     }
-            // },
-            // '.place-right': {
-            //     'backgroundColor': backgroundColor,
-            //     'border': '1px solid' + borderColor,
-            //     ':after': {
-            //         'borderRight': '6px solid ' + backgroundColor
-            //     },
-            //     ':before': {
-            //         'borderRight': '8px solid ' + borderColor
-            //     }
-            // }
         }
 
     })

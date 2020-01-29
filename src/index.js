@@ -22,6 +22,7 @@ import nodeListToArray from './utils/nodeListToArray'
 import cssStyle from './style'
 import { css } from 'aphrodite-jss'
 import { getTooltipStyle } from './decorators/styler'
+import { getDefaultPopupColors } from './decorators/defaultStyles'
 
 @staticMethods
 @windowListener
@@ -546,9 +547,11 @@ class ReactTooltip extends React.Component {
   }
 
   render () {
+
     const {extraClass, html, ariaProps, disable} = this.state
     const placeholder = this.getTooltipContent()
     const isEmptyTip = this.isEmptyTip(placeholder)
+
     let tooltipClass = classname(
       '__react_component_tooltip',
       {'show': this.state.show && !disable && !isEmptyTip},
@@ -562,7 +565,13 @@ class ReactTooltip extends React.Component {
       {'allow_click': this.props.clickable}
     )
 
-    let tooltipStyle = getTooltipStyle('white', 'black', 'red')
+    let colors = getDefaultPopupColors(this.state.type) // TODO: accept custom values too
+
+    if (!colors) {
+      colors = {'textColor': this.props.color, 'borderColor': this.props.border, 'arrowColor': this.props.arrow} // TODO: check if works
+    }
+
+    let tooltipStyle = getTooltipStyle(colors)
 
     let Wrapper = this.props.wrapper
     if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
