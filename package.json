@@ -3,10 +3,18 @@
   "version": "0.0.0-semantic-release",
   "description": "react tooltip component",
   "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "jsnext:main": "dist/index.es.js",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
   "scripts": {
     "test": "make lint",
-    "start": "make dev",
-    "build": "make deploy",
+    "clean": "rimraf dist",
+    "build": "rollup -c",
+    "build:watch": "rollup -c -w",
+    "start": "npm-run-all clean build:watch",
     "deploy": "make deploy",
     "gh-pages": "gh-pages -d example",
     "github-changes": "github-changes -o wwayne -r react-tooltip -a --only-pulls --use-commit-body",
@@ -49,25 +57,23 @@
     "react-dom": "global:ReactDOM"
   },
   "peerDependencies": {
-    "react": ">=0.14",
-    "react-dom": ">=0.14"
+    "react": ">=^16.0.0",
+    "react-dom": ">=^16.0.0"
   },
   "dependencies": {
-    "classnames": "^2.2.5",
+    "classnames": "^2.2.6",
     "prop-types": "^15.6.0"
   },
-  "engines": {
-    "node": ">=4.2.1"
-  },
   "devDependencies": {
-    "babel-cli": "^6.5.1",
-    "babel-core": "^6.9.1",
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-react": "^7.7.4",
+    "@svgr/rollup": "^4.3.3",    
     "babel-eslint": "^4.1.1",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-plugin-transform-runtime": "^6.5.0",
-    "babel-preset-es2015": "^6.5.0",
-    "babel-preset-react": "^6.5.0",
-    "babel-preset-stage-0": "^6.5.0",
+    "babel-plugin-syntax-decorators": "^6.13.0",
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
     "browserify-shim": "^3.8.12",
@@ -83,15 +89,30 @@
     "http-server": "^0.11.1",
     "jsdom": "^9.2.1",
     "mocha": "^5.2.0",
-    "node-sass": "^3.7.0",
-    "react": "^16.1.1",
+    "node-sass": "^4.13.0",
+    "npm-run-all": "^4.1.5",
+    "postcss-nested": "^4.2.1",
+    "postcss-simple-vars": "^5.0.2",
+    "react": "^16.4.1",
     "react-addons-test-utils": "^15.1.0",
-    "react-dom": "^16.1.1",
+    "react-dom": "^16.4.1",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.27.5",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-sass": "^1.2.2",
+    "rollup-plugin-url": "^3.0.1",
     "semantic-release": "15.1.5",
     "sinon": "^1.17.4",
     "snazzy": "^2.0.1",
     "standard": "^5.2.2",
     "uglifyjs": "^2.4.10",
     "watchify": "^3.11.0"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }

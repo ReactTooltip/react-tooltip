@@ -1,5 +1,3 @@
-'use strict'
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import classname from 'classnames'
@@ -614,4 +612,4 @@ class ReactTooltip extends React.Component {
 }
 
 /* export default not fit for standalone, it will exports {default:...} */
-module.exports = ReactTooltip
+export default ReactTooltip
