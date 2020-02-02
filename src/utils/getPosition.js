@@ -14,43 +14,43 @@
  * - `newState` {Object}
  * - `position` {Object} {left: {Number}, top: {Number}}
  */
-export default function (e, target, node, place, desiredPlace, effect, offset) {
-  const {
-    width: tipWidth,
-    height: tipHeight
-  } = getDimensions(node)
+export default function(e, target, node, place, desiredPlace, effect, offset) {
+  const { width: tipWidth, height: tipHeight } = getDimensions(node);
 
-  const {
-    width: targetWidth,
-    height: targetHeight
-  } = getDimensions(target)
+  const { width: targetWidth, height: targetHeight } = getDimensions(target);
 
-  const {mouseX, mouseY} = getCurrentOffset(e, target, effect)
-  const defaultOffset = getDefaultPosition(effect, targetWidth, targetHeight, tipWidth, tipHeight)
-  const {extraOffset_X, extraOffset_Y} = calculateOffset(offset)
+  const { mouseX, mouseY } = getCurrentOffset(e, target, effect);
+  const defaultOffset = getDefaultPosition(
+    effect,
+    targetWidth,
+    targetHeight,
+    tipWidth,
+    tipHeight
+  );
+  const { extraOffset_X, extraOffset_Y } = calculateOffset(offset);
 
-  const windowWidth = window.innerWidth
-  const windowHeight = window.innerHeight
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
 
-  const {parentTop, parentLeft} = getParent(node)
+  const { parentTop, parentLeft } = getParent(node);
 
   // Get the edge offset of the tooltip
-  const getTipOffsetLeft = (place) => {
-    const offset_X = defaultOffset[place].l
-    return mouseX + offset_X + extraOffset_X
-  }
-  const getTipOffsetRight = (place) => {
-    const offset_X = defaultOffset[place].r
-    return mouseX + offset_X + extraOffset_X
-  }
-  const getTipOffsetTop = (place) => {
-    const offset_Y = defaultOffset[place].t
-    return mouseY + offset_Y + extraOffset_Y
-  }
-  const getTipOffsetBottom = (place) => {
-    const offset_Y = defaultOffset[place].b
-    return mouseY + offset_Y + extraOffset_Y
-  }
+  const getTipOffsetLeft = place => {
+    const offset_X = defaultOffset[place].l;
+    return mouseX + offset_X + extraOffset_X;
+  };
+  const getTipOffsetRight = place => {
+    const offset_X = defaultOffset[place].r;
+    return mouseX + offset_X + extraOffset_X;
+  };
+  const getTipOffsetTop = place => {
+    const offset_Y = defaultOffset[place].t;
+    return mouseY + offset_Y + extraOffset_Y;
+  };
+  const getTipOffsetBottom = place => {
+    const offset_Y = defaultOffset[place].b;
+    return mouseY + offset_Y + extraOffset_Y;
+  };
 
   //
   // Functions to test whether the tooltip's sides are inside
@@ -66,180 +66,197 @@ export default function (e, target, node, place, desiredPlace, effect, offset) {
   //       |
   //  Bottom side
   //
-  let outsideLeft = p => getTipOffsetLeft(p) < 0
-  let outsideRight = p => getTipOffsetRight(p) > windowWidth
-  let outsideTop = p => getTipOffsetTop(p) < 0
-  let outsideBottom = p => getTipOffsetBottom(p) > windowHeight
+  const outsideLeft = p => getTipOffsetLeft(p) < 0;
+  const outsideRight = p => getTipOffsetRight(p) > windowWidth;
+  const outsideTop = p => getTipOffsetTop(p) < 0;
+  const outsideBottom = p => getTipOffsetBottom(p) > windowHeight;
 
   // Check whether the tooltip with orientation p is completely inside the client window
-  let outside = p => outsideLeft(p) || outsideRight(p) || outsideTop(p) || outsideBottom(p)
-  let inside = p => !outside(p)
+  const outside = p =>
+    outsideLeft(p) || outsideRight(p) || outsideTop(p) || outsideBottom(p);
+  const inside = p => !outside(p);
 
-  let placesList = ['top', 'bottom', 'left', 'right']
-  let insideList = []
+  const placesList = ["top", "bottom", "left", "right"];
+  const insideList = [];
   for (let i = 0; i < 4; i++) {
-    let p = placesList[i]
+    const p = placesList[i];
     if (inside(p)) {
-      insideList.push(p)
+      insideList.push(p);
     }
   }
 
-  let isNewState = false
-  let newPlace
-  let shouldUpdatePlace = desiredPlace !== place
+  let isNewState = false;
+  let newPlace;
+  const shouldUpdatePlace = desiredPlace !== place;
   if (inside(desiredPlace) && shouldUpdatePlace) {
-    isNewState = true
-    newPlace = desiredPlace
-  } else if (insideList.length > 0 && shouldUpdatePlace && outside(desiredPlace) && outside(place)) {
-    isNewState = true
-    newPlace = insideList[0]
+    isNewState = true;
+    newPlace = desiredPlace;
+  } else if (
+    insideList.length > 0 &&
+    shouldUpdatePlace &&
+    outside(desiredPlace) &&
+    outside(place)
+  ) {
+    isNewState = true;
+    newPlace = insideList[0];
   }
 
   if (isNewState) {
     return {
       isNewState: true,
-      newState: {place: newPlace}
-    }
+      newState: { place: newPlace },
+    };
   }
 
   return {
     isNewState: false,
     position: {
       left: parseInt(getTipOffsetLeft(place) - parentLeft, 10),
-      top: parseInt(getTipOffsetTop(place) - parentTop, 10)
-    }
-  }
+      top: parseInt(getTipOffsetTop(place) - parentTop, 10),
+    },
+  };
 }
 
-const getDimensions = (node) => {
-  const { height, width } = node.getBoundingClientRect()
+const getDimensions = node => {
+  const { height, width } = node.getBoundingClientRect();
   return {
     height: parseInt(height, 10),
-    width: parseInt(width, 10)
-  }
-}
+    width: parseInt(width, 10),
+  };
+};
 
 // Get current mouse offset
 const getCurrentOffset = (e, currentTarget, effect) => {
-  const boundingClientRect = currentTarget.getBoundingClientRect()
-  const targetTop = boundingClientRect.top
-  const targetLeft = boundingClientRect.left
-  const {
-    width: targetWidth,
-    height: targetHeight
-  } = getDimensions(currentTarget)
+  const boundingClientRect = currentTarget.getBoundingClientRect();
+  const targetTop = boundingClientRect.top;
+  const targetLeft = boundingClientRect.left;
+  const { width: targetWidth, height: targetHeight } = getDimensions(
+    currentTarget
+  );
 
-  if (effect === 'float') {
+  if (effect === "float") {
     return {
       mouseX: e.clientX,
-      mouseY: e.clientY
-    }
+      mouseY: e.clientY,
+    };
   }
   return {
-    mouseX: targetLeft + (targetWidth / 2),
-    mouseY: targetTop + (targetHeight / 2)
-  }
-}
+    mouseX: targetLeft + targetWidth / 2,
+    mouseY: targetTop + targetHeight / 2,
+  };
+};
 
 // List all possibility of tooltip final offset
 // This is useful in judging if it is necessary for tooltip to switch position when out of window
-const getDefaultPosition = (effect, targetWidth, targetHeight, tipWidth, tipHeight) => {
-  let top
-  let right
-  let bottom
-  let left
-  const disToMouse = 3
-  const triangleHeight = 2
-  const cursorHeight = 12 // Optimize for float bottom only, cause the cursor will hide the tooltip
+const getDefaultPosition = (
+  effect,
+  targetWidth,
+  targetHeight,
+  tipWidth,
+  tipHeight
+) => {
+  let top;
+  let right;
+  let bottom;
+  let left;
+  const disToMouse = 3;
+  const triangleHeight = 2;
+  const cursorHeight = 12; // Optimize for float bottom only, cause the cursor will hide the tooltip
 
-  if (effect === 'float') {
+  if (effect === "float") {
     top = {
       l: -(tipWidth / 2),
       r: tipWidth / 2,
       t: -(tipHeight + disToMouse + triangleHeight),
-      b: -disToMouse
-    }
+      b: -disToMouse,
+    };
     bottom = {
       l: -(tipWidth / 2),
       r: tipWidth / 2,
       t: disToMouse + cursorHeight,
-      b: tipHeight + disToMouse + triangleHeight + cursorHeight
-    }
+      b: tipHeight + disToMouse + triangleHeight + cursorHeight,
+    };
     left = {
       l: -(tipWidth + disToMouse + triangleHeight),
       r: -disToMouse,
       t: -(tipHeight / 2),
-      b: tipHeight / 2
-    }
+      b: tipHeight / 2,
+    };
     right = {
       l: disToMouse,
       r: tipWidth + disToMouse + triangleHeight,
       t: -(tipHeight / 2),
-      b: tipHeight / 2
-    }
-  } else if (effect === 'solid') {
+      b: tipHeight / 2,
+    };
+  } else if (effect === "solid") {
     top = {
       l: -(tipWidth / 2),
       r: tipWidth / 2,
       t: -(targetHeight / 2 + tipHeight + triangleHeight),
-      b: -(targetHeight / 2)
-    }
+      b: -(targetHeight / 2),
+    };
     bottom = {
       l: -(tipWidth / 2),
       r: tipWidth / 2,
       t: targetHeight / 2,
-      b: targetHeight / 2 + tipHeight + triangleHeight
-    }
+      b: targetHeight / 2 + tipHeight + triangleHeight,
+    };
     left = {
       l: -(tipWidth + targetWidth / 2 + triangleHeight),
       r: -(targetWidth / 2),
       t: -(tipHeight / 2),
-      b: tipHeight / 2
-    }
+      b: tipHeight / 2,
+    };
     right = {
       l: targetWidth / 2,
       r: tipWidth + targetWidth / 2 + triangleHeight,
       t: -(tipHeight / 2),
-      b: tipHeight / 2
-    }
+      b: tipHeight / 2,
+    };
   }
 
-  return {top, bottom, left, right}
-}
+  return { top, bottom, left, right };
+};
 
 // Consider additional offset into position calculation
-const calculateOffset = (offset) => {
-  let extraOffset_X = 0
-  let extraOffset_Y = 0
+const calculateOffset = offset => {
+  let extraOffset_X = 0;
+  let extraOffset_Y = 0;
 
-  if (Object.prototype.toString.apply(offset) === '[object String]') {
-    offset = JSON.parse(offset.toString().replace(/\'/g, '\"'))
+  if (Object.prototype.toString.apply(offset) === "[object String]") {
+    offset = JSON.parse(offset.toString().replace(/\'/g, '"'));
   }
-  for (let key in offset) {
-    if (key === 'top') {
-      extraOffset_Y -= parseInt(offset[key], 10)
-    } else if (key === 'bottom') {
-      extraOffset_Y += parseInt(offset[key], 10)
-    } else if (key === 'left') {
-      extraOffset_X -= parseInt(offset[key], 10)
-    } else if (key === 'right') {
-      extraOffset_X += parseInt(offset[key], 10)
+  for (const key in offset) {
+    if (key === "top") {
+      extraOffset_Y -= parseInt(offset[key], 10);
+    } else if (key === "bottom") {
+      extraOffset_Y += parseInt(offset[key], 10);
+    } else if (key === "left") {
+      extraOffset_X -= parseInt(offset[key], 10);
+    } else if (key === "right") {
+      extraOffset_X += parseInt(offset[key], 10);
     }
   }
 
-  return {extraOffset_X, extraOffset_Y}
-}
+  return { extraOffset_X, extraOffset_Y };
+};
 
 // Get the offset of the parent elements
-const getParent = (currentTarget) => {
-  let currentParent = currentTarget
+const getParent = currentTarget => {
+  let currentParent = currentTarget;
   while (currentParent) {
-    if (window.getComputedStyle(currentParent).getPropertyValue('transform') !== 'none') break
-    currentParent = currentParent.parentElement
+    if (
+      window.getComputedStyle(currentParent).getPropertyValue("transform") !==
+      "none"
+    )
+      break;
+    currentParent = currentParent.parentElement;
   }
 
-  const parentTop = currentParent && currentParent.getBoundingClientRect().top || 0
-  const parentLeft = currentParent && currentParent.getBoundingClientRect().left || 0
+  const parentTop =
+    (currentParent && currentParent.getBoundingClientRect().top) || 0;
+  const parentLeft =
+    (currentParent && currentParent.getBoundingClientRect().left) || 0;
 
-  return {parentTop, parentLeft}
-}
+  return { parentTop, parentLeft };
+};
