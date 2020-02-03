@@ -72,7 +72,7 @@ className	|   data-class  |  String  |   | extra custom class, can use !importan
  border  |   data-border  |  Bool  |  true, false | Add one pixel white border
  textColor | data-text-color | String | e.g. red | Popup text color
  backgroundColor | data-background-color | String | e.g. yellow | Popup background color
- arrowColor | data-arrow-color | String | e.g. #fff | Popup arrow color - if not specified, will use the *backgroundColor* value
+ arrowColor | data-arrow-color | String | e.g. #fff | Popup arrow color - if not specified, will use the `backgroundColor` value
  getContent | null | Func or Array | (dataTip) => {}, [(dataTip) => {}, Interval] | Generate the tip content dynamically
  afterShow | null | Func | (evt) => {} | Function that will be called after tooltip show, with event that triggered show
  afterHide | null | Func | (evt) => {} | Function that will be called after tooltip hide, with event that triggered hide

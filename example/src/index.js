@@ -1,4 +1,3 @@
-import './index.css';
 import React from 'react'
 import ReactDOM from 'react-dom'
 import ReactTooltip from 'react-tooltip'

@@ -597,8 +597,6 @@ class ReactTooltip extends React.Component {
       Wrapper = ReactTooltip.defaultProps.wrapper
     }
 
-    console.log('LE TdEST')// TODO: DEL DEBUG
-
     const wrapperClassName = [tooltipClass, extraClass].filter(Boolean).join(' ')
 
     if (html) {

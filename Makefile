@@ -4,7 +4,7 @@ EXAMPLE_SRC  = example/src
 STANDALONE   = standalone
 SRC          = src
 DIST         = dist
-TEST         = test/*.test.js
+TEST         = test/*.spec.js
 MOCHA_OPTS   = --compilers js:babel-core/register --require test/setup.js -b --timeout 20000 --reporter spec
 
 lint:
@@ -30,7 +30,7 @@ devCSS:
 	@$(NODE_BIN)/node-sass -w $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
 
 deployExample:
-	@$(NODE_BIN)/browserify -t babelify $(EXAMPLE_SRC)/index.js -o $(EXAMPLE_DIST)/index.js -dv
+	@$(NODE_BIN)/browserify -t [ babelify --presets  [@babel/preset-env @babel/react] ] $(EXAMPLE_SRC)/index.js -o $(EXAMPLE_DIST)/index.js -dv
 	@$(NODE_BIN)/node-sass $(EXAMPLE_SRC)/index.scss $(EXAMPLE_DIST)/index.css
 	@$(NODE_BIN)/node-sass $(SRC)/index.scss $(EXAMPLE_DIST)/style.css
 
@@ -53,9 +53,9 @@ deploy: lint
 	@echo Deploy...
 	@rm -rf dist && mkdir dist
 	@rm -rf $(EXAMPLE_DIST) && mkdir -p $(EXAMPLE_DIST)
+	@make deployJS
 	@make deployExample
 	@make convertCSS
-	@make deployJS
 	@make genStand
 	@echo success!
 
