@@ -1,3 +1,6 @@
+/* eslint no-unused-vars: 0 */  // --> OFF
+/* eslint no-undef: 0 */  // --> OFF
+
 'use strict'
 
 import React from 'react'
@@ -593,6 +596,8 @@ class ReactTooltip extends React.Component {
     if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
       Wrapper = ReactTooltip.defaultProps.wrapper
     }
+
+    console.log('LE TdEST')// TODO: DEL DEBUG
 
     const wrapperClassName = [tooltipClass, extraClass].filter(Boolean).join(' ')
 
