@@ -40,6 +40,9 @@ class ReactTooltip extends React.Component {
     offset: PropTypes.object,
     multiline: PropTypes.bool,
     border: PropTypes.bool,
+    textColor: PropTypes.string,
+    backgroundColor: PropTypes.string,
+    arrowColor: PropTypes.string,
     insecure: PropTypes.bool,
     class: PropTypes.string,
     className: PropTypes.string,
@@ -518,6 +521,25 @@ class ReactTooltip extends React.Component {
   }
 
   /**
+  * Determine popup colors
+  */
+  setPopupColors () {
+    let colors
+
+    let textColor = this.props.textColor
+    let backgroundColor = this.props.backgroundColor
+    let arrowColor = this.props.arrowColor ? this.props.arrowColor : this.props.backgroundColor
+
+    if (textColor && backgroundColor) {
+      colors = {'textColor': textColor, 'backgroundColor': backgroundColor, 'arrowColor': arrowColor}
+    } else {
+      colors = getDefaultPopupColors(this.state.type)
+    }
+
+    return colors
+  }
+
+  /**
    * Set style tag in header
    * in this way we can insert default css
    */
@@ -547,7 +569,6 @@ class ReactTooltip extends React.Component {
   }
 
   render () {
-
     const {extraClass, html, ariaProps, disable} = this.state
     const placeholder = this.getTooltipContent()
     const isEmptyTip = this.isEmptyTip(placeholder)
@@ -565,12 +586,7 @@ class ReactTooltip extends React.Component {
       {'allow_click': this.props.clickable}
     )
 
-    let colors = getDefaultPopupColors(this.state.type) // TODO: accept custom values too
-
-    if (!colors) {
-      colors = {'textColor': this.props.color, 'borderColor': this.props.border, 'arrowColor': this.props.arrow} // TODO: check if works
-    }
-
+    const colors = this.setPopupColors()
     let tooltipStyle = getTooltipStyle(colors)
 
     let Wrapper = this.props.wrapper

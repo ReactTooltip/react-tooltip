@@ -5356,6 +5356,30 @@ var customListeners = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.getDefaultPopupColors = getDefaultPopupColors;
+/**
+ * Default pop-up style values (text color, background color).
+ */
+var defaultColors = {
+  'dark': { 'textColor': '#fff', 'backgroundColor': '#222', 'arrowColor': '#222' },
+  'success': { 'textColor': '#fff', 'backgroundColor': '#8DC572', 'arrowColor': '#8DC572' },
+  'warning': { 'textColor': '#fff', 'backgroundColor': '#F0AD4E', 'arrowColor': '#F0AD4E' },
+  'error': { 'textColor': '#fff', 'backgroundColor': '#BE6464', 'arrowColor': '#BE6464' },
+  'info': { 'textColor': '#fff', 'backgroundColor': '#337AB7', 'arrowColor': '#337AB7' },
+  'light': { 'textColor': '#222', 'backgroundColor': '#fff', 'arrowColor': '#fff' }
+};
+
+function getDefaultPopupColors(type) {
+  // TODO: gotta have a switch there looking at the classes originally provided by the plugin
+  return defaultColors[type];
+}
+
+},{}],62:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 exports.default = function (target) {
   target.prototype.getEffect = function (currentTarget) {
@@ -5364,7 +5388,7 @@ exports.default = function (target) {
   };
 };
 
-},{}],62:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5377,7 +5401,7 @@ exports.default = function (target) {
   };
 };
 
-},{}],63:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5457,11 +5481,11 @@ var dispatchGlobalEvent = function dispatchGlobalEvent(eventName, opts) {
     * Static methods for react-tooltip
     */
 
-},{"../constant":59}],64:[function(require,module,exports){
+},{"../constant":59}],65:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 exports.getTooltipStyle = getTooltipStyle;
 
@@ -5470,94 +5494,76 @@ var _aphroditeJss = require('aphrodite-jss');
 /**
  * Generates the tooltip style based on the element-specified "data-type" property.
  */
-function getTooltipStyle(textColor, backgroundColor, borderColor) {
+function getTooltipStyle(colors) {
+  var textColor = colors.textColor;
+  var backgroundColor = colors.backgroundColor;
+  var arrowColor = colors.arrowColor;
 
-    return _aphroditeJss.StyleSheet.create({
+  return _aphroditeJss.StyleSheet.create({
+    '__react_component_tooltip': {
+      'color': textColor,
+      'backgroundColor': backgroundColor,
 
-        '__react_component_tooltip': {
-            'color': textColor,
-            'backgroundColor': backgroundColor,
-            'border': '6px solid ' + borderColor,
+      '&.place-top': {
+        'margin-top': '-10px'
+      },
+      '&.place-top:after': {
+        'border-left': '8px solid transparent',
+        'border-right': '8px solid transparent',
+        'bottom': '-6px',
+        'left': '50%',
+        'margin-left': '-8px',
+        'border-top-color': arrowColor,
+        'border-top-style': 'solid',
+        'border-top-width': '6px'
+      },
 
-            // TODO: JUST TEST WORKING EXAMPLE - REMOVE WHEN DONE
-            // '&.place-top' : {
-            //  	'width' : '5000px !important'
-            //  },
-            //  '&.place-top' : {
-            //  	'width' : '6000px !important'
-            //  },
-            //  // TODO: JUST TEST
+      '&.place-bottom': {
+        'margin-top': '10px'
+      },
+      '&.place-bottom:after': {
+        'border-left': '8px solid transparent',
+        'border-right': '8px solid transparent',
+        'top': '-6px',
+        'left': '50%',
+        'margin-left': '-8px',
+        'border-bottom-color': arrowColor,
+        'border-bottom-style': 'solid',
+        'border-bottom-width': '6px'
+      },
 
+      '&.place-left': {
+        'margin-left': '-10px'
+      },
+      '&.place-left:after': {
+        'border-top': '5px solid transparent',
+        'border-bottom': '5px solid transparent',
+        'right': '-6px',
+        'top': '50%',
+        'margin-top': '-4px',
+        'border-left-color': arrowColor,
+        'border-left-style': 'solid',
+        'border-left-width': '6px'
+      },
 
-            '.place-top': {
-                '&:after': {
-                    'textAlign': 'right !important', // TODO: DEL DEBUG
-                    'borderTop': '6px solid violet !important', //'6px solid ' + backgroundColor, // TODO: REVERT TO SET COLOUR WHEN DONE DEV
-                    'fontWeight': 'bold' // TODO: DEL DEBUG
-                },
-                '&:before': {
-                    'textAlign': 'right !important', // TODO: DEL DEBUG
-                    'borderTop': '8px solid violet !important', //'8px solid ' + borderColor, // TODO: REVERT TO SET COLOUR WHEN DONE DEV
-                    'fontWeight': 'bold' // TODO: DEL DEBUG
-                }
-            },
-
-            '&.place-top': {
-                'marginTop': '-10px',
-                'backgroundColor': backgroundColor,
-                'border': '1px solid' + borderColor,
-
-                '&:before': {
-                    'borderLeft': '10px solid transparent',
-                    'borderRight': '10px solid transparent',
-                    'bottom': '-8px',
-                    'left': '50%',
-                    'marginLeft': '-10px'
-                },
-                '&:after': {
-                    'borderLeft': '8px solid transparent',
-                    'borderRight': '8px solid transparent',
-                    'bottom': '-6px',
-                    'left': '50%',
-                    'marginLeft': '-8px'
-                }
-            }
-            // '.place-bottom': {
-            //     'backgroundColor': backgroundColor,
-            //     'border': '1px solid' + borderColor,
-            //     ':after': {
-            //         'borderBottom': '6px solid ' + backgroundColor
-            //     },
-            //     ':before': {
-            //         'borderBottom': '8px solid ' + borderColor
-            //     }
-            // },
-            // '.place-left': {
-            //     'backgroundColor': backgroundColor,
-            //     'border': '1px solid' + borderColor,
-            //     ':after': {
-            //         'borderLeft': '6px solid ' + backgroundColor
-            //     },
-            //     ':before': {
-            //         'borderLeft': '8px solid ' + borderColor
-            //     }
-            // },
-            // '.place-right': {
-            //     'backgroundColor': backgroundColor,
-            //     'border': '1px solid' + borderColor,
-            //     ':after': {
-            //         'borderRight': '6px solid ' + backgroundColor
-            //     },
-            //     ':before': {
-            //         'borderRight': '8px solid ' + borderColor
-            //     }
-            // }
-        }
-
-    });
+      '&.place-right': {
+        'margin-left': '10px'
+      },
+      '&.place-right:after': {
+        'border-top': '5px solid transparent',
+        'border-bottom': '5px solid transparent',
+        'left': '-6px',
+        'top': '50%',
+        'margin-top': '-4px',
+        'border-right-color': arrowColor,
+        'border-right-style': 'solid',
+        'border-right-width': '6px'
+      }
+    }
+  });
 }
 
-},{"aphrodite-jss":1}],65:[function(require,module,exports){
+},{"aphrodite-jss":1}],66:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5611,7 +5617,7 @@ var getMutationObserverClass = function getMutationObserverClass() {
   return window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
 };
 
-},{}],66:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5661,7 +5667,7 @@ var _constant2 = _interopRequireDefault(_constant);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"../constant":59}],67:[function(require,module,exports){
+},{"../constant":59}],68:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -5737,6 +5743,8 @@ var _style2 = _interopRequireDefault(_style);
 var _aphroditeJss = require('aphrodite-jss');
 
 var _styler = require('./decorators/styler');
+
+var _defaultStyles = require('./decorators/defaultStyles');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6267,6 +6275,28 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     }
 
     /**
+    * Determine popup colors
+    */
+
+  }, {
+    key: 'setPopupColors',
+    value: function setPopupColors() {
+      var colors = void 0;
+
+      var textColor = this.props.textColor;
+      var backgroundColor = this.props.backgroundColor;
+      var arrowColor = this.props.arrowColor ? this.props.arrowColor : this.props.backgroundColor;
+
+      if (textColor && backgroundColor) {
+        colors = { 'textColor': textColor, 'backgroundColor': backgroundColor, 'arrowColor': arrowColor };
+      } else {
+        colors = (0, _defaultStyles.getDefaultPopupColors)(this.state.type);
+      }
+
+      return colors;
+    }
+
+    /**
      * Set style tag in header
      * in this way we can insert default css
      */
@@ -6313,9 +6343,11 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       var placeholder = this.getTooltipContent();
       var isEmptyTip = this.isEmptyTip(placeholder);
+
       var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show && !disable && !isEmptyTip }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, _defineProperty({}, 'type-' + this.state.type, this.state.type), { 'allow_hover': this.props.delayUpdate }, { 'allow_click': this.props.clickable });
 
-      var tooltipStyle = (0, _styler.getTooltipStyle)('white', 'black', 'red');
+      var colors = this.setPopupColors();
+      var tooltipStyle = (0, _styler.getTooltipStyle)(colors);
 
       var Wrapper = this.props.wrapper;
       if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
@@ -6374,6 +6406,9 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   offset: _propTypes2.default.object,
   multiline: _propTypes2.default.bool,
   border: _propTypes2.default.bool,
+  textColor: _propTypes2.default.string,
+  backgroundColor: _propTypes2.default.string,
+  arrowColor: _propTypes2.default.string,
   insecure: _propTypes2.default.bool,
   class: _propTypes2.default.string,
   className: _propTypes2.default.string,
@@ -6409,7 +6444,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 module.exports = ReactTooltip;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./decorators/customEvent":60,"./decorators/getEffect":61,"./decorators/isCapture":62,"./decorators/staticMethods":63,"./decorators/styler":64,"./decorators/trackRemoval":65,"./decorators/windowListener":66,"./style":68,"./utils/aria":69,"./utils/getPosition":70,"./utils/getTipContent":71,"./utils/nodeListToArray":72,"aphrodite-jss":1,"classnames":2,"prop-types":56}],68:[function(require,module,exports){
+},{"./decorators/customEvent":60,"./decorators/defaultStyles":61,"./decorators/getEffect":62,"./decorators/isCapture":63,"./decorators/staticMethods":64,"./decorators/styler":65,"./decorators/trackRemoval":66,"./decorators/windowListener":67,"./style":69,"./utils/aria":70,"./utils/getPosition":71,"./utils/getTipContent":72,"./utils/nodeListToArray":73,"aphrodite-jss":1,"classnames":2,"prop-types":56}],69:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6417,7 +6452,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = '.__react_component_tooltip{border-radius:3px;display:inline-block;font-size:13px;left:-999em;opacity:0;padding:8px 21px;position:fixed;pointer-events:none;transition:opacity 0.3s ease-out;top:-999em;visibility:hidden;z-index:999}.__react_component_tooltip.allow_hover,.__react_component_tooltip.allow_click{pointer-events:auto}.__react_component_tooltip:before,.__react_component_tooltip:after{content:"";width:0;height:0;position:absolute}.__react_component_tooltip.show{opacity:0.9;margin-top:0px;margin-left:0px;visibility:visible}.__react_component_tooltip.place-bottom{margin-top:10px}.__react_component_tooltip.place-bottom:before{border-left:10px solid transparent;border-right:10px solid transparent;top:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-bottom:after{border-left:8px solid transparent;border-right:8px solid transparent;top:-6px;left:50%;margin-left:-8px}.__react_component_tooltip.place-left{margin-left:-10px}.__react_component_tooltip.place-left:before{border-top:6px solid transparent;border-bottom:6px solid transparent;right:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-left:after{border-top:5px solid transparen;border-bottom:5px solid transparent;right:-6px;top:50%;margin-top:-4px}.__react_component_tooltip.place-right{margin-left:10px}.__react_component_tooltip.place-right:before{border-top:6px solid transparent;border-bottom:6px solid transparent;left:-8px;top:50%;margin-top:-5px}.__react_component_tooltip.place-right:after{border-top:5px solid transparent;border-bottom:5px solid transparent;left:-6px;top:50%;margin-top:-4px}.__react_component_tooltip .multi-line{display:block;padding:2px 0px;text-align:center}';
 
-},{}],69:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6443,7 +6478,7 @@ function parseAria(props) {
   return ariaObj;
 }
 
-},{}],70:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6718,7 +6753,7 @@ var getParent = function getParent(currentTarget) {
   return { parentTop: parentTop, parentLeft: parentLeft };
 };
 
-},{}],71:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -6754,7 +6789,7 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],72:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6771,5 +6806,5 @@ exports.default = function (nodeList) {
   });
 };
 
-},{}]},{},[67])(67)
+},{}]},{},[68])(68)
 });

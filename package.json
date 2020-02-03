@@ -25,9 +25,6 @@
       "standalone/",
       "src/style.js",
       "src/style.css",
-      "src/components",
-      "src/index.js",
-      "src/decorators/styler.js",
       "example/"
     ]
   },

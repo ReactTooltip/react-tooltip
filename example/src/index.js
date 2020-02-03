@@ -220,6 +220,39 @@ class Test extends React.Component {
               </div>
             </pre>
           </div>
+
+
+          <div className="section">
+            <h4 className='title'>Custom colors</h4>
+            <p className="sub-title"></p>
+            <div className="example-jsx">
+              <div className="side">
+                <a data-for='custom-color-no-arrow' data-tip='Lovely colors!'>ㅇㅅㅇ</a>
+                <ReactTooltip id='custom-color-no-arrow' className='custom-color-no-arrow' delayHide={1000} textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' effect='solid'/>
+              </div>
+              <div className="side">
+                <a data-for='custom-color' data-tip='That is one weird arrow!'>V(^-^)V</a>
+                <ReactTooltip id='custom-color' className='custom-color' place='right' textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' arrowColor='red'/>
+              </div>
+            </div>
+            <br />
+            <pre className='example-pre'>
+              <div>
+                <p>{"<a data-for='custom-color-no-arrow' data-tip='Lovely colors!'>ㅇㅅㅇ</a>\n" + 
+                    "<ReactTooltip id='custom-color-no-arrow' className='custom-color-no-arrow' delayHide={1000}\n" + 
+                    "textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' effect='solid'/>"}
+                 </p>
+              </div>
+              <div>
+                <p>{"<a data-for='custom-color' data-tip='That is one weird arrow!'>V(^-^)V</a>\n" + 
+                    "<ReactTooltip id='custom-color' className='custom-color' place='right'\n" + 
+                    "textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' arrowColor='red'/>"}
+                 </p>
+              </div>
+            </pre>
+          </div>
+
+
           <div className="section">
             <h4 className='title'>Update tip content over time</h4>
             <p className="sub-title"></p>
