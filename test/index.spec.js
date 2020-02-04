@@ -5,49 +5,39 @@ const jsdom = require('mocha-jsdom')
 import ReactTooltip from '../src/index.js'
 import { render, cleanup } from '@testing-library/react'
 import jss from 'jss'
+import * as Aphrodite from 'aphrodite-jss'
+import sinon from 'sinon'
 
-afterEach(cleanup)
+const spy = sinon.spy(Aphrodite.StyleSheet, 'create')
+
+afterEach(() => {
+    cleanup()
+    spy.reset()
+})
 
 describe('Tooltip', () => {
  	jsdom({url: 'http://localhost/'})
 
-	forEach([[{'textColor': 'green', 'backgroundColor': 'red', 'arrowColor': 'blue'}]
-		]).it('Popup color generation', (props) => {
+	forEach([
+            [{'textColor': 'green', 'backgroundColor': 'red', 'arrowColor': 'blue'}, {popupType: 'type-custom'}],
+            [{'textColor': 'green', 'backgroundColor': 'red'}, {popupType: 'type-custom'}],
+            [{'textColor': 'green', 'arrowColor': 'red'}, {popupType: 'type-dark'}], // all props must be set for custom theme
+            [{'backgroundColor': 'green', 'arrowColor': 'red'}, {popupType: 'type-dark'}],
+            [{'textColor': 'red'}, {popupType: 'type-dark'}],
+            [{'backgroundColor': 'red'}, {popupType: 'type-dark'}],
+            [{'arrowColor': 'red'}, {popupType: 'type-dark'}],
+		]).it('Popup color generation', (props, res) => {
 
+           render(<ReactTooltip id='colorSpec' {...props}/>)
+           const tooltip = document.getElementById('colorSpec')
+           const tooltipGeneratedClass = spy.returnValues[0]['__react_component_tooltip'].className
+           const tooltipGeneratedStyle = spy.returnValues[0]['__react_component_tooltip'].style
 
+           // TODO: text colour assert
+           // TODO: background colour assert
+           // TODO: arrow colour assert
 
-//console.log(wrapper.renderer._element)
-
-
-// console.log(jss)
-
-	const tooltip = render(<ReactTooltip id='colorSpec' {...props}/>)
-		const style = window.getComputedStyle(document.getElementById('colorSpec'))
-
-
-		// console.log(document.getElementById('colorSpec'))
-		// console.dir(style)
-
-
-		// // console.dir(document.getElementById('colorSpec').classList[0])
-
-
-
-
-    var cssText = "";
-
-
-    var classes = document.styleSheets[0].rules || document.styleSheets[0].cssRules;
-    for (var x = 0; x < classes.length; x++) {        
-        // if (classes[x].selectorText == className) {
-       		//console.dir(classes[x])
-       		       	//	console.dir(classes[x].selectorText)
-            cssText += classes[x].cssText || classes[x].style.cssText;
-        // }         
-    }
-    // console.log(cssText)
-
-
-		// //console.dir(window.getComputedStyle(tooltip))
+           expect(tooltip.className).to.
+           equal(tooltipGeneratedClass + ' __react_component_tooltip place-top ' + res.popupType)
 	})
 })

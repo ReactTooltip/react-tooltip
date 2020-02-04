@@ -49,8 +49,13 @@ deployJS:
 	@echo Generating deploy JS files...
 	@$(NODE_BIN)/babel $(SRC) --out-dir $(DIST)
 
+unitTest:
+	@echo Unit testing..
+	@$(NODE_BIN)/mocha --require @babel/register 'test/*.spec.js'	
+
 deploy: lint
 	@echo Deploy...
+	@make unitTest
 	@rm -rf dist && mkdir dist
 	@rm -rf $(EXAMPLE_DIST) && mkdir -p $(EXAMPLE_DIST)
 	@make deployJS

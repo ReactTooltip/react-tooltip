@@ -584,13 +584,13 @@ class ReactTooltip extends React.Component {
       {'place-bottom': this.state.place === 'bottom'},
       {'place-left': this.state.place === 'left'},
       {'place-right': this.state.place === 'right'},
-      {['type-' + this.state.type]: this.state.type},
+      {['type-' + (this.props.textColor && this.props.backgroundColor ? 'custom' : this.state.type)]: this.state.type},
       {'allow_hover': this.props.delayUpdate},
       {'allow_click': this.props.clickable}
     )
 
     const colors = this.setPopupColors()
-    let tooltipStyle = getTooltipStyle(colors)
+    const tooltipStyle = getTooltipStyle(colors)
 
     let Wrapper = this.props.wrapper
     if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
