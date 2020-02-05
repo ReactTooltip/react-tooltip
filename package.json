@@ -62,7 +62,6 @@
     "react-dom": ">=^16.0.0"
   },
   "dependencies": {
-    "classnames": "^2.2.6",
     "prop-types": "^15.6.0"
   },
   "devDependencies": {
@@ -72,7 +71,7 @@
     "@babel/plugin-proposal-decorators": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "@babel/preset-react": "^7.7.4",
-    "@svgr/rollup": "^4.3.3",    
+    "@svgr/rollup": "^4.3.3",
     "babel-eslint": "^4.1.1",
     "babel-plugin-syntax-decorators": "^6.13.0",
     "babelify": "^7.2.0",

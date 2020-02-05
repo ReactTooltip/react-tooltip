@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import classname from "classnames";
 
 /* Decorators */
 import staticMethods from "./decorators/staticMethods";
@@ -659,23 +658,13 @@ class ReactTooltip extends React.Component {
     const { extraClass, html, ariaProps, disable } = this.state;
     const placeholder = this.getTooltipContent();
     const isEmptyTip = this.isEmptyTip(placeholder);
-    const tooltipClass = classname(
-      "__react_component_tooltip",
-      { show: this.state.show && !disable && !isEmptyTip },
-      { border: this.state.border },
-      { "place-top": this.state.place === "top" },
-      { "place-bottom": this.state.place === "bottom" },
-      { "place-left": this.state.place === "left" },
-      { "place-right": this.state.place === "right" },
-      { "type-dark": this.state.type === "dark" },
-      { "type-success": this.state.type === "success" },
-      { "type-warning": this.state.type === "warning" },
-      { "type-error": this.state.type === "error" },
-      { "type-info": this.state.type === "info" },
-      { "type-light": this.state.type === "light" },
-      { allow_hover: this.props.delayUpdate },
-      { allow_click: this.props.clickable }
-    );
+    const tooltipClass ="__react_component_tooltip" +
+      (( this.state.show && !disable && !isEmptyTip)? " show": "")+
+      ( this.state.border?" border":"" )+
+      ` place-${this.state.place}`+ // top, bottom, left, right
+      ` type-${this.state.type}`+ // dark, success, warning, error, info, light
+      ( this.props.delayUpdate?" allow_hover":"" )+
+      ( this.props.clickable?" allow_click":"" )
 
     let Wrapper = this.props.wrapper;
     if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
