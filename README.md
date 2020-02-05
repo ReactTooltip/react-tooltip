@@ -70,8 +70,8 @@ className	|   data-class  |  String  |   | extra custom class, can use !importan
  delayUpdate	|   data-delay-update |  Number  |   | `<p data-tip="tooltip" data-delay-update='1000'></p>` or `<ReactTooltip delayUpdate={1000} />` Sets a delay in calling getContent if the tooltip is already shown and you mouse over another target  
  insecure | null | Bool | true, false | Whether to inject the style header into the page dynamically (violates CSP style-src but is a convenient default)
  border  |   data-border  |  Bool  |  true, false | Add one pixel white border
- textColor | data-text-color | String | e.g. red | Popup text color
- backgroundColor | data-background-color | String | e.g. yellow | Popup background color
+ textColor | data-text-color | String | e.g. red | Popup text color - required with the `backgroundColor` value
+ backgroundColor | data-background-color | String | e.g. yellow | Popup background color - required with the `textColor` value
  arrowColor | data-arrow-color | String | e.g. #fff | Popup arrow color - if not specified, will use the `backgroundColor` value
  getContent | null | Func or Array | (dataTip) => {}, [(dataTip) => {}, Interval] | Generate the tip content dynamically
  afterShow | null | Func | (evt) => {} | Function that will be called after tooltip show, with event that triggered show
