@@ -17,7 +17,8 @@ import { parseAria } from "./utils/aria";
 import nodeListToArray from "./utils/nodeListToArray";
 
 /* CSS */
-import cssStyle from "./style";
+// import cssStyle from "./style";
+import "./index.scss";
 
 @staticMethods
 @windowListener
@@ -132,7 +133,7 @@ class ReactTooltip extends React.Component {
   componentDidMount() {
     const { insecure, resizeHide } = this.props;
     if (insecure) {
-      this.setStyleHeader(); // Set the style to the <link>
+      // this.setStyleHeader(); // Set the style to the <link>
     }
 
     this.bindListener(); // Bind listener for tooltip
@@ -629,20 +630,20 @@ class ReactTooltip extends React.Component {
    * Set style tag in header
    * in this way we can insert default css
    */
-  setStyleHeader() {
+  /* setStyleHeader() {
     const head = document.getElementsByTagName("head")[0];
     if (!head.querySelector('style[id="react-tooltip"]')) {
       const tag = document.createElement("style");
       tag.id = "react-tooltip";
-      tag.innerHTML = cssStyle;
-      /* eslint-disable */
-      if (typeof __webpack_nonce__ !== 'undefined' && __webpack_nonce__) {
+      tag.innerHTML = cssStyle; */
+  /* eslint-disable */
+/*      if (typeof __webpack_nonce__ !== 'undefined' && __webpack_nonce__) {
         tag.setAttribute('nonce', __webpack_nonce__)
-      }
+      }*/
       /* eslint-enable */
-      head.insertBefore(tag, head.firstChild);
+  /*    head.insertBefore(tag, head.firstChild);
     }
-  }
+  } */
 
   /**
    * CLear all kinds of timeout of interval
@@ -658,13 +659,14 @@ class ReactTooltip extends React.Component {
     const { extraClass, html, ariaProps, disable } = this.state;
     const placeholder = this.getTooltipContent();
     const isEmptyTip = this.isEmptyTip(placeholder);
-    const tooltipClass ="__react_component_tooltip" +
-      (( this.state.show && !disable && !isEmptyTip)? " show": "")+
-      ( this.state.border?" border":"" )+
-      ` place-${this.state.place}`+ // top, bottom, left, right
-      ` type-${this.state.type}`+ // dark, success, warning, error, info, light
-      ( this.props.delayUpdate?" allow_hover":"" )+
-      ( this.props.clickable?" allow_click":"" )
+    const tooltipClass =
+      "__react_component_tooltip" +
+      (this.state.show && !disable && !isEmptyTip ? " show" : "") +
+      (this.state.border ? " border" : "") +
+      ` place-${this.state.place}` + // top, bottom, left, right
+      ` type-${this.state.type}` + // dark, success, warning, error, info, light
+      (this.props.delayUpdate ? " allow_hover" : "") +
+      (this.props.clickable ? " allow_click" : "");
 
     let Wrapper = this.props.wrapper;
     if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
@@ -701,5 +703,4 @@ class ReactTooltip extends React.Component {
   }
 }
 
-/* export default not fit for standalone, it will exports {default:...} */
 export default ReactTooltip;
