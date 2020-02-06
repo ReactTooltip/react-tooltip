@@ -11,6 +11,8 @@
 
 [aronhelser](https://github.com/aronhelser) Passive maintainer - accepting PRs and doing minor testing, but not fixing issues or doing active development.
 
+[Rogger794](https://github.com/Rogger794) Active maintainer - accepting PRs and doing minor testing, fixing issues or doing active development.
+
 [huumanoid](https://github.com/huumanoid) (inactive)
 
 We would gladly accept a new maintainer to help out!
@@ -19,6 +21,12 @@ We would gladly accept a new maintainer to help out!
 
 ```sh
 npm install react-tooltip
+```
+
+or
+
+```sh
+yarn react-tooltip
 ```
 
 ## Usage
@@ -31,12 +39,12 @@ import ReactTooltip from 'react-tooltip'
 ```
 
 2 . Add data-tip = "your placeholder" to your element
+
 ```jsx
 <p data-tip="hello world">Tooltip</p>
 ```
 
 3 . Include react-tooltip component
-
 
 ```js
 <ReactTooltip />
