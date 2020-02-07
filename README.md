@@ -7,6 +7,10 @@
 [download-image]: https://img.shields.io/npm/dm/react-tooltip.svg?style=flat-square
 [download-url]: https://npmjs.org/package/react-tooltip
 
+## Demo
+
+[![Edit ReactTooltip](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/heuristic-curran-bddeu?fontsize=14&hidenavigation=1&theme=dark)
+
 ## Maintainers
 
 [aronhelser](https://github.com/aronhelser) Passive maintainer - accepting PRs and doing minor testing, but not fixing issues or doing active development.
@@ -26,7 +30,7 @@ npm install react-tooltip
 or
 
 ```sh
-yarn react-tooltip
+yarn add react-tooltip
 ```
 
 ## Usage
@@ -93,9 +97,6 @@ className	|   data-class  |  String  |   | extra custom class, can use !importan
 ### Security Note
 
 The `html` option allows a tooltip to directly display raw HTML. This is a security risk if any of that content is supplied by the user. Any user-supplied content must be sanitized, using a package like [sanitize-html-react](https://www.npmjs.com/package/sanitize-html-react). We chose not to include sanitization after discovering it [increased our package size](https://github.com/wwayne/react-tooltip/issues/429) too much - we don't want to penalize people who don't use the `html` option.
-
-## Using react component as tooltip
-Check the example [React-tooltip Test](https://react-tooltip.netlify.com/)
 
 ##### Note:
 1. **data-tip** is necessary, because `<ReactTooltip />` finds the tooltip via this attribute
