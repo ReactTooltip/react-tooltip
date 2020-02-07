@@ -1,6 +1,3 @@
-/* eslint no-unused-vars: 0 */  // --> OFF
-/* eslint no-undef: 0 */  // --> OFF
-
 'use strict'
 
 import React from 'react'
@@ -24,8 +21,7 @@ import nodeListToArray from './utils/nodeListToArray'
 /* CSS */
 import cssStyle from './style'
 import { css } from 'aphrodite-jss'
-import { getTooltipStyle } from './decorators/styler'
-import { getDefaultPopupColors } from './decorators/defaultStyles'
+import { getTooltipStyle, getPopupColors } from './decorators/styler'
 
 @staticMethods
 @windowListener
@@ -45,6 +41,7 @@ class ReactTooltip extends React.Component {
     border: PropTypes.bool,
     textColor: PropTypes.string,
     backgroundColor: PropTypes.string,
+    borderColor: PropTypes.string,
     arrowColor: PropTypes.string,
     insecure: PropTypes.bool,
     class: PropTypes.string,
@@ -83,6 +80,7 @@ class ReactTooltip extends React.Component {
 
   constructor (props) {
     super(props)
+
     this.state = {
       place: props.place || 'top', // Direction of tooltip
       desiredPlace: props.place || 'top',
@@ -90,6 +88,7 @@ class ReactTooltip extends React.Component {
       effect: 'float', // float or fixed
       show: false,
       border: false,
+      customColors: {},
       offset: {},
       extraClass: '',
       html: false,
@@ -196,12 +195,14 @@ class ReactTooltip extends React.Component {
    */
   getTargetArray (id) {
     let targetArray
+
     if (!id) {
       targetArray = document.querySelectorAll('[data-tip]:not([data-for])')
     } else {
       const escaped = id.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
       targetArray = document.querySelectorAll(`[data-tip][data-for="${escaped}"]`)
     }
+
     // targetArray is a NodeList, convert it to a real array
     return nodeListToArray(targetArray)
   }
@@ -345,6 +346,12 @@ class ReactTooltip extends React.Component {
         desiredPlace: desiredPlace,
         place: place,
         type: target.getAttribute('data-type') || self.props.type || 'dark',
+        customColors: {
+          text: target.getAttribute('data-text-color') || self.props.textColor || null,
+          background: target.getAttribute('data-background-color') || self.props.backgroundColor || null,
+          border: target.getAttribute('data-border-color') || self.props.borderColor || null,
+          arrow: target.getAttribute('data-arrow-color') || self.props.arrowColor || null
+        },
         effect: effect,
         offset: offset,
         html: target.getAttribute('data-html') ? target.getAttribute('data-html') === 'true' : self.props.html || false,
@@ -356,7 +363,9 @@ class ReactTooltip extends React.Component {
         disable: target.getAttribute('data-tip-disable') ? target.getAttribute('data-tip-disable') === 'true' : self.props.disable || false,
         currentTarget: target
       }, () => {
-        if (scrollHide) self.addScrollListener(self.state.currentTarget)
+        if (scrollHide) {
+          self.addScrollListener(self.state.currentTarget)
+        }
         self.updateTooltip(e)
 
         if (getContent && Array.isArray(getContent)) {
@@ -408,7 +417,9 @@ class ReactTooltip extends React.Component {
           show: true
         }, () => {
           this.updatePosition()
-          if (isInvisible && afterShow) afterShow(e)
+          if (isInvisible && afterShow) {
+            afterShow(e)
+          }
         })
       }
     }
@@ -471,7 +482,9 @@ class ReactTooltip extends React.Component {
         show: false
       }, () => {
         this.removeScrollListener()
-        if (isVisible && afterHide) afterHide(e)
+        if (isVisible && afterHide) {
+          afterHide(e)
+        }
       })
     }
 
@@ -518,28 +531,10 @@ class ReactTooltip extends React.Component {
         this.updatePosition()
       })
     }
+
     // Set tooltip position
     node.style.left = result.position.left + 'px'
     node.style.top = result.position.top + 'px'
-  }
-
-  /**
-  * Determine popup colors
-  */
-  setPopupColors () {
-    let colors
-
-    let textColor = this.props.textColor
-    let backgroundColor = this.props.backgroundColor
-    let arrowColor = this.props.arrowColor ? this.props.arrowColor : this.props.backgroundColor
-
-    if (textColor && backgroundColor) {
-      colors = {'textColor': textColor, 'backgroundColor': backgroundColor, 'arrowColor': arrowColor}
-    } else {
-      colors = getDefaultPopupColors(this.state.type)
-    }
-
-    return colors
   }
 
   /**
@@ -571,6 +566,11 @@ class ReactTooltip extends React.Component {
     clearInterval(this.intervalUpdateContent)
   }
 
+  hasCustomColors () {
+    return Boolean((Object.keys(this.state.customColors).find(color => color !== 'border' && this.state.customColors[color]) ||
+      (this.state.border && this.state.customColors['border'])))
+  }
+
   render () {
     const {extraClass, html, ariaProps, disable} = this.state
     const placeholder = this.getTooltipContent()
@@ -584,13 +584,12 @@ class ReactTooltip extends React.Component {
       {'place-bottom': this.state.place === 'bottom'},
       {'place-left': this.state.place === 'left'},
       {'place-right': this.state.place === 'right'},
-      {['type-' + (this.props.textColor && this.props.backgroundColor ? 'custom' : this.state.type)]: this.state.type},
+      {['type-' + (this.hasCustomColors() ? 'custom' : this.state.type)]: this.state.type},
       {'allow_hover': this.props.delayUpdate},
       {'allow_click': this.props.clickable}
     )
 
-    const colors = this.setPopupColors()
-    const tooltipStyle = getTooltipStyle(colors)
+    const tooltipStyle = getTooltipStyle(getPopupColors(this.state.customColors, this.state.type, this.state.border))
 
     let Wrapper = this.props.wrapper
     if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {

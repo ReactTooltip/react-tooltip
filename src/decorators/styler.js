@@ -1,19 +1,26 @@
 import { StyleSheet } from 'aphrodite-jss'
+import { getDefaultPopupColors } from './defaultStyles'
+
 /**
  * Generates the tooltip style based on the element-specified "data-type" property.
  */
 export function getTooltipStyle (colors) {
-  const textColor = colors.textColor
-  const backgroundColor = colors.backgroundColor
-  const arrowColor = colors.arrowColor
+  const textColor = colors.text
+  const backgroundColor = colors.background
+  const borderColor = colors.border
+  const arrowColor = colors.arrow
 
   return StyleSheet.create({
     '__react_component_tooltip': {
       'color': textColor,
       'backgroundColor': backgroundColor,
+      'border': '1px solid ' + borderColor,
 
       '&.place-top': {
         'margin-top': '-10px'
+      },
+      '&.place-top:before': {
+        'border-top': '8px solid ' + borderColor
       },
       '&.place-top:after': {
         'border-left': '8px solid transparent',
@@ -29,6 +36,9 @@ export function getTooltipStyle (colors) {
       '&.place-bottom': {
         'margin-top': '10px'
       },
+      '&.place-bottom:before': {
+        'border-bottom': '8px solid ' + borderColor
+      },
       '&.place-bottom:after': {
         'border-left': '8px solid transparent',
         'border-right': '8px solid transparent',
@@ -42,6 +52,9 @@ export function getTooltipStyle (colors) {
 
       '&.place-left': {
         'margin-left': '-10px'
+      },
+      '&.place-left:before': {
+        'border-left': '8px solid ' + borderColor
       },
       '&.place-left:after': {
         'border-top': '5px solid transparent',
@@ -57,6 +70,9 @@ export function getTooltipStyle (colors) {
       '&.place-right': {
         'margin-left': '10px'
       },
+      '&.place-right:before': {
+        'border-right': '8px solid ' + borderColor
+      },
       '&.place-right:after': {
         'border-top': '5px solid transparent',
         'border-bottom': '5px solid transparent',
@@ -69,4 +85,40 @@ export function getTooltipStyle (colors) {
       }
     }
   })
+}
+
+/**
+* Get popup colors
+*/
+export function getPopupColors (customColors, type, hasBorder) {
+  let colors
+
+  const textColor = customColors.text
+  const backgroundColor = customColors.background
+  const borderColor = customColors.border
+  const arrowColor = customColors.arrow ? customColors.arrow : customColors.background
+
+  colors = getDefaultPopupColors(type)
+
+  if (textColor) {
+    colors.text = textColor
+  }
+
+  if (backgroundColor) {
+    colors.background = backgroundColor
+  }
+
+  if (hasBorder) {
+    if (borderColor) {
+      colors.border = borderColor
+    } else {
+      colors.border = 'white'
+    }
+  }
+
+  if (arrowColor) {
+    colors.arrow = arrowColor
+  }
+
+  return colors
 }

@@ -5,7 +5,6 @@ STANDALONE   = standalone
 SRC          = src
 DIST         = dist
 TEST         = test/*.spec.js
-MOCHA_OPTS   = --compilers js:babel-core/register --require test/setup.js -b --timeout 20000 --reporter spec
 
 lint:
 	@echo Linting...
@@ -51,11 +50,11 @@ deployJS:
 
 unitTest:
 	@echo Unit testing..
-	@$(NODE_BIN)/mocha --require @babel/register 'test/*.spec.js'	
+	@$(NODE_BIN)/mocha --require @babel/register $(TEST)	
 
 deploy: lint
 	@echo Deploy...
-	@make unitTest
+	@make unitTest 
 	@rm -rf dist && mkdir dist
 	@rm -rf $(EXAMPLE_DIST) && mkdir -p $(EXAMPLE_DIST)
 	@make deployJS
@@ -64,5 +63,5 @@ deploy: lint
 	@make genStand
 	@echo success!
 
-.PHONY: lint convertCSS genStand devJS devCSS devServer dev deployExample deployJS deployCSS deploy
+.PHONY: lint convertCSS genStand devJS devCSS devServer dev unitTest deployExample deployJS deployCSS deploy
 	

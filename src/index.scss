@@ -28,9 +28,18 @@
     margin-left: 0px ;
     visibility: visible ;
   }
+
   // Place
+  &.place-top {
+    &:before {
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      bottom: -8px;
+      left: 50%;
+      margin-left: -10px;
+    }
+  }
   &.place-bottom {
-    margin-top: 10px;
     &:before {
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;
@@ -38,16 +47,8 @@
       left: 50%;
       margin-left: -10px;
     }
-    &:after {
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      top: -6px;
-      left: 50%;
-      margin-left: -8px;
-    }
   }
   &.place-left {
-    margin-left: -10px;
     &:before {
       border-top: 6px solid transparent;
       border-bottom: 6px solid transparent;
@@ -55,16 +56,8 @@
       top: 50%;
       margin-top: -5px;
     }
-    &:after {
-      border-top: 5px solid transparen;
-      border-bottom: 5px solid transparent;
-      right: -6px;
-      top: 50%;
-      margin-top: -4px;
-    }
   }
   &.place-right {
-    margin-left: 10px;
     &:before {
       border-top: 6px solid transparent;
       border-bottom: 6px solid transparent;
@@ -72,17 +65,13 @@
       top: 50%;
       margin-top: -5px;
     }
-    &:after {
-      border-top: 5px solid transparent;
-      border-bottom: 5px solid transparent;
-      left: -6px;
-      top: 50%;
-      margin-top: -4px;
-    }
   }
+
+  // Wrapping
   .multi-line {
     display: block ;
     padding: 2px 0px ;
     text-align: center ;
   }
+
 }
