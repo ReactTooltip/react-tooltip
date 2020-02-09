@@ -20,7 +20,11 @@ script:
   - cd example
   - yarn
   - yarn build
+  - cd ..
 
+after_success:
+  - yarn semantic-release
+  
 deploy:
   provider: pages
   local_dir: example/build
@@ -28,10 +32,7 @@ deploy:
   token: $GH_TOKEN
   keep_history: true
   on:
-    branch: master
-  
-after_success:
-  - yarn semantic-release
+    branch: master  
   
 branches:
   except:
