@@ -19,10 +19,20 @@ script:
   - git config --global user.email "aron.helser@kitware.com"
   - export GIT_PUBLISH_URL=https://${GH_TOKEN}@github.com/wwayne/react-tooltip.git
   - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then yarn gh-pages -- --repo ${GIT_PUBLISH_URL}; fi
+  - cd example
+  - yarn build
 
+deploy:
+  provider: pages
+  skip_cleanup: true
+  token: $GH_TOKEN
+  keep_history: true
+  on:
+    branch: refactoring
+  
 after_success:
   - yarn semantic-release
-
+  
 branches:
   except:
     - "/^v\\d+\\.\\d+\\.\\d+$/"
