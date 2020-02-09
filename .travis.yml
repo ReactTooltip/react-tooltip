@@ -21,7 +21,7 @@ script:
   - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then yarn gh-pages -- --repo ${GIT_PUBLISH_URL}; fi
   - cd example
   - yarn
-  - yarn build
+  - yarn deploy
 
 deploy:
   provider: pages
