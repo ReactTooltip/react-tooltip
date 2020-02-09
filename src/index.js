@@ -192,17 +192,26 @@ class ReactTooltip extends React.Component {
    * Pick out corresponded target elements
    */
   getTargetArray(id) {
-    let targetArray;
+    let targetArray = [];
+    let selector;
     if (!id) {
-      targetArray = document.querySelectorAll("[data-tip]:not([data-for])");
+      selector = "[data-tip]:not([data-for])";
     } else {
       const escaped = id.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
-      targetArray = document.querySelectorAll(
-        `[data-tip][data-for="${escaped}"]`
-      );
+      selector = `[data-tip][data-for="${escaped}"]`;
     }
-    // targetArray is a NodeList, convert it to a real array
-    return nodeListToArray(targetArray);
+
+    // Scan document for shadow DOM elements
+    nodeListToArray(document.getElementsByTagName("*"))
+      .filter(element => element.shadowRoot)
+      .forEach(element => {
+        targetArray = targetArray.concat(
+          nodeListToArray(element.shadowRoot.querySelectorAll(selector))
+        );
+      });
+    return targetArray.concat(
+      nodeListToArray(document.querySelectorAll(selector))
+    );
   }
 
   /**
