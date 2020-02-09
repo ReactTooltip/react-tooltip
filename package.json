@@ -10,7 +10,6 @@
     "npm": ">=5"
   },
   "scripts": {
-    "test": "make lint",
     "pretest": "./node_modules/.bin/eslint . --fix",
     "clean": "rimraf dist",
     "build": "rollup -c",

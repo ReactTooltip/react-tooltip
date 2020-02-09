@@ -56,7 +56,7 @@ import ReactTooltip from 'react-tooltip'
 
 **Standalone**
 
-You can import `node_modules/react-tooltip/standalone/react-tooltip.min.js` into your page. Please make sure that you have already imported `react` and `react-dom` into your page.
+You can import `node_modules/react-tooltip/dist/index.js` into your page. Please make sure that you have already imported `react` and `react-dom` into your page.
 
 ## Options
 Notes:
