@@ -21,10 +21,11 @@ script:
   - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then yarn gh-pages -- --repo ${GIT_PUBLISH_URL}; fi
   - cd example
   - yarn
-  - yarn deploy
+#  - yarn deploy
 
 deploy:
   provider: pages
+  local_dir: example/build
   skip_cleanup: true
   token: $GH_TOKEN
   keep_history: true
