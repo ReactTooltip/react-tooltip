@@ -652,15 +652,16 @@ export default class App extends Component {
                 <p>{"<a data-for='soclose' data-tip='8'>8 (❂‿❂)</a>"}</p>
                 <p>
                   {"<ReactTooltip id='soclose'\n" +
-                    " getContent={(dataTip) => \n" +
+                    "  getContent={(dataTip) => \n" +
                     "  <div><h3>This little buddy is {dataTip}</h3><p>Put mouse here</p></div> }\n" +
-                    " effect='solid'\n" +
-                    " delayHide={500}\n" +
-                    " delayShow={500}\n" +
-                    " delayUpdate={500}\n" +
-                    " place={'right'}\n" +
-                    " border={true}\n" +
-                    " type={'light'}"}
+                    "  effect='solid'\n" +
+                    "  delayHide={500}\n" +
+                    "  delayShow={500}\n" +
+                    "  delayUpdate={500}\n" +
+                    "  place={'right'}\n" +
+                    "  border={true}\n" +
+                    "  type={'light'}\n" +
+                    "/>"}
                 </p>
               </div>
             </pre>
@@ -760,8 +761,11 @@ export default class App extends Component {
               <div>
                 <p>
                   {"<a data-tip data-for='overridePosition'>( •̀д•́) override</a>\n" +
-                    "<ReactTooltip id='overridePosition' overridePosition={ ({ left, top },\n" +
-                    "                                                        currentEvent, currentTarget, node) => {\n" +
+                    "<ReactTooltip\n" +
+                    "  id='overridePosition'\n" +
+                    "  overridePosition={ (\n" +
+                    "    { left, top },\n" +
+                    "    currentEvent, currentTarget, node) => {\n" +
                     "  const d = document.documentElement;\n" +
                     "  left = Math.min(d.clientWidth - node.clientWidth, left);\n" +
                     "  top = Math.min(d.clientHeight - node.clientHeight, top);\n" +
