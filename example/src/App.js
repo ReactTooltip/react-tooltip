@@ -126,7 +126,7 @@ export default class App extends Component {
                   className={effect === "float" ? "active" : ""}
                   onClick={this.changeEffect.bind(this, "float")}
                 >
-                  Float<span className="mark">(default)</span>
+                  Float<span className="mark">{'(default)'}</span>
                 </a>
                 <a
                   className={effect === "solid" ? "active" : ""}
@@ -172,7 +172,7 @@ export default class App extends Component {
                 style={{ transform: "translate3d(5px, 5px, 5px)" }}
               >
                 <a data-tip data-for="happyFace">
-                  d(`･∀･)b
+                {'d(`･∀･)b'}
                 </a>
                 <ReactTooltip id="happyFace" type="error">
                   <span>Show happy face</span>
@@ -209,12 +209,12 @@ export default class App extends Component {
             <div className="example-jsx">
               <div className="side">
                 <a data-tip data-for="global">
-                  σ`∀´)σ
+                {'σ`∀´)σ'}
                 </a>
               </div>
               <div className="side">
                 <a data-tip data-for="global">
-                  (〃∀〃)
+                {'(〃∀〃)'}
                 </a>
               </div>
               <ReactTooltip id="global" aria-haspopup="true" role="example">
@@ -263,7 +263,7 @@ export default class App extends Component {
                   data-tip="custom show"
                   data-event="click focus"
                 >
-                  ( •̀д•́)
+                  {'( •̀д•́)'}
                 </a>
                 <ReactTooltip id="custom-event" globalEventOff="click" />
               </div>
@@ -275,7 +275,7 @@ export default class App extends Component {
                   data-event="click"
                   data-event-off="dblclick"
                 >
-                  ( •̀д•́)
+                  {'( •̀д•́)'}
                 </a>
                 <ReactTooltip id="custom-off-event" />
               </div>
@@ -305,7 +305,7 @@ export default class App extends Component {
                   data-for="custom-class"
                   data-tip="hover on me will keep the tooltip"
                 >
-                  (･ω´･ )
+                  {'(･ω´･ )'}
                 </a>
                 <ReactTooltip
                   id="custom-class"
@@ -316,7 +316,7 @@ export default class App extends Component {
               </div>
               <div className="side">
                 <a data-for="custom-theme" data-tip="custom theme">
-                  (･ω´･ )
+                {'(･ω´･ )'}
                 </a>
                 <ReactTooltip id="custom-theme" className="customeTheme" />
               </div>
@@ -362,7 +362,7 @@ export default class App extends Component {
             <div className="example-jsx">
               <div className="side">
                 <a data-for="getContent" data-tip>
-                  =( •̀д•́)
+                {'=( •̀д•́)'}
                 </a>
                 <ReactTooltip
                   id="getContent"
@@ -371,7 +371,7 @@ export default class App extends Component {
               </div>
               <div className="side">
                 <a data-for="overTime" data-tip>
-                  =( •̀д•́)
+                {'=( •̀д•́)'}
                 </a>
                 <ReactTooltip
                   id="overTime"
@@ -411,12 +411,12 @@ export default class App extends Component {
             <div className="example-jsx">
               <div className="side">
                 <a data-for="enrich" data-tip="sooooo cute">
-                  (❂‿❂)
+                {'(❂‿❂)'}
                 </a>
               </div>
               <div className="side">
                 <a data-for="enrich" data-tip="really high">
-                  (❂‿❂)
+                {'(❂‿❂)'}
                 </a>
               </div>
               <ReactTooltip
@@ -588,42 +588,42 @@ export default class App extends Component {
             <div className="example-jsx">
               <div className="block">
                 <a data-for="soclose" data-tip="1">
-                  1 (❂‿❂)
+                {'1 (❂‿❂)'}
                 </a>
               </div>
               <div className="block">
                 <a data-for="soclose" data-tip="2">
-                  2 (❂‿❂)
+                {'2 (❂‿❂)'}
                 </a>
               </div>
               <div className="block">
                 <a data-for="soclose" data-tip="3">
-                  3 (❂‿❂)
+                {'3 (❂‿❂)'}
                 </a>
               </div>
               <div className="block">
                 <a data-for="soclose" data-tip="4">
-                  4 (❂‿❂)
+                {'4 (❂‿❂)'}
                 </a>
               </div>
               <div className="block">
                 <a data-for="soclose" data-tip="5">
-                  5 (❂‿❂)
+                {'5 (❂‿❂)'}
                 </a>
               </div>
               <div className="block">
                 <a data-for="soclose" data-tip="6">
-                  6 (❂‿❂)
+                {'6 (❂‿❂)'}
                 </a>
               </div>
               <div className="block">
                 <a data-for="soclose" data-tip="7">
-                  7 (❂‿❂)
+                {'7 (❂‿❂)'}
                 </a>
               </div>
               <div className="block">
                 <a data-for="soclose" data-tip="8">
-                  8 (❂‿❂)
+                {'8 (❂‿❂)'}
                 </a>
               </div>
 
@@ -666,14 +666,13 @@ export default class App extends Component {
             </pre>
 
             <p>
-              When <em>clickable</em> property is set to <em>true</em>", tooltip
-              can respond to mouse (or touch) events."
+              When <em>clickable</em> property is set to <em>true</em>{', tooltip can respond to mouse (or touch) events.'}
             </p>
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="block">
                 <a data-tip data-for="clickme" data-event="click">
-                  (❂‿❂)
+                {'(❂‿❂)'}
                 </a>
               </div>
 
@@ -715,7 +714,7 @@ export default class App extends Component {
             <div className="example-jsx">
               <div className="side" style={{ display: "flex", width: "100%" }}>
                 <a data-tip data-for="overridePosition">
-                  ( •̀д•́) override
+                {'( •̀д•́) override'}
                 </a>
                 <ReactTooltip
                   id="overridePosition"
@@ -744,7 +743,7 @@ export default class App extends Component {
                   <div>footer</div>
                 </ReactTooltip>
                 <a data-tip data-for="noOverridePosition">
-                  ( •̀д•́) noOverride
+                {'( •̀д•́) noOverride'}
                 </a>
                 <ReactTooltip id="noOverridePosition">
                   <div>header</div>
