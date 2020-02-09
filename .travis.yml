@@ -23,13 +23,13 @@ script:
   - yarn
   - yarn build
 
-#deploy:
-#  provider: pages
-#  skip_cleanup: true
-#  token: $GH_TOKEN
-#  keep_history: true
-#  on:
-#    branch: refactoring
+deploy:
+  provider: pages
+  skip_cleanup: true
+  token: $GH_TOKEN
+  keep_history: true
+  on:
+    branch: refactoring
   
 after_success:
   - yarn semantic-release
