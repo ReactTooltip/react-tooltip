@@ -1,0 +1,16 @@
+// system file
+*.log
+.DS_Store*
+.idea/
+
+// specific files
+node_modules/
+example/
+test/
+bin/
+CHANGELOG.md
+src/
+
+// setting files
+.babelrc
+.travis.yml

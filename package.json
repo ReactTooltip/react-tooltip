@@ -1,21 +1,129 @@
 {
-  "name": "react-tooltip-example",
-  "homepage": "https://github.com/wwayne/react-tooltip",
-  "version": "1.0.0",
-  "license": "MIT",
-  "dependencies": {
-    "gh-pages": "^2.1.1",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-scripts": "^1.1.4",
-    "react-tooltip": "link:.."
+  "name": "react-tooltip",
+  "version": "0.0.0-semantic-release",
+  "description": "react tooltip component",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "jsnext:main": "dist/index.es.js",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "predeploy": "yarn build",
-    "deploy": "gh-pages -d build"
-  }
+    "test": "make lint",
+    "pretest": "./node_modules/.bin/eslint . --fix",
+    "clean": "rimraf dist",
+    "build": "rollup -c",
+    "build:watch": "rollup -c -w",
+    "start": "npm-run-all clean build:watch",
+    "deploy": "make deploy",
+    "gh-pages": "gh-pages -d example",
+    "github-changes": "github-changes -o wwayne -r react-tooltip -a --only-pulls --use-commit-body",
+    "commit": "git cz",
+    "semantic-release": "semantic-release"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [
+      "dist/",
+      "standalone/",
+      "src/style.js",
+      "src/style.css",
+      "example/"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wwayne/react-tooltip"
+  },
+  "keywords": [
+    "react",
+    "react-component",
+    "tooltip",
+    "react-tooltip"
+  ],
+  "author": "wwayne",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wwayne/react-tooltip/issues"
+  },
+  "homepage": "https://github.com/wwayne/react-tooltip",
+  "browserify-shim": {
+    "react": "global:React",
+    "react-dom": "global:ReactDOM"
+  },
+  "peerDependencies": {
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-react": "^7.7.4",
+    "@svgr/rollup": "^4.3.3",
+    "babel-eslint": "^4.1.1",
+    "babel-plugin-syntax-decorators": "^6.13.0",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0",
+    "browserify-shim": "^3.8.12",
+    "chai": "^3.5.0",
+    "chai-enzyme": "^0.5.0",
+    "commitizen": "2.9.6",
+    "concurrently": "^2.1.0",
+    "cz-conventional-changelog": "2.1.0",
+    "enzyme": "^2.3.0",
+    "enzyme-adapter-react-16": "^1.0.1",
+    "eslint": "^6.7.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-config-standard-react": "^9.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-standard": "^4.0.1",
+    "gh-pages": "1.1.0",
+    "github-changes": "^1.1.2",
+    "http-server": "^0.11.1",
+    "jsdom": "^9.2.1",
+    "mocha": "^5.2.0",
+    "node-sass": "^4.13.0",
+    "npm-run-all": "^4.1.5",
+    "postcss-nested": "^4.2.1",
+    "postcss-simple-vars": "^5.0.2",
+    "prettier": "^1.19.1",
+    "react": "^16.4.1",
+    "react-addons-test-utils": "^15.1.0",
+    "react-dom": "^16.4.1",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.27.5",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-sass": "^1.2.2",
+    "rollup-plugin-url": "^3.0.1",
+    "semantic-release": "15.1.5",
+    "sinon": "^1.17.4",
+    "snazzy": "^2.0.1",
+    "standard": "^5.2.2",
+    "uglifyjs": "^2.4.10",
+    "watchify": "^3.11.0"
+  },
+  "files": [
+    "dist"
+  ]
 }
