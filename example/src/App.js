@@ -217,7 +217,7 @@ export default class App extends Component {
                 {'(〃∀〃)'}
                 </a>
               </div>
-              <ReactTooltip id="global" aria-haspopup="true" role="example">
+              <ReactTooltip id="global" aria-haspopup="true">
                 <p>This is a global react component tooltip</p>
                 <p>You can put every thing here</p>
                 <ul>
@@ -232,7 +232,7 @@ export default class App extends Component {
                 <p>
                   {"<a data-tip data-for='global'> σ`∀´)σ </a>\n" +
                     "<a data-tip data-for='global'> (〃∀〃) </a>\n" +
-                    "<ReactTooltip id='global' aria-haspopup='true' role='example'>\n" +
+                    "<ReactTooltip id='global' aria-haspopup='true' >\n" +
                     " <p>This is a global react component tooltip</p>\n" +
                     " <p>You can put every thing here</p>\n" +
                     " <ul>\n" +
@@ -430,7 +430,7 @@ export default class App extends Component {
                 <p>
                   {"<a data-for='enrich' data-tip='sooooo cute'>(❂‿❂)</a>\n" +
                     "<a data-for='enrich' data-tip='really high'>(❂‿❂)</a>\n" +
-                    "<ReactTooltip id='enrich' getContent={(dataTip) => `This little buddy is ${dataTip}`}/>"}
+                    `<ReactTooltip id='enrich' getContent={(dataTip) => \`This little buddy is \${dataTip}\`}/>`}
                 </p>
               </div>
             </pre>
@@ -738,7 +738,7 @@ export default class App extends Component {
                   <div>header</div>
                   <img
                     src="http://lorempixel.com/100/1500"
-                    alt="lorem image 100x1500"
+                    alt="lorem 100x1500"
                   />
                   <div>footer</div>
                 </ReactTooltip>
@@ -749,7 +749,7 @@ export default class App extends Component {
                   <div>header</div>
                   <img
                     src="http://lorempixel.com/100/1500"
-                    alt="lorem image 100x1500"
+                    alt="lorem 100x1500"
                   />
                   <div>footer</div>
                 </ReactTooltip>
