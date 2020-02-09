@@ -26,6 +26,7 @@
       "path": "node_modules/cz-conventional-changelog"
     }
   },
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "standard": {
     "parser": "babel-eslint",
     "ignore": [
