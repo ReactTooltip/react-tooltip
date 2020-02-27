@@ -8,6 +8,9 @@
 !.gitignore
 !.npmignore
 
+# NPM
+package-lock.json
+
 # files
 node_modules/
 example/dist/

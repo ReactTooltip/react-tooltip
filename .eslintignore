@@ -1,0 +1,10 @@
+# Dependency directories
+node_modules/
+
+# Styling
+*.scss
+
+# Dist
+build/
+dist/
+standalone/

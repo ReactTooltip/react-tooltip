@@ -3,7 +3,7 @@
   "version": "0.0.0-semantic-release",
   "description": "react tooltip component",
   "main": "dist/index.js",
-  "module": "dist/index.js",
+  "module": "dist/index.es.js",
   "jsnext:main": "dist/index.ex.js",
   "engines": {
     "node": ">=8",
@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test": "make lint",
-    "test:unit": "mocha --require @babel/register 'test/*.spec.js'",
+    "test:unit": "mocha --require @babel/register --require ignore-styles 'test/*.spec.js'",
     "clean": "rimraf dist",
     "build": "rollup -c",
     "build:watch": "rollup -c -w",
@@ -26,18 +26,6 @@
     "commitizen": {
       "path": "node_modules/cz-conventional-changelog"
     }
-  },
-  "standard": {
-    "parser": "babel-eslint",
-    "ignore": [
-      "dist/",
-      "standalone/",
-      "src/style.js",
-      "src/style.css",
-      "example/",
-      "test/",
-      "rollup.config.js"
-    ]
   },
   "repository": {
     "type": "git",
@@ -93,6 +81,13 @@
     "enzyme": "^2.3.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-config-standard-react": "^9.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-standard": "^4.0.1",
     "gh-pages": "1.1.0",
     "github-changes": "^1.1.2",
     "http-server": "^0.11.1",
@@ -116,12 +111,14 @@
     "rollup-plugin-postcss": "^2.0.3",
     "rollup-plugin-sass": "^1.2.2",
     "rollup-plugin-url": "^3.0.1",
+    "rollup-plugin-eslint": "7.0.0",
     "semantic-release": "15.1.5",
     "sinon": "^1.17.7",
     "snazzy": "^2.0.1",
     "standard": "^5.2.2",
     "uglifyjs": "^2.4.10",
-    "watchify": "^3.11.1"
+    "watchify": "^3.11.1",
+    "ignore-styles": "5.0.1"
   },
   "files": [
     "dist"
