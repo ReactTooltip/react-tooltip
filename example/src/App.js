@@ -303,7 +303,7 @@ export default class App extends Component {
             <div className="example-jsx">
               <div className="side">
                 <a data-for='custom-color-no-arrow' data-tip='Lovely colors!'>ㅇㅅㅇ</a>
-                <ReactTooltip id='custom-color-no-arrow' className='custom-color-no-arrow' delayHide={1000} textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' effect='solid'/>
+                <ReactTooltip id='custom-color-no-arrow' className='custom-color-no-arrow' textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' effect='solid'/>
               </div>
               <div className="side">
                 <a data-for='custom-color' data-tip='That is one weird arrow!'>V(^-^)V</a>
