@@ -108,7 +108,7 @@ export function getPopupColors(customColors, type, hasBorder) {
     if (borderColor) {
       colors.border = borderColor;
     } else {
-      colors.border = "white";
+      colors.border = "black";
     }
   }
 
