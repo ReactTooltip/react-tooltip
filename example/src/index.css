@@ -38,8 +38,8 @@ html, body {
   position: absolute;
   left: 50%;
   top: 50%;
-  margin-left: - 30px;
-  margin-top: - 15px;
+  margin-left: -30px;
+  margin-top: -15px;
   cursor: pointer;
   box-shadow: 3px 4px 3px rgba(0, 0, 0, 0.5);
   border: 1px solid #333;
