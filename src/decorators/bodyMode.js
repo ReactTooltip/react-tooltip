@@ -63,7 +63,7 @@ export default function(target) {
       event,
       eventOff,
       possibleCustomEvents,
-      possibleCustomEventsOff,
+      possibleCustomEventsOff
     } = this.state;
     const body = getBody();
 
@@ -85,7 +85,7 @@ export default function(target) {
     if (event == null) {
       listeners.mouseover = bodyListener.bind(this, this.showTooltip, {});
       listeners.mousemove = bodyListener.bind(this, this.updateTooltip, {
-        respectEffect: true,
+        respectEffect: true
       });
       listeners.mouseout = bodyListener.bind(this, this.hideTooltip, {});
     }
@@ -103,7 +103,7 @@ export default function(target) {
     }
     for (const event in customEventsOff) {
       listeners[event] = bodyListener.bind(this, this.hideTooltip, {
-        customEvent: true,
+        customEvent: true
       });
     }
     for (const event in listeners) {

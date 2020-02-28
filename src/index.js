@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars, dot-notation */
-
 import React from "react";
 import PropTypes from "prop-types";
-import { classname } from "classnames";
+import classname from "classnames";
 
 /* Decorators */
 import staticMethods from "./decorators/staticMethods";
@@ -77,7 +76,7 @@ class ReactTooltip extends React.Component {
     insecure: true,
     resizeHide: true,
     wrapper: "div",
-    clickable: false,
+    clickable: false
   };
 
   static supportedWrappers = ["div", "span"];
@@ -110,7 +109,7 @@ class ReactTooltip extends React.Component {
       possibleCustomEvents: props.possibleCustomEvents || "",
       possibleCustomEventsOff: props.possibleCustomEventsOff || "",
       originTooltip: null,
-      isMultiline: false,
+      isMultiline: false
     };
 
     this.bind([
@@ -123,7 +122,7 @@ class ReactTooltip extends React.Component {
       "globalShow",
       "globalHide",
       "onWindowResize",
-      "mouseOnToolTip",
+      "mouseOnToolTip"
     ]);
 
     this.mount = true;
@@ -160,7 +159,7 @@ class ReactTooltip extends React.Component {
     }
     return {
       ...prevState,
-      ariaProps: newAriaProps,
+      ariaProps: newAriaProps
     };
   }
 
@@ -415,7 +414,7 @@ class ReactTooltip extends React.Component {
               null,
             arrow: target.getAttribute("data-arrow-color") ||
               self.props.arrowColor ||
-              null,
+              null
           },
           effect: effect,
           offset: offset,
@@ -430,15 +429,19 @@ class ReactTooltip extends React.Component {
           delayUpdate: target.getAttribute("data-delay-update") ||
             self.props.delayUpdate ||
             0,
-          border: (target.getAttribute("data-border") ? target.getAttribute("data-border") === "true" : self.props.border) ||
+          border: (target.getAttribute("data-border") ?
+            target.getAttribute("data-border") === "true" :
+            self.props.border) ||
             false,
           extraClass: target.getAttribute("data-class") ||
             self.props.class ||
             self.props.className ||
             "",
-          disable: (target.getAttribute("data-tip-disable") ? target.getAttribute("data-tip-disable") === "true" : self.props.disable) ||
+          disable: (target.getAttribute("data-tip-disable") ?
+            target.getAttribute("data-tip-disable") === "true" :
+            self.props.disable) ||
             false,
-          currentTarget: target,
+          currentTarget: target
         }, () => {
           if (scrollHide) {
             self.addScrollListener(self.state.currentTarget);
@@ -452,7 +455,7 @@ class ReactTooltip extends React.Component {
                 const { getContent } = self.props;
                 const placeholder = getTipContent(originTooltip, "", getContent[0](), isMultiline);
                 const isEmptyTip = self.isEmptyTip(placeholder);
-                self.setState({isEmptyTip});
+                self.setState({ isEmptyTip });
                 self.updatePosition();
               }
             }, getContent[1]);
@@ -495,7 +498,7 @@ class ReactTooltip extends React.Component {
         this.setState({
             currentEvent: e,
             currentTarget: eventTarget,
-            show: true,
+            show: true
           }, () => {
             this.updatePosition();
             if (isInvisible && afterShow) {
@@ -605,7 +608,7 @@ class ReactTooltip extends React.Component {
       place,
       desiredPlace,
       effect,
-      offset,
+      offset
     } = this.state;
     const node = this.tooltipRef;
     const result = getPosition(

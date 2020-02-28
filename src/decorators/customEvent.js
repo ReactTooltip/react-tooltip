@@ -42,7 +42,7 @@ const customListeners = {
       // this is workaround for WeakMap, which is not supported in older browsers, such as IE
       Object.defineProperty(target, this.id, {
         configurable: true,
-        value: { [event]: listener },
+        value: { [event]: listener }
       });
     }
   },
@@ -51,7 +51,7 @@ const customListeners = {
     if (map !== undefined) {
       return map[event];
     }
-  },
+  }
 };
 
 export default function(target) {

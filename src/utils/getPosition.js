@@ -104,7 +104,7 @@ export default function(e, target, node, place, desiredPlace, effect, offset) {
   if (isNewState) {
     return {
       isNewState: true,
-      newState: { place: newPlace },
+      newState: { place: newPlace }
     };
   }
 
@@ -112,8 +112,8 @@ export default function(e, target, node, place, desiredPlace, effect, offset) {
     isNewState: false,
     position: {
       left: parseInt(getTipOffsetLeft(place) - parentLeft, 10),
-      top: parseInt(getTipOffsetTop(place) - parentTop, 10),
-    },
+      top: parseInt(getTipOffsetTop(place) - parentTop, 10)
+    }
   };
 }
 
@@ -121,7 +121,7 @@ const getDimensions = node => {
   const { height, width } = node.getBoundingClientRect();
   return {
     height: parseInt(height, 10),
-    width: parseInt(width, 10),
+    width: parseInt(width, 10)
   };
 };
 
@@ -137,12 +137,12 @@ const getCurrentOffset = (e, currentTarget, effect) => {
   if (effect === "float") {
     return {
       mouseX: e.clientX,
-      mouseY: e.clientY,
+      mouseY: e.clientY
     };
   }
   return {
     mouseX: targetLeft + targetWidth / 2,
-    mouseY: targetTop + targetHeight / 2,
+    mouseY: targetTop + targetHeight / 2
   };
 };
 
@@ -168,50 +168,50 @@ const getDefaultPosition = (
       l: -(tipWidth / 2),
       r: tipWidth / 2,
       t: -(tipHeight + disToMouse + triangleHeight),
-      b: -disToMouse,
+      b: -disToMouse
     };
     bottom = {
       l: -(tipWidth / 2),
       r: tipWidth / 2,
       t: disToMouse + cursorHeight,
-      b: tipHeight + disToMouse + triangleHeight + cursorHeight,
+      b: tipHeight + disToMouse + triangleHeight + cursorHeight
     };
     left = {
       l: -(tipWidth + disToMouse + triangleHeight),
       r: -disToMouse,
       t: -(tipHeight / 2),
-      b: tipHeight / 2,
+      b: tipHeight / 2
     };
     right = {
       l: disToMouse,
       r: tipWidth + disToMouse + triangleHeight,
       t: -(tipHeight / 2),
-      b: tipHeight / 2,
+      b: tipHeight / 2
     };
   } else if (effect === "solid") {
     top = {
       l: -(tipWidth / 2),
       r: tipWidth / 2,
       t: -(targetHeight / 2 + tipHeight + triangleHeight),
-      b: -(targetHeight / 2),
+      b: -(targetHeight / 2)
     };
     bottom = {
       l: -(tipWidth / 2),
       r: tipWidth / 2,
       t: targetHeight / 2,
-      b: targetHeight / 2 + tipHeight + triangleHeight,
+      b: targetHeight / 2 + tipHeight + triangleHeight
     };
     left = {
       l: -(tipWidth + targetWidth / 2 + triangleHeight),
       r: -(targetWidth / 2),
       t: -(tipHeight / 2),
-      b: tipHeight / 2,
+      b: tipHeight / 2
     };
     right = {
       l: targetWidth / 2,
       r: tipWidth + targetWidth / 2 + triangleHeight,
       t: -(tipHeight / 2),
-      b: tipHeight / 2,
+      b: tipHeight / 2
     };
   }
 
