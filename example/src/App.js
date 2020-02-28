@@ -306,8 +306,8 @@ export default class App extends Component {
                 <ReactTooltip id='custom-color-no-arrow' className='custom-color-no-arrow' textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' effect='solid'/>
               </div>
               <div className="side">
-                <a data-for='custom-color' data-tip='That is one weird arrow!'>V(^-^)V</a>
-                <ReactTooltip id='custom-color' className='custom-color' place='right' textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' arrowColor='red'/>
+                <a data-for='custom-color' data-tip='That is one weird arrow (and a border)!'>V(^-^)V</a>
+                <ReactTooltip id='custom-color' className='custom-color' place='right' border textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' borderColor='darkgreen' arrowColor='red'/>
               </div>
             </div>
             <br />
@@ -319,9 +319,9 @@ export default class App extends Component {
                  </p>
               </div>
               <div>
-                <p>{"<a data-for='custom-color' data-tip='That is one weird arrow!'>V(^-^)V</a>\n" + 
-                    "<ReactTooltip id='custom-color' className='custom-color' place='right'\n" + 
-                    "textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' arrowColor='red'/>"}
+                <p>{"<a data-for='custom-color' data-tip='That is one weird arrow (and a border)!'>V(^-^)V</a>\n" + 
+                    "<ReactTooltip id='custom-color' className='custom-color' place='right' border\n" + 
+                    "textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' borderColor='darkgreen' arrowColor='red'/>"}
                  </p>
               </div>
             </pre>
