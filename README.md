@@ -3,6 +3,7 @@
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 [![npm download][download-image]][download-url]
 [![Build Status](https://travis-ci.org/wwayne/react-tooltip.svg?branch=master)](https://travis-ci.org/wwayne/react-tooltip)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 [download-image]: https://img.shields.io/npm/dm/react-tooltip.svg?style=flat-square
 [download-url]: https://npmjs.org/package/react-tooltip
@@ -10,6 +11,8 @@
 ## Demo
 
 [![Edit ReactTooltip](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/heuristic-curran-bddeu?fontsize=14&hidenavigation=1&theme=dark)
+
+Or see it on [Github Page](https://wwayne.github.io/react-tooltip/).
 
 ## Maintainers
 
@@ -56,7 +59,7 @@ import ReactTooltip from 'react-tooltip'
 
 **Standalone**
 
-You can import `node_modules/react-tooltip/standalone/react-tooltip.min.js` into your page. Please make sure that you have already imported `react` and `react-dom` into your page.
+You can import `node_modules/react-tooltip/dist/index.js` into your page. Please make sure that you have already imported `react` and `react-dom` into your page.
 
 ## Options
 Notes:

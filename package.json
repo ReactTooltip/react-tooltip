@@ -10,10 +10,11 @@
     "npm": ">=5"
   },
   "scripts": {
+    "pretest": "./node_modules/.bin/eslint . --fix",
     "test": "make lint",
     "test:unit": "mocha --require @babel/register --require ignore-styles 'test/*.spec.js'",
     "clean": "rimraf dist",
-    "build": "npm run test:unit & rollup -c",
+    "build": "npm run test:unit && rollup -c",
     "build:watch": "rollup -c -w",
     "start": "npm-run-all clean build:watch",
     "gh-pages": "gh-pages -d example",
@@ -25,6 +26,19 @@
     "commitizen": {
       "path": "node_modules/cz-conventional-changelog"
     }
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [
+      "dist/",
+      "standalone/",
+      "src/style.js",
+      "src/style.css",
+      "example/"
+    ]
   },
   "repository": {
     "type": "git",
@@ -47,8 +61,8 @@
     "react-dom": "global:ReactDOM"
   },
   "peerDependencies": {
-    "react": ">=^16.0.0",
-    "react-dom": ">=^16.0.0"
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0"
   },
   "dependencies": {
     "aphrodite-jss": "^2.1.0",
