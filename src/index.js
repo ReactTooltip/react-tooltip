@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars, dot-notation */
 import React from "react";
 import PropTypes from "prop-types";
-import classname from "classnames";
 
 /* Decorators */
 import staticMethods from "./decorators/staticMethods";
@@ -674,18 +673,14 @@ class ReactTooltip extends React.Component {
     const placeholder = this.getTooltipContent();
     const isEmptyTip = this.isEmptyTip(placeholder);
 
-    const tooltipClass = classname(
-      "__react_component_tooltip",
-      { "show": this.state.show && !disable && !isEmptyTip },
-      { "border": this.state.border },
-      { "place-top": this.state.place === "top" },
-      { "place-bottom": this.state.place === "bottom" },
-      { "place-left": this.state.place === "left" },
-      { "place-right": this.state.place === "right" },
-      { ["type-" + (this.hasCustomColors() ? "custom" : this.state.type)]: this.state.type },
-      { "allow_hover": this.props.delayUpdate },
-      { "allow_click": this.props.clickable }
-    );
+    const tooltipClass =
+      "__react_component_tooltip" +
+      (this.state.show && !disable && !isEmptyTip ? " show" : "") +
+      (this.state.border ? " border" : "") +
+      ` place-${this.state.place}` + // top, bottom, left, right
+      ` type-${(this.hasCustomColors() ? "custom" : this.state.type)}` + // dark, success, warning, error, info, light, custom
+      (this.props.delayUpdate ? " allow_hover" : "") +
+      (this.props.clickable ? " allow_click" : "");
 
     const tooltipStyle = getTooltipStyle(getPopupColors(this.state.customColors, this.state.type, this.state.border));
 

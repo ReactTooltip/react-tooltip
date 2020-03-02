@@ -4,7 +4,7 @@
   "description": "react tooltip component",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
-  "jsnext:main": "dist/index.ex.js",
+  "jsnext:main": "dist/index.es.js",
   "engines": {
     "node": ">=8",
     "npm": ">=5"
@@ -29,16 +29,6 @@
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
-  },
-  "standard": {
-    "parser": "babel-eslint",
-    "ignore": [
-      "dist/",
-      "standalone/",
-      "src/style.js",
-      "src/style.css",
-      "example/"
-    ]
   },
   "repository": {
     "type": "git",
@@ -66,8 +56,6 @@
   },
   "dependencies": {
     "aphrodite-jss": "^2.1.0",
-    "classnames": "^2.2.6",
-    "lodash": "^4.17.15",
     "prop-types": "^15.7.2"
   },
   "devDependencies": {

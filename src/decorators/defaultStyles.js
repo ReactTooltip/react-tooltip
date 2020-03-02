@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 /**
  * Default pop-up style values (text color, background color).
  */
@@ -13,5 +11,5 @@ const defaultColors = {
 };
 
 export function getDefaultPopupColors (type) {
-  return _.cloneDeep(defaultColors[type]);
+	return defaultColors[type] ? { ...defaultColors[type] } : undefined;
 }
