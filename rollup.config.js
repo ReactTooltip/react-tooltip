@@ -6,6 +6,7 @@ import postcss from "rollup-plugin-postcss";
 import resolve from "rollup-plugin-node-resolve";
 import url from "rollup-plugin-url";
 import { eslint } from "rollup-plugin-eslint";
+import stylelint from "rollup-plugin-stylelint";
 import svgr from "@svgr/rollup";
 
 /* postCSS plugins */
@@ -30,7 +31,14 @@ export default {
   ],
   plugins: [
     external(),
-    eslint(), 
+    eslint({ 
+    	throwOnError: true,
+    	throwOnWarning: true
+    }), 
+    stylelint({ 
+    	throwOnError: true, 
+    	throwOnWarning: true 
+    }),
     postcss({
       plugins: [simplevars(), nested()],
       modules: true,

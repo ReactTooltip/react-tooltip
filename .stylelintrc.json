@@ -1,0 +1,6 @@
+{
+  "extends": "stylelint-config-standard",
+  "ignoreFiles": [
+  	"src/decorators/*.js"
+  ]
+}

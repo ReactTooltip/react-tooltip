@@ -19,10 +19,10 @@ export function getTooltipStyle(colors) {
       "&.place-top": {
         "margin-top": "-10px"
       },
-      "&.place-top:before": {
+      "&.place-top::before": {
         "border-top": "8px solid " + borderColor
       },
-      "&.place-top:after": {
+      "&.place-top::after": {
         "border-left": "8px solid transparent",
         "border-right": "8px solid transparent",
         "bottom": "-6px",
@@ -36,10 +36,10 @@ export function getTooltipStyle(colors) {
       "&.place-bottom": {
         "margin-top": "10px"
       },
-      "&.place-bottom:before": {
+      "&.place-bottom::before": {
         "border-bottom": "8px solid " + borderColor
       },
-      "&.place-bottom:after": {
+      "&.place-bottom::after": {
         "border-left": "8px solid transparent",
         "border-right": "8px solid transparent",
         "top": "-6px",
@@ -53,10 +53,10 @@ export function getTooltipStyle(colors) {
       "&.place-left": {
         "margin-left": "-10px"
       },
-      "&.place-left:before": {
+      "&.place-left::before": {
         "border-left": "8px solid " + borderColor
       },
-      "&.place-left:after": {
+      "&.place-left::after": {
         "border-top": "5px solid transparent",
         "border-bottom": "5px solid transparent",
         "right": "-6px",
@@ -70,10 +70,10 @@ export function getTooltipStyle(colors) {
       "&.place-right": {
         "margin-left": "10px"
       },
-      "&.place-right:before": {
+      "&.place-right::before": {
         "border-right": "8px solid " + borderColor
       },
-      "&.place-right:after": {
+      "&.place-right::after": {
         "border-top": "5px solid transparent",
         "border-bottom": "5px solid transparent",
         "left": "-6px",

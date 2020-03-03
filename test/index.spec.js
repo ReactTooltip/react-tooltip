@@ -74,7 +74,7 @@ describe('Tooltip', () => {
 
            const arrowPositions = ['top', 'bottom', 'left', 'right']
            arrowPositions.forEach((pos) => {
-              expect(tooltipGeneratedStyle['&.place-' + pos + ':after']['border-' + pos + '-color'], pos + ' arrow color').to.
+              expect(tooltipGeneratedStyle['&.place-' + pos + '::after']['border-' + pos + '-color'], pos + ' arrow color').to.
               equal(res.arrowColor ? res.arrowColor : res.backgroundColor)
            })
   })
