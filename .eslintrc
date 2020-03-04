@@ -18,7 +18,7 @@
     "sourceType": "module",
     "ecmaVersion": 2018,
     "ecmaFeatures": {
-      "impliedStrict": true,
+      "impliedStrict": true, 
       "jsx": true,
       "arrowFunctions": true,
       "blockBindings": true,
@@ -38,25 +38,15 @@
     }
   },
   "rules": {
-    // don't force es6 functions to include space before paren
     "space-before-function-paren": 0,
-
-    // allow specifying true explicitly for boolean props
     "react/jsx-boolean-value": 0,
-
     "max-len": [2, {"code":120,"ignoreComments":true}],
-
-    "prettier/prettier": [
-      "error",
-      {
-        "singleQuote": false,
-        "trailingComma": "es5",
-        "tabWidth": 2,
-        "printWidth": 80,
-        "semi": true,
-        "bracketSpacing": true,
-        "jsxBracketSameLine": false
-      }
-    ]
+    "newline-per-chained-call": 0, 
+    "no-trailing-spaces": ["error"],
+    "quotes": ["error", "double", { "avoidEscape": true }],
+    "comma-dangle": ["error", "never"],
+    "semi": ["error", "always"],
+    "object-curly-spacing": ["error", "always"],
+    "quote-props": ["error", "consistent"]
   }
 }

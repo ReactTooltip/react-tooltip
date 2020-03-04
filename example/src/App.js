@@ -296,6 +296,37 @@ export default class App extends Component {
               </div>
             </pre>
           </div>
+
+          <div className="section">
+            <h4 className='title'>Custom colors</h4>
+            <p className="sub-title"></p>
+            <div className="example-jsx">
+              <div className="side">
+                <a data-for='custom-color-no-arrow' data-tip='Lovely colors!'>ㅇㅅㅇ</a>
+                <ReactTooltip id='custom-color-no-arrow' className='custom-color-no-arrow' textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' effect='solid'/>
+              </div>
+              <div className="side">
+                <a data-for='custom-color' data-tip='That is one weird arrow (and a border)!'>V(^-^)V</a>
+                <ReactTooltip id='custom-color' className='custom-color' place='right' border textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' borderColor='darkgreen' arrowColor='red'/>
+              </div>
+            </div>
+            <br />
+            <pre className='example-pre'>
+              <div>
+                <p>{"<a data-for='custom-color-no-arrow' data-tip='Lovely colors!'>ㅇㅅㅇ</a>\n" + 
+                    "<ReactTooltip id='custom-color-no-arrow' className='custom-color-no-arrow' delayHide={1000}\n" + 
+                    "textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' effect='solid'/>"}
+                 </p>
+              </div>
+              <div>
+                <p>{"<a data-for='custom-color' data-tip='That is one weird arrow (and a border)!'>V(^-^)V</a>\n" + 
+                    "<ReactTooltip id='custom-color' className='custom-color' place='right' border\n" + 
+                    "textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' borderColor='darkgreen' arrowColor='red'/>"}
+                 </p>
+              </div>
+            </pre>
+          </div>
+
           <div className="section">
             <h4 className="title">Theme and delay</h4>
             <p className="sub-title" />
@@ -356,6 +387,7 @@ export default class App extends Component {
               </div>
             </pre>
           </div>
+
           <div className="section">
             <h4 className="title">Update tip content over time</h4>
             <p className="sub-title" />
@@ -405,6 +437,7 @@ export default class App extends Component {
               </div>
             </pre>
           </div>
+
           <div className="section">
             <h4 className="title">Compute or enrich tip content</h4>
             <p className="sub-title" />
@@ -435,6 +468,7 @@ export default class App extends Component {
               </div>
             </pre>
           </div>
+
           <div className="section">
             <h4 className="title">Test Scrolling</h4>
             <p className="sub-title" />
@@ -502,6 +536,7 @@ export default class App extends Component {
               </div>
             </pre>
           </div>
+
           <div className="section">
             <h4 className="title">Test SVG</h4>
             <p>Note: if you dynamically change elements in the SVG, add:</p>
@@ -577,6 +612,7 @@ export default class App extends Component {
               </div>
             </pre>
           </div>
+
           <div className="section">
             <h4 className="title">Demonstrate using mouse in tooltip. </h4>
             <p>
@@ -702,6 +738,7 @@ export default class App extends Component {
               </div>
             </pre>
           </div>
+
           <div className="section">
             <h4 className="title">Override position</h4>
             <p className="sub-title">
