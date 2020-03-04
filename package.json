@@ -27,9 +27,6 @@
       "path": "node_modules/cz-conventional-changelog"
     }
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/wwayne/react-tooltip"
