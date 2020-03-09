@@ -395,13 +395,13 @@ class ReactTooltip extends React.Component {
     // To prevent previously created timers from triggering
     this.clearTimer();
 
-    var target = e.currentTarget;
+    const target = e.currentTarget;
 
-    var reshowDelay = this.state.show ? (target.getAttribute("data-delay-update") || this.props.delayUpdate) : 0;
+    const reshowDelay = this.state.show ? (target.getAttribute("data-delay-update") || this.props.delayUpdate) : 0;
 
-    var self = this;
+    const self = this;
 
-    var updateState = function updateState() {
+    const updateState = function updateState() {
       self.setState({
           originTooltip: originTooltip,
           isMultiline: isMultiline,
