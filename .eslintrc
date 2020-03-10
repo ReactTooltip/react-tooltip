@@ -47,6 +47,7 @@
     "comma-dangle": ["error", "never"],
     "semi": ["error", "always"],
     "object-curly-spacing": ["error", "always"],
-    "quote-props": ["error", "consistent"]
+    "quote-props": ["error", "consistent"],
+    "no-var": ["error"]
   }
 }

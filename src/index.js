@@ -16,11 +16,11 @@ import getPosition from "./utils/getPosition";
 import getTipContent from "./utils/getTipContent";
 import { parseAria } from "./utils/aria";
 import nodeListToArray from "./utils/nodeListToArray";
+import { generateUUID } from "./utils/uuid";
 
 /* CSS */
 import "./index.scss";
-import { css } from "aphrodite-jss";
-import { getTooltipStyle, getPopupColors } from "./decorators/styler";
+import { generateTooltipStyle } from "./decorators/styler";
 
 @staticMethods
 @windowListener
@@ -32,6 +32,7 @@ import { getTooltipStyle, getPopupColors } from "./decorators/styler";
 class ReactTooltip extends React.Component {
   static get propTypes() {
     return {
+      uuid: PropTypes.string,
       children: PropTypes.any,
       place: PropTypes.string,
       type: PropTypes.string,
@@ -86,6 +87,7 @@ class ReactTooltip extends React.Component {
     super(props);
 
     this.state = {
+      uuid: generateUUID(),
       place: props.place || "top", // Direction of tooltip
       desiredPlace: props.place || "top",
       type: "dark", // Color theme of tooltip
@@ -393,13 +395,13 @@ class ReactTooltip extends React.Component {
     // To prevent previously created timers from triggering
     this.clearTimer();
 
-    var target = e.currentTarget;
+    const target = e.currentTarget;
 
-    var reshowDelay = this.state.show ? (target.getAttribute("data-delay-update") || this.props.delayUpdate) : 0;
+    const reshowDelay = this.state.show ? (target.getAttribute("data-delay-update") || this.props.delayUpdate) : 0;
 
-    var self = this;
+    const self = this;
 
-    var updateState = function updateState() {
+    const updateState = function updateState() {
       self.setState({
           originTooltip: originTooltip,
           isMultiline: isMultiline,
@@ -670,19 +672,19 @@ class ReactTooltip extends React.Component {
 
   render() {
     const { extraClass, html, ariaProps, disable } = this.state;
-    const placeholder = this.getTooltipContent();
-    const isEmptyTip = this.isEmptyTip(placeholder);
+    const content = this.getTooltipContent();
+    const isEmptyTip = this.isEmptyTip(content);
+    const style = generateTooltipStyle(this.state.uuid, this.state.customColors, this.state.type, this.state.border);
 
     const tooltipClass =
       "__react_component_tooltip" +
+      ` ${this.state.uuid}` +
       (this.state.show && !disable && !isEmptyTip ? " show" : "") +
       (this.state.border ? " border" : "") +
       ` place-${this.state.place}` + // top, bottom, left, right
       ` type-${(this.hasCustomColors() ? "custom" : this.state.type)}` + // dark, success, warning, error, info, light, custom
       (this.props.delayUpdate ? " allow_hover" : "") +
       (this.props.clickable ? " allow_click" : "");
-
-    const tooltipStyle = getTooltipStyle(getPopupColors(this.state.customColors, this.state.type, this.state.border));
 
     let Wrapper = this.props.wrapper;
 
@@ -693,26 +695,29 @@ class ReactTooltip extends React.Component {
     const wrapperClassName = [tooltipClass, extraClass].filter(Boolean).join(" ");
 
     if (html) {
+      const htmlContent = `${content}\n<style>${style}</style>`;
+
       return (
         <Wrapper
-          className={`${css(tooltipStyle["__react_component_tooltip"])} ${wrapperClassName}`}
+          className={`${wrapperClassName}`}
           id={this.props.id}
           ref={ref => (this.tooltipRef = ref)}
           {...ariaProps}
           data-id="tooltip"
-          dangerouslySetInnerHTML={{ __html: placeholder }}
+          dangerouslySetInnerHTML={{ __html: htmlContent }}
         />
       );
     } else {
       return (
         <Wrapper
-          className={`${css(tooltipStyle["__react_component_tooltip"])} ${wrapperClassName}`}
+          className={`${wrapperClassName}`}
           id={this.props.id}
           {...ariaProps}
           ref={ref => (this.tooltipRef = ref)}
           data-id="tooltip"
         >
-          {placeholder}
+          <style dangerouslySetInnerHTML={{ __html: style }} />
+          {content}
         </Wrapper>
       );
     }
