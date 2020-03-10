@@ -52,7 +52,6 @@
     "react-dom": ">=16.0.0"
   },
   "dependencies": {
-    "aphrodite-jss": "^2.1.0",
     "prop-types": "^15.7.2"
   },
   "devDependencies": {
@@ -118,7 +117,6 @@
     "rollup-plugin-eslint": "7.0.0",
     "rollup-plugin-stylelint": "1.0.0",
     "semantic-release": "15.1.5",
-    "sinon": "^1.17.7",
     "snazzy": "^2.0.1",
     "standard": "^5.2.2",
     "uglifyjs": "^2.4.10",
