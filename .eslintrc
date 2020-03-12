@@ -1,0 +1,53 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "standard",
+    "standard-react",
+    "prettier",
+    "eslint:recommended"
+  ],
+  "env": {
+    "es6": true,
+    "jest": true
+  },
+  "plugins": [
+    "react",
+    "prettier"
+  ],
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2018,
+    "ecmaFeatures": {
+      "impliedStrict": true, 
+      "jsx": true,
+      "arrowFunctions": true,
+      "blockBindings": true,
+      "defaultParams": true,
+      "destructuring": true,
+      "forOf": true,
+      "generators": true,
+      "objectLiteralComputedProperties": true,
+      "objectLiteralShorthandMethods": true,
+      "objectLiteralShorthandProperties": true,
+      "experimentalObjectRestSpread": true,
+      "restParams": true,
+      "spread": true,
+      "templateStrings": true,
+      "modules": true,
+      "classes": true
+    }
+  },
+  "rules": {
+    "space-before-function-paren": 0,
+    "react/jsx-boolean-value": 0,
+    "max-len": [2, {"code":120,"ignoreComments":true}],
+    "newline-per-chained-call": 0, 
+    "no-trailing-spaces": ["error"],
+    "quotes": ["error", "double", { "avoidEscape": true }],
+    "comma-dangle": ["error", "never"],
+    "semi": ["error", "always"],
+    "object-curly-spacing": ["error", "always"],
+    "quote-props": ["error", "consistent"],
+    "no-var": ["error"]
+  }
+}
