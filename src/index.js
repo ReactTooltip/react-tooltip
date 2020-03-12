@@ -381,7 +381,7 @@ class ReactTooltip extends React.Component {
     if (result.position && this.props.overridePosition) {
       result.position = this.props.overridePosition(
         result.position,
-        e.currentTarget,
+        e,
         this.tooltipRef,
         desiredPlace,
         desiredPlace,
