@@ -72,7 +72,7 @@ Check example:  [React-tooltip Test](https://react-tooltip.netlify.com/)
 Global|Specific	|Type	|Values  |  Description
 |:---|:---|:---|:---|:----
  place	|   data-place  |  String  |  top, right, bottom, left | placement
- type	|   data-type  |  String  |  success, warning, error, info, light | theme
+ type	|   data-type  |  String  |  dark, success, warning, error, info, light | theme
  effect|   data-effect  |  String  |  float, solid | behaviour of tooltip
  event |   data-event  |  String  |  e.g. click | custom event to trigger tooltip
  eventOff |   data-event-off  |  String  |  e.g. click | custom event to hide tooltip (only makes effect after setting event attribute)
