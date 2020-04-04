@@ -8,7 +8,7 @@ interface Offset {
 }
 
 type Place = 'top' | 'right' | 'bottom' | 'left';
-type Type = 'success' | 'warning' | 'error' | 'info' | 'light';
+type Type = 'dark' | 'success' | 'warning' | 'error' | 'info' | 'light';
 type Effect = 'float' | 'solid';
 
 type VoidFunc = (...args: any[]) => void;
