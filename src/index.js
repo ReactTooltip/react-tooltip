@@ -54,7 +54,6 @@ class ReactTooltip extends React.Component {
       delayShow: PropTypes.number,
       event: PropTypes.string,
       eventOff: PropTypes.string,
-      watchWindow: PropTypes.bool,
       isCapture: PropTypes.bool,
       globalEventOff: PropTypes.string,
       getContent: PropTypes.any,
