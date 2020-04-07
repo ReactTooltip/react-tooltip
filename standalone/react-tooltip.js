@@ -1936,7 +1936,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var desiredPlace = e.currentTarget.getAttribute('data-place') || this.props.place || 'top';
       var effect = switchToSolid && 'solid' || this.getEffect(e.currentTarget);
       var offset = e.currentTarget.getAttribute('data-offset') || this.props.offset || {};
-      var result = (0, _getPosition2.default)(e, e.currentTarget, this.tooltipRef, desiredPlace, desiredPlace, effect, offset);
+      var result = (0, _getPosition2.default)(e, e.currentTarget, this.tooltipRef, desiredPlace, desiredPlace, effect, offset, this.props.autoFitWindowBounds);
       var place = result.isNewState ? result.newState.place : desiredPlace;
 
       // To prevent previously created timers from triggering
@@ -2152,7 +2152,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           offset = _state3.offset;
 
       var node = this.tooltipRef;
-      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, desiredPlace, effect, offset);
+      var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, desiredPlace, effect, offset, this.props.autoFitWindowBounds);
 
       if (result.isNewState) {
         // Switch to reverse placement
@@ -2275,14 +2275,16 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   wrapper: _propTypes2.default.string,
   clickable: _propTypes2.default.bool,
   ignoreMouseOverOnHide: _propTypes2.default.bool,
-  forceHideOnEscape: _propTypes2.default.bool
+  forceHideOnEscape: _propTypes2.default.bool,
+  autoFitWindowBounds: _propTypes2.default.bool
 }, _class2.defaultProps = {
   insecure: true,
   resizeHide: true,
   wrapper: 'div',
   clickable: false,
   ignoreMouseOverOnHide: false,
-  forceHideOnEscape: false
+  forceHideOnEscape: false,
+  autoFitWindowBounds: true
 }, _class2.supportedWrappers = ['div', 'span'], _class2.displayName = 'ReactTooltip', _temp)) || _class) || _class) || _class) || _class) || _class) || _class;
 
 /* export default not fit for standalone, it will exports {default:...} */
@@ -2332,7 +2334,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-exports.default = function (e, target, node, place, desiredPlace, effect, offset) {
+exports.default = function (e, target, node, place, desiredPlace, effect, offset, autoFitWindowBounds) {
   if (!target || !node) {
     return {
       isNewState: false,
@@ -2434,12 +2436,15 @@ exports.default = function (e, target, node, place, desiredPlace, effect, offset
 
   var isNewState = false;
   var newPlace = void 0;
-  if (inside(desiredPlace) && desiredPlace !== place) {
-    isNewState = true;
-    newPlace = desiredPlace;
-  } else if (insideList.length > 0 && outside(desiredPlace) && outside(place)) {
-    isNewState = true;
-    newPlace = insideList[0];
+
+  if (autoFitWindowBounds) {
+    if (inside(desiredPlace) && desiredPlace !== place) {
+      isNewState = true;
+      newPlace = desiredPlace;
+    } else if (insideList.length > 0 && outside(desiredPlace) && outside(place)) {
+      isNewState = true;
+      newPlace = insideList[0];
+    }
   }
 
   if (isNewState) {

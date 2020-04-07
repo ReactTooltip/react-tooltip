@@ -59,7 +59,8 @@ class ReactTooltip extends React.Component {
     wrapper: PropTypes.string,
     clickable: PropTypes.bool,
     ignoreMouseOverOnHide: PropTypes.bool,
-    forceHideOnEscape: PropTypes.bool
+    forceHideOnEscape: PropTypes.bool,
+    autoFitWindowBounds: PropTypes.bool
   };
 
   static defaultProps = {
@@ -68,7 +69,8 @@ class ReactTooltip extends React.Component {
     wrapper: 'div',
     clickable: false,
     ignoreMouseOverOnHide: false,
-    forceHideOnEscape: false
+    forceHideOnEscape: false,
+    autoFitWindowBounds: true
   };
 
   static supportedWrappers = ['div', 'span'];
@@ -335,7 +337,7 @@ class ReactTooltip extends React.Component {
     let desiredPlace = e.currentTarget.getAttribute('data-place') || this.props.place || 'top'
     let effect = switchToSolid && 'solid' || this.getEffect(e.currentTarget)
     let offset = e.currentTarget.getAttribute('data-offset') || this.props.offset || {}
-    let result = getPosition(e, e.currentTarget, this.tooltipRef, desiredPlace, desiredPlace, effect, offset)
+    let result = getPosition(e, e.currentTarget, this.tooltipRef, desiredPlace, desiredPlace, effect, offset, this.props.autoFitWindowBounds)
     let place = result.isNewState ? result.newState.place : desiredPlace
 
     // To prevent previously created timers from triggering
@@ -510,7 +512,7 @@ class ReactTooltip extends React.Component {
   updatePosition () {
     const {currentEvent, currentTarget, place, desiredPlace, effect, offset} = this.state
     const node = this.tooltipRef
-    const result = getPosition(currentEvent, currentTarget, node, place, desiredPlace, effect, offset)
+    const result = getPosition(currentEvent, currentTarget, node, place, desiredPlace, effect, offset, this.props.autoFitWindowBounds)
 
     if (result.isNewState) {
       // Switch to reverse placement

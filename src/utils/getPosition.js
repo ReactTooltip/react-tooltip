@@ -14,7 +14,7 @@
  * - `newState` {Object}
  * - `position` {Object} {left: {Number}, top: {Number}}
  */
-export default function (e, target, node, place, desiredPlace, effect, offset) {
+export default function (e, target, node, place, desiredPlace, effect, offset, autoFitWindowBounds) {
   if (!target || !node) {
     return {
       isNewState: false,
@@ -96,12 +96,15 @@ export default function (e, target, node, place, desiredPlace, effect, offset) {
 
   let isNewState = false
   let newPlace
-  if (inside(desiredPlace) && desiredPlace !== place) {
-    isNewState = true
-    newPlace = desiredPlace
-  } else if (insideList.length > 0 && outside(desiredPlace) && outside(place)) {
-    isNewState = true
-    newPlace = insideList[0]
+
+  if (autoFitWindowBounds) {
+    if (inside(desiredPlace) && desiredPlace !== place) {
+      isNewState = true
+      newPlace = desiredPlace
+    } else if (insideList.length > 0 && outside(desiredPlace) && outside(place)) {
+      isNewState = true
+      newPlace = insideList[0]
+    }
   }
 
   if (isNewState) {
