@@ -236,7 +236,7 @@ class ReactTooltip extends React.Component {
         target.setAttribute("currentItem", "false");
       }
       this.unbindBasicListener(target);
-      if (this.isCustomEvent(target)) {
+      if (this.isCustomEvent(target) || this.isNoEvent(target)) {
         this.customUnbindListener(target);
       }
     });
@@ -245,6 +245,9 @@ class ReactTooltip extends React.Component {
       this.bindBodyListener(targetArray);
     } else {
       targetArray.forEach(target => {
+        if (this.isNoEvent(target)) {
+          return;
+        }
         const isCaptureMode = this.isCapture(target);
         const effect = this.getEffect(target);
         if (this.isCustomEvent(target)) {

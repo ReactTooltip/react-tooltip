@@ -60,6 +60,11 @@ export default function(target) {
     return event || !!ele.getAttribute("data-event");
   };
 
+  target.prototype.isNoEvent = function(ele) {
+    const { event } = this.state;
+    return ele.getAttribute("data-event") === "" || event === "";
+  };
+
   /* Bind listener for custom event */
   target.prototype.customBindListener = function(ele) {
     const { event, eventOff } = this.state;
