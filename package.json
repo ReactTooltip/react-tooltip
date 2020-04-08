@@ -3,6 +3,7 @@
   "version": "0.0.0-semantic-release",
   "description": "react tooltip component",
   "main": "dist/index.js",
+  "types": "react-tooltip.d.ts",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
   "engines": {
