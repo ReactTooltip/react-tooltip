@@ -33,3 +33,8 @@ We are using semantic-release instead of this:
 * `git tag -a 3.X.Y -m 3.X.Y` `git push --tags`
 * `npm publish`
 * add a version on the github release page, based on the tag
+
+
+## Typescript Type Definitions
+
+Ensure that any changes modifying the **props** or **staticmethods** are also reflected in the typescript type definitions file.
