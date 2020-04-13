@@ -51,5 +51,6 @@ export default {
     }),
     resolve(),
     commonjs()
-  ]
+  ],
+  external: ["prop-types", "uuid"]
 };
