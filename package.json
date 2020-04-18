@@ -20,7 +20,7 @@
     "start": "npm-run-all clean build:watch",
     "gh-pages": "gh-pages -d example",
     "github-changes": "github-changes -o wwayne -r react-tooltip -a --only-pulls --use-commit-body",
-    "commit": "git cz",
+    "cm": "git cz",
     "semantic-release": "semantic-release"
   },
   "config": {
@@ -43,7 +43,7 @@
   "bugs": {
     "url": "https://github.com/wwayne/react-tooltip/issues"
   },
-  "homepage": "https://github.com/wwayne/react-tooltip",
+  "homepage": "https://github.com/wwayne/react-tooltip#readme",
   "browserify-shim": {
     "react": "global:React",
     "react-dom": "global:ReactDOM"
@@ -56,6 +56,16 @@
     "prop-types": "^15.7.2",
     "uuid": "^7.0.3"
   },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git"
+    ],
+    "branch": "master"
+  },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
     "@babel/core": "^7.7.4",
@@ -66,6 +76,11 @@
     "@babel/register": "^7.8.3",
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
+    "@semantic-release/changelog": "^5.0.0",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/npm": "^7.0.5",
+    "@semantic-release/release-notes-generator": "^9.0.1",
     "@svgr/rollup": "^4.3.3",
     "@testing-library/react": "^9.4.0",
     "babel-eslint": "^4.1.1",
