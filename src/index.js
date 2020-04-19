@@ -54,7 +54,6 @@ class ReactTooltip extends React.Component {
       delayShow: PropTypes.number,
       event: PropTypes.string,
       eventOff: PropTypes.string,
-      watchWindow: PropTypes.bool,
       isCapture: PropTypes.bool,
       globalEventOff: PropTypes.string,
       getContent: PropTypes.any,
@@ -87,7 +86,7 @@ class ReactTooltip extends React.Component {
     super(props);
 
     this.state = {
-      uuid: generateUUID(),
+      uuid: props.uuid || generateUUID(),
       place: props.place || "top", // Direction of tooltip
       desiredPlace: props.place || "top",
       type: "dark", // Color theme of tooltip
@@ -382,6 +381,7 @@ class ReactTooltip extends React.Component {
       result.position = this.props.overridePosition(
         result.position,
         e,
+        e.currentTarget,
         this.tooltipRef,
         desiredPlace,
         desiredPlace,

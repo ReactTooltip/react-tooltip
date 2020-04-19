@@ -1,9 +1,9 @@
 import babel from "rollup-plugin-babel";
-import commonjs from "rollup-plugin-commonjs";
+import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
 import external from "rollup-plugin-peer-deps-external";
 import sass from "rollup-plugin-sass";
 import postcss from "rollup-plugin-postcss";
-import resolve from "rollup-plugin-node-resolve";
 import url from "rollup-plugin-url";
 import { eslint } from "rollup-plugin-eslint";
 import stylelint from "rollup-plugin-stylelint";
@@ -21,35 +21,36 @@ export default {
     {
       file: pkg.main,
       format: "cjs",
-      sourcemap: true,
+      sourcemap: true
     },
     {
       file: pkg.module,
       format: "es",
-      sourcemap: true,
-    },
+      sourcemap: true
+    }
   ],
   plugins: [
     external(),
-    eslint({ 
-    	throwOnError: true,
-    	throwOnWarning: true
-    }), 
-    stylelint({ 
-    	throwOnError: true, 
-    	throwOnWarning: true 
+    eslint({
+      throwOnError: true,
+      throwOnWarning: true
+    }),
+    stylelint({
+      throwOnError: true,
+      throwOnWarning: true
     }),
     postcss({
       plugins: [simplevars(), nested()],
-      modules: true,
+      modules: true
     }),
     sass({ insert: true }),
     url(),
     svgr(),
     babel({
-      exclude: "node_modules/**",
+      exclude: "node_modules/**"
     }),
     resolve(),
-    commonjs(),
+    commonjs()
   ],
-}
+  external: ["prop-types", "uuid"]
+};

@@ -93,7 +93,6 @@ export default function(e, target, node, place, desiredPlace, effect, offset) {
     newPlace = desiredPlace;
   } else if (
     insideList.length > 0 &&
-    shouldUpdatePlace &&
     outside(desiredPlace) &&
     outside(place)
   ) {

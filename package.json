@@ -3,6 +3,7 @@
   "version": "0.0.0-semantic-release",
   "description": "react tooltip component",
   "main": "dist/index.js",
+  "types": "dist/react-tooltip.d.ts",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
   "engines": {
@@ -11,21 +12,27 @@
   },
   "scripts": {
     "pretest": "./node_modules/.bin/eslint . --fix",
-    "test": "make lint",
     "test:unit": "mocha --require @babel/register --require ignore-styles 'test/*.spec.js'",
     "clean": "rimraf dist",
-    "build": "npm run test:unit && rollup -c",
+    "build:rollup": "rollup -c",
+    "build": "npm-run-all clean copy:types build:rollup",
     "build:watch": "rollup -c -w",
     "start": "npm-run-all clean build:watch",
     "gh-pages": "gh-pages -d example",
     "github-changes": "github-changes -o wwayne -r react-tooltip -a --only-pulls --use-commit-body",
-    "commit": "git cz",
+    "copy:types": "cpy './react-tooltip.d.ts' './dist' --parents --dot",
+    "cm": "git cz",
     "semantic-release": "semantic-release"
   },
   "config": {
     "commitizen": {
       "path": "node_modules/cz-conventional-changelog"
     }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "repository": {
     "type": "git",
@@ -42,7 +49,7 @@
   "bugs": {
     "url": "https://github.com/wwayne/react-tooltip/issues"
   },
-  "homepage": "https://github.com/wwayne/react-tooltip",
+  "homepage": "https://github.com/wwayne/react-tooltip#readme",
   "browserify-shim": {
     "react": "global:React",
     "react-dom": "global:ReactDOM"
@@ -52,7 +59,18 @@
     "react-dom": ">=16.0.0"
   },
   "dependencies": {
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.7.2",
+    "uuid": "^7.0.3"
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git"
+    ],
+    "branch": "master"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
@@ -62,6 +80,16 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/plugin-syntax-import-meta": "^7.8.3",
     "@babel/register": "^7.8.3",
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.2.0",
+    "@commitlint/travis-cli": "^8.3.5",
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "@semantic-release/changelog": "^5.0.0",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/npm": "^7.0.5",
+    "@semantic-release/release-notes-generator": "^9.0.1",
     "@svgr/rollup": "^4.3.3",
     "@testing-library/react": "^9.4.0",
     "babel-eslint": "^4.1.1",
@@ -74,26 +102,26 @@
     "chai-spies": "^1.0.0",
     "commitizen": "2.9.6",
     "concurrently": "^2.1.0",
+    "cpy-cli": "^3.1.0",
     "cz-conventional-changelog": "2.1.0",
     "enzyme": "^2.3.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.8.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-config-standard-react": "^9.2.0",
     "eslint-config-jss": "5.0.1",
     "eslint-config-prettier": "6.10.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-config-standard-react": "^9.2.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "3.1.2",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-standard": "^4.0.1",
-    "eslint-plugin-prettier": "3.1.2",
-    "stylelint": "13.2.0",
-    "stylelint-config-standard": "20.0.0",
-    "prettier": "1.19.1",
     "gh-pages": "1.1.0",
     "github-changes": "^1.1.2",
+    "husky": "^3.1.0",
     "http-server": "^0.11.1",
+    "ignore-styles": "5.0.1",
     "jsdom": "^9.2.1",
     "mocha": "^5.2.0",
     "mocha-each": "^2.0.1",
@@ -102,28 +130,34 @@
     "npm-run-all": "^4.1.5",
     "postcss-nested": "^4.2.1",
     "postcss-simple-vars": "^5.0.2",
+    "prettier": "1.19.1",
     "react": "^16.4.1",
     "react-addons-test-utils": "^15.1.0",
     "react-dom": "^16.4.1",
     "rimraf": "^3.0.0",
     "rollup": "^1.27.5",
     "rollup-plugin-babel": "^4.3.3",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-eslint": "7.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-postcss": "^2.0.3",
     "rollup-plugin-sass": "^1.2.2",
-    "rollup-plugin-url": "^3.0.1",
-    "rollup-plugin-eslint": "7.0.0",
     "rollup-plugin-stylelint": "1.0.0",
+    "rollup-plugin-url": "^3.0.1",
     "semantic-release": "15.1.5",
     "snazzy": "^2.0.1",
     "standard": "^5.2.2",
+    "stylelint": "13.2.0",
+    "stylelint-config-standard": "20.0.0",
     "uglifyjs": "^2.4.10",
-    "watchify": "^3.11.1",
-    "ignore-styles": "5.0.1"
+    "watchify": "^3.11.1"
   },
   "files": [
     "dist"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn test:unit",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
 }
