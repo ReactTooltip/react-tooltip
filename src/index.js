@@ -86,7 +86,7 @@ class ReactTooltip extends React.Component {
     super(props);
 
     this.state = {
-      uuid: generateUUID(),
+      uuid: props.uuid || generateUUID(),
       place: props.place || "top", // Direction of tooltip
       desiredPlace: props.place || "top",
       type: "dark", // Color theme of tooltip
