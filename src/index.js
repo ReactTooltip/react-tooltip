@@ -169,7 +169,7 @@ class ReactTooltip extends React.Component {
     this.clearTimer();
 
     this.unbindListener();
-    this.removeScrollListener();
+    this.removeScrollListener(this.state.currentTarget);
     this.unbindWindowEvents();
   }
 
@@ -573,7 +573,7 @@ class ReactTooltip extends React.Component {
       this.removeListenerForTooltipExit();
 
       this.setState({ show: false }, () => {
-        this.removeScrollListener();
+        this.removeScrollListener(this.state.currentTarget);
         if (isVisible && afterHide) {
           afterHide(e);
         }
@@ -604,8 +604,9 @@ class ReactTooltip extends React.Component {
     window.addEventListener("scroll", this.hideTooltipOnScroll, isCaptureMode);
   }
 
-  removeScrollListener() {
-    window.removeEventListener("scroll", this.hideTooltipOnScroll);
+  removeScrollListener(currentTarget) {
+    const isCaptureMode = this.isCapture(currentTarget);
+    window.removeEventListener("scroll", this.hideTooltipOnScroll, isCaptureMode);
   }
 
   // Calculation the position
