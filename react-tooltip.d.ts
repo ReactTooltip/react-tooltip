@@ -15,7 +15,7 @@ type VoidFunc = (...args: any[]) => void;
 type GetContentFunc = (toolTipStr: string) => React.ReactNode;
 type GetContent = GetContentFunc | [GetContentFunc, number];
 
-interface TooltipProps {
+export interface TooltipProps {
   children?: React.ReactNode;
   uuid?: string;
   // Placement of tooltip
