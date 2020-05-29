@@ -1,16 +1,16 @@
-import { getDefaultPopupColors } from "./defaultStyles";
+import { getDefaultPopupColors, DEFAULT_PADDING } from "./defaultStyles";
 
 /**
 * Generates the specific tooltip style for use on render.
 */
-export function generateTooltipStyle(uuid, customColors, type, hasBorder) {
-	return generateStyle(uuid, getPopupColors(customColors, type, hasBorder));
+export function generateTooltipStyle(uuid, customColors, type, hasBorder, padding) {
+	return generateStyle(uuid, getPopupColors(customColors, type, hasBorder), padding);
 }
 
 /**
  * Generates the tooltip style rules based on the element-specified "data-type" property.
  */
-function generateStyle(uuid, colors) {
+function generateStyle(uuid, colors, padding = DEFAULT_PADDING) {
   const textColor = colors.text;
   const backgroundColor = colors.background;
   const borderColor = colors.border;
@@ -21,6 +21,7 @@ function generateStyle(uuid, colors) {
 	    color: ${textColor};
 	    background: ${backgroundColor};
 	    border: 1px solid ${borderColor};
+      padding: ${padding};
   	}
 
   	.${uuid}.place-top {

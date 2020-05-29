@@ -38,6 +38,7 @@ class ReactTooltip extends React.Component {
       type: PropTypes.string,
       effect: PropTypes.string,
       offset: PropTypes.object,
+      padding: PropTypes.string,
       multiline: PropTypes.bool,
       border: PropTypes.bool,
       textColor: PropTypes.string,
@@ -95,6 +96,7 @@ class ReactTooltip extends React.Component {
       border: false,
       customColors: {},
       offset: {},
+      padding: props.padding,
       extraClass: "",
       html: false,
       delayHide: 0,
@@ -426,6 +428,7 @@ class ReactTooltip extends React.Component {
           },
           effect: effect,
           offset: offset,
+          padding: target.getAttribute("data-padding") || self.props.padding,
           html: (target.getAttribute("data-html") ? target.getAttribute("data-html") === "true" : self.props.html) ||
             false,
           delayShow: target.getAttribute("data-delay-show") ||
@@ -674,7 +677,13 @@ class ReactTooltip extends React.Component {
     const { extraClass, html, ariaProps, disable } = this.state;
     const content = this.getTooltipContent();
     const isEmptyTip = this.isEmptyTip(content);
-    const style = generateTooltipStyle(this.state.uuid, this.state.customColors, this.state.type, this.state.border);
+    const style = generateTooltipStyle(
+      this.state.uuid,
+      this.state.customColors,
+      this.state.type,
+      this.state.border,
+      this.state.padding
+    );
 
     const tooltipClass =
       "__react_component_tooltip" +
