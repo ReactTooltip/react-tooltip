@@ -487,6 +487,7 @@ export default class App extends Component {
                 <p>
                   {"<a data-for='enrich' data-tip='sooooo cute'>(❂‿❂)</a>\n" +
                     "<a data-for='enrich' data-tip='really high'>(❂‿❂)</a>\n" +
+                    /* eslint-disable no-template-curly-in-string */
                     "<ReactTooltip id='enrich' getContent={(dataTip) => `This little buddy is ${dataTip}`}/>"}
                 </p>
               </div>
