@@ -32,11 +32,6 @@
       "path": "node_modules/cz-conventional-changelog"
     }
   },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/wwayne/react-tooltip"
@@ -64,16 +59,6 @@
   "dependencies": {
     "prop-types": "^15.7.2",
     "uuid": "^7.0.3"
-  },
-  "release": {
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
-      "@semantic-release/npm",
-      "@semantic-release/git"
-    ],
-    "branch": "master"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
@@ -106,7 +91,7 @@
     "commitizen": "2.9.6",
     "concurrently": "^2.1.0",
     "cpy-cli": "^3.1.0",
-    "cz-conventional-changelog": "2.1.0",
+    "cz-conventional-changelog": "^3.1.0",
     "enzyme": "^2.3.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.8.0",
@@ -148,7 +133,7 @@
     "rollup-plugin-sass": "^1.2.2",
     "rollup-plugin-stylelint": "1.0.0",
     "rollup-plugin-url": "^3.0.1",
-    "semantic-release": "15.1.5",
+    "semantic-release": "^17.0.4",
     "snazzy": "^2.0.1",
     "standard": "^5.2.2",
     "stylelint": "13.2.0",
@@ -159,6 +144,21 @@
   "files": [
     "dist"
   ],
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git"
+    ],
+    "branch": "master"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "lint-staged": {
     "*.{js,ts}": "yarn eslint:fix"
   },

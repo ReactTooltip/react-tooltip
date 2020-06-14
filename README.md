@@ -13,7 +13,7 @@
 
 [![Edit ReactTooltip](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/heuristic-curran-bddeu?fontsize=14&hidenavigation=1&theme=dark)
 
-Or see it on [Github Page](https://wwayne.github.io/react-tooltip/).
+Or see it on [Github Page](https://wwayne.github.io/react-tooltip).
 
 ## Maintainers
 
@@ -44,7 +44,7 @@ yarn add react-tooltip
 1 . Require react-tooltip after installation
 
 ```js
-import ReactTooltip from "react-tooltip";
+import ReactTooltip from 'react-tooltip';
 ```
 
 2 . Add data-tip = "your placeholder" to your element
@@ -70,8 +70,6 @@ Notes:
 - The tooltip sets `type: dark` `place: top` `effect: float` as **default** attributes. You don't have to add these options if you don't want to change the defaults
 - The option you set on `<ReactTooltip />` component will be implemented on every tooltip in a same page: `<ReactTooltip effect="solid" />`
 - The option you set on a specific element, for example: `<a data-type="warning"></a>` will only affect this specific tooltip
-
-Check example: [React-tooltip Test](https://react-tooltip.netlify.com/)
 
 | Global           | Specific              | Type          | Values                                                                                                                                | Description                                                                                                                                                                                         |
 | :--------------- | :-------------------- | :------------ | :------------------------------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
