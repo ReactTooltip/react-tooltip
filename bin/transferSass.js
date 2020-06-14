@@ -1,19 +1,19 @@
-var sass = require("node-sass");
-var fs = require("fs");
-var path = require("path");
+const sass = require("node-sass");
+const fs = require("fs");
+const path = require("path");
 
 function transferSass() {
   sass.render(
     {
       file: path.resolve(__dirname, "../src/index.scss"),
-      outputStyle: "compressed",
+      outputStyle: "compressed"
     },
     function(err, result) {
       if (err) {
         console.log(err);
         return;
       }
-      var cssSource = result.css.toString();
+      const cssSource = result.css.toString();
       fs.writeFile(
         path.resolve(__dirname, "../src/style.js"),
         "export default '" + cssSource.replace(/\n/g, "") + "'",

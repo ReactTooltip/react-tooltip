@@ -7,11 +7,14 @@
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
   "engines": {
-    "node": ">=8",
-    "npm": ">=5"
+    "node": ">=10.18",
+    "npm": ">=6.13"
   },
   "scripts": {
-    "pretest": "./node_modules/.bin/eslint . --fix",
+    "pretest": "npm-run-all pretty:quick lint:staged",
+    "eslint:fix": "./node_modules/.bin/eslint . --ignore-path ./.eslintignore --fix",
+    "pretty:quick": "./node_modules/.bin/pretty-quick --staged",
+    "lint:staged": "./node_modules/.bin/lint-staged",
     "test:unit": "mocha --require @babel/register --require ignore-styles 'test/*.spec.js'",
     "clean": "rimraf dist",
     "build:rollup": "rollup -c",
@@ -123,6 +126,7 @@
     "http-server": "^0.11.1",
     "ignore-styles": "5.0.1",
     "jsdom": "^9.2.1",
+    "lint-staged": "^10.2.7",
     "mocha": "^5.2.0",
     "mocha-each": "^2.0.1",
     "mocha-jsdom": "^2.0.0",
@@ -131,6 +135,7 @@
     "postcss-nested": "^4.2.1",
     "postcss-simple-vars": "^5.0.2",
     "prettier": "1.19.1",
+    "pretty-quick": "^2.0.1",
     "react": "^16.4.1",
     "react-addons-test-utils": "^15.1.0",
     "react-dom": "^16.4.1",
@@ -154,9 +159,11 @@
   "files": [
     "dist"
   ],
+  "lint-staged": {
+    "*.{js,ts}": "yarn eslint:fix"
+  },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn test:unit",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   }

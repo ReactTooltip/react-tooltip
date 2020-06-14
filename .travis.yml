@@ -21,6 +21,7 @@ script:
   - yarn
   - yarn build
   - cd ..
+  - commitlint-travis
 
 after_success:
   - yarn semantic-release
