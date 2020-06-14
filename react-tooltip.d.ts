@@ -109,7 +109,7 @@ export interface TooltipProps {
 // ReactTooltip component is the default export
 export default class ReactTooltip extends React.Component<TooltipProps> {
   // static methods
-  static show: (target: string) => {}; 
-  static hide: (target?: string) => {}; 
+  static show: (target: Element) => {}; 
+  static hide: (target?: Element) => {}; 
   static rebuild: () => {}; 
 }
