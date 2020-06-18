@@ -19,20 +19,20 @@ const bodyListener = function(callback, options, e) {
   const { respectEffect = false, customEvent = false } = options;
   const { id } = this.props;
 
-  let tip = null
-  let forId
-  let target = e.target
-  let lastTarget
+  let tip = null;
+  let forId;
+  let target = e.target;
+  let lastTarget;
   // walk up parent chain until tip is found
   // there is no match if parent visible area is matched by mouse position, so some corner cases might not work as expected
   while (tip === null && target !== null) {
-    lastTarget = target
-    tip = target.getAttribute('data-tip') || null
-    forId = target.getAttribute('data-for') || null
-    target = target.parentElement
+    lastTarget = target;
+    tip = target.getAttribute('data-tip') || null;
+    forId = target.getAttribute('data-for') || null;
+    target = target.parentElement;
   }
 
-  target = lastTarget || e.target
+  target = lastTarget || e.target;
 
   if (this.isCustomEvent(target) && !customEvent) {
     return;
