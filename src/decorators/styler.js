@@ -21,7 +21,7 @@ function generateStyle(uuid, colors, padding = DEFAULT_PADDING) {
 	    color: ${textColor};
 	    background: ${backgroundColor};
 	    border: 1px solid ${borderColor};
-      padding: ${padding};
+	    padding: ${padding};
   	}
 
   	.${uuid}.place-top {
