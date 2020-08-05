@@ -25,7 +25,8 @@
     "github-changes": "github-changes -o wwayne -r react-tooltip -a --only-pulls --use-commit-body",
     "copy:types": "cpy './react-tooltip.d.ts' './dist' --parents --dot",
     "cm": "git cz",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "prepare": "npm run build"
   },
   "config": {
     "commitizen": {
