@@ -1,3 +1,10 @@
+## [4.2.8](https://github.com/wwayne/react-tooltip/compare/v4.2.7...v4.2.8) (2020-08-06)
+
+
+### Bug Fixes
+
+* **showtooltip:** check if tooltipRef is undefined ([#623](https://github.com/wwayne/react-tooltip/issues/623)) ([f63eab2](https://github.com/wwayne/react-tooltip/commit/f63eab2))
+
 ## Change Log
 
 ### v3.9.0 (2018/11/07 00:43 +00:00)
