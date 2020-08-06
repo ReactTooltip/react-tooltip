@@ -1,12 +1,12 @@
 /**
  * Util method to get effect
  */
-import { checkStatus } from "./customEvent";
+import { checkStatus } from './customEvent';
 
 const makeProxy = e => {
   const proxy = {};
   for (const key in e) {
-    if (typeof e[key] === "function") {
+    if (typeof e[key] === 'function') {
       proxy[key] = e[key].bind(e);
     } else {
       proxy[key] = e[key];
@@ -19,8 +19,8 @@ const bodyListener = function(callback, options, e) {
   const { respectEffect = false, customEvent = false } = options;
   const { id } = this.props;
 
-  const tip = e.target.getAttribute("data-tip") || null;
-  const forId = e.target.getAttribute("data-for") || null;
+  const tip = e.target.getAttribute('data-tip') || null;
+  const forId = e.target.getAttribute('data-for') || null;
 
   const target = e.target;
   if (this.isCustomEvent(target) && !customEvent) {
@@ -32,7 +32,7 @@ const bodyListener = function(callback, options, e) {
 
   if (
     tip != null &&
-    (!respectEffect || this.getEffect(target) === "float") &&
+    (!respectEffect || this.getEffect(target) === 'float') &&
     isTargetBelongsToTooltip
   ) {
     const proxy = makeProxy(e);
@@ -45,13 +45,13 @@ const findCustomEvents = (targetArray, dataAttribute) => {
   const events = {};
   targetArray.forEach(target => {
     const event = target.getAttribute(dataAttribute);
-    if (event) event.split(" ").forEach(event => (events[event] = true));
+    if (event) event.split(' ').forEach(event => (events[event] = true));
   });
 
   return events;
 };
 
-const getBody = () => document.getElementsByTagName("body")[0];
+const getBody = () => document.getElementsByTagName('body')[0];
 
 export default function(target) {
   target.prototype.isBodyMode = function() {
@@ -67,16 +67,16 @@ export default function(target) {
     } = this.state;
     const body = getBody();
 
-    const customEvents = findCustomEvents(targetArray, "data-event");
-    const customEventsOff = findCustomEvents(targetArray, "data-event-off");
+    const customEvents = findCustomEvents(targetArray, 'data-event');
+    const customEventsOff = findCustomEvents(targetArray, 'data-event-off');
 
     if (event != null) customEvents[event] = true;
     if (eventOff != null) customEventsOff[eventOff] = true;
     possibleCustomEvents
-      .split(" ")
+      .split(' ')
       .forEach(event => (customEvents[event] = true));
     possibleCustomEventsOff
-      .split(" ")
+      .split(' ')
       .forEach(event => (customEventsOff[event] = true));
 
     this.unbindBodyListener(body);
@@ -95,7 +95,7 @@ export default function(target) {
         this,
         e => {
           const targetEventOff =
-            e.currentTarget.getAttribute("data-event-off") || eventOff;
+            e.currentTarget.getAttribute('data-event-off') || eventOff;
           checkStatus.call(this, targetEventOff, e);
         },
         { customEvent: true }

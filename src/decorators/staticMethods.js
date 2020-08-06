@@ -1,7 +1,7 @@
 /**
  * Static methods for react-tooltip
  */
-import CONSTANT from "../constant";
+import CONSTANT from '../constant';
 
 const dispatchGlobalEvent = (eventName, opts) => {
   // Compatible with IE
@@ -9,10 +9,10 @@ const dispatchGlobalEvent = (eventName, opts) => {
   // @see https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
   let event;
 
-  if (typeof window.CustomEvent === "function") {
+  if (typeof window.CustomEvent === 'function') {
     event = new window.CustomEvent(eventName, { detail: opts });
   } else {
-    event = document.createEvent("Event");
+    event = document.createEvent('Event');
     event.initEvent(eventName, false, true, opts);
   }
 
@@ -57,7 +57,10 @@ export default function(target) {
         (event && event.detail && event.detail.target && true) || false;
       // Create a fake event, specific show will limit the type to `solid`
       // only `float` type cares e.clientX e.clientY
-      this.showTooltip({ currentTarget: hasTarget && event.detail.target }, true);
+      this.showTooltip(
+        { currentTarget: hasTarget && event.detail.target },
+        true
+      );
     }
   };
 
