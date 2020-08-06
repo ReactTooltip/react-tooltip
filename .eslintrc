@@ -36,7 +36,7 @@
     "max-len": [2, { "code": 120, "ignoreComments": true }],
     "newline-per-chained-call": 0,
     "no-trailing-spaces": ["error"],
-    "quotes": ["error", "double", { "avoidEscape": true }],
+    "quotes": ["error", "single", { "avoidEscape": true }],
     "comma-dangle": ["error", "never"],
     "no-template-curly-in-string": "off",
     "semi": ["error", "always"],
