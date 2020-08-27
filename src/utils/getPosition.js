@@ -240,9 +240,12 @@ const calculateOffset = offset => {
 const getParent = currentTarget => {
   let currentParent = currentTarget;
   while (currentParent) {
+    const computedStyle = window.getComputedStyle(currentParent);
+    // transform and will-change: transform change the containing block
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_Block
     if (
-      window.getComputedStyle(currentParent).getPropertyValue('transform') !==
-      'none'
+      computedStyle.getPropertyValue('transform') !== 'none' ||
+      computedStyle.getPropertyValue('will-change') === 'transform'
     )
       break;
     currentParent = currentParent.parentElement;
