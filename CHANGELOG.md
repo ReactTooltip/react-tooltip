@@ -1,3 +1,10 @@
+## [4.2.9](https://github.com/wwayne/react-tooltip/compare/v4.2.8...v4.2.9) (2020-08-27)
+
+
+### Bug Fixes
+
+* **getposition:** properly determine parents with will-change: transform ([3a76250](https://github.com/wwayne/react-tooltip/commit/3a76250))
+
 ## [4.2.8](https://github.com/wwayne/react-tooltip/compare/v4.2.7...v4.2.8) (2020-08-06)
 
 
