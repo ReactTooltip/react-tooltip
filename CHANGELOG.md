@@ -1,3 +1,10 @@
+## [4.2.10](https://github.com/wwayne/react-tooltip/compare/v4.2.9...v4.2.10) (2020-09-14)
+
+
+### Bug Fixes
+
+* **build:** removing single quotes on cpy for windows shell ([#632](https://github.com/wwayne/react-tooltip/issues/632)) ([9c280af](https://github.com/wwayne/react-tooltip/commit/9c280af))
+
 ## [4.2.9](https://github.com/wwayne/react-tooltip/compare/v4.2.8...v4.2.9) (2020-08-27)
 
 
