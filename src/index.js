@@ -19,7 +19,7 @@ import nodeListToArray from './utils/nodeListToArray';
 import { generateUUID } from './utils/uuid';
 
 /* CSS */
-import './index.scss';
+import baseCss from './index.scss';
 import { generateTooltipStyle } from './decorators/styler';
 
 @staticMethods
@@ -146,6 +146,7 @@ class ReactTooltip extends React.Component {
 
     this.bindListener(); // Bind listener for tooltip
     this.bindWindowEvents(resizeHide); // Bind global event for static method
+    this.injectStyles(); // Inject styles for each DOM root having tooltip.
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -171,6 +172,34 @@ class ReactTooltip extends React.Component {
     this.unbindListener();
     this.removeScrollListener(this.state.currentTarget);
     this.unbindWindowEvents();
+  }
+
+  /* Look for the closest DOM root having tooltip and inject styles. */
+  injectStyles() {
+    const { id } = this.props;
+    const targetArray = this.getTargetArray(id);
+    const domRoots = [];
+    targetArray.forEach(target => {
+      let parentNode = target.parentNode;
+      while (parentNode.parentNode && !parentNode.host) {
+        parentNode = parentNode.parentNode;
+      }
+      const head = parentNode.querySelector('head');
+      domRoots.push(head || parentNode);
+    });
+    if (domRoots.length) {
+      const style = document.createElement('style');
+      style.textContent = baseCss;
+      style.setAttribute('data-react-tooltip', 'true');
+      domRoots
+        .filter((item, idx, src) => src.indexOf(item) === idx)
+        .forEach(domRoot => {
+          // Prevent styles duplication.
+          if (!domRoot.querySelector('style[data-react-tooltip]')) {
+            domRoot.appendChild(style);
+          }
+        });
+    }
   }
 
   /**
