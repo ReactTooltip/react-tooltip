@@ -1,3 +1,10 @@
+## [4.2.11](https://github.com/wwayne/react-tooltip/compare/v4.2.10...v4.2.11) (2020-11-22)
+
+
+### Bug Fixes
+
+* **styles:** add styles for shadow dom ([00d1539](https://github.com/wwayne/react-tooltip/commit/00d1539)), closes [#597](https://github.com/wwayne/react-tooltip/issues/597)
+
 ## [4.2.10](https://github.com/wwayne/react-tooltip/compare/v4.2.9...v4.2.10) (2020-09-14)
 
 
