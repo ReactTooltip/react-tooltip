@@ -281,6 +281,7 @@ class ReactTooltip extends React.Component {
         }
 
         target.addEventListener('mouseenter', this.showTooltip, isCaptureMode);
+        target.addEventListener('mousemove', this.showTooltip, isCaptureMode);
         if (effect === 'float') {
           target.addEventListener(
             'mousemove',
