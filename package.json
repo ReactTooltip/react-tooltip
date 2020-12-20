@@ -11,6 +11,7 @@
   },
   "scripts": {
     "pretest": "npm-run-all pretty:quick lint:staged",
+    "eslint": "./node_modules/.bin/eslint . --ignore-path ./.eslintignore",
     "eslint:fix": "./node_modules/.bin/eslint . --ignore-path ./.eslintignore --fix",
     "pretty:quick": "./node_modules/.bin/pretty-quick --staged",
     "lint:staged": "./node_modules/.bin/lint-staged",
