@@ -22,7 +22,7 @@
     "build:watch": "rollup -c -w",
     "start": "npm-run-all clean build:watch",
     "gh-pages": "gh-pages -d example",
-    "github-changes": "github-changes -o wwayne -r react-tooltip -a --only-pulls --use-commit-body",
+    "github-changes": "github-changes -o impargo -r react-tooltip -a --only-pulls --use-commit-body",
     "copy:types": "cpy ./react-tooltip.d.ts ./dist --parents --dot",
     "cm": "git cz",
     "semantic-release": "semantic-release"
@@ -34,7 +34,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wwayne/react-tooltip"
+    "url": "https://github.com/impargo/react-tooltip"
   },
   "keywords": [
     "react",
@@ -42,12 +42,12 @@
     "tooltip",
     "react-tooltip"
   ],
-  "author": "wwayne",
+  "author": "impargo",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wwayne/react-tooltip/issues"
+    "url": "https://github.com/impargo/react-tooltip/issues"
   },
-  "homepage": "https://github.com/wwayne/react-tooltip#readme",
+  "homepage": "https://github.com/impargo/react-tooltip#readme",
   "browserify-shim": {
     "react": "global:React",
     "react-dom": "global:ReactDOM"
