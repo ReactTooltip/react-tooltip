@@ -1,0 +1,50 @@
+name: Node.js Package
+
+on:
+  release:
+    types: [created]
+jobs:
+  publish-gpr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: npmrc
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc   
+          echo "@impargo:registry=https://npm.pkg.github.com/" >> .npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: check if the package already exist
+        id: publish
+        run: |
+          VERSION=$(awk '/version/{print $NF}'  package.json  | tr -d '",')
+          PUBLISH=$(npm info  @impargo/react-tooltip@${VERSION} --json | sed -n 's/homepage/&/p' | wc -l)
+          if [ $PUBLISH -eq 0 ]
+          then
+            echo "::set-output name=alreadyPublished::false"
+          else
+            echo "skipping publish, package @impargo/react-tooltip@${VERSION} already published"
+            echo "::set-output name=alreadyPublished::true"
+          fi
+      - name: cache
+        if: steps.publish.outputs.alreadyPublished == 'false'
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('./yarn.lock') }}
+      - name: Install
+        if: steps.publish.outputs.alreadyPublished == 'false'
+        run: |
+          yarn install --frozen-lockfile
+      - name: Lint
+        if: steps.publish.outputs.alreadyPublished == 'false'
+        run: yarn run eslint
+      - name: Test
+        if: steps.publish.outputs.alreadyPublished == 'false'
+        run: yarn test:unit
+      - name: Build
+        if: steps.publish.outputs.alreadyPublished == 'false'
+        run: yarn build
+      - name: Publish
+        if: steps.publish.outputs.alreadyPublished == 'false'
+        run: npm publish
