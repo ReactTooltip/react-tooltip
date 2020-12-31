@@ -538,6 +538,7 @@ class ReactTooltip extends React.Component {
 
     // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
     if (this.mouseOnToolTip()) {
+       _this5.updatePosition();
       return;
     }
 
