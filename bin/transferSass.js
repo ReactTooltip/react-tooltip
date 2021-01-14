@@ -1,12 +1,12 @@
-const sass = require("node-sass");
-const fs = require("fs");
-const path = require("path");
+const sass = require('node-sass');
+const fs = require('fs');
+const path = require('path');
 
 function transferSass() {
   sass.render(
     {
-      file: path.resolve(__dirname, "../src/index.scss"),
-      outputStyle: "compressed"
+      file: path.resolve(__dirname, '../src/index.scss'),
+      outputStyle: 'compressed'
     },
     function(err, result) {
       if (err) {
@@ -15,21 +15,21 @@ function transferSass() {
       }
       const cssSource = result.css.toString();
       fs.writeFile(
-        path.resolve(__dirname, "../src/style.js"),
-        "export default '" + cssSource.replace(/\n/g, "") + "'",
+        path.resolve(__dirname, '../src/style.js'),
+        "export default '" + cssSource.replace(/\n/g, '') + "'",
         function(err) {
           if (err) {
             console.error(err);
           }
-          console.log("css file has been transformed to JS successful");
+          console.log('css file has been transformed to JS successful');
           fs.writeFile(
-            path.resolve(__dirname, "../src/style.css"),
+            path.resolve(__dirname, '../src/style.css'),
             cssSource,
             function(err) {
               if (err) {
                 console.error(err);
               }
-              console.log("css file has been transformed successful");
+              console.log('css file has been transformed successful');
               process.exit();
             }
           );
@@ -41,7 +41,7 @@ function transferSass() {
 
 transferSass();
 
-fs.watch(path.resolve(__dirname, "../src/index.scss"), function(
+fs.watch(path.resolve(__dirname, '../src/index.scss'), function(
   event,
   filename
 ) {

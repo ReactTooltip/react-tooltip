@@ -76,7 +76,7 @@ export default function(e, target, node, place, desiredPlace, effect, offset) {
     outsideLeft(p) || outsideRight(p) || outsideTop(p) || outsideBottom(p);
   const inside = p => !outside(p);
 
-  const placesList = ["top", "bottom", "left", "right"];
+  const placesList = ['top', 'bottom', 'left', 'right'];
   const insideList = [];
   for (let i = 0; i < 4; i++) {
     const p = placesList[i];
@@ -91,11 +91,7 @@ export default function(e, target, node, place, desiredPlace, effect, offset) {
   if (inside(desiredPlace) && shouldUpdatePlace) {
     isNewState = true;
     newPlace = desiredPlace;
-  } else if (
-    insideList.length > 0 &&
-    outside(desiredPlace) &&
-    outside(place)
-  ) {
+  } else if (insideList.length > 0 && outside(desiredPlace) && outside(place)) {
     isNewState = true;
     newPlace = insideList[0];
   }
@@ -133,7 +129,7 @@ const getCurrentOffset = (e, currentTarget, effect) => {
     currentTarget
   );
 
-  if (effect === "float") {
+  if (effect === 'float') {
     return {
       mouseX: e.clientX,
       mouseY: e.clientY
@@ -162,7 +158,7 @@ const getDefaultPosition = (
   const triangleHeight = 2;
   const cursorHeight = 12; // Optimize for float bottom only, cause the cursor will hide the tooltip
 
-  if (effect === "float") {
+  if (effect === 'float') {
     top = {
       l: -(tipWidth / 2),
       r: tipWidth / 2,
@@ -187,7 +183,7 @@ const getDefaultPosition = (
       t: -(tipHeight / 2),
       b: tipHeight / 2
     };
-  } else if (effect === "solid") {
+  } else if (effect === 'solid') {
     top = {
       l: -(tipWidth / 2),
       r: tipWidth / 2,
@@ -222,17 +218,17 @@ const calculateOffset = offset => {
   let extraOffsetX = 0;
   let extraOffsetY = 0;
 
-  if (Object.prototype.toString.apply(offset) === "[object String]") {
+  if (Object.prototype.toString.apply(offset) === '[object String]') {
     offset = JSON.parse(offset.toString().replace(/'/g, '"'));
   }
   for (const key in offset) {
-    if (key === "top") {
+    if (key === 'top') {
       extraOffsetY -= parseInt(offset[key], 10);
-    } else if (key === "bottom") {
+    } else if (key === 'bottom') {
       extraOffsetY += parseInt(offset[key], 10);
-    } else if (key === "left") {
+    } else if (key === 'left') {
       extraOffsetX -= parseInt(offset[key], 10);
-    } else if (key === "right") {
+    } else if (key === 'right') {
       extraOffsetX += parseInt(offset[key], 10);
     }
   }
@@ -244,9 +240,12 @@ const calculateOffset = offset => {
 const getParent = currentTarget => {
   let currentParent = currentTarget;
   while (currentParent) {
+    const computedStyle = window.getComputedStyle(currentParent);
+    // transform and will-change: transform change the containing block
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_Block
     if (
-      window.getComputedStyle(currentParent).getPropertyValue("transform") !==
-      "none"
+      computedStyle.getPropertyValue('transform') !== 'none' ||
+      computedStyle.getPropertyValue('will-change') === 'transform'
     )
       break;
     currentParent = currentParent.parentElement;

@@ -1,3 +1,31 @@
+## [4.2.11](https://github.com/wwayne/react-tooltip/compare/v4.2.10...v4.2.11) (2020-11-22)
+
+
+### Bug Fixes
+
+* **styles:** add styles for shadow dom ([00d1539](https://github.com/wwayne/react-tooltip/commit/00d1539)), closes [#597](https://github.com/wwayne/react-tooltip/issues/597)
+
+## [4.2.10](https://github.com/wwayne/react-tooltip/compare/v4.2.9...v4.2.10) (2020-09-14)
+
+
+### Bug Fixes
+
+* **build:** removing single quotes on cpy for windows shell ([#632](https://github.com/wwayne/react-tooltip/issues/632)) ([9c280af](https://github.com/wwayne/react-tooltip/commit/9c280af))
+
+## [4.2.9](https://github.com/wwayne/react-tooltip/compare/v4.2.8...v4.2.9) (2020-08-27)
+
+
+### Bug Fixes
+
+* **getposition:** properly determine parents with will-change: transform ([3a76250](https://github.com/wwayne/react-tooltip/commit/3a76250))
+
+## [4.2.8](https://github.com/wwayne/react-tooltip/compare/v4.2.7...v4.2.8) (2020-08-06)
+
+
+### Bug Fixes
+
+* **showtooltip:** check if tooltipRef is undefined ([#623](https://github.com/wwayne/react-tooltip/issues/623)) ([f63eab2](https://github.com/wwayne/react-tooltip/commit/f63eab2))
+
 ## Change Log
 
 ### v3.9.0 (2018/11/07 00:43 +00:00)

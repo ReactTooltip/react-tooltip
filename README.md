@@ -1,7 +1,7 @@
 # react-tooltip
 
 [![Version](http://img.shields.io/npm/v/react-tooltip.svg)](https://www.npmjs.org/package/react-tooltip)
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![npm download][download-image]][download-url]
 [![Build Status](https://travis-ci.org/wwayne/react-tooltip.svg?branch=master)](https://travis-ci.org/wwayne/react-tooltip)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
@@ -39,7 +39,7 @@ yarn add react-tooltip
 
 ## Usage
 
-**Using NPM**
+### Using NPM
 
 1 . Require react-tooltip after installation
 
@@ -55,11 +55,11 @@ import ReactTooltip from 'react-tooltip';
 
 3 . Include react-tooltip component
 
-```js
+```jsx
 <ReactTooltip />
 ```
 
-**Standalone**
+### Standalone
 
 You can import `node_modules/react-tooltip/dist/index.js` into your page. Please make sure that you have already imported `react` and `react-dom` into your page.
 
@@ -105,9 +105,9 @@ Notes:
 
 ### Security Note
 
-The `html` option allows a tooltip to directly display raw HTML. This is a security risk if any of that content is supplied by the user. Any user-supplied content must be sanitized, using a package like [sanitize-html-react](https://www.npmjs.com/package/sanitize-html-react). We chose not to include sanitization after discovering it [increased our package size](https://github.com/wwayne/react-tooltip/issues/429) too much - we don't want to penalize people who don't use the `html` option.
+The `html` option allows a tooltip to directly display raw HTML. This is a security risk if any of that content is supplied by the user. Any user-supplied content must be sanitized, using a package like [sanitize-html](https://www.npmjs.com/package/sanitize-html). We chose not to include sanitization after discovering it [increased our package size](https://github.com/wwayne/react-tooltip/issues/429) too much - we don't want to penalize people who don't use the `html` option.
 
-##### Note:
+#### Note
 
 1. **data-tip** is necessary, because `<ReactTooltip />` finds the tooltip via this attribute
 2. **data-for** corresponds to the **id** of `<ReactTooltip />`
@@ -119,7 +119,7 @@ The `html` option allows a tooltip to directly display raw HTML. This is a secur
 
 > Hide the tooltip manually, the target is optional, if no target passed in, all existing tooltips will be hidden
 
-```js
+```jsx
 import ReactTooltip from 'react-tooltip'
 
 <p ref={ref => this.fooRef = ref} data-tip='tooltip'></p>
@@ -135,7 +135,7 @@ import ReactTooltip from 'react-tooltip'
 
 > Show specific tooltip manually, for example:
 
-```js
+```jsx
 import ReactTooltip from 'react-tooltip'
 
 <p ref={ref => this.fooRef = ref} data-tip='tooltip'></p>
@@ -170,6 +170,46 @@ Same for empty children, if you don't want show the tooltip when the children is
 ```jsx
 <p data-tip='' data-for='test'></p>
 <ReactTooltip id='test'>{}</ReactTooltip>
+```
+
+### 3. Tooltip not binding to dynamic content
+
+When you render `<ReactTooltip>` ahead of dynamic content, and are using `data-for={id}` attributes 
+on new dynamic content, the tooltip will not register its event listener.  
+
+For example, you render a generic tooltip in the root of your app, then load a list of content async.
+Elements in the list use the `data-for={id}` attribute to bind the tooltip on hover.
+Since the tooltip has already scanned for data-tip these new elements will not trigger.
+
+One workaround for this is to trigger `ReactTooltip.rebuild()` after the data load to scan for the attribute again, 
+to allow event wireup.
+
+#### Example
+
+```jsx
+<app>
+  <ReactTooltip id="foo" />
+  <list/>
+</app>
+```
+
+```jsx
+
+const dynamicList = (props) => {
+
+ useEffect(() => {
+        ReactTooltip.rebuild();
+    });
+
+return(
+  <list>
+    {data.map((item)=> {
+      <span data-for="foo">My late bound tooltip triggered data</span>
+    });}
+  </list>
+);
+};
+
 ```
 
 ## Article

@@ -10,13 +10,13 @@ export const checkStatus = function(dataEventOff, e) {
   const { show } = this.state;
   const { id } = this.props;
   const isCapture = this.isCapture(e.currentTarget);
-  const currentItem = e.currentTarget.getAttribute("currentItem");
+  const currentItem = e.currentTarget.getAttribute('currentItem');
 
   if (!isCapture) e.stopPropagation();
-  if (show && currentItem === "true") {
+  if (show && currentItem === 'true') {
     if (!dataEventOff) this.hideTooltip(e);
   } else {
-    e.currentTarget.setAttribute("currentItem", "true");
+    e.currentTarget.setAttribute('currentItem', 'true');
     setUntargetItems(e.currentTarget, this.getTargetArray(id));
     this.showTooltip(e);
   }
@@ -25,15 +25,15 @@ export const checkStatus = function(dataEventOff, e) {
 const setUntargetItems = function(currentTarget, targetArray) {
   for (let i = 0; i < targetArray.length; i++) {
     if (currentTarget !== targetArray[i]) {
-      targetArray[i].setAttribute("currentItem", "false");
+      targetArray[i].setAttribute('currentItem', 'false');
     } else {
-      targetArray[i].setAttribute("currentItem", "true");
+      targetArray[i].setAttribute('currentItem', 'true');
     }
   }
 };
 
 const customListeners = {
-  id: "9b69f92e-d3fe-498b-b1b4-c5e63a51b0cf",
+  id: '9b69f92e-d3fe-498b-b1b4-c5e63a51b0cf',
   set(target, event, listener) {
     if (this.id in target) {
       const map = target[this.id];
@@ -57,23 +57,23 @@ const customListeners = {
 export default function(target) {
   target.prototype.isCustomEvent = function(ele) {
     const { event } = this.state;
-    return event || !!ele.getAttribute("data-event");
+    return event || !!ele.getAttribute('data-event');
   };
 
   /* Bind listener for custom event */
   target.prototype.customBindListener = function(ele) {
     const { event, eventOff } = this.state;
-    const dataEvent = ele.getAttribute("data-event") || event;
-    const dataEventOff = ele.getAttribute("data-event-off") || eventOff;
+    const dataEvent = ele.getAttribute('data-event') || event;
+    const dataEventOff = ele.getAttribute('data-event-off') || eventOff;
 
-    dataEvent.split(" ").forEach(event => {
+    dataEvent.split(' ').forEach(event => {
       ele.removeEventListener(event, customListeners.get(ele, event));
       const customListener = checkStatus.bind(this, dataEventOff);
       customListeners.set(ele, event, customListener);
       ele.addEventListener(event, customListener, false);
     });
     if (dataEventOff) {
-      dataEventOff.split(" ").forEach(event => {
+      dataEventOff.split(' ').forEach(event => {
         ele.removeEventListener(event, this.hideTooltip);
         ele.addEventListener(event, this.hideTooltip, false);
       });
@@ -83,8 +83,8 @@ export default function(target) {
   /* Unbind listener for custom event */
   target.prototype.customUnbindListener = function(ele) {
     const { event, eventOff } = this.state;
-    const dataEvent = event || ele.getAttribute("data-event");
-    const dataEventOff = eventOff || ele.getAttribute("data-event-off");
+    const dataEvent = event || ele.getAttribute('data-event');
+    const dataEventOff = eventOff || ele.getAttribute('data-event-off');
 
     ele.removeEventListener(dataEvent, customListeners.get(ele, event));
     if (dataEventOff) ele.removeEventListener(dataEventOff, this.hideTooltip);

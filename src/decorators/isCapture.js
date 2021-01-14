@@ -6,7 +6,7 @@ export default function(target) {
   target.prototype.isCapture = function(currentTarget) {
     return (
       (currentTarget &&
-        currentTarget.getAttribute("data-iscapture") === "true") ||
+        currentTarget.getAttribute('data-iscapture') === 'true') ||
       this.props.isCapture ||
       false
     );

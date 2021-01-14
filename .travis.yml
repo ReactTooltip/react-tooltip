@@ -3,7 +3,7 @@ cache:
   directories:
     - node_modules
 node_js:
-  - 11
+  - 12
 notifications:
   email:
     recipients:
