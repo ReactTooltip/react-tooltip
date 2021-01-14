@@ -1,3 +1,10 @@
+## [4.2.12](https://github.com/wwayne/react-tooltip/compare/v4.2.11...v4.2.12) (2021-01-14)
+
+
+### Bug Fixes
+
+* **style injection:** change style injection default root ([a00c5b7](https://github.com/wwayne/react-tooltip/commit/a00c5b7)), closes [#665](https://github.com/wwayne/react-tooltip/issues/665)
+
 ## [4.2.11](https://github.com/wwayne/react-tooltip/compare/v4.2.10...v4.2.11) (2020-11-22)
 
 

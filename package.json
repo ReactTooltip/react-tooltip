@@ -1,6 +1,6 @@
 {
   "name": "react-tooltip",
-  "version": "4.2.11",
+  "version": "4.2.12",
   "description": "react tooltip component",
   "main": "dist/index.js",
   "types": "dist/react-tooltip.d.ts",
