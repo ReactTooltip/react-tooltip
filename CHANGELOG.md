@@ -1,3 +1,10 @@
+## [4.2.13](https://github.com/wwayne/react-tooltip/compare/v4.2.12...v4.2.13) (2021-01-15)
+
+
+### Bug Fixes
+
+* **domexception:** revert previous changed for unexpected behavior ([85e38bb](https://github.com/wwayne/react-tooltip/commit/85e38bb)), closes [#667](https://github.com/wwayne/react-tooltip/issues/667)
+
 ## [4.2.12](https://github.com/wwayne/react-tooltip/compare/v4.2.11...v4.2.12) (2021-01-14)
 
 
