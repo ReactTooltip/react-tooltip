@@ -185,7 +185,7 @@ class ReactTooltip extends React.Component {
         parentNode = parentNode.parentNode;
       }
       const head = parentNode.querySelector('head');
-      domRoots.push(parentNode || head);
+      domRoots.push(head || parentNode);
     });
     if (domRoots.length) {
       const style = document.createElement('style');
