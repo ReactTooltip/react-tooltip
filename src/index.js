@@ -185,9 +185,19 @@ class ReactTooltip extends React.Component {
     while (parentNode.parentNode) {
       parentNode = parentNode.parentNode;
     }
-    const head = parentNode.querySelector('head');
 
-    const domRoot = parentNode || head;
+    let domRoot;
+
+    switch (parentNode.constructor.name) {
+      case 'HTMLDocument':
+        domRoot = parentNode.head;
+        break;
+      case 'ShadowRoot':
+      default:
+        domRoot = parentNode;
+        break;
+    }
+
     // Prevent styles duplication.
     if (!domRoot.querySelector('style[data-react-tooltip]')) {
       const style = document.createElement('style');
