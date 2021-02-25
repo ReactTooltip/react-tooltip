@@ -539,7 +539,6 @@ class ReactTooltip extends React.Component {
     const { delayShow, disable } = this.state;
     const { afterShow } = this.props;
     const placeholder = this.getTooltipContent();
-    const delayTime = parseInt(delayShow, 10);
     const eventTarget = e.currentTarget || e.target;
 
     // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
@@ -551,6 +550,8 @@ class ReactTooltip extends React.Component {
     if (this.isEmptyTip(placeholder) || disable) {
       return;
     }
+
+    const delayTime = !this.state.show ? parseInt(delayShow, 10) : 0;
 
     const updateState = () => {
       if (
@@ -575,7 +576,7 @@ class ReactTooltip extends React.Component {
     };
 
     clearTimeout(this.delayShowLoop);
-    if (delayShow) {
+    if (delayTime) {
       this.delayShowLoop = setTimeout(updateState, delayTime);
     } else {
       updateState();
