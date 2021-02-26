@@ -1,3 +1,10 @@
+## [4.2.15](https://github.com/wwayne/react-tooltip/compare/v4.2.14...v4.2.15) (2021-02-26)
+
+
+### Bug Fixes
+
+* do not delay show if tooltip is already shown ([#676](https://github.com/wwayne/react-tooltip/issues/676)) ([e8b9d84](https://github.com/wwayne/react-tooltip/commit/e8b9d84))
+
 ## [4.2.14](https://github.com/wwayne/react-tooltip/compare/v4.2.13...v4.2.14) (2021-02-16)
 
 
