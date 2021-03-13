@@ -472,8 +472,7 @@ class ReactTooltip extends React.Component {
           },
           effect: effect,
           offset: offset,
-          padding:
-            target.getAttribute("data-padding") || self.props.padding,
+          padding: target.getAttribute('data-padding') || self.props.padding,
           html:
             (target.getAttribute('data-html')
               ? target.getAttribute('data-html') === 'true'
