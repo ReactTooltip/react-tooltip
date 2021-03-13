@@ -15,7 +15,7 @@ type VoidFunc = (...args: any[]) => void;
 type GetContentFunc = (toolTipStr: string) => React.ReactNode;
 type GetContent = GetContentFunc | [GetContentFunc, number];
 
-interface TooltipProps {
+export interface TooltipProps {
   children?: React.ReactNode;
   uuid?: string;
   // Placement of tooltip
@@ -109,7 +109,7 @@ interface TooltipProps {
 // ReactTooltip component is the default export
 export default class ReactTooltip extends React.Component<TooltipProps> {
   // static methods
-  static show: (target: string) => {}; 
-  static hide: (target?: string) => {}; 
+  static show: (target: Element) => {}; 
+  static hide: (target?: Element) => {}; 
   static rebuild: () => {}; 
 }

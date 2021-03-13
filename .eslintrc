@@ -1,24 +1,16 @@
 {
   "parser": "babel-eslint",
-  "extends": [
-    "standard",
-    "standard-react",
-    "prettier",
-    "eslint:recommended"
-  ],
+  "extends": ["standard", "standard-react", "prettier", "eslint:recommended"],
   "env": {
     "es6": true,
     "jest": true
   },
-  "plugins": [
-    "react",
-    "prettier"
-  ],
+  "plugins": ["react", "prettier"],
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2018,
     "ecmaFeatures": {
-      "impliedStrict": true, 
+      "impliedStrict": true,
       "jsx": true,
       "arrowFunctions": true,
       "blockBindings": true,
@@ -38,13 +30,15 @@
     }
   },
   "rules": {
+    "react/jsx-no-bind": "off",
     "space-before-function-paren": 0,
     "react/jsx-boolean-value": 0,
-    "max-len": [2, {"code":120,"ignoreComments":true}],
-    "newline-per-chained-call": 0, 
+    "max-len": [2, { "code": 120, "ignoreComments": true }],
+    "newline-per-chained-call": 0,
     "no-trailing-spaces": ["error"],
-    "quotes": ["error", "double", { "avoidEscape": true }],
+    "quotes": ["error", "single", { "avoidEscape": true }],
     "comma-dangle": ["error", "never"],
+    "no-template-curly-in-string": "off",
     "semi": ["error", "always"],
     "object-curly-spacing": ["error", "always"],
     "quote-props": ["error", "consistent"],

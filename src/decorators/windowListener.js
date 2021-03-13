@@ -1,7 +1,7 @@
 /**
  * Events that should be bound to the window
  */
-import CONSTANT from "../constant";
+import CONSTANT from '../constant';
 
 export default function(target) {
   target.prototype.bindWindowEvents = function(resizeHide) {
@@ -19,8 +19,8 @@ export default function(target) {
 
     // Resize
     if (resizeHide) {
-      window.removeEventListener("resize", this.onWindowResize);
-      window.addEventListener("resize", this.onWindowResize, false);
+      window.removeEventListener('resize', this.onWindowResize);
+      window.addEventListener('resize', this.onWindowResize, false);
     }
   };
 
@@ -28,7 +28,7 @@ export default function(target) {
     window.removeEventListener(CONSTANT.GLOBAL.HIDE, this.globalHide);
     window.removeEventListener(CONSTANT.GLOBAL.REBUILD, this.globalRebuild);
     window.removeEventListener(CONSTANT.GLOBAL.SHOW, this.globalShow);
-    window.removeEventListener("resize", this.onWindowResize);
+    window.removeEventListener('resize', this.onWindowResize);
   };
 
   /**
