@@ -1,10 +1,20 @@
-import { getDefaultPopupColors, DEFAULT_PADDING } from "./defaultStyles";
+import { getDefaultPopupColors, DEFAULT_PADDING } from './defaultStyles';
 
 /**
  * Generates the specific tooltip style for use on render.
  */
-export function generateTooltipStyle(uuid, customColors, type, hasBorder, padding) {
-	return generateStyle(uuid, getPopupColors(customColors, type, hasBorder), padding);
+export function generateTooltipStyle(
+  uuid,
+  customColors,
+  type,
+  hasBorder,
+  padding
+) {
+  return generateStyle(
+    uuid,
+    getPopupColors(customColors, type, hasBorder),
+    padding
+  );
 }
 
 /**

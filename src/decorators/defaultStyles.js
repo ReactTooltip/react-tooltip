@@ -44,4 +44,4 @@ export function getDefaultPopupColors(type) {
   return defaultColors[type] ? { ...defaultColors[type] } : undefined;
 }
 
-export const DEFAULT_PADDING = "8px 21px";
+export const DEFAULT_PADDING = '8px 21px';
