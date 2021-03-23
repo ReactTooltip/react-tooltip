@@ -1,32 +1,17 @@
 {
   "parser": "babel-eslint",
-  "extends": ["standard", "standard-react", "prettier", "eslint:recommended"],
+  "extends": ["standard", "standard-jsx", "standard-react", "plugin:prettier/recommended"],
   "env": {
     "es6": true,
     "jest": true
   },
-  "plugins": ["react", "prettier"],
+  "plugins": ["prettier", "react"],
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2018,
     "ecmaFeatures": {
       "impliedStrict": true,
-      "jsx": true,
-      "arrowFunctions": true,
-      "blockBindings": true,
-      "defaultParams": true,
-      "destructuring": true,
-      "forOf": true,
-      "generators": true,
-      "objectLiteralComputedProperties": true,
-      "objectLiteralShorthandMethods": true,
-      "objectLiteralShorthandProperties": true,
-      "experimentalObjectRestSpread": true,
-      "restParams": true,
-      "spread": true,
-      "templateStrings": true,
-      "modules": true,
-      "classes": true
+      "jsx": true
     }
   },
   "rules": {

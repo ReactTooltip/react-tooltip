@@ -196,8 +196,9 @@ describe('Tooltip', () => {
 
     const uuid = tooltip.className.split(' ')[1];
     const cssRules = tooltip.firstElementChild.sheet.cssRules;
-    const mainCssRule = cssRules.find(rule => rule.selectorText === `.${uuid}`)
-      .style;
+    const mainCssRule = cssRules.find(
+      (rule) => rule.selectorText === `.${uuid}`
+    ).style;
 
     expect(mainCssRule.color, 'Text color').to.equal(res.textColor);
     expect(mainCssRule.background, 'Background color').to.equal(res.background);
@@ -206,10 +207,10 @@ describe('Tooltip', () => {
     );
 
     const arrowPositions = ['top', 'bottom', 'left', 'right'];
-    arrowPositions.forEach(pos => {
+    arrowPositions.forEach((pos) => {
       expect(
         cssRules.find(
-          rule => rule.selectorText === `.${uuid}.place-${pos}::after`
+          (rule) => rule.selectorText === `.${uuid}.place-${pos}::after`
         ).style[`border-${pos}-color`],
         pos + ' arrow color'
       ).to.equal(res.arrowColor ? res.arrowColor : res.background);

@@ -270,7 +270,7 @@ export default class App extends Component {
               <div className="side">
                 <a
                   data-for="custom-off-event"
-                  ref={ref => (this.targetRef = ref)}
+                  ref={(ref) => (this.targetRef = ref)}
                   data-tip="custom show and hide"
                   data-event="click"
                   data-event-off="dblclick"
@@ -478,7 +478,7 @@ export default class App extends Component {
               </div>
               <ReactTooltip
                 id="enrich"
-                getContent={dataTip => 'This little buddy is ' + dataTip}
+                getContent={(dataTip) => 'This little buddy is ' + dataTip}
               />
             </div>
             <br />
@@ -692,7 +692,7 @@ export default class App extends Component {
 
               <ReactTooltip
                 id="soclose"
-                getContent={dataTip => (
+                getContent={(dataTip) => (
                   <div>
                     <h3>This little buddy is {dataTip}</h3>
                     <p>Put mouse here</p>

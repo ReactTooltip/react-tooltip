@@ -19,12 +19,12 @@ const dispatchGlobalEvent = (eventName, opts) => {
   window.dispatchEvent(event);
 };
 
-export default function(target) {
+export default function (target) {
   /**
    * Hide all tooltip
    * @trigger ReactTooltip.hide()
    */
-  target.hide = target => {
+  target.hide = (target) => {
     dispatchGlobalEvent(CONSTANT.GLOBAL.HIDE, { target });
   };
 
@@ -40,18 +40,18 @@ export default function(target) {
    * Show specific tooltip
    * @trigger ReactTooltip.show()
    */
-  target.show = target => {
+  target.show = (target) => {
     dispatchGlobalEvent(CONSTANT.GLOBAL.SHOW, { target });
   };
 
-  target.prototype.globalRebuild = function() {
+  target.prototype.globalRebuild = function () {
     if (this.mount) {
       this.unbindListener();
       this.bindListener();
     }
   };
 
-  target.prototype.globalShow = function(event) {
+  target.prototype.globalShow = function (event) {
     if (this.mount) {
       const hasTarget =
         (event && event.detail && event.detail.target && true) || false;
@@ -64,7 +64,7 @@ export default function(target) {
     }
   };
 
-  target.prototype.globalHide = function(event) {
+  target.prototype.globalHide = function (event) {
     if (this.mount) {
       const hasTarget =
         (event && event.detail && event.detail.target && true) || false;

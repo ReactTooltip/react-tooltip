@@ -14,7 +14,7 @@
  * - `newState` {Object}
  * - `position` {Object} {left: {Number}, top: {Number}}
  */
-export default function(e, target, node, place, desiredPlace, effect, offset) {
+export default function (e, target, node, place, desiredPlace, effect, offset) {
   const { width: tipWidth, height: tipHeight } = getDimensions(node);
 
   const { width: targetWidth, height: targetHeight } = getDimensions(target);
@@ -35,19 +35,19 @@ export default function(e, target, node, place, desiredPlace, effect, offset) {
   const { parentTop, parentLeft } = getParent(node);
 
   // Get the edge offset of the tooltip
-  const getTipOffsetLeft = place => {
+  const getTipOffsetLeft = (place) => {
     const offsetX = defaultOffset[place].l;
     return mouseX + offsetX + extraOffsetX;
   };
-  const getTipOffsetRight = place => {
+  const getTipOffsetRight = (place) => {
     const offsetX = defaultOffset[place].r;
     return mouseX + offsetX + extraOffsetX;
   };
-  const getTipOffsetTop = place => {
+  const getTipOffsetTop = (place) => {
     const offsetY = defaultOffset[place].t;
     return mouseY + offsetY + extraOffsetY;
   };
-  const getTipOffsetBottom = place => {
+  const getTipOffsetBottom = (place) => {
     const offsetY = defaultOffset[place].b;
     return mouseY + offsetY + extraOffsetY;
   };
@@ -66,15 +66,15 @@ export default function(e, target, node, place, desiredPlace, effect, offset) {
   //       |
   //  Bottom side
   //
-  const outsideLeft = p => getTipOffsetLeft(p) < 0;
-  const outsideRight = p => getTipOffsetRight(p) > windowWidth;
-  const outsideTop = p => getTipOffsetTop(p) < 0;
-  const outsideBottom = p => getTipOffsetBottom(p) > windowHeight;
+  const outsideLeft = (p) => getTipOffsetLeft(p) < 0;
+  const outsideRight = (p) => getTipOffsetRight(p) > windowWidth;
+  const outsideTop = (p) => getTipOffsetTop(p) < 0;
+  const outsideBottom = (p) => getTipOffsetBottom(p) > windowHeight;
 
   // Check whether the tooltip with orientation p is completely inside the client window
-  const outside = p =>
+  const outside = (p) =>
     outsideLeft(p) || outsideRight(p) || outsideTop(p) || outsideBottom(p);
-  const inside = p => !outside(p);
+  const inside = (p) => !outside(p);
 
   const placesList = ['top', 'bottom', 'left', 'right'];
   const insideList = [];
@@ -112,7 +112,7 @@ export default function(e, target, node, place, desiredPlace, effect, offset) {
   };
 }
 
-const getDimensions = node => {
+const getDimensions = (node) => {
   const { height, width } = node.getBoundingClientRect();
   return {
     height: parseInt(height, 10),
@@ -214,7 +214,7 @@ const getDefaultPosition = (
 };
 
 // Consider additional offset into position calculation
-const calculateOffset = offset => {
+const calculateOffset = (offset) => {
   let extraOffsetX = 0;
   let extraOffsetY = 0;
 
@@ -237,7 +237,7 @@ const calculateOffset = offset => {
 };
 
 // Get the offset of the parent elements
-const getParent = currentTarget => {
+const getParent = (currentTarget) => {
   let currentParent = currentTarget;
   while (currentParent) {
     const computedStyle = window.getComputedStyle(currentParent);
@@ -246,8 +246,9 @@ const getParent = currentTarget => {
     if (
       computedStyle.getPropertyValue('transform') !== 'none' ||
       computedStyle.getPropertyValue('will-change') === 'transform'
-    )
+    ) {
       break;
+    }
     currentParent = currentParent.parentElement;
   }
 

@@ -4,10 +4,10 @@
  * NodeLists are functions in Safari
  */
 
-export default function(nodeList) {
+export default function (nodeList) {
   const length = nodeList.length;
   if (nodeList.hasOwnProperty) {
     return Array.prototype.slice.call(nodeList);
   }
-  return new Array(length).fill().map(index => nodeList[index]);
+  return new Array(length).fill().map((index) => nodeList[index]);
 }

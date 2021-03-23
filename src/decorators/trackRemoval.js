@@ -16,12 +16,12 @@ const getMutationObserverClass = () => {
   );
 };
 
-export default function(target) {
-  target.prototype.bindRemovalTracker = function() {
+export default function (target) {
+  target.prototype.bindRemovalTracker = function () {
     const MutationObserver = getMutationObserverClass();
     if (MutationObserver == null) return;
 
-    const observer = new MutationObserver(mutations => {
+    const observer = new MutationObserver((mutations) => {
       for (let m1 = 0; m1 < mutations.length; m1++) {
         const mutation = mutations[m1];
         for (let m2 = 0; m2 < mutation.removedNodes.length; m2++) {
@@ -39,7 +39,7 @@ export default function(target) {
     this.removalTracker = observer;
   };
 
-  target.prototype.unbindRemovalTracker = function() {
+  target.prototype.unbindRemovalTracker = function () {
     if (this.removalTracker) {
       this.removalTracker.disconnect();
       this.removalTracker = null;

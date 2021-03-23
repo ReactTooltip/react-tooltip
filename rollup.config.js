@@ -5,7 +5,7 @@ import external from 'rollup-plugin-peer-deps-external';
 import sass from 'rollup-plugin-sass';
 import postcss from 'rollup-plugin-postcss';
 import url from 'rollup-plugin-url';
-import { eslint } from 'rollup-plugin-eslint';
+import eslint from '@rollup/plugin-eslint';
 import stylelint from 'rollup-plugin-stylelint';
 import svgr from '@svgr/rollup';
 

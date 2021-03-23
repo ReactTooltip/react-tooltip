@@ -6,7 +6,7 @@
  * - `eventOff` {String}
  */
 
-export const checkStatus = function(dataEventOff, e) {
+export const checkStatus = function (dataEventOff, e) {
   const { show } = this.state;
   const { id } = this.props;
   const isCapture = this.isCapture(e.currentTarget);
@@ -22,7 +22,7 @@ export const checkStatus = function(dataEventOff, e) {
   }
 };
 
-const setUntargetItems = function(currentTarget, targetArray) {
+const setUntargetItems = function (currentTarget, targetArray) {
   for (let i = 0; i < targetArray.length; i++) {
     if (currentTarget !== targetArray[i]) {
       targetArray[i].setAttribute('currentItem', 'false');
@@ -54,26 +54,26 @@ const customListeners = {
   }
 };
 
-export default function(target) {
-  target.prototype.isCustomEvent = function(ele) {
+export default function (target) {
+  target.prototype.isCustomEvent = function (ele) {
     const { event } = this.state;
     return event || !!ele.getAttribute('data-event');
   };
 
   /* Bind listener for custom event */
-  target.prototype.customBindListener = function(ele) {
+  target.prototype.customBindListener = function (ele) {
     const { event, eventOff } = this.state;
     const dataEvent = ele.getAttribute('data-event') || event;
     const dataEventOff = ele.getAttribute('data-event-off') || eventOff;
 
-    dataEvent.split(' ').forEach(event => {
+    dataEvent.split(' ').forEach((event) => {
       ele.removeEventListener(event, customListeners.get(ele, event));
       const customListener = checkStatus.bind(this, dataEventOff);
       customListeners.set(ele, event, customListener);
       ele.addEventListener(event, customListener, false);
     });
     if (dataEventOff) {
-      dataEventOff.split(' ').forEach(event => {
+      dataEventOff.split(' ').forEach((event) => {
         ele.removeEventListener(event, this.hideTooltip);
         ele.addEventListener(event, this.hideTooltip, false);
       });
@@ -81,7 +81,7 @@ export default function(target) {
   };
 
   /* Unbind listener for custom event */
-  target.prototype.customUnbindListener = function(ele) {
+  target.prototype.customUnbindListener = function (ele) {
     const { event, eventOff } = this.state;
     const dataEvent = event || ele.getAttribute('data-event');
     const dataEventOff = eventOff || ele.getAttribute('data-event-off');
