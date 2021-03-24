@@ -551,7 +551,7 @@ class ReactTooltip extends React.Component {
    * When mouse hover, update tool tip
    */
   updateTooltip(e) {
-    const { delayShow, disable } = this.state;
+    const { delayShow, delayUpdate, disable } = this.state;
     const { afterShow } = this.props;
     const placeholder = this.getTooltipContent();
     const eventTarget = e.currentTarget || e.target;
@@ -566,7 +566,9 @@ class ReactTooltip extends React.Component {
       return;
     }
 
-    const delayTime = !this.state.show ? parseInt(delayShow, 10) : 0;
+    const delayTime = !this.state.show
+      ? parseInt(delayShow, 10)
+      : parseInt(delayUpdate, 10);
 
     const updateState = () => {
       if (
