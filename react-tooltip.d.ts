@@ -104,6 +104,8 @@ export interface TooltipProps {
   possibleCustomEventsOff?: string;
   // Should the tooltip by clickable?
   clickable?: boolean;
+  // Aria role for the tooltip
+  role?: string;
 }
 
 // ReactTooltip component is the default export
