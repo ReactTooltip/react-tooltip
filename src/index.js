@@ -189,6 +189,7 @@ class ReactTooltip extends React.Component {
     let domRoot;
 
     switch (parentNode.constructor.name) {
+      case 'Document':
       case 'HTMLDocument':
         domRoot = parentNode.head;
         break;
