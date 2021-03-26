@@ -1,3 +1,10 @@
+## [4.2.17](https://github.com/wwayne/react-tooltip/compare/v4.2.16...v4.2.17) (2021-03-26)
+
+
+### Bug Fixes
+
+* **type:** added role property to types ([#679](https://github.com/wwayne/react-tooltip/issues/679)) ([9b49395](https://github.com/wwayne/react-tooltip/commit/9b49395))
+
 ## [4.2.16](https://github.com/wwayne/react-tooltip/compare/v4.2.15...v4.2.16) (2021-03-26)
 
 
