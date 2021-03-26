@@ -1,3 +1,10 @@
+## [4.2.16](https://github.com/wwayne/react-tooltip/compare/v4.2.15...v4.2.16) (2021-03-26)
+
+
+### Bug Fixes
+
+* **index.js:** fix exception when testing with Jest ([#682](https://github.com/wwayne/react-tooltip/issues/682)) ([f885f1f](https://github.com/wwayne/react-tooltip/commit/f885f1f))
+
 ## [4.2.15](https://github.com/wwayne/react-tooltip/compare/v4.2.14...v4.2.15) (2021-02-26)
 
 
