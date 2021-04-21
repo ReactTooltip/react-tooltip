@@ -136,7 +136,7 @@ class ReactTooltip extends React.Component {
    * For unify the bind and unbind listener
    */
   bind(methodArray) {
-    methodArray.forEach(method => {
+    methodArray.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
@@ -152,7 +152,7 @@ class ReactTooltip extends React.Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     const { ariaProps } = prevState;
     const newAriaProps = parseAria(nextProps);
-    const isChanged = Object.keys(newAriaProps).some(props => {
+    const isChanged = Object.keys(newAriaProps).some((props) => {
       return newAriaProps[props] !== ariaProps[props];
     });
     if (!isChanged) {
@@ -247,8 +247,8 @@ class ReactTooltip extends React.Component {
 
     // Scan document for shadow DOM elements
     nodeListToArray(document.getElementsByTagName('*'))
-      .filter(element => element.shadowRoot)
-      .forEach(element => {
+      .filter((element) => element.shadowRoot)
+      .forEach((element) => {
         targetArray = targetArray.concat(
           nodeListToArray(element.shadowRoot.querySelectorAll(selector))
         );
@@ -266,7 +266,7 @@ class ReactTooltip extends React.Component {
     const { id, globalEventOff, isCapture } = this.props;
     const targetArray = this.getTargetArray(id);
 
-    targetArray.forEach(target => {
+    targetArray.forEach((target) => {
       if (target.getAttribute('currentItem') === null) {
         target.setAttribute('currentItem', 'false');
       }
@@ -279,7 +279,7 @@ class ReactTooltip extends React.Component {
     if (this.isBodyMode()) {
       this.bindBodyListener(targetArray);
     } else {
-      targetArray.forEach(target => {
+      targetArray.forEach((target) => {
         const isCaptureMode = this.isCapture(target);
         const effect = this.getEffect(target);
         if (this.isCustomEvent(target)) {
@@ -288,6 +288,7 @@ class ReactTooltip extends React.Component {
         }
 
         target.addEventListener('mouseenter', this.showTooltip, isCaptureMode);
+        target.addEventListener('focus', this.showTooltip, isCaptureMode);
         if (effect === 'float') {
           target.addEventListener(
             'mousemove',
@@ -296,6 +297,7 @@ class ReactTooltip extends React.Component {
           );
         }
         target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode);
+        target.addEventListener('blur', this.showTooltip, isCaptureMode);
       });
     }
 
@@ -318,7 +320,7 @@ class ReactTooltip extends React.Component {
       this.unbindBodyListener();
     } else {
       const targetArray = this.getTargetArray(id);
-      targetArray.forEach(target => {
+      targetArray.forEach((target) => {
         this.unbindBasicListener(target);
         if (this.isCustomEvent(target)) this.customUnbindListener(target);
       });
@@ -380,7 +382,7 @@ class ReactTooltip extends React.Component {
     if (isGlobalCall) {
       // Don't trigger other elements belongs to other ReactTooltip
       const targetArray = this.getTargetArray(this.props.id);
-      const isMyElement = targetArray.some(ele => ele === e.currentTarget);
+      const isMyElement = targetArray.some((ele) => ele === e.currentTarget);
       if (!isMyElement) return;
     }
     // Get the tooltip content
@@ -399,6 +401,11 @@ class ReactTooltip extends React.Component {
       scrollHide = e.currentTarget.getAttribute('data-scroll-hide') === 'true';
     } else if (this.props.scrollHide != null) {
       scrollHide = this.props.scrollHide;
+    }
+
+    // adding aria-describedby to target to make tooltips read by screen readers
+    if (e && e.currentTarget && e.currentTarget.setAttribute) {
+      e.currentTarget.setAttribute('aria-describedby', this.state.uuid);
     }
 
     // Make sure the correct place is set
@@ -617,8 +624,13 @@ class ReactTooltip extends React.Component {
     if (hasTarget) {
       // Don't trigger other elements belongs to other ReactTooltip
       const targetArray = this.getTargetArray(this.props.id);
-      const isMyElement = targetArray.some(ele => ele === e.currentTarget);
+      const isMyElement = targetArray.some((ele) => ele === e.currentTarget);
       if (!isMyElement || !this.state.show) return;
+    }
+
+    // clean up aria-describedby when hiding tooltip
+    if (e && e.currentTarget && e.currentTarget.removeAttribute) {
+      e.currentTarget.removeAttribute('aria-describedby');
     }
 
     const resetState = () => {
@@ -730,14 +742,14 @@ class ReactTooltip extends React.Component {
   hasCustomColors() {
     return Boolean(
       Object.keys(this.state.customColors).find(
-        color => color !== 'border' && this.state.customColors[color]
+        (color) => color !== 'border' && this.state.customColors[color]
       ) ||
         (this.state.border && this.state.customColors['border'])
     );
   }
 
   render() {
-    const { extraClass, html, ariaProps, disable } = this.state;
+    const { extraClass, html, ariaProps, disable, uuid } = this.state;
     const content = this.getTooltipContent();
     const isEmptyTip = this.isEmptyTip(content);
     const style = generateTooltipStyle(
@@ -773,8 +785,8 @@ class ReactTooltip extends React.Component {
       return (
         <Wrapper
           className={`${wrapperClassName}`}
-          id={this.props.id}
-          ref={ref => (this.tooltipRef = ref)}
+          id={this.props.id || uuid}
+          ref={(ref) => (this.tooltipRef = ref)}
           {...ariaProps}
           data-id="tooltip"
           dangerouslySetInnerHTML={{ __html: htmlContent }}
@@ -784,9 +796,9 @@ class ReactTooltip extends React.Component {
       return (
         <Wrapper
           className={`${wrapperClassName}`}
-          id={this.props.id}
+          id={this.props.id || uuid}
           {...ariaProps}
-          ref={ref => (this.tooltipRef = ref)}
+          ref={(ref) => (this.tooltipRef = ref)}
           data-id="tooltip"
         >
           <style dangerouslySetInnerHTML={{ __html: style }} />
