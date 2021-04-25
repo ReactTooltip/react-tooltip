@@ -1,3 +1,10 @@
+## [4.2.18](https://github.com/wwayne/react-tooltip/compare/v4.2.17...v4.2.18) (2021-04-25)
+
+
+### Bug Fixes
+
+* **src/index.js:** add accessibility support for tabbing ([#695](https://github.com/wwayne/react-tooltip/issues/695)) ([ae936a5](https://github.com/wwayne/react-tooltip/commit/ae936a5))
+
 ## [4.2.17](https://github.com/wwayne/react-tooltip/compare/v4.2.16...v4.2.17) (2021-03-26)
 
 
