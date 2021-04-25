@@ -288,6 +288,7 @@ class ReactTooltip extends React.Component {
         }
 
         target.addEventListener('mouseenter', this.showTooltip, isCaptureMode);
+        target.addEventListener('focus', this.showTooltip, isCaptureMode);
         if (effect === 'float') {
           target.addEventListener(
             'mousemove',
@@ -296,6 +297,7 @@ class ReactTooltip extends React.Component {
           );
         }
         target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode);
+        target.addEventListener('blur', this.showTooltip, isCaptureMode);
       });
     }
 
@@ -399,6 +401,11 @@ class ReactTooltip extends React.Component {
       scrollHide = e.currentTarget.getAttribute('data-scroll-hide') === 'true';
     } else if (this.props.scrollHide != null) {
       scrollHide = this.props.scrollHide;
+    }
+
+    // adding aria-describedby to target to make tooltips read by screen readers
+    if (e && e.currentTarget && e.currentTarget.setAttribute) {
+      e.currentTarget.setAttribute('aria-describedby', this.state.uuid);
     }
 
     // Make sure the correct place is set
@@ -621,6 +628,11 @@ class ReactTooltip extends React.Component {
       if (!isMyElement || !this.state.show) return;
     }
 
+    // clean up aria-describedby when hiding tooltip
+    if (e && e.currentTarget && e.currentTarget.removeAttribute) {
+      e.currentTarget.removeAttribute('aria-describedby');
+    }
+
     const resetState = () => {
       const isVisible = this.state.show;
       // Check if the mouse is actually over the tooltip, if so don't hide the tooltip
@@ -737,7 +749,7 @@ class ReactTooltip extends React.Component {
   }
 
   render() {
-    const { extraClass, html, ariaProps, disable } = this.state;
+    const { extraClass, html, ariaProps, disable, uuid } = this.state;
     const content = this.getTooltipContent();
     const isEmptyTip = this.isEmptyTip(content);
     const style = generateTooltipStyle(
@@ -773,7 +785,7 @@ class ReactTooltip extends React.Component {
       return (
         <Wrapper
           className={`${wrapperClassName}`}
-          id={this.props.id}
+          id={this.props.id || uuid}
           ref={ref => (this.tooltipRef = ref)}
           {...ariaProps}
           data-id="tooltip"
@@ -784,7 +796,7 @@ class ReactTooltip extends React.Component {
       return (
         <Wrapper
           className={`${wrapperClassName}`}
-          id={this.props.id}
+          id={this.props.id || uuid}
           {...ariaProps}
           ref={ref => (this.tooltipRef = ref)}
           data-id="tooltip"
