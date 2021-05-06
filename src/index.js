@@ -297,7 +297,7 @@ class ReactTooltip extends React.Component {
           );
         }
         target.addEventListener('mouseleave', this.hideTooltip, isCaptureMode);
-        target.addEventListener('blur', this.showTooltip, isCaptureMode);
+        target.addEventListener('blur', this.hideTooltip, isCaptureMode);
       });
     }
 
