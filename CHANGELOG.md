@@ -1,3 +1,10 @@
+## [4.2.19](https://github.com/wwayne/react-tooltip/compare/v4.2.18...v4.2.19) (2021-05-06)
+
+
+### Bug Fixes
+
+* **src/index.js:** hide tooltip if blurred (tabbed out) ([#699](https://github.com/wwayne/react-tooltip/issues/699)) ([e0a2a1d](https://github.com/wwayne/react-tooltip/commit/e0a2a1d))
+
 ## [4.2.18](https://github.com/wwayne/react-tooltip/compare/v4.2.17...v4.2.18) (2021-04-25)
 
 
