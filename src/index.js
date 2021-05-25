@@ -22,6 +22,9 @@ import { generateUUID } from './utils/uuid';
 import baseCss from './index.scss';
 import { generateTooltipStyle } from './decorators/styler';
 
+/* Polyfill */
+import 'core-js/modules/es.array.find';
+
 @staticMethods
 @windowListener
 @customEvent
@@ -191,6 +194,7 @@ class ReactTooltip extends React.Component {
     switch (parentNode.constructor.name) {
       case 'Document':
       case 'HTMLDocument':
+      case undefined:
         domRoot = parentNode.head;
         break;
       case 'ShadowRoot':
