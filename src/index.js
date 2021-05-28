@@ -780,7 +780,7 @@ class ReactTooltip extends React.Component {
       .join(' ');
 
     if (html) {
-      const htmlContent = `${content}\n<style>${style}</style>`;
+      const htmlContent = `${content}\n<style aria-hidden="true">${style}</style>`;
 
       return (
         <Wrapper
@@ -801,7 +801,10 @@ class ReactTooltip extends React.Component {
           ref={ref => (this.tooltipRef = ref)}
           data-id="tooltip"
         >
-          <style dangerouslySetInnerHTML={{ __html: style }} />
+          <style
+            dangerouslySetInnerHTML={{ __html: style }}
+            aria-hidden="true"
+          />
           {content}
         </Wrapper>
       );
