@@ -1,3 +1,10 @@
+## [4.2.20](https://github.com/wwayne/react-tooltip/compare/v4.2.19...v4.2.20) (2021-05-28)
+
+
+### Bug Fixes
+
+* add aria hidden attribute to style tag ([#703](https://github.com/wwayne/react-tooltip/issues/703)) ([d60c2b7](https://github.com/wwayne/react-tooltip/commit/d60c2b7))
+
 ## [4.2.19](https://github.com/wwayne/react-tooltip/compare/v4.2.18...v4.2.19) (2021-05-06)
 
 
