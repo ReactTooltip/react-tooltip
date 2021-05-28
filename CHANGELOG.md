@@ -1,3 +1,10 @@
+## [4.2.21](https://github.com/wwayne/react-tooltip/compare/v4.2.20...v4.2.21) (2021-05-28)
+
+
+### Bug Fixes
+
+* **compability:** add polyfill and change styles ([#706](https://github.com/wwayne/react-tooltip/issues/706)) ([b6e9a1c](https://github.com/wwayne/react-tooltip/commit/b6e9a1c))
+
 ## [4.2.20](https://github.com/wwayne/react-tooltip/compare/v4.2.19...v4.2.20) (2021-05-28)
 
 
