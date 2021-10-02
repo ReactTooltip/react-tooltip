@@ -57,14 +57,14 @@ const customListeners = {
 export default function(target) {
   target.prototype.isCustomEvent = function(ele) {
     const { event } = this.state;
-    return event || !!ele.getAttribute('data-event');
+    return event || !!ele.getAttribute('data-tooltip-event');
   };
 
   /* Bind listener for custom event */
   target.prototype.customBindListener = function(ele) {
     const { event, eventOff } = this.state;
-    const dataEvent = ele.getAttribute('data-event') || event;
-    const dataEventOff = ele.getAttribute('data-event-off') || eventOff;
+    const dataEvent = ele.getAttribute('data-tooltip-event') || event;
+    const dataEventOff = ele.getAttribute('data-tooltip-event-off') || eventOff;
 
     dataEvent.split(' ').forEach(event => {
       ele.removeEventListener(event, customListeners.get(ele, event));
@@ -83,8 +83,8 @@ export default function(target) {
   /* Unbind listener for custom event */
   target.prototype.customUnbindListener = function(ele) {
     const { event, eventOff } = this.state;
-    const dataEvent = event || ele.getAttribute('data-event');
-    const dataEventOff = eventOff || ele.getAttribute('data-event-off');
+    const dataEvent = event || ele.getAttribute('data-tooltip-event');
+    const dataEventOff = eventOff || ele.getAttribute('data-tooltip-event-off');
 
     ele.removeEventListener(dataEvent, customListeners.get(ele, event));
     if (dataEventOff) ele.removeEventListener(dataEventOff, this.hideTooltip);

@@ -173,7 +173,7 @@ describe('Tooltip', () => {
     ]
   ]).it('Popup color generation - show', (props, res) => {
     render(
-      <span id="colorSpecInvoker" data-tip data-for="colorSpec">
+      <span id="colorSpecInvoker" data-tip data-tooltip-for="colorSpec">
         Invoker
       </span>
     );

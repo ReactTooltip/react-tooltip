@@ -20,7 +20,7 @@ const bodyListener = function(callback, options, e) {
   const { id } = this.props;
 
   const tip = e.target.getAttribute('data-tip') || null;
-  const forId = e.target.getAttribute('data-for') || null;
+  const forId = e.target.getAttribute('data-tooltip-for') || null;
 
   const target = e.target;
   if (this.isCustomEvent(target) && !customEvent) {
@@ -67,8 +67,11 @@ export default function(target) {
     } = this.state;
     const body = getBody();
 
-    const customEvents = findCustomEvents(targetArray, 'data-event');
-    const customEventsOff = findCustomEvents(targetArray, 'data-event-off');
+    const customEvents = findCustomEvents(targetArray, 'data-tooltip-event');
+    const customEventsOff = findCustomEvents(
+      targetArray,
+      'data-tooltip-event-off'
+    );
 
     if (event != null) customEvents[event] = true;
     if (eventOff != null) customEventsOff[eventOff] = true;
@@ -95,7 +98,7 @@ export default function(target) {
         this,
         e => {
           const targetEventOff =
-            e.currentTarget.getAttribute('data-event-off') || eventOff;
+            e.currentTarget.getAttribute('data-tooltip-event-off') || eventOff;
           checkStatus.call(this, targetEventOff, e);
         },
         { customEvent: true }

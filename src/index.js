@@ -206,10 +206,10 @@ class ReactTooltip extends React.Component {
     }
 
     // Prevent styles duplication.
-    if (!domRoot.querySelector('style[data-react-tooltip]')) {
+    if (!domRoot.querySelector('style[data-tooltip-react-tooltip]')) {
       const style = document.createElement('style');
       style.textContent = baseCss;
-      style.setAttribute('data-react-tooltip', 'true');
+      style.setAttribute('data-tooltip-react-tooltip', 'true');
 
       domRoot.appendChild(style);
     }
@@ -245,10 +245,10 @@ class ReactTooltip extends React.Component {
     let targetArray = [];
     let selector;
     if (!id) {
-      selector = '[data-tip]:not([data-for])';
+      selector = '[data-tip]:not([data-tooltip-for])';
     } else {
       const escaped = id.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-      selector = `[data-tip][data-for="${escaped}"]`;
+      selector = `[data-tip][data-tooltip-for="${escaped}"]`;
     }
 
     // Scan document for shadow DOM elements
@@ -396,15 +396,18 @@ class ReactTooltip extends React.Component {
     const { multiline, getContent } = this.props;
     const originTooltip = e.currentTarget.getAttribute('data-tip');
     const isMultiline =
-      e.currentTarget.getAttribute('data-multiline') || multiline || false;
+      e.currentTarget.getAttribute('data-tooltip-multiline') ||
+      multiline ||
+      false;
 
     // If it is focus event or called by ReactTooltip.show, switch to `solid` effect
     const switchToSolid = e instanceof window.FocusEvent || isGlobalCall;
 
     // if it needs to skip adding hide listener to scroll
     let scrollHide = true;
-    if (e.currentTarget.getAttribute('data-scroll-hide')) {
-      scrollHide = e.currentTarget.getAttribute('data-scroll-hide') === 'true';
+    if (e.currentTarget.getAttribute('data-tooltip-scroll-hide')) {
+      scrollHide =
+        e.currentTarget.getAttribute('data-tooltip-scroll-hide') === 'true';
     } else if (this.props.scrollHide != null) {
       scrollHide = this.props.scrollHide;
     }
@@ -416,11 +419,15 @@ class ReactTooltip extends React.Component {
 
     // Make sure the correct place is set
     const desiredPlace =
-      e.currentTarget.getAttribute('data-place') || this.props.place || 'top';
+      e.currentTarget.getAttribute('data-tooltip-place') ||
+      this.props.place ||
+      'top';
     const effect =
       (switchToSolid && 'solid') || this.getEffect(e.currentTarget);
     const offset =
-      e.currentTarget.getAttribute('data-offset') || this.props.offset || {};
+      e.currentTarget.getAttribute('data-tooltip-offset') ||
+      this.props.offset ||
+      {};
     const result = getPosition(
       e,
       e.currentTarget,
@@ -451,7 +458,8 @@ class ReactTooltip extends React.Component {
     const target = e.currentTarget;
 
     const reshowDelay = this.state.show
-      ? target.getAttribute('data-delay-update') || this.props.delayUpdate
+      ? target.getAttribute('data-tooltip-delay-update') ||
+        this.props.delayUpdate
       : 0;
 
     const self = this;
@@ -463,46 +471,54 @@ class ReactTooltip extends React.Component {
           isMultiline: isMultiline,
           desiredPlace: desiredPlace,
           place: place,
-          type: target.getAttribute('data-type') || self.props.type || 'dark',
+          type:
+            target.getAttribute('data-tooltip-type') ||
+            self.props.type ||
+            'dark',
           customColors: {
             text:
-              target.getAttribute('data-text-color') ||
+              target.getAttribute('data-tooltip-text-color') ||
               self.props.textColor ||
               null,
             background:
-              target.getAttribute('data-background-color') ||
+              target.getAttribute('data-tooltip-background-color') ||
               self.props.backgroundColor ||
               null,
             border:
-              target.getAttribute('data-border-color') ||
+              target.getAttribute('data-tooltip-border-color') ||
               self.props.borderColor ||
               null,
             arrow:
-              target.getAttribute('data-arrow-color') ||
+              target.getAttribute('data-tooltip-arrow-color') ||
               self.props.arrowColor ||
               null
           },
           effect: effect,
           offset: offset,
-          padding: target.getAttribute('data-padding') || self.props.padding,
+          padding:
+            target.getAttribute('data-tooltip-padding') || self.props.padding,
           html:
-            (target.getAttribute('data-html')
-              ? target.getAttribute('data-html') === 'true'
+            (target.getAttribute('data-tooltip-html')
+              ? target.getAttribute('data-tooltip-html') === 'true'
               : self.props.html) || false,
           delayShow:
-            target.getAttribute('data-delay-show') || self.props.delayShow || 0,
+            target.getAttribute('data-tooltip-delay-show') ||
+            self.props.delayShow ||
+            0,
           delayHide:
-            target.getAttribute('data-delay-hide') || self.props.delayHide || 0,
+            target.getAttribute('data-tooltip-delay-hide') ||
+            self.props.delayHide ||
+            0,
           delayUpdate:
-            target.getAttribute('data-delay-update') ||
+            target.getAttribute('data-tooltip-delay-update') ||
             self.props.delayUpdate ||
             0,
           border:
-            (target.getAttribute('data-border')
-              ? target.getAttribute('data-border') === 'true'
+            (target.getAttribute('data-tooltip-border')
+              ? target.getAttribute('data-tooltip-border') === 'true'
               : self.props.border) || false,
           extraClass:
-            target.getAttribute('data-class') ||
+            target.getAttribute('data-tooltip-class') ||
             self.props.class ||
             self.props.className ||
             '',
@@ -796,7 +812,7 @@ class ReactTooltip extends React.Component {
           id={this.props.id || uuid}
           ref={ref => (this.tooltipRef = ref)}
           {...ariaProps}
-          data-id="tooltip"
+          data-tooltip-id="tooltip"
           dangerouslySetInnerHTML={{ __html: htmlContent }}
         />
       );
@@ -807,7 +823,7 @@ class ReactTooltip extends React.Component {
           id={this.props.id || uuid}
           {...ariaProps}
           ref={ref => (this.tooltipRef = ref)}
-          data-id="tooltip"
+          data-tooltip-id="tooltip"
         >
           <style
             dangerouslySetInnerHTML={{ __html: style }}

@@ -45,9 +45,9 @@ export default class App extends Component {
           <h4 className="title">React Tooltip</h4>
           <div className="demonstration">
             <a
-              data-for="main"
+              data-tooltip-for="main"
               data-tip="Hello<br />multiline<br />tooltip"
-              data-iscapture="true"
+              data-tooltip-iscapture="true"
             >
               ◕‿‿◕
             </a>
@@ -171,7 +171,7 @@ export default class App extends Component {
                 className="side"
                 style={{ transform: 'translate3d(5px, 5px, 5px)' }}
               >
-                <a data-tip data-for="happyFace">
+                <a data-tip data-tooltip-for="happyFace">
                   d(`･∀･)b
                 </a>
                 <ReactTooltip id="happyFace" type="error">
@@ -179,7 +179,7 @@ export default class App extends Component {
                 </ReactTooltip>
               </div>
               <div className="side">
-                <a data-tip data-for="sadFace">
+                <a data-tip data-tooltip-for="sadFace">
                   இдஇ
                 </a>
                 <ReactTooltip id="sadFace" type="warning" effect="solid">
@@ -191,13 +191,13 @@ export default class App extends Component {
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<a data-tip data-for='happyFace'> d(`･∀･)b </a>\n" +
+                  {"<a data-tip data-tooltip-for='happyFace'> d(`･∀･)b </a>\n" +
                     "<ReactTooltip id='happyFace' type='error'>\n" +
                     ' ' +
                     ' ' +
                     '<span>Show happy face</span>\n' +
                     '</ReactTooltip>\n' +
-                    "<a data-tip data-for='sadFace'> இдஇ </a>\n" +
+                    "<a data-tip data-tooltip-for='sadFace'> இдஇ </a>\n" +
                     "<ReactTooltip id='sadFace' type='warning' effect='solid'>\n" +
                     ' ' +
                     ' ' +
@@ -208,12 +208,12 @@ export default class App extends Component {
             </pre>
             <div className="example-jsx">
               <div className="side">
-                <a data-tip data-for="global">
+                <a data-tip data-tooltip-for="global">
                   σ`∀´)σ
                 </a>
               </div>
               <div className="side">
-                <a data-tip data-for="global">
+                <a data-tip data-tooltip-for="global">
                   (〃∀〃)
                 </a>
               </div>
@@ -230,8 +230,8 @@ export default class App extends Component {
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<a data-tip data-for='global'> σ`∀´)σ </a>\n" +
-                    "<a data-tip data-for='global'> (〃∀〃) </a>\n" +
+                  {"<a data-tip data-tooltip-for='global'> σ`∀´)σ </a>\n" +
+                    "<a data-tip data-tooltip-for='global'> (〃∀〃) </a>\n" +
                     "<ReactTooltip id='global' aria-haspopup='true' >\n" +
                     ' <p>This is a global react component tooltip</p>\n' +
                     ' <p>You can put every thing here</p>\n' +
@@ -259,9 +259,9 @@ export default class App extends Component {
             <div className="example-jsx">
               <div className="side">
                 <a
-                  data-for="custom-event"
+                  data-tooltip-for="custom-event"
                   data-tip="custom show"
-                  data-event="click focus"
+                  data-tooltip-event="click focus"
                 >
                   ( •̀д•́)
                 </a>
@@ -269,11 +269,11 @@ export default class App extends Component {
               </div>
               <div className="side">
                 <a
-                  data-for="custom-off-event"
+                  data-tooltip-for="custom-off-event"
                   ref={ref => (this.targetRef = ref)}
                   data-tip="custom show and hide"
-                  data-event="click"
-                  data-event-off="dblclick"
+                  data-tooltip-event="click"
+                  data-tooltip-event-off="dblclick"
                 >
                   ( •̀д•́)
                 </a>
@@ -284,13 +284,14 @@ export default class App extends Component {
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<a data-tip='custom show' data-event='click focus'>( •̀д•́)</a>\n" +
+                  {"<a data-tip='custom show' data-tooltip-event='click focus'>( •̀д•́)</a>\n" +
                     "<ReactTooltip globalEventOff='click' />"}
                 </p>
               </div>
               <div>
                 <p>
-                  {"<a data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>\n" +
+                  {"<a data-tip='custom show and hide' data-tooltip-event='click' data-tooltip-event-off='dblclick'>" +
+                    '( •̀д•́)</a>\n' +
                     '<ReactTooltip/>'}
                 </p>
               </div>
@@ -302,7 +303,10 @@ export default class App extends Component {
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="side">
-                <a data-for="custom-color-no-arrow" data-tip="Lovely colors!">
+                <a
+                  data-tooltip-for="custom-color-no-arrow"
+                  data-tip="Lovely colors!"
+                >
                   ㅇㅅㅇ
                 </a>
                 <ReactTooltip
@@ -315,7 +319,7 @@ export default class App extends Component {
               </div>
               <div className="side">
                 <a
-                  data-for="custom-color"
+                  data-tooltip-for="custom-color"
                   data-tip="That is one weird arrow (and a border)!"
                 >
                   V(^-^)V
@@ -336,14 +340,16 @@ export default class App extends Component {
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<a data-for='custom-color-no-arrow' data-tip='Lovely colors!'>ㅇㅅㅇ</a>\n" +
+                  {"<a data-tooltip-for='custom-color-no-arrow' data-tip='Lovely colors!'>ㅇㅅㅇ</a>\n" +
                     "<ReactTooltip id='custom-color-no-arrow' className='custom-color-no-arrow' delayHide={1000}\n" +
                     "textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' effect='solid'/>"}
                 </p>
               </div>
               <div>
                 <p>
-                  {"<a data-for='custom-color' data-tip='That is one weird arrow (and a border)!'>V(^-^)V</a>\n" +
+                  {"<a data-tooltip-for='custom-color' data-tip='That is one weird arrow (and a border)!'>" +
+                    'V(^-^)V' +
+                    '</a>\n' +
                     "<ReactTooltip id='custom-color' className='custom-color' place='right' border\n" +
                     "textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' borderColor='darkgreen' arrowColor='red'/>"}
                 </p>
@@ -357,7 +363,7 @@ export default class App extends Component {
             <div className="example-jsx">
               <div className="side">
                 <a
-                  data-for="custom-class"
+                  data-tooltip-for="custom-class"
                   data-tip="hover on me will keep the tooltip"
                 >
                   (･ω´･ )
@@ -370,7 +376,7 @@ export default class App extends Component {
                 />
               </div>
               <div className="side">
-                <a data-for="custom-theme" data-tip="custom theme">
+                <a data-tooltip-for="custom-theme" data-tip="custom theme">
                   (･ω´･ )
                 </a>
                 <ReactTooltip id="custom-theme" className="customeTheme" />
@@ -417,7 +423,7 @@ export default class App extends Component {
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="side">
-                <a data-for="getContent" data-tip>
+                <a data-tooltip-for="getContent" data-tip>
                   =( •̀д•́)
                 </a>
                 <ReactTooltip
@@ -426,7 +432,7 @@ export default class App extends Component {
                 />
               </div>
               <div className="side">
-                <a data-for="overTime" data-tip>
+                <a data-tooltip-for="overTime" data-tip>
                   =( •̀д•́)
                 </a>
                 <ReactTooltip
@@ -447,13 +453,13 @@ export default class App extends Component {
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<a data-for='getContent' data-tip>=( •̀д•́)</a>\n" +
+                  {"<a data-tooltip-for='getContent' data-tip>=( •̀д•́)</a>\n" +
                     "<ReactTooltip id='getContent' getContent={() => Math.floor(Math.random() * 100)} />"}
                 </p>
               </div>
               <div>
                 <p>
-                  {"<a data-for='overTime' data-tip>=( •̀д•́)</a>\n" +
+                  {"<a data-tooltip-for='overTime' data-tip>=( •̀д•́)</a>\n" +
                     "<ReactTooltip id='overTime' getContent={[() => {\n" +
                     " return 'Random length content'.slice(0, Math.floor(Math.random() * 21) + 1)\n" +
                     '}, 1000]}/>'}
@@ -467,12 +473,12 @@ export default class App extends Component {
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="side">
-                <a data-for="enrich" data-tip="sooooo cute">
+                <a data-tooltip-for="enrich" data-tip="sooooo cute">
                   (❂‿❂)
                 </a>
               </div>
               <div className="side">
-                <a data-for="enrich" data-tip="really high">
+                <a data-tooltip-for="enrich" data-tip="really high">
                   (❂‿❂)
                 </a>
               </div>
@@ -485,8 +491,8 @@ export default class App extends Component {
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<a data-for='enrich' data-tip='sooooo cute'>(❂‿❂)</a>\n" +
-                    "<a data-for='enrich' data-tip='really high'>(❂‿❂)</a>\n" +
+                  {"<a data-tooltip-for='enrich' data-tip='sooooo cute'>(❂‿❂)</a>\n" +
+                    "<a data-tooltip-for='enrich' data-tip='really high'>(❂‿❂)</a>\n" +
                     /* eslint-disable no-template-curly-in-string */
                     "<ReactTooltip id='enrich' getContent={(dataTip) => `This little buddy is ${dataTip}`}/>"}
                 </p>
@@ -503,16 +509,16 @@ export default class App extends Component {
                 style={{ overflow: 'auto', height: '200px' }}
               >
                 <div
-                  data-for="scrollContent"
+                  data-tooltip-for="scrollContent"
                   data-tip
-                  data-iscapture="true"
+                  data-tooltip-iscapture="true"
                   style={{ width: '5000px', height: '5000px' }}
                 >
                   Scroll me with the mouse wheel.
                   <br />
                   The tooltip will hide.
                   <br />
-                  Make sure you set data-iscapture="true"
+                  Make sure you set data-tooltip-iscapture="true"
                 </div>
                 <ReactTooltip
                   id="scrollContent"
@@ -524,10 +530,10 @@ export default class App extends Component {
                 style={{ overflow: 'auto', height: '200px' }}
               >
                 <div
-                  data-for="scrollTime"
+                  data-tooltip-for="scrollTime"
                   data-tip
-                  data-iscapture="true"
-                  data-scroll-hide="false"
+                  data-tooltip-iscapture="true"
+                  data-tooltip-scroll-hide="false"
                   style={{ width: '5000px', height: '5000px' }}
                 >
                   Scroll me with the mouse wheel.
@@ -549,14 +555,15 @@ export default class App extends Component {
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<div data-for='scrollContent' data-tip data-iscapture='true'\n" +
+                  {"<div data-tooltip-for='scrollContent' data-tip data-tooltip-iscapture='true'\n" +
                     "style={{ width: '5000px', height: '5000px' }}>...</div>\n" +
                     "<ReactTooltip id='scrollContent' getContent={() => Math.floor(Math.random() * 100)}/>"}
                 </p>
               </div>
               <div>
                 <p>
-                  {"<div data-for='scrollTime' data-tip data-iscapture='true' data-scroll-hide='false'\n" +
+                  {"<div data-tooltip-for='scrollTime' data-tip " +
+                    "data-tooltip-iscapture='true' data-tooltip-scroll-hide='false'\n" +
                     "style={{ width: '5000px', height: '5000px' }}>...</div>\n" +
                     "<ReactTooltip id='scrollTime' getContent={[() => {return new Date().toISOString()}, 1000]}/>"}
                 </p>
@@ -577,7 +584,7 @@ export default class App extends Component {
               <div className="side" style={{ textAlign: 'center' }}>
                 <svg
                   data-tip="=( •̀д•́)"
-                  data-for="svgTooltip"
+                  data-tooltip-for="svgTooltip"
                   width="50"
                   height="50"
                 >
@@ -596,7 +603,7 @@ export default class App extends Component {
                 <svg width="75" height="50">
                   <circle
                     data-tip="=( •̀‿•́)"
-                    data-for="svgTooltip2"
+                    data-tooltip-for="svgTooltip2"
                     cx="25"
                     cy="25"
                     r="22"
@@ -606,7 +613,7 @@ export default class App extends Component {
                   />
                   <circle
                     data-tip="=( ❂‿❂)"
-                    data-for="svgTooltip2"
+                    data-tooltip-for="svgTooltip2"
                     cx="50"
                     cy="25"
                     r="16"
@@ -622,16 +629,16 @@ export default class App extends Component {
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<svg data-tip='=( •̀д•́)' data-for='svgTooltip' width='50' height='50'>\n" +
+                  {"<svg data-tip='=( •̀д•́)' data-tooltip-for='svgTooltip' width='50' height='50'>\n" +
                     "  <circle cx='25' cy='25' r='22' fill='#fff' stroke='#000' strokeWidth='8'/>\n" +
                     '</svg>\n' +
                     "<ReactTooltip id='svgTooltip' />"}
                 </p>
                 <p>
                   {"<svg width='75' height='50'>\n" +
-                    "<circle data-tip='=( •̀‿•́)' data-for='svgTooltip2'\n" +
+                    "<circle data-tip='=( •̀‿•́)' data-tooltip-for='svgTooltip2'\n" +
                     "   cx='25' cy='25' r='22' fill='#fff' stroke='#000' strokeWidth='4'/>\n" +
-                    "<circle data-tip='=( ❂‿❂)' data-for='svgTooltip2'\n" +
+                    "<circle data-tip='=( ❂‿❂)' data-tooltip-for='svgTooltip2'\n" +
                     "   cx='50' cy='25' r='16' fill='#fdf' stroke='#404' strokeWidth='4'/>\n" +
                     '</svg>\n' +
                     "<ReactTooltip id='svgTooltip2'/>"}
@@ -650,42 +657,42 @@ export default class App extends Component {
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="block">
-                <a data-for="soclose" data-tip="1">
+                <a data-tooltip-for="soclose" data-tip="1">
                   1 (❂‿❂)
                 </a>
               </div>
               <div className="block">
-                <a data-for="soclose" data-tip="2">
+                <a data-tooltip-for="soclose" data-tip="2">
                   2 (❂‿❂)
                 </a>
               </div>
               <div className="block">
-                <a data-for="soclose" data-tip="3">
+                <a data-tooltip-for="soclose" data-tip="3">
                   3 (❂‿❂)
                 </a>
               </div>
               <div className="block">
-                <a data-for="soclose" data-tip="4">
+                <a data-tooltip-for="soclose" data-tip="4">
                   4 (❂‿❂)
                 </a>
               </div>
               <div className="block">
-                <a data-for="soclose" data-tip="5">
+                <a data-tooltip-for="soclose" data-tip="5">
                   5 (❂‿❂)
                 </a>
               </div>
               <div className="block">
-                <a data-for="soclose" data-tip="6">
+                <a data-tooltip-for="soclose" data-tip="6">
                   6 (❂‿❂)
                 </a>
               </div>
               <div className="block">
-                <a data-for="soclose" data-tip="7">
+                <a data-tooltip-for="soclose" data-tip="7">
                   7 (❂‿❂)
                 </a>
               </div>
               <div className="block">
-                <a data-for="soclose" data-tip="8">
+                <a data-tooltip-for="soclose" data-tip="8">
                   8 (❂‿❂)
                 </a>
               </div>
@@ -710,9 +717,15 @@ export default class App extends Component {
             <br />
             <pre className="example-pre">
               <div>
-                <p>{"<a data-for='soclose' data-tip='1'>1 (❂‿❂)</a>"}</p>
-                <p>{"<a data-for='soclose' data-tip='2'>2 (❂‿❂)</a>..."}</p>
-                <p>{"<a data-for='soclose' data-tip='8'>8 (❂‿❂)</a>"}</p>
+                <p>
+                  {"<a data-tooltip-for='soclose' data-tip='1'>1 (❂‿❂)</a>"}
+                </p>
+                <p>
+                  {"<a data-tooltip-for='soclose' data-tip='2'>2 (❂‿❂)</a>..."}
+                </p>
+                <p>
+                  {"<a data-tooltip-for='soclose' data-tip='8'>8 (❂‿❂)</a>"}
+                </p>
                 <p>
                   {"<ReactTooltip id='soclose'\n" +
                     '  getContent={(dataTip) => \n' +
@@ -736,7 +749,11 @@ export default class App extends Component {
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="block">
-                <a data-tip data-for="clickme" data-event="click">
+                <a
+                  data-tip
+                  data-tooltip-for="clickme"
+                  data-tooltip-event="click"
+                >
                   (❂‿❂)
                 </a>
               </div>
@@ -755,7 +772,7 @@ export default class App extends Component {
               <div>
                 <p>
                   {
-                    "<a data-tip data-for='clickme' data-event='click'> (❂‿❂) </a>"
+                    "<a data-tip data-tooltip-for='clickme' data-tooltip-event='click'> (❂‿❂) </a>"
                   }
                 </p>
                 <p>
@@ -779,7 +796,7 @@ export default class App extends Component {
             </p>
             <div className="example-jsx">
               <div className="side" style={{ display: 'flex', width: '100%' }}>
-                <a data-tip data-for="overridePosition">
+                <a data-tip data-tooltip-for="overridePosition">
                   ( •̀д•́) override
                 </a>
                 <ReactTooltip
@@ -808,7 +825,7 @@ export default class App extends Component {
                   />
                   <div>footer</div>
                 </ReactTooltip>
-                <a data-tip data-for="noOverridePosition">
+                <a data-tip data-tooltip-for="noOverridePosition">
                   ( •̀д•́) noOverride
                 </a>
                 <ReactTooltip id="noOverridePosition">
@@ -825,7 +842,7 @@ export default class App extends Component {
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<a data-tip data-for='overridePosition'>( •̀д•́) override</a>\n" +
+                  {"<a data-tip data-tooltip-for='overridePosition'>( •̀д•́) override</a>\n" +
                     '<ReactTooltip\n' +
                     "  id='overridePosition'\n" +
                     '  overridePosition={ (\n' +
@@ -842,7 +859,7 @@ export default class App extends Component {
                     '  <img src="http://lorempixel.com/100/1500" alt="lorem image 100x1500" />\n' +
                     '  <div>footer</div>\n' +
                     '</ReactTooltip>\n' +
-                    "<a data-tip data-for='noOverridePosition'>( •̀д•́) noOverride</a>\n" +
+                    "<a data-tip data-tooltip-for='noOverridePosition'>( •̀д•́) noOverride</a>\n" +
                     "<ReactTooltip id='noOverridePosition'>\n" +
                     '  <div>header</div>\n' +
                     '  <img src="http://lorempixel.com/100/1500" alt="lorem image 100x1500" />\n' +

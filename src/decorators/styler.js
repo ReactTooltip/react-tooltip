@@ -18,7 +18,7 @@ export function generateTooltipStyle(
 }
 
 /**
- * Generates the tooltip style rules based on the element-specified "data-type" property.
+ * Generates the tooltip style rules based on the element-specified "data-tooltip-type" property.
  */
 function generateStyle(uuid, colors, padding = DEFAULT_PADDING) {
   const textColor = colors.text;
