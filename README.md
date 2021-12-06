@@ -84,7 +84,7 @@ Notes:
 | padding          | data-padding          | String        | e.g. `8px 21px`                                                                                                                       | Popup padding style                                                                                                                                                                                 |
 | multiline        | data-multiline        | Bool          | true, false                                                                                                                           | support `<br>`, `<br />` to make multiline                                                                                                                                                          |
 | className        | data-class            | String        |                                                                                                                                       | extra custom class, can use !important to overwrite react-tooltip's default class                                                                                                                   |
-| html             | data-html             | Bool          | true, false                                                                                                                           | `<p data-tip="<p>HTML tooltip</p>" data-html={true}></p>` or `<ReactTooltip html={true} />`, but see [Security Note](#security-note) below.                                                         |
+| html             | data-html             | Bool          | true, false                                                                                                                           | `<p data-tip="<p>HTML tooltip</p>" data-html={true}></p>` or `<ReactTooltip html={true} />`, but see [Security Note](#security-note) below.<br/>When using JSX, see [this note](#jsx-note) below.                                                        |
 | delayHide        | data-delay-hide       | Number        |                                                                                                                                       | `<p data-tip="tooltip" data-delay-hide='1000'></p>` or `<ReactTooltip delayHide={1000} />`                                                                                                          |
 | delayShow        | data-delay-show       | Number        |                                                                                                                                       | `<p data-tip="tooltip" data-delay-show='1000'></p>` or `<ReactTooltip delayShow={1000} />`                                                                                                          |
 | delayUpdate      | data-delay-update     | Number        |                                                                                                                                       | `<p data-tip="tooltip" data-delay-update='1000'></p>` or `<ReactTooltip delayUpdate={1000} />` Sets a delay in calling getContent if the tooltip is already shown and you mouse over another target |
@@ -107,6 +107,17 @@ Notes:
 ### Security Note
 
 The `html` option allows a tooltip to directly display raw HTML. This is a security risk if any of that content is supplied by the user. Any user-supplied content must be sanitized, using a package like [sanitize-html](https://www.npmjs.com/package/sanitize-html). We chose not to include sanitization after discovering it [increased our package size](https://github.com/wwayne/react-tooltip/issues/429) too much - we don't want to penalize people who don't use the `html` option.
+
+#### JSX Note
+You can use React's [`renderToStaticMarkup`-function](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to use JSX instead of HTML. You still need to set `data-html={true}`.
+**Example:**
+```jsx
+import ReactDOMServer from 'react-dom/server';
+[...]
+<p data-html={true} data-tip={ReactDOMServer.renderToString(<div>I am <b>JSX</b> content</div>)}>
+  Hover me
+</p>
+```
 
 #### Note
 
