@@ -93,8 +93,8 @@ class ReactTooltip extends React.Component {
       uuid: props.uuid || generateUUID(),
       place: props.place || 'top', // Direction of tooltip
       desiredPlace: props.place || 'top',
-      type: 'dark', // Color theme of tooltip
-      effect: 'float', // float or fixed
+      type: props.type || 'dark', // Color theme of tooltip
+      effect: props.effect || 'float', // float or fixed
       show: false,
       border: false,
       customColors: {},
