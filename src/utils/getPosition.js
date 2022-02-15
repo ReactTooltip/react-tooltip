@@ -83,17 +83,18 @@ export default function(e, target, node, place, desiredPlace, effect, offset) {
     right: inside('right')
   };
 
-  function firstInside() {
+  function choose() {
     const allPlaces = desiredPlace
       .split(',')
       .concat(place, ['top', 'bottom', 'left', 'right']);
     for (const d of allPlaces) {
       if (placeIsInside[d]) return d;
     }
-    return null;
+    // if nothing is inside, just use the old place.
+    return place;
   }
 
-  const chosen = firstInside();
+  const chosen = choose();
 
   let isNewState = false;
   let newPlace;
