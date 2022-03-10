@@ -591,10 +591,13 @@ class ReactTooltip extends React.Component {
       }
     };
 
-    clearTimeout(this.delayShowLoop);
+    if (this.delayShowLoop) {
+      clearTimeout(this.delayShowLoop);
+    }
     if (delayTime) {
       this.delayShowLoop = setTimeout(updateState, delayTime);
     } else {
+      this.delayShowLoop = null;
       updateState();
     }
   }
@@ -743,10 +746,22 @@ class ReactTooltip extends React.Component {
    * CLear all kinds of timeout of interval
    */
   clearTimer() {
-    clearTimeout(this.delayShowLoop);
-    clearTimeout(this.delayHideLoop);
-    clearTimeout(this.delayReshow);
-    clearInterval(this.intervalUpdateContent);
+    if (this.delayShowLoop) {
+      clearTimeout(this.delayShowLoop);
+      this.delayShowLoop = null;
+    }
+    if (this.delayHideLoop) {
+      clearTimeout(this.delayHideLoop);
+      this.delayHideLoop = null;
+    }
+    if (this.delayReshow) {
+      clearTimeout(this.delayReshow);
+      this.delayReshow = null;
+    }
+    if (this.intervalUpdateContent) {
+      clearInterval(this.intervalUpdateContent);
+      this.intervalUpdateContent = null;
+    }
   }
 
   hasCustomColors() {
