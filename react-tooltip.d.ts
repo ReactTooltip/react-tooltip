@@ -30,6 +30,8 @@ export interface TooltipProps {
   multiline?: boolean;
   // Add 1px white border
   border?: boolean;
+  // A custom class name to use for the border
+  borderClass?: string;
   // Popup text color
   textColor?: string;
   // Popup background color
@@ -74,7 +76,7 @@ export interface TooltipProps {
   afterHide?: VoidFunc;
   // Callback to override the tooltip position
   overridePosition?: (
-    position: { left: number; top: number; },
+    position: { left: number; top: number },
     currentEvent: Event,
     currentTarget: EventTarget,
     // node is the ref argument, and the wrapper
@@ -83,8 +85,8 @@ export interface TooltipProps {
     place: Place,
     desiredPlace: Place,
     effect: Effect,
-    offset: Offset,
-  ) => ({ left: number; top: number; });
+    offset: Offset
+  ) => { left: number; top: number };
   // Manually disable the tooltip behavior
   disable?: boolean;
   // Hide the tooltip when scrolling;
@@ -94,7 +96,7 @@ export interface TooltipProps {
   // default = true
   resizeHide?: boolean;
   // The tooltip parent component;
-  // default = 'div' 
+  // default = 'div'
   wrapper?: 'div' | 'span';
   // Listen to body events vs. individual events
   bodyMode?: boolean;
@@ -111,7 +113,7 @@ export interface TooltipProps {
 // ReactTooltip component is the default export
 export default class ReactTooltip extends React.Component<TooltipProps> {
   // static methods
-  static show: (target: Element) => {}; 
-  static hide: (target?: Element) => {}; 
-  static rebuild: () => {}; 
+  static show: (target: Element) => {};
+  static hide: (target?: Element) => {};
+  static rebuild: () => {};
 }

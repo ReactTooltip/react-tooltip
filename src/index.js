@@ -44,6 +44,7 @@ class ReactTooltip extends React.Component {
       padding: PropTypes.string,
       multiline: PropTypes.bool,
       border: PropTypes.bool,
+      borderClass: PropTypes.string,
       textColor: PropTypes.string,
       backgroundColor: PropTypes.string,
       borderColor: PropTypes.string,
@@ -97,6 +98,7 @@ class ReactTooltip extends React.Component {
       effect: props.effect || 'float', // float or fixed
       show: false,
       border: false,
+      borderClass: 'border',
       customColors: {},
       offset: {},
       padding: props.padding,
@@ -501,6 +503,10 @@ class ReactTooltip extends React.Component {
             (target.getAttribute('data-border')
               ? target.getAttribute('data-border') === 'true'
               : self.props.border) || false,
+          borderClass:
+            target.getAttribute('data-border-class') ||
+            self.props.borderClass ||
+            'border',
           extraClass:
             target.getAttribute('data-class') ||
             self.props.class ||
@@ -771,7 +777,7 @@ class ReactTooltip extends React.Component {
       '__react_component_tooltip' +
       ` ${this.state.uuid}` +
       (this.state.show && !disable && !isEmptyTip ? ' show' : '') +
-      (this.state.border ? ' border' : '') +
+      (this.state.border ? ' ' + this.state.borderClass : '') +
       ` place-${this.state.place}` + // top, bottom, left, right
       ` type-${this.hasCustomColors() ? 'custom' : this.state.type}` + // dark, success, warning, error, info, light, custom
       (this.props.delayUpdate ? ' allow_hover' : '') +

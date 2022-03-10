@@ -84,12 +84,13 @@ Notes:
 | padding          | data-padding          | String        | e.g. `8px 21px`                                                                                                                       | Popup padding style                                                                                                                                                                                 |
 | multiline        | data-multiline        | Bool          | true, false                                                                                                                           | support `<br>`, `<br />` to make multiline                                                                                                                                                          |
 | className        | data-class            | String        |                                                                                                                                       | extra custom class, can use !important to overwrite react-tooltip's default class                                                                                                                   |
-| html             | data-html             | Bool          | true, false                                                                                                                           | `<p data-tip="<p>HTML tooltip</p>" data-html={true}></p>` or `<ReactTooltip html={true} />`, but see [Security Note](#security-note) below.<br/>When using JSX, see [this note](#jsx-note) below.                                                        |
+| html             | data-html             | Bool          | true, false                                                                                                                           | `<p data-tip="<p>HTML tooltip</p>" data-html={true}></p>` or `<ReactTooltip html={true} />`, but see [Security Note](#security-note) below.<br/>When using JSX, see [this note](#jsx-note) below.   |
 | delayHide        | data-delay-hide       | Number        |                                                                                                                                       | `<p data-tip="tooltip" data-delay-hide='1000'></p>` or `<ReactTooltip delayHide={1000} />`                                                                                                          |
 | delayShow        | data-delay-show       | Number        |                                                                                                                                       | `<p data-tip="tooltip" data-delay-show='1000'></p>` or `<ReactTooltip delayShow={1000} />`                                                                                                          |
 | delayUpdate      | data-delay-update     | Number        |                                                                                                                                       | `<p data-tip="tooltip" data-delay-update='1000'></p>` or `<ReactTooltip delayUpdate={1000} />` Sets a delay in calling getContent if the tooltip is already shown and you mouse over another target |
 | insecure         | null                  | Bool          | true, false                                                                                                                           | Whether to inject the style header into the page dynamically (violates CSP style-src but is a convenient default)                                                                                   |
 | border           | data-border           | Bool          | true, false                                                                                                                           | Add one pixel white border                                                                                                                                                                          |
+| borderClass      | data-border-class     | String        | e.g. custom-border-class                                                                                                              | A custom class name to use for the border - enabled by the `border` prop                                                                                                                            |
 | textColor        | data-text-color       | String        | e.g. red                                                                                                                              | Popup text color                                                                                                                                                                                    |
 | backgroundColor  | data-background-color | String        | e.g. yellow                                                                                                                           | Popup background color                                                                                                                                                                              |
 | borderColor      | data-border-color     | String        | e.g. green                                                                                                                            | Popup border color - enabled by the `border` value                                                                                                                                                  |
@@ -109,8 +110,10 @@ Notes:
 The `html` option allows a tooltip to directly display raw HTML. This is a security risk if any of that content is supplied by the user. Any user-supplied content must be sanitized, using a package like [sanitize-html](https://www.npmjs.com/package/sanitize-html). We chose not to include sanitization after discovering it [increased our package size](https://github.com/wwayne/react-tooltip/issues/429) too much - we don't want to penalize people who don't use the `html` option.
 
 #### JSX Note
+
 You can use React's [`renderToStaticMarkup`-function](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to use JSX instead of HTML. You still need to set `data-html={true}`.
 **Example:**
+
 ```jsx
 import ReactDOMServer from 'react-dom/server';
 [...]
@@ -186,14 +189,14 @@ Same for empty children, if you don't want show the tooltip when the children is
 
 ### 3. Tooltip not binding to dynamic content
 
-When you render `<ReactTooltip>` ahead of dynamic content, and are using `data-for={id}` attributes 
-on new dynamic content, the tooltip will not register its event listener.  
+When you render `<ReactTooltip>` ahead of dynamic content, and are using `data-for={id}` attributes
+on new dynamic content, the tooltip will not register its event listener.
 
 For example, you render a generic tooltip in the root of your app, then load a list of content async.
 Elements in the list use the `data-for={id}` attribute to bind the tooltip on hover.
 Since the tooltip has already scanned for data-tip these new elements will not trigger.
 
-One workaround for this is to trigger `ReactTooltip.rebuild()` after the data load to scan for the attribute again, 
+One workaround for this is to trigger `ReactTooltip.rebuild()` after the data load to scan for the attribute again,
 to allow event wireup.
 
 #### Example
@@ -201,7 +204,7 @@ to allow event wireup.
 ```jsx
 <app>
   <ReactTooltip id="foo" />
-  <list/>
+  <list />
 </app>
 ```
 
