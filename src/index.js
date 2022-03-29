@@ -411,7 +411,10 @@ class ReactTooltip extends React.Component {
 
     // adding aria-describedby to target to make tooltips read by screen readers
     if (e && e.currentTarget && e.currentTarget.setAttribute) {
-      e.currentTarget.setAttribute('aria-describedby', this.state.uuid);
+      e.currentTarget.setAttribute(
+        'aria-describedby',
+        this.props.id || this.state.uuid
+      );
     }
 
     // Make sure the correct place is set
