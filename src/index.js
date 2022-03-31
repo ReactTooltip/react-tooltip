@@ -148,6 +148,7 @@ class ReactTooltip extends React.Component {
 
   componentDidMount() {
     const { insecure, resizeHide } = this.props;
+    this.mount = true;
 
     this.bindListener(); // Bind listener for tooltip
     this.bindWindowEvents(resizeHide); // Bind global event for static method
