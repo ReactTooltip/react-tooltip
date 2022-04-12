@@ -555,7 +555,7 @@ class ReactTooltip extends React.Component {
    */
   updateTooltip(e) {
     const { delayShow, disable } = this.state;
-    const { afterShow } = this.props;
+    const { afterShow, disable: disableProp } = this.props;
     const placeholder = this.getTooltipContent();
     const eventTarget = e.currentTarget || e.target;
 
@@ -565,7 +565,7 @@ class ReactTooltip extends React.Component {
     }
 
     // if the tooltip is empty, disable the tooltip
-    if (this.isEmptyTip(placeholder) || disable) {
+    if (this.isEmptyTip(placeholder) || disable || disableProp) {
       return;
     }
 
@@ -631,10 +631,10 @@ class ReactTooltip extends React.Component {
     const { disable } = this.state;
     const { isScroll } = options;
     const delayHide = isScroll ? 0 : this.state.delayHide;
-    const { afterHide } = this.props;
+    const { afterHide, disable: disableProp } = this.props;
     const placeholder = this.getTooltipContent();
     if (!this.mount) return;
-    if (this.isEmptyTip(placeholder) || disable) return; // if the tooltip is empty, disable the tooltip
+    if (this.isEmptyTip(placeholder) || disable || disableProp) return; // if the tooltip is empty, disable the tooltip
     if (hasTarget) {
       // Don't trigger other elements belongs to other ReactTooltip
       const targetArray = this.getTargetArray(this.props.id);
