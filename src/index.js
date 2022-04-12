@@ -32,7 +32,7 @@ import 'core-js/modules/es.array.find';
 @getEffect
 @bodyMode
 @trackRemoval
-class ReactTooltip extends React.Component {
+class ReactTooltip extends React.ReactNode {
   static get propTypes() {
     return {
       uuid: PropTypes.string,
