@@ -76,24 +76,31 @@ export default function(e, target, node, place, desiredPlace, effect, offset) {
     outsideLeft(p) || outsideRight(p) || outsideTop(p) || outsideBottom(p);
   const inside = p => !outside(p);
 
-  const placesList = ['top', 'bottom', 'left', 'right'];
-  const insideList = [];
-  for (let i = 0; i < 4; i++) {
-    const p = placesList[i];
-    if (inside(p)) {
-      insideList.push(p);
+  const placeIsInside = {
+    top: inside('top'),
+    bottom: inside('bottom'),
+    left: inside('left'),
+    right: inside('right')
+  };
+
+  function choose() {
+    const allPlaces = desiredPlace
+      .split(',')
+      .concat(place, ['top', 'bottom', 'left', 'right']);
+    for (const d of allPlaces) {
+      if (placeIsInside[d]) return d;
     }
+    // if nothing is inside, just use the old place.
+    return place;
   }
+
+  const chosen = choose();
 
   let isNewState = false;
   let newPlace;
-  const shouldUpdatePlace = desiredPlace !== place;
-  if (inside(desiredPlace) && shouldUpdatePlace) {
+  if (chosen && chosen !== place) {
     isNewState = true;
-    newPlace = desiredPlace;
-  } else if (insideList.length > 0 && outside(desiredPlace) && outside(place)) {
-    isNewState = true;
-    newPlace = insideList[0];
+    newPlace = chosen;
   }
 
   if (isNewState) {
