@@ -10,6 +10,7 @@
     "npm": ">=6.13"
   },
   "scripts": {
+    "test": "npm-run-all test:unit",
     "pretest": "npm-run-all pretty:quick lint:staged",
     "eslint:fix": "./node_modules/.bin/eslint . --ignore-path ./.eslintignore --fix",
     "pretty:quick": "./node_modules/.bin/pretty-quick --staged",
@@ -24,7 +25,8 @@
     "github-changes": "github-changes -o wwayne -r react-tooltip -a --only-pulls --use-commit-body",
     "copy:types": "cpy ./react-tooltip.d.ts ./dist --parents --dot",
     "cm": "git cz",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "prepare": "husky install"
   },
   "config": {
     "commitizen": {
@@ -108,7 +110,7 @@
     "gh-pages": "4.0.0",
     "github-changes": "^2.0.3",
     "http-server": "^14.1.1",
-    "husky": "^8.0.1",
+    "husky": "^8.0.0",
     "ignore-styles": "5.0.1",
     "jsdom": "^20.0.0",
     "lint-staged": "^13.0.3",
