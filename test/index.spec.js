@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactTooltip from '../src/index.js';
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup, fireEvent, screen } from '@testing-library/react';
 import { expect } from 'chai';
 const forEach = require('mocha-each');
 const jsdom = require('mocha-jsdom');
@@ -173,17 +173,15 @@ describe('Tooltip', () => {
     ]
   ]).it('Popup color generation - show', (props, res) => {
     render(
-      <span id="colorSpecInvoker" data-tip data-for="colorSpec">
+      <span id="colorSpecInvoker" data-tip data-for="colorSpec" onMouseEnter={() => console.log('ENTER*******')}>
         Invoker
       </span>
     );
     render(<ReactTooltip id="colorSpec" {...props} />);
-    document
-      .getElementById('colorSpecInvoker')
-      .dispatchEvent(new window.Event('mouseenter'));
+    fireEvent( document
+      .getElementById('colorSpecInvoker'), new window.Event('mouseenter'))
 
     const tooltip = document.getElementById('colorSpec');
-
     expect(tooltip.className).to.match(
       new RegExp(
         '__react_component_tooltip [a-zA-Z0-9-]+ show' +
