@@ -1,20 +1,20 @@
-# [4.3.0](https://github.com/pdeszynski/react-tooltip/compare/v4.2.21...v4.3.0) (2022-08-03)
+# [4.3.0](https://github.com/wwayne/react-tooltip/compare/v4.2.21...v4.3.0) (2022-08-03)
 
 ### Bug Fixes
 
-- [#759](https://github.com/pdeszynski/react-tooltip/issues/759) - Disable tooltip when disable prop changes ([8e9cca0](https://github.com/pdeszynski/react-tooltip/commit/8e9cca016f8eb59036c0c4623b85bf3f465ba262))
-- **aftershow:** call afterShow only after state has fully updated ([54752e8](https://github.com/pdeszynski/react-tooltip/commit/54752e81093f4c41bae1b49f7de65f28cf54df1a))
-- effect and type not properly applied at first render ([a8d0e51](https://github.com/pdeszynski/react-tooltip/commit/a8d0e51dd5dc0eb85d985232da90d54fd031ae4b))
-- **getposition:** no error when all placements outside ([249b925](https://github.com/pdeszynski/react-tooltip/commit/249b925a30ac2e7f04648a20bc9976e85358205b))
-- performance issue caused by excessive use of clearTimeout/Interval ([22aea50](https://github.com/pdeszynski/react-tooltip/commit/22aea5086db47727feae609bb7a6f8e269b7f2de))
-- **react18:** tip not hiding with React 18 StrictMode enabled ([83b72c6](https://github.com/pdeszynski/react-tooltip/commit/83b72c63ea9fe527bcbfb0b85414527e172c970b))
-- set aria-describedby value wrong when custom id ([a04d26c](https://github.com/pdeszynski/react-tooltip/commit/a04d26cc0639054b474ca8b373c95a09b199973a))
+- [#759](https://github.com/wwayne/react-tooltip/issues/759) - Disable tooltip when disable prop changes ([8e9cca0](https://github.com/wwayne/react-tooltip/commit/8e9cca016f8eb59036c0c4623b85bf3f465ba262))
+- **aftershow:** call afterShow only after state has fully updated ([54752e8](https://github.com/wwayne/react-tooltip/commit/54752e81093f4c41bae1b49f7de65f28cf54df1a))
+- effect and type not properly applied at first render ([a8d0e51](https://github.com/wwayne/react-tooltip/commit/a8d0e51dd5dc0eb85d985232da90d54fd031ae4b))
+- **getposition:** no error when all placements outside ([249b925](https://github.com/wwayne/react-tooltip/commit/249b925a30ac2e7f04648a20bc9976e85358205b))
+- performance issue caused by excessive use of clearTimeout/Interval ([22aea50](https://github.com/wwayne/react-tooltip/commit/22aea5086db47727feae609bb7a6f8e269b7f2de))
+- **react18:** tip not hiding with React 18 StrictMode enabled ([83b72c6](https://github.com/wwayne/react-tooltip/commit/83b72c63ea9fe527bcbfb0b85414527e172c970b))
+- set aria-describedby value wrong when custom id ([a04d26c](https://github.com/wwayne/react-tooltip/commit/a04d26cc0639054b474ca8b373c95a09b199973a))
 
 ### Features
 
-- **component:** adding "padding" property to customize padding style ([9ae765a](https://github.com/pdeszynski/react-tooltip/commit/9ae765a3cc38b36ce5ea77edd8fcc0f7bd9646a6))
-- **getposition:** support desired-place-list (by priority) ([982d89d](https://github.com/pdeszynski/react-tooltip/commit/982d89d2b9d663ed92d41743f63069d0c8a4aac0))
-- **parent_body_mode:** [#535](https://github.com/pdeszynski/react-tooltip/issues/535) search parents for data-tip if in body mode ([71da348](https://github.com/pdeszynski/react-tooltip/commit/71da34870163c4377a82b009ac63692e34eeb444))
+- **component:** adding "padding" property to customize padding style ([9ae765a](https://github.com/wwayne/react-tooltip/commit/9ae765a3cc38b36ce5ea77edd8fcc0f7bd9646a6))
+- **getposition:** support desired-place-list (by priority) ([982d89d](https://github.com/wwayne/react-tooltip/commit/982d89d2b9d663ed92d41743f63069d0c8a4aac0))
+- **parent_body_mode:** [#535](https://github.com/wwayne/react-tooltip/issues/535) search parents for data-tip if in body mode ([71da348](https://github.com/wwayne/react-tooltip/commit/71da34870163c4377a82b009ac63692e34eeb444))
 
 ## [4.2.21](https://github.com/wwayne/react-tooltip/compare/v4.2.20...v4.2.21) (2021-05-28)
 
