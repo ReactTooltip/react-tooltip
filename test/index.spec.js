@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactTooltip from '../src/index.js';
-import { render, cleanup, fireEvent, screen } from '@testing-library/react';
+import { render, cleanup, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';
 const forEach = require('mocha-each');
 const jsdom = require('mocha-jsdom');
