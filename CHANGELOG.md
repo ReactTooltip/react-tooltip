@@ -1,100 +1,104 @@
-## [4.2.21](https://github.com/wwayne/react-tooltip/compare/v4.2.20...v4.2.21) (2021-05-28)
-
+# [4.3.0](https://github.com/pdeszynski/react-tooltip/compare/v4.2.21...v4.3.0) (2022-08-03)
 
 ### Bug Fixes
 
-* **compability:** add polyfill and change styles ([#706](https://github.com/wwayne/react-tooltip/issues/706)) ([b6e9a1c](https://github.com/wwayne/react-tooltip/commit/b6e9a1c))
+- [#759](https://github.com/pdeszynski/react-tooltip/issues/759) - Disable tooltip when disable prop changes ([8e9cca0](https://github.com/pdeszynski/react-tooltip/commit/8e9cca016f8eb59036c0c4623b85bf3f465ba262))
+- **aftershow:** call afterShow only after state has fully updated ([54752e8](https://github.com/pdeszynski/react-tooltip/commit/54752e81093f4c41bae1b49f7de65f28cf54df1a))
+- effect and type not properly applied at first render ([a8d0e51](https://github.com/pdeszynski/react-tooltip/commit/a8d0e51dd5dc0eb85d985232da90d54fd031ae4b))
+- **getposition:** no error when all placements outside ([249b925](https://github.com/pdeszynski/react-tooltip/commit/249b925a30ac2e7f04648a20bc9976e85358205b))
+- performance issue caused by excessive use of clearTimeout/Interval ([22aea50](https://github.com/pdeszynski/react-tooltip/commit/22aea5086db47727feae609bb7a6f8e269b7f2de))
+- **react18:** tip not hiding with React 18 StrictMode enabled ([83b72c6](https://github.com/pdeszynski/react-tooltip/commit/83b72c63ea9fe527bcbfb0b85414527e172c970b))
+- set aria-describedby value wrong when custom id ([a04d26c](https://github.com/pdeszynski/react-tooltip/commit/a04d26cc0639054b474ca8b373c95a09b199973a))
+
+### Features
+
+- **component:** adding "padding" property to customize padding style ([9ae765a](https://github.com/pdeszynski/react-tooltip/commit/9ae765a3cc38b36ce5ea77edd8fcc0f7bd9646a6))
+- **getposition:** support desired-place-list (by priority) ([982d89d](https://github.com/pdeszynski/react-tooltip/commit/982d89d2b9d663ed92d41743f63069d0c8a4aac0))
+- **parent_body_mode:** [#535](https://github.com/pdeszynski/react-tooltip/issues/535) search parents for data-tip if in body mode ([71da348](https://github.com/pdeszynski/react-tooltip/commit/71da34870163c4377a82b009ac63692e34eeb444))
+
+## [4.2.21](https://github.com/wwayne/react-tooltip/compare/v4.2.20...v4.2.21) (2021-05-28)
+
+### Bug Fixes
+
+- **compability:** add polyfill and change styles ([#706](https://github.com/wwayne/react-tooltip/issues/706)) ([b6e9a1c](https://github.com/wwayne/react-tooltip/commit/b6e9a1c))
 
 ## [4.2.20](https://github.com/wwayne/react-tooltip/compare/v4.2.19...v4.2.20) (2021-05-28)
 
-
 ### Bug Fixes
 
-* add aria hidden attribute to style tag ([#703](https://github.com/wwayne/react-tooltip/issues/703)) ([d60c2b7](https://github.com/wwayne/react-tooltip/commit/d60c2b7))
+- add aria hidden attribute to style tag ([#703](https://github.com/wwayne/react-tooltip/issues/703)) ([d60c2b7](https://github.com/wwayne/react-tooltip/commit/d60c2b7))
 
 ## [4.2.19](https://github.com/wwayne/react-tooltip/compare/v4.2.18...v4.2.19) (2021-05-06)
 
-
 ### Bug Fixes
 
-* **src/index.js:** hide tooltip if blurred (tabbed out) ([#699](https://github.com/wwayne/react-tooltip/issues/699)) ([e0a2a1d](https://github.com/wwayne/react-tooltip/commit/e0a2a1d))
+- **src/index.js:** hide tooltip if blurred (tabbed out) ([#699](https://github.com/wwayne/react-tooltip/issues/699)) ([e0a2a1d](https://github.com/wwayne/react-tooltip/commit/e0a2a1d))
 
 ## [4.2.18](https://github.com/wwayne/react-tooltip/compare/v4.2.17...v4.2.18) (2021-04-25)
 
-
 ### Bug Fixes
 
-* **src/index.js:** add accessibility support for tabbing ([#695](https://github.com/wwayne/react-tooltip/issues/695)) ([ae936a5](https://github.com/wwayne/react-tooltip/commit/ae936a5))
+- **src/index.js:** add accessibility support for tabbing ([#695](https://github.com/wwayne/react-tooltip/issues/695)) ([ae936a5](https://github.com/wwayne/react-tooltip/commit/ae936a5))
 
 ## [4.2.17](https://github.com/wwayne/react-tooltip/compare/v4.2.16...v4.2.17) (2021-03-26)
 
-
 ### Bug Fixes
 
-* **type:** added role property to types ([#679](https://github.com/wwayne/react-tooltip/issues/679)) ([9b49395](https://github.com/wwayne/react-tooltip/commit/9b49395))
+- **type:** added role property to types ([#679](https://github.com/wwayne/react-tooltip/issues/679)) ([9b49395](https://github.com/wwayne/react-tooltip/commit/9b49395))
 
 ## [4.2.16](https://github.com/wwayne/react-tooltip/compare/v4.2.15...v4.2.16) (2021-03-26)
 
-
 ### Bug Fixes
 
-* **index.js:** fix exception when testing with Jest ([#682](https://github.com/wwayne/react-tooltip/issues/682)) ([f885f1f](https://github.com/wwayne/react-tooltip/commit/f885f1f))
+- **index.js:** fix exception when testing with Jest ([#682](https://github.com/wwayne/react-tooltip/issues/682)) ([f885f1f](https://github.com/wwayne/react-tooltip/commit/f885f1f))
 
 ## [4.2.15](https://github.com/wwayne/react-tooltip/compare/v4.2.14...v4.2.15) (2021-02-26)
 
-
 ### Bug Fixes
 
-* do not delay show if tooltip is already shown ([#676](https://github.com/wwayne/react-tooltip/issues/676)) ([e8b9d84](https://github.com/wwayne/react-tooltip/commit/e8b9d84))
+- do not delay show if tooltip is already shown ([#676](https://github.com/wwayne/react-tooltip/issues/676)) ([e8b9d84](https://github.com/wwayne/react-tooltip/commit/e8b9d84))
 
 ## [4.2.14](https://github.com/wwayne/react-tooltip/compare/v4.2.13...v4.2.14) (2021-02-16)
 
-
 ### Bug Fixes
 
-* **styles:** change style injection way ([#668](https://github.com/wwayne/react-tooltip/issues/668)) ([1e10cce](https://github.com/wwayne/react-tooltip/commit/1e10cce)), closes [#650](https://github.com/wwayne/react-tooltip/issues/650)
+- **styles:** change style injection way ([#668](https://github.com/wwayne/react-tooltip/issues/668)) ([1e10cce](https://github.com/wwayne/react-tooltip/commit/1e10cce)), closes [#650](https://github.com/wwayne/react-tooltip/issues/650)
 
 ## [4.2.13](https://github.com/wwayne/react-tooltip/compare/v4.2.12...v4.2.13) (2021-01-15)
 
-
 ### Bug Fixes
 
-* **domexception:** revert previous changed for unexpected behavior ([85e38bb](https://github.com/wwayne/react-tooltip/commit/85e38bb)), closes [#667](https://github.com/wwayne/react-tooltip/issues/667)
+- **domexception:** revert previous changed for unexpected behavior ([85e38bb](https://github.com/wwayne/react-tooltip/commit/85e38bb)), closes [#667](https://github.com/wwayne/react-tooltip/issues/667)
 
 ## [4.2.12](https://github.com/wwayne/react-tooltip/compare/v4.2.11...v4.2.12) (2021-01-14)
 
-
 ### Bug Fixes
 
-* **style injection:** change style injection default root ([a00c5b7](https://github.com/wwayne/react-tooltip/commit/a00c5b7)), closes [#665](https://github.com/wwayne/react-tooltip/issues/665)
+- **style injection:** change style injection default root ([a00c5b7](https://github.com/wwayne/react-tooltip/commit/a00c5b7)), closes [#665](https://github.com/wwayne/react-tooltip/issues/665)
 
 ## [4.2.11](https://github.com/wwayne/react-tooltip/compare/v4.2.10...v4.2.11) (2020-11-22)
 
-
 ### Bug Fixes
 
-* **styles:** add styles for shadow dom ([00d1539](https://github.com/wwayne/react-tooltip/commit/00d1539)), closes [#597](https://github.com/wwayne/react-tooltip/issues/597)
+- **styles:** add styles for shadow dom ([00d1539](https://github.com/wwayne/react-tooltip/commit/00d1539)), closes [#597](https://github.com/wwayne/react-tooltip/issues/597)
 
 ## [4.2.10](https://github.com/wwayne/react-tooltip/compare/v4.2.9...v4.2.10) (2020-09-14)
 
-
 ### Bug Fixes
 
-* **build:** removing single quotes on cpy for windows shell ([#632](https://github.com/wwayne/react-tooltip/issues/632)) ([9c280af](https://github.com/wwayne/react-tooltip/commit/9c280af))
+- **build:** removing single quotes on cpy for windows shell ([#632](https://github.com/wwayne/react-tooltip/issues/632)) ([9c280af](https://github.com/wwayne/react-tooltip/commit/9c280af))
 
 ## [4.2.9](https://github.com/wwayne/react-tooltip/compare/v4.2.8...v4.2.9) (2020-08-27)
 
-
 ### Bug Fixes
 
-* **getposition:** properly determine parents with will-change: transform ([3a76250](https://github.com/wwayne/react-tooltip/commit/3a76250))
+- **getposition:** properly determine parents with will-change: transform ([3a76250](https://github.com/wwayne/react-tooltip/commit/3a76250))
 
 ## [4.2.8](https://github.com/wwayne/react-tooltip/compare/v4.2.7...v4.2.8) (2020-08-06)
 
-
 ### Bug Fixes
 
-* **showtooltip:** check if tooltipRef is undefined ([#623](https://github.com/wwayne/react-tooltip/issues/623)) ([f63eab2](https://github.com/wwayne/react-tooltip/commit/f63eab2))
+- **showtooltip:** check if tooltipRef is undefined ([#623](https://github.com/wwayne/react-tooltip/issues/623)) ([f63eab2](https://github.com/wwayne/react-tooltip/commit/f63eab2))
 
 ## Change Log
 
