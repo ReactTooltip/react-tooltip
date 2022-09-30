@@ -15,11 +15,19 @@
 
 Or see it on [Github Page](https://wwayne.github.io/react-tooltip).
 
+## INACTIVE PROJECT
+
+The future of this project will be discussed here: https://github.com/wwayne/react-tooltip/issues/794 
+
+We hope to identify a fork of this project which will be actively maintained and can accept PRs and publish regularly to NPM.
+
+One current fork and npm package is at https://www.npmjs.com/package/react-tooltip-rc, but the publisher has not yet committed to further maintenance.
+
 ## Maintainers
 
 [aronhelser](https://github.com/aronhelser) Passive maintainer - accepting PRs and doing minor testing, but not fixing issues or doing active development.
 
-[roggervalf](https://github.com/roggervalf) Active maintainer - accepting PRs and doing minor testing, fixing issues or doing active development.
+[roggervalf](https://github.com/roggervalf) inactive maintainer - no longer seems to be doing development.
 
 [huumanoid](https://github.com/huumanoid) (inactive)
 
