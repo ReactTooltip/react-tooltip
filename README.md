@@ -25,6 +25,8 @@ One current fork and npm package is at https://www.npmjs.com/package/react-toolt
 
 ## Maintainers
 
+[alexgurr](https://github.com/alexgurr) Casual maintainer - accepting PRs and doing minor testing/development.
+
 [aronhelser](https://github.com/aronhelser) Passive maintainer - accepting PRs and doing minor testing, but not fixing issues or doing active development.
 
 [roggervalf](https://github.com/roggervalf) inactive maintainer - no longer seems to be doing development.
