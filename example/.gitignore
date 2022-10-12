@@ -1,0 +1,6 @@
+# system files
+*.log
+.DS_Store*
+.idea/
+
+*.lock
