@@ -15,26 +15,6 @@
 
 Or see it on [Github Page](https://wwayne.github.io/react-tooltip).
 
-## INACTIVE PROJECT
-
-The future of this project will be discussed here: https://github.com/wwayne/react-tooltip/issues/794 
-
-We hope to identify a fork of this project which will be actively maintained and can accept PRs and publish regularly to NPM.
-
-One current fork and npm package is at https://www.npmjs.com/package/react-tooltip-rc, but the publisher has not yet committed to further maintenance.
-
-## Maintainers
-
-[alexgurr](https://github.com/alexgurr) Casual maintainer - accepting PRs and doing minor testing/development.
-
-[aronhelser](https://github.com/aronhelser) Passive maintainer - accepting PRs and doing minor testing, but not fixing issues or doing active development.
-
-[roggervalf](https://github.com/roggervalf) inactive maintainer - no longer seems to be doing development.
-
-[huumanoid](https://github.com/huumanoid) (inactive)
-
-We would gladly accept a new maintainer to help out!
-
 ## Installation
 
 ```sh
@@ -119,8 +99,10 @@ Notes:
 The `html` option allows a tooltip to directly display raw HTML. This is a security risk if any of that content is supplied by the user. Any user-supplied content must be sanitized, using a package like [sanitize-html](https://www.npmjs.com/package/sanitize-html). We chose not to include sanitization after discovering it [increased our package size](https://github.com/wwayne/react-tooltip/issues/429) too much - we don't want to penalize people who don't use the `html` option.
 
 #### JSX Note
+
 You can use React's [`renderToStaticMarkup`-function](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to use JSX instead of HTML. You still need to set `data-html={true}`.
 **Example:**
+
 ```jsx
 import ReactDOMServer from 'react-dom/server';
 [...]
@@ -196,14 +178,14 @@ Same for empty children, if you don't want show the tooltip when the children is
 
 ### 3. Tooltip not binding to dynamic content
 
-When you render `<ReactTooltip>` ahead of dynamic content, and are using `data-for={id}` attributes 
-on new dynamic content, the tooltip will not register its event listener.  
+When you render `<ReactTooltip>` ahead of dynamic content, and are using `data-for={id}` attributes
+on new dynamic content, the tooltip will not register its event listener.
 
 For example, you render a generic tooltip in the root of your app, then load a list of content async.
 Elements in the list use the `data-for={id}` attribute to bind the tooltip on hover.
 Since the tooltip has already scanned for data-tip these new elements will not trigger.
 
-One workaround for this is to trigger `ReactTooltip.rebuild()` after the data load to scan for the attribute again, 
+One workaround for this is to trigger `ReactTooltip.rebuild()` after the data load to scan for the attribute again,
 to allow event wireup.
 
 #### Example
@@ -211,7 +193,7 @@ to allow event wireup.
 ```jsx
 <app>
   <ReactTooltip id="foo" />
-  <list/>
+  <list />
 </app>
 ```
 
@@ -237,6 +219,20 @@ return(
 ## Article
 
 [How I insert sass into react component](https://medium.com/@wwayne_me/how-i-insert-sass-into-my-npm-react-component-b46b9811c226#.gi4hxu44a)
+
+## Maintainers
+
+[danielbarion](https://github.com/danielbarion) Casual maintainer - accepting PRs and doing minor testing/development.
+
+[alexgurr](https://github.com/alexgurr) Casual maintainer - accepting PRs and doing minor testing/development.
+
+[aronhelser](https://github.com/aronhelser) Passive maintainer - accepting PRs and doing minor testing, but not fixing issues or doing active development.
+
+[roggervalf](https://github.com/roggervalf) inactive maintainer - no longer seems to be doing development.
+
+[huumanoid](https://github.com/huumanoid) (inactive)
+
+We would gladly accept a new maintainer to help out!
 
 ## Contributing
 
