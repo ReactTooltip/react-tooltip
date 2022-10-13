@@ -1,10 +1,17 @@
 {
-  "parser": "babel-eslint",
-  "extends": ["standard", "standard-react", "prettier", "eslint:recommended"],
+  "parser": "@babel/eslint-parser",
+  "extends": [
+    "plugin:react/recommended",
+    "standard-react",
+    "prettier",
+    "eslint:recommended"
+  ],
   "env": {
     "es6": true,
-    "jest": true
+    "jest": true,
+    "browser": true
   },
+  "ignorePatterns": ["/bin", "/example", "/test", "/dist"],
   "plugins": ["react", "prettier"],
   "parserOptions": {
     "sourceType": "module",

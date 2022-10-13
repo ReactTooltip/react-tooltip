@@ -13,17 +13,7 @@
 
 [![Edit ReactTooltip](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/heuristic-curran-bddeu?fontsize=14&hidenavigation=1&theme=dark)
 
-Or see it on [Github Page](https://wwayne.github.io/react-tooltip).
-
-## Maintainers
-
-[aronhelser](https://github.com/aronhelser) Passive maintainer - accepting PRs and doing minor testing, but not fixing issues or doing active development.
-
-[roggervalf](https://github.com/roggervalf) Active maintainer - accepting PRs and doing minor testing, fixing issues or doing active development.
-
-[huumanoid](https://github.com/huumanoid) (inactive)
-
-We would gladly accept a new maintainer to help out!
+Or see it on [Github Page](https://reacttooltip.github.io/react-tooltip/).
 
 ## Installation
 
@@ -73,14 +63,14 @@ Notes:
 
 | Global           | Specific              | Type          | Values                                                                                                                                | Description                                                                                                                                                                                         |
 | :--------------- | :-------------------- | :------------ | :------------------------------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| place            | data-place            | String        | top, right, bottom, left                                                                                                              | placement                                                                                                                                                                                           |
+| place            | data-place            | String        | "top", "right", "bottom", "left", or comma-separated e.g. "left,right"                                                                | placement - can specify a comma-separated list of preferences that will be attempted in order                                                                                                       |
 | type             | data-type             | String        | dark, success, warning, error, info, light                                                                                            | theme                                                                                                                                                                                               |
 | effect           | data-effect           | String        | float, solid                                                                                                                          | behaviour of tooltip                                                                                                                                                                                |
 | event            | data-event            | String        | e.g. click                                                                                                                            | custom event to trigger tooltip                                                                                                                                                                     |
 | eventOff         | data-event-off        | String        | e.g. click                                                                                                                            | custom event to hide tooltip (only makes effect after setting event attribute)                                                                                                                      |
 | globalEventOff   |                       | String        | e.g. click                                                                                                                            | global event to hide tooltip (global only)                                                                                                                                                          |
 | isCapture        | data-iscapture        | Bool          | true, false                                                                                                                           | when set to true, custom event's propagation mode will be capture                                                                                                                                   |
-| offset           | data-offset           | Object        | top, right, bottom, left                                                                                                              | `data-offset="{'top': 10, 'left': 10}"` for specific and `offset={{top: 10, left: 10}}` for global                                                                                                  |
+| offset           | data-offset           | Object        | { top?: number, right?: number, bottom?: number, left?: number }                                                                      | `data-offset="{'top': 10, 'left': 10}"` for specific and `offset={{top: 10, left: 10}}` for global                                                                                                  |
 | padding          | data-padding          | String        | e.g. `8px 21px`                                                                                                                       | Popup padding style                                                                                                                                                                                 |
 | multiline        | data-multiline        | Bool          | true, false                                                                                                                           | support `<br>`, `<br />` to make multiline                                                                                                                                                          |
 | className        | data-class            | String        |                                                                                                                                       | extra custom class, can use !important to overwrite react-tooltip's default class                                                                                                                   |
@@ -230,6 +220,22 @@ return(
 ## Article
 
 [How I insert sass into react component](https://medium.com/@wwayne_me/how-i-insert-sass-into-my-npm-react-component-b46b9811c226#.gi4hxu44a)
+
+## Maintainers
+
+[danielbarion](https://github.com/danielbarion) Casual maintainer - accepting PRs and doing minor testing/development.
+
+[alexgurr](https://github.com/alexgurr) Casual maintainer - accepting PRs and doing minor testing/development.
+
+[pdeszynski](https://github.com/pdeszynski) Casual maintainer - accepting PRs and doing minor testing/development.
+
+[aronhelser](https://github.com/aronhelser) Passive maintainer - accepting PRs and doing minor testing, but not fixing issues or doing active development.
+
+[roggervalf](https://github.com/roggervalf) (inactive).
+
+[huumanoid](https://github.com/huumanoid) (inactive)
+
+We would gladly accept a new maintainer to help out!
 
 ## Contributing
 

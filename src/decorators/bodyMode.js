@@ -3,7 +3,7 @@
  */
 import { checkStatus } from './customEvent';
 
-const makeProxy = e => {
+const makeProxy = (e) => {
   const proxy = {};
   for (const key in e) {
     if (typeof e[key] === 'function') {
@@ -15,14 +15,25 @@ const makeProxy = e => {
   return proxy;
 };
 
-const bodyListener = function(callback, options, e) {
+const bodyListener = function (callback, options, e) {
   const { respectEffect = false, customEvent = false } = options;
   const { id } = this.props;
 
-  const tip = e.target.getAttribute('data-tip') || null;
-  const forId = e.target.getAttribute('data-for') || null;
+  let tip = null;
+  let forId;
+  let target = e.target;
+  let lastTarget;
+  // walk up parent chain until tip is found
+  // there is no match if parent visible area is matched by mouse position, so some corner cases might not work as expected
+  while (tip === null && target !== null) {
+    lastTarget = target;
+    tip = target.getAttribute('data-tip') || null;
+    forId = target.getAttribute('data-for') || null;
+    target = target.parentElement;
+  }
 
-  const target = e.target;
+  target = lastTarget || e.target;
+
   if (this.isCustomEvent(target) && !customEvent) {
     return;
   }
@@ -43,9 +54,9 @@ const bodyListener = function(callback, options, e) {
 
 const findCustomEvents = (targetArray, dataAttribute) => {
   const events = {};
-  targetArray.forEach(target => {
+  targetArray.forEach((target) => {
     const event = target.getAttribute(dataAttribute);
-    if (event) event.split(' ').forEach(event => (events[event] = true));
+    if (event) event.split(' ').forEach((event) => (events[event] = true));
   });
 
   return events;
@@ -53,18 +64,14 @@ const findCustomEvents = (targetArray, dataAttribute) => {
 
 const getBody = () => document.getElementsByTagName('body')[0];
 
-export default function(target) {
-  target.prototype.isBodyMode = function() {
+export default function (target) {
+  target.prototype.isBodyMode = function () {
     return !!this.props.bodyMode;
   };
 
-  target.prototype.bindBodyListener = function(targetArray) {
-    const {
-      event,
-      eventOff,
-      possibleCustomEvents,
-      possibleCustomEventsOff
-    } = this.state;
+  target.prototype.bindBodyListener = function (targetArray) {
+    const { event, eventOff, possibleCustomEvents, possibleCustomEventsOff } =
+      this.state;
     const body = getBody();
 
     const customEvents = findCustomEvents(targetArray, 'data-event');
@@ -74,10 +81,10 @@ export default function(target) {
     if (eventOff != null) customEventsOff[eventOff] = true;
     possibleCustomEvents
       .split(' ')
-      .forEach(event => (customEvents[event] = true));
+      .forEach((event) => (customEvents[event] = true));
     possibleCustomEventsOff
       .split(' ')
-      .forEach(event => (customEventsOff[event] = true));
+      .forEach((event) => (customEventsOff[event] = true));
 
     this.unbindBodyListener(body);
 
@@ -93,7 +100,7 @@ export default function(target) {
     for (const event in customEvents) {
       listeners[event] = bodyListener.bind(
         this,
-        e => {
+        (e) => {
           const targetEventOff =
             e.currentTarget.getAttribute('data-event-off') || eventOff;
           checkStatus.call(this, targetEventOff, e);
@@ -111,7 +118,7 @@ export default function(target) {
     }
   };
 
-  target.prototype.unbindBodyListener = function(body) {
+  target.prototype.unbindBodyListener = function (body) {
     body = body || getBody();
 
     const listeners = this.bodyModeListeners;

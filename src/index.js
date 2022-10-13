@@ -143,13 +143,14 @@ class ReactTooltip extends React.Component {
    * For unify the bind and unbind listener
    */
   bind(methodArray) {
-    methodArray.forEach(method => {
+    methodArray.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
 
   componentDidMount() {
     const { insecure, resizeHide } = this.props;
+    this.mount = true;
 
     this.bindListener(); // Bind listener for tooltip
     this.bindWindowEvents(resizeHide); // Bind global event for static method
@@ -159,7 +160,7 @@ class ReactTooltip extends React.Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     const { ariaProps } = prevState;
     const newAriaProps = parseAria(nextProps);
-    const isChanged = Object.keys(newAriaProps).some(props => {
+    const isChanged = Object.keys(newAriaProps).some((props) => {
       return newAriaProps[props] !== ariaProps[props];
     });
     if (!isChanged) {
@@ -255,8 +256,8 @@ class ReactTooltip extends React.Component {
 
     // Scan document for shadow DOM elements
     nodeListToArray(document.getElementsByTagName('*'))
-      .filter(element => element.shadowRoot)
-      .forEach(element => {
+      .filter((element) => element.shadowRoot)
+      .forEach((element) => {
         targetArray = targetArray.concat(
           nodeListToArray(element.shadowRoot.querySelectorAll(selector))
         );
@@ -274,7 +275,7 @@ class ReactTooltip extends React.Component {
     const { id, globalEventOff, isCapture } = this.props;
     const targetArray = this.getTargetArray(id);
 
-    targetArray.forEach(target => {
+    targetArray.forEach((target) => {
       if (target.getAttribute('currentItem') === null) {
         target.setAttribute('currentItem', 'false');
       }
@@ -287,7 +288,7 @@ class ReactTooltip extends React.Component {
     if (this.isBodyMode()) {
       this.bindBodyListener(targetArray);
     } else {
-      targetArray.forEach(target => {
+      targetArray.forEach((target) => {
         const isCaptureMode = this.isCapture(target);
         const effect = this.getEffect(target);
         if (this.isCustomEvent(target)) {
@@ -328,7 +329,7 @@ class ReactTooltip extends React.Component {
       this.unbindBodyListener();
     } else {
       const targetArray = this.getTargetArray(id);
-      targetArray.forEach(target => {
+      targetArray.forEach((target) => {
         this.unbindBasicListener(target);
         if (this.isCustomEvent(target)) this.customUnbindListener(target);
       });
@@ -390,7 +391,7 @@ class ReactTooltip extends React.Component {
     if (isGlobalCall) {
       // Don't trigger other elements belongs to other ReactTooltip
       const targetArray = this.getTargetArray(this.props.id);
-      const isMyElement = targetArray.some(ele => ele === e.currentTarget);
+      const isMyElement = targetArray.some((ele) => ele === e.currentTarget);
       if (!isMyElement) return;
     }
     // Get the tooltip content
@@ -413,7 +414,10 @@ class ReactTooltip extends React.Component {
 
     // adding aria-describedby to target to make tooltips read by screen readers
     if (e && e.currentTarget && e.currentTarget.setAttribute) {
-      e.currentTarget.setAttribute('aria-describedby', this.state.uuid);
+      e.currentTarget.setAttribute(
+        'aria-describedby',
+        this.props.id || this.state.uuid
+      );
     }
 
     // Make sure the correct place is set
@@ -427,7 +431,7 @@ class ReactTooltip extends React.Component {
       e,
       e.currentTarget,
       this.tooltipRef,
-      desiredPlace,
+      desiredPlace.split(',')[0],
       desiredPlace,
       effect,
       offset
@@ -445,7 +449,9 @@ class ReactTooltip extends React.Component {
       );
     }
 
-    const place = result.isNewState ? result.newState.place : desiredPlace;
+    const place = result.isNewState
+      ? result.newState.place
+      : desiredPlace.split(',')[0];
 
     // To prevent previously created timers from triggering
     this.clearTimer();
@@ -558,7 +564,7 @@ class ReactTooltip extends React.Component {
    */
   updateTooltip(e) {
     const { delayShow, disable } = this.state;
-    const { afterShow } = this.props;
+    const { afterShow, disable: disableProp } = this.props;
     const placeholder = this.getTooltipContent();
     const eventTarget = e.currentTarget || e.target;
 
@@ -568,7 +574,7 @@ class ReactTooltip extends React.Component {
     }
 
     // if the tooltip is empty, disable the tooltip
-    if (this.isEmptyTip(placeholder) || disable) {
+    if (this.isEmptyTip(placeholder) || disable || disableProp) {
       return;
     }
 
@@ -587,19 +593,23 @@ class ReactTooltip extends React.Component {
             show: true
           },
           () => {
-            this.updatePosition();
-            if (isInvisible && afterShow) {
-              afterShow(e);
-            }
+            this.updatePosition(() => {
+              if (isInvisible && afterShow) {
+                afterShow(e);
+              }
+            });
           }
         );
       }
     };
 
-    clearTimeout(this.delayShowLoop);
+    if (this.delayShowLoop) {
+      clearTimeout(this.delayShowLoop);
+    }
     if (delayTime) {
       this.delayShowLoop = setTimeout(updateState, delayTime);
     } else {
+      this.delayShowLoop = null;
       updateState();
     }
   }
@@ -630,14 +640,14 @@ class ReactTooltip extends React.Component {
     const { disable } = this.state;
     const { isScroll } = options;
     const delayHide = isScroll ? 0 : this.state.delayHide;
-    const { afterHide } = this.props;
+    const { afterHide, disable: disableProp } = this.props;
     const placeholder = this.getTooltipContent();
     if (!this.mount) return;
-    if (this.isEmptyTip(placeholder) || disable) return; // if the tooltip is empty, disable the tooltip
+    if (this.isEmptyTip(placeholder) || disable || disableProp) return; // if the tooltip is empty, disable the tooltip
     if (hasTarget) {
       // Don't trigger other elements belongs to other ReactTooltip
       const targetArray = this.getTargetArray(this.props.id);
-      const isMyElement = targetArray.some(ele => ele === e.currentTarget);
+      const isMyElement = targetArray.some((ele) => ele === e.currentTarget);
       if (!isMyElement || !this.state.show) return;
     }
 
@@ -698,15 +708,9 @@ class ReactTooltip extends React.Component {
   }
 
   // Calculation the position
-  updatePosition() {
-    const {
-      currentEvent,
-      currentTarget,
-      place,
-      desiredPlace,
-      effect,
-      offset
-    } = this.state;
+  updatePosition(callbackAfter) {
+    const { currentEvent, currentTarget, place, desiredPlace, effect, offset } =
+      this.state;
     const node = this.tooltipRef;
     const result = getPosition(
       currentEvent,
@@ -733,8 +737,12 @@ class ReactTooltip extends React.Component {
     if (result.isNewState) {
       // Switch to reverse placement
       return this.setState(result.newState, () => {
-        this.updatePosition();
+        this.updatePosition(callbackAfter);
       });
+    }
+
+    if (callbackAfter && typeof callbackAfter === 'function') {
+      callbackAfter();
     }
 
     // Set tooltip position
@@ -746,16 +754,28 @@ class ReactTooltip extends React.Component {
    * CLear all kinds of timeout of interval
    */
   clearTimer() {
-    clearTimeout(this.delayShowLoop);
-    clearTimeout(this.delayHideLoop);
-    clearTimeout(this.delayReshow);
-    clearInterval(this.intervalUpdateContent);
+    if (this.delayShowLoop) {
+      clearTimeout(this.delayShowLoop);
+      this.delayShowLoop = null;
+    }
+    if (this.delayHideLoop) {
+      clearTimeout(this.delayHideLoop);
+      this.delayHideLoop = null;
+    }
+    if (this.delayReshow) {
+      clearTimeout(this.delayReshow);
+      this.delayReshow = null;
+    }
+    if (this.intervalUpdateContent) {
+      clearInterval(this.intervalUpdateContent);
+      this.intervalUpdateContent = null;
+    }
   }
 
   hasCustomColors() {
     return Boolean(
       Object.keys(this.state.customColors).find(
-        color => color !== 'border' && this.state.customColors[color]
+        (color) => color !== 'border' && this.state.customColors[color]
       ) ||
         (this.state.border && this.state.customColors['border'])
     );
@@ -800,7 +820,7 @@ class ReactTooltip extends React.Component {
         <Wrapper
           className={`${wrapperClassName}`}
           id={this.props.id || uuid}
-          ref={ref => (this.tooltipRef = ref)}
+          ref={(ref) => (this.tooltipRef = ref)}
           {...ariaProps}
           data-id="tooltip"
           dangerouslySetInnerHTML={{ __html: htmlContent }}
@@ -812,7 +832,7 @@ class ReactTooltip extends React.Component {
           className={`${wrapperClassName}`}
           id={this.props.id || uuid}
           {...ariaProps}
-          ref={ref => (this.tooltipRef = ref)}
+          ref={(ref) => (this.tooltipRef = ref)}
           data-id="tooltip"
         >
           <style

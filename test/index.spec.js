@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactTooltip from '../src/index.js';
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';
 const forEach = require('mocha-each');
 const jsdom = require('mocha-jsdom');
@@ -193,9 +193,10 @@ describe('Tooltip', () => {
       </span>
     );
     render(<ReactTooltip id="colorSpec" {...props} />);
-    document
-      .getElementById('colorSpecInvoker')
-      .dispatchEvent(new window.Event('mouseenter'));
+    fireEvent(
+      document.getElementById('colorSpecInvoker'),
+      new window.Event('mouseenter')
+    );
 
     const tooltip = document.getElementById('colorSpec');
 
@@ -213,8 +214,9 @@ describe('Tooltip', () => {
 
     const uuid = tooltip.className.split(' ')[1];
     const cssRules = tooltip.firstElementChild.sheet.cssRules;
-    const mainCssRule = cssRules.find(rule => rule.selectorText === `.${uuid}`)
-      .style;
+    const mainCssRule = cssRules.find(
+      (rule) => rule.selectorText === `.${uuid}`
+    ).style;
 
     expect(mainCssRule.color, 'Text color').to.equal(res.textColor);
     expect(mainCssRule.background, 'Background color').to.equal(res.background);
@@ -223,10 +225,10 @@ describe('Tooltip', () => {
     );
 
     const arrowPositions = ['top', 'bottom', 'left', 'right'];
-    arrowPositions.forEach(pos => {
+    arrowPositions.forEach((pos) => {
       expect(
         cssRules.find(
-          rule => rule.selectorText === `.${uuid}.place-${pos}::after`
+          (rule) => rule.selectorText === `.${uuid}.place-${pos}::after`
         ).style[`border-${pos}-color`],
         pos + ' arrow color'
       ).to.equal(res.arrowColor ? res.arrowColor : res.background);
