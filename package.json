@@ -75,7 +75,7 @@
     "@commitlint/cli": "17.1.2",
     "@commitlint/config-conventional": "17.1.0",
     "@commitlint/travis-cli": "17.1.2",
-    "@rollup/plugin-commonjs": "^22.0.1",
+    "@rollup/plugin-commonjs": "23.0.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/commit-analyzer": "^9.0.2",
