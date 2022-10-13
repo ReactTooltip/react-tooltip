@@ -1,0 +1,41 @@
+{
+  "name": "style-loader",
+  "version": "0.19.0",
+  "author": "Tobias Koppers @sokra",
+  "description": "style loader module for webpack",
+  "engines": {
+    "node": ">= 0.12.0"
+  },
+  "main": "index.js",
+  "files": [
+    "lib",
+    "url.js",
+    "index.js",
+    "useable.js",
+    "options.json"
+  ],
+  "dependencies": {
+    "loader-utils": "^1.0.2",
+    "schema-utils": "^0.3.0"
+  },
+  "devDependencies": {
+    "css-loader": "^0.28.3",
+    "file-loader": "^0.11.1",
+    "jsdom": "^9.12.0",
+    "memory-fs": "^0.4.1",
+    "mocha": "^3.4.2",
+    "sinon": "^2.4.1",
+    "standard-version": "^4.0.0",
+    "webpack": "^2.6.1"
+  },
+  "scripts": {
+    "test": "mocha",
+    "travis:test": "yarn run test",
+    "release": "yarn run standard-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:webpack/style-loader.git"
+  },
+  "license": "MIT"
+}

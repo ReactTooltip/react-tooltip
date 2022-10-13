@@ -1,0 +1,47 @@
+{
+  "name": "eslint-loader",
+  "version": "1.9.0",
+  "description": "eslint loader (for webpack)",
+  "keywords": [
+    "lint",
+    "linter",
+    "eslint",
+    "loader",
+    "webpack"
+  ],
+  "repository": "https://github.com/MoOx/eslint-loader.git",
+  "author": "Maxime Thirouin",
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "peerDependencies": {
+    "eslint": ">=1.6.0 <5.0.0"
+  },
+  "dependencies": {
+    "loader-fs-cache": "^1.0.0",
+    "loader-utils": "^1.0.2",
+    "object-assign": "^4.0.1",
+    "object-hash": "^1.1.4",
+    "rimraf": "^2.6.1"
+  },
+  "devDependencies": {
+    "ava": "^0.17.0",
+    "eslint": "^4.0.0",
+    "eslint-friendly-formatter": "^2.0.4",
+    "npmpub": "^3.0.1",
+    "webpack": "^2.2.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "ava": "ava",
+    "test": "npm run lint && npm run ava",
+    "release": "npmpub"
+  },
+  "ava": {
+    "files": [
+      "test/*.js"
+    ],
+    "verbose": true
+  }
+}
