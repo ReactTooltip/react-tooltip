@@ -28,4 +28,3 @@ jobs:
         run: |
           yarn build
           yarn run semantic-release
-          yarn gh-pages
