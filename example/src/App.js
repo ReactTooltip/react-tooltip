@@ -316,7 +316,7 @@ export default class App extends Component {
               <div className="side">
                 <a
                   data-for="custom-color"
-                  data-tip="That is one weird arrow (and a border)!"
+                  data-tip="That is one weird arrow (and a border with custom class name)!"
                 >
                   V(^-^)V
                 </a>
@@ -325,6 +325,7 @@ export default class App extends Component {
                   className="custom-color"
                   place="right"
                   border
+                  borderClass="custom-border-class"
                   textColor="#5F4B8BFF"
                   backgroundColor="#E69A8DFF"
                   borderColor="darkgreen"

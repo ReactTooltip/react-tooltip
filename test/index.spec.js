@@ -170,6 +170,21 @@ describe('Tooltip', () => {
         arrowColor: '#222',
         borderColor: 'blue'
       }
+    ],
+    [
+      {
+        border: true,
+        borderClass: 'custom-border-class',
+        borderColor: '#414141'
+      },
+      {
+        borderColor: '#414141',
+        borderClass: 'custom-border-class',
+        popupType: 'type-custom',
+        textColor: '#fff',
+        background: '#222',
+        arrowColor: '#222'
+      }
     ]
   ]).it('Popup color generation - show', (props, res) => {
     render(
@@ -184,10 +199,13 @@ describe('Tooltip', () => {
     );
 
     const tooltip = document.getElementById('colorSpec');
+
+    const expectedBorderClass = res.borderClass || 'border';
+
     expect(tooltip.className).to.match(
       new RegExp(
         '__react_component_tooltip [a-zA-Z0-9-]+ show' +
-          (props.border ? ' border ' : ' ') +
+          (props.border ? ` ${expectedBorderClass} ` : ' ') +
           'place-top ' +
           res.popupType,
         'i'
