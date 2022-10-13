@@ -1,3 +1,9 @@
+## [4.3.1](https://github.com/ReactTooltip/react-tooltip/compare/v4.3.0...v4.3.1) (2022-10-13)
+
+### Bug Fixes
+
+- add validation before call callbackAfter function as function ([aae936e](https://github.com/ReactTooltip/react-tooltip/commit/aae936e2f7a820cf1edcb68927b8973051dae9c2))
+
 # [4.3.0](https://github.com/wwayne/react-tooltip/compare/v4.2.21...v4.3.0) (2022-10-12)
 
 ### Bug Fixes
