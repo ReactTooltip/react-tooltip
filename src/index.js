@@ -741,7 +741,9 @@ class ReactTooltip extends React.Component {
       });
     }
 
+    if (callbackAfter && typeof callbackAfter === 'function') {
     callbackAfter();
+    }
 
     // Set tooltip position
     node.style.left = result.position.left + 'px';
