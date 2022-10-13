@@ -1,3 +1,14 @@
+# [4.4.0](https://github.com/ReactTooltip/react-tooltip/compare/v4.3.1...v4.4.0) (2022-10-13)
+
+### Features
+
+- add borderClass prop to allow a custom border class ([2eec877](https://github.com/ReactTooltip/react-tooltip/commit/2eec8775d30a533e028b3a6b5bca90856f193060))
+- add borderClass prop to allow a custom border class [skip-ci] ([9844a6c](https://github.com/ReactTooltip/react-tooltip/commit/9844a6ce5a9ce549b72b4ab0700394adeb009ed2))
+
+### Reverts
+
+- revert the upgrade in uuid as it was breaking the examples page ([71afd00](https://github.com/ReactTooltip/react-tooltip/commit/71afd0045fe3ab4127bd120900a453f17dc4ad4b))
+
 ## [4.3.1](https://github.com/ReactTooltip/react-tooltip/compare/v4.3.0...v4.3.1) (2022-10-13)
 
 ### Bug Fixes
