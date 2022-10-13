@@ -44,9 +44,9 @@
   "author": "ReactTooltip",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wwayne/react-tooltip/issues"
+    "url": "https://github.com/ReactTooltip/react-tooltip/issues"
   },
-  "homepage": "https://github.com/wwayne/react-tooltip#readme",
+  "homepage": "https://github.com/ReactTooltip/react-tooltip#readme",
   "browserify-shim": {
     "react": "global:React",
     "react-dom": "global:ReactDOM"
