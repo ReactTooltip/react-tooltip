@@ -13,7 +13,7 @@
 
 [![Edit ReactTooltip](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/heuristic-curran-bddeu?fontsize=14&hidenavigation=1&theme=dark)
 
-Or see it on [Github Page](https://wwayne.github.io/react-tooltip).
+Or see it on [Github Page](https://reacttooltip.github.io/react-tooltip/).
 
 ## Installation
 
@@ -226,9 +226,11 @@ return(
 
 [alexgurr](https://github.com/alexgurr) Casual maintainer - accepting PRs and doing minor testing/development.
 
+[pdeszynski](https://github.com/pdeszynski) Casual maintainer - accepting PRs and doing minor testing/development.
+
 [aronhelser](https://github.com/aronhelser) Passive maintainer - accepting PRs and doing minor testing, but not fixing issues or doing active development.
 
-[roggervalf](https://github.com/roggervalf) inactive maintainer - no longer seems to be doing development.
+[roggervalf](https://github.com/roggervalf) (inactive).
 
 [huumanoid](https://github.com/huumanoid) (inactive)
 
