@@ -14,6 +14,7 @@
 
 var Buffer = require('safe-buffer').Buffer
 var contentDisposition = require('content-disposition');
+var createError = require('http-errors')
 var deprecate = require('depd')('express');
 var encodeUrl = require('encodeurl');
 var escapeHtml = require('escape-html');
@@ -64,6 +65,9 @@ var charsetRegExp = /;\s*charset\s*=/;
  */
 
 res.status = function status(code) {
+  if ((typeof code === 'string' || Math.floor(code) !== code) && code > 99 && code < 1000) {
+    deprecate('res.status(' + JSON.stringify(code) + '): use res.status(' + Math.floor(code) + ') instead')
+  }
   this.statusCode = code;
   return this;
 };
@@ -135,7 +139,7 @@ res.send = function send(body) {
 
     deprecate('res.send(status): Use res.sendStatus(status) instead');
     this.statusCode = chunk;
-    chunk = statuses[chunk]
+    chunk = statuses.message[chunk]
   }
 
   switch (typeof chunk) {
@@ -213,6 +217,13 @@ res.send = function send(body) {
     chunk = '';
   }
 
+  // alter headers for 205
+  if (this.statusCode === 205) {
+    this.set('Content-Length', '0')
+    this.removeHeader('Transfer-Encoding')
+    chunk = ''
+  }
+
   if (req.method === 'HEAD') {
     // skip body for HEAD
     this.end();
@@ -284,9 +295,9 @@ res.jsonp = function jsonp(obj) {
 
   // allow status / body
   if (arguments.length === 2) {
-    // res.json(body, status) backwards compat
+    // res.jsonp(body, status) backwards compat
     if (typeof arguments[1] === 'number') {
-      deprecate('res.jsonp(obj, status): Use res.status(status).json(obj) instead');
+      deprecate('res.jsonp(obj, status): Use res.status(status).jsonp(obj) instead');
       this.statusCode = arguments[1];
     } else {
       deprecate('res.jsonp(status, obj): Use res.status(status).jsonp(obj) instead');
@@ -322,10 +333,15 @@ res.jsonp = function jsonp(obj) {
     // restrict callback charset
     callback = callback.replace(/[^\[\]\w$.]/g, '');
 
-    // replace chars not allowed in JavaScript that are in JSON
-    body = body
-      .replace(/\u2028/g, '\\u2028')
-      .replace(/\u2029/g, '\\u2029');
+    if (body === undefined) {
+      // empty argument
+      body = ''
+    } else if (typeof body === 'string') {
+      // replace chars not allowed in JavaScript that are in JSON
+      body = body
+        .replace(/\u2028/g, '\\u2028')
+        .replace(/\u2029/g, '\\u2029')
+    }
 
     // the /**/ is a specific security mitigation for "Rosetta Flash JSONP abuse"
     // the typeof check is just to reduce client error noise
@@ -351,7 +367,7 @@ res.jsonp = function jsonp(obj) {
  */
 
 res.sendStatus = function sendStatus(statusCode) {
-  var body = statuses[statusCode] || String(statusCode)
+  var body = statuses.message[statusCode] || String(statusCode)
 
   this.statusCode = statusCode;
   this.type('txt');
@@ -364,7 +380,7 @@ res.sendStatus = function sendStatus(statusCode) {
  *
  * Automatically sets the _Content-Type_ response header field.
  * The callback `callback(err)` is invoked when the transfer is complete
- * or when an error occurs. Be sure to check `res.sentHeader`
+ * or when an error occurs. Be sure to check `res.headersSent`
  * if you wish to attempt responding, as the header and some data
  * may have already been transferred.
  *
@@ -446,7 +462,7 @@ res.sendFile = function sendFile(path, options, callback) {
  *
  * Automatically sets the _Content-Type_ response header field.
  * The callback `callback(err)` is invoked when the transfer is complete
- * or when an error occurs. Be sure to check `res.sentHeader`
+ * or when an error occurs. Be sure to check `res.headersSent`
  * if you wish to attempt responding, as the header and some data
  * may have already been transferred.
  *
@@ -519,7 +535,7 @@ res.sendfile = deprecate.function(res.sendfile,
  * Optionally providing an alternate attachment `filename`,
  * and optional callback `callback(err)`. The callback is invoked
  * when the data transfer is complete, or when an error has
- * ocurred. Be sure to check `res.headersSent` if you plan to respond.
+ * occurred. Be sure to check `res.headersSent` if you plan to respond.
  *
  * Optionally providing an `options` object to use with `res.sendFile()`.
  * This function will set the `Content-Disposition` header, overriding
@@ -546,6 +562,13 @@ res.download = function download (path, filename, options, callback) {
     opts = null
   }
 
+  // support optional filename, where options may be in it's place
+  if (typeof filename === 'object' &&
+    (typeof options === 'function' || options === undefined)) {
+    name = null
+    opts = filename
+  }
+
   // set Content-Disposition when file is sent
   var headers = {
     'Content-Disposition': contentDisposition(name || path)
@@ -567,7 +590,9 @@ res.download = function download (path, filename, options, callback) {
   opts.headers = headers
 
   // Resolve the full path for sendFile
-  var fullPath = resolve(path);
+  var fullPath = !opts.root
+    ? resolve(path)
+    : path
 
   // send file
   return this.sendFile(fullPath, opts, done)
@@ -623,7 +648,7 @@ res.type = function contentType(type) {
  *        res.send('<p>hey</p>');
  *      },
  *
- *      'appliation/json': function(){
+ *      'application/json': function () {
  *        res.send({ message: 'hey' });
  *      }
  *    });
@@ -660,9 +685,8 @@ res.format = function(obj){
   var req = this.req;
   var next = req.next;
 
-  var fn = obj.default;
-  if (fn) delete obj.default;
-  var keys = Object.keys(obj);
+  var keys = Object.keys(obj)
+    .filter(function (v) { return v !== 'default' })
 
   var key = keys.length > 0
     ? req.accepts(keys)
@@ -673,13 +697,12 @@ res.format = function(obj){
   if (key) {
     this.set('Content-Type', normalizeType(key).value);
     obj[key](req, this, next);
-  } else if (fn) {
-    fn();
+  } else if (obj.default) {
+    obj.default(req, this, next)
   } else {
-    var err = new Error('Not Acceptable');
-    err.status = err.statusCode = 406;
-    err.types = normalizeTypes(keys).map(function(o){ return o.value });
-    next(err);
+    next(createError(406, {
+      types: normalizeTypes(keys).map(function (o) { return o.value })
+    }))
   }
 
   return this;
@@ -726,7 +749,7 @@ res.append = function append(field, val) {
     // concat the new and prev vals
     value = Array.isArray(prev) ? prev.concat(val)
       : Array.isArray(val) ? [prev].concat(val)
-      : [prev, val];
+        : [prev, val]
   }
 
   return this.set(field, value);
@@ -845,9 +868,13 @@ res.cookie = function (name, value, options) {
     val = 's:' + sign(val, secret);
   }
 
-  if ('maxAge' in opts) {
-    opts.expires = new Date(Date.now() + opts.maxAge);
-    opts.maxAge /= 1000;
+  if (opts.maxAge != null) {
+    var maxAge = opts.maxAge - 0
+
+    if (!isNaN(maxAge)) {
+      opts.expires = new Date(Date.now() + maxAge)
+      opts.maxAge = Math.floor(maxAge / 1000)
+    }
   }
 
   if (opts.path == null) {
@@ -928,12 +955,12 @@ res.redirect = function redirect(url) {
   // Support text/{plain,html} by default
   this.format({
     text: function(){
-      body = statuses[status] + '. Redirecting to ' + address
+      body = statuses.message[status] + '. Redirecting to ' + address
     },
 
     html: function(){
       var u = escapeHtml(address);
-      body = '<p>' + statuses[status] + '. Redirecting to <a href="' + u + '">' + u + '</a></p>'
+      body = '<p>' + statuses.message[status] + '. Redirecting to <a href="' + u + '">' + u + '</a></p>'
     },
 
     default: function(){
@@ -1108,7 +1135,7 @@ function sendfile(res, file, options, callback) {
  * ability to escape characters that can trigger HTML sniffing.
  *
  * @param {*} value
- * @param {function} replaces
+ * @param {function} replacer
  * @param {number} spaces
  * @param {boolean} escape
  * @returns {string}
@@ -1122,7 +1149,7 @@ function stringify (value, replacer, spaces, escape) {
     ? JSON.stringify(value, replacer, spaces)
     : JSON.stringify(value);
 
-  if (escape) {
+  if (escape && typeof json === 'string') {
     json = json.replace(/[<>&]/g, function (c) {
       switch (c.charCodeAt(0)) {
         case 0x3c:

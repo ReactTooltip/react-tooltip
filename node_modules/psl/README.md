@@ -1,10 +1,6 @@
 # psl (Public Suffix List)
 
-[![NPM](https://nodei.co/npm/psl.png?downloads=true&downloadRank=true)](https://nodei.co/npm/psl/)
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/lupomontero/psl.svg)](https://greenkeeper.io/)
-[![Build Status](https://travis-ci.org/lupomontero/psl.svg?branch=master)](https://travis-ci.org/lupomontero/psl)
-[![devDependency Status](https://david-dm.org/lupomontero/psl/dev-status.png)](https://david-dm.org/lupomontero/psl#info=devDependencies)
+[![Node.js CI](https://github.com/lupomontero/psl/actions/workflows/node.js.yml/badge.svg)](https://github.com/lupomontero/psl/actions/workflows/node.js.yml)
 
 `psl` is a `JavaScript` domain name parser based on the
 [Public Suffix List](https://publicsuffix.org/).

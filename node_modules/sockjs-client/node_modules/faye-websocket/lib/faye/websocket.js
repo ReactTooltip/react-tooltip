@@ -14,7 +14,7 @@ var WebSocket = function(request, socket, body, protocols, options) {
   options = options || {};
 
   this._stream = socket;
-  this._driver = driver.http(request, {maxLength: options.maxLength, protocols: protocols});
+  this._driver = driver.http(request, { maxLength: options.maxLength, protocols: protocols });
 
   var self = this;
   if (!this._stream || !this._stream.writable) return;

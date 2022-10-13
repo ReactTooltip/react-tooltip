@@ -176,10 +176,15 @@ Git.prototype.tag = function(name) {
  * Push a branch.
  * @param {string} remote Remote alias.
  * @param {string} branch Branch name.
+ * @param {boolean} force Force push.
  * @return {Promise} A promise.
  */
-Git.prototype.push = function(remote, branch) {
-  return this.exec('push', '--tags', remote, branch);
+Git.prototype.push = function(remote, branch, force) {
+  const args = ['push', '--tags', remote, branch];
+  if (force) {
+    args.push('--force');
+  }
+  return this.exec.apply(this, args);
 };
 
 /**
@@ -210,6 +215,14 @@ Git.prototype.getRemoteUrl = function(remote) {
           'or must be configured with the "repo" option).'
       );
     });
+};
+
+/**
+ * Delete ref to remove branch history
+ * @param {string} branch
+ */
+Git.prototype.deleteRef = function(branch) {
+  return this.exec('update-ref', '-d', 'refs/heads/' + branch);
 };
 
 /**

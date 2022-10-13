@@ -1,6 +1,6 @@
 {
   "name": "json-schema",
-  "version": "0.2.3",
+  "version": "0.4.0",
   "author": "Kris Zyp",
   "description": "JSON Schema validation and specifications",
   "maintainers":[
@@ -9,16 +9,10 @@
     "json",
     "schema"
   ],
-  "licenses": [
-     {
-         "type": "AFLv2.1",
-         "url": "http://trac.dojotoolkit.org/browser/dojo/trunk/LICENSE#L43"
-     },
-     {
-         "type": "BSD",
-         "url": "http://trac.dojotoolkit.org/browser/dojo/trunk/LICENSE#L13"
-     }
+  "files": [
+    "lib"
   ],
+  "license": "(AFL-2.1 OR BSD-3-Clause)",
   "repository": {
     "type":"git",
     "url":"http://github.com/kriszyp/json-schema"
@@ -26,6 +20,5 @@
   "directories": { "lib": "./lib" },
   "main": "./lib/validate.js",
   "devDependencies": { "vows": "*" },
-  "scripts": { "test": "echo TESTS DISABLED vows --spec test/*.js" }
+  "scripts": { "test": "vows --spec test/*.js" }
 }
-

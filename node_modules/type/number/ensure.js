@@ -6,5 +6,8 @@ var resolveException = require("../lib/resolve-exception")
 module.exports = function (value/*, options*/) {
 	var coerced = coerce(value);
 	if (coerced !== null) return coerced;
-	return resolveException(value, "%v is not a number", arguments[1]);
+	var options = arguments[1];
+	var errorMessage =
+		options && options.name ? "Expected a number for %n, received %v" : "%v is not a number";
+	return resolveException(value, errorMessage, options);
 };

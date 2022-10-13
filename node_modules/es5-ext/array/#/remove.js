@@ -5,7 +5,7 @@ var indexOf = require("./e-index-of")
   , splice  = Array.prototype.splice;
 
 // eslint-disable-next-line no-unused-vars
-module.exports = function (itemToRemove/*, …item*/) {
+module.exports = function (itemToRemove /*, …item*/) {
 	forEach.call(
 		arguments,
 		function (item) {

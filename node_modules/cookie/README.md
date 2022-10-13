@@ -3,12 +3,16 @@
 [![NPM Version][npm-version-image]][npm-url]
 [![NPM Downloads][npm-downloads-image]][npm-url]
 [![Node.js Version][node-version-image]][node-version-url]
-[![Build Status][travis-image]][travis-url]
+[![Build Status][github-actions-ci-image]][github-actions-ci-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
 Basic HTTP cookie parser and serializer for HTTP servers.
 
 ## Installation
+
+This is a [Node.js](https://nodejs.org/en/) module available through the
+[npm registry](https://www.npmjs.com/). Installation is done using the
+[`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
 ```sh
 $ npm install cookie
@@ -108,9 +112,23 @@ so if both are set, they should point to the same date and time.
 Specifies the value for the [`Path` `Set-Cookie` attribute][rfc-6265-5.2.4]. By default, the path
 is considered the ["default path"][rfc-6265-5.1.4].
 
+##### priority
+
+Specifies the `string` to be the value for the [`Priority` `Set-Cookie` attribute][rfc-west-cookie-priority-00-4.1].
+
+  - `'low'` will set the `Priority` attribute to `Low`.
+  - `'medium'` will set the `Priority` attribute to `Medium`, the default priority when not set.
+  - `'high'` will set the `Priority` attribute to `High`.
+
+More information about the different priority levels can be found in
+[the specification][rfc-west-cookie-priority-00-4.1].
+
+**note** This is an attribute that has not yet been fully standardized, and may change in the future.
+This also means many clients may ignore this attribute until they understand it.
+
 ##### sameSite
 
-Specifies the `boolean` or `string` to be the value for the [`SameSite` `Set-Cookie` attribute][rfc-6265bis-03-4.1.2.7].
+Specifies the `boolean` or `string` to be the value for the [`SameSite` `Set-Cookie` attribute][rfc-6265bis-09-5.4.7].
 
   - `true` will set the `SameSite` attribute to `Strict` for strict same site enforcement.
   - `false` will not set the `SameSite` attribute.
@@ -119,7 +137,7 @@ Specifies the `boolean` or `string` to be the value for the [`SameSite` `Set-Coo
   - `'strict'` will set the `SameSite` attribute to `Strict` for strict same site enforcement.
 
 More information about the different enforcement levels can be found in
-[the specification][rfc-6265bis-03-4.1.2.7].
+[the specification][rfc-6265bis-09-5.4.7].
 
 **note** This is an attribute that has not yet been fully standardized, and may change in the future.
 This also means many clients may ignore this attribute until they understand it.
@@ -194,40 +212,71 @@ $ npm test
 ```
 $ npm run bench
 
-> cookie@0.3.1 bench cookie
+> cookie@0.4.2 bench
 > node benchmark/index.js
 
-  http_parser@2.8.0
-  node@6.14.2
-  v8@5.1.281.111
-  uv@1.16.1
+  node@16.14.0
+  v8@9.4.146.24-node.20
+  uv@1.43.0
   zlib@1.2.11
-  ares@1.10.1-DEV
-  icu@58.2
-  modules@48
-  napi@3
-  openssl@1.0.2o
+  brotli@1.0.9
+  ares@1.18.1
+  modules@93
+  nghttp2@1.45.1
+  napi@8
+  llhttp@6.0.4
+  openssl@1.1.1m+quic
+  cldr@40.0
+  icu@70.1
+  tz@2021a3
+  unicode@14.0
+  ngtcp2@0.1.0-DEV
+  nghttp3@0.1.0-DEV
+
+> node benchmark/parse-top.js
+
+  cookie.parse - top sites
+
+  15 tests completed.
+
+  parse accounts.google.com x 2,421,245 ops/sec ±0.80% (188 runs sampled)
+  parse apple.com           x 2,684,710 ops/sec ±0.59% (189 runs sampled)
+  parse cloudflare.com      x 2,231,418 ops/sec ±0.76% (186 runs sampled)
+  parse docs.google.com     x 2,316,357 ops/sec ±1.28% (187 runs sampled)
+  parse drive.google.com    x 2,363,543 ops/sec ±0.49% (189 runs sampled)
+  parse en.wikipedia.org    x   839,414 ops/sec ±0.53% (189 runs sampled)
+  parse linkedin.com        x   553,797 ops/sec ±0.63% (190 runs sampled)
+  parse maps.google.com     x 1,314,779 ops/sec ±0.72% (189 runs sampled)
+  parse microsoft.com       x   153,783 ops/sec ±0.53% (190 runs sampled)
+  parse play.google.com     x 2,249,574 ops/sec ±0.59% (187 runs sampled)
+  parse plus.google.com     x 2,258,682 ops/sec ±0.60% (188 runs sampled)
+  parse sites.google.com    x 2,247,069 ops/sec ±0.68% (189 runs sampled)
+  parse support.google.com  x 1,456,840 ops/sec ±0.70% (187 runs sampled)
+  parse www.google.com      x 1,046,028 ops/sec ±0.58% (188 runs sampled)
+  parse youtu.be            x   937,428 ops/sec ±1.47% (190 runs sampled)
+  parse youtube.com         x   963,878 ops/sec ±0.59% (190 runs sampled)
 
 > node benchmark/parse.js
 
-  cookie.parse
+  cookie.parse - generic
 
   6 tests completed.
 
-  simple      x 1,200,691 ops/sec ±1.12% (189 runs sampled)
-  decode      x 1,012,994 ops/sec ±0.97% (186 runs sampled)
-  unquote     x 1,074,174 ops/sec ±2.43% (186 runs sampled)
-  duplicates  x   438,424 ops/sec ±2.17% (184 runs sampled)
-  10 cookies  x   147,154 ops/sec ±1.01% (186 runs sampled)
-  100 cookies x    14,274 ops/sec ±1.07% (187 runs sampled)
+  simple      x 2,745,604 ops/sec ±0.77% (185 runs sampled)
+  decode      x   557,287 ops/sec ±0.60% (188 runs sampled)
+  unquote     x 2,498,475 ops/sec ±0.55% (189 runs sampled)
+  duplicates  x   868,591 ops/sec ±0.89% (187 runs sampled)
+  10 cookies  x   306,745 ops/sec ±0.49% (190 runs sampled)
+  100 cookies x    22,414 ops/sec ±2.38% (182 runs sampled)
 ```
 
 ## References
 
 - [RFC 6265: HTTP State Management Mechanism][rfc-6265]
-- [Same-site Cookies][rfc-6265bis-03-4.1.2.7]
+- [Same-site Cookies][rfc-6265bis-09-5.4.7]
 
-[rfc-6265bis-03-4.1.2.7]: https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-03#section-4.1.2.7
+[rfc-west-cookie-priority-00-4.1]: https://tools.ietf.org/html/draft-west-cookie-priority-00#section-4.1
+[rfc-6265bis-09-5.4.7]: https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-09#section-5.4.7
 [rfc-6265]: https://tools.ietf.org/html/rfc6265
 [rfc-6265-5.1.4]: https://tools.ietf.org/html/rfc6265#section-5.1.4
 [rfc-6265-5.2.1]: https://tools.ietf.org/html/rfc6265#section-5.2.1
@@ -244,10 +293,10 @@ $ npm run bench
 
 [coveralls-image]: https://badgen.net/coveralls/c/github/jshttp/cookie/master
 [coveralls-url]: https://coveralls.io/r/jshttp/cookie?branch=master
+[github-actions-ci-image]: https://img.shields.io/github/workflow/status/jshttp/cookie/ci/master?label=ci
+[github-actions-ci-url]: https://github.com/jshttp/cookie/actions/workflows/ci.yml
 [node-version-image]: https://badgen.net/npm/node/cookie
 [node-version-url]: https://nodejs.org/en/download
 [npm-downloads-image]: https://badgen.net/npm/dm/cookie
 [npm-url]: https://npmjs.org/package/cookie
 [npm-version-image]: https://badgen.net/npm/v/cookie
-[travis-image]: https://badgen.net/travis/jshttp/cookie/master
-[travis-url]: https://travis-ci.org/jshttp/cookie

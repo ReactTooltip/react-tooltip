@@ -1,6 +1,6 @@
 {
   "name": "sshpk",
-  "version": "1.16.1",
+  "version": "1.17.0",
   "description": "A library for finding and using SSH public keys",
   "main": "lib/index.js",
   "scripts": {

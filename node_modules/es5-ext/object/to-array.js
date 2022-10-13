@@ -6,7 +6,7 @@ var callable  = require("./valid-callable")
   , call      = Function.prototype.call
   , defaultCb = function (value, key) { return [key, value]; };
 
-module.exports = function (obj/*, cb, thisArg, compareFn*/) {
+module.exports = function (obj /*, cb, thisArg, compareFn*/) {
 	var a = [], cb = arguments[1], thisArg = arguments[2];
 	cb = isValue(cb) ? callable(cb) : defaultCb;
 

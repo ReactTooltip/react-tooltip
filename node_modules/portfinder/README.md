@@ -1,9 +1,9 @@
-# node-portfinder [![Build Status](https://api.travis-ci.org/http-party/node-portfinder.svg)](https://travis-ci.org/http-party/node-portfinder)
+# node-portfinder [![CI](https://github.com/http-party/node-portfinder/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/http-party/node-portfinder/actions/workflows/ci.yml)
 
 ## Installation
 
 ``` bash
-  $ [sudo] npm install portfinder
+  $ npm install portfinder
 ```
 
 ## Usage
@@ -20,7 +20,7 @@ The `portfinder` module has a simple interface:
   });
 ```
 
-Or with promise (if Promise are supported) :
+Or with promise (if `Promise`s are supported) :
 
 ``` js
   const portfinder = require('portfinder');
@@ -41,15 +41,15 @@ Or with promise (if Promise are supported) :
 
 If `portfinder.getPortPromise()` is called on a Node version without Promise (<4), it will throw an Error unless [Bluebird](http://bluebirdjs.com/docs/getting-started.html) or any Promise pollyfill is used.
 
-### Ports search scope 
+### Ports search scope
 
-By default `portfinder` will start searching from `8000` and scan until maximum port number (`65535`) is reached. 
+By default `portfinder` will start searching from `8000` and scan until maximum port number (`65535`) is reached.
 
 You can change this globally by setting:
 
 ```js
-portfinder.basePort = 3000;    // default: 8000
-portfinder.highestPort = 3333; // default: 65535
+portfinder.setBasePort(3000);    // default: 8000
+portfinder.setHighestPort(3333); // default: 65535
 ```
 
 or by passing optional options object on each invocation:
@@ -67,7 +67,7 @@ portfinder.getPort({
 ```
 
 #### Author: [Charlie Robbins][0]
-#### Maintainer: [Erik Trom][1]
+#### Author/Maintainer: [Erik Trom][1]
 #### License: MIT/X11
 [0]: http://nodejitsu.com
 [1]: https://github.com/eriktrom

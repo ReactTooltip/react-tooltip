@@ -75,7 +75,7 @@ describe('eventHandlers', () => {
       'onAnimationEnd',
       'onAnimationIteration',
       'onTransitionEnd',
-    ].every(handlerName => includes(eventHandlers, handlerName)));
+    ].every((handlerName) => includes(eventHandlers, handlerName)));
   });
 });
 
@@ -96,6 +96,6 @@ describe('eventHandlersByType', () => {
       'image',
       'animation',
       'transition',
-    ].every(type => !!eventHandlersByType[type]));
+    ].every((type) => !!eventHandlersByType[type]));
   });
 });

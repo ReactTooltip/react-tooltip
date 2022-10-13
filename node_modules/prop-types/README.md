@@ -1,9 +1,9 @@
-# prop-types [![Build Status](https://travis-ci.com/facebook/prop-types.svg?branch=master)](https://travis-ci.org/facebook/prop-types)
+# prop-types [![Build Status](https://travis-ci.com/facebook/prop-types.svg?branch=main)](https://travis-ci.org/facebook/prop-types)
 
 Runtime type checking for React props and similar objects.
 
 You can use prop-types to document the intended types of properties passed to
-components. React (and potentially other libraries—see the checkPropTypes()
+components. React (and potentially other libraries—see the `checkPropTypes()`
 reference below) will check props passed to your components against those
 definitions, and warn in development if they don’t match.
 
@@ -67,6 +67,7 @@ MyComponent.propTypes = {
   // You can declare that a prop is a specific JS primitive. By default, these
   // are all optional.
   optionalArray: PropTypes.array,
+  optionalBigInt: PropTypes.bigint,
   optionalBool: PropTypes.bool,
   optionalFunc: PropTypes.func,
   optionalNumber: PropTypes.number,
@@ -76,12 +77,15 @@ MyComponent.propTypes = {
 
   // Anything that can be rendered: numbers, strings, elements or an array
   // (or fragment) containing these types.
+  // see https://reactjs.org/docs/rendering-elements.html for more info
   optionalNode: PropTypes.node,
 
   // A React element (ie. <MyComponent />).
   optionalElement: PropTypes.element,
 
-  // A React element type (ie. MyComponent).
+  // A React element type (eg. MyComponent).
+  // a function, string, or "element-like" object (eg. React.Fragment, Suspense, etc.)
+  // see https://github.com/facebook/react/blob/HEAD/packages/shared/isValidElementType.js
   optionalElementType: PropTypes.elementType,
 
   // You can also declare that a prop is an instance of a class. This uses
@@ -256,6 +260,8 @@ PropTypes.checkPropTypes(MyComponent.propTypes, props, 'prop', 'MyComponent');
 ```
 See below for more info.
 
+**If you DO want to use validation in production**, you can choose to use the **development version** by importing/requiring `prop-types/prop-types` instead of `prop-types`.
+
 **You might also see this error** if you’re calling a `PropTypes` validator from your own custom `PropTypes` validator. In this case, the fix is to make sure that you are passing *all* of the arguments to the inner function. There is a more in-depth explanation of how to fix it [on this page](https://facebook.github.io/react/warnings/dont-call-proptypes.html#fixing-the-false-positive-in-third-party-proptypes). Alternatively, you can temporarily keep using `React.PropTypes` until React 16, as it would still only warn in this case.
 
 If you use a bundler like Browserify or Webpack, don’t forget to [follow these instructions](https://reactjs.org/docs/optimizing-performance.html#use-the-production-build) to correctly bundle your application in development or production mode. Otherwise you’ll ship unnecessary code to your users.
@@ -281,7 +287,7 @@ const props = {
 // Let's say your component is called 'MyComponent'
 
 // Works with standalone PropTypes
-PropTypes.checkPropTypes(myPropTypes, props, 'age', 'MyComponent');
+PropTypes.checkPropTypes(myPropTypes, props, 'prop', 'MyComponent');
 // This will warn as follows:
 // Warning: Failed prop type: Invalid prop `age` of type `string` supplied to
 // `MyComponent`, expected `number`.
@@ -289,7 +295,7 @@ PropTypes.checkPropTypes(myPropTypes, props, 'age', 'MyComponent');
 
 ## PropTypes.resetWarningCache()
 
-`PropTypes.checkPropTypes(...)` only `console.error.log(...)`s a given message once.  To reset the cache while testing call `PropTypes.resetWarningCache()`
+`PropTypes.checkPropTypes(...)` only `console.error`s a given message once. To reset the error warning cache in tests, call `PropTypes.resetWarningCache()`
 
 ### License
 

@@ -1,3 +1,28 @@
+0.18.0 / 2022-03-23
+===================
+
+  * Fix emitted 416 error missing headers property
+  * Limit the headers removed for 304 response
+  * deps: depd@2.0.0
+    - Replace internal `eval` usage with `Function` constructor
+    - Use instance methods on `process` to check for listeners
+  * deps: destroy@1.2.0
+  * deps: http-errors@2.0.0
+    - deps: depd@2.0.0
+    - deps: statuses@2.0.1
+  * deps: on-finished@2.4.1
+  * deps: statuses@2.0.1
+
+0.17.2 / 2021-12-11
+===================
+
+  * pref: ignore empty http tokens
+  * deps: http-errors@1.8.1
+    - deps: inherits@2.0.4
+    - deps: toidentifier@1.0.1
+    - deps: setprototypeof@1.2.0
+  * deps: ms@2.1.3
+
 0.17.1 / 2019-05-10
 ===================
 

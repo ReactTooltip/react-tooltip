@@ -98,6 +98,8 @@ Route.prototype._options = function _options() {
 Route.prototype.dispatch = function dispatch(req, res, done) {
   var idx = 0;
   var stack = this.stack;
+  var sync = 0
+
   if (stack.length === 0) {
     return done();
   }
@@ -122,20 +124,27 @@ Route.prototype.dispatch = function dispatch(req, res, done) {
       return done(err)
     }
 
-    var layer = stack[idx++];
+    // max sync stack
+    if (++sync > 100) {
+      return setImmediate(next, err)
+    }
+
+    var layer = stack[idx++]
+
+    // end of layers
     if (!layer) {
-      return done(err);
+      return done(err)
     }
 
     if (layer.method && layer.method !== method) {
-      return next(err);
-    }
-
-    if (err) {
+      next(err)
+    } else if (err) {
       layer.handle_error(err, req, res, next);
     } else {
       layer.handle_request(req, res, next);
     }
+
+    sync = 0
   }
 };
 

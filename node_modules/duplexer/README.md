@@ -17,7 +17,9 @@ It is assumed that the two streams are connected to each other in some way.
 ## Example
 
 ```js
-var grep = cp.exec('grep Stream')
+var cp = require('child_process')
+  , duplex = require('duplexer')
+  , grep = cp.exec('grep Stream')
 
 duplex(grep.stdin, grep.stdout)
 ```

@@ -3,7 +3,7 @@
 var value   = require("./valid-value")
   , isValue = require("./is-value");
 
-module.exports = function (obj/*, …names*/) {
+module.exports = function (obj /*, …names*/) {
 	var length, current = 1;
 	value(obj);
 	length = arguments.length - 1;

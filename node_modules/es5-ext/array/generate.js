@@ -4,7 +4,7 @@ var toPosInt = require("../number/to-pos-integer")
   , value    = require("../object/valid-value")
   , slice    = Array.prototype.slice;
 
-module.exports = function (length/*, …fill*/) {
+module.exports = function (length /*, …fill*/) {
 	var arr, currentLength;
 	length = toPosInt(value(length));
 	if (length === 0) return [];

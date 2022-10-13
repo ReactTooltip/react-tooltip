@@ -1,3 +1,7 @@
+For recent changelog see CHANGELOG.md
+
+-----
+
 v1.0.0  --  2016.06.09
 * In case MutationObserver based solution ensure all callbacks are propagated
   even if any on the way crashes (fixes #3)

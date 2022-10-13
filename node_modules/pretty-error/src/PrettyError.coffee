@@ -1,8 +1,42 @@
-{object, array} = require 'utila'
+isPlainObject = require 'lodash/isPlainObject'
 defaultStyle = require './defaultStyle'
 ParsedError = require './ParsedError'
 nodePaths = require './nodePaths'
 RenderKid = require 'renderkid'
+merge = require 'lodash/merge'
+
+arrayUtils = 
+  pluckByCallback: (a, cb) ->
+    return a if a.length < 1
+    removed = 0
+
+    for value, index in a
+      if cb value, index
+        removed++
+        continue
+
+      if removed isnt 0
+        a[index - removed] = a[index]
+
+    if removed > 0
+      a.length = a.length - removed
+
+    a
+
+  pluckOneItem: (a, item) ->
+    return a if a.length < 1
+    reached = no
+
+    for value, index in a
+      if not reached
+        if value is item
+          reached = yes
+          continue
+      else
+        a[index - 1] = a[index]
+
+    a.length = a.length - 1 if reached
+    a
 
 instance = null
 
@@ -100,7 +134,7 @@ module.exports = class PrettyError
         @filterParsedError.apply @, c.parsedErrorFilters
 
     if c.aliases?
-      if object.isBareObject c.aliases
+      if isPlainObject c.aliases
         @alias path, alias for path, alias of c.aliases
       else if c.aliases is no
         @removeAllAliases()
@@ -120,7 +154,7 @@ module.exports = class PrettyError
     @
 
   unskipPackage: (packages...) ->
-    array.pluckOneItem(@_packagesToSkip, pkg) for pkg in packages
+    arrayUtils.pluckOneItem(@_packagesToSkip, pkg) for pkg in packages
     @
 
   unskipAllPackages: ->
@@ -132,7 +166,7 @@ module.exports = class PrettyError
     @
 
   unskipPath: (paths...) ->
-    array.pluckOneItem(@_pathsToSkip, path) for path in paths
+    arrayUtils.pluckOneItem(@_pathsToSkip, path) for path in paths
     @
 
   unskipAllPaths: ->
@@ -144,7 +178,7 @@ module.exports = class PrettyError
     @
 
   unskip: (callbacks...) ->
-    array.pluckOneItem(@_skipCallbacks, cb) for cb in callbacks
+    arrayUtils.pluckOneItem(@_skipCallbacks, cb) for cb in callbacks
     @
 
   unskipAll: ->
@@ -162,7 +196,7 @@ module.exports = class PrettyError
     @
 
   removeFilter: (callbacks...) ->
-    array.pluckOneItem(@_filterCallbacks, cb) for cb in callbacks
+    arrayUtils.pluckOneItem(@_filterCallbacks, cb) for cb in callbacks
     @
 
   removeAllFilters: ->
@@ -174,7 +208,7 @@ module.exports = class PrettyError
     @
 
   removeParsedErrorFilter: (callbacks...) ->
-    array.pluckOneItem(@_parsedErrorFilters, cb) for cb in callbacks
+    arrayUtils.pluckOneItem(@_parsedErrorFilters, cb) for cb in callbacks
     @
 
   removeAllParsedErrorFilters: ->
@@ -191,7 +225,7 @@ module.exports = class PrettyError
     @
 
   removeAlias: (stringOrRx) ->
-    array.pluckByCallback @_aliases, (pair) ->
+    arrayUtils.pluckByCallback @_aliases, (pair) ->
       pair.stringOrRx is stringOrRx
 
     @
@@ -204,7 +238,7 @@ module.exports = class PrettyError
     @_style
 
   appendStyle: (toAppend) ->
-    object.appendOnto @_style, toAppend
+    merge @_style, toAppend
     @_renderer.style toAppend
     @
 

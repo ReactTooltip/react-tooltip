@@ -33,6 +33,7 @@ exports.defaults = {
   src: '**/*',
   only: '.',
   push: true,
+  history: true,
   message: 'Updates',
   silent: false
 };
@@ -143,6 +144,13 @@ exports.publish = function publish(basePath, config, callback) {
         return git.checkout(options.remote, options.branch);
       })
       .then(git => {
+        if (!options.history) {
+          return git.deleteRef(options.branch);
+        } else {
+          return git;
+        }
+      })
+      .then(git => {
         if (!options.add) {
           log('Removing files');
           return git.rm(only.join(' '));
@@ -193,7 +201,7 @@ exports.publish = function publish(basePath, config, callback) {
       .then(git => {
         if (options.push) {
           log('Pushing');
-          return git.push(options.remote, options.branch);
+          return git.push(options.remote, options.branch, !options.history);
         } else {
           return git;
         }

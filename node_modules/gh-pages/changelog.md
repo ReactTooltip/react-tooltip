@@ -1,3 +1,10 @@
+## v2.2.0
+
+ * [#318](https://github.com/tschaub/gh-pages/pull/318) - Allow an absolute path as dist directory ([@okuryu](https://github.com/okuryu))
+ * [#319](https://github.com/tschaub/gh-pages/pull/319) - Added 'remove' documentation to the readme ([@Sag-Dev](https://github.com/Sag-Dev))
+ * [#323](https://github.com/tschaub/gh-pages/pull/323) - Update dependencies ([@tschaub](https://github.com/tschaub))
+ * [#277](https://github.com/tschaub/gh-pages/pull/277) - Add `--no-history` flag not to preserve deploy history ([@dplusic](https://github.com/dplusic))
+
 ## v2.1.1
 
  * [#312](https://github.com/tschaub/gh-pages/pull/312) - Add default for '--git' option ([@tschaub](https://github.com/tschaub))

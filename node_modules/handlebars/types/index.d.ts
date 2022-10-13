@@ -30,6 +30,10 @@ declare namespace Handlebars {
       data?: any;
       blockParams?: any[];
       allowCallsToHelperMissing?: boolean;
+      allowedProtoProperties?: { [name: string]: boolean };
+      allowedProtoMethods?: { [name: string]: boolean };
+      allowProtoPropertiesByDefault?: boolean;
+      allowProtoMethodsByDefault?: boolean;
   }
 
   export interface HelperOptions {
@@ -83,6 +87,8 @@ declare namespace Handlebars {
   export const partials: { [name: string]: any };
   // TODO: replace Function with actual signature
   export const decorators: { [name: string]: Function };
+
+  export const VERSION: string;
 
   export function noConflict(): typeof Handlebars;
 

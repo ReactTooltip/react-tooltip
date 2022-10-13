@@ -1,9 +1,9 @@
-# Statuses
+# statuses
 
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
+[![NPM Version][npm-version-image]][npm-url]
+[![NPM Downloads][npm-downloads-image]][npm-url]
 [![Node.js Version][node-version-image]][node-version-url]
-[![Build Status][travis-image]][travis-url]
+[![Build Status][ci-image]][ci-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
 HTTP status utility for node.
@@ -34,62 +34,45 @@ $ npm install statuses
 var status = require('statuses')
 ```
 
-### var code = status(Integer || String)
+### status(code)
 
-If `Integer` or `String` is a valid HTTP code or status message, then the
-appropriate `code` will be returned. Otherwise, an error will be thrown.
+Returns the status message string for a known HTTP status code. The code
+may be a number or a string. An error is thrown for an unknown status code.
 
 <!-- eslint-disable no-undef -->
 
 ```js
-status(403) // => 403
-status('403') // => 403
-status('forbidden') // => 403
-status('Forbidden') // => 403
-status(306) // throws, as it's not supported by node.js
+status(403) // => 'Forbidden'
+status('403') // => 'Forbidden'
+status(306) // throws
 ```
 
-### status.STATUS_CODES
+### status(msg)
 
-Returns an object which maps status codes to status messages, in
-the same format as the
-[Node.js http module](https://nodejs.org/dist/latest/docs/api/http.html#http_http_status_codes).
+Returns the numeric status code for a known HTTP status message. The message
+is case-insensitive. An error is thrown for an unknown status message.
+
+<!-- eslint-disable no-undef -->
+
+```js
+status('forbidden') // => 403
+status('Forbidden') // => 403
+status('foo') // throws
+```
 
 ### status.codes
 
 Returns an array of all the status codes as `Integer`s.
 
-### var msg = status[code]
+### status.code[msg]
 
-Map of `code` to `status message`. `undefined` for invalid `code`s.
-
-<!-- eslint-disable no-undef, no-unused-expressions -->
-
-```js
-status[404] // => 'Not Found'
-```
-
-### var code = status[msg]
-
-Map of `status message` to `code`. `msg` can either be title-cased or
-lower-cased. `undefined` for invalid `status message`s.
+Returns the numeric status code for a known status message (in lower-case),
+otherwise `undefined`.
 
 <!-- eslint-disable no-undef, no-unused-expressions -->
 
 ```js
 status['not found'] // => 404
-status['Not Found'] // => 404
-```
-
-### status.redirect[code]
-
-Returns `true` if a status code is a valid redirect status.
-
-<!-- eslint-disable no-undef, no-unused-expressions -->
-
-```js
-status.redirect[200] // => undefined
-status.redirect[301] // => true
 ```
 
 ### status.empty[code]
@@ -104,6 +87,29 @@ status.empty[204] // => true
 status.empty[304] // => true
 ```
 
+### status.message[code]
+
+Returns the string message for a known numeric status code, otherwise
+`undefined`. This object is the same format as the
+[Node.js http module `http.STATUS_CODES`](https://nodejs.org/dist/latest/docs/api/http.html#http_http_status_codes).
+
+<!-- eslint-disable no-undef, no-unused-expressions -->
+
+```js
+status.message[404] // => 'Not Found'
+```
+
+### status.redirect[code]
+
+Returns `true` if a status code is a valid redirect status.
+
+<!-- eslint-disable no-undef, no-unused-expressions -->
+
+```js
+status.redirect[200] // => undefined
+status.redirect[301] // => true
+```
+
 ### status.retry[code]
 
 Returns `true` if you should retry the rest.
@@ -115,13 +121,16 @@ status.retry[501] // => undefined
 status.retry[503] // => true
 ```
 
-[npm-image]: https://img.shields.io/npm/v/statuses.svg
-[npm-url]: https://npmjs.org/package/statuses
-[node-version-image]: https://img.shields.io/node/v/statuses.svg
-[node-version-url]: https://nodejs.org/en/download
-[travis-image]: https://img.shields.io/travis/jshttp/statuses.svg
-[travis-url]: https://travis-ci.org/jshttp/statuses
-[coveralls-image]: https://img.shields.io/coveralls/jshttp/statuses.svg
+## License
+
+[MIT](LICENSE)
+
+[ci-image]: https://badgen.net/github/checks/jshttp/statuses/master?label=ci
+[ci-url]: https://github.com/jshttp/statuses/actions?query=workflow%3Aci
+[coveralls-image]: https://badgen.net/coveralls/c/github/jshttp/statuses/master
 [coveralls-url]: https://coveralls.io/r/jshttp/statuses?branch=master
-[downloads-image]: https://img.shields.io/npm/dm/statuses.svg
-[downloads-url]: https://npmjs.org/package/statuses
+[node-version-image]: https://badgen.net/npm/node/statuses
+[node-version-url]: https://nodejs.org/en/download
+[npm-downloads-image]: https://badgen.net/npm/dm/statuses
+[npm-url]: https://npmjs.org/package/statuses
+[npm-version-image]: https://badgen.net/npm/v/statuses

@@ -1,4 +1,4 @@
-# capture-stack-trace [![Build Status](https://travis-ci.org/floatdrop/capture-stack-trace.svg?branch=master)](https://travis-ci.org/floatdrop/capture-stack-trace)
+# capture-stack-trace
 
 > Ponyfill for Error.captureStackTrace
 
@@ -30,7 +30,3 @@ captureStackTrace({});
 Type: `Object`
 
 Target Object, that will recieve stack property.
-
-## License
-
-MIT © [Vsevolod Strukchinsky](http://github.com/floatdrop)

@@ -1,3 +1,22 @@
+0.5.0 / 2022-04-11
+==================
+
+  * Add `priority` option
+  * Fix `expires` option to reject invalid dates
+  * pref: improve default decode speed
+  * pref: remove slow string split in parse
+
+0.4.2 / 2022-02-02
+==================
+
+  * pref: read value only when assigning in parse
+  * pref: remove unnecessary regexp in parse
+
+0.4.1 / 2020-04-21
+==================
+
+  * Fix `maxAge` option to reject invalid values
+
 0.4.0 / 2019-05-15
 ==================
 

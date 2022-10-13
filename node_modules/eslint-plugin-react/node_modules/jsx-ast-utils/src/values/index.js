@@ -10,10 +10,11 @@ const TYPES = {
 };
 
 // Composition map of types to their extractor functions to handle literals.
-const LITERAL_TYPES = Object.assign({}, TYPES, {
+const LITERAL_TYPES = {
+  ...TYPES,
   JSXElement: () => null,
   JSXExpressionContainer: extractLiteral,
-});
+};
 
 /**
  * This function maps an AST value node

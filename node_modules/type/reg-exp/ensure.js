@@ -5,5 +5,10 @@ var resolveException = require("../lib/resolve-exception")
 
 module.exports = function (value/*, options*/) {
 	if (is(value)) return value;
-	return resolveException(value, "%v is not a regular expression object", arguments[1]);
+	var options = arguments[1];
+	var errorMessage =
+		options && options.name
+			? "Expected a regular expression for %n, received %v"
+			: "%v is not a regular expression";
+	return resolveException(value, errorMessage, options);
 };

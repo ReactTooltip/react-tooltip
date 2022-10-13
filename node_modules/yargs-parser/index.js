@@ -2,14 +2,15 @@ var camelCase = require('camelcase')
 var path = require('path')
 var tokenizeArgString = require('./lib/tokenize-arg-string')
 var util = require('util')
+var assign = require('object.assign')
 
 function parse (args, opts) {
-  if (!opts) opts = {}
+  if (!opts) opts = Object.create(null)
   // allow a string argument to be passed in rather
   // than an argv array.
   args = tokenizeArgString(args)
   // aliases might have transitive relationships, normalize this.
-  var aliases = combineAliases(opts.alias || {})
+  var aliases = combineAliases(opts.alias || Object.create(null))
   var configuration = assign({
     'short-option-groups': true,
     'camel-case-expansion': true,
@@ -19,27 +20,27 @@ function parse (args, opts) {
     'duplicate-arguments-array': true,
     'flatten-duplicate-arrays': true
   }, opts.configuration)
-  var defaults = opts.default || {}
+  var defaults = opts.default || Object.create(null)
   var configObjects = opts.configObjects || []
   var envPrefix = opts.envPrefix
-  var newAliases = {}
+  var newAliases = Object.create(null)
   // allow a i18n handler to be passed in, default to a fake one (util.format).
   var __ = opts.__ || function (str) {
     return util.format.apply(util, Array.prototype.slice.call(arguments))
   }
   var error = null
   var flags = {
-    aliases: {},
-    arrays: {},
-    bools: {},
-    strings: {},
-    numbers: {},
-    counts: {},
-    normalize: {},
-    configs: {},
-    defaulted: {},
-    nargs: {},
-    coercions: {}
+    aliases: Object.create(null),
+    arrays: Object.create(null),
+    bools: Object.create(null),
+    strings: Object.create(null),
+    numbers: Object.create(null),
+    counts: Object.create(null),
+    normalize: Object.create(null),
+    configs: Object.create(null),
+    defaulted: Object.create(null),
+    nargs: Object.create(null),
+    coercions: Object.create(null)
   }
   var negative = /^-[0-9]+(\.[0-9]+)?/
 
@@ -67,11 +68,11 @@ function parse (args, opts) {
     flags.normalize[key] = true
   })
 
-  Object.keys(opts.narg || {}).forEach(function (k) {
+  Object.keys(opts.narg || Object.create(null)).forEach(function (k) {
     flags.nargs[k] = opts.narg[k]
   })
 
-  Object.keys(opts.coerce || {}).forEach(function (k) {
+  Object.keys(opts.coerce || Object.create(null)).forEach(function (k) {
     flags.coercions[k] = opts.coerce[k]
   })
 
@@ -80,7 +81,7 @@ function parse (args, opts) {
       flags.configs[key] = true
     })
   } else {
-    Object.keys(opts.config || {}).forEach(function (k) {
+    Object.keys(opts.config || Object.create(null)).forEach(function (k) {
       flags.configs[k] = opts.config[k]
     })
   }
@@ -417,7 +418,7 @@ function parse (args, opts) {
   // set args from config.json file, this should be
   // applied last so that defaults can be applied.
   function setConfig (argv) {
-    var configLookup = {}
+    var configLookup = Object.create(null)
 
     // expand defaults/aliases, in-case any happen to reference
     // the config.json file.
@@ -537,7 +538,7 @@ function parse (args, opts) {
     if (!configuration['dot-notation']) keys = [keys.join('.')]
 
     keys.slice(0, -1).forEach(function (key) {
-      o = (o[key] || {})
+      o = (o[key] || Object.create(null))
     })
 
     var key = keys[keys.length - 1]
@@ -551,8 +552,10 @@ function parse (args, opts) {
 
     if (!configuration['dot-notation']) keys = [keys.join('.')]
 
+    keys = keys.map(sanitizeKey)
+
     keys.slice(0, -1).forEach(function (key) {
-      if (o[key] === undefined) o[key] = {}
+      if (o[key] === undefined) o[key] = Object.create(null)
       o = o[key]
     })
 
@@ -584,7 +587,7 @@ function parse (args, opts) {
   // extend the aliases list with inferred aliases.
   function extendAliases () {
     Array.prototype.slice.call(arguments).forEach(function (obj) {
-      Object.keys(obj || {}).forEach(function (key) {
+      Object.keys(obj || Object.create(null)).forEach(function (key) {
         // short-circuit if we've already added a key
         // to the aliases array, for example it might
         // exist in both 'opts.default' and 'opts.key'.
@@ -681,7 +684,7 @@ function parse (args, opts) {
 function combineAliases (aliases) {
   var aliasArrays = []
   var change = true
-  var combined = {}
+  var combined = Object.create(null)
 
   // turn alias lookup hash {key: ['alias1', 'alias2']} into
   // a simple array ['key', 'alias1', 'alias2']
@@ -723,25 +726,16 @@ function combineAliases (aliases) {
   return combined
 }
 
-function assign (defaults, configuration) {
-  var o = {}
-  configuration = configuration || {}
-
-  Object.keys(defaults).forEach(function (k) {
-    o[k] = defaults[k]
-  })
-  Object.keys(configuration).forEach(function (k) {
-    o[k] = configuration[k]
-  })
-
-  return o
-}
-
 // this function should only be called when a count is given as an arg
 // it is NOT called to set a default value
 // thus we can start the count at 1 instead of 0
 function increment (orig) {
   return orig !== undefined ? orig + 1 : 1
+}
+
+function sanitizeKey (key) {
+  if (key === '__proto__') return '___proto___'
+  return key
 }
 
 function Parser (args, opts) {

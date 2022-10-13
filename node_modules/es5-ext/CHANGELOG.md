@@ -2,7 +2,71 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.10.62](https://github.com/medikoo/es5-ext/compare/v0.10.61...v0.10.62) (2022-08-02)
+
+### Maintenance Improvements
+
+- **Manifest improvements:**
+  - ([#190](https://github.com/medikoo/es5-ext/issues/190)) ([b8dc53f](https://github.com/medikoo/es5-ext/commit/b8dc53fa439b98541644c64c1275f25d9f2e2235))
+  - ([c51d552](https://github.com/medikoo/es5-ext/commit/c51d552c03967858b8f14a4afa305338ba648cce))
+
+### [0.10.61](https://github.com/medikoo/es5-ext/compare/v0.10.60...v0.10.61) (2022-04-20)
+
+### Bug Fixes
+
+- Ensure postinstall script does not error ([a0be4fd](https://github.com/medikoo/es5-ext/commit/a0be4fdacdbc3aefd6f2952b7b9215827d362bbb))
+
+### Maintenance Improvements
+
+- Bump dependencies ([d7e0a61](https://github.com/medikoo/es5-ext/commit/d7e0a612b7d895c1c7238c779feae1e39d4634c4))
+
+### [0.10.60](https://github.com/medikoo/es5-ext/compare/v0.10.59...v0.10.60) (2022-04-07)
+
+### Maintenance Improvements
+
+- Improve `postinstall` script configuration ([ab6b121](https://github.com/medikoo/es5-ext/commit/ab6b121f0ca4f033bba9b6f400b24d07869bd716))
+
+### [0.10.59](https://github.com/medikoo/es5-ext/compare/v0.10.58...v0.10.59) (2022-03-17)
+
+### Maintenance Improvements
+
+- Improve manifest wording ([#122](https://github.com/medikoo/es5-ext/issues/122)) ([eb7ae59](https://github.com/medikoo/es5-ext/commit/eb7ae59966774a8c26f1717415c627d90bb3d954))
+- Update data in manifest ([3d2935a](https://github.com/medikoo/es5-ext/commit/3d2935ac6f1a0969c7569840d5b3bdeed6940e56))
+
+### [0.10.58](https://github.com/medikoo/es5-ext/compare/v0.10.57...v0.10.58) (2022-03-11)
+
+### Maintenance Improvements
+
+- Improve "call for peace" manifest ([3beace4](https://github.com/medikoo/es5-ext/commit/3beace4b3d00f02da61b72dd328f90cf069d46de))
+
+### [0.10.57](https://github.com/medikoo/es5-ext/compare/v0.10.56...v0.10.57) (2022-03-08)
+
+### Bug Fixes
+
+- Workaround `postinstall` script prevent npx error ([#110](https://github.com/medikoo/es5-ext/issues/110)) ([e212d5a](https://github.com/medikoo/es5-ext/commit/e212d5a0adf186f1fadf85fdc07aab25085ee097)) ([martindrq](https://github.com/martindrq))
+
+### [0.10.56](https://github.com/medikoo/es5-ext/compare/v0.10.55...v0.10.56) (2022-03-07)
+
+### Maintenance Improvements
+
+- Add missing shebang to postinstall script ([e423fd7](https://github.com/medikoo/es5-ext/commit/e423fd7264c4f145921e461037d571b35b6a9833))
+
+### [0.10.55](https://github.com/medikoo/es5-ext/compare/v0.10.54...v0.10.55) (2022-03-07)
+
+### Maintenance Improvements
+
+- Configure `.npmignore` file (exclude tests from publication) ([d3ed4b6](https://github.com/medikoo/es5-ext/commit/d3ed4b6a873900a2abf3957bbebdcf18c4e564e0))
+
+### [0.10.54](https://github.com/medikoo/es5-ext/compare/v0.10.53...v0.10.54) (2022-03-07)
+
+### Maintenance Improvements
+
+- Convert dependency ranges ([765eb8e](https://github.com/medikoo/es5-ext/commit/765eb8e897cabc76f0351443d84b4843a1187b27))
+- Give Peace a Chance ([28de285](https://github.com/medikoo/es5-ext/commit/28de285ed433b45113f01e4ce7c74e9a356b2af2))
+
 ### [0.10.53](https://github.com/medikoo/es5-ext/compare/v0.10.52...v0.10.53) (2019-11-21)
+
+_Maintenance improvements_
 
 ### [0.10.52](https://github.com/medikoo/es5-ext/compare/v0.10.51...v0.10.52) (2019-10-29)
 

@@ -1,6 +1,4 @@
-# convert-source-map [![build status](https://secure.travis-ci.org/thlorenz/convert-source-map.svg?branch=master)](http://travis-ci.org/thlorenz/convert-source-map)
-
-<a href="https://www.patreon.com/bePatron?u=8663953"><img alt="become a patron" src="https://c5.patreon.com/external/logo/become_a_patron_button.png" height="35px"></a>
+# convert-source-map [![Build Status][ci-image]][ci-url]
 
 Converts a source-map from/to  different formats and allows adding/changing properties.
 
@@ -121,5 +119,5 @@ By default, the comment is formatted like: `//# sourceMappingURL=...`, which you
 
 When `options.multiline == true`, the comment is formatted like: `/*# sourceMappingURL=... */`, which you would find in a CSS source file.
 
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/thlorenz/convert-source-map/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[ci-url]: https://github.com/thlorenz/convert-source-map/actions?query=workflow:ci
+[ci-image]: https://img.shields.io/github/workflow/status/thlorenz/convert-source-map/CI?style=flat-square

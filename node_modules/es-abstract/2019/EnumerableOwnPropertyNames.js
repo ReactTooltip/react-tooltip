@@ -1,14 +1,14 @@
 'use strict';
 
-var GetIntrinsic = require('../GetIntrinsic');
+var GetIntrinsic = require('get-intrinsic');
 
 var $TypeError = GetIntrinsic('%TypeError%');
 
 var objectKeys = require('object-keys');
 
-var callBound = require('../helpers/callBound');
+var callBound = require('call-bind/callBound');
 
-var callBind = require('../helpers/callBind');
+var callBind = require('call-bind');
 
 var $isEnumerable = callBound('Object.prototype.propertyIsEnumerable');
 var $pushApply = callBind.apply(GetIntrinsic('%Array.prototype.push%'));
@@ -17,9 +17,9 @@ var forEach = require('../helpers/forEach');
 
 var Type = require('./Type');
 
-// https://www.ecma-international.org/ecma-262/8.0/#sec-enumerableownproperties
+// https://262.ecma-international.org/8.0/#sec-enumerableownproperties
 
-module.exports = function EnumerableOwnProperties(O, kind) {
+module.exports = function EnumerableOwnPropertyNames(O, kind) {
 	if (Type(O) !== 'Object') {
 		throw new $TypeError('Assertion failed: Type(O) is not Object');
 	}

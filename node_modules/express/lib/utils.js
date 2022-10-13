@@ -120,6 +120,7 @@ exports.contentDisposition = deprecate.function(contentDisposition,
  * also includes `.originalIndex` for stable sorting
  *
  * @param {String} str
+ * @param {Number} index
  * @return {Object}
  * @api private
  */
@@ -157,15 +158,13 @@ exports.compileETag = function(val) {
 
   switch (val) {
     case true:
+    case 'weak':
       fn = exports.wetag;
       break;
     case false:
       break;
     case 'strong':
       fn = exports.etag;
-      break;
-    case 'weak':
-      fn = exports.wetag;
       break;
     default:
       throw new TypeError('unknown value for etag function: ' + val);
@@ -191,6 +190,7 @@ exports.compileQueryParser = function compileQueryParser(val) {
 
   switch (val) {
     case true:
+    case 'simple':
       fn = querystring.parse;
       break;
     case false:
@@ -198,9 +198,6 @@ exports.compileQueryParser = function compileQueryParser(val) {
       break;
     case 'extended':
       fn = parseExtendedQueryString;
-      break;
-    case 'simple':
-      fn = querystring.parse;
       break;
     default:
       throw new TypeError('unknown value for query parser function: ' + val);
@@ -232,7 +229,8 @@ exports.compileTrust = function(val) {
 
   if (typeof val === 'string') {
     // Support comma-separated values
-    val = val.split(/ *, */);
+    val = val.split(',')
+      .map(function (v) { return v.trim() })
   }
 
   return proxyaddr.compile(val || []);

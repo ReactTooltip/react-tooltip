@@ -6,5 +6,10 @@ var resolveException = require("../lib/resolve-exception")
 module.exports = function (value/*, options*/) {
 	var coerced = coerce(value);
 	if (coerced !== null) return coerced;
-	return resolveException(value, "%v is not a valid array length", arguments[1]);
+	var options = arguments[1];
+	var errorMessage =
+		options && options.name
+			? "Expected an array length for %n, received %v"
+			: "%v is not an array length";
+	return resolveException(value, errorMessage, options);
 };

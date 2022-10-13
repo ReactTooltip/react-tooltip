@@ -18,6 +18,13 @@ All notable changes to this project will be documented in this file. See [standa
 
 
 <a name="4.2.1"></a>
+### [5.0.1](https://www.github.com/yargs/yargs-parser/compare/v5.0.0...v5.0.1) (2021-03-10)
+
+
+### Bug Fixes
+
+* **security:** address GHSA-p9pc-299p-vxgp ([#362](https://www.github.com/yargs/yargs-parser/issues/362)) ([1c417bd](https://www.github.com/yargs/yargs-parser/commit/1c417bd0b42b09c475ee881e36d292af4fa2cc36))
+
 ## [4.2.1](https://github.com/yargs/yargs-parser/compare/v4.2.0...v4.2.1) (2017-01-02)
 
 

@@ -7,7 +7,7 @@ var isPlainArray = require("../../is-plain-array")
   , forEach      = Array.prototype.forEach
   , call         = Function.prototype.call;
 
-module.exports = function (callbackFn/*, thisArg*/) {
+module.exports = function (callbackFn /*, thisArg*/) {
 	var result, thisArg, i;
 	if (!this || !isArray(this) || isPlainArray(this)) {
 		return filter.apply(this, arguments);

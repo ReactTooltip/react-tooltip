@@ -5,5 +5,8 @@ var resolveException = require("../lib/resolve-exception")
 
 module.exports = function (value/*, options*/) {
 	if (is(value)) return value;
-	return resolveException(value, "%v is not an error object", arguments[1]);
+	var options = arguments[1];
+	var errorMessage =
+		options && options.name ? "Expected an error for %n, received %v" : "%v is not an error";
+	return resolveException(value, errorMessage, options);
 };

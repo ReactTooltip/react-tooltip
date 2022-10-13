@@ -1,4 +1,4 @@
-# Regenerate [![Build status](https://travis-ci.org/mathiasbynens/regenerate.svg?branch=master)](https://travis-ci.org/mathiasbynens/regenerate) [![Code coverage status](https://img.shields.io/codecov/c/github/mathiasbynens/regenerate.svg)](https://codecov.io/gh/mathiasbynens/regenerate) [![Dependency status](https://gemnasium.com/mathiasbynens/regenerate.svg)](https://gemnasium.com/mathiasbynens/regenerate)
+# Regenerate [![Build status](https://travis-ci.org/mathiasbynens/regenerate.svg?branch=master)](https://travis-ci.org/mathiasbynens/regenerate) [![Code coverage status](https://img.shields.io/codecov/c/github/mathiasbynens/regenerate.svg)](https://codecov.io/gh/mathiasbynens/regenerate)
 
 _Regenerate_ is a Unicode-aware regex generator for JavaScript. It allows you to easily generate ES5-compatible regular expressions based on a given set of Unicode symbols or code points. (This is trickier than you might think, because of [how JavaScript deals with astral symbols](https://mathiasbynens.be/notes/javascript-unicode).)
 
@@ -14,12 +14,6 @@ Via [Bower](http://bower.io/):
 
 ```bash
 bower install regenerate
-```
-
-Via [Component](https://github.com/component/component):
-
-```bash
-component install mathiasbynens/regenerate
 ```
 
 In a browser:
@@ -122,7 +116,7 @@ regenerate(0x1D306, 'A', '©', 0x2603).toString();
 
 ### `regenerate.prototype.remove(value1, value2, value3, ...)`
 
-Any arguments passed to `remove()` are removed to the set. Both code points (numbers) and symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
+Any arguments passed to `remove()` are removed from the set. Both code points (numbers) and symbols (strings consisting of a single Unicode symbol) are accepted, as well as arrays containing values of these types.
 
 ```js
 regenerate(0x1D306, 'A', '©', 0x2603).remove('☃').toString();
@@ -241,7 +235,7 @@ lowSurrogates.toString({ 'bmpOnly': true });
 // → '[\\uDC00-\\uDFFF]'
 ```
 
-Note that lone low surrogates cannot be matched accurately using regular expressions in JavaScript. Regenerate’s output makes a best-effort approach but [there can be false negatives in this regard](https://github.com/mathiasbynens/regenerate/issues/28#issuecomment-72224808).
+Note that lone low surrogates cannot be matched accurately using regular expressions in JavaScript without the use of [lookbehind assertions](https://mathiasbynens.be/notes/es-regexp-proposals#lookbehinds), which aren't yet widely supported. Regenerate’s output makes a best-effort approach but [there can be false negatives in this regard](https://github.com/mathiasbynens/regenerate/issues/28#issuecomment-72224808).
 
 If the `hasUnicodeFlag` property of the optional `options` object is set to `true`, the output makes use of Unicode code point escapes (`\u{…}`) where applicable. This simplifies the output at the cost of compatibility and portability, since it means the output can only be used as a pattern in a regular expression with [the ES6 `u` flag](https://mathiasbynens.be/notes/es6-unicode-regex) enabled.
 

@@ -8,14 +8,14 @@ var util   = require('util'),
     API    = require('./api'),
     Event  = require('./api/event');
 
-var DEFAULT_PORTS    = {'http:': 80, 'https:': 443, 'ws:':80, 'wss:': 443},
+var DEFAULT_PORTS    = { 'http:': 80, 'https:': 443, 'ws:':80, 'wss:': 443 },
     SECURE_PROTOCOLS = ['https:', 'wss:'];
 
 var Client = function(_url, protocols, options) {
   options = options || {};
 
   this.url     = _url;
-  this._driver = driver.client(this.url, {maxLength: options.maxLength, protocols: protocols});
+  this._driver = driver.client(this.url, { maxLength: options.maxLength, protocols: protocols });
 
   ['open', 'error'].forEach(function(event) {
     this._driver.on(event, function() {
@@ -67,12 +67,12 @@ Client.prototype._configureProxy = function(proxy, originTLS) {
     for (name in proxy.headers) this._proxy.setHeader(name, proxy.headers[name]);
   }
 
-  this._proxy.pipe(this._stream, {end: false});
+  this._proxy.pipe(this._stream, { end: false });
   this._stream.pipe(this._proxy);
 
   this._proxy.on('connect', function() {
     if (secure) {
-      var options = {socket: self._stream, servername: uri.hostname};
+      var options = { socket: self._stream, servername: uri.hostname };
       for (name in originTLS) options[name] = originTLS[name];
       self._stream = tls.connect(options);
       self._configureStream();

@@ -4,7 +4,7 @@ var callable = require("./valid-callable")
   , forEach  = require("./for-each")
   , call     = Function.prototype.call;
 
-module.exports = function (obj, cb/*, thisArg*/) {
+module.exports = function (obj, cb /*, thisArg*/) {
 	var result = {}, thisArg = arguments[2];
 	callable(cb);
 	forEach(

@@ -1,3 +1,13 @@
+2.4.1 / 2022-02-22
+==================
+
+  * Fix error on early async hooks implementations
+
+2.4.0 / 2022-02-21
+==================
+
+  * Prevent loss of async hooks context
+
 2.3.0 / 2015-05-26
 ==================
 

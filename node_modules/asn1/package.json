@@ -8,10 +8,10 @@
   ],
   "name": "asn1",
   "description": "Contains parsers and serializers for ASN.1 (currently BER only)",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "repository": {
     "type": "git",
-    "url": "git://github.com/joyent/node-asn1.git"
+    "url": "https://github.com/joyent/node-asn1.git"
   },
   "main": "lib/index.js",
   "dependencies": {

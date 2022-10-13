@@ -5,7 +5,7 @@ var assign            = require("../object/assign")
   , isValue           = require("../object/is-value")
   , captureStackTrace = Error.captureStackTrace;
 
-module.exports = function (message/*, code, ext*/) {
+module.exports = function (message /*, code, ext*/) {
 	var err = new Error(message), code = arguments[1], ext = arguments[2];
 	if (!isValue(ext)) {
 		if (isObject(code)) {

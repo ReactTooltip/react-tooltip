@@ -1,6 +1,6 @@
 'use strict';
 
-var GetIntrinsic = require('../GetIntrinsic');
+var GetIntrinsic = require('get-intrinsic');
 
 var $TypeError = GetIntrinsic('%TypeError%');
 
@@ -20,8 +20,7 @@ module.exports = function GetIterator(obj, method) {
 			{
 				AdvanceStringIndex: AdvanceStringIndex,
 				GetMethod: GetMethod,
-				IsArray: IsArray,
-				Type: Type
+				IsArray: IsArray
 			},
 			obj
 		);

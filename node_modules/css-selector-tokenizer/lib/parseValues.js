@@ -136,12 +136,12 @@ var parser = new Parser({
 		"url\\((\\s*)(\"(?:[^\\\\\"]|\\\\.)*\")(\\s*)\\)": urlMatch,
 		"url\\((\\s*)('(?:[^\\\\']|\\\\.)*')(\\s*)\\)": urlMatch,
 		"url\\((\\s*)((?:[^\\\\)'\"]|\\\\.)*)(\\s*)\\)": urlMatch,
-		"([\\w\-]+)\\((\\s*)": nestedItemMatch,
+		"([\\w-]+)\\((\\s*)": nestedItemMatch,
 		"(\\s*)(\\))": nestedItemEndMatch,
 		",(\\s*)": commaMatch,
 		"\\s+$": endSpacingMatch,
 		"\\s+": spacingMatch,
-		"[^\\s,\)]+": itemMatch
+		"[^\\s,)]+": itemMatch
 	}
 });
 

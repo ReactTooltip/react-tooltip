@@ -31,7 +31,13 @@ class TypedArrayContents {
       v8::Local<v8::ArrayBuffer> buffer = array->Buffer();
 
       length = byte_length / sizeof(T);
-      data   = static_cast<char*>(buffer->GetContents().Data()) + byte_offset;
+// Actually it's 7.9 here but this would lead to ABI issues with Node.js 13
+// using 7.8 till 13.2.0.
+#if (V8_MAJOR_VERSION >= 8)
+      data = static_cast<char*>(buffer->GetBackingStore()->Data()) + byte_offset;
+#else
+      data = static_cast<char*>(buffer->GetContents().Data()) + byte_offset;
+#endif
     }
 
 #else

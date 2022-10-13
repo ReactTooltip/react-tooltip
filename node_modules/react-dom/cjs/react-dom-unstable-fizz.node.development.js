@@ -1,4 +1,4 @@
-/** @license React v16.12.0
+/** @license React v16.13.1
  * react-dom-unstable-fizz.node.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -73,13 +73,6 @@ function formatChunk(type, props) {
 var hasSymbol = typeof Symbol === 'function' && Symbol.for;
 var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
 
-
-
-
-
- // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
-// (unstable) APIs that have been removed. Can we remove the symbols?
-
 function createRequest(children, destination) {
   return {
     destination: destination,
@@ -142,9 +135,6 @@ function startFlowing(request) {
   flushCompletedChunks(request);
 }
 
-// This file intentionally does *not* have the Flow annotation.
-// Don't add it. See `./inline-typed.js` for an explanation.
-
 function createDrainHandler(destination, request) {
   return function () {
     return startFlowing(request);
@@ -161,17 +151,11 @@ var ReactDOMFizzServerNode = {
   pipeToNodeWritable: pipeToNodeWritable
 };
 
-var ReactDOMFizzServerNode$1 = Object.freeze({
-	default: ReactDOMFizzServerNode
-});
-
-var ReactDOMFizzServerNode$2 = ( ReactDOMFizzServerNode$1 && ReactDOMFizzServerNode ) || ReactDOMFizzServerNode$1;
-
 // TODO: decide on the top-level export form.
 // This is hacky but makes it work with both Rollup and Jest
 
 
-var unstableFizz_node = ReactDOMFizzServerNode$2.default || ReactDOMFizzServerNode$2;
+var unstableFizz_node = ReactDOMFizzServerNode.default || ReactDOMFizzServerNode;
 
 module.exports = unstableFizz_node;
   })();

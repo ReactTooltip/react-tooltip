@@ -1,6 +1,7 @@
 # has-symbols <sup>[![Version Badge][2]][1]</sup>
 
-[![Build Status][3]][4]
+[![github actions][actions-image]][actions-url]
+[![coverage][codecov-image]][codecov-url]
 [![dependency status][5]][6]
 [![dev dependency status][7]][8]
 [![License][license-image]][license-url]
@@ -29,17 +30,17 @@ hasSymbolsKinda() === true; // if the environment has a Symbol sham that mostly 
 Simply clone the repo, `npm install`, and run `npm test`
 
 [1]: https://npmjs.org/package/has-symbols
-[2]: http://versionbadg.es/ljharb/has-symbols.svg
-[3]: https://travis-ci.org/ljharb/has-symbols.svg
-[4]: https://travis-ci.org/ljharb/has-symbols
-[5]: https://david-dm.org/ljharb/has-symbols.svg
-[6]: https://david-dm.org/ljharb/has-symbols
-[7]: https://david-dm.org/ljharb/has-symbols/dev-status.svg
-[8]: https://david-dm.org/ljharb/has-symbols#info=devDependencies
-[9]: https://ci.testling.com/ljharb/has-symbols.png
-[10]: https://ci.testling.com/ljharb/has-symbols
+[2]: https://versionbadg.es/inspect-js/has-symbols.svg
+[5]: https://david-dm.org/inspect-js/has-symbols.svg
+[6]: https://david-dm.org/inspect-js/has-symbols
+[7]: https://david-dm.org/inspect-js/has-symbols/dev-status.svg
+[8]: https://david-dm.org/inspect-js/has-symbols#info=devDependencies
 [11]: https://nodei.co/npm/has-symbols.png?downloads=true&stars=true
-[license-image]: http://img.shields.io/npm/l/has-symbols.svg
+[license-image]: https://img.shields.io/npm/l/has-symbols.svg
 [license-url]: LICENSE
-[downloads-image]: http://img.shields.io/npm/dm/has-symbols.svg
-[downloads-url]: http://npm-stat.com/charts.html?package=has-symbols
+[downloads-image]: https://img.shields.io/npm/dm/has-symbols.svg
+[downloads-url]: https://npm-stat.com/charts.html?package=has-symbols
+[codecov-image]: https://codecov.io/gh/inspect-js/has-symbols/branch/main/graphs/badge.svg
+[codecov-url]: https://app.codecov.io/gh/inspect-js/has-symbols/
+[actions-image]: https://img.shields.io/endpoint?url=https://github-actions-badge-u3jn4tfpocch.runkit.sh/inspect-js/has-symbols
+[actions-url]: https://github.com/inspect-js/has-symbols/actions

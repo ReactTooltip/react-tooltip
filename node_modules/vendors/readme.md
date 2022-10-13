@@ -12,17 +12,17 @@ From [Wikipedia][wiki] and the [CSS 2.1 spec][spec].
 † — real, as in, `mso-` and `prince-` are not included because they are
 not valid.
 
-## Installation
+## Install
 
 [npm][]:
 
-```bash
+```sh
 npm install vendors
 ```
 
-## Usage
+## Use
 
-```javascript
+```js
 var vendors = require('vendors')
 
 console.log(vendors)

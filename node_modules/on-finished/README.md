@@ -1,14 +1,18 @@
 # on-finished
 
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
-[![Node.js Version][node-version-image]][node-version-url]
-[![Build Status][travis-image]][travis-url]
-[![Test Coverage][coveralls-image]][coveralls-url]
+[![NPM Version][npm-version-image]][npm-url]
+[![NPM Downloads][npm-downloads-image]][npm-url]
+[![Node.js Version][node-image]][node-url]
+[![Build Status][ci-image]][ci-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
 
 Execute a callback when a HTTP request closes, finishes, or errors.
 
 ## Install
+
+This is a [Node.js](https://nodejs.org/en/) module available through the
+[npm registry](https://www.npmjs.com/). Installation is done using the
+[`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
 ```sh
 $ npm install on-finished
@@ -32,10 +36,12 @@ with the response, like open files.
 
 Listener is invoked as `listener(err, res)`.
 
+<!-- eslint-disable handle-callback-err -->
+
 ```js
 onFinished(res, function (err, res) {
   // clean up open fds, etc.
-  // err contains the error is request error'd
+  // err contains the error if request error'd
 })
 ```
 
@@ -51,11 +57,13 @@ after reading the data.
 
 Listener is invoked as `listener(err, req)`.
 
+<!-- eslint-disable handle-callback-err -->
+
 ```js
 var data = ''
 
 req.setEncoding('utf8')
-res.on('data', function (str) {
+req.on('data', function (str) {
   data += str
 })
 
@@ -97,7 +105,7 @@ interface**. This means if the `CONNECT` request contains a request entity,
 the request will be considered "finished" even before it has been read.
 
 There is no such thing as a response object to a `CONNECT` request in
-Node.js, so there is no support for for one.
+Node.js, so there is no support for one.
 
 ### HTTP Upgrade request
 
@@ -117,7 +125,7 @@ entity, the request will be considered "finished" even before it has been
 read.
 
 There is no such thing as a response object to a `Upgrade` request in
-Node.js, so there is no support for for one.
+Node.js, so there is no support for one.
 
 ## Example
 
@@ -126,13 +134,14 @@ once the response finishes.
 
 ```js
 var destroy = require('destroy')
+var fs = require('fs')
 var http = require('http')
 var onFinished = require('on-finished')
 
-http.createServer(function onRequest(req, res) {
+http.createServer(function onRequest (req, res) {
   var stream = fs.createReadStream('package.json')
   stream.pipe(res)
-  onFinished(res, function (err) {
+  onFinished(res, function () {
     destroy(stream)
   })
 })
@@ -142,13 +151,12 @@ http.createServer(function onRequest(req, res) {
 
 [MIT](LICENSE)
 
-[npm-image]: https://img.shields.io/npm/v/on-finished.svg
-[npm-url]: https://npmjs.org/package/on-finished
-[node-version-image]: https://img.shields.io/node/v/on-finished.svg
-[node-version-url]: http://nodejs.org/download/
-[travis-image]: https://img.shields.io/travis/jshttp/on-finished/master.svg
-[travis-url]: https://travis-ci.org/jshttp/on-finished
-[coveralls-image]: https://img.shields.io/coveralls/jshttp/on-finished/master.svg
+[ci-image]: https://badgen.net/github/checks/jshttp/on-finished/master?label=ci
+[ci-url]: https://github.com/jshttp/on-finished/actions/workflows/ci.yml
+[coveralls-image]: https://badgen.net/coveralls/c/github/jshttp/on-finished/master
 [coveralls-url]: https://coveralls.io/r/jshttp/on-finished?branch=master
-[downloads-image]: https://img.shields.io/npm/dm/on-finished.svg
-[downloads-url]: https://npmjs.org/package/on-finished
+[node-image]: https://badgen.net/npm/node/on-finished
+[node-url]: https://nodejs.org/en/download
+[npm-downloads-image]: https://badgen.net/npm/dm/on-finished
+[npm-url]: https://npmjs.org/package/on-finished
+[npm-version-image]: https://badgen.net/npm/v/on-finished

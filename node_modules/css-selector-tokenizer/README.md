@@ -1,4 +1,7 @@
-# CSS Modules: CSS selector Tokenizer
+# CSS Modules: css-selector-tokenizer
+[![Build Status](https://travis-ci.org/css-modules/css-selector-tokenizer.svg?branch=master)](https://travis-ci.org/css-modules/css-selector-tokenizer)
+[![coveralls.io](https://coveralls.io/repos/css-modules/css-selector-tokenizer/badge.svg?branch=master)](https://coveralls.io/r/css-modules/css-selector-tokenizer?branch=master)
+[![codecov.io](https://codecov.io/github/css-modules/css-selector-tokenizer/coverage.svg?branch=master)](https://codecov.io/github/css-modules/css-selector-tokenizer?branch=master)
 
 Parses and stringifies CSS selectors.
 
@@ -71,14 +74,9 @@ npm install
 npm test
 ```
 
-[![Build Status](https://travis-ci.org/css-modules/css-selector-tokenizer.svg?branch=master)](https://travis-ci.org/css-modules/css-selector-tokenizer)
-
-* Lines: [![Coverage Status](https://coveralls.io/repos/css-modules/css-selector-tokenizer/badge.svg?branch=master)](https://coveralls.io/r/css-modules/css-selector-tokenizer?branch=master)
-* Statements: [![codecov.io](http://codecov.io/github/css-modules/css-selector-tokenizer/coverage.svg?branch=master)](http://codecov.io/github/css-modules/css-selector-tokenizer?branch=master)
-
 ## Development
 
-- `npm autotest` will watch `lib` and `test` for changes and retest
+- `npm test -- -w` will watch `lib` and `test` for changes and retest
 
 ## License
 

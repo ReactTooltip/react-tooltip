@@ -264,7 +264,7 @@ function replace() {
         default:
       }
 
-      /* Value converstion */
+      /* Value conversion */
       switch (arguments[groups[6][0]]) {
         case 'Boolean':
         case 'Int32':

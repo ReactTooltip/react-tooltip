@@ -5,7 +5,7 @@ var isCallable = require("../object/is-callable")
   , slice      = Array.prototype.slice
   , apply      = Function.prototype.apply;
 
-module.exports = function (name/*, …args*/) {
+module.exports = function (name /*, …args*/) {
 	var args = slice.call(arguments, 1), isFn = isCallable(name);
 	return function (obj) {
 		value(obj);

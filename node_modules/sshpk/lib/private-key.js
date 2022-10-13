@@ -33,6 +33,7 @@ formats['ssh-private'] = require('./formats/ssh-private');
 formats['openssh'] = formats['ssh-private'];
 formats['ssh'] = formats['ssh-private'];
 formats['dnssec'] = require('./formats/dnssec');
+formats['putty'] = require('./formats/putty');
 
 function PrivateKey(opts) {
 	assert.object(opts, 'options');

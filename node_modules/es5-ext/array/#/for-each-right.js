@@ -6,7 +6,7 @@ var toPosInt          = require("../../number/to-pos-integer")
   , objHasOwnProperty = Object.prototype.hasOwnProperty
   , call              = Function.prototype.call;
 
-module.exports = function (cb/*, thisArg*/) {
+module.exports = function (cb /*, thisArg*/) {
 	var i, self, thisArg;
 
 	self = Object(value(this));

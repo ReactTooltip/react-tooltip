@@ -1,6 +1,6 @@
 {
   "name": "dot-prop",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "Get, set, or delete a property from a nested object using a dot path",
   "license": "MIT",
   "repository": "sindresorhus/dot-prop",
@@ -38,9 +38,9 @@
     "is-obj": "^1.0.0"
   },
   "devDependencies": {
-    "ava": "*",
+    "ava": "1.4.1",
     "matcha": "^0.7.0",
-    "xo": "*"
+    "xo": "0.24.0"
   },
   "xo": {
     "esnext": true

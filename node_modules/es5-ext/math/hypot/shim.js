@@ -10,7 +10,7 @@ var some = Array.prototype.some
   , add = function (sum, number) { return sum + number * number; };
 
 // eslint-disable-next-line no-unused-vars
-module.exports = function (val1, val2/*, …valn*/) {
+module.exports = function (val1, val2 /*, …valn*/) {
 	var result, numbers;
 	if (!arguments.length) return 0;
 	some.call(arguments, function (val) {

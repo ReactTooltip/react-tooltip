@@ -1,7 +1,7 @@
 /*!
  * send
  * Copyright(c) 2012 TJ Holowaychuk
- * Copyright(c) 2014-2016 Douglas Christopher Wilson
+ * Copyright(c) 2014-2022 Douglas Christopher Wilson
  * MIT Licensed
  */
 
@@ -267,13 +267,11 @@ SendStream.prototype.maxage = deprecate.function(function maxage (maxAge) {
 SendStream.prototype.error = function error (status, err) {
   // emit if listeners instead of responding
   if (hasListeners(this, 'error')) {
-    return this.emit('error', createError(status, err, {
-      expose: false
-    }))
+    return this.emit('error', createHttpError(status, err))
   }
 
   var res = this.res
-  var msg = statuses[status] || String(status)
+  var msg = statuses.message[status] || String(status)
   var doc = createHtmlDocument('Error', escapeHtml(msg))
 
   // clear existing headers
@@ -349,21 +347,19 @@ SendStream.prototype.isPreconditionFailure = function isPreconditionFailure () {
 }
 
 /**
- * Strip content-* header fields.
+ * Strip various content header fields for a change in entity.
  *
  * @private
  */
 
 SendStream.prototype.removeContentHeaderFields = function removeContentHeaderFields () {
   var res = this.res
-  var headers = getHeaderNames(res)
 
-  for (var i = 0; i < headers.length; i++) {
-    var header = headers[i]
-    if (header.substr(0, 8) === 'content-' && header !== 'content-location') {
-      res.removeHeader(header)
-    }
-  }
+  res.removeHeader('Content-Encoding')
+  res.removeHeader('Content-Language')
+  res.removeHeader('Content-Length')
+  res.removeHeader('Content-Range')
+  res.removeHeader('Content-Type')
 }
 
 /**
@@ -435,7 +431,7 @@ SendStream.prototype.onStatError = function onStatError (error) {
 
 SendStream.prototype.isFresh = function isFresh () {
   return fresh(this.req.headers, {
-    'etag': this.res.getHeader('ETag'),
+    etag: this.res.getHeader('ETag'),
     'last-modified': this.res.getHeader('Last-Modified')
   })
 }
@@ -787,8 +783,6 @@ SendStream.prototype.sendIndex = function sendIndex (path) {
  */
 
 SendStream.prototype.stream = function stream (path, options) {
-  // TODO: this is all lame, refactor meeee
-  var finished = false
   var self = this
   var res = this.res
 
@@ -797,20 +791,18 @@ SendStream.prototype.stream = function stream (path, options) {
   this.emit('stream', stream)
   stream.pipe(res)
 
-  // response finished, done with the fd
-  onFinished(res, function onfinished () {
-    finished = true
-    destroy(stream)
-  })
+  // cleanup
+  function cleanup () {
+    destroy(stream, true)
+  }
 
-  // error handling code-smell
+  // response finished, cleanup
+  onFinished(res, cleanup)
+
+  // error handling
   stream.on('error', function onerror (err) {
-    // request already finished
-    if (finished) return
-
-    // clean up stream
-    finished = true
-    destroy(stream)
+    // clean up stream early
+    cleanup()
 
     // error
     self.onStatError(err)
@@ -975,6 +967,24 @@ function createHtmlDocument (title, body) {
 }
 
 /**
+ * Create a HttpError object from simple arguments.
+ *
+ * @param {number} status
+ * @param {Error|object} err
+ * @private
+ */
+
+function createHttpError (status, err) {
+  if (!err) {
+    return createError(status)
+  }
+
+  return err instanceof Error
+    ? createError(status, err, { expose: false })
+    : createError(status, err)
+}
+
+/**
  * decodeURIComponent.
  *
  * Allows V8 to only deoptimize this fn instead of all
@@ -1096,7 +1106,9 @@ function parseTokenList (str) {
         }
         break
       case 0x2c: /* , */
-        list.push(str.substring(start, end))
+        if (start !== end) {
+          list.push(str.substring(start, end))
+        }
         start = end = i + 1
         break
       default:
@@ -1106,7 +1118,9 @@ function parseTokenList (str) {
   }
 
   // final token
-  list.push(str.substring(start, end))
+  if (start !== end) {
+    list.push(str.substring(start, end))
+  }
 
   return list
 }

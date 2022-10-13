@@ -904,7 +904,7 @@ describe('getPropValue', () => {
 
   describeIfNotBabylon('Typescript', () => {
     beforeEach(() => {
-      changePlugins(pls => [...pls, 'typescript']);
+      changePlugins((pls) => [...pls, 'typescript']);
     });
 
     it('should return string representation of variable identifier wrapped in a Typescript non-null assertion', () => {
@@ -926,7 +926,7 @@ describe('getPropValue', () => {
     });
 
     it('should return string representation of variable identifier wrapped in a Typescript type coercion', () => {
-      changePlugins(pls => [...pls, 'typescript']);
+      changePlugins((pls) => [...pls, 'typescript']);
       const prop = extractProp('<div foo={bar as any} />');
 
       const expected = 'bar';

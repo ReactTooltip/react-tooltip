@@ -9,7 +9,7 @@
 var floor = Math.floor, fromCharCode = String.fromCharCode;
 
 // eslint-disable-next-line no-unused-vars
-module.exports = function (codePoint1/*, …codePoints*/) {
+module.exports = function (codePoint1 /*, …codePoints*/) {
 	var chars = [], length = arguments.length, i, codePoint, result = "";
 	for (i = 0; i < length; ++i) {
 		codePoint = Number(arguments[i]);

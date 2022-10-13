@@ -1,6 +1,5 @@
-[![Build status][nix-build-image]][nix-build-url]
-[![Windows status][win-build-image]][win-build-url]
-![Transpilation status][transpilation-image]
+[![Build status][build-image]][build-url]
+[![Tests coverage][cov-image]][cov-url]
 [![npm version][npm-image]][npm-url]
 
 # es5-ext
@@ -17,7 +16,9 @@ When used in ECMAScript 6 environment, native implementation (if valid) takes pr
 
 ### Installation
 
-    $ npm install es5-ext
+```bash
+npm install es5-ext
+```
 
 To port it to Browser or any other (non CJS) environment, use your favorite CJS bundler. No favorite yet? Try: [Browserify](http://browserify.org/), [Webmake](https://github.com/medikoo/modules-webmake) or [Webpack](http://webpack.github.io/)
 
@@ -1030,10 +1031,9 @@ Available as part of the Tidelift Subscription
 
 The maintainers of es5-ext and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more.](https://tidelift.com/subscription/pkg/npm-es5-ext?utm_source=npm-es5-ext&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)
 
-[nix-build-image]: https://semaphoreci.com/api/v1/medikoo-org/es5-ext/branches/master/shields_badge.svg
-[nix-build-url]: https://semaphoreci.com/medikoo-org/es5-ext
-[win-build-image]: https://ci.appveyor.com/api/projects/status/3jox67ksw3p8hkwh/branch/master?svg=true
-[win-build-url]: https://ci.appveyor.com/project/medikoo/es5-ext
-[transpilation-image]: https://img.shields.io/badge/transpilation-free-brightgreen.svg
+[build-image]: https://github.com/medikoo/es5-ext/workflows/Integrate/badge.svg
+[build-url]: https://github.com/medikoo/es5-ext/actions?query=workflow%3AIntegrate
+[cov-image]: https://img.shields.io/codecov/c/github/medikoo/es5-ext.svg
+[cov-url]: https://codecov.io/gh/medikoo/es5-ext
 [npm-image]: https://img.shields.io/npm/v/es5-ext.svg
 [npm-url]: https://www.npmjs.com/package/es5-ext

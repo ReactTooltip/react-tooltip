@@ -42,23 +42,43 @@ function propertyToJSXAttribute(node) {
     type: 'JSXAttribute',
     name: { type: 'JSXIdentifier', name: key.name, ...getBaseProps(key) },
     value: value.type === 'Literal'
-      ? value
-      : { type: 'JSXExpressionContainer', expression: value, ...getBaseProps(value) },
+      ? adjustRangeStartAndEndOfNode(value)
+      : {
+        type: 'JSXExpressionContainer',
+        expression: adjustExpressionRangeStartAndEnd(value),
+        ...getBaseProps(value),
+      },
     ...getBaseProps(node),
   };
 }
 
-function getBaseProps({
-  start,
-  end,
-  loc,
-  range,
-}) {
+function adjustRangeStartAndEndOfNode(node) {
+  const [start, end] = node.range || [node.start, node.end];
+
   return {
+    ...node,
+    end,
+    range: [start, end],
+    start,
+  };
+}
+
+function adjustExpressionRangeStartAndEnd({ expressions, quasis, ...expression }) {
+  return {
+    ...adjustRangeStartAndEndOfNode(expression),
+    ...(expressions ? { expressions: expressions.map(adjustRangeStartAndEndOfNode) } : {}),
+    ...(quasis ? { quasis: quasis.map(adjustRangeStartAndEndOfNode) } : {}),
+  };
+}
+
+function getBaseProps({ loc, ...node }) {
+  const { end, range, start } = adjustRangeStartAndEndOfNode(node);
+
+  return {
+    end,
     loc: getBaseLocation(loc),
-    ...(start !== undefined ? { start } : {}),
-    ...(end !== undefined ? { end } : {}),
-    ...(range !== undefined ? { range } : {}),
+    range,
+    start,
   };
 }
 

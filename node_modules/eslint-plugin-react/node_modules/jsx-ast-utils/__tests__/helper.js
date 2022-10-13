@@ -9,7 +9,14 @@ let parserName;
 const babelParser = fallbackToBabylon ? require('babylon') : require('@babel/parser');
 const flowParser = require('flow-parser');
 
-const defaultPlugins = ['jsx', 'functionBind', 'estree', 'objectRestSpread', 'optionalChaining'];
+const defaultPlugins = [
+  'jsx',
+  'functionBind',
+  'estree',
+  'objectRestSpread',
+  'optionalChaining',
+  // 'nullishCoalescing', // TODO: update to babel 7
+];
 let plugins = [...defaultPlugins];
 
 export function setParserName(name) {

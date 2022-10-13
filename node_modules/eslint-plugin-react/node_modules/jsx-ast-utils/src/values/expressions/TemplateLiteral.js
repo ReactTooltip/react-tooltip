@@ -1,3 +1,7 @@
+function sortStarts(a, b) {
+  return (a.range ? a.range[0] : a.start) - (b.range ? b.range[0] : b.start);
+}
+
 /**
  * Returns the string value of a template literal object.
  * Tries to build it as best as it can based on the passed
@@ -13,7 +17,7 @@ export default function extractValueFromTemplateLiteral(value) {
   } = value;
   const partitions = quasis.concat(expressions);
 
-  return partitions.sort((a, b) => a.start - b.start).reduce((raw, part) => {
+  return partitions.sort(sortStarts).reduce((raw, part) => {
     const {
       type,
     } = part;

@@ -1,4 +1,4 @@
-/** @license React v16.12.0
+/** @license React v16.13.1
  * react-dom-unstable-fizz.browser.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -21,12 +21,10 @@ function scheduleWork(callback) {
 function flushBuffered(destination) {// WHATWG Streams do not yet have a way to flush the underlying
   // transform streams. https://github.com/whatwg/streams/issues/960
 }
-
 function writeChunk(destination, buffer) {
   destination.enqueue(buffer);
   return destination.desiredSize > 0;
 }
-
 function close(destination) {
   destination.close();
 }
@@ -53,13 +51,6 @@ function formatChunk(type, props) {
 // nor polyfill, then a plain number is used for performance.
 var hasSymbol = typeof Symbol === 'function' && Symbol.for;
 var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
-
-
-
-
-
- // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
-// (unstable) APIs that have been removed. Can we remove the symbols?
 
 function createRequest(children, destination) {
   return {
@@ -98,13 +89,13 @@ function flushCompletedChunks(request) {
   var destination = request.destination;
   var chunks = request.completedChunks;
   request.completedChunks = [];
+
   try {
     for (var i = 0; i < chunks.length; i++) {
       var chunk = chunks[i];
       writeChunk(destination, chunk);
     }
   } finally {
-    
   }
 
   close(destination);
@@ -120,9 +111,6 @@ function startFlowing(request) {
   request.flowing = false;
   flushCompletedChunks(request);
 }
-
-// This file intentionally does *not* have the Flow annotation.
-// Don't add it. See `./inline-typed.js` for an explanation.
 
 function renderToReadableStream(children) {
   var request;
@@ -142,17 +130,11 @@ var ReactDOMFizzServerBrowser = {
   renderToReadableStream: renderToReadableStream
 };
 
-var ReactDOMFizzServerBrowser$1 = Object.freeze({
-	default: ReactDOMFizzServerBrowser
-});
-
-var ReactDOMFizzServerBrowser$2 = ( ReactDOMFizzServerBrowser$1 && ReactDOMFizzServerBrowser ) || ReactDOMFizzServerBrowser$1;
-
 // TODO: decide on the top-level export form.
 // This is hacky but makes it work with both Rollup and Jest
 
 
-var unstableFizz_browser = ReactDOMFizzServerBrowser$2.default || ReactDOMFizzServerBrowser$2;
+var unstableFizz_browser = ReactDOMFizzServerBrowser.default || ReactDOMFizzServerBrowser;
 
 module.exports = unstableFizz_browser;
   })();

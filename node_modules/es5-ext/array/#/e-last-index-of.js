@@ -8,7 +8,7 @@ var numberIsNaN       = require("../../number/is-nan")
   , abs               = Math.abs
   , floor             = Math.floor;
 
-module.exports = function (searchElement/*, fromIndex*/) {
+module.exports = function (searchElement /*, fromIndex*/) {
 	var i, fromIndex, val;
 	if (!numberIsNaN(searchElement)) {
 		// Jslint: ignore

@@ -8,7 +8,7 @@ var toInteger  = require("../../../number/to-integer")
   , max        = Math.max
   , min        = Math.min;
 
-module.exports = function (value/*, start, end*/) {
+module.exports = function (value /*, start, end*/) {
 	var arr = validValue(this)
 	  , start = arguments[1]
 	  , end = arguments[2]

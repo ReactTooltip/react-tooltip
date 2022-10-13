@@ -10,7 +10,7 @@ var isValue       = require("../object/is-value")
 var split = String.prototype.split;
 
 module.exports = function (type) {
-	return function (value/*, exp*/) {
+	return function (value /*, exp*/) {
 		value = Number(value);
 		var exp = arguments[1];
 		if (isValue(exp)) exp = ensureInteger(exp);

@@ -1,5 +1,9 @@
-module.exports = function () {
-    for (var i = 0; i < arguments.length; i++) {
-        if (arguments[i] !== undefined) return arguments[i];
-    }
+'use strict';
+
+module.exports = function defined() {
+	for (var i = 0; i < arguments.length; i++) {
+		if (typeof arguments[i] !== 'undefined') {
+			return arguments[i];
+		}
+	}
 };

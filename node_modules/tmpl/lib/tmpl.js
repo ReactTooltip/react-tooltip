@@ -1,4 +1,4 @@
-var INTERPOLATE = /{([\s\S]+?)}/g
+var INTERPOLATE = /{([^{]+?)}/g
 
 module.exports = function(str, data) {
   var tmpl = 'var __p=[],print=function(){__p.push.apply(__p,arguments);};' +

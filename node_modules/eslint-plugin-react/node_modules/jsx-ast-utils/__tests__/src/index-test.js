@@ -5,8 +5,8 @@ import assert from 'assert';
 import core from '../../src/index';
 
 const src = fs.readdirSync(path.resolve(__dirname, '../../src'))
-  .filter(f => f.indexOf('.js') >= 0)
-  .map(f => path.basename(f, '.js'));
+  .filter((f) => f.indexOf('.js') >= 0)
+  .map((f) => path.basename(f, '.js'));
 
 describe('main export', () => {
   it('should export an object', () => {
@@ -16,7 +16,7 @@ describe('main export', () => {
     assert.equal(expected, actual);
   });
 
-  src.filter(f => f !== 'index').forEach((f) => {
+  src.filter((f) => f !== 'index').forEach((f) => {
     it(`should export ${f}`, () => {
       assert.equal(
         core[f],

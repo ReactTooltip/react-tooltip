@@ -6,7 +6,7 @@ var toInteger = require("../../../number/to-integer")
   , min       = Math.min
   , max       = Math.max;
 
-module.exports = function (searchString/*, endPosition*/) {
+module.exports = function (searchString /*, endPosition*/) {
 	var self, start, endPos;
 	self = String(value(this));
 	searchString = String(searchString);

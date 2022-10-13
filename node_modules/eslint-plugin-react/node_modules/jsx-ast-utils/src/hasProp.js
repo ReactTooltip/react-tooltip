@@ -33,7 +33,7 @@ export default function hasProp(props = [], prop = '', options = DEFAULT_OPTIONS
 export function hasAnyProp(nodeProps = [], props = [], options = DEFAULT_OPTIONS) {
   const propsToCheck = typeof props === 'string' ? props.split(' ') : props;
 
-  return propsToCheck.some(prop => hasProp(nodeProps, prop, options));
+  return propsToCheck.some((prop) => hasProp(nodeProps, prop, options));
 }
 
 /**
@@ -43,5 +43,5 @@ export function hasAnyProp(nodeProps = [], props = [], options = DEFAULT_OPTIONS
 export function hasEveryProp(nodeProps = [], props = [], options = DEFAULT_OPTIONS) {
   const propsToCheck = typeof props === 'string' ? props.split(' ') : props;
 
-  return propsToCheck.every(prop => hasProp(nodeProps, prop, options));
+  return propsToCheck.every((prop) => hasProp(nodeProps, prop, options));
 }

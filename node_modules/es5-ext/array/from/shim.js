@@ -14,7 +14,7 @@ var iteratorSymbol = require("es6-symbol").iterator
   , defineProperty = Object.defineProperty;
 
 // eslint-disable-next-line complexity, max-lines-per-function
-module.exports = function (arrayLike/*, mapFn, thisArg*/) {
+module.exports = function (arrayLike /*, mapFn, thisArg*/) {
 	var mapFn = arguments[1]
 	  , thisArg = arguments[2]
 	  , Context

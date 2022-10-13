@@ -8,7 +8,7 @@
                     "eventsource"
           ],
           "license": "Apache-2.0",
-          "version": "0.11.3",
+          "version": "0.11.4",
           "engines": {
                     "node": ">=0.8.0"
           },

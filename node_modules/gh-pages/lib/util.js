@@ -1,7 +1,7 @@
 const path = require('path');
 const Git = require('./git');
 const async = require('async');
-const fs = require('graceful-fs');
+const fs = require('fs-extra');
 
 /**
  * Generate a list of unique directory paths given a list of file paths.

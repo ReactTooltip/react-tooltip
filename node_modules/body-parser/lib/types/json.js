@@ -37,7 +37,7 @@ module.exports = json
  *            %x0D )              ; Carriage return
  */
 
-var FIRST_CHAR_REGEXP = /^[\x20\x09\x0a\x0d]*(.)/ // eslint-disable-line no-control-regex
+var FIRST_CHAR_REGEXP = /^[\x20\x09\x0a\x0d]*([^\x20\x09\x0a\x0d])/ // eslint-disable-line no-control-regex
 
 /**
  * Create a middleware to parse JSON bodies.
@@ -122,7 +122,7 @@ function json (options) {
 
     // assert charset per RFC 7159 sec 8.1
     var charset = getCharset(req) || 'utf-8'
-    if (charset.substr(0, 4) !== 'utf-') {
+    if (charset.slice(0, 4) !== 'utf-') {
       debug('invalid charset')
       next(createError(415, 'unsupported charset "' + charset.toUpperCase() + '"', {
         charset: charset,
@@ -152,7 +152,9 @@ function json (options) {
 
 function createStrictSyntaxError (str, char) {
   var index = str.indexOf(char)
-  var partial = str.substring(0, index) + '#'
+  var partial = index !== -1
+    ? str.substring(0, index) + '#'
+    : ''
 
   try {
     JSON.parse(partial); /* istanbul ignore next */ throw new SyntaxError('strict violation')
@@ -173,7 +175,11 @@ function createStrictSyntaxError (str, char) {
  */
 
 function firstchar (str) {
-  return FIRST_CHAR_REGEXP.exec(str)[1]
+  var match = FIRST_CHAR_REGEXP.exec(str)
+
+  return match
+    ? match[1]
+    : undefined
 }
 
 /**

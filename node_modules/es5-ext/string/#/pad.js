@@ -6,7 +6,7 @@ var toInteger = require("../../number/to-integer")
   , abs       = Math.abs
   , max       = Math.max;
 
-module.exports = function (fill/*, length*/) {
+module.exports = function (fill /*, length*/) {
 	var self = String(value(this)), sLength = self.length, length = arguments[1];
 
 	length = isNaN(length) ? 1 : toInteger(length);

@@ -27,5 +27,5 @@ test("emit and write", function(t) {
     readable.emit("data")
 
     t.equal(written, 1, "should have written once")
-    t.equal(data, 1, "should have recived once")
+    t.equal(data, 1, "should have received once")
 })

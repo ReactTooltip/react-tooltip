@@ -1,7 +1,7 @@
 "use strict";
 
 var Parser = require("fastparse");
-var regexpu = require("regexpu-core");
+var uniRegexp = require("./uni-regexp");
 
 function unescape(str) {
 	return str.replace(/\\(.)/g, "$1");
@@ -175,8 +175,8 @@ function getSelectors() {
 	// ISO 10646 characters U+00A0 and higher, plus the hyphen (-) and the underscore (_)
 	//
 	// 10ffff is the maximum allowed in current Unicode
-	selectors[regexpu("\\.((?:\\\\.|[A-Za-z_\\-\\u{00a0}-\\u{10ffff}])(?:\\\\.|[A-Za-z_\\-0-9\\u{00a0}-\\u{10ffff}])*)", "u")] = typeMatch("class");
-	selectors[regexpu("#((?:\\\\.|[A-Za-z_\\-\\u{00a0}-\\u{10ffff}])(?:\\\\.|[A-Za-z_\\-0-9\\u{00a0}-\\u{10ffff}])*)", "u")] = typeMatch("id");
+	selectors[uniRegexp.typeMatchClass] = typeMatch("class");
+	selectors[uniRegexp.typeMatchId] = typeMatch("id");
 	var selectorsSecondHalf = {
 		":(not|matches|has|local|global)\\((\\s*)": nestedPseudoClassStartMatch,
 		":((?:\\\\.|[A-Za-z_\\-0-9])+)\\(": pseudoClassStartMatch,

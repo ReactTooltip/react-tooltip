@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./is-implemented')() ? Set : require('./polyfill');
+module.exports = require("./is-implemented")() ? Set : require("./polyfill");

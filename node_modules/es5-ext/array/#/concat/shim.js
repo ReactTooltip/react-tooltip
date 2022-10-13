@@ -19,7 +19,7 @@ isSpreadable = function (value) {
 };
 
 // eslint-disable-next-line no-unused-vars
-module.exports = function (item/*, …items*/) {
+module.exports = function (item /*, …items*/) {
 	var result;
 	if (!this || !isArray(this) || isPlainArray(this)) {
 		return concat.apply(this, arguments);

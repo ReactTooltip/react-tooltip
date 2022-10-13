@@ -10,7 +10,7 @@ export default function extractValueFromObjectExpression(value) {
   // eslint-disable-next-line global-require
   const getValue = require('./index.js').default;
   return value.properties.reduce((obj, property) => {
-    const object = Object.assign({}, obj);
+    const object = { ...obj };
     // Support types: SpreadProperty and ExperimentalSpreadProperty
     if (/^(?:Experimental)?Spread(?:Property|Element)$/.test(property.type)) {
       if (property.argument.type === 'ObjectExpression') {

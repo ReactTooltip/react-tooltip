@@ -15,6 +15,9 @@
   "GCC-exception-2.0",
   "GCC-exception-3.1",
   "gnu-javamail-exception",
+  "GPL-3.0-linking-exception",
+  "GPL-3.0-linking-source-exception",
+  "GPL-CC-1.0",
   "i2p-gpl-java-exception",
   "Libtool-exception",
   "Linux-syscall-note",
@@ -22,6 +25,7 @@
   "LZMA-exception",
   "mif-exception",
   "Nokia-Qt-exception-1.1",
+  "OCaml-LGPL-linking-exception",
   "OCCT-exception-1.0",
   "OpenJDK-assembly-exception-1.0",
   "openvpn-openssl-exception",
@@ -29,6 +33,8 @@
   "Qt-GPL-exception-1.0",
   "Qt-LGPL-exception-1.1",
   "Qwt-exception-1.0",
+  "Swift-exception",
   "u-boot-exception-2.0",
+  "Universal-FOSS-exception-1.0",
   "WxWindows-exception-3.1"
 ]

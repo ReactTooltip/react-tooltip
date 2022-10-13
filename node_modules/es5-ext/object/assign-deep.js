@@ -27,7 +27,7 @@ var deepAssign = function (target, source) {
 	return source;
 };
 
-module.exports = function (target/*, ...objects*/) {
+module.exports = function (target /*, ...objects*/) {
 	return uniq
 		.call([ensureValue(target)].concat(slice.call(arguments, 1).map(ensureValue)))
 		.reduce(deepAssign);

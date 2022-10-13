@@ -1,3 +1,22 @@
+1.1.4 / 2022-04-14
+=================
+ * [Refactor] use `has-property-descriptors`
+ * [readme] add github actions/codecov badges
+ * [Docs] fix header parsing; remove testling
+ * [Deps] update `object-keys`
+ * [meta] use `prepublishOnly` script for npm 7+
+ * [meta] add `funding` field; create FUNDING.yml
+ * [actions] add "Allow Edits" workflow; automatic rebasing / merge commit blocking
+ * [actions] reuse common workflows
+ * [actions] update codecov uploader
+ * [actions] use `node/install` instead of `node/run`; use `codecov` action
+ * [Tests] migrate tests to Github Actions
+ * [Tests] run `nyc` on all tests; use `tape` runner
+ * [Tests] use shared travis-ci config
+ * [Tests] use `npx aud` instead of `nsp` or `npm audit` with hoops
+ * [Tests] remove `jscs`
+ * [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `safe-publish-latest`, `tape`; add `aud`, `safe-publish-latest`
+
 1.1.3 / 2018-08-14
 =================
  * [Refactor] use a for loop instead of `foreach` to make for smaller bundle sizes

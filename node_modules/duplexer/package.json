@@ -1,6 +1,6 @@
 {
   "name": "duplexer",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Creates a duplex stream",
   "keywords": [],
   "author": "Raynos <raynos2@gmail.com>",
@@ -20,12 +20,7 @@
     "tape": "0.3.3",
     "through": "~0.1.4"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/Raynos/duplexer/raw/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "scripts": {
     "test": "node test"
   },

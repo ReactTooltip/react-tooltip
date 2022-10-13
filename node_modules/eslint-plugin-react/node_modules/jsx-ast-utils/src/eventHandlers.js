@@ -1,4 +1,3 @@
-
 /**
  * Common event handlers for JSX element event binding.
  */

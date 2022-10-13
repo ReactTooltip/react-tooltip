@@ -13,5 +13,12 @@ export default function extractValueFromLogicalExpression(value) {
   const leftVal = getValue(left);
   const rightVal = getValue(right);
 
-  return operator === '&&' ? leftVal && rightVal : leftVal || rightVal;
+  if (operator === '&&') {
+    return leftVal && rightVal;
+  }
+  if (operator === '??') {
+    // return leftVal ?? rightVal; // TODO: update to babel 7
+    return (leftVal === null || typeof leftVal === 'undefined') ? rightVal : leftVal;
+  }
+  return leftVal || rightVal;
 }

@@ -6,7 +6,7 @@ var compact   = require("../array/#/compact")
   , isArray   = Array.isArray
   , stringify = JSON.stringify;
 
-module.exports = function self(value/*, replacer, space*/) {
+module.exports = function self(value /*, replacer, space*/) {
 	var replacer = arguments[1], space = arguments[2];
 	try {
 		return stringify(value, replacer, space);

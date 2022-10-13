@@ -5,5 +5,10 @@ var resolveException = require("../lib/resolve-exception")
 
 module.exports = function (value/*, options*/) {
 	if (is(value)) return value;
-	return resolveException(value, "%v is not a thenable object", arguments[1]);
+	var options = arguments[1];
+	var errorMessage =
+		options && options.name
+			? "Expected a thenable for %n, received %v"
+			: "%v is not a thenable";
+	return resolveException(value, errorMessage, options);
 };

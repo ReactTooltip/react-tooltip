@@ -5,7 +5,7 @@ var callable    = require("../../../object/valid-callable")
   , some        = Array.prototype.some
   , apply       = Function.prototype.apply;
 
-module.exports = function (predicate/*, thisArg*/) {
+module.exports = function (predicate /*, thisArg*/) {
 	var k, self;
 	self = Object(ensureValue(this));
 	callable(predicate);

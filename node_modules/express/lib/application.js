@@ -29,6 +29,13 @@ var flatten = require('array-flatten');
 var merge = require('utils-merge');
 var resolve = require('path').resolve;
 var setPrototypeOf = require('setprototypeof')
+
+/**
+ * Module variables.
+ * @private
+ */
+
+var hasOwnProperty = Object.prototype.hasOwnProperty
 var slice = Array.prototype.slice;
 
 /**
@@ -276,7 +283,7 @@ app.route = function route(path) {
  * In this case EJS provides a `.renderFile()` method with
  * the same signature that Express expects: `(path, options, callback)`,
  * though note that it aliases this method as `ejs.__express` internally
- * so if you're using ".ejs" extensions you dont need to do anything.
+ * so if you're using ".ejs" extensions you don't need to do anything.
  *
  * Some template engines do not follow this convention, the
  * [Consolidate.js](https://github.com/tj/consolidate.js)
@@ -352,7 +359,17 @@ app.param = function param(name, fn) {
 app.set = function set(setting, val) {
   if (arguments.length === 1) {
     // app.get(setting)
-    return this.settings[setting];
+    var settings = this.settings
+
+    while (settings && settings !== Object.prototype) {
+      if (hasOwnProperty.call(settings, setting)) {
+        return settings[setting]
+      }
+
+      settings = Object.getPrototypeOf(settings)
+    }
+
+    return undefined
   }
 
   debug('set "%s" to %o', setting, val);

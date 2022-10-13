@@ -1,3 +1,20 @@
+2.0.1 / 2021-01-03
+==================
+
+  * Fix returning values from `Object.prototype`
+
+2.0.0 / 2020-04-19
+==================
+
+  * Drop support for Node.js 0.6
+  * Fix messaging casing of `418 I'm a Teapot`
+  * Remove code 306
+  * Remove `status[code]` exports; use `status.message[code]`
+  * Remove `status[msg]` exports; use `status.code[msg]`
+  * Rename `425 Unordered Collection` to standard `425 Too Early`
+  * Rename `STATUS_CODES` export to `message`
+  * Return status message for `statuses(code)` when given code
+
 1.5.0 / 2018-03-27
 ==================
 
