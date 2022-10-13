@@ -57,15 +57,15 @@ export interface TooltipProps {
   // Time delay for showing popup
   delayShow?: number;
   // Custom event to trigger tooltip
-  event?: string;
+  event?: keyof HTMLElementEventMap | string;
   // Custom event to hide tooltip
   // (this requires the event prop as well)
-  eventOff?: string;
+  eventOff?: keyof HTMLElementEventMap | string;
   // When set to true, custom event's propagation
   // mode will be captue
   isCapture?: boolean;
   // Global event to hide tooltip
-  globalEventOff?: string;
+  globalEventOff?: keyof HTMLElementEventMap | string;
   // Function to dynamically generate the tooltip content
   getContent?: GetContent;
   // Callback after tooltip is shown
@@ -109,6 +109,7 @@ export interface TooltipProps {
 }
 
 // ReactTooltip component is the default export
+// You can overview demo examples here: https://bddeu.csb.app
 export default class ReactTooltip extends React.Component<TooltipProps> {
   // static methods
   static show: (target: Element) => {}; 
