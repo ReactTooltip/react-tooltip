@@ -13,7 +13,7 @@
 
 [![Edit ReactTooltip](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/heuristic-curran-bddeu?fontsize=14&hidenavigation=1&theme=dark)
 
-Or see it on [Github Page](https://wwayne.github.io/react-tooltip).
+Or see it on [Github Page](https://reacttooltip.github.io/react-tooltip/).
 
 ## Installation
 
