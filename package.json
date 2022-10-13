@@ -2,6 +2,7 @@
   "name": "react-tooltip",
   "version": "4.3.0",
   "description": "react tooltip component",
+  "private": false,
   "main": "dist/index.js",
   "types": "dist/react-tooltip.d.ts",
   "module": "dist/index.es.js",
@@ -33,17 +34,14 @@
       "path": "node_modules/cz-conventional-changelog"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wwayne/react-tooltip"
-  },
+  "repository": "https://github.com/ReactTooltip/react-tooltip",
   "keywords": [
     "react",
     "react-component",
     "tooltip",
     "react-tooltip"
   ],
-  "author": "wwayne",
+  "author": "ReactTooltip",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/wwayne/react-tooltip/issues"
