@@ -1,0 +1,11 @@
+name: Pull request workflow
+
+on:
+  push:
+    branches:
+      - '!master'
+  pull_request:
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yaml
