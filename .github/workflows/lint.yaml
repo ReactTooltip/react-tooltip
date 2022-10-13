@@ -1,0 +1,35 @@
+name: Run basic linting and testing
+
+on:
+  workflow_call:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+
+      - name: Install dev dependencies
+        run: yarn install
+
+      - name: ESLint
+        run: yarn run eslint
+
+  test:
+    needs: lint
+    strategy:
+      matrix:
+        version: [14, 16, 18]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.version }}
+
+      - name: Install dev dependencies
+        run: yarn install
+
+      - name: Run tests
+        run: yarn run test
