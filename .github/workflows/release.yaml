@@ -3,7 +3,7 @@ name: Release workflow
 on:
   push:
     branches:
-      - master
+      - releases
 
 jobs:
   lint:
