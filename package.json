@@ -57,7 +57,7 @@
   },
   "dependencies": {
     "prop-types": "^15.8.1",
-    "uuid": "8.3.2"
+    "uuid": "^7.0.3"
   },
   "devDependencies": {
     "@babel/cli": "7.19.3",
