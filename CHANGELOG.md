@@ -1,3 +1,9 @@
+## [4.4.2](https://github.com/ReactTooltip/react-tooltip/compare/v4.4.1...v4.4.2) (2022-10-18)
+
+### Bug Fixes
+
+- revert the flow to do a release from master branch ([03b7c4e](https://github.com/ReactTooltip/react-tooltip/commit/03b7c4e72d21cfed9c2fcce8702dd53ef3cc4960))
+
 # [4.4.0](https://github.com/ReactTooltip/react-tooltip/compare/v4.3.1...v4.4.0) (2022-10-13)
 
 ### Features
