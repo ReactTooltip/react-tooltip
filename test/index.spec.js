@@ -1,4 +1,5 @@
 import React from 'react';
+import { DEFAULT_RADIUS } from '../src/decorators/defaultStyles.js';
 import ReactTooltip from '../src/index.js';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';
@@ -14,12 +15,20 @@ describe('Tooltip', () => {
 
   forEach([
     [
-      { textColor: 'green', backgroundColor: 'red', arrowColor: 'blue' },
+      {
+        textColor: 'green',
+        backgroundColor: 'red',
+        arrowColor: 'blue',
+        arrowRadius: '2',
+        tooltipRadius: '4'
+      },
       {
         popupType: 'type-custom',
         textColor: 'green',
         background: 'red',
-        arrowColor: 'blue'
+        arrowColor: 'blue',
+        arrowRadius: '2',
+        tooltipRadius: '4'
       }
     ],
     [
@@ -27,14 +36,16 @@ describe('Tooltip', () => {
         textColor: 'green',
         backgroundColor: 'red',
         arrowColor: 'blue',
-        borderColor: 'teal'
+        borderColor: 'teal',
+        arrowRadius: '2'
       },
       {
         popupType: 'type-custom',
         textColor: 'green',
         background: 'red',
         arrowColor: 'blue',
-        borderColor: 'transparent'
+        borderColor: 'transparent',
+        arrowRadius: '2'
       }
     ],
     [
@@ -43,14 +54,18 @@ describe('Tooltip', () => {
         backgroundColor: 'red',
         arrowColor: 'blue',
         border: true,
-        borderColor: 'teal'
+        borderColor: 'teal',
+        arrowRadius: '2',
+        tooltipRadius: '4'
       },
       {
         popupType: 'type-custom',
         textColor: 'green',
         background: 'red',
         arrowColor: 'blue',
-        borderColor: 'teal'
+        borderColor: 'teal',
+        arrowRadius: '2',
+        tooltipRadius: '4'
       }
     ],
     [
@@ -59,13 +74,17 @@ describe('Tooltip', () => {
         backgroundColor: 'red',
         arrowColor: 'blue',
         border: false,
-        borderColor: 'teal'
+        borderColor: 'teal',
+        arrowRadius: '2',
+        tooltipRadius: '4'
       },
       {
         popupType: 'type-custom',
         textColor: 'green',
         background: 'red',
-        arrowColor: 'blue'
+        arrowColor: 'blue',
+        arrowRadius: '2',
+        tooltipRadius: '4'
       }
     ],
     [
@@ -162,12 +181,19 @@ describe('Tooltip', () => {
       }
     ],
     [
-      { border: true, borderColor: 'blue' },
+      {
+        border: true,
+        borderColor: 'blue',
+        arrowRadius: '2',
+        tooltipRadius: '4'
+      },
       {
         popupType: 'type-custom',
         textColor: '#fff',
         background: '#222',
         arrowColor: '#222',
+        arrowRadius: '2',
+        tooltipRadius: '4',
         borderColor: 'blue'
       }
     ],
@@ -223,15 +249,26 @@ describe('Tooltip', () => {
     expect(mainCssRule.border, 'Border color').to.equal(
       '1px solid ' + (res.borderColor ? res.borderColor : 'transparent')
     );
+    expect(mainCssRule['border-radius'], 'Tooltip radius').to.equal(
+      `${res.tooltipRadius || DEFAULT_RADIUS.tooltip}px`
+    );
 
     const arrowPositions = ['top', 'bottom', 'left', 'right'];
+    const pseudoRule = (pos, pseudo) =>
+      cssRules.find(
+        (rule) => rule.selectorText === `.${uuid}.place-${pos}::${pseudo}`
+      );
     arrowPositions.forEach((pos) => {
-      expect(
-        cssRules.find(
-          (rule) => rule.selectorText === `.${uuid}.place-${pos}::after`
-        ).style[`border-${pos}-color`],
-        pos + ' arrow color'
-      ).to.equal(res.arrowColor ? res.arrowColor : res.background);
+      const after = pseudoRule(pos, 'after').style;
+      expect(after['background-color']).to.equal(
+        res.arrowColor ? res.arrowColor : res.background
+      );
+      expect(after['border-top-right-radius']).to.equal(
+        `${res.arrowRadius || DEFAULT_RADIUS.arrow}px`
+      );
+
+      const before = pseudoRule(pos, 'before').style;
+      expect(before['background-color']).to.equal('inherit');
     });
   });
 });

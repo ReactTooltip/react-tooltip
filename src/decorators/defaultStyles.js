@@ -45,3 +45,8 @@ export function getDefaultPopupColors(type) {
 }
 
 export const DEFAULT_PADDING = '8px 21px';
+
+export const DEFAULT_RADIUS = {
+  tooltip: 3,
+  arrow: 0
+};

@@ -49,6 +49,8 @@ class ReactTooltip extends React.Component {
       backgroundColor: PropTypes.string,
       borderColor: PropTypes.string,
       arrowColor: PropTypes.string,
+      arrowRadius: PropTypes.string,
+      tooltipRadius: PropTypes.string,
       insecure: PropTypes.bool,
       class: PropTypes.string,
       className: PropTypes.string,
@@ -100,6 +102,7 @@ class ReactTooltip extends React.Component {
       border: false,
       borderClass: 'border',
       customColors: {},
+      customRadius: {},
       offset: {},
       padding: props.padding,
       extraClass: '',
@@ -490,6 +493,16 @@ class ReactTooltip extends React.Component {
               self.props.arrowColor ||
               null
           },
+          customRadius: {
+            tooltip:
+              target.getAttribute('data-tooltip-radius') ||
+              self.props.tooltipRadius ||
+              '3',
+            arrow:
+              target.getAttribute('data-arrow-radius') ||
+              self.props.arrowRadius ||
+              '0'
+          },
           effect: effect,
           offset: offset,
           padding: target.getAttribute('data-padding') || self.props.padding,
@@ -790,7 +803,8 @@ class ReactTooltip extends React.Component {
       this.state.customColors,
       this.state.type,
       this.state.border,
-      this.state.padding
+      this.state.padding,
+      this.state.customRadius
     );
 
     const tooltipClass =
