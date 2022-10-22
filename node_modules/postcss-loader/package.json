@@ -1,0 +1,63 @@
+{
+  "name": "postcss-loader",
+  "version": "2.0.8",
+  "description": "PostCSS loader for webpack",
+  "main": "lib/index.js",
+  "engines": {
+    "node": ">= 4"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "loader-utils": "^1.1.0",
+    "postcss": "^6.0.0",
+    "postcss-load-config": "^1.2.0",
+    "schema-utils": "^0.3.0"
+  },
+  "devDependencies": {
+    "coveralls": "^2.0.0",
+    "jest": "^21.0.0",
+    "jsdoc-to-markdown": "^3.0.0",
+    "memory-fs": "^0.4.0",
+    "postcss-js": "^1.0.0",
+    "standard": "^10.0.0",
+    "standard-version": "^4.0.0",
+    "sugarss": "^1.0.0",
+    "webpack": "^3.0.0"
+  },
+  "scripts": {
+    "clean": "rm -rf dmd jest* coverage jsdoc-api test/results",
+    "lint": "standard",
+    "docs": "jsdoc2md lib/index.js > LOADER.md",
+    "postdocs": "npm run clean",
+    "pretest": "npm run clean",
+    "test": "jest --verbose --coverage",
+    "release": "standard-version"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "lib/*.js"
+    ]
+  },
+  "standard": {
+    "env": {
+      "jest": true
+    },
+    "ignore": [
+      "*.test.js"
+    ]
+  },
+  "keywords": [
+    "css",
+    "postcss",
+    "postcss-runner",
+    "webpack",
+    "webpack-loader"
+  ],
+  "author": "Andrey Sitnik <andrey@sitnik.ru>",
+  "repository": "https://github.com/postcss/postcss-loader.git",
+  "bugs": "https://github.com/postcss/postcss-loader/issues",
+  "homepage": "https://github.com/postcss/postcss-loader#readme",
+  "license": "MIT"
+}

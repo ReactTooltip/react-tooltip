@@ -1,0 +1,119 @@
+[09-Sep-2020 05:13:15 UTC] PHP Warning:  copy(/home/canius6/public_html/caniuse-data-input/features-json/aac.json): failed to open stream: No such file or directory in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 16
+[09-Sep-2020 05:13:15 UTC] PHP Fatal error:  Uncaught Exception: ERROR: Failed to copy "/home/canius6/support-data/features-json/aac.json" to "/home/canius6/public_html/caniuse-data-input/features-json/aac.json' in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(18): GitSync->error('ERROR: Failed t...')
+#1 /home/canius6/public_html/admin/git-sync/git-sync.class.php(247): GitSync->copy('/home/canius6/s...', '/home/canius6/p...')
+#2 /home/canius6/public_html/admin/git-sync/index.php(17): GitSync->updateCaniuse()
+#3 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[08-Sep-2020 22:39:18 America/Los_Angeles] PHP Fatal error:  Uncaught Exception: Failed to copy region data in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(130): GitSync->error('Failed to copy ...')
+#1 /home/canius6/public_html/admin/git-sync/git-sync.class.php(219): GitSync->updateRepoFiles()
+#2 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#3 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[14-Sep-2020 22:41:27 America/Los_Angeles] PHP Fatal error:  Uncaught Exception: Latest repo changes have not yet been imported. Import first before updating repo. in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(72): GitSync->error('Latest repo cha...')
+#1 /home/canius6/public_html/admin/git-sync/git-sync.class.php(82): GitSync->checkForChanges()
+#2 /home/canius6/public_html/admin/git-sync/git-sync.class.php(219): GitSync->updateRepoFiles()
+#3 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#4 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[21-Sep-2020 22:44:28 America/Los_Angeles] PHP Fatal error:  Uncaught Exception: Latest repo changes have not yet been imported. Import first before updating repo. in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(72): GitSync->error('Latest repo cha...')
+#1 /home/canius6/public_html/admin/git-sync/git-sync.class.php(82): GitSync->checkForChanges()
+#2 /home/canius6/public_html/admin/git-sync/git-sync.class.php(219): GitSync->updateRepoFiles()
+#3 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#4 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[17-Nov-2020 22:36:05 America/Los_Angeles] PHP Fatal error:  Uncaught Exception: Repo update or publish failed in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(222): GitSync->error('Repo update or ...')
+#1 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#2 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[13-Jan-2021 22:07:46 America/Los_Angeles] PHP Fatal error:  Uncaught Exception: Latest repo changes have not yet been imported. Import first before updating repo. in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(72): GitSync->error('Latest repo cha...')
+#1 /home/canius6/public_html/admin/git-sync/git-sync.class.php(82): GitSync->checkForChanges()
+#2 /home/canius6/public_html/admin/git-sync/git-sync.class.php(219): GitSync->updateRepoFiles()
+#3 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#4 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[31-Jan-2021 11:17:44 America/Los_Angeles] PHP Fatal error:  Uncaught Exception: Repo update or publish failed in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(222): GitSync->error('Repo update or ...')
+#1 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#2 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[04-Feb-2021 22:07:12 America/Los_Angeles] PHP Fatal error:  Uncaught Exception: Latest repo changes have not yet been imported. Import first before updating repo. in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(72): GitSync->error('Latest repo cha...')
+#1 /home/canius6/public_html/admin/git-sync/git-sync.class.php(82): GitSync->checkForChanges()
+#2 /home/canius6/public_html/admin/git-sync/git-sync.class.php(219): GitSync->updateRepoFiles()
+#3 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#4 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[04-Feb-2021 22:12:56 America/Los_Angeles] PHP Fatal error:  Uncaught Exception: Latest repo changes have not yet been imported. Import first before updating repo. in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(72): GitSync->error('Latest repo cha...')
+#1 /home/canius6/public_html/admin/git-sync/git-sync.class.php(82): GitSync->checkForChanges()
+#2 /home/canius6/public_html/admin/git-sync/git-sync.class.php(219): GitSync->updateRepoFiles()
+#3 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#4 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[04-Feb-2021 22:16:12 America/Los_Angeles] PHP Fatal error:  Uncaught Exception: Latest repo changes have not yet been imported. Import first before updating repo. in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(72): GitSync->error('Latest repo cha...')
+#1 /home/canius6/public_html/admin/git-sync/git-sync.class.php(82): GitSync->checkForChanges()
+#2 /home/canius6/public_html/admin/git-sync/git-sync.class.php(219): GitSync->updateRepoFiles()
+#3 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#4 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[10-Feb-2021 21:52:57 America/Los_Angeles] PHP Fatal error:  Uncaught Exception: Latest repo changes have not yet been imported. Import first before updating repo. in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(72): GitSync->error('Latest repo cha...')
+#1 /home/canius6/public_html/admin/git-sync/git-sync.class.php(82): GitSync->checkForChanges()
+#2 /home/canius6/public_html/admin/git-sync/git-sync.class.php(219): GitSync->updateRepoFiles()
+#3 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#4 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[11-Feb-2021 05:57:35 UTC] PHP Fatal error:  Uncaught Exception: Repo update or publish failed in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(222): GitSync->error('Repo update or ...')
+#1 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#2 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[11-Feb-2021 05:59:25 UTC] PHP Fatal error:  Uncaught Exception: Repo update or publish failed in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(222): GitSync->error('Repo update or ...')
+#1 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#2 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[11-Feb-2021 06:00:04 UTC] PHP Fatal error:  Uncaught Exception: Repo update or publish failed in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(224): GitSync->error('Repo update or ...')
+#1 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#2 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[11-Feb-2021 06:06:20 UTC] PHP Fatal error:  Uncaught Exception: Repo update or publish failed in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(222): GitSync->error('Repo update or ...')
+#1 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#2 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[12-Feb-2021 11:11:54 America/Los_Angeles] PHP Fatal error:  Uncaught Exception: Repo update or publish failed in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(222): GitSync->error('Repo update or ...')
+#1 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#2 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12
+[12-Feb-2021 11:16:26 America/Los_Angeles] PHP Fatal error:  Uncaught Exception: Repo update or publish failed in /home/canius6/public_html/admin/git-sync/git-sync.class.php:12
+Stack trace:
+#0 /home/canius6/public_html/admin/git-sync/git-sync.class.php(222): GitSync->error('Repo update or ...')
+#1 /home/canius6/public_html/admin/git-sync/index.php(13): GitSync->updateGithub()
+#2 {main}
+  thrown in /home/canius6/public_html/admin/git-sync/git-sync.class.php on line 12

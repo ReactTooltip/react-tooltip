@@ -1,0 +1,91 @@
+{
+  "name": "autoprefixer",
+  "version": "7.1.6",
+  "description": "Parse CSS and add vendor prefixes to CSS rules using values from the Can I Use website",
+  "keywords": [
+    "autoprefixer",
+    "css",
+    "prefix",
+    "postcss",
+    "postcss-plugin"
+  ],
+  "author": "Andrey Sitnik <andrey@sitnik.ru>",
+  "license": "MIT",
+  "repository": "postcss/autoprefixer",
+  "dependencies": {
+    "browserslist": "^2.5.1",
+    "caniuse-lite": "^1.0.30000748",
+    "normalize-range": "^0.1.2",
+    "num2fraction": "^1.2.2",
+    "postcss": "^6.0.13",
+    "postcss-value-parser": "^3.2.3"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.0.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "babelify": "^7.3.0",
+    "browserify": "^14.5.0",
+    "eslint": "^4.9.0",
+    "eslint-config-postcss": "^2.0.2",
+    "fs-extra": "^4.0.2",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-coffee": "^2.3.4",
+    "gulp-json-editor": "^2.2.1",
+    "gulp-replace": "^0.6.1",
+    "jest": "^21.2.1",
+    "lint-staged": "^4.3.0",
+    "pre-commit": "^1.2.2",
+    "size-limit": "^0.11.6",
+    "vinyl-source-stream": "^1.1.0",
+    "babel-register": "^6.26.0"
+  },
+  "scripts": {
+    "lint-staged": "lint-staged",
+    "lint": "eslint *.js lib/*.js data/*.js test/*.js",
+    "test": "jest && npm run lint && gulp && size-limit"
+  },
+  "lint-staged": {
+    "*.js": "eslint"
+  },
+  "pre-commit": [
+    "lint-staged"
+  ],
+  "size-limit": [{
+    "path": "build/lib/autoprefixer.js",
+    "limit": "239 KB"
+  }],
+  "eslintConfig": {
+    "extends": "eslint-config-postcss",
+    "parser": "babel-eslint",
+    "rules": {
+      "complexity": "off",
+      "camelcase": "off"
+    },
+    "env": {
+      "jest": true
+    }
+  },
+  "babel": {
+    "presets": [
+      [
+        "env", {
+          "targets": {
+            "browsers": "last 1 version",
+            "node": 4
+          },
+          "loose": true
+        }
+      ]
+    ],
+    "plugins": [
+      [
+        "transform-class-properties", {
+          "spec": true
+        }
+      ]
+    ]
+  },
+  "main": "lib/autoprefixer"
+}

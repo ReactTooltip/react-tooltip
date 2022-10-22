@@ -1,0 +1,50 @@
+{
+	"name": "math-expression-evaluator",
+	"version": "1.4.0",
+	"description": "A flexible math expression evaluator",
+	"main": "src/formula_evaluator.js",
+	"scripts": {
+		"test": "mocha",
+		"prepare": "husky install",
+		"build": "webpack && NODE_ENV=production webpack"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/redhivesoftware/math-expression-evaluator.git"
+	},
+	"files": [
+		"src",
+		"dist"
+	],
+	"keywords": [
+		"math",
+		"expression",
+		"evaluator",
+		"parser"
+	],
+	"author": "Ankit<ankitbug94@gmail.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/redhivesoftware/math-expression-evaluator/issues"
+	},
+	"homepage": "https://github.com/redhivesoftware/math-expression-evaluator#readme",
+	"devDependencies": {
+		"cz-conventional-changelog": "^3.3.0",
+		"eslint": "^6.6.0",
+		"eslint-config-standard": "^10.2.1",
+		"eslint-plugin-import": "^2.2.0",
+		"eslint-plugin-node": "^4.2.2",
+		"eslint-plugin-promise": "^3.5.0",
+		"eslint-plugin-standard": "^3.0.1",
+		"husky": "^7.0.4",
+		"mocha": "^2.2.5",
+		"semantic-release": "^19.0.2",
+		"webpack-cli": "^4.9.2",
+		"webpack": "^5.67.0"
+	},
+	"config": {
+		"commitizen": {
+			"path": "cz-conventional-changelog"
+		}
+	}
+}
