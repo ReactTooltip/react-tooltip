@@ -270,7 +270,7 @@ export default class App extends Component {
               <div className="side">
                 <a
                   data-for="custom-off-event"
-                  ref={ref => (this.targetRef = ref)}
+                  ref={(ref) => (this.targetRef = ref)}
                   data-tip="custom show and hide"
                   data-event="click"
                   data-event-off="dblclick"
@@ -353,6 +353,58 @@ export default class App extends Component {
           </div>
 
           <div className="section">
+            <h4 className="title">Custom radius</h4>
+            <p className="sub-title" />
+            <div className="example-jsx">
+              <div className="side">
+                <a
+                  data-for="custom-tooltip-radius"
+                  data-tip="No tooltip border radius!"
+                >
+                  ㅇㅅㅇ
+                </a>
+                <ReactTooltip
+                  id="custom-tooltip-radius"
+                  place="right"
+                  className="custom-tooltip-radius"
+                  tooltipRadius="0"
+                />
+              </div>
+              <div className="side">
+                <a
+                  data-for="custom-arrow-radius"
+                  data-tip="That is an arrow with border radius!"
+                >
+                  V(^-^)V
+                </a>
+                <ReactTooltip
+                  id="custom-arrow-radius"
+                  className="custom-arrow-radius"
+                  place="top"
+                  arrowRadius="3"
+                />
+              </div>
+            </div>
+            <br />
+            <pre className="example-pre">
+              <div>
+                <p>
+                  {"<a data-for='custom-tooltip-radius' data-tip='Lovely colors!'>ㅇㅅㅇ</a>\n" +
+                    "<ReactTooltip id='custom-tooltip-radius' className='custom-tooltip-radius' place='right'\n" +
+                    "backgroundColor='#E69A8DFF' tooltipRadius='0'/>"}
+                </p>
+              </div>
+              <div>
+                <p>
+                  {"<a data-for='custom-arrow-radius' data-tip='That is an arrow with border radius!'>V(^-^)V</a>\n" +
+                    "<ReactTooltip id='custom-arrow-radius' className='custom-arrow-radius' place='top' border\n" +
+                    "backgroundColor='#E69A8DFF' arrowRadius='3'/>"}
+                </p>
+              </div>
+            </pre>
+          </div>
+
+          <div className="section">
             <h4 className="title">Theme and delay</h4>
             <p className="sub-title" />
             <div className="example-jsx">
@@ -374,7 +426,7 @@ export default class App extends Component {
                 <a data-for="custom-theme" data-tip="custom theme">
                   (･ω´･ )
                 </a>
-                <ReactTooltip id="custom-theme" className="customeTheme" />
+                <ReactTooltip id="custom-theme" className="customTheme" />
               </div>
             </div>
             <br />
@@ -396,8 +448,8 @@ export default class App extends Component {
               <div>
                 <p>
                   {"<a data-tip='custom theme'>(･ω´･ )</a>\n" +
-                    "<ReactTooltip className='customeTheme'/>\n" +
-                    ' .customeTheme {\n' +
+                    "<ReactTooltip className='customTheme'/>\n" +
+                    ' .customTheme {\n' +
                     ' color: #ff6e00 !important;\n' +
                     ' background-color: orange !important;\n' +
                     ' &.place-top {\n' +
@@ -479,7 +531,7 @@ export default class App extends Component {
               </div>
               <ReactTooltip
                 id="enrich"
-                getContent={dataTip => 'This little buddy is ' + dataTip}
+                getContent={(dataTip) => 'This little buddy is ' + dataTip}
               />
             </div>
             <br />
@@ -693,7 +745,7 @@ export default class App extends Component {
 
               <ReactTooltip
                 id="soclose"
-                getContent={dataTip => (
+                getContent={(dataTip) => (
                   <div>
                     <h3>This little buddy is {dataTip}</h3>
                     <p>Put mouse here</p>

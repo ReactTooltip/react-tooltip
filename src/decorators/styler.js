@@ -1,4 +1,8 @@
-import { getDefaultPopupColors, DEFAULT_PADDING } from './defaultStyles';
+import {
+  getDefaultPopupColors,
+  DEFAULT_PADDING,
+  DEFAULT_RADIUS
+} from './defaultStyles';
 
 /**
  * Generates the specific tooltip style for use on render.
@@ -8,29 +12,39 @@ export function generateTooltipStyle(
   customColors,
   type,
   hasBorder,
-  padding
+  padding,
+  radius
 ) {
   return generateStyle(
     uuid,
     getPopupColors(customColors, type, hasBorder),
-    padding
+    padding,
+    radius
   );
 }
 
 /**
  * Generates the tooltip style rules based on the element-specified "data-type" property.
  */
-function generateStyle(uuid, colors, padding = DEFAULT_PADDING) {
+function generateStyle(
+  uuid,
+  colors,
+  padding = DEFAULT_PADDING,
+  radius = DEFAULT_RADIUS
+) {
   const textColor = colors.text;
   const backgroundColor = colors.background;
   const borderColor = colors.border;
   const arrowColor = colors.arrow;
+  const arrowRadius = radius.arrow;
+  const tooltipRadius = radius.tooltip;
 
   return `
   	.${uuid} {
 	    color: ${textColor};
 	    background: ${backgroundColor};
 	    border: 1px solid ${borderColor};
+	    border-radius: ${tooltipRadius}px;
 	    padding: ${padding};
   	}
 
@@ -38,68 +52,104 @@ function generateStyle(uuid, colors, padding = DEFAULT_PADDING) {
         margin-top: -10px;
     }
     .${uuid}.place-top::before {
-        border-top: 8px solid ${borderColor};
+        content: "";
+        background-color: inherit;
+        position: absolute;
+        z-index: 2;
+        width: 18px;
+        height: 10px;
     }
     .${uuid}.place-top::after {
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-top-right-radius: ${arrowRadius}px;
+        border: 1px solid ${borderColor};
+        background-color: ${arrowColor};
+        z-index: 1;
         bottom: -6px;
         left: 50%;
         margin-left: -8px;
-        border-top-color: ${arrowColor};
-        border-top-style: solid;
-        border-top-width: 6px;
+        transform: rotate(135deg);
     }
 
     .${uuid}.place-bottom {
         margin-top: 10px;
     }
     .${uuid}.place-bottom::before {
-        border-bottom: 8px solid ${borderColor};
+        content: "";
+        background-color: inherit;
+        position: absolute;
+        z-index: 2;
+        width: 18px;
+        height: 10px;
     }
     .${uuid}.place-bottom::after {
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-top-right-radius: ${arrowRadius}px;
+        border: 1px solid ${borderColor};
+        background-color: ${arrowColor};
+        z-index: 1;
         top: -6px;
         left: 50%;
         margin-left: -8px;
-        border-bottom-color: ${arrowColor};
-        border-bottom-style: solid;
-        border-bottom-width: 6px;
+        transform: rotate(45deg);
     }
 
     .${uuid}.place-left {
         margin-left: -10px;
     }
     .${uuid}.place-left::before {
-        border-left: 8px solid ${borderColor};
+        content: "";
+        background-color: inherit;
+        position: absolute;
+        z-index: 2;
+        width: 10px;
+        height: 18px;
     }
     .${uuid}.place-left::after {
-        border-top: 5px solid transparent;
-        border-bottom: 5px solid transparent;
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-top-right-radius: ${arrowRadius}px;
+        border: 1px solid ${borderColor};
+        background-color: ${arrowColor};
+        z-index: 1;
         right: -6px;
         top: 50%;
-        margin-top: -4px;
-        border-left-color: ${arrowColor};
-        border-left-style: solid;
-        border-left-width: 6px;
+        margin-top: -6px;
+        transform: rotate(45deg);
     }
 
     .${uuid}.place-right {
         margin-left: 10px;
     }
     .${uuid}.place-right::before {
-        border-right: 8px solid ${borderColor};
+        content: "";
+        background-color: inherit;
+        position: absolute;
+        z-index: 2;
+        width: 10px;
+        height: 18px;
     }
     .${uuid}.place-right::after {
-        border-top: 5px solid transparent;
-        border-bottom: 5px solid transparent;
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-top-right-radius: ${arrowRadius}px;
+        border: 1px solid ${borderColor};
+        background-color: ${arrowColor};
+        z-index: 1;
         left: -6px;
         top: 50%;
-        margin-top: -4px;
-        border-right-color: ${arrowColor};
-        border-right-style: solid;
-        border-right-width: 6px;
+        margin-top: -6px;
+        transform: rotate(-135deg);
     }
   `;
 }
