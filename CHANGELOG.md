@@ -1,3 +1,10 @@
+## [4.4.3](https://github.com/ReactTooltip/react-tooltip/compare/v4.4.2...v4.4.3) (2022-10-22)
+
+### Bug Fixes
+
+- use double quotes instead of single quotes in sass ([b19ebcb](https://github.com/ReactTooltip/react-tooltip/commit/b19ebcb4cc30e6702e10539b96676ef33050fe03))
+- use double quotes instead of single quotes in sass ([1f776ac](https://github.com/ReactTooltip/react-tooltip/commit/1f776aca75ac80705aad74d9ee6f1dd63617fcf5))
+
 ## [4.4.2](https://github.com/ReactTooltip/react-tooltip/compare/v4.4.1...v4.4.2) (2022-10-18)
 
 ### Bug Fixes
