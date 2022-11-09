@@ -108,6 +108,8 @@ export interface TooltipProps {
   clickable?: boolean;
   // Aria role for the tooltip
   role?: string;
+  // Padding attribute
+  padding?: string;
 }
 
 // ReactTooltip component is the default export
