@@ -1,3 +1,9 @@
+## [4.4.4](https://github.com/ReactTooltip/react-tooltip/compare/v4.4.3...v4.4.4) (2022-11-09)
+
+### Bug Fixes
+
+- Fixed the tooltip arrow overlapping tooltip content ([51c7e1a](https://github.com/ReactTooltip/react-tooltip/commit/51c7e1a854c80ea545c22edb403e831d0941d8f9))
+
 ## [4.4.3](https://github.com/ReactTooltip/react-tooltip/compare/v4.4.2...v4.4.3) (2022-10-22)
 
 ### Bug Fixes
