@@ -1,19 +1,9 @@
 {
-  "plugins": [
-    ["@babel/plugin-proposal-decorators", { "legacy": true }],
-    "@babel/plugin-syntax-dynamic-import",
-    "@babel/plugin-syntax-import-meta",
-    ["@babel/plugin-proposal-class-properties", { "loose": false }],
-    "@babel/plugin-proposal-json-strings"
-  ],
   "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "useBuiltIns": "entry",
-          "corejs": "3.12"
-        }
-      ],
-      "@babel/preset-react"
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties"
   ]
 }

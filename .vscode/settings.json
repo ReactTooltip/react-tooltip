@@ -1,0 +1,17 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "css.lint.unknownAtRules": "ignore",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "eslint.validate": [
+    "vue",
+    "html",
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact"
+  ]
+}

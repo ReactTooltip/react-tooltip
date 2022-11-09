@@ -1,16 +1,37 @@
-# system files
-*.log
-.DS_Store*
+## editors
+/.idea
+
+## system files
+.DS_Store
 .idea/
+*.log
+
+## npm
+/node_modules/
+/npm-debug.log
+.npmrc
+
+## testing
+/coverage/
+
+## bower
+/bower_components*/
+/bower-*.json
+
+## temp folders
+/.tmp/
+
+## demoing
+/demo/
+
+## building
+/build/
+/dist/
+
+## other
+yarn-error.log
 
 # push to github
 !.babelrc
 !.gitignore
 !.npmignore
-
-# files
-node_modules/
-dist/
-build/
-.env
-.npmrc
