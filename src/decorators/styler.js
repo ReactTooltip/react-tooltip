@@ -55,7 +55,7 @@ function generateStyle(
         content: "";
         background-color: inherit;
         position: absolute;
-        z-index: 2;
+        z-index: -1;
         width: 18px;
         height: 10px;
     }
@@ -67,7 +67,7 @@ function generateStyle(
         border-top-right-radius: ${arrowRadius}px;
         border: 1px solid ${borderColor};
         background-color: ${arrowColor};
-        z-index: 1;
+        z-index: -2;
         bottom: -6px;
         left: 50%;
         margin-left: -8px;
@@ -81,7 +81,7 @@ function generateStyle(
         content: "";
         background-color: inherit;
         position: absolute;
-        z-index: 2;
+        z-index: -1;
         width: 18px;
         height: 10px;
     }
@@ -93,7 +93,7 @@ function generateStyle(
         border-top-right-radius: ${arrowRadius}px;
         border: 1px solid ${borderColor};
         background-color: ${arrowColor};
-        z-index: 1;
+        z-index: -2;
         top: -6px;
         left: 50%;
         margin-left: -8px;
@@ -107,7 +107,7 @@ function generateStyle(
         content: "";
         background-color: inherit;
         position: absolute;
-        z-index: 2;
+        z-index: -1;
         width: 10px;
         height: 18px;
     }
@@ -119,7 +119,7 @@ function generateStyle(
         border-top-right-radius: ${arrowRadius}px;
         border: 1px solid ${borderColor};
         background-color: ${arrowColor};
-        z-index: 1;
+        z-index: -2;
         right: -6px;
         top: 50%;
         margin-top: -6px;
@@ -133,7 +133,7 @@ function generateStyle(
         content: "";
         background-color: inherit;
         position: absolute;
-        z-index: 2;
+        z-index: -1;
         width: 10px;
         height: 18px;
     }
@@ -145,7 +145,7 @@ function generateStyle(
         border-top-right-radius: ${arrowRadius}px;
         border: 1px solid ${borderColor};
         background-color: ${arrowColor};
-        z-index: 1;
+        z-index: -2;
         left: -6px;
         top: 50%;
         margin-top: -6px;
