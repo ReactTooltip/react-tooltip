@@ -74,7 +74,8 @@ class ReactTooltip extends React.Component {
       bodyMode: PropTypes.bool,
       possibleCustomEvents: PropTypes.string,
       possibleCustomEventsOff: PropTypes.string,
-      clickable: PropTypes.bool
+      clickable: PropTypes.bool,
+      disableInternalStyle: PropTypes.bool
     };
   }
 
@@ -152,12 +153,15 @@ class ReactTooltip extends React.Component {
   }
 
   componentDidMount() {
-    const { insecure, resizeHide } = this.props;
+    const { insecure, resizeHide, disableInternalStyle } = this.props;
     this.mount = true;
 
     this.bindListener(); // Bind listener for tooltip
     this.bindWindowEvents(resizeHide); // Bind global event for static method
-    this.injectStyles(); // Inject styles for each DOM root having tooltip.
+
+    if (!disableInternalStyle) {
+      this.injectStyles(); // Inject styles for each DOM root having tooltip.
+    }
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -798,14 +802,16 @@ class ReactTooltip extends React.Component {
     const { extraClass, html, ariaProps, disable, uuid } = this.state;
     const content = this.getTooltipContent();
     const isEmptyTip = this.isEmptyTip(content);
-    const style = generateTooltipStyle(
-      this.state.uuid,
-      this.state.customColors,
-      this.state.type,
-      this.state.border,
-      this.state.padding,
-      this.state.customRadius
-    );
+    const style = this.props.disableInternalStyle
+      ? ''
+      : generateTooltipStyle(
+          this.state.uuid,
+          this.state.customColors,
+          this.state.type,
+          this.state.border,
+          this.state.padding,
+          this.state.customRadius
+        );
 
     const tooltipClass =
       '__react_component_tooltip' +
@@ -828,7 +834,9 @@ class ReactTooltip extends React.Component {
       .join(' ');
 
     if (html) {
-      const htmlContent = `${content}\n<style aria-hidden="true">${style}</style>`;
+      const htmlContent = `${content}${
+        style ? `\n<style aria-hidden="true">${style}</style>` : ''
+      }`;
 
       return (
         <Wrapper
@@ -849,10 +857,12 @@ class ReactTooltip extends React.Component {
           ref={(ref) => (this.tooltipRef = ref)}
           data-id="tooltip"
         >
-          <style
-            dangerouslySetInnerHTML={{ __html: style }}
-            aria-hidden="true"
-          />
+          {style && (
+            <style
+              dangerouslySetInnerHTML={{ __html: style }}
+              aria-hidden="true"
+            />
+          )}
           {content}
         </Wrapper>
       );
