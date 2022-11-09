@@ -110,6 +110,8 @@ export interface TooltipProps {
   role?: string;
   // Padding attribute
   padding?: string;
+  // Set internal style as optional
+  disableInternalStyle?: boolean;
 }
 
 // ReactTooltip component is the default export
