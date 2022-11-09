@@ -1,3 +1,9 @@
+## [4.4.5](https://github.com/ReactTooltip/react-tooltip/compare/v4.4.4...v4.4.5) (2022-11-09)
+
+### Bug Fixes
+
+- add padding into the ts type file ([365c2da](https://github.com/ReactTooltip/react-tooltip/commit/365c2dad98d15ecd32356c05ee962225fa018b06)), closes [#817](https://github.com/ReactTooltip/react-tooltip/issues/817) [#808](https://github.com/ReactTooltip/react-tooltip/issues/808)
+
 ## [4.4.4](https://github.com/ReactTooltip/react-tooltip/compare/v4.4.3...v4.4.4) (2022-11-09)
 
 ### Bug Fixes
