@@ -13,6 +13,9 @@ import copy from 'rollup-plugin-copy'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import ts from '@rollup/plugin-typescript'
 import typescript from 'typescript'
+import tailwindcss from 'tailwindcss'
+import autoprefixer from 'autoprefixer'
+import tailwindConfig from './tailwind.config'
 
 const input = ['src/index-dev.tsx']
 
@@ -39,19 +42,25 @@ const plugins = [
     },
   }),
   string({ include: '**/*.html' }),
-  json(),
   postcss({
     extract: true,
     autoModules: true,
     include: '**/*.css',
     extensions: ['.css'],
+    plugins: [autoprefixer(), tailwindcss(tailwindConfig)],
   }),
+  json(),
   nodeResolve({
-    modulePaths: ['src', 'node_modules', 'src/components'],
+    browser: true,
+
+    // Add this line for development config, omit for
+    // production config
+    exportConditions: ['development'],
   }),
   ts({
     typescript,
     tsconfig: './tsconfig.json',
+    noEmitOnError: false,
   }),
   commonjs({
     include: 'node_modules/**',

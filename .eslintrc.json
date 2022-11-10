@@ -91,6 +91,8 @@
     "import/extensions": 0,
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "warn",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "react/function-component-definition": "off",
+    "dot-notation": "off"
   }
 }
