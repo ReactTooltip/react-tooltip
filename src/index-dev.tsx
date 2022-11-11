@@ -1,5 +1,4 @@
 import { createRoot } from 'react-dom/client'
-import './tailwind.module.css'
 import App from './App'
 
 const container = document.getElementById('app')

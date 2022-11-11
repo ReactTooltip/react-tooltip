@@ -13,9 +13,10 @@ import {
   FloatingPortal,
 } from '@floating-ui/react-dom-interactions'
 import { Tooltip } from 'components/Tooltip'
+import styles from './styles.module.css'
 
 function App() {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
 
   const { x, y, reference, floating, strategy, context } = useFloating({
     open,
@@ -37,7 +38,7 @@ function App() {
   const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role])
 
   return (
-    <>
+    <main className={styles['main']}>
       <button ref={reference} {...getReferenceProps()}>
         Hover or focus me
       </button>
@@ -52,7 +53,7 @@ function App() {
           />
         )}
       </FloatingPortal>
-    </>
+    </main>
   )
 }
 

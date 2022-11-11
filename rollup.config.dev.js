@@ -3,7 +3,6 @@ import { string } from 'rollup-plugin-string'
 import analyze from 'rollup-plugin-analyzer'
 import commonjs from '@rollup/plugin-commonjs'
 import filesize from 'rollup-plugin-filesize'
-import json from '@rollup/plugin-json/dist'
 import postcss from 'rollup-plugin-postcss'
 import progress from 'rollup-plugin-progress'
 import browsersync from 'rollup-plugin-browsersync'
@@ -13,9 +12,6 @@ import copy from 'rollup-plugin-copy'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import ts from '@rollup/plugin-typescript'
 import typescript from 'typescript'
-import tailwindcss from 'tailwindcss'
-import autoprefixer from 'autoprefixer'
-import tailwindConfig from './tailwind.config'
 
 const input = ['src/index-dev.tsx']
 
@@ -47,16 +43,9 @@ const plugins = [
     autoModules: true,
     include: '**/*.css',
     extensions: ['.css'],
-    plugins: [autoprefixer(), tailwindcss(tailwindConfig)],
+    plugins: [],
   }),
-  json(),
-  nodeResolve({
-    browser: true,
-
-    // Add this line for development config, omit for
-    // production config
-    exportConditions: ['development'],
-  }),
+  nodeResolve(),
   ts({
     typescript,
     tsconfig: './tsconfig.json',
@@ -84,6 +73,8 @@ const plugins = [
   browsersync({
     server: 'build',
     watch: true,
+    ui: false,
+    open: false,
     // port: 3000,
     // ui: {
     //   port: 3001,

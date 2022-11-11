@@ -6,6 +6,5 @@
   "trailingComma": "all",
   "tabWidth": 2,
   "printWidth": 100,
-  "bracketSameLine": false,
   "endOfLine": "auto"
 }

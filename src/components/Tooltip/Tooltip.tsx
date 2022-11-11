@@ -15,7 +15,7 @@ const Tooltip = ({ innerRef, strategy, y, x, floatingProps }: ITooltip) => {
       }}
       {...floatingProps}
     >
-      I'm a tooltip!
+      Hello World from a Tooltip
     </div>
   )
 }
