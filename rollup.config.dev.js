@@ -1,5 +1,3 @@
-// import { babel } from '@rollup/plugin-babel'
-import { string } from 'rollup-plugin-string'
 import analyze from 'rollup-plugin-analyzer'
 import commonjs from '@rollup/plugin-commonjs'
 import filesize from 'rollup-plugin-filesize'
@@ -37,7 +35,6 @@ const plugins = [
       'process.env.NODE_ENV': JSON.stringify('development'),
     },
   }),
-  string({ include: '**/*.html' }),
   postcss({
     extract: true,
     autoModules: true,
@@ -54,11 +51,6 @@ const plugins = [
   commonjs({
     include: 'node_modules/**',
   }),
-  // babel({
-  //   babelHelpers: 'bundled',
-  //   exclude: 'node_modules/**',
-  //   presets: ['@babel/env', '@babel/preset-react'],
-  // }),
   analyze(),
   filesize(),
   copy({

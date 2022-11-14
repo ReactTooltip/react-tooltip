@@ -16,13 +16,6 @@
       "node": {
         "extensions": [".js", ".jsx", ".ts", ".tsx"],
         "moduleDirectory": ["node_modules", "src/"]
-      },
-      "babel-module": {
-        "root": ["./src/"],
-        "alias": {
-          "src": "./src",
-          "components": "./src/components"
-        }
       }
     }
   },
