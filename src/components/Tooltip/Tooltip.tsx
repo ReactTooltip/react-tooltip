@@ -5,7 +5,7 @@ import { computeToolTipPosition } from '../../utils/compute-positions'
 import debounce from '../../utils/debounce'
 import type { ITooltip } from './TooltipTypes'
 
-const Tooltip = ({ id, content, anchorId }: ITooltip) => {
+const Tooltip = ({ id, content, anchorId, place, offset }: ITooltip) => {
   const tooltipRef = createRef()
   const tooltipArrowRef = createRef()
   const [inlineStyles, setInlineStyles] = useState({})
@@ -49,6 +49,8 @@ const Tooltip = ({ id, content, anchorId }: ITooltip) => {
     const elementReference = document.querySelector(`#${anchorId}`)
 
     computeToolTipPosition({
+      place,
+      offset,
       elementReference,
       tooltipReference: tooltipRef.current,
       tooltipArrowReference: tooltipArrowRef.current,

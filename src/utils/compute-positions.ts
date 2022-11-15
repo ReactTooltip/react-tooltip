@@ -4,18 +4,20 @@ export const computeToolTipPosition = async ({
   elementReference,
   tooltipReference = null,
   tooltipArrowReference = null,
+  place = 'top',
+  offset: offsetValue = 10,
 }) => {
   if (tooltipReference === null) {
     return { tooltipStyles: {}, tooltipArrowStyles: {} }
   }
 
-  const middleware = [offset(5), flip(), shift({ padding: 5 })]
+  const middleware = [offset(offsetValue), flip(), shift({ padding: 5 })]
 
   if (tooltipArrowReference) {
     middleware.push(arrow({ element: tooltipArrowReference }))
 
     return computePosition(elementReference, tooltipReference, {
-      placement: 'bottom',
+      placement: place,
       middleware,
     }).then(({ x, y, placement, middlewareData }) => {
       const styles = { left: `${x}px`, top: `${y}px` }

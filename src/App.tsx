@@ -16,7 +16,13 @@ function App() {
       >
         My button
       </button>
-      <Tooltip id="tooltip" anchorId={anchorId} content="My big tooltip content" />
+      <Tooltip
+        id="tooltip"
+        offset={10}
+        place="top"
+        anchorId={anchorId}
+        content="My big tooltip content"
+      />
 
       <section style={{ marginTop: '100px' }}>
         <p>

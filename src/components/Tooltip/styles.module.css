@@ -14,7 +14,7 @@
 
 .arrow {
   position: absolute;
-  background: #333;
+  background: #222;
   width: 8px;
   height: 8px;
   transform: rotate(45deg);
