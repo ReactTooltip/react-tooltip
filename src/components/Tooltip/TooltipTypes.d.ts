@@ -5,4 +5,5 @@ export interface ITooltip {
   y?
   x?
   floatingProps?
+  content?
 }
