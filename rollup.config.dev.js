@@ -47,6 +47,8 @@ const plugins = [
     typescript,
     tsconfig: './tsconfig.json',
     noEmitOnError: false,
+    // declaration: true,
+    // declarationDir: './build',
   }),
   commonjs({
     include: 'node_modules/**',
