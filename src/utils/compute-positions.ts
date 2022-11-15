@@ -1,16 +1,52 @@
-import { computePosition, offset, flip, shift } from '@floating-ui/dom'
+import { computePosition, offset, flip, shift, arrow } from '@floating-ui/dom'
 
-export const computeToolTipPosition = async ({ elementReference, tooltipReference }) => {
+export const computeToolTipPosition = async ({
+  elementReference,
+  tooltipReference = null,
+  tooltipArrowReference = null,
+}) => {
   if (tooltipReference === null) {
-    return {}
+    return { tooltipStyles: {}, tooltipArrowStyles: {} }
+  }
+
+  const middleware = [offset(5), flip(), shift({ padding: 5 })]
+
+  if (tooltipArrowReference) {
+    middleware.push(arrow({ element: tooltipArrowReference }))
+
+    return computePosition(elementReference, tooltipReference, {
+      placement: 'bottom',
+      middleware,
+    }).then(({ x, y, placement, middlewareData }) => {
+      const styles = { left: `${x}px`, top: `${y}px` }
+
+      const { x: arrowX, y: arrowY } = middlewareData.arrow
+
+      const staticSide = {
+        top: 'bottom',
+        right: 'left',
+        bottom: 'top',
+        left: 'right',
+      }[placement.split('-')[0]]
+
+      const arrowStyle = {
+        left: arrowX != null ? `${arrowX}px` : '',
+        top: arrowY != null ? `${arrowY}px` : '',
+        right: '',
+        bottom: '',
+        [staticSide]: '-4px',
+      }
+
+      return { tooltipStyles: styles, tooltipArrowStyles: arrowStyle }
+    })
   }
 
   return computePosition(elementReference, tooltipReference, {
     placement: 'bottom',
-    middleware: [offset(5), flip(), shift({ padding: 5 })],
-  }).then(({ x, y, placement, middlewareData }) => {
+    middleware,
+  }).then(({ x, y }) => {
     const styles = { left: `${x}px`, top: `${y}px` }
 
-    return styles
+    return { tooltipStyles: styles, tooltipArrowStyles: {} }
   })
 }

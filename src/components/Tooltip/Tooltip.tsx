@@ -7,7 +7,9 @@ import type { ITooltip } from './TooltipTypes'
 
 const Tooltip = ({ id, content, anchorId }: ITooltip) => {
   const tooltipRef = createRef()
+  const tooltipArrowRef = createRef()
   const [inlineStyles, setInlineStyles] = useState({})
+  const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState(false)
 
   const handleShowTooltip = () => {
@@ -46,13 +48,19 @@ const Tooltip = ({ id, content, anchorId }: ITooltip) => {
   useEffect(() => {
     const elementReference = document.querySelector(`#${anchorId}`)
 
-    computeToolTipPosition({ elementReference, tooltipReference: tooltipRef.current }).then(
-      (computedStyles) => {
-        if (Object.keys(computedStyles).length) {
-          setInlineStyles(computedStyles)
-        }
-      },
-    )
+    computeToolTipPosition({
+      elementReference,
+      tooltipReference: tooltipRef.current,
+      tooltipArrowReference: tooltipArrowRef.current,
+    }).then((computedStylesData) => {
+      if (Object.keys(computedStylesData.tooltipStyles).length) {
+        setInlineStyles(computedStylesData.tooltipStyles)
+      }
+
+      if (Object.keys(computedStylesData.tooltipArrowStyles).length) {
+        setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
+      }
+    })
   }, [show, anchorId])
 
   return (
@@ -63,10 +71,15 @@ const Tooltip = ({ id, content, anchorId }: ITooltip) => {
         [styles['show']]: show,
       })}
       style={inlineStyles}
-      ref={tooltipRef}
+      ref={tooltipRef as React.RefObject<HTMLDivElement>}
     >
       {content}
-      {/* <div id="arrow" className={styles['arrow']} style={{ ...arrowStyles }} ref={arrowRef} /> */}
+      <div
+        id="arrow"
+        className={styles['arrow']}
+        style={{ ...inlineArrowStyles }}
+        ref={tooltipArrowRef as React.RefObject<HTMLDivElement>}
+      />
     </div>
   )
 }
