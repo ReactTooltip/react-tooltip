@@ -4,3 +4,5 @@
 .idea/
 
 *.lock
+
+/node_modules/
