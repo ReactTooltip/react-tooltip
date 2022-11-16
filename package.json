@@ -82,8 +82,8 @@
     "typescript": "^4.8.4"
   },
   "peerDependencies": {
-    "react": ">=16.0.0",
-    "react-dom": ">=16.0.0"
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   },
   "browserslist": {
     "production": [
@@ -106,7 +106,6 @@
     "@floating-ui/dom": "^1.0.4",
     "@floating-ui/react-dom": "^1.0.0",
     "@floating-ui/react-dom-interactions": "^0.10.3",
-    "classnames": "^2.3.2",
-    "react-merge-refs": "^2.0.1"
+    "classnames": "^2.3.2"
   }
 }

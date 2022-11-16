@@ -10,7 +10,7 @@ const parameters = args.reduce((acc, arg) => {
 
 const bundleFolder = {
   development: './build',
-  production: './build',
+  production: './dist',
 }
 
 // Build folder
