@@ -1,11 +1,20 @@
-import { createRef, useEffect, useState } from 'react'
+import { createRef, useEffect, useState, useId } from 'react'
 import classNames from 'classnames'
+import debounce from 'utils/debounce'
 import styles from './styles.module.css'
 import { computeToolTipPosition } from '../../utils/compute-positions'
-import debounce from '../../utils/debounce'
 import type { ITooltip } from './TooltipTypes'
 
-const Tooltip = ({ id, content, anchorId, place, offset }: ITooltip) => {
+const Tooltip = ({
+  id = useId(),
+  className,
+  classNameArrow,
+  content,
+  variant = 'dark',
+  anchorId,
+  place,
+  offset,
+}: ITooltip) => {
   const tooltipRef = createRef()
   const tooltipArrowRef = createRef()
   const [inlineStyles, setInlineStyles] = useState({})
@@ -69,7 +78,7 @@ const Tooltip = ({ id, content, anchorId, place, offset }: ITooltip) => {
     <div
       id={id}
       role="tooltip"
-      className={classNames(styles['tooltip'], {
+      className={classNames(styles['tooltip'], styles[variant], className, {
         [styles['show']]: show,
       })}
       style={inlineStyles}
@@ -77,9 +86,8 @@ const Tooltip = ({ id, content, anchorId, place, offset }: ITooltip) => {
     >
       {content}
       <div
-        id="arrow"
-        className={styles['arrow']}
-        style={{ ...inlineArrowStyles }}
+        className={classNames(styles['arrow'], classNameArrow)}
+        style={inlineArrowStyles}
         ref={tooltipArrowRef as React.RefObject<HTMLDivElement>}
       />
     </div>

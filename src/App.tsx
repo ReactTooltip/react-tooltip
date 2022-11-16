@@ -16,11 +16,19 @@ function App() {
       >
         My button
       </button>
+      <Tooltip offset={10} place="top" anchorId={anchorId} content="My big tooltip content" />
       <Tooltip
-        id="tooltip"
         offset={10}
         place="top"
-        anchorId={anchorId}
+        variant="success"
+        anchorId="button2"
+        content="My big tooltip content"
+      />
+      <Tooltip
+        offset={10}
+        place="top"
+        variant="info"
+        anchorId="button3"
         content="My big tooltip content"
       />
 
