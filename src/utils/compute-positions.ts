@@ -1,4 +1,5 @@
 import { computePosition, offset, flip, shift, arrow } from '@floating-ui/dom'
+import type { IComputePositions } from './compute-positions-types'
 
 export const computeToolTipPosition = async ({
   elementReference,
@@ -6,7 +7,7 @@ export const computeToolTipPosition = async ({
   tooltipArrowReference = null,
   place = 'top',
   offset: offsetValue = 10,
-}) => {
+}: IComputePositions) => {
   if (tooltipReference === null) {
     return { tooltipStyles: {}, tooltipArrowStyles: {} }
   }
@@ -14,14 +15,15 @@ export const computeToolTipPosition = async ({
   const middleware = [offset(offsetValue), flip(), shift({ padding: 5 })]
 
   if (tooltipArrowReference) {
-    middleware.push(arrow({ element: tooltipArrowReference }))
+    middleware.push(arrow({ element: tooltipArrowReference as HTMLElement }))
 
-    return computePosition(elementReference, tooltipReference, {
+    return computePosition(elementReference as HTMLElement, tooltipReference as HTMLElement, {
       placement: place,
       middleware,
     }).then(({ x, y, placement, middlewareData }) => {
       const styles = { left: `${x}px`, top: `${y}px` }
 
+      // @ts-ignore
       const { x: arrowX, y: arrowY } = middlewareData.arrow
 
       const staticSide = {
@@ -36,6 +38,7 @@ export const computeToolTipPosition = async ({
         top: arrowY != null ? `${arrowY}px` : '',
         right: '',
         bottom: '',
+        // @ts-ignore
         [staticSide]: '-4px',
       }
 
@@ -43,7 +46,7 @@ export const computeToolTipPosition = async ({
     })
   }
 
-  return computePosition(elementReference, tooltipReference, {
+  return computePosition(elementReference as HTMLElement, tooltipReference as HTMLElement, {
     placement: 'bottom',
     middleware,
   }).then(({ x, y }) => {

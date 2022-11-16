@@ -86,6 +86,7 @@
     "@typescript-eslint/no-explicit-any": "warn",
     "import/prefer-default-export": "off",
     "react/function-component-definition": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
     "dot-notation": "off"
   }
 }

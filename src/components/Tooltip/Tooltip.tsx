@@ -36,19 +36,19 @@ const Tooltip = ({
     const elementReference = document.querySelector(`#${anchorId}`)
 
     const events = [
-      ['mouseenter', debouncedHandleShowTooltip],
-      ['mouseleave', debouncedHandleHideTooltip],
-      ['focus', debouncedHandleShowTooltip],
-      ['blur', debouncedHandleHideTooltip],
+      { event: 'mouseenter', listener: debouncedHandleShowTooltip },
+      { event: 'mouseleave', listener: debouncedHandleHideTooltip },
+      { event: 'focus', listener: debouncedHandleShowTooltip },
+      { event: 'blur', listener: debouncedHandleHideTooltip },
     ]
 
     console.log(anchorId)
-    events.forEach(([event, listener]) => {
+    events.forEach(({ event, listener }) => {
       elementReference?.addEventListener(event, listener)
     })
 
     return () => {
-      events.forEach(([event, listener]) => {
+      events.forEach(({ event, listener }) => {
         elementReference?.removeEventListener(event, listener)
       })
     }
@@ -61,8 +61,8 @@ const Tooltip = ({
       place,
       offset,
       elementReference,
-      tooltipReference: tooltipRef.current,
-      tooltipArrowReference: tooltipArrowRef.current,
+      tooltipReference: tooltipRef.current as HTMLElement,
+      tooltipArrowReference: tooltipArrowRef.current as HTMLElement,
     }).then((computedStylesData) => {
       if (Object.keys(computedStylesData.tooltipStyles).length) {
         setInlineStyles(computedStylesData.tooltipStyles)

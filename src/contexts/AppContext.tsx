@@ -1,27 +1,4 @@
-import {
-  useState,
-  createContext,
-  ReactNode,
-  useContext,
-  useMemo,
-  useEffect,
-  createRef,
-  cloneElement,
-} from 'react'
-import {
-  useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  useHover,
-  useFocus,
-  useDismiss,
-  useRole,
-  useInteractions,
-  FloatingPortal,
-} from '@floating-ui/react-dom-interactions'
-import { computePosition } from '@floating-ui/dom'
+import { useState, createContext, ReactNode, useContext, useMemo } from 'react'
 
 import type { AppContextTypeData, AppContextTypeApi } from './AppContextTypes'
 
@@ -49,53 +26,6 @@ export function useAppGlobalStateApi(): AppContextTypeApi {
 
 export const AppGlobalStateProvider = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState(false)
-  const ref = createRef()
-
-  const { x, y, reference, floating, strategy, context } = useFloating({
-    open,
-    onOpenChange: setOpen,
-    placement: 'top',
-    // Make sure the tooltip stays on the screen
-    whileElementsMounted: autoUpdate,
-    middleware: [offset(5), flip(), shift()],
-  })
-
-  // Event listeners to change the open state
-  const hover = useHover(context, { move: false })
-  const focus = useFocus(context)
-  const dismiss = useDismiss(context)
-  // Role props for screen readers
-  const role = useRole(context, { role: 'tooltip' })
-
-  // Merge all the interactions into prop getters
-  const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role])
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      console.log('browser', ref)
-
-      const elementsWithDataTip = []
-
-      const tooltipElements = document.querySelectorAll('[data-tip]')
-
-      tooltipElements.forEach((element) => {
-        computePosition(element, tooltip, {
-          placement: 'top',
-          middleware: [offset(5), flip(), shift()],
-        }).then(({ x, y }) => {
-          Object.assign(tooltip.style, {
-            left: `${x}px`,
-            top: `${y}px`,
-          })
-        })
-
-        // elementsWithDataTip.push(newElement)
-      })
-
-      console.log(tooltipElements)
-      // console.log(elementsWithDataTip)
-    }
-  }, [])
 
   const DataValue = useMemo(
     () => ({
@@ -109,8 +39,6 @@ export const AppGlobalStateProvider = ({ children }: { children: ReactNode }) =>
   const ApiValue = useMemo(
     () => ({
       setOpen,
-      getReferenceProps,
-      getFloatingProps,
     }),
     [open],
   )

@@ -7,6 +7,4 @@ export interface AppContextTypeData {
 export interface AppContextTypeApi {
   state?: AppContextTypeData
   setOpen
-  getReferenceProps
-  getFloatingProps
 }

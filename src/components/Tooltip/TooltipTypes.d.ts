@@ -6,4 +6,5 @@ export interface ITooltip {
   offset?: number
   id?: string
   variant?: 'dark' | 'light' | 'success' | 'warning' | 'error' | 'info'
+  anchorId
 }
