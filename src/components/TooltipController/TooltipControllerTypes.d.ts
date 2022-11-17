@@ -1,4 +1,4 @@
-export interface ITooltip {
+export interface ITooltipController {
   className?: string
   classNameArrow?: string
   content?: string | number
@@ -8,5 +8,4 @@ export interface ITooltip {
   id?: string
   variant?: 'dark' | 'light' | 'success' | 'warning' | 'error' | 'info'
   anchorId
-  isHtmlContent?: boolean
 }

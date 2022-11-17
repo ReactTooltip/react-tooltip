@@ -1,2 +1,1 @@
-export { Tooltip } from './components/Tooltip'
-export { default as App } from './App'
+export { TooltipController as Tooltip } from './components/TooltipController'

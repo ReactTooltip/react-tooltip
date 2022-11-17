@@ -1,25 +1,30 @@
 import { createRef, useEffect, useState, useId } from 'react'
 import classNames from 'classnames'
 import debounce from 'utils/debounce'
-import styles from './styles.module.css'
+import { TooltipContent } from 'components/TooltipContent'
 import { computeToolTipPosition } from '../../utils/compute-positions'
+import styles from './styles.module.css'
 import type { ITooltip } from './TooltipTypes'
 
 const Tooltip = ({
+  // props
   id = useId(),
   className,
   classNameArrow,
-  content,
   variant = 'dark',
   anchorId,
   place,
   offset,
+
+  // props handled by controller
+  isHtmlContent = false,
+  content,
 }: ITooltip) => {
   const tooltipRef = createRef()
   const tooltipArrowRef = createRef()
   const [inlineStyles, setInlineStyles] = useState({})
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState<boolean>(false)
 
   const handleShowTooltip = () => {
     setShow(true)
@@ -35,6 +40,11 @@ const Tooltip = ({
   useEffect(() => {
     const elementReference = document.querySelector(`#${anchorId}`)
 
+    if (!elementReference) {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      return () => {}
+    }
+
     const events = [
       { event: 'mouseenter', listener: debouncedHandleShowTooltip },
       { event: 'mouseleave', listener: debouncedHandleHideTooltip },
@@ -42,7 +52,6 @@ const Tooltip = ({
       { event: 'blur', listener: debouncedHandleHideTooltip },
     ]
 
-    console.log(anchorId)
     events.forEach(({ event, listener }) => {
       elementReference?.addEventListener(event, listener)
     })
@@ -84,7 +93,7 @@ const Tooltip = ({
       style={inlineStyles}
       ref={tooltipRef as React.RefObject<HTMLDivElement>}
     >
-      {content}
+      {isHtmlContent ? <TooltipContent content={content as string} /> : content}
       <div
         className={classNames(styles['arrow'], classNameArrow)}
         style={inlineArrowStyles}

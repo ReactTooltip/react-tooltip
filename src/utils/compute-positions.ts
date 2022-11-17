@@ -2,12 +2,18 @@ import { computePosition, offset, flip, shift, arrow } from '@floating-ui/dom'
 import type { IComputePositions } from './compute-positions-types'
 
 export const computeToolTipPosition = async ({
-  elementReference,
+  elementReference = null,
   tooltipReference = null,
   tooltipArrowReference = null,
   place = 'top',
   offset: offsetValue = 10,
 }: IComputePositions) => {
+  if (elementReference === null) {
+    // eslint-disable-next-line no-console
+    console.error('The reference element for tooltip was not defined: ', elementReference)
+    return { tooltipStyles: {}, tooltipArrowStyles: {} }
+  }
+
   if (tooltipReference === null) {
     return { tooltipStyles: {}, tooltipArrowStyles: {} }
   }

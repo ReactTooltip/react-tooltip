@@ -8,7 +8,7 @@ export default class App extends Component {
     super(props)
     this.state = {
       place: 'top',
-      type: 'dark',
+      variant: 'dark',
       effect: 'float',
       condition: false,
     }
@@ -20,9 +20,9 @@ export default class App extends Component {
     })
   }
 
-  changeType(type) {
+  changeVariant(variant) {
     this.setState({
-      type: type,
+      variant,
     })
   }
 
@@ -45,7 +45,11 @@ export default class App extends Component {
         <section className="tooltip-example">
           <h4 className="title">React Tooltip</h4>
           <div className="demonstration">
-            <a data-for="main" data-tip="Hello<br />multiline<br />tooltip" data-iscapture="true">
+            <a
+              id="mainTooltipReferenceElement"
+              data-content="Hello<br />multiline<br />tooltip"
+              data-iscapture="true"
+            >
               ◕‿‿◕
             </a>
           </div>
@@ -82,37 +86,37 @@ export default class App extends Component {
                 <p>Type</p>
                 <a
                   className={type === 'dark' ? 'active' : ''}
-                  onClick={this.changeType.bind(this, 'dark')}
+                  onClick={this.changeVariant.bind(this, 'dark')}
                 >
                   Dark<span className="mark">(default)</span>
                 </a>
                 <a
                   className={type === 'success' ? 'active' : ''}
-                  onClick={this.changeType.bind(this, 'success')}
+                  onClick={this.changeVariant.bind(this, 'success')}
                 >
                   Success
                 </a>
                 <a
                   className={type === 'warning' ? 'active' : ''}
-                  onClick={this.changeType.bind(this, 'warning')}
+                  onClick={this.changeVariant.bind(this, 'warning')}
                 >
                   Warning
                 </a>
                 <a
                   className={type === 'error' ? 'active' : ''}
-                  onClick={this.changeType.bind(this, 'error')}
+                  onClick={this.changeVariant.bind(this, 'error')}
                 >
                   Error
                 </a>
                 <a
                   className={type === 'info' ? 'active' : ''}
-                  onClick={this.changeType.bind(this, 'info')}
+                  onClick={this.changeVariant.bind(this, 'info')}
                 >
                   Info
                 </a>
                 <a
                   className={type === 'light' ? 'active' : ''}
-                  onClick={this.changeType.bind(this, 'light')}
+                  onClick={this.changeVariant.bind(this, 'light')}
                 >
                   Light
                 </a>
@@ -150,7 +154,14 @@ export default class App extends Component {
               </div>
             </pre>
           </div>
-          <ReactTooltip id="main" place={place} type={type} effect={effect} multiline={true} />
+          <ReactTooltip
+            anchorId="mainTooltipReferenceElement"
+            // htmlContent="<strong>Hello</strong> world!"
+            place={place}
+            type={type}
+            effect={effect}
+            multiline={true}
+          />
         </section>
         <section className="advance">
           <div className="section">
