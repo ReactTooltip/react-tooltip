@@ -1,4 +1,4 @@
-import analyze from 'rollup-plugin-analyzer'
+// import analyze from 'rollup-plugin-analyzer'
 import commonjs from '@rollup/plugin-commonjs'
 import filesize from 'rollup-plugin-filesize'
 import postcss from 'rollup-plugin-postcss'
@@ -53,7 +53,7 @@ const plugins = [
   commonjs({
     include: 'node_modules/**',
   }),
-  analyze(),
+  // analyze(), // to check diff of file size when bundle
   filesize(),
   copy({
     // targets: [
@@ -61,7 +61,7 @@ const plugins = [
     //   { src: 'public/manifest.json', dest: 'build/' },
     //   { src: 'public/offline.html', dest: 'build/' },
     // ],
-    targets: [],
+    targets: [{ src: 'dist/', dest: 'build/' }],
     verbose: true,
   }),
   browsersync({

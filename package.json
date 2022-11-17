@@ -3,8 +3,8 @@
   "version": "4.5.0",
   "description": "react tooltip component",
   "scripts": {
-    "dev": "node ./cli.js --env=development && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.dev.js --watch --bundleConfigAsCjs",
-    "build": "node ./cli.js --env=production && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.prod.js --bundleConfigAsCjs",
+    "dev": "node ./cli.js --env=development && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.dev.js --watch",
+    "build": "node ./cli.js --env=production && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.prod.js",
     "types": "node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.types.js",
     "eslint": "eslint --ext=js --ext=jsx --ext=ts --ext=tsx --fix ./src",
     "stylelint": "stylelint \"src/**/*.css\"",
@@ -12,9 +12,21 @@
     "cm": "git cz",
     "prepare": "husky install"
   },
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
-  "browser": "dist/index.js",
+  "main": "dist/react-tooltip.esm.js",
+  "buildFormats": [
+    {
+      "file": "dist/react-tooltip.umd.js",
+      "format": "umd"
+    },
+    {
+      "file": "dist/react-tooltip.cjs.js",
+      "format": "cjs"
+    },
+    {
+      "file": "dist/react-tooltip.esm.js",
+      "format": "es"
+    }
+  ],
   "types": "dist/index.d.ts",
   "type": "module",
   "license": "MIT",
@@ -51,7 +63,7 @@
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.26.0",
+    "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^8.0.1",
     "lint-staged": "13.0.3",

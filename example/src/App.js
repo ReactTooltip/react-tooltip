@@ -1,54 +1,51 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import ReactTooltip from 'react-tooltip';
+// import ReactTooltip from 'react-tooltip';
+import { Tooltip as ReactTooltip } from 'react-tooltip'
 
 export default class App extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       place: 'top',
       type: 'dark',
       effect: 'float',
-      condition: false
-    };
+      condition: false,
+    }
   }
 
   changePlace(place) {
     this.setState({
-      place: place
-    });
+      place: place,
+    })
   }
 
   changeType(type) {
     this.setState({
-      type: type
-    });
+      type: type,
+    })
   }
 
   changeEffect(effect) {
     this.setState({
-      effect: effect
-    });
+      effect: effect,
+    })
   }
 
   _onClick() {
     this.setState({
-      condition: true
-    });
+      condition: true,
+    })
   }
 
   render() {
-    const { place, type, effect } = this.state;
+    const { place, type, effect } = this.state
     return (
       <div>
         <section className="tooltip-example">
           <h4 className="title">React Tooltip</h4>
           <div className="demonstration">
-            <a
-              data-for="main"
-              data-tip="Hello<br />multiline<br />tooltip"
-              data-iscapture="true"
-            >
+            <a data-for="main" data-tip="Hello<br />multiline<br />tooltip" data-iscapture="true">
               ◕‿‿◕
             </a>
           </div>
@@ -153,13 +150,7 @@ export default class App extends Component {
               </div>
             </pre>
           </div>
-          <ReactTooltip
-            id="main"
-            place={place}
-            type={type}
-            effect={effect}
-            multiline={true}
-          />
+          <ReactTooltip id="main" place={place} type={type} effect={effect} multiline={true} />
         </section>
         <section className="advance">
           <div className="section">
@@ -167,10 +158,7 @@ export default class App extends Component {
             <p className="sub-title">Use everything as tooltip</p>
 
             <div className="example-jsx">
-              <div
-                className="side"
-                style={{ transform: 'translate3d(5px, 5px, 5px)' }}
-              >
+              <div className="side" style={{ transform: 'translate3d(5px, 5px, 5px)' }}>
                 <a data-tip data-for="happyFace">
                   d(`･∀･)b
                 </a>
@@ -258,11 +246,7 @@ export default class App extends Component {
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="side">
-                <a
-                  data-for="custom-event"
-                  data-tip="custom show"
-                  data-event="click focus"
-                >
+                <a data-for="custom-event" data-tip="custom show" data-event="click focus">
                   ( •̀д•́)
                 </a>
                 <ReactTooltip id="custom-event" globalEventOff="click" />
@@ -357,10 +341,7 @@ export default class App extends Component {
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="side">
-                <a
-                  data-for="custom-tooltip-radius"
-                  data-tip="No tooltip border radius!"
-                >
+                <a data-for="custom-tooltip-radius" data-tip="No tooltip border radius!">
                   ㅇㅅㅇ
                 </a>
                 <ReactTooltip
@@ -371,10 +352,7 @@ export default class App extends Component {
                 />
               </div>
               <div className="side">
-                <a
-                  data-for="custom-arrow-radius"
-                  data-tip="That is an arrow with border radius!"
-                >
+                <a data-for="custom-arrow-radius" data-tip="That is an arrow with border radius!">
                   V(^-^)V
                 </a>
                 <ReactTooltip
@@ -409,10 +387,7 @@ export default class App extends Component {
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="side">
-                <a
-                  data-for="custom-class"
-                  data-tip="hover on me will keep the tooltip"
-                >
+                <a data-for="custom-class" data-tip="hover on me will keep the tooltip">
                   (･ω´･ )
                 </a>
                 <ReactTooltip
@@ -473,10 +448,7 @@ export default class App extends Component {
                 <a data-for="getContent" data-tip>
                   =( •̀д•́)
                 </a>
-                <ReactTooltip
-                  id="getContent"
-                  getContent={() => Math.floor(Math.random() * 100)}
-                />
+                <ReactTooltip id="getContent" getContent={() => Math.floor(Math.random() * 100)} />
               </div>
               <div className="side">
                 <a data-for="overTime" data-tip>
@@ -486,12 +458,9 @@ export default class App extends Component {
                   id="overTime"
                   getContent={[
                     () => {
-                      return 'Random length content'.slice(
-                        0,
-                        Math.floor(Math.random() * 21) + 1
-                      );
+                      return 'Random length content'.slice(0, Math.floor(Math.random() * 21) + 1)
                     },
-                    1000
+                    1000,
                   ]}
                 />
               </div>
@@ -551,10 +520,7 @@ export default class App extends Component {
             <h4 className="title">Test Scrolling</h4>
             <p className="sub-title" />
             <div className="example-jsx" style={{ height: '200px' }}>
-              <div
-                className="side"
-                style={{ overflow: 'auto', height: '200px' }}
-              >
+              <div className="side" style={{ overflow: 'auto', height: '200px' }}>
                 <div
                   data-for="scrollContent"
                   data-tip
@@ -572,10 +538,7 @@ export default class App extends Component {
                   getContent={() => Math.floor(Math.random() * 100)}
                 />
               </div>
-              <div
-                className="side"
-                style={{ overflow: 'auto', height: '200px' }}
-              >
+              <div className="side" style={{ overflow: 'auto', height: '200px' }}>
                 <div
                   data-for="scrollTime"
                   data-tip
@@ -591,9 +554,9 @@ export default class App extends Component {
                   id="scrollTime"
                   getContent={[
                     () => {
-                      return new Date().toISOString();
+                      return new Date().toISOString()
                     },
-                    1000
+                    1000,
                   ]}
                 />
               </div>
@@ -620,28 +583,12 @@ export default class App extends Component {
           <div className="section">
             <h4 className="title">Test SVG</h4>
             <p>Note: if you dynamically change elements in the SVG, add:</p>
-            <pre>
-              {'  componentDidUpdate() {\n' +
-                '    ReactTooltip.rebuild()\n' +
-                '  }'}
-            </pre>
+            <pre>{'  componentDidUpdate() {\n' + '    ReactTooltip.rebuild()\n' + '  }'}</pre>
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="side" style={{ textAlign: 'center' }}>
-                <svg
-                  data-tip="=( •̀д•́)"
-                  data-for="svgTooltip"
-                  width="50"
-                  height="50"
-                >
-                  <circle
-                    cx="25"
-                    cy="25"
-                    r="22"
-                    fill="#fff"
-                    stroke="#000"
-                    strokeWidth="4"
-                  />
+                <svg data-tip="=( •̀д•́)" data-for="svgTooltip" width="50" height="50">
+                  <circle cx="25" cy="25" r="22" fill="#fff" stroke="#000" strokeWidth="4" />
                 </svg>
                 <ReactTooltip id="svgTooltip" />
               </div>
@@ -696,9 +643,9 @@ export default class App extends Component {
           <div className="section">
             <h4 className="title">Demonstrate using mouse in tooltip. </h4>
             <p>
-              Notice that the tooltip delays going away so you can get your
-              mouse in it. You must set delayUpdate and delayHide for the
-              tooltip to stay long enough to get your mouse over it.
+              Notice that the tooltip delays going away so you can get your mouse in it. You must
+              set delayUpdate and delayHide for the tooltip to stay long enough to get your mouse
+              over it.
             </p>
             <p className="sub-title" />
             <div className="example-jsx">
@@ -783,8 +730,8 @@ export default class App extends Component {
             </pre>
 
             <p>
-              When <em>clickable</em> property is set to <em>true</em>, tooltip
-              can respond to mouse (or touch) events.
+              When <em>clickable</em> property is set to <em>true</em>, tooltip can respond to mouse
+              (or touch) events.
             </p>
             <p className="sub-title" />
             <div className="example-jsx">
@@ -794,23 +741,14 @@ export default class App extends Component {
                 </a>
               </div>
 
-              <ReactTooltip
-                id="clickme"
-                place="right"
-                effect="solid"
-                clickable={true}
-              >
+              <ReactTooltip id="clickme" place="right" effect="solid" clickable={true}>
                 <input type="text" placeholder="Type something..." />
               </ReactTooltip>
             </div>
             <br />
             <pre className="example-pre">
               <div>
-                <p>
-                  {
-                    "<a data-tip data-for='clickme' data-event='click'> (❂‿❂) </a>"
-                  }
-                </p>
+                <p>{"<a data-tip data-for='clickme' data-event='click'> (❂‿❂) </a>"}</p>
                 <p>
                   {"<ReactTooltip id='clickme' place='right' effect='solid' clickable={true}>\n" +
                     "<input type='text' placeholder='Type something...' /> \n" +
@@ -823,12 +761,11 @@ export default class App extends Component {
           <div className="section">
             <h4 className="title">Override position</h4>
             <p className="sub-title">
-              Try to resize/zoom in window - tooltip in this sample will try to
-              magnet to window borders, top left border is priority here. Idea
-              is following: sometimes you have custom border cases, like custom
-              scrolls, small windows, iframes, react-tooltip itself can not
-              cover everything, so up to you if you want to customize default
-              behavior, or may be just limit it like in this example.
+              Try to resize/zoom in window - tooltip in this sample will try to magnet to window
+              borders, top left border is priority here. Idea is following: sometimes you have
+              custom border cases, like custom scrolls, small windows, iframes, react-tooltip itself
+              can not cover everything, so up to you if you want to customize default behavior, or
+              may be just limit it like in this example.
             </p>
             <div className="example-jsx">
               <div className="side" style={{ display: 'flex', width: '100%' }}>
@@ -837,28 +774,20 @@ export default class App extends Component {
                 </a>
                 <ReactTooltip
                   id="overridePosition"
-                  overridePosition={(
-                    { left, top },
-                    currentEvent,
-                    currentTarget,
-                    node
-                  ) => {
-                    const d = document.documentElement;
+                  overridePosition={({ left, top }, currentEvent, currentTarget, node) => {
+                    const d = document.documentElement
 
-                    left = Math.min(d.clientWidth - node.clientWidth, left);
-                    top = Math.min(d.clientHeight - node.clientHeight, top);
+                    left = Math.min(d.clientWidth - node.clientWidth, left)
+                    top = Math.min(d.clientHeight - node.clientHeight, top)
 
-                    left = Math.max(0, left);
-                    top = Math.max(0, top);
+                    left = Math.max(0, left)
+                    top = Math.max(0, top)
 
-                    return { top, left };
+                    return { top, left }
                   }}
                 >
                   <div>header</div>
-                  <img
-                    src="http://lorempixel.com/100/1500"
-                    alt="lorem 100x1500"
-                  />
+                  <img src="http://lorempixel.com/100/1500" alt="lorem 100x1500" />
                   <div>footer</div>
                 </ReactTooltip>
                 <a data-tip data-for="noOverridePosition">
@@ -866,10 +795,7 @@ export default class App extends Component {
                 </a>
                 <ReactTooltip id="noOverridePosition">
                   <div>header</div>
-                  <img
-                    src="http://lorempixel.com/100/1500"
-                    alt="lorem 100x1500"
-                  />
+                  <img src="http://lorempixel.com/100/1500" alt="lorem 100x1500" />
                   <div>footer</div>
                 </ReactTooltip>
               </div>
@@ -907,6 +833,6 @@ export default class App extends Component {
           </div>
         </section>
       </div>
-    );
+    )
   }
 }

@@ -1,8 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { StrictMode, version } from 'react'
+import { createRoot } from 'react-dom/client'
+import 'react-tooltip/dist/react-tooltip.css'
+import './index.css'
+import App from './App'
+// import { App } from 'react-tooltip'
 
-import './index.css';
+console.log('Loaded React version: ', version)
 
-import App from './App';
-
-ReactDOM.render(<App />, document.getElementById('root'));
+const container = document.getElementById('root')
+const root = createRoot(container)
+root.render(<StrictMode>{<App />}</StrictMode>)

@@ -1,4 +1,3 @@
-import analyze from 'rollup-plugin-analyzer'
 import commonjs from '@rollup/plugin-commonjs'
 import filesize from 'rollup-plugin-filesize'
 import postcss from 'rollup-plugin-postcss'
@@ -14,7 +13,7 @@ const input = ['src/index.tsx']
 
 const name = 'ReactTooltip'
 
-const external = ['react', 'react-dom', 'prop-types', 'classnames']
+const external = ['react', 'react-dom', 'prop-types']
 
 const globals = {
   react: 'React',
@@ -23,7 +22,8 @@ const globals = {
   'prop-types': 'PropTypes',
 }
 
-const plugins = [
+// splitted to be reusable by minified css build and unminified css
+const pluginsBeforePostCSS = [
   progress(),
   replace({
     preventAssignment: true,
@@ -31,13 +31,10 @@ const plugins = [
       'process.env.NODE_ENV': JSON.stringify('development'),
     },
   }),
-  postcss({
-    extract: true,
-    autoModules: true,
-    include: '**/*.css',
-    extensions: ['.css'],
-    plugins: [],
-  }),
+]
+
+// splitted to be reusable by minified css build and unminified css
+const pluginsAfterPostCSS = [
   nodeResolve(),
   ts({
     typescript,
@@ -49,27 +46,50 @@ const plugins = [
   commonjs({
     include: 'node_modules/**',
   }),
-  terser(),
-  analyze(),
-  filesize(),
 ]
 
-const outputData = [
-  {
-    file: pkg.browser,
-    format: 'umd',
-  },
-  {
-    file: pkg.main,
-    format: 'cjs',
-  },
-  {
-    file: pkg.module,
-    format: 'es',
-  },
+const plugins = [
+  ...pluginsBeforePostCSS,
+  postcss({
+    // extract: true, // this will generate a css file based on output file name
+    extract: 'react-tooltip.css', // this will generate a specific file and override on multiples build, but the css will be the same
+    autoModules: true,
+    include: '**/*.css',
+    extensions: ['.css'],
+    plugins: [],
+  }),
+  ...pluginsAfterPostCSS,
 ]
 
-const config = outputData.map(({ file, format }) => ({
+const pluginsForCSSMinification = [
+  ...pluginsBeforePostCSS,
+  postcss({
+    extract: 'react-tooltip.min.css', // this will generate a specific file and override on multiples build, but the css will be the same
+    autoModules: true,
+    include: '**/*.css',
+    extensions: ['.css'],
+    plugins: [],
+    minimize: true,
+  }),
+  ...pluginsAfterPostCSS,
+]
+
+const defaultOutputData = pkg.buildFormats.map(({ file, format }) => ({
+  file,
+  format,
+  plugins: [...plugins, filesize()],
+}))
+
+// this step is just to build the minified css and es modules javascript
+const minifiedOutputData = pkg.buildFormats.map(({ file, format }) => ({
+  file: file.replace('.js', '.min.js'),
+  format,
+  plugins: [...pluginsForCSSMinification, terser(), filesize()],
+}))
+
+const outputData = [...minifiedOutputData, ...defaultOutputData]
+
+const config = outputData.map(({ file, format, plugins: specificPLugins }) => ({
   input,
   output: {
     file,
@@ -78,7 +98,7 @@ const config = outputData.map(({ file, format }) => ({
     globals,
   },
   external,
-  plugins,
+  plugins: specificPLugins,
 }))
 
 export default config
