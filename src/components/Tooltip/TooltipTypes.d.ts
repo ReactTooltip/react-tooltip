@@ -1,12 +1,16 @@
+export type PlacesType = 'top' | 'right' | 'bottom' | 'left'
+
+export type VariantType = 'dark' | 'light' | 'success' | 'warning' | 'error' | 'info'
+
 export interface ITooltip {
   className?: string
   classNameArrow?: string
   content?: string | number
   html?: string
-  place?: 'top' | 'right' | 'bottom' | 'left'
+  place?: PlacesType
   offset?: number
   id?: string
-  variant?: 'dark' | 'light' | 'success' | 'warning' | 'error' | 'info'
+  variant?: VariantType
   anchorId
   isHtmlContent?: boolean
 }

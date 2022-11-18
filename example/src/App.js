@@ -49,6 +49,7 @@ export default class App extends Component {
               id="mainTooltipReferenceElement"
               data-content="Hello<br />multiline<br />tooltip"
               data-iscapture="true"
+              data-place={place}
             >
               ◕‿‿◕
             </a>
@@ -157,7 +158,7 @@ export default class App extends Component {
           <ReactTooltip
             anchorId="mainTooltipReferenceElement"
             // htmlContent="<strong>Hello</strong> world!"
-            place={place}
+            // place={place}
             type={type}
             effect={effect}
             multiline={true}

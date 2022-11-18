@@ -13,7 +13,7 @@ const Tooltip = ({
   classNameArrow,
   variant = 'dark',
   anchorId,
-  place,
+  place = 'top',
   offset,
 
   // props handled by controller
