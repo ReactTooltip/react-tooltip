@@ -11,12 +11,13 @@ export default class App extends Component {
       variant: 'dark',
       effect: 'float',
       condition: false,
+      offset: 10,
     }
   }
 
   changePlace(place) {
     this.setState({
-      place: place,
+      place,
     })
   }
 
@@ -28,7 +29,13 @@ export default class App extends Component {
 
   changeEffect(effect) {
     this.setState({
-      effect: effect,
+      effect,
+    })
+  }
+
+  changeOffset(offset) {
+    this.setState({
+      offset,
     })
   }
 
@@ -39,7 +46,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { place, type, effect } = this.state
+    const { place, variant, effect, offset } = this.state
     return (
       <div>
         <section className="tooltip-example">
@@ -50,6 +57,8 @@ export default class App extends Component {
               data-content="Hello<br />multiline<br />tooltip"
               data-iscapture="true"
               data-place={place}
+              data-variant={variant}
+              data-offset={offset}
             >
               ◕‿‿◕
             </a>
@@ -84,42 +93,75 @@ export default class App extends Component {
                 </a>
               </div>
               <div className="item">
-                <p>Type</p>
+                <p>Variant</p>
                 <a
-                  className={type === 'dark' ? 'active' : ''}
+                  className={variant === 'dark' ? 'active' : ''}
                   onClick={this.changeVariant.bind(this, 'dark')}
                 >
                   Dark<span className="mark">(default)</span>
                 </a>
                 <a
-                  className={type === 'success' ? 'active' : ''}
+                  className={variant === 'success' ? 'active' : ''}
                   onClick={this.changeVariant.bind(this, 'success')}
                 >
                   Success
                 </a>
                 <a
-                  className={type === 'warning' ? 'active' : ''}
+                  className={variant === 'warning' ? 'active' : ''}
                   onClick={this.changeVariant.bind(this, 'warning')}
                 >
                   Warning
                 </a>
                 <a
-                  className={type === 'error' ? 'active' : ''}
+                  className={variant === 'error' ? 'active' : ''}
                   onClick={this.changeVariant.bind(this, 'error')}
                 >
                   Error
                 </a>
                 <a
-                  className={type === 'info' ? 'active' : ''}
+                  className={variant === 'info' ? 'active' : ''}
                   onClick={this.changeVariant.bind(this, 'info')}
                 >
                   Info
                 </a>
                 <a
-                  className={type === 'light' ? 'active' : ''}
+                  className={variant === 'light' ? 'active' : ''}
                   onClick={this.changeVariant.bind(this, 'light')}
                 >
                   Light
+                </a>
+              </div>
+              <div className="item">
+                <p>Offset (any number)</p>
+                <a
+                  className={offset === 10 ? 'active' : ''}
+                  onClick={this.changeOffset.bind(this, 10)}
+                >
+                  10<span className="mark">(default)</span>
+                </a>
+                <a
+                  className={offset === 20 ? 'active' : ''}
+                  onClick={this.changeOffset.bind(this, 20)}
+                >
+                  20
+                </a>
+                <a
+                  className={offset === 30 ? 'active' : ''}
+                  onClick={this.changeOffset.bind(this, 30)}
+                >
+                  30
+                </a>
+                <a
+                  className={offset === 40 ? 'active' : ''}
+                  onClick={this.changeOffset.bind(this, 40)}
+                >
+                  40
+                </a>
+                <a
+                  className={offset === 50 ? 'active' : ''}
+                  onClick={this.changeOffset.bind(this, 50)}
+                >
+                  50
                 </a>
               </div>
               <div className="item">
@@ -146,8 +188,8 @@ export default class App extends Component {
                 <p>
                   {'<ReactTooltip place="' +
                     place +
-                    '" type="' +
-                    type +
+                    '" variant="' +
+                    variant +
                     '" effect="' +
                     effect +
                     '"/>'}
@@ -158,8 +200,6 @@ export default class App extends Component {
           <ReactTooltip
             anchorId="mainTooltipReferenceElement"
             // htmlContent="<strong>Hello</strong> world!"
-            // place={place}
-            type={type}
             effect={effect}
             multiline={true}
           />
@@ -174,7 +214,7 @@ export default class App extends Component {
                 <a data-tip data-for="happyFace">
                   d(`･∀･)b
                 </a>
-                <ReactTooltip id="happyFace" type="error">
+                <ReactTooltip id="happyFace" variant="error">
                   <span>Show happy face</span>
                 </ReactTooltip>
               </div>
@@ -182,7 +222,7 @@ export default class App extends Component {
                 <a data-tip data-for="sadFace">
                   இдஇ
                 </a>
-                <ReactTooltip id="sadFace" type="warning" effect="solid">
+                <ReactTooltip id="sadFace" variant="warning" effect="solid">
                   <span>Show sad face</span>
                 </ReactTooltip>
               </div>
@@ -192,13 +232,13 @@ export default class App extends Component {
               <div>
                 <p>
                   {"<a data-tip data-for='happyFace'> d(`･∀･)b </a>\n" +
-                    "<ReactTooltip id='happyFace' type='error'>\n" +
+                    "<ReactTooltip id='happyFace' variant='error'>\n" +
                     ' ' +
                     ' ' +
                     '<span>Show happy face</span>\n' +
                     '</ReactTooltip>\n' +
                     "<a data-tip data-for='sadFace'> இдஇ </a>\n" +
-                    "<ReactTooltip id='sadFace' type='warning' effect='solid'>\n" +
+                    "<ReactTooltip id='sadFace' variant='warning' effect='solid'>\n" +
                     ' ' +
                     ' ' +
                     '<span>Show sad face</span>\n' +
@@ -716,7 +756,7 @@ export default class App extends Component {
                 delayUpdate={500}
                 place="right"
                 border={true}
-                type="light"
+                variant="light"
               />
             </div>
             <br />
@@ -735,7 +775,7 @@ export default class App extends Component {
                     '  delayUpdate={500}\n' +
                     "  place={'right'}\n" +
                     '  border={true}\n' +
-                    "  type={'light'}\n" +
+                    "  variant={'light'}\n" +
                     '/>'}
                 </p>
               </div>

@@ -14,7 +14,7 @@ const Tooltip = ({
   variant = 'dark',
   anchorId,
   place = 'top',
-  offset,
+  offset = 10,
 
   // props handled by controller
   isHtmlContent = false,

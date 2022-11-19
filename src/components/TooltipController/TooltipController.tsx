@@ -10,13 +10,14 @@ const TooltipController = ({
   html,
   className,
   classNameArrow,
-  variant,
+  variant = 'dark',
   place = 'top',
-  offset,
+  offset = 10,
 }: ITooltipController) => {
   const [tooltipContent, setTooltipContent] = useState(content || html)
   const [tooltipPlace, setTooltipPlace] = useState(place)
   const [tooltipVariant, setTooltipVariant] = useState(variant)
+  const [tooltipOffset, setTooltipOffset] = useState(offset)
   const [isHtmlContent, setIsHtmlContent] = useState<boolean>(Boolean(html))
 
   const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
@@ -39,9 +40,7 @@ const TooltipController = ({
 
     const handleDataAttributes = {
       place: (value: PlacesType) => {
-        if (tooltipPlace !== value) {
-          setTooltipPlace(value)
-        }
+        setTooltipPlace(value)
       },
       content: (value: string) => {
         setIsHtmlContent(true)
@@ -52,9 +51,10 @@ const TooltipController = ({
         setTooltipContent(value)
       },
       variant: (value: VariantType) => {
-        if (tooltipVariant !== value) {
-          setTooltipVariant(value)
-        }
+        setTooltipVariant(value)
+      },
+      offset: (value: number) => {
+        setTooltipOffset(value)
       },
     }
 
@@ -125,6 +125,8 @@ const TooltipController = ({
       content={tooltipContent}
       isHtmlContent={isHtmlContent}
       place={tooltipPlace}
+      variant={tooltipVariant}
+      offset={tooltipOffset}
     />
   )
 }

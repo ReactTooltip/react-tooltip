@@ -3,4 +3,5 @@ export const dataAttributesKeys = [
   'content', // content of tooltip
   'html', // html content of tooltip
   'variant', // variant of tooltip
+  'offset', // offset of tooltip
 ]

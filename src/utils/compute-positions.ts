@@ -18,7 +18,7 @@ export const computeToolTipPosition = async ({
     return { tooltipStyles: {}, tooltipArrowStyles: {} }
   }
 
-  const middleware = [offset(offsetValue), flip(), shift({ padding: 5 })]
+  const middleware = [offset(Number(offsetValue)), flip(), shift({ padding: 5 })]
 
   if (tooltipArrowReference) {
     middleware.push(arrow({ element: tooltipArrowReference as HTMLElement }))
