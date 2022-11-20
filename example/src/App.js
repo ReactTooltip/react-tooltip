@@ -291,37 +291,61 @@ export default class App extends Component {
             <h4 className="title">Custom event</h4>
             <p className="sub-title" />
             <div className="example-jsx">
-              <div className="side">
-                <a data-for="custom-event" data-tip="custom show" data-event="click focus">
-                  ( •̀д•́)
-                </a>
-                <ReactTooltip id="custom-event" globalEventOff="click" />
-              </div>
-              <div className="side">
+              <div className="side-3">
                 <a
-                  data-for="custom-off-event"
-                  ref={(ref) => (this.targetRef = ref)}
-                  data-tip="custom show and hide"
-                  data-event="click"
-                  data-event-off="dblclick"
+                  id="customEventHoverOnlyAnchor"
+                  data-content="default show and hide using hover events only"
                 >
                   ( •̀д•́)
                 </a>
-                <ReactTooltip id="custom-off-event" />
+                <ReactTooltip anchorId="customEventHoverOnlyAnchor" events={['hover']} />
+              </div>
+              <div className="side-3">
+                <a
+                  id="customEventClickOnlyAnchor"
+                  data-content="custom show and hide using click event only"
+                >
+                  ( •̀д•́)
+                </a>
+                <ReactTooltip anchorId="customEventClickOnlyAnchor" events={['click']} />
+              </div>
+              <div className="side-3">
+                <a
+                  id="customClickAndHoverEvent"
+                  data-content="custom show and hide using click and hover event"
+                  data-events="click hover"
+                >
+                  ( •̀д•́)
+                </a>
+                <ReactTooltip anchorId="customClickAndHoverEvent" />
               </div>
             </div>
             <br />
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<a data-tip='custom show' data-event='click focus'>( •̀д•́)</a>\n" +
-                    "<ReactTooltip globalEventOff='click' />"}
+                  {'<a \n id="customEventHoverOnlyAnchor" \n data-content="default show and hide using hover events only"\n>( •̀д•́)</a>\n' +
+                    '<ReactTooltip anchorId="customEventHoverOnlyAnchor" events={[\'hover\']} />'}
                 </p>
               </div>
               <div>
                 <p>
-                  {"<a data-tip='custom show and hide' data-event='click' data-event-off='dblclick'>( •̀д•́)</a>\n" +
-                    '<ReactTooltip/>'}
+                  {'<a \n id="customEventClickOnlyAnchor" \n data-content="custom show and hide using click event only"\n>( •̀д•́)</a>\n' +
+                    '<ReactTooltip anchorId="customEventClickOnlyAnchor" events={[\'click\']} />'}
+                </p>
+              </div>
+              <div>
+                ------------------------------------------------ <br /> Option 1 for events
+                <p>
+                  {'<a \n id="customClickAndHoverEvent" \n data-content="custom show and hide using click and hover event" \n data-events="click hover"\n>( •̀д•́)</a>\n' +
+                    '<ReactTooltip anchorId="customClickAndHoverEvent" />'}
+                </p>
+              </div>
+              <div>
+                ------------------------------------------------ <br /> Option 2 for events
+                <p>
+                  {'<a \n id="customClickAndHoverEvent" \n data-content="custom show and hide using click and hover event"\n>( •̀д•́)</a>\n' +
+                    "<ReactTooltip anchorId=\"customClickAndHoverEvent\" events={['click', 'hover']} />"}
                 </p>
               </div>
             </pre>

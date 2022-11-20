@@ -8,6 +8,8 @@ export type WrapperType = ElementType | 'div' | 'span'
 
 export type ChildrenType = Element | ElementType | ReactNode
 
+export type EventsType = 'hover' | 'click'
+
 export interface ITooltip {
   className?: string
   classNameArrow?: string
@@ -17,8 +19,9 @@ export interface ITooltip {
   offset?: number
   id?: string
   variant?: VariantType
-  anchorId
+  anchorId: string
   isHtmlContent?: boolean
   wrapper: WrapperType
   children?: ChildrenType
+  events?: EventsType[]
 }

@@ -3,6 +3,7 @@ import type {
   VariantType,
   WrapperType,
   ChildrenType,
+  EventsType,
 } from 'components/Tooltip/TooltipTypes'
 
 export interface ITooltipController {
@@ -14,7 +15,8 @@ export interface ITooltipController {
   offset?: number
   id?: string
   variant?: VariantType
-  anchorId
+  anchorId: string
   wrapper?: WrapperType
   children?: ChildrenType
+  events?: EventsType[]
 }

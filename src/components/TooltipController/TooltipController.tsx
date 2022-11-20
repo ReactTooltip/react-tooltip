@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Tooltip } from 'components/Tooltip'
-import type { PlacesType, VariantType, WrapperType } from 'components/Tooltip/TooltipTypes'
+import type {
+  EventsType,
+  PlacesType,
+  VariantType,
+  WrapperType,
+} from 'components/Tooltip/TooltipTypes'
 import { dataAttributesKeys } from './constants'
 import type { ITooltipController } from './TooltipControllerTypes'
 
@@ -15,12 +20,14 @@ const TooltipController = ({
   offset = 10,
   wrapper = 'div',
   children = null,
+  events = ['hover'],
 }: ITooltipController) => {
   const [tooltipContent, setTooltipContent] = useState(content || html)
   const [tooltipPlace, setTooltipPlace] = useState(place)
   const [tooltipVariant, setTooltipVariant] = useState(variant)
   const [tooltipOffset, setTooltipOffset] = useState(offset)
   const [tooltipWrapper, setTooltipWrapper] = useState<WrapperType>(wrapper)
+  const [tooltipEvents, setTooltipEvents] = useState<EventsType[]>(events)
   const [isHtmlContent, setIsHtmlContent] = useState<boolean>(Boolean(html))
 
   const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
@@ -62,6 +69,10 @@ const TooltipController = ({
       wrapper: (value: WrapperType) => {
         setTooltipWrapper(value)
       },
+      events: (value: string) => {
+        const parsedEvents = value.split(' ')
+        setTooltipEvents(parsedEvents as EventsType[])
+      },
     }
 
     keys.forEach((key) => {
@@ -92,6 +103,8 @@ const TooltipController = ({
       return () => {}
     }
 
+    // do not check for subtree and childrens, we only want to know attribute changes
+    // to stay watching `data-attributes` from anchor element
     const observerConfig = { attributes: true, childList: false, subtree: false }
 
     const observerCallback = (mutationList: any) => {
@@ -120,7 +133,7 @@ const TooltipController = ({
     applyAllDataAttributesFromAnchorElement(dataAttributes)
 
     return () => {
-      // Later, you can stop observing
+      // Remove the observer when the tooltip is destroyed
       observer.disconnect()
     }
   }, [anchorId])
@@ -136,6 +149,7 @@ const TooltipController = ({
       variant={tooltipVariant}
       offset={tooltipOffset}
       wrapper={tooltipWrapper}
+      events={tooltipEvents}
     >
       {children}
     </Tooltip>
@@ -150,6 +164,7 @@ const TooltipController = ({
       variant={tooltipVariant}
       offset={tooltipOffset}
       wrapper={tooltipWrapper}
+      events={tooltipEvents}
     />
   )
 }

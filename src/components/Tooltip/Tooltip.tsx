@@ -15,7 +15,7 @@ const Tooltip = ({
   anchorId,
   place = 'top',
   offset = 10,
-  // events = 'hover',
+  events = ['hover'],
   wrapper: WrapperElement = 'div',
   children = null,
 
@@ -49,31 +49,36 @@ const Tooltip = ({
   useEffect(() => {
     const elementReference = document.querySelector(`#${anchorId}`)
 
-    console.log(anchorId, content)
-
     if (!elementReference) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       return () => {}
     }
 
-    const events = [
-      { event: 'click', listener: handleClickTooltip },
-      { event: 'mouseenter', listener: debouncedHandleShowTooltip },
-      { event: 'mouseleave', listener: debouncedHandleHideTooltip },
-      { event: 'focus', listener: debouncedHandleShowTooltip },
-      { event: 'blur', listener: debouncedHandleHideTooltip },
-    ]
+    const enabledEvents: { event: string; listener: () => void }[] = []
 
-    events.forEach(({ event, listener }) => {
+    if (events.find((event: string) => event === 'click')) {
+      enabledEvents.push({ event: 'click', listener: handleClickTooltip })
+    }
+
+    if (events.find((event: string) => event === 'hover')) {
+      enabledEvents.push(
+        { event: 'mouseenter', listener: debouncedHandleShowTooltip },
+        { event: 'mouseleave', listener: debouncedHandleHideTooltip },
+        { event: 'focus', listener: debouncedHandleShowTooltip },
+        { event: 'blur', listener: debouncedHandleHideTooltip },
+      )
+    }
+
+    enabledEvents.forEach(({ event, listener }) => {
       elementReference?.addEventListener(event, listener)
     })
 
     return () => {
-      events.forEach(({ event, listener }) => {
+      enabledEvents.forEach(({ event, listener }) => {
         elementReference?.removeEventListener(event, listener)
       })
     }
-  }, [anchorId])
+  }, [anchorId, events])
 
   useEffect(() => {
     const elementReference = document.querySelector(`#${anchorId}`)

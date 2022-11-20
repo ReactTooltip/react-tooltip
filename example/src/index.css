@@ -173,6 +173,11 @@ body {
   float: left;
   box-sizing: border-box;
 }
+.example-jsx .side-3 {
+  width: 33.333%;
+  float: left;
+  box-sizing: border-box;
+}
 .example-jsx a {
   text-align: center;
   width: 55px;

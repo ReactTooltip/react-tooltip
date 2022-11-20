@@ -5,4 +5,5 @@ export const dataAttributesKeys = [
   'variant', // variant of tooltip
   'offset', // offset of tooltip
   'wrapper', // wrapper of tooltip
+  'events', // events of tooltip
 ]
