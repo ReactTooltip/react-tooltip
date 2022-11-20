@@ -12,6 +12,7 @@ export default class App extends Component {
       effect: 'float',
       condition: false,
       offset: 10,
+      wrapper: 'div',
     }
   }
 
@@ -39,6 +40,12 @@ export default class App extends Component {
     })
   }
 
+  changeWrapper(wrapper) {
+    this.setState({
+      wrapper,
+    })
+  }
+
   _onClick() {
     this.setState({
       condition: true,
@@ -46,19 +53,20 @@ export default class App extends Component {
   }
 
   render() {
-    const { place, variant, effect, offset } = this.state
+    const { place, variant, effect, offset, wrapper } = this.state
     return (
       <div>
         <section className="tooltip-example">
           <h4 className="title">React Tooltip</h4>
           <div className="demonstration">
             <a
-              id="mainTooltipReferenceElement"
+              id="exampleTooltip"
               data-content="Hello<br />multiline<br />tooltip"
               data-iscapture="true"
               data-place={place}
               data-variant={variant}
               data-offset={offset}
+              data-wrapper={wrapper}
             >
               ◕‿‿◕
             </a>
@@ -165,6 +173,27 @@ export default class App extends Component {
                 </a>
               </div>
               <div className="item">
+                <p>Wrapper</p>
+                <a
+                  className={wrapper === 'div' ? 'active' : ''}
+                  onClick={this.changeWrapper.bind(this, 'div')}
+                >
+                  div<span className="mark">(default)</span>
+                </a>
+                <a
+                  className={wrapper === 'span' ? 'active' : ''}
+                  onClick={this.changeWrapper.bind(this, 'span')}
+                >
+                  span
+                </a>
+                <a
+                  className={wrapper === 'section' ? 'active' : ''}
+                  onClick={this.changeWrapper.bind(this, 'section')}
+                >
+                  section
+                </a>
+              </div>
+              <div className="item">
                 <p>Effect</p>
                 <a
                   className={effect === 'float' ? 'active' : ''}
@@ -182,27 +211,40 @@ export default class App extends Component {
             </div>
             <pre>
               <div>
-                <p className="label">Code</p>
+                <p className="label">Code - Example 1</p>
                 <hr />
-                <p>{'<a data-tip="React-tooltip"> ◕‿‿◕ </a>'}</p>
                 <p>
-                  {'<ReactTooltip place="' +
-                    place +
-                    '" variant="' +
-                    variant +
-                    '" effect="' +
-                    effect +
-                    '"/>'}
+                  {`<a
+  id="exampleTooltip"
+  data-content="Hello<br />multiline<br />tooltip"
+  data-place={place}
+  data-variant={variant}
+  data-offset={offset}
+  data-wrapper={wrapper}
+>
+◕‿‿◕
+</a>`}
                 </p>
+                <p>{'<ReactTooltip anchorId="exampleTooltip"/>'}</p>
+              </div>
+            </pre>
+            <pre>
+              <div>
+                <p className="label">Code - Example 2</p>
+                <hr />
+                <p>{`<a id="exampleTooltip">◕‿‿◕</a>`}</p>
+                <p>{`<ReactTooltip
+  anchorId="exampleTooltip"
+  content="Hello<br />multiline<br />tooltip"
+  place={place}
+  variant={variant}
+  offset={offset}
+  wrapper={wrapper}
+/>`}</p>
               </div>
             </pre>
           </div>
-          <ReactTooltip
-            anchorId="mainTooltipReferenceElement"
-            // htmlContent="<strong>Hello</strong> world!"
-            effect={effect}
-            multiline={true}
-          />
+          <ReactTooltip anchorId="exampleTooltip" />
         </section>
         <section className="advance">
           <div className="section">
@@ -211,18 +253,14 @@ export default class App extends Component {
 
             <div className="example-jsx">
               <div className="side" style={{ transform: 'translate3d(5px, 5px, 5px)' }}>
-                <a data-tip data-for="happyFace">
-                  d(`･∀･)b
-                </a>
-                <ReactTooltip id="happyFace" variant="error">
+                <a id="happyFaceError">d(`･∀･)b</a>
+                <ReactTooltip anchorId="happyFaceError" variant="error">
                   <span>Show happy face</span>
                 </ReactTooltip>
               </div>
               <div className="side">
-                <a data-tip data-for="sadFace">
-                  இдஇ
-                </a>
-                <ReactTooltip id="sadFace" variant="warning" effect="solid">
+                <a id="sadFaceWarning">இдஇ</a>
+                <ReactTooltip anchorId="sadFaceWarning" variant="warning">
                   <span>Show sad face</span>
                 </ReactTooltip>
               </div>
@@ -231,61 +269,17 @@ export default class App extends Component {
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<a data-tip data-for='happyFace'> d(`･∀･)b </a>\n" +
-                    "<ReactTooltip id='happyFace' variant='error'>\n" +
+                  {'<a id="happyFaceError"> d(`･∀･)b </a>\n' +
+                    '<ReactTooltip anchorId="happyFaceError" variant=\'error\'>\n' +
                     ' ' +
                     ' ' +
                     '<span>Show happy face</span>\n' +
                     '</ReactTooltip>\n' +
-                    "<a data-tip data-for='sadFace'> இдஇ </a>\n" +
-                    "<ReactTooltip id='sadFace' variant='warning' effect='solid'>\n" +
+                    '<a id="sadFaceWarning"> இдஇ </a>\n' +
+                    '<ReactTooltip anchorId="sadFaceWarning" variant=\'warning\'>\n' +
                     ' ' +
                     ' ' +
                     '<span>Show sad face</span>\n' +
-                    '</ReactTooltip>'}
-                </p>
-              </div>
-            </pre>
-            <div className="example-jsx">
-              <div className="side">
-                <a data-tip data-for="global">
-                  σ`∀´)σ
-                </a>
-              </div>
-              <div className="side">
-                <a data-tip data-for="global">
-                  (〃∀〃)
-                </a>
-              </div>
-              <ReactTooltip id="global" aria-haspopup="true">
-                <p>This is a global react component tooltip</p>
-                <p>You can put every thing here</p>
-                <ul>
-                  <li>Word</li>
-                  <li>Chart</li>
-                  <li>Else</li>
-                </ul>
-              </ReactTooltip>
-            </div>
-            <pre className="example-pre">
-              <div>
-                <p>
-                  {"<a data-tip data-for='global'> σ`∀´)σ </a>\n" +
-                    "<a data-tip data-for='global'> (〃∀〃) </a>\n" +
-                    "<ReactTooltip id='global' aria-haspopup='true' >\n" +
-                    ' <p>This is a global react component tooltip</p>\n' +
-                    ' <p>You can put every thing here</p>\n' +
-                    ' <ul>\n' +
-                    ' ' +
-                    ' ' +
-                    ' <li>Word</li>\n' +
-                    ' ' +
-                    ' ' +
-                    ' <li>Chart</li>\n' +
-                    ' ' +
-                    ' ' +
-                    ' <li>Else</li>\n' +
-                    ' </ul>\n' +
                     '</ReactTooltip>'}
                 </p>
               </div>

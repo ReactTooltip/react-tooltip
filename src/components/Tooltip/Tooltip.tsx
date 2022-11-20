@@ -15,6 +15,9 @@ const Tooltip = ({
   anchorId,
   place = 'top',
   offset = 10,
+  // events = 'hover',
+  wrapper: WrapperElement = 'div',
+  children = null,
 
   // props handled by controller
   isHtmlContent = false,
@@ -34,11 +37,19 @@ const Tooltip = ({
     setShow(false)
   }
 
+  const handleClickTooltip = () => {
+    setShow((currentValue) => !currentValue)
+  }
+
+  // debounce handler to prevent call twice when
+  // mouse enter and focus events being triggered toggether
   const debouncedHandleShowTooltip = debounce(handleShowTooltip, 50)
   const debouncedHandleHideTooltip = debounce(handleHideTooltip, 50)
 
   useEffect(() => {
     const elementReference = document.querySelector(`#${anchorId}`)
+
+    console.log(anchorId, content)
 
     if (!elementReference) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -46,6 +57,7 @@ const Tooltip = ({
     }
 
     const events = [
+      { event: 'click', listener: handleClickTooltip },
       { event: 'mouseenter', listener: debouncedHandleShowTooltip },
       { event: 'mouseleave', listener: debouncedHandleHideTooltip },
       { event: 'focus', listener: debouncedHandleShowTooltip },
@@ -84,7 +96,7 @@ const Tooltip = ({
   }, [show, anchorId])
 
   return (
-    <div
+    <WrapperElement
       id={id}
       role="tooltip"
       className={classNames(styles['tooltip'], styles[variant], className, {
@@ -93,13 +105,13 @@ const Tooltip = ({
       style={inlineStyles}
       ref={tooltipRef as React.RefObject<HTMLDivElement>}
     >
-      {isHtmlContent ? <TooltipContent content={content as string} /> : content}
+      {children || (isHtmlContent ? <TooltipContent content={content as string} /> : content)}
       <div
         className={classNames(styles['arrow'], classNameArrow)}
         style={inlineArrowStyles}
         ref={tooltipArrowRef as React.RefObject<HTMLDivElement>}
       />
-    </div>
+    </WrapperElement>
   )
 }
 

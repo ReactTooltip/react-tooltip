@@ -1,11 +1,20 @@
+import type {
+  PlacesType,
+  VariantType,
+  WrapperType,
+  ChildrenType,
+} from 'components/Tooltip/TooltipTypes'
+
 export interface ITooltipController {
   className?: string
   classNameArrow?: string
   content?: string | number
   html?: string
-  place?: 'top' | 'right' | 'bottom' | 'left'
+  place?: PlacesType
   offset?: number
   id?: string
-  variant?: 'dark' | 'light' | 'success' | 'warning' | 'error' | 'info'
+  variant?: VariantType
   anchorId
+  wrapper?: WrapperType
+  children?: ChildrenType
 }
