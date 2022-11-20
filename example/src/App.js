@@ -288,6 +288,70 @@ export default class App extends Component {
         </section>
         <section className="advance">
           <div className="section">
+            <h4 className="title">Events</h4>
+            <p className="sub-title" />
+            <div className="example-jsx">
+              <div className="side-3">
+                <a
+                  id="eventHoverOnlyAnchor"
+                  data-content="default show and hide using hover events only"
+                >
+                  ( •̀д•́)
+                </a>
+                <ReactTooltip anchorId="eventHoverOnlyAnchor" events={['hover']} />
+              </div>
+              <div className="side-3">
+                <a
+                  id="eventClickOnlyAnchor"
+                  data-content="custom show and hide using click event only"
+                >
+                  ( •̀д•́)
+                </a>
+                <ReactTooltip anchorId="eventClickOnlyAnchor" events={['click']} />
+              </div>
+              <div className="side-3">
+                <a
+                  id="clickAndHoverEvent"
+                  data-content="custom show and hide using click and hover event"
+                  data-events="click hover"
+                >
+                  ( •̀д•́)
+                </a>
+                <ReactTooltip anchorId="clickAndHoverEvent" />
+              </div>
+            </div>
+            <br />
+            <pre className="example-pre">
+              <div>
+                <p>
+                  {'<a \n id="eventHoverOnlyAnchor" \n data-content="default show and hide using hover events only"\n>( •̀д•́)</a>\n' +
+                    '<ReactTooltip anchorId="eventHoverOnlyAnchor" events={[\'hover\']} />'}
+                </p>
+              </div>
+              <div>
+                <p>
+                  {'<a \n id="eventClickOnlyAnchor" \n data-content="custom show and hide using click event only"\n>( •̀д•́)</a>\n' +
+                    '<ReactTooltip anchorId="eventClickOnlyAnchor" events={[\'click\']} />'}
+                </p>
+              </div>
+              <div>
+                ------------------------------------------------ <br /> Option 1 for events
+                <p>
+                  {'<a \n id="clickAndHoverEvent" \n data-content="custom show and hide using click and hover event" \n data-events="click hover"\n>( •̀д•́)</a>\n' +
+                    '<ReactTooltip anchorId="clickAndHoverEvent" />'}
+                </p>
+              </div>
+              <div>
+                ------------------------------------------------ <br /> Option 2 for events
+                <p>
+                  {'<a \n id="clickAndHoverEvent" \n data-content="custom show and hide using click and hover event"\n>( •̀д•́)</a>\n' +
+                    "<ReactTooltip anchorId=\"clickAndHoverEvent\" events={['click', 'hover']} />"}
+                </p>
+              </div>
+            </pre>
+          </div>
+
+          <div className="section">
             <h4 className="title">Custom event</h4>
             <p className="sub-title" />
             <div className="example-jsx">
