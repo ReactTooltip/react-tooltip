@@ -517,15 +517,69 @@ export default class App extends Component {
           </div>
 
           <div className="section">
-            <h4 className="title">Theme and delay</h4>
+            <h4 className="title">Delays</h4>
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="side">
-                <a data-for="custom-class" data-tip="hover on me will keep the tooltip">
+                <a
+                  id="delayShowAnchor"
+                  data-content="delayed 3 seconds tooltip content"
+                  data-delay-show={3000}
+                >
+                  (･ω´･ )
+                </a>
+                <ReactTooltip anchorId="delayShowAnchor" />
+              </div>
+              <div className="side">
+                <a
+                  id="delayHideAnchor"
+                  data-content="hover on me will keep the tooltip"
+                  data-delay-hide={3000}
+                >
+                  (･ω´･ )
+                </a>
+                <ReactTooltip anchorId="delayHideAnchor" />
+              </div>
+            </div>
+            <br />
+            <pre className="example-pre">
+              <div>
+                <p>
+                  {`<a
+  id="delayShowAnchor"
+  data-content="delayed 3 seconds tooltip content"
+  data-delay-show={3000}
+>
+  (･ω´･ )
+</a>
+<ReactTooltip anchorId="delayShowAnchor" />`}
+                </p>
+              </div>
+              <div>
+                <p>
+                  {`<a
+  id="delayHideAnchor"
+  data-content="hover on me will keep the tooltip"
+  data-delay-hide={3000}
+>
+  (･ω´･ )
+</a>
+<ReactTooltip anchorId="delayHideAnchor" />`}
+                </p>
+              </div>
+            </pre>
+          </div>
+
+          <div className="section">
+            <h4 className="title">Custom Classes</h4>
+            <p className="sub-title" />
+            <div className="example-jsx">
+              <div className="side">
+                <a id="delayShowAnchor" data-tip="hover on me will keep the tooltip">
                   (･ω´･ )
                 </a>
                 <ReactTooltip
-                  id="custom-class"
+                  anchorId="customClassAnchor"
                   className="extraClass"
                   delayHide={1000}
                   effect="solid"

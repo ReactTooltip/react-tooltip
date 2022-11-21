@@ -222,6 +222,7 @@ body {
 .extraClass {
   font-size: 20px !important;
   pointer-events: auto !important;
+  background-color: #1182dd;
 }
 .extraClass:hover {
   visibility: visible !important;

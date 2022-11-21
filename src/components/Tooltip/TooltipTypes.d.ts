@@ -24,4 +24,6 @@ export interface ITooltip {
   wrapper: WrapperType
   children?: ChildrenType
   events?: EventsType[]
+  delayShow?: number
+  delayHide?: number
 }

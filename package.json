@@ -57,13 +57,13 @@
     "commitizen": "^4.2.5",
     "css-loader": "6.7.2",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "8.27.0",
+    "eslint": "8.28.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.27.1",
+    "eslint-plugin-react": "7.31.11",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^8.0.1",
     "lint-staged": "13.0.3",
@@ -117,7 +117,7 @@
   "dependencies": {
     "@floating-ui/dom": "^1.0.4",
     "@floating-ui/react-dom": "^1.0.0",
-    "@floating-ui/react-dom-interactions": "^0.10.3",
+    "@floating-ui/react-dom-interactions": "0.11.0",
     "classnames": "^2.3.2"
   }
 }

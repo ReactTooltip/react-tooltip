@@ -1,4 +1,4 @@
-import { createRef, useEffect, useState, useId } from 'react'
+import { createRef, useEffect, useState, useId, useRef } from 'react'
 import classNames from 'classnames'
 import debounce from 'utils/debounce'
 import { TooltipContent } from 'components/TooltipContent'
@@ -18,23 +18,62 @@ const Tooltip = ({
   events = ['hover'],
   wrapper: WrapperElement = 'div',
   children = null,
-
+  delayShow = 0,
+  delayHide = 0,
   // props handled by controller
   isHtmlContent = false,
   content,
 }: ITooltip) => {
   const tooltipRef = createRef()
   const tooltipArrowRef = createRef()
+  const tooltipShowDelayTimerRef = useRef<ReturnType<typeof setTimeout>>()
+  const tooltipHideDelayTimerRef = useRef<ReturnType<typeof setTimeout>>()
   const [inlineStyles, setInlineStyles] = useState({})
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState<boolean>(false)
 
+  const handleShowTooltipDelayed = () => {
+    if (tooltipShowDelayTimerRef.current) {
+      clearTimeout(tooltipShowDelayTimerRef.current)
+    }
+
+    tooltipShowDelayTimerRef.current = setTimeout(() => {
+      setShow(true)
+    }, delayShow)
+  }
+
+  const handleHideTooltipDelayed = () => {
+    if (tooltipHideDelayTimerRef.current) {
+      clearTimeout(tooltipHideDelayTimerRef.current)
+    }
+
+    tooltipHideDelayTimerRef.current = setTimeout(() => {
+      setShow(false)
+    }, delayHide)
+  }
+
   const handleShowTooltip = () => {
-    setShow(true)
+    if (delayShow) {
+      handleShowTooltipDelayed()
+    } else {
+      setShow(true)
+    }
+
+    if (tooltipHideDelayTimerRef.current) {
+      clearTimeout(tooltipHideDelayTimerRef.current)
+    }
   }
 
   const handleHideTooltip = () => {
-    setShow(false)
+    if (delayHide) {
+      handleHideTooltipDelayed()
+    } else {
+      setShow(false)
+    }
+
+    if (tooltipShowDelayTimerRef.current) {
+      clearTimeout(tooltipShowDelayTimerRef.current)
+    }
   }
 
   const handleClickTooltip = () => {
@@ -78,7 +117,7 @@ const Tooltip = ({
         elementReference?.removeEventListener(event, listener)
       })
     }
-  }, [anchorId, events])
+  }, [anchorId, events, delayHide, delayShow])
 
   useEffect(() => {
     const elementReference = document.querySelector(`#${anchorId}`)
@@ -98,6 +137,11 @@ const Tooltip = ({
         setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
       }
     })
+
+    return () => {
+      tooltipShowDelayTimerRef.current = undefined
+      tooltipHideDelayTimerRef.current = undefined
+    }
   }, [show, anchorId])
 
   return (

@@ -6,4 +6,6 @@ export const dataAttributesKeys = [
   'offset', // offset of tooltip
   'wrapper', // wrapper of tooltip
   'events', // events of tooltip
+  'delay-show', // delay to show tooltip
+  'delay-hide', // delay to hide tooltip
 ]

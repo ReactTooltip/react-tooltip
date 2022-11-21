@@ -21,11 +21,15 @@ const TooltipController = ({
   wrapper = 'div',
   children = null,
   events = ['hover'],
+  delayShow = 0,
+  delayHide = 0,
 }: ITooltipController) => {
   const [tooltipContent, setTooltipContent] = useState(content || html)
   const [tooltipPlace, setTooltipPlace] = useState(place)
   const [tooltipVariant, setTooltipVariant] = useState(variant)
   const [tooltipOffset, setTooltipOffset] = useState(offset)
+  const [tooltipDelayShow, setTooltipDelayShow] = useState(delayShow)
+  const [tooltipDelayHide, setTooltipDelayHide] = useState(delayHide)
   const [tooltipWrapper, setTooltipWrapper] = useState<WrapperType>(wrapper)
   const [tooltipEvents, setTooltipEvents] = useState<EventsType[]>(events)
   const [isHtmlContent, setIsHtmlContent] = useState<boolean>(Boolean(html))
@@ -72,6 +76,12 @@ const TooltipController = ({
       events: (value: string) => {
         const parsedEvents = value.split(' ')
         setTooltipEvents(parsedEvents as EventsType[])
+      },
+      'delay-show': (value: number) => {
+        setTooltipDelayShow(Number(value))
+      },
+      'delay-hide': (value: number) => {
+        setTooltipDelayHide(Number(value))
       },
     }
 
@@ -138,35 +148,22 @@ const TooltipController = ({
     }
   }, [anchorId])
 
-  return children ? (
-    <Tooltip
-      anchorId={anchorId}
-      className={className}
-      classNameArrow={classNameArrow}
-      content={tooltipContent}
-      isHtmlContent={isHtmlContent}
-      place={tooltipPlace}
-      variant={tooltipVariant}
-      offset={tooltipOffset}
-      wrapper={tooltipWrapper}
-      events={tooltipEvents}
-    >
-      {children}
-    </Tooltip>
-  ) : (
-    <Tooltip
-      anchorId={anchorId}
-      className={className}
-      classNameArrow={classNameArrow}
-      content={tooltipContent}
-      isHtmlContent={isHtmlContent}
-      place={tooltipPlace}
-      variant={tooltipVariant}
-      offset={tooltipOffset}
-      wrapper={tooltipWrapper}
-      events={tooltipEvents}
-    />
-  )
+  const props = {
+    anchorId,
+    className,
+    classNameArrow,
+    content: tooltipContent,
+    isHtmlContent,
+    place: tooltipPlace,
+    variant: tooltipVariant,
+    offset: tooltipOffset,
+    wrapper: tooltipWrapper,
+    events: tooltipEvents,
+    delayShow: tooltipDelayShow,
+    delayHide: tooltipDelayHide,
+  }
+
+  return children ? <Tooltip {...props}>{children}</Tooltip> : <Tooltip {...props} />
 }
 
 export default TooltipController
