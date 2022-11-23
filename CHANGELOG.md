@@ -1,3 +1,21 @@
+# [4.5.0](https://github.com/ReactTooltip/react-tooltip/compare/v4.4.5...v4.5.0) (2022-11-09)
+
+### Features
+
+- add disable internal style prop into react-tooltip.d.ts as feat to trigger semantic-release ([ce41c47](https://github.com/ReactTooltip/react-tooltip/commit/ce41c479c2532a01afbcd4250a523dbeaa014672)), closes [#811](https://github.com/ReactTooltip/react-tooltip/issues/811)
+
+## [4.4.5](https://github.com/ReactTooltip/react-tooltip/compare/v4.4.4...v4.4.5) (2022-11-09)
+
+### Bug Fixes
+
+- add padding into the ts type file ([365c2da](https://github.com/ReactTooltip/react-tooltip/commit/365c2dad98d15ecd32356c05ee962225fa018b06)), closes [#817](https://github.com/ReactTooltip/react-tooltip/issues/817) [#808](https://github.com/ReactTooltip/react-tooltip/issues/808)
+
+## [4.4.4](https://github.com/ReactTooltip/react-tooltip/compare/v4.4.3...v4.4.4) (2022-11-09)
+
+### Bug Fixes
+
+- Fixed the tooltip arrow overlapping tooltip content ([51c7e1a](https://github.com/ReactTooltip/react-tooltip/commit/51c7e1a854c80ea545c22edb403e831d0941d8f9))
+
 ## [4.4.3](https://github.com/ReactTooltip/react-tooltip/compare/v4.4.2...v4.4.3) (2022-10-22)
 
 ### Bug Fixes
