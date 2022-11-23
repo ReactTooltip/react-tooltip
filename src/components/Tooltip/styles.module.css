@@ -15,7 +15,7 @@
 
 .arrow {
   position: absolute;
-  background: #222;
+  background: var(--rt-color-dark);
   width: 8px;
   height: 8px;
   transform: rotate(45deg);
@@ -29,36 +29,36 @@
 /** Types variant **/
 .dark,
 .dark .arrow {
-  background: #222;
-  color: white;
+  background: var(--rt-color-dark);
+  color: var(--rt-color-white);
 }
 
 .light,
 .light .arrow {
-  background-color: #fff;
-  color: #222;
+  background-color: var(--rt-color-white);
+  color: var(--rt-color-dark);
 }
 
 .success,
 .success .arrow {
-  background-color: #8dc572;
-  color: white;
+  background-color: var(--rt-color-success);
+  color: var(--rt-color-white);
 }
 
 .warning,
 .warning .arrow {
-  background-color: #f0ad4e;
-  color: white;
+  background-color: var(--rt-color-warning);
+  color: var(--rt-color-white);
 }
 
 .error,
 .error .arrow {
-  background-color: #be6464;
-  color: white;
+  background-color: var(--rt-color-error);
+  color: var(--rt-color-white);
 }
 
 .info,
 .info .arrow {
-  background-color: #337ab7;
-  color: #fff;
+  background-color: var(--rt-color-info);
+  color: var(--rt-color-white);
 }
