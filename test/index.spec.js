@@ -88,8 +88,13 @@ describe('Tooltip', () => {
       }
     ],
     [
-      { textColor: 'teal', backgroundColor: 'orange' },
-      { popupType: 'type-custom', textColor: 'teal', background: 'orange' }
+      { textColor: 'teal', backgroundColor: 'orange', arrowColor: 'orange' },
+      {
+        popupType: 'type-custom',
+        textColor: 'teal',
+        background: 'orange',
+        arrowColor: 'orange'
+      }
     ],
     [
       { textColor: 'green', arrowColor: 'red' },
@@ -185,7 +190,8 @@ describe('Tooltip', () => {
         border: true,
         borderColor: 'blue',
         arrowRadius: '2',
-        tooltipRadius: '4'
+        tooltipRadius: '4',
+        arrowColor: '#222'
       },
       {
         popupType: 'type-custom',
@@ -201,7 +207,8 @@ describe('Tooltip', () => {
       {
         border: true,
         borderClass: 'custom-border-class',
-        borderColor: '#414141'
+        borderColor: '#414141',
+        arrowColor: '#222'
       },
       {
         borderColor: '#414141',

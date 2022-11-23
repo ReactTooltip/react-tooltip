@@ -55,9 +55,9 @@ function generateStyle(
         content: "";
         background-color: inherit;
         position: absolute;
-        z-index: -1;
-        width: 18px;
-        height: 10px;
+        z-index: 2;
+        width: 20px;
+        height: 12px;
     }
     .${uuid}.place-top::after {
         content: "";
@@ -70,7 +70,7 @@ function generateStyle(
         z-index: -2;
         bottom: -6px;
         left: 50%;
-        margin-left: -8px;
+        margin-left: -6px;
         transform: rotate(135deg);
     }
 
@@ -96,7 +96,7 @@ function generateStyle(
         z-index: -2;
         top: -6px;
         left: 50%;
-        margin-left: -8px;
+        margin-left: -6px;
         transform: rotate(45deg);
     }
 
