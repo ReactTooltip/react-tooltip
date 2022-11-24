@@ -21,7 +21,7 @@ export interface ITooltip {
   variant?: VariantType
   anchorId: string
   isHtmlContent?: boolean
-  wrapper: WrapperType
+  wrapper?: WrapperType
   children?: ChildrenType
   events?: EventsType[]
   delayShow?: number

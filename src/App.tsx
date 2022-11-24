@@ -1,4 +1,4 @@
-import { Tooltip } from 'components/Tooltip'
+import { TooltipController as Tooltip } from 'components/TooltipController'
 import { useState } from 'react'
 import styles from './styles.module.css'
 
@@ -16,21 +16,9 @@ function App() {
       >
         My button
       </button>
-      <Tooltip offset={10} place="top" anchorId={anchorId} content="My big tooltip content" />
-      <Tooltip
-        offset={10}
-        place="top"
-        variant="success"
-        anchorId="button2"
-        content="My big tooltip content"
-      />
-      <Tooltip
-        offset={10}
-        place="top"
-        variant="info"
-        anchorId="button3"
-        content="My big tooltip content"
-      />
+      <Tooltip place="bottom" anchorId={anchorId} content="My big tooltip content" />
+      <Tooltip place="top" variant="success" anchorId="button2" content="My big tooltip content" />
+      <Tooltip place="top" variant="info" anchorId="button3" content="My big tooltip content" />
 
       <section style={{ marginTop: '100px' }}>
         <p>
