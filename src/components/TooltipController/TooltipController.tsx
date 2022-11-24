@@ -23,6 +23,7 @@ const TooltipController = ({
   events = ['hover'],
   delayShow = 0,
   delayHide = 0,
+  getContent,
 }: ITooltipController) => {
   const [tooltipContent, setTooltipContent] = useState(content || html)
   const [tooltipPlace, setTooltipPlace] = useState(place)
@@ -58,11 +59,19 @@ const TooltipController = ({
       },
       content: (value: string) => {
         setIsHtmlContent(true)
-        setTooltipContent(value)
+        if (getContent) {
+          setTooltipContent(getContent(value))
+        } else {
+          setTooltipContent(value)
+        }
       },
       html: (value: string) => {
         setIsHtmlContent(true)
-        setTooltipContent(value)
+        if (getContent) {
+          setTooltipContent(getContent(value))
+        } else {
+          setTooltipContent(value)
+        }
       },
       variant: (value: VariantType) => {
         setTooltipVariant(value)

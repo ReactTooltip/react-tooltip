@@ -21,4 +21,5 @@ export interface ITooltipController {
   events?: EventsType[]
   delayShow?: number
   delayHide?: number
+  getContent?: function
 }

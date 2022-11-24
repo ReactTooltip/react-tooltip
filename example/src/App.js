@@ -1,3 +1,4 @@
+/* eslint-disable */ // --> OFF
 import React, { Component } from 'react'
 
 // import ReactTooltip from 'react-tooltip';
@@ -13,6 +14,7 @@ export default class App extends Component {
       condition: false,
       offset: 10,
       wrapper: 'div',
+      anchorBuddyId: 'anchorBuddy1',
     }
   }
 
@@ -46,14 +48,14 @@ export default class App extends Component {
     })
   }
 
-  _onClick() {
+  changeBuddyId(id) {
     this.setState({
-      condition: true,
+      anchorBuddyId: id,
     })
   }
 
   render() {
-    const { place, variant, effect, offset, wrapper } = this.state
+    const { place, variant, effect, offset, wrapper, anchorBuddyId } = this.state
     return (
       <div>
         <section className="tooltip-example">
@@ -420,7 +422,7 @@ export default class App extends Component {
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="side">
-                <a data-for="custom-color-no-arrow" data-tip="Lovely colors!">
+                <a data-for="custom-color-no-arrow" data-content="Lovely colors!">
                   ㅇㅅㅇ
                 </a>
                 <ReactTooltip
@@ -434,7 +436,7 @@ export default class App extends Component {
               <div className="side">
                 <a
                   data-for="custom-color"
-                  data-tip="That is one weird arrow (and a border with custom class name)!"
+                  data-content="That is one weird arrow (and a border with custom class name)!"
                 >
                   V(^-^)V
                 </a>
@@ -455,62 +457,16 @@ export default class App extends Component {
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<a data-for='custom-color-no-arrow' data-tip='Lovely colors!'>ㅇㅅㅇ</a>\n" +
+                  {"<a data-for='custom-color-no-arrow' data-content='Lovely colors!'>ㅇㅅㅇ</a>\n" +
                     "<ReactTooltip id='custom-color-no-arrow' className='custom-color-no-arrow' delayHide={1000}\n" +
                     "textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' effect='solid'/>"}
                 </p>
               </div>
               <div>
                 <p>
-                  {"<a data-for='custom-color' data-tip='That is one weird arrow (and a border)!'>V(^-^)V</a>\n" +
+                  {"<a data-for='custom-color' data-content='That is one weird arrow (and a border)!'>V(^-^)V</a>\n" +
                     "<ReactTooltip id='custom-color' className='custom-color' place='right' border\n" +
                     "textColor='#5F4B8BFF' backgroundColor='#E69A8DFF' borderColor='darkgreen' arrowColor='red'/>"}
-                </p>
-              </div>
-            </pre>
-          </div>
-
-          <div className="section">
-            <h4 className="title">Custom radius</h4>
-            <p className="sub-title" />
-            <div className="example-jsx">
-              <div className="side">
-                <a data-for="custom-tooltip-radius" data-tip="No tooltip border radius!">
-                  ㅇㅅㅇ
-                </a>
-                <ReactTooltip
-                  id="custom-tooltip-radius"
-                  place="right"
-                  className="custom-tooltip-radius"
-                  tooltipRadius="0"
-                />
-              </div>
-              <div className="side">
-                <a data-for="custom-arrow-radius" data-tip="That is an arrow with border radius!">
-                  V(^-^)V
-                </a>
-                <ReactTooltip
-                  id="custom-arrow-radius"
-                  className="custom-arrow-radius"
-                  place="top"
-                  arrowRadius="3"
-                />
-              </div>
-            </div>
-            <br />
-            <pre className="example-pre">
-              <div>
-                <p>
-                  {"<a data-for='custom-tooltip-radius' data-tip='Lovely colors!'>ㅇㅅㅇ</a>\n" +
-                    "<ReactTooltip id='custom-tooltip-radius' className='custom-tooltip-radius' place='right'\n" +
-                    "backgroundColor='#E69A8DFF' tooltipRadius='0'/>"}
-                </p>
-              </div>
-              <div>
-                <p>
-                  {"<a data-for='custom-arrow-radius' data-tip='That is an arrow with border radius!'>V(^-^)V</a>\n" +
-                    "<ReactTooltip id='custom-arrow-radius' className='custom-arrow-radius' place='top' border\n" +
-                    "backgroundColor='#E69A8DFF' arrowRadius='3'/>"}
                 </p>
               </div>
             </pre>
@@ -575,98 +531,37 @@ export default class App extends Component {
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="side">
-                <a id="delayShowAnchor" data-tip="hover on me will keep the tooltip">
+                <a
+                  id="customClassAnchor"
+                  data-content="This tooltip has custom class for tooltip and for arrow"
+                >
                   (･ω´･ )
                 </a>
                 <ReactTooltip
                   anchorId="customClassAnchor"
                   className="extraClass"
-                  delayHide={1000}
-                  effect="solid"
+                  classNameArrow="extraClassArrow"
                 />
-              </div>
-              <div className="side">
-                <a data-for="custom-theme" data-tip="custom theme">
-                  (･ω´･ )
-                </a>
-                <ReactTooltip id="custom-theme" className="customTheme" />
               </div>
             </div>
             <br />
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<a data-tip='hover on me will keep the tooltip'>(･ω´･ )</a>\n" +
-                    "<ReactTooltip className='extraClass' delayHide={1000} effect='solid'/>\n" +
+                  {"<a data-content='This tooltip has custom class for tooltip and for arrow'>(･ω´･ )</a>\n" +
+                    "<ReactTooltip\n className='extraClass'\n classNameArrow='extraClassArrow'\n delayHide={1000}\n effect='solid'/>\n\n" +
                     '.extraClass {\n' +
-                    ' font-size: 20px !important;\n' +
-                    ' pointer-events: auto !important;\n' +
-                    ' &:hover {\n' +
-                    'visibility: visible !important;\n' +
-                    'opacity: 1 !important;\n' +
-                    ' }\n' +
-                    '}'}
-                </p>
-              </div>
-              <div>
-                <p>
-                  {"<a data-tip='custom theme'>(･ω´･ )</a>\n" +
-                    "<ReactTooltip className='customTheme'/>\n" +
-                    ' .customTheme {\n' +
-                    ' color: #ff6e00 !important;\n' +
-                    ' background-color: orange !important;\n' +
-                    ' &.place-top {\n' +
-                    ' &:after {\n' +
-                    ' border-top-color: orange !important;\n' +
-                    ' border-top-style: solid !important;\n' +
-                    ' border-top-width: 6px !important;\n' +
-                    ' }\n' +
-                    ' }\n' +
-                    '}'}
-                </p>
-              </div>
-            </pre>
-          </div>
-
-          <div className="section">
-            <h4 className="title">Update tip content over time</h4>
-            <p className="sub-title" />
-            <div className="example-jsx">
-              <div className="side">
-                <a data-for="getContent" data-tip>
-                  =( •̀д•́)
-                </a>
-                <ReactTooltip id="getContent" getContent={() => Math.floor(Math.random() * 100)} />
-              </div>
-              <div className="side">
-                <a data-for="overTime" data-tip>
-                  =( •̀д•́)
-                </a>
-                <ReactTooltip
-                  id="overTime"
-                  getContent={[
-                    () => {
-                      return 'Random length content'.slice(0, Math.floor(Math.random() * 21) + 1)
-                    },
-                    1000,
-                  ]}
-                />
-              </div>
-            </div>
-            <br />
-            <pre className="example-pre">
-              <div>
-                <p>
-                  {"<a data-for='getContent' data-tip>=( •̀д•́)</a>\n" +
-                    "<ReactTooltip id='getContent' getContent={() => Math.floor(Math.random() * 100)} />"}
-                </p>
-              </div>
-              <div>
-                <p>
-                  {"<a data-for='overTime' data-tip>=( •̀д•́)</a>\n" +
-                    "<ReactTooltip id='overTime' getContent={[() => {\n" +
-                    " return 'Random length content'.slice(0, Math.floor(Math.random() * 21) + 1)\n" +
-                    '}, 1000]}/>'}
+                    ' font-size: 20px;\n' +
+                    ' background-color: #00ffe5;\n' +
+                    ' color: #222;\n' +
+                    '}\n' +
+                    '.extraClass .extraClassArrow {\n' +
+                    ' background-color: #00ffe5;\n' +
+                    '}\n\n'}
+                  You don't need to use <b>!important</b>. You can just use CSS Specificity
+                  knowledge. <br />
+                  https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity <br />
+                  https://www.w3schools.com/css/css_specificity.asp
                 </p>
               </div>
             </pre>
@@ -677,27 +572,30 @@ export default class App extends Component {
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="side">
-                <a data-for="enrich" data-tip="sooooo cute">
+                <a id="enrichAnchor" data-content="sooooo cute">
                   (❂‿❂)
                 </a>
               </div>
               <div className="side">
-                <a data-for="enrich" data-tip="really high">
+                <a id="enrichAnchor2" data-content="really high">
                   (❂‿❂)
                 </a>
               </div>
               <ReactTooltip
-                id="enrich"
-                getContent={(dataTip) => 'This little buddy is ' + dataTip}
+                anchorId="enrichAnchor"
+                getContent={(dataTip) => `This little buddy is ${dataTip}`}
+              />
+              <ReactTooltip
+                anchorId="enrichAnchor2"
+                getContent={(dataTip) => `This little buddy is ${dataTip}`}
               />
             </div>
             <br />
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<a data-for='enrich' data-tip='sooooo cute'>(❂‿❂)</a>\n" +
-                    "<a data-for='enrich' data-tip='really high'>(❂‿❂)</a>\n" +
-                    /* eslint-disable no-template-curly-in-string */
+                  {"<a data-for='enrich' data-content='sooooo cute'>(❂‿❂)</a>\n" +
+                    "<a data-for='enrich' data-content='really high'>(❂‿❂)</a>\n" +
                     "<ReactTooltip id='enrich' getContent={(dataTip) => `This little buddy is ${dataTip}`}/>"}
                 </p>
               </div>
@@ -711,7 +609,7 @@ export default class App extends Component {
               <div className="side" style={{ overflow: 'auto', height: '200px' }}>
                 <div
                   data-for="scrollContent"
-                  data-tip
+                  data-content
                   data-iscapture="true"
                   style={{ width: '5000px', height: '5000px' }}
                 >
@@ -729,7 +627,7 @@ export default class App extends Component {
               <div className="side" style={{ overflow: 'auto', height: '200px' }}>
                 <div
                   data-for="scrollTime"
-                  data-tip
+                  data-content
                   data-iscapture="true"
                   data-scroll-hide="false"
                   style={{ width: '5000px', height: '5000px' }}
@@ -740,12 +638,12 @@ export default class App extends Component {
                 </div>
                 <ReactTooltip
                   id="scrollTime"
-                  getContent={[
-                    () => {
-                      return new Date().toISOString()
-                    },
-                    1000,
-                  ]}
+                  // getContent={[
+                  //   () => {
+                  //     return new Date().toISOString()
+                  //   },
+                  //   1000,
+                  // ]}
                 />
               </div>
             </div>
@@ -753,14 +651,14 @@ export default class App extends Component {
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<div data-for='scrollContent' data-tip data-iscapture='true'\n" +
+                  {"<div data-for='scrollContent' data-content data-iscapture='true'\n" +
                     "style={{ width: '5000px', height: '5000px' }}>...</div>\n" +
                     "<ReactTooltip id='scrollContent' getContent={() => Math.floor(Math.random() * 100)}/>"}
                 </p>
               </div>
               <div>
                 <p>
-                  {"<div data-for='scrollTime' data-tip data-iscapture='true' data-scroll-hide='false'\n" +
+                  {"<div data-for='scrollTime' data-content data-iscapture='true' data-scroll-hide='false'\n" +
                     "style={{ width: '5000px', height: '5000px' }}>...</div>\n" +
                     "<ReactTooltip id='scrollTime' getContent={[() => {return new Date().toISOString()}, 1000]}/>"}
                 </p>
@@ -770,21 +668,19 @@ export default class App extends Component {
 
           <div className="section">
             <h4 className="title">Test SVG</h4>
-            <p>Note: if you dynamically change elements in the SVG, add:</p>
-            <pre>{'  componentDidUpdate() {\n' + '    ReactTooltip.rebuild()\n' + '  }'}</pre>
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="side" style={{ textAlign: 'center' }}>
-                <svg data-tip="=( •̀д•́)" data-for="svgTooltip" width="50" height="50">
+                <svg data-content="=( •̀д•́)" id="svgTooltipAnchor" width="50" height="50">
                   <circle cx="25" cy="25" r="22" fill="#fff" stroke="#000" strokeWidth="4" />
                 </svg>
-                <ReactTooltip id="svgTooltip" />
+                <ReactTooltip anchorId="svgTooltipAnchor" />
               </div>
               <div className="side" style={{ textAlign: 'center' }}>
                 <svg width="75" height="50">
                   <circle
-                    data-tip="=( •̀‿•́)"
-                    data-for="svgTooltip2"
+                    data-content="=( •̀‿•́)"
+                    id="svgTooltip2Anchor"
                     cx="25"
                     cy="25"
                     r="22"
@@ -793,8 +689,8 @@ export default class App extends Component {
                     strokeWidth="4"
                   />
                   <circle
-                    data-tip="=( ❂‿❂)"
-                    data-for="svgTooltip2"
+                    data-content="=( ❂‿❂)"
+                    id="svgTooltip3Anchor"
                     cx="50"
                     cy="25"
                     r="16"
@@ -803,26 +699,27 @@ export default class App extends Component {
                     strokeWidth="4"
                   />
                 </svg>
-                <ReactTooltip id="svgTooltip2" />
+                <ReactTooltip anchorId="svgTooltip2Anchor" />
+                <ReactTooltip anchorId="svgTooltip3Anchor" />
               </div>
             </div>
             <br />
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<svg data-tip='=( •̀д•́)' data-for='svgTooltip' width='50' height='50'>\n" +
+                  {"<svg data-content='=( •̀д•́)' id=\"svgTooltipAnchor\" width='50' height='50'>\n" +
                     "  <circle cx='25' cy='25' r='22' fill='#fff' stroke='#000' strokeWidth='8'/>\n" +
                     '</svg>\n' +
-                    "<ReactTooltip id='svgTooltip' />"}
+                    '<ReactTooltip anchorId="svgTooltipAnchor" />'}
                 </p>
                 <p>
                   {"<svg width='75' height='50'>\n" +
-                    "<circle data-tip='=( •̀‿•́)' data-for='svgTooltip2'\n" +
-                    "   cx='25' cy='25' r='22' fill='#fff' stroke='#000' strokeWidth='4'/>\n" +
-                    "<circle data-tip='=( ❂‿❂)' data-for='svgTooltip2'\n" +
-                    "   cx='50' cy='25' r='16' fill='#fdf' stroke='#404' strokeWidth='4'/>\n" +
+                    '<circle \n data-content=\'=( •̀‿•́)\' \n id="svgTooltip2Anchor"\n' +
+                    " cx='25' cy='25' r='22' fill='#fff' stroke='#000' strokeWidth='4'/>\n" +
+                    '<circle \n data-content=\'=( ❂‿❂)\' \n id="svgTooltip3Anchor"\n' +
+                    " cx='50' cy='25' r='16' fill='#fdf' stroke='#404' strokeWidth='4'/>\n" +
                     '</svg>\n' +
-                    "<ReactTooltip id='svgTooltip2'/>"}
+                    '<ReactTooltip anchorId="svgTooltip2Anchor" /> \n<ReactTooltip anchorId="svgTooltip3Anchor" />'}
                 </p>
               </div>
             </pre>
@@ -838,69 +735,90 @@ export default class App extends Component {
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="block">
-                <a data-for="soclose" data-tip="1">
+                <a
+                  id="anchorBuddy1"
+                  onMouseEnter={this.changeBuddyId.bind(this, 'anchorBuddy1')}
+                  data-content="1"
+                >
                   1 (❂‿❂)
                 </a>
               </div>
               <div className="block">
-                <a data-for="soclose" data-tip="2">
+                <a
+                  id="anchorBuddy2"
+                  onMouseEnter={this.changeBuddyId.bind(this, 'anchorBuddy2')}
+                  data-content="2"
+                >
                   2 (❂‿❂)
                 </a>
               </div>
               <div className="block">
-                <a data-for="soclose" data-tip="3">
+                <a
+                  id="anchorBuddy3"
+                  onMouseEnter={this.changeBuddyId.bind(this, 'anchorBuddy3')}
+                  data-content="3"
+                >
                   3 (❂‿❂)
                 </a>
               </div>
               <div className="block">
-                <a data-for="soclose" data-tip="4">
+                <a
+                  id="anchorBuddy4"
+                  onMouseEnter={this.changeBuddyId.bind(this, 'anchorBuddy4')}
+                  data-content="4"
+                >
                   4 (❂‿❂)
                 </a>
               </div>
               <div className="block">
-                <a data-for="soclose" data-tip="5">
+                <a
+                  id="anchorBuddy5"
+                  onMouseEnter={this.changeBuddyId.bind(this, 'anchorBuddy5')}
+                  data-content="5"
+                >
                   5 (❂‿❂)
                 </a>
               </div>
               <div className="block">
-                <a data-for="soclose" data-tip="6">
+                <a
+                  id="anchorBuddy6"
+                  onMouseEnter={this.changeBuddyId.bind(this, 'anchorBuddy6')}
+                  data-content="6"
+                >
                   6 (❂‿❂)
                 </a>
               </div>
               <div className="block">
-                <a data-for="soclose" data-tip="7">
+                <a
+                  id="anchorBuddy7"
+                  onMouseEnter={this.changeBuddyId.bind(this, 'anchorBuddy7')}
+                  data-content="7"
+                >
                   7 (❂‿❂)
                 </a>
               </div>
               <div className="block">
-                <a data-for="soclose" data-tip="8">
+                <a
+                  id="anchorBuddy8"
+                  onMouseEnter={this.changeBuddyId.bind(this, 'anchorBuddy8')}
+                  data-content="8"
+                >
                   8 (❂‿❂)
                 </a>
               </div>
 
               <ReactTooltip
-                id="soclose"
-                getContent={(dataTip) => (
-                  <div>
-                    <h3>This little buddy is {dataTip}</h3>
-                    <p>Put mouse here</p>
-                  </div>
-                )}
-                effect="solid"
-                delayHide={500}
-                delayShow={500}
-                delayUpdate={500}
-                place="right"
-                border={true}
-                variant="light"
+                anchorId={anchorBuddyId}
+                getContent={(dataTip) => `This little buddy is ${dataTip}`}
+                place="top"
               />
             </div>
             <br />
             <pre className="example-pre">
               <div>
-                <p>{"<a data-for='soclose' data-tip='1'>1 (❂‿❂)</a>"}</p>
-                <p>{"<a data-for='soclose' data-tip='2'>2 (❂‿❂)</a>..."}</p>
-                <p>{"<a data-for='soclose' data-tip='8'>8 (❂‿❂)</a>"}</p>
+                <p>{"<a data-for='soclose' data-content='1'>1 (❂‿❂)</a>"}</p>
+                <p>{"<a data-for='soclose' data-content='2'>2 (❂‿❂)</a>..."}</p>
+                <p>{"<a data-for='soclose' data-content='8'>8 (❂‿❂)</a>"}</p>
                 <p>
                   {"<ReactTooltip id='soclose'\n" +
                     '  getContent={(dataTip) => \n' +
@@ -924,19 +842,19 @@ export default class App extends Component {
             <p className="sub-title" />
             <div className="example-jsx">
               <div className="block">
-                <a data-tip data-for="clickme" data-event="click">
+                <a data-content data-for="clickme" data-event="click">
                   (❂‿❂)
                 </a>
               </div>
 
-              <ReactTooltip id="clickme" place="right" effect="solid" clickable={true}>
+              <ReactTooltip id="clickme" place="right" effect="solid" clickable>
                 <input type="text" placeholder="Type something..." />
               </ReactTooltip>
             </div>
             <br />
             <pre className="example-pre">
               <div>
-                <p>{"<a data-tip data-for='clickme' data-event='click'> (❂‿❂) </a>"}</p>
+                <p>{"<a data-content data-for='clickme' data-event='click'> (❂‿❂) </a>"}</p>
                 <p>
                   {"<ReactTooltip id='clickme' place='right' effect='solid' clickable={true}>\n" +
                     "<input type='text' placeholder='Type something...' /> \n" +
@@ -957,7 +875,7 @@ export default class App extends Component {
             </p>
             <div className="example-jsx">
               <div className="side" style={{ display: 'flex', width: '100%' }}>
-                <a data-tip data-for="overridePosition">
+                <a data-content data-for="overridePosition">
                   ( •̀д•́) override
                 </a>
                 <ReactTooltip
@@ -978,7 +896,7 @@ export default class App extends Component {
                   <img src="http://lorempixel.com/100/1500" alt="lorem 100x1500" />
                   <div>footer</div>
                 </ReactTooltip>
-                <a data-tip data-for="noOverridePosition">
+                <a data-content data-for="noOverridePosition">
                   ( •̀д•́) noOverride
                 </a>
                 <ReactTooltip id="noOverridePosition">
@@ -992,7 +910,7 @@ export default class App extends Component {
             <pre className="example-pre">
               <div>
                 <p>
-                  {"<a data-tip data-for='overridePosition'>( •̀д•́) override</a>\n" +
+                  {"<a data-content data-for='overridePosition'>( •̀д•́) override</a>\n" +
                     '<ReactTooltip\n' +
                     "  id='overridePosition'\n" +
                     '  overridePosition={ (\n' +
@@ -1009,7 +927,7 @@ export default class App extends Component {
                     '  <img src="http://lorempixel.com/100/1500" alt="lorem image 100x1500" />\n' +
                     '  <div>footer</div>\n' +
                     '</ReactTooltip>\n' +
-                    "<a data-tip data-for='noOverridePosition'>( •̀д•́) noOverride</a>\n" +
+                    "<a data-content data-for='noOverridePosition'>( •̀д•́) noOverride</a>\n" +
                     "<ReactTooltip id='noOverridePosition'>\n" +
                     '  <div>header</div>\n' +
                     '  <img src="http://lorempixel.com/100/1500" alt="lorem image 100x1500" />\n' +

@@ -220,20 +220,19 @@ body {
   line-height: 30px;
 }
 .extraClass {
-  font-size: 20px !important;
-  pointer-events: auto !important;
-  background-color: #1182dd;
+  font-size: 20px;
+  background-color: #00ffe5;
+  color: #222;
 }
-.extraClass:hover {
-  visibility: visible !important;
-  opacity: 1 !important;
+.extraClass .extraClassArrow {
+  background-color: #00ffe5;
 }
 .customTheme {
-  color: #ff6e00 !important;
-  background-color: orange !important;
+  color: #ff6e00;
+  background-color: orange;
 }
 .customTheme.place-top:after {
-  border-top-color: orange !important;
-  border-top-style: solid !important;
-  border-top-width: 6px !important;
+  border-top-color: orange;
+  border-top-style: solid;
+  border-top-width: 6px;
 }
