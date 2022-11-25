@@ -19,11 +19,13 @@ export interface ITooltip {
   offset?: number
   id?: string
   variant?: VariantType
-  anchorId: string
+  anchorId?: string
   isHtmlContent?: boolean
   wrapper?: WrapperType
   children?: ChildrenType
   events?: EventsType[]
   delayShow?: number
   delayHide?: number
+  isOpen?: boolean
+  setIsOpen?: (value: boolean) => void
 }

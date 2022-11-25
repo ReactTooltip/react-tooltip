@@ -23,6 +23,8 @@ const Tooltip = ({
   // props handled by controller
   isHtmlContent = false,
   content,
+  isOpen,
+  setIsOpen,
 }: ITooltip) => {
   const tooltipRef = createRef()
   const tooltipArrowRef = createRef()
@@ -32,13 +34,21 @@ const Tooltip = ({
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState<boolean>(false)
 
+  const handleShow = (value: boolean) => {
+    if (setIsOpen) {
+      setIsOpen(value)
+    } else {
+      setShow(value)
+    }
+  }
+
   const handleShowTooltipDelayed = () => {
     if (tooltipShowDelayTimerRef.current) {
       clearTimeout(tooltipShowDelayTimerRef.current)
     }
 
     tooltipShowDelayTimerRef.current = setTimeout(() => {
-      setShow(true)
+      handleShow(true)
     }, delayShow)
   }
 
@@ -48,7 +58,7 @@ const Tooltip = ({
     }
 
     tooltipHideDelayTimerRef.current = setTimeout(() => {
-      setShow(false)
+      handleShow(false)
     }, delayHide)
   }
 
@@ -56,7 +66,7 @@ const Tooltip = ({
     if (delayShow) {
       handleShowTooltipDelayed()
     } else {
-      setShow(true)
+      handleShow(true)
     }
 
     if (tooltipHideDelayTimerRef.current) {
@@ -68,7 +78,7 @@ const Tooltip = ({
     if (delayHide) {
       handleHideTooltipDelayed()
     } else {
-      setShow(false)
+      handleShow(false)
     }
 
     if (show && tooltipShowDelayTimerRef.current) {
@@ -77,13 +87,17 @@ const Tooltip = ({
       // workaround to prevent tooltip being show forever
       // when we remove the mouse before show tooltip with `delayShow`
       tooltipHideDelayTimerRef.current = setTimeout(() => {
-        setShow(false)
+        handleShow(false)
       }, delayShow * 2)
     }
   }
 
-  const handleClickTooltip = () => {
-    setShow((currentValue) => !currentValue)
+  const handleClickTooltipAnchor = () => {
+    if (setIsOpen) {
+      setIsOpen(!isOpen)
+    } else {
+      setShow((currentValue) => !currentValue)
+    }
   }
 
   // debounce handler to prevent call twice when
@@ -102,7 +116,7 @@ const Tooltip = ({
     const enabledEvents: { event: string; listener: () => void }[] = []
 
     if (events.find((event: string) => event === 'click')) {
-      enabledEvents.push({ event: 'click', listener: handleClickTooltip })
+      enabledEvents.push({ event: 'click', listener: handleClickTooltipAnchor })
     }
 
     if (events.find((event: string) => event === 'hover')) {
@@ -148,14 +162,14 @@ const Tooltip = ({
       tooltipShowDelayTimerRef.current = undefined
       tooltipHideDelayTimerRef.current = undefined
     }
-  }, [show, anchorId])
+  }, [show, isOpen, anchorId])
 
   return (
     <WrapperElement
       id={id}
       role="tooltip"
       className={classNames(styles['tooltip'], styles[variant], className, {
-        [styles['show']]: show,
+        [styles['show']]: isOpen || show,
       })}
       style={inlineStyles}
       ref={tooltipRef as React.RefObject<HTMLDivElement>}

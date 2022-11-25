@@ -24,6 +24,8 @@ const TooltipController = ({
   delayShow = 0,
   delayHide = 0,
   getContent,
+  isOpen,
+  setIsOpen,
 }: ITooltipController) => {
   const [tooltipContent, setTooltipContent] = useState(content || html)
   const [tooltipPlace, setTooltipPlace] = useState(place)
@@ -115,6 +117,11 @@ const TooltipController = ({
   }
 
   useEffect(() => {
+    if (!anchorId) {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      return () => {}
+    }
+
     const elementReference = document.querySelector(`#${anchorId}`)
 
     if (!elementReference) {
@@ -170,6 +177,8 @@ const TooltipController = ({
     events: tooltipEvents,
     delayShow: tooltipDelayShow,
     delayHide: tooltipDelayHide,
+    isOpen,
+    setIsOpen,
   }
 
   return children ? <Tooltip {...props}>{children}</Tooltip> : <Tooltip {...props} />

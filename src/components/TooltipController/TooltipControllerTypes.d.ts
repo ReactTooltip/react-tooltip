@@ -15,11 +15,13 @@ export interface ITooltipController {
   offset?: number
   id?: string
   variant?: VariantType
-  anchorId: string
+  anchorId?: string
   wrapper?: WrapperType
   children?: ChildrenType
   events?: EventsType[]
   delayShow?: number
   delayHide?: number
   getContent?: function
+  isOpen?: boolean
+  setIsOpen?: (value: boolean) => void
 }

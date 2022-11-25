@@ -4,6 +4,7 @@ import styles from './styles.module.css'
 
 function App() {
   const [anchorId, setAnchorId] = useState('button')
+  const [isDarkOpen, setIsDarkOpen] = useState(false)
 
   return (
     <main className={styles['main']}>
@@ -16,9 +17,29 @@ function App() {
       >
         My button
       </button>
-      <Tooltip place="bottom" anchorId={anchorId} content="My big tooltip content" />
-      <Tooltip place="top" variant="success" anchorId="button2" content="My big tooltip content" />
-      <Tooltip place="top" variant="info" anchorId="button3" content="My big tooltip content" />
+      <Tooltip
+        place="bottom"
+        anchorId={anchorId}
+        content="My big tooltip content"
+        isOpen={isDarkOpen}
+        setIsOpen={setIsDarkOpen}
+      />
+      <Tooltip
+        place="top"
+        variant="success"
+        anchorId="button2"
+        content="My big tooltip content"
+        isOpen={isDarkOpen}
+        setIsOpen={setIsDarkOpen}
+      />
+      <Tooltip
+        place="top"
+        variant="info"
+        anchorId="button3"
+        content="My big tooltip content"
+        isOpen={isDarkOpen}
+        setIsOpen={setIsDarkOpen}
+      />
 
       <section style={{ marginTop: '100px' }}>
         <p>
