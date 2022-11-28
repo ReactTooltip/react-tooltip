@@ -24,9 +24,6 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
         boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
         border: '1px solid #333',
       }}
-      onClick={() => {
-        alert(`clicked on Tooltip Anchor: ${id}`)
-      }}
       {...rest}
     >
       {children}
