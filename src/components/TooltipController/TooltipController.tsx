@@ -10,6 +10,7 @@ import { dataAttributesKeys } from './constants'
 import type { ITooltipController } from './TooltipControllerTypes'
 
 const TooltipController = ({
+  id,
   anchorId,
   content,
   html,
@@ -165,6 +166,7 @@ const TooltipController = ({
   }, [anchorId])
 
   const props = {
+    id,
     anchorId,
     className,
     classNameArrow,

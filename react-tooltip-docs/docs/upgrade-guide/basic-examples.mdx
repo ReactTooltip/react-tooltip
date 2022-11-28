@@ -1,0 +1,114 @@
+---
+sidebar_position: 4
+---
+
+# Basic examples
+
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      onClick={() => {
+        alert(`clicked on Tooltip Anchor: ${id}`)
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+### V4 or less
+
+```jsx
+import ReactTooltip from 'react-tooltip';
+
+<a data-tip="hello world!" data-for="tooltip"> ◕‿‿◕ </a>
+
+<ReactTooltip id="tooltip" place="top" type="dark" />
+```
+
+(v4) `data-tip` = `data-content` (v5)
+
+- `V4` - CSS styles are built-in and injected by tooltip into the header (not a good practice but convenient), [issues in GitHub](https://github.com/ReactTooltip/react-tooltip/issues?q=is%3Aissue+header)
+- `V5` - CSS styles are optional and can be imported or not to the project
+
+### V5 - props option
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css'
+
+<a id="props-basic"> ◕‿‿◕ </a>
+
+<Tooltip anchorId="props-basic" content="hello world!" />
+```
+
+<TooltipAnchor id="props-basic">◕‿‿◕</TooltipAnchor>
+<Tooltip anchorId="props-basic" content="hello world!" />
+
+### V5 - data attributes
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
+
+<a id="attributes-basic" data-content="hello world!"> ◕‿‿◕ </a>
+
+<Tooltip anchorId="attributes-basic" />
+```
+
+<TooltipAnchor id="attributes-basic" data-content="hello world!">
+  ◕‿‿◕
+</TooltipAnchor>
+<Tooltip anchorId="attributes-basic" />
+
+---
+
+# Colors
+
+### V4 or less - type
+
+```jsx
+import ReactTooltip from 'react-tooltip';
+
+<a data-tip="hello world!" data-for="tooltip"> ◕‿‿◕ </a>
+
+<ReactTooltip id="tooltip" place="top" type="success" />
+```
+
+(v4) `type` = `variant` (v5)
+
+### V5 - variant
+
+Available values `dark` | `light` | `success` | `warning` | `error` | `info`
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
+
+<a id="attributes-variant" data-content="hello world!" data-variant="success"> ◕‿‿◕ </a>
+
+<Tooltip anchorId="attributes-variant" />
+```
+
+<TooltipAnchor id="attributes-variant" data-content="hello world!" data-variant="success">
+  ◕‿‿◕
+</TooltipAnchor>
+<Tooltip anchorId="attributes-variant" />
