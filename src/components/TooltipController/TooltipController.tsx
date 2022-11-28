@@ -40,7 +40,7 @@ const TooltipController = ({
 
   const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
     const dataAttributes = elementReference?.getAttributeNames().reduce((acc, name) => {
-      if (name.includes('data-')) {
+      if (name.includes('data-tooltip-')) {
         ;(acc as any)[name] = elementReference?.getAttribute(name)
       }
 
@@ -98,7 +98,7 @@ const TooltipController = ({
     }
 
     keys.forEach((key) => {
-      formatedKey = key.replace('data-', '')
+      formatedKey = key.replace('data-tooltip-', '')
 
       if (dataAttributesKeys.includes(formatedKey)) {
         // @ts-ignore
