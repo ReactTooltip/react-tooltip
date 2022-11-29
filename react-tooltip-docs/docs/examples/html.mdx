@@ -2,9 +2,9 @@
 sidebar_position: 1
 ---
 
-# Place
+# HTML
 
-Available places of ReactTooltip component.
+HTML content in ReactTooltip component.
 
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
@@ -33,23 +33,43 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-`place` available values `top` | `right` | `bottom` | `left`
+### Using `html`
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
 <a id="tooltip-anchor"> ◕‿‿◕ </a>
-<Tooltip anchorId="tooltip-anchor" content="Hello World - top" place="top" />
-<Tooltip anchorId="tooltip-anchor" content="Hello World - right" place="right" />
-<Tooltip anchorId="tooltip-anchor" content="Hello World - bottom" place="bottom" />
-<Tooltip anchorId="tooltip-anchor" content="Hello World - left" place="left" />
+<Tooltip anchorId="tooltip-anchor" html="Hello<br /><s>multiline</s><br /><b>HTML</b><br />tooltip" place="left" />
 ```
 
 <div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
   <TooltipAnchor id="tooltip-anchor">◕‿‿◕</TooltipAnchor>
-  <Tooltip anchorId="tooltip-anchor" content="Hello World - top" place="top" />
-  <Tooltip anchorId="tooltip-anchor" content="Hello World - right" place="right" />
-  <Tooltip anchorId="tooltip-anchor" content="Hello World - bottom" place="bottom" />
-  <Tooltip anchorId="tooltip-anchor" content="Hello World - left" place="left" />
+  <Tooltip
+    anchorId="tooltip-anchor"
+    html="Hello<br /><s>multiline</s><br /><b>HTML</b><br />tooltip"
+  />
+</div>
+
+### Using `data-tooltip-html`
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
+
+<a
+  id="tooltip-anchor-data-html"
+  data-tooltip-html="<div><h1>Tooltip</h1><ul><li>Lorem</li><li>Ipsum</li></ul></div>"
+> ◕‿‿◕ </a>
+<Tooltip anchorId="tooltip-anchor-data-html" />
+```
+
+<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
+  <TooltipAnchor
+    id="tooltip-anchor-html"
+    data-tooltip-html="<div><h1>Tooltip</h1><ul><li>Lorem</li><li>Ipsum</li></ul></div>"
+  >
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip anchorId="tooltip-anchor-html" />
 </div>

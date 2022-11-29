@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# V4 -> V5
+# Changelog V4 -> V5
 
 If you are using V4 and want to use V5, please read this doc.
 
@@ -13,9 +13,11 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 ## Improvements
 
 - Dropped package dependency `uuid`
-- - Using React `useId` (https://beta.reactjs.org/apis/react/useId)
+- - Using React `useId` - [Docs](https://reactjs.org/docs/hooks-reference.html#useid)
 - - - Unfortunately `useId` was introduced only into React v18, so, that will be the minimum necessary version of React to V5
 - Dropped package dependency `prop-types`
+- V5 is written in TypeScript
+- V5 has minified and unminified files available to be used as you want
 
 ## Break Changes
 
@@ -76,3 +78,7 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 ### Detailed informations
 
 - [The Pull Request of V5](https://github.com/ReactTooltip/react-tooltip/pull/820)
+
+---
+
+Please see [all V5 Options here](../options.mdx).

@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# Basic examples
+# Basic examples V4 -> V5
 
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
@@ -71,7 +71,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 <Tooltip anchorId="attributes-basic" />
 ```
 
-<TooltipAnchor id="attributes-basic" data-content="hello world!">
+<TooltipAnchor id="attributes-basic" data-tooltip-content="hello world!">
   ◕‿‿◕
 </TooltipAnchor>
 <Tooltip anchorId="attributes-basic" />
@@ -100,12 +100,20 @@ Available values `dark` | `light` | `success` | `warning` | `error` | `info`
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
-<a id="attributes-variant" data-content="hello world!" data-variant="success"> ◕‿‿◕ </a>
+<a id="attributes-variant" data-tooltip-content="hello world!" data-tooltip-variant="success"> ◕‿‿◕ </a>
 
 <Tooltip anchorId="attributes-variant" />
 ```
 
-<TooltipAnchor id="attributes-variant" data-content="hello world!" data-variant="success">
+<TooltipAnchor
+  id="attributes-variant"
+  data-tooltip-content="hello world!"
+  data-tooltip-variant="success"
+>
   ◕‿‿◕
 </TooltipAnchor>
 <Tooltip anchorId="attributes-variant" />
+
+---
+
+Please see [all V5 Options here](../options.mdx).
