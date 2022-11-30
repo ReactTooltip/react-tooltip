@@ -56,3 +56,19 @@
 .example-container .example-pink .example-arrow {
   background-color: rgb(255, 0, 255);
 }
+
+.example-container .example-no-radius {
+  border-radius: 0;
+}
+
+.example-container .example-rounded {
+  border-radius: 50%;
+}
+
+.example-container .example-no-padding {
+  padding: 0;
+}
+
+.example-container .example-padding {
+  padding: 48px;
+}

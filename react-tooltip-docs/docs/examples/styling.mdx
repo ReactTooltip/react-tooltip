@@ -179,7 +179,7 @@ Now this will work as expected.
 
 ---
 
-### More examples
+### More examples - Colors
 
 #### Orange
 
@@ -253,4 +253,128 @@ import 'react-tooltip/dist/react-tooltip.css'
     ◕‿‿◕
   </TooltipAnchor>
   <Tooltip anchorId="custom-styles-pink" className="example-pink" classNameArrow="example-arrow" />
+</div>
+
+### More examples - Radius
+
+#### Removing radius
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+
+<style>
+.example-container .example-no-radius {
+  border-radius: 0;
+}
+</style>
+
+<div className="example-container">
+  <a id="custom-styles-no-radius" data-tooltip-content="hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip anchorId="custom-styles-no-radius" className="example-no-radius" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor id="custom-styles-no-radius" data-tooltip-content="hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip anchorId="custom-styles-no-radius" className="example-no-radius" />
+</div>
+
+#### Rounded
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+
+<style>
+.example-container .example-rounded {
+  border-radius: 50%;
+}
+</style>
+
+<div className="example-container">
+  <a id="custom-styles-rounded" data-tooltip-content="hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip anchorId="custom-styles-rounded" className="example-rounded" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor id="custom-styles-rounded" data-tooltip-content="hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip anchorId="custom-styles-rounded" className="example-rounded" />
+</div>
+
+### More examples - Padding
+
+#### Removing padding
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+
+<style>
+.example-container .example-no-padding {
+  padding: 0;
+}
+</style>
+
+<div className="example-container">
+  <a id="custom-styles-no-padding" data-tooltip-content="hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip anchorId="custom-styles-no-padding" className="example-no-padding" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor id="custom-styles-no-padding" data-tooltip-content="hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip anchorId="custom-styles-no-padding" className="example-no-padding" />
+</div>
+
+#### Adding more padding
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+
+<style>
+.example-container .example-padding {
+  border-radius: 50%;
+}
+</style>
+
+<div className="example-container">
+  <a id="custom-styles-padding" data-tooltip-content="hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip anchorId="custom-styles-padding" className="example-padding" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor id="custom-styles-padding" data-tooltip-content="hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip anchorId="custom-styles-padding" className="example-padding" />
 </div>
