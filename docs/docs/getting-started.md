@@ -11,13 +11,13 @@ A react tooltip is a floating react element that displays information related to
 ## Installation
 
 ```bash
-npm install react-tooltip
+npm install react-tooltip@5.0.0-beta.0
 ```
 
 or
 
 ```bash
-yarn add react-tooltip
+yarn add react-tooltip@5.0.0-beta.0
 ```
 
 ## Usage

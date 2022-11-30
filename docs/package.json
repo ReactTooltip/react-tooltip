@@ -20,9 +20,9 @@
     "@mdx-js/react": "^1.6.22",
     "clsx": "^1.2.1",
     "prism-react-renderer": "^1.3.5",
-    "react": "link:../node_modules/react",
-    "react-dom": "link:../node_modules/react-dom",
-    "react-tooltip": "link:.."
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-tooltip": "5.0.0-beta.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.2.0",

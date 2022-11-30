@@ -10,6 +10,15 @@ $ yarn
 
 ### Local Development
 
+You can link react packages and react-tooltip to this repository, but this should not be updated in github:
+
+In package.json:
+```
+    "react": "link:../node_modules/react",
+    "react-dom": "link:../node_modules/react-dom",
+    "react-tooltip": "link:.."
+```
+
 ```
 $ yarn start
 ```
