@@ -378,3 +378,11 @@ import 'react-tooltip/dist/react-tooltip.css'
   </TooltipAnchor>
   <Tooltip anchorId="custom-styles-padding" className="example-padding" />
 </div>
+
+#### Observation
+
+This doc is only if you are importing `import 'react-tooltip/dist/react-tooltip.css'`, if not, you can write your classes by you directly.
+
+With CSS specificity everything can be overridden if you know what are you doing.
+
+The necessity of `!import` was removed because `!import` cut a lot of levels/possibilities related to CSS specificity.
