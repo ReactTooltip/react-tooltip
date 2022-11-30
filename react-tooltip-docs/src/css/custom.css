@@ -28,3 +28,31 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/** styling examples **/
+.example-container .example {
+  color: #222;
+  background-color: rgb(0, 247, 255);
+}
+
+.example-container .example .example-arrow {
+  background-color: rgb(0, 247, 255);
+}
+
+.example-container .example-orange {
+  color: #222;
+  background-color: rgb(255, 153, 0);
+}
+
+.example-container .example-orange .example-arrow {
+  background-color: rgb(255, 153, 0);
+}
+
+.example-container .example-pink {
+  color: #fff;
+  background-color: rgb(255, 0, 255);
+}
+
+.example-container .example-pink .example-arrow {
+  background-color: rgb(255, 0, 255);
+}

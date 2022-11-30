@@ -130,6 +130,10 @@ const TooltipController = ({
       return () => {}
     }
 
+    if (content && getContent) {
+      setTooltipContent(getContent(content))
+    }
+
     // do not check for subtree and childrens, we only want to know attribute changes
     // to stay watching `data-attributes` from anchor element
     const observerConfig = { attributes: true, childList: false, subtree: false }

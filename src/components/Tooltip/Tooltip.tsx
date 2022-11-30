@@ -37,7 +37,7 @@ const Tooltip = ({
   const handleShow = (value: boolean) => {
     if (setIsOpen) {
       setIsOpen(value)
-    } else {
+    } else if (isOpen === undefined) {
       setShow(value)
     }
   }
@@ -95,7 +95,7 @@ const Tooltip = ({
   const handleClickTooltipAnchor = () => {
     if (setIsOpen) {
       setIsOpen(!isOpen)
-    } else {
+    } else if (isOpen === undefined) {
       setShow((currentValue) => !currentValue)
     }
   }
