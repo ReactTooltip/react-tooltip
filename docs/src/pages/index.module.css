@@ -20,4 +20,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  row-gap: 16px;
+}
+
+@media screen and (min-width: 768px) {
+  .buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    column-gap: 16px;
+  }
 }

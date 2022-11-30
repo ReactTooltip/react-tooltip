@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import React from 'react'
 import clsx from 'clsx'
 import Link from '@docusaurus/Link'
@@ -15,8 +16,11 @@ function HomepageHeader() {
         <h1 className="hero__title">{siteConfig.title}</h1>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
-          <Link className="button button--secondary button--lg" to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
+          <Link className="button button--primary button--lg" to="/docs/category/upgrade-guide">
+            Upgrade from V4 to V5
+          </Link>
+          <Link className="button button--secondary button--lg" to="/docs/getting-started">
+            Getting Started with V5
           </Link>
         </div>
       </div>
@@ -25,12 +29,10 @@ function HomepageHeader() {
 }
 
 export default function Home(): JSX.Element {
-  const { siteConfig } = useDocusaurusContext()
+  // const { siteConfig } = useDocusaurusContext()
   return (
-    <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
-    >
+    // <Layout title={`${siteConfig.title}`} description="Awesome React Tooltip component">
+    <Layout title="Welcome" description="Awesome React Tooltip component">
       <HomepageHeader />
       <main>
         <HomepageFeatures />
