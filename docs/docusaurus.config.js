@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 const config = {
   title: 'React Tooltip',
   tagline: 'Awesome React Tooltip component',
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://react-tooltip.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
