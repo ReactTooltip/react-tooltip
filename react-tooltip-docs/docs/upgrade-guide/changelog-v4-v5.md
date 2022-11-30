@@ -27,6 +27,7 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 - CSS import is now optional, so, you can modify and/or add any styling to your floating tooltip element
 - `data-tip` attribute now is `data-content`
 - `getContent` prop now doesn't accept `any` anymore, just a `function`
+- default behavior of tooltip now is `solid` instead of `float`
 
 ## New Props
 

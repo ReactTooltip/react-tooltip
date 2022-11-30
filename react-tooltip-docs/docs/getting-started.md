@@ -4,6 +4,8 @@ sidebar_position: 1
 
 # Getting Started
 
+This docs is related to V5, [if you are using V4 please check here](https://reacttooltip.github.io/react-tooltip/)
+
 A react tooltip is a floating react element that displays information related to an anchor element when it receives keyboard focus or the mouse hovers over it.
 
 ## Installation

@@ -1,0 +1,21 @@
+{
+  "name": "react-tooltip-example",
+  "homepage": "https://reacttooltip.github.io/react-tooltip/",
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "gh-pages": "^2.1.1",
+    "react": "link:../node_modules/react",
+    "react-dom": "link:../node_modules/react-dom",
+    "react-scripts": "5.0.1",
+    "react-tooltip": "link:.."
+  },
+  "scripts": {
+    "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
+    "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
+    "test": "DISABLE_ESLINT_PLUGIN=true react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
+  }
+}

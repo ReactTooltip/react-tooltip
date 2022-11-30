@@ -3,10 +3,11 @@ body {
   margin: 0px;
   padding: 0px;
   min-width: 1024px;
+  letter-spacing: 0.05rem;
 }
 .tooltip-example {
   background: #1182dd;
-  height: 550px;
+  height: 900px;
   position: relative;
 }
 .tooltip-example .title {
@@ -62,7 +63,8 @@ body {
   left: 0px;
   right: 0px;
   width: 100%;
-  height: 230px;
+  height: auto;
+  padding-bottom: 30px;
   overflow: auto;
 }
 .control-panel:after {
@@ -84,7 +86,7 @@ body {
 .control-panel .button-group .item p {
   margin: 10px 0px 2px;
   font-size: 18px;
-  color: #777;
+  color: black;
 }
 .control-panel .button-group .item a {
   border-radius: 3px;
@@ -171,6 +173,11 @@ body {
   float: left;
   box-sizing: border-box;
 }
+.example-jsx .side-3 {
+  width: 33.333%;
+  float: left;
+  box-sizing: border-box;
+}
 .example-jsx a {
   text-align: center;
   width: 55px;
@@ -213,19 +220,19 @@ body {
   line-height: 30px;
 }
 .extraClass {
-  font-size: 20px !important;
-  pointer-events: auto !important;
+  font-size: 20px;
+  background-color: #00ffe5;
+  color: #222;
 }
-.extraClass:hover {
-  visibility: visible !important;
-  opacity: 1 !important;
+.extraClass .extraClassArrow {
+  background-color: #00ffe5;
 }
 .customTheme {
-  color: #ff6e00 !important;
-  background-color: orange !important;
+  color: #ff6e00;
+  background-color: orange;
 }
 .customTheme.place-top:after {
-  border-top-color: orange !important;
-  border-top-style: solid !important;
-  border-top-width: 6px !important;
+  border-top-color: orange;
+  border-top-style: solid;
+  border-top-width: 6px;
 }
