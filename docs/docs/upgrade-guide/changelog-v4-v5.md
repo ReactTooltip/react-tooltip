@@ -21,6 +21,7 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 
 ## Break Changes
 
+- All data attributes now has `tooltip` into his name
 - Default Padding changed from `padding: 8px 21px;` to `padding: 8px 16px;`
 - Exported module now is `Tooltip` instead of `ReactTooltip`
 - - If you already have a `Tooltip` component in your application and want to explicitly declare this is `ReactTooltip`, just `import { Tooltip as ReactTooltip } from "react-tooltip"`
