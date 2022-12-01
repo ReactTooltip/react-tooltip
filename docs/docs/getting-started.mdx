@@ -8,6 +8,33 @@ This docs is related to V5, [if you are using V4 please check here](https://reac
 
 A react tooltip is a floating react element that displays information related to an anchor element when it receives keyboard focus or the mouse hovers over it.
 
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
 ## Installation
 
 ```bash
@@ -68,3 +95,6 @@ import ReactTooltip from 'react-tooltip'
 ```jsx
 <ReactTooltip anchorId="my-anchor-element" />
 ```
+
+<TooltipAnchor id="props-basic">◕‿‿◕</TooltipAnchor>
+<Tooltip anchorId="props-basic" content="hello world!" />
