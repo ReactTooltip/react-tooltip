@@ -55,11 +55,20 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      announcementBar: {
+        id: 'support_us',
+        content:
+          '⭐️ If you like ReactTooltip, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/ReactTooltip/react-tooltip">GitHub</a> ⭐️',
+        backgroundColor: '#222',
+        textColor: '#fff',
+        isCloseable: false,
+      },
       navbar: {
         title: 'React Tooltip',
         logo: {
           alt: 'React Tooltip Logo',
-          src: 'img/logo.svg',
+          src: 'img/only-tooltip.svg',
+          width: 120,
         },
         items: [
           {
