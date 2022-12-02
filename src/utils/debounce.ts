@@ -22,16 +22,10 @@ const debounce = (func: { (): void; (): void; apply?: any }, wait?: number, imme
       }
     }
 
-    const callNow = immediate && !timeout
-
     // @ts-ignore
     clearTimeout(timeout)
 
     timeout = setTimeout(later, wait)
-
-    if (callNow) {
-      func.apply(context, args)
-    }
   }
 }
 
