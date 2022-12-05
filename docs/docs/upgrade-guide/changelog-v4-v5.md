@@ -42,7 +42,7 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 - [x] children
 - [x] place - `data-place`
 - [x] type - **Deprecated** | in V5 -> `variant` - `data-variant`
-- [ ] effect
+- [ ] effect - not implemented yet, if many users need this feature, we will work on this one.
 - [x] offset - `data-offset`
 - [ ] padding - **Deprecated** | in V5 -> can be easy updated by className prop
 - [ ] multiline - **Deprecated** | in V5 -> this is already supported as default by `content` and `html` props
@@ -61,17 +61,17 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 - [x] delayHide - `data-delay-hide`
 - [ ] delayUpdate - **Deprecated** | if requested, can be implemented later
 - [x] delayShow - `data-delay-show`
-- [ ] event
-- [ ] eventOff
+- [ ] event - not implemented yet, if many users need this feature, we will work on this one.
+- [ ] eventOff - **Deprecated**
 - [ ] isCapture - **Deprecated**
 - [ ] globalEventOff - **Deprecated**
 - [x] getContent - Now this attribute only accepts a function instead of any
-- [ ] afterShow
-- [ ] afterHide
+- [ ] afterShow - not implemented yet, if many users need this feature, we will work on this one.
+- [ ] afterHide - not implemented yet, if many users need this feature, we will work on this one.
 - [ ] overridePosition - **Deprecated**
-- [ ] disable
-- [ ] scrollHide
-- [ ] resizeHide
+- [ ] disable - **Deprecated** | in V5 -> state can be controlled or uncontrolled
+- [ ] scrollHide - not implemented yet, if many users need this feature, we will validate if we wrok on this one.
+- [ ] resizeHide - not implemented yet, if many users need this feature, we will validate if we wrok on this one.
 - [x] wrapper - `data-wrapper`
 - [ ] bodyMode - **Deprecated**
 - [ ] clickable - **Deprecated** | Supported by default in V5
