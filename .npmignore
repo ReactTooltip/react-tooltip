@@ -14,10 +14,12 @@ CHANGELOG.md
 src/
 docs/
 public/
+coverage/
 
 // setting files
 .babelrc
 .travis.yml
+.editorconfig
 
 // others
 .vscode/
