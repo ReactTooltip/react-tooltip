@@ -6,11 +6,20 @@
 // specific files
 node_modules/
 example/
+example-v5/
+build/
 test/
 bin/
 CHANGELOG.md
 src/
+docs/
+public/
 
 // setting files
 .babelrc
 .travis.yml
+
+// others
+.vscode/
+.husky/
+.github/

@@ -1,6 +1,6 @@
 {
   "name": "react-tooltip",
-  "version": "5.0.0-beta.1",
+  "version": "5.0.0-beta.2",
   "description": "react tooltip component",
   "scripts": {
     "dev": "node ./cli.js --env=development && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.dev.js --watch",
@@ -13,7 +13,7 @@
     "prepare": "husky install",
     "test": "jest"
   },
-  "main": "dist/react-tooltip.esm.js",
+  "main": "dist/react-tooltip.esm.min.js",
   "buildFormats": [
     {
       "file": "dist/react-tooltip.umd.js",
