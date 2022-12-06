@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable max-len */
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
@@ -66,6 +68,29 @@ const config = {
         backgroundColor: '#222',
         textColor: '#fff',
         isCloseable: false,
+      },
+      algolia: {
+        // The application ID provided by Algolia
+        appId: 'CQB0RZ7E1F',
+
+        // Public API key: it is safe to commit it
+        apiKey: '97b68f94056a6d6fad56df43bf178866',
+
+        indexName: 'react-tooltip',
+
+        // Optional: see doc section below
+        contextualSearch: true,
+
+        // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
+        // externalUrlRegex: 'external\\.com|domain\\.com',
+
+        // Optional: Algolia search parameters
+        // searchParameters: {},
+
+        // Optional: path for search page that enabled by default (`false` to disable it)
+        searchPagePath: 'search',
+
+        // ... other Algolia params
       },
       navbar: {
         title: 'React Tooltip',
