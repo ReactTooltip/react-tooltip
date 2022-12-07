@@ -1,3 +1,9 @@
+## [4.5.1](https://github.com/ReactTooltip/react-tooltip/compare/v4.5.0...v4.5.1) (2022-11-23)
+
+### Bug Fixes
+
+- Fixed tooltip arrow center position ([13f6e75](https://github.com/ReactTooltip/react-tooltip/commit/13f6e75053267a27e1480faaef98caa86c561d6d))
+
 # [4.5.0](https://github.com/ReactTooltip/react-tooltip/compare/v4.4.5...v4.5.0) (2022-11-09)
 
 ### Features
