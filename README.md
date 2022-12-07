@@ -102,17 +102,20 @@ import ReactDOMServer from 'react-dom/server';
 
 ## Maintainers
 
-[danielbarion](https://github.com/danielbarion) maintainer - accepting PRs and doing minor testing/development.
-
-[alexgurr](https://github.com/alexgurr) Casual maintainer - accepting PRs and doing minor testing/development.
-
-[pdeszynski](https://github.com/pdeszynski) Casual maintainer - accepting PRs and doing minor testing/development.
+[danielbarion](https://github.com/danielbarion) Maintainer - Creator of React Tooltip >= V5.
 
 [aronhelser](https://github.com/aronhelser) Passive maintainer - accepting PRs and doing minor testing, but not fixing issues or doing active development.
+
+[alexgurr](https://github.com/alexgurr) (inactive).
+
+[pdeszynski](https://github.com/pdeszynski) (inactive).
 
 [roggervalf](https://github.com/roggervalf) (inactive).
 
 [huumanoid](https://github.com/huumanoid) (inactive)
+
+[wwayne](https://github.com/wwayne) (inactive) - Creator of the original React Tooltip (V1.x ~ V4.x.)
+
 
 We would gladly accept a new maintainer to help out!
 
