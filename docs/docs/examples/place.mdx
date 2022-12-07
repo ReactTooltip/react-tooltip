@@ -1,0 +1,55 @@
+---
+sidebar_position: 1
+---
+
+# Place
+
+Available places of ReactTooltip component.
+
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+`place` available values `top` | `right` | `bottom` | `left`
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
+
+<a id="tooltip-anchor"> ◕‿‿◕ </a>
+<Tooltip anchorId="tooltip-anchor" content="Hello World - top" place="top" />
+<Tooltip anchorId="tooltip-anchor" content="Hello World - right" place="right" />
+<Tooltip anchorId="tooltip-anchor" content="Hello World - bottom" place="bottom" />
+<Tooltip anchorId="tooltip-anchor" content="Hello World - left" place="left" />
+```
+
+<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
+  <TooltipAnchor id="tooltip-anchor">◕‿‿◕</TooltipAnchor>
+  <Tooltip anchorId="tooltip-anchor" content="Hello World - top" place="top" />
+  <Tooltip anchorId="tooltip-anchor" content="Hello World - right" place="right" />
+  <Tooltip anchorId="tooltip-anchor" content="Hello World - bottom" place="bottom" />
+  <Tooltip anchorId="tooltip-anchor" content="Hello World - left" place="left" />
+</div>

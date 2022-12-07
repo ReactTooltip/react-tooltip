@@ -1,0 +1,64 @@
+.tooltip {
+  visibility: hidden;
+  width: max-content;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 8px 16px;
+  border-radius: 3px;
+  font-size: 90%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  will-change: opacity, visibility;
+}
+
+.arrow {
+  position: absolute;
+  background: var(--rt-color-dark);
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+}
+
+.show {
+  visibility: visible;
+  opacity: 0.9;
+}
+
+/** Types variant **/
+.dark,
+.dark .arrow {
+  background: var(--rt-color-dark);
+  color: var(--rt-color-white);
+}
+
+.light,
+.light .arrow {
+  background-color: var(--rt-color-white);
+  color: var(--rt-color-dark);
+}
+
+.success,
+.success .arrow {
+  background-color: var(--rt-color-success);
+  color: var(--rt-color-white);
+}
+
+.warning,
+.warning .arrow {
+  background-color: var(--rt-color-warning);
+  color: var(--rt-color-white);
+}
+
+.error,
+.error .arrow {
+  background-color: var(--rt-color-error);
+  color: var(--rt-color-white);
+}
+
+.info,
+.info .arrow {
+  background-color: var(--rt-color-info);
+  color: var(--rt-color-white);
+}

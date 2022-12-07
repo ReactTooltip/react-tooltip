@@ -1,39 +1,38 @@
 {
   "name": "react-tooltip",
-  "version": "4.5.1",
+  "version": "5.0.0",
   "description": "react tooltip component",
-  "private": false,
-  "main": "dist/index.js",
-  "types": "dist/react-tooltip.d.ts",
-  "module": "dist/index.es.js",
-  "jsnext:main": "dist/index.es.js",
-  "engines": {
-    "npm": ">=6.13"
-  },
   "scripts": {
-    "test": "npm-run-all test:unit",
-    "pretest": "npm-run-all pretty:quick lint:staged",
-    "eslint:fix": "./node_modules/.bin/eslint . --ignore-path ./.eslintignore --fix",
-    "pretty:quick": "./node_modules/.bin/pretty-quick --staged",
-    "lint:staged": "./node_modules/.bin/lint-staged",
-    "test:unit": "mocha --require @babel/register --require ignore-styles test/*.spec.js",
-    "clean": "rimraf dist",
-    "build:rollup": "rollup -c",
-    "build": "npm-run-all clean copy:types build:rollup",
-    "build:watch": "rollup -c -w",
-    "start": "npm-run-all clean build:watch",
-    "gh-pages": "gh-pages -d example",
-    "github-changes": "github-changes -o ReactTooltip -r react-tooltip -a --only-pulls --use-commit-body",
-    "copy:types": "cpy ./react-tooltip.d.ts ./dist --parents --dot",
+    "dev": "node ./cli.js --env=development && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.dev.js --watch",
+    "build": "node ./cli.js --env=production && npm run types && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.prod.js",
+    "types": "node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.types.js",
+    "eslint": "eslint --ext=js --ext=jsx --ext=ts --ext=tsx --fix ./src",
+    "stylelint": "stylelint \"src/**/*.css\"",
+    "prettier": "prettier --config ./.prettierrc.json --write \"src/**/*{.js,.jsx,.ts,.tsx,.css}\"",
     "cm": "git cz",
-    "semantic-release": "semantic-release",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "jest"
   },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
+  "main": "dist/react-tooltip.esm.min.js",
+  "buildFormats": [
+    {
+      "file": "dist/react-tooltip.umd.js",
+      "format": "umd"
+    },
+    {
+      "file": "dist/react-tooltip.cjs.js",
+      "format": "cjs"
+    },
+    {
+      "file": "dist/react-tooltip.esm.js",
+      "format": "es"
     }
-  },
+  ],
+  "types": "dist/react-tooltip.d.ts",
+  "type": "module",
+  "license": "MIT",
+  "private": false,
+  "author": "ReactTooltip",
   "repository": "https://github.com/ReactTooltip/react-tooltip",
   "keywords": [
     "react",
@@ -41,135 +40,90 @@
     "tooltip",
     "react-tooltip"
   ],
-  "author": "ReactTooltip",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ReactTooltip/react-tooltip/issues"
   },
   "homepage": "https://github.com/ReactTooltip/react-tooltip#readme",
-  "browserify-shim": {
-    "react": "global:React",
-    "react-dom": "global:ReactDOM"
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "22.0.2",
+    "@rollup/plugin-node-resolve": "14.1.0",
+    "@rollup/plugin-replace": "4.0.0",
+    "@rollup/plugin-typescript": "8.5.0",
+    "@types/css": "^0.0.33",
+    "@types/css-modules": "^1.0.2",
+    "@types/jest": "^29.2.3",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "@types/react-test-renderer": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.1",
+    "@typescript-eslint/parser": "^5.42.1",
+    "commitizen": "^4.2.5",
+    "css-loader": "6.7.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "8.28.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "7.31.11",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^8.0.1",
+    "jest": "^29.3.1",
+    "jest-environment-jsdom": "^29.3.1",
+    "jest-transform-css": "^6.0.0",
+    "lint-staged": "13.0.3",
+    "postcss": "8.4.19",
+    "prettier": "^2.4.1",
+    "process": "^0.11.10",
+    "prop-types": "^15.7.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-test-renderer": "^18.2.0",
+    "rimraf": "^3.0.2",
+    "rollup": "2.79.1",
+    "rollup-plugin-analyzer": "^4.0.0",
+    "rollup-plugin-browsersync": "^1.3.3",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-dts": "4.2.3",
+    "rollup-plugin-filesize": "^9.1.1",
+    "rollup-plugin-html-scaffold": "^0.2.0",
+    "rollup-plugin-postcss": "^4.0.1",
+    "rollup-plugin-progress": "^1.1.2",
+    "rollup-plugin-string": "^3.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-visualizer": "^5.5.2",
+    "style-loader": "^3.3.0",
+    "stylelint": "^13.13.1",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-standard": "^22.0.0",
+    "ts-jest": "^29.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
   },
   "peerDependencies": {
-    "react": ">=16.0.0",
-    "react-dom": ">=16.0.0"
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   },
-  "dependencies": {
-    "prop-types": "^15.8.1",
-    "uuid": "^7.0.3"
-  },
-  "devDependencies": {
-    "@babel/cli": "7.19.3",
-    "@babel/core": "7.19.3",
-    "@babel/eslint-parser": "7.19.1",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/plugin-proposal-decorators": "7.19.3",
-    "@babel/plugin-proposal-json-strings": "^7.18.6",
-    "@babel/plugin-proposal-object-rest-spread": "7.19.4",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/plugin-syntax-import-meta": "^7.10.4",
-    "@babel/preset-env": "^7.19.4",
-    "@babel/preset-react": "^7.18.6",
-    "@babel/register": "^7.18.9",
-    "@commitlint/cli": "17.1.2",
-    "@commitlint/config-conventional": "17.1.0",
-    "@commitlint/travis-cli": "17.1.2",
-    "@rollup/plugin-commonjs": "23.0.0",
-    "@rollup/plugin-node-resolve": "^13.3.0",
-    "@semantic-release/changelog": "^6.0.1",
-    "@semantic-release/commit-analyzer": "^9.0.2",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/npm": "^9.0.1",
-    "@semantic-release/release-notes-generator": "^10.0.3",
-    "@svgr/rollup": "6.4.0",
-    "@testing-library/react": "13.4.0",
-    "babel-loader": "8.2.5",
-    "babelify": "^10.0.0",
-    "browserify": "^17.0.0",
-    "browserify-shim": "^3.8.15",
-    "chai": "^4.3.6",
-    "chai-enzyme": "^1.0.0-beta.1",
-    "chai-spies": "^1.0.0",
-    "commitizen": "4.2.5",
-    "concurrently": "7.4.0",
-    "core-js": "3.25.5",
-    "cpy-cli": "4.2.0",
-    "cz-conventional-changelog": "^3.3.0",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.6",
-    "eslint": "8.25.0",
-    "eslint-config-jss": ">=5.0.1",
-    "eslint-config-prettier": ">=8.5.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-config-standard-react": ">=11.0.1",
-    "eslint-plugin-import": ">=2.26.0",
-    "eslint-plugin-node": ">=11.1.0",
-    "eslint-plugin-prettier": "4.2.1",
-    "eslint-plugin-promise": "6.1.0",
-    "eslint-plugin-react": "7.31.10",
-    "gh-pages": "4.0.0",
-    "github-changes": "^2.0.3",
-    "http-server": "^14.1.1",
-    "husky": "^8.0.0",
-    "ignore-styles": "5.0.1",
-    "jsdom": "20.0.1",
-    "lint-staged": "^13.0.3",
-    "mocha": "^10.0.0",
-    "mocha-each": "^2.0.1",
-    "mocha-jsdom": "^2.0.0",
-    "npm-run-all": "^4.1.5",
-    "postcss-nested": "^5.0.6",
-    "postcss-scss": "4.0.5",
-    "postcss-simple-vars": "^6.0.3",
-    "prettier": "2.7.1",
-    "pretty-quick": "^3.1.3",
-    "react": "^18.2.0",
-    "react-addons-test-utils": "^15.1.0",
-    "react-dom": "^18.2.0",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.77.2",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-eslint": "7.0.0",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-sass": "1.12.16",
-    "rollup-plugin-stylelint": "1.0.0",
-    "rollup-plugin-url": "^3.0.1",
-    "sass": "1.55.0",
-    "semantic-release": "19.0.5",
-    "snazzy": "^9.0.0",
-    "standard": "^17.0.0",
-    "stylelint": "14.13.0",
-    "stylelint-config-standard": "26.0.0",
-    "uglifyjs": "^2.4.10",
-    "watchify": "^4.0.0"
-  },
-  "files": [
-    "dist"
-  ],
-  "release": {
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
-      "@semantic-release/npm",
-      "@semantic-release/git"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
     ],
-    "branch": "master"
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   },
-  "lint-staged": {
-    "*.{js,ts}": "yarn eslint:fix"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn pretest",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "@floating-ui/dom": "^1.0.4",
+    "classnames": "^2.3.2"
   }
 }

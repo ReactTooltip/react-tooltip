@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tooltip props basic tooltip component 1`] = `
+[
+  <span
+    id="basic-example"
+  >
+    Lorem Ipsum
+  </span>,
+  <div
+    className=""
+    id=":r2:"
+    role="tooltip"
+    style={{}}
+  >
+    Hello World!
+    <div
+      className=""
+      style={{}}
+    />
+  </div>,
+]
+`;
+
+exports[`tooltip props tooltip component - getContent 1`] = `
+[
+  <span
+    id="basic-example-get-content"
+  >
+    Lorem Ipsum
+  </span>,
+  <div
+    className=""
+    id=":r4:"
+    role="tooltip"
+    style={{}}
+  >
+    Hello World!
+    <div
+      className=""
+      style={{}}
+    />
+  </div>,
+]
+`;
+
+exports[`tooltip props tooltip component - html 1`] = `
+[
+  <span
+    id="basic-example-html"
+  >
+    Lorem Ipsum
+  </span>,
+  <div
+    className=""
+    id=":r3:"
+    role="tooltip"
+    style={{}}
+  >
+    <span
+      dangerouslySetInnerHTML={
+        {
+          "__html": "Hello World!",
+        }
+      }
+    />
+    <div
+      className=""
+      style={{}}
+    />
+  </div>,
+]
+`;
+
+exports[`tooltip props tooltip component - without anchorId 1`] = `
+[
+  <span>
+    Lorem Ipsum
+  </span>,
+  <div
+    className=""
+    id=":r0:"
+    role="tooltip"
+    style={{}}
+  >
+    Hello World!
+    <div
+      className=""
+      style={{}}
+    />
+  </div>,
+]
+`;
+
+exports[`tooltip props tooltip component - without element reference 1`] = `
+<div
+  className=""
+  id=":r1:"
+  role="tooltip"
+  style={{}}
+>
+  <div
+    className=""
+    style={{}}
+  />
+</div>
+`;
