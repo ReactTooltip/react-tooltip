@@ -1,4 +1,4 @@
-# Contribuition
+# Contribution
 
 ## Running project locally
 
