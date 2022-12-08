@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Tooltip } from 'components/Tooltip'
-import {
+import type {
   EventsType,
   PositionStrategy,
   PlacesType,
