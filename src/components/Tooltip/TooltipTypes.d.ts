@@ -10,6 +10,8 @@ export type ChildrenType = Element | ElementType | ReactNode
 
 export type EventsType = 'hover' | 'click'
 
+export type PositionStrategy = 'absolute' | 'fixed'
+
 export interface ITooltip {
   className?: string
   classNameArrow?: string
@@ -24,6 +26,7 @@ export interface ITooltip {
   wrapper?: WrapperType
   children?: ChildrenType
   events?: EventsType[]
+  positionStrategy?: PositionStrategy
   delayShow?: number
   delayHide?: number
   isOpen?: boolean

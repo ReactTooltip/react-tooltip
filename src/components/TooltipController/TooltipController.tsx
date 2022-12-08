@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Tooltip } from 'components/Tooltip'
-import type {
+import {
   EventsType,
+  PositionStrategy,
   PlacesType,
   VariantType,
   WrapperType,
@@ -22,6 +23,7 @@ const TooltipController = ({
   wrapper = 'div',
   children = null,
   events = ['hover'],
+  positionStrategy = 'absolute',
   delayShow = 0,
   delayHide = 0,
   getContent,
@@ -36,6 +38,8 @@ const TooltipController = ({
   const [tooltipDelayHide, setTooltipDelayHide] = useState(delayHide)
   const [tooltipWrapper, setTooltipWrapper] = useState<WrapperType>(wrapper)
   const [tooltipEvents, setTooltipEvents] = useState<EventsType[]>(events)
+  const [tooltipPositionStrategy, setTooltipPositionStrategy] =
+    useState<PositionStrategy>(positionStrategy)
   const [isHtmlContent, setIsHtmlContent] = useState<boolean>(Boolean(html))
 
   const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
@@ -88,6 +92,9 @@ const TooltipController = ({
       events: (value: string) => {
         const parsedEvents = value.split(' ')
         setTooltipEvents(parsedEvents as EventsType[])
+      },
+      positionStrategy: (value: PositionStrategy) => {
+        setTooltipPositionStrategy(value)
       },
       'delay-show': (value: number) => {
         setTooltipDelayShow(Number(value))
@@ -181,6 +188,7 @@ const TooltipController = ({
     offset: tooltipOffset,
     wrapper: tooltipWrapper,
     events: tooltipEvents,
+    positionStrategy: tooltipPositionStrategy,
     delayShow: tooltipDelayShow,
     delayHide: tooltipDelayHide,
     isOpen,

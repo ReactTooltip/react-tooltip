@@ -4,4 +4,5 @@ export interface IComputePositions {
   tooltipArrowReference?: Element | HTMLElement | null
   place?: 'top' | 'right' | 'bottom' | 'left'
   offset?: number
+  strategy?: 'absolute' | 'fixed'
 }

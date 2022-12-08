@@ -16,6 +16,7 @@ const Tooltip = ({
   place = 'top',
   offset = 10,
   events = ['hover'],
+  positionStrategy = 'absolute',
   wrapper: WrapperElement = 'div',
   children = null,
   delayShow = 0,
@@ -148,6 +149,7 @@ const Tooltip = ({
       elementReference,
       tooltipReference: tooltipRef.current as HTMLElement,
       tooltipArrowReference: tooltipArrowRef.current as HTMLElement,
+      strategy: positionStrategy,
     }).then((computedStylesData) => {
       if (Object.keys(computedStylesData.tooltipStyles).length) {
         setInlineStyles(computedStylesData.tooltipStyles)
@@ -170,6 +172,7 @@ const Tooltip = ({
       role="tooltip"
       className={classNames(styles['tooltip'], styles[variant], className, {
         [styles['show']]: isOpen || show,
+        [styles['fixed']]: positionStrategy === 'fixed',
       })}
       style={inlineStyles}
       ref={tooltipRef as React.RefObject<HTMLDivElement>}

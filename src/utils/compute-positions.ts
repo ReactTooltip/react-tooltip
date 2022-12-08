@@ -7,6 +7,7 @@ export const computeToolTipPosition = async ({
   tooltipArrowReference = null,
   place = 'top',
   offset: offsetValue = 10,
+  strategy = 'absolute',
 }: IComputePositions) => {
   if (!elementReference) {
     // elementReference can be null or undefined and we will not compute the position
@@ -23,9 +24,9 @@ export const computeToolTipPosition = async ({
 
   if (tooltipArrowReference) {
     middleware.push(arrow({ element: tooltipArrowReference as HTMLElement }))
-
     return computePosition(elementReference as HTMLElement, tooltipReference as HTMLElement, {
       placement: place,
+      strategy,
       middleware,
     }).then(({ x, y, placement, middlewareData }) => {
       const styles = { left: `${x}px`, top: `${y}px` }
@@ -55,6 +56,7 @@ export const computeToolTipPosition = async ({
 
   return computePosition(elementReference as HTMLElement, tooltipReference as HTMLElement, {
     placement: 'bottom',
+    strategy,
     middleware,
   }).then(({ x, y }) => {
     const styles = { left: `${x}px`, top: `${y}px` }
