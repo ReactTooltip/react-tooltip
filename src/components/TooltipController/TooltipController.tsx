@@ -93,7 +93,7 @@ const TooltipController = ({
         const parsedEvents = value.split(' ')
         setTooltipEvents(parsedEvents as EventsType[])
       },
-      positionStrategy: (value: PositionStrategy) => {
+      'position-strategy': (value: PositionStrategy) => {
         setTooltipPositionStrategy(value)
       },
       'delay-show': (value: number) => {

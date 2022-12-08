@@ -82,14 +82,8 @@ const Tooltip = ({
       handleShow(false)
     }
 
-    if (show && tooltipShowDelayTimerRef.current) {
+    if (tooltipShowDelayTimerRef.current) {
       clearTimeout(tooltipShowDelayTimerRef.current)
-    } else if (!show && tooltipShowDelayTimerRef.current) {
-      // workaround to prevent tooltip being show forever
-      // when we remove the mouse before show tooltip with `delayShow`
-      tooltipHideDelayTimerRef.current = setTimeout(() => {
-        handleShow(false)
-      }, delayShow * 2)
     }
   }
 
