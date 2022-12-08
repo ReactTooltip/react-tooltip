@@ -4,6 +4,7 @@ import type {
   WrapperType,
   ChildrenType,
   EventsType,
+  PositionStrategy,
 } from 'components/Tooltip/TooltipTypes'
 
 export interface ITooltipController {
@@ -19,6 +20,7 @@ export interface ITooltipController {
   wrapper?: WrapperType
   children?: ChildrenType
   events?: EventsType[]
+  positionStrategy?: PositionStrategy
   delayShow?: number
   delayHide?: number
   getContent?: function

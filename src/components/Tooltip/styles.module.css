@@ -13,6 +13,10 @@
   will-change: opacity, visibility;
 }
 
+.fixed {
+  position: fixed;
+}
+
 .arrow {
   position: absolute;
   background: var(--rt-color-dark);
