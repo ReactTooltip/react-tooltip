@@ -7,6 +7,7 @@ import type {
   VariantType,
   WrapperType,
 } from 'components/Tooltip/TooltipTypes'
+import { useTooltip } from 'components/TooltipProvider'
 import { dataAttributesKeys } from './constants'
 import type { ITooltipController } from './TooltipControllerTypes'
 
@@ -42,6 +43,7 @@ const TooltipController = ({
   const [tooltipPositionStrategy, setTooltipPositionStrategy] =
     useState<PositionStrategy>(positionStrategy)
   const [isHtmlContent, setIsHtmlContent] = useState<boolean>(Boolean(html))
+  const { anchorRefs, activeAnchor } = useTooltip()
 
   const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
     const dataAttributes = elementReference?.getAttributeNames().reduce((acc, name) => {
@@ -131,9 +133,14 @@ const TooltipController = ({
       return () => {}
     }
 
-    const elementReference = document.querySelector(`[id='${anchorId}']`)
+    const elementRefs = new Set(anchorRefs)
 
-    if (!elementReference) {
+    const anchorById = document.querySelector(`[id='${anchorId}']`)
+    if (anchorById) {
+      elementRefs.add({ current: anchorById as HTMLElement })
+    }
+
+    if (!elementRefs.size) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       return () => {}
     }
@@ -148,9 +155,12 @@ const TooltipController = ({
 
     const observerCallback = (mutationList: any) => {
       mutationList.forEach((mutation: any) => {
+        if (!activeAnchor.current) {
+          return
+        }
         if (mutation.type === 'attributes') {
           const attributeKeyAndValue = getElementSpecificAttributeKeyAndValueParsed({
-            element: elementReference as HTMLElement,
+            element: activeAnchor.current,
             attributeName: mutation.attributeName,
           })
 
@@ -164,18 +174,27 @@ const TooltipController = ({
     // Create an observer instance linked to the callback function
     const observer = new MutationObserver(observerCallback)
 
-    // Start observing the target node for configured mutations
-    observer.observe(elementReference, observerConfig)
-
-    const dataAttributes = getDataAttributesFromAnchorElement(elementReference as HTMLElement)
-
-    applyAllDataAttributesFromAnchorElement(dataAttributes)
+    elementRefs.forEach((ref) => {
+      if (!ref.current) {
+        return
+      }
+      // Start observing the target nodes for configured mutations
+      observer.observe(ref.current, observerConfig)
+    })
 
     return () => {
       // Remove the observer when the tooltip is destroyed
       observer.disconnect()
     }
-  }, [anchorId])
+  }, [anchorRefs, activeAnchor, anchorId])
+
+  useEffect(() => {
+    if (!activeAnchor.current) {
+      return
+    }
+    const dataAttributes = getDataAttributesFromAnchorElement(activeAnchor.current)
+    applyAllDataAttributesFromAnchorElement(dataAttributes)
+  }, [activeAnchor])
 
   const props = {
     id,

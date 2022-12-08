@@ -2,6 +2,7 @@ import { createRef, useEffect, useState, useId, useRef } from 'react'
 import classNames from 'classnames'
 import debounce from 'utils/debounce'
 import { TooltipContent } from 'components/TooltipContent'
+import { useTooltip } from 'components/TooltipProvider'
 import { computeToolTipPosition } from '../../utils/compute-positions'
 import styles from './styles.module.css'
 import type { ITooltip } from './TooltipTypes'
@@ -35,6 +36,7 @@ const Tooltip = ({
   const [inlineStyles, setInlineStyles] = useState({})
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState<boolean>(false)
+  const { anchorRefs, activeAnchor, setActiveAnchor } = useTooltip()
 
   const handleShow = (value: boolean) => {
     if (setIsOpen) {
@@ -64,12 +66,16 @@ const Tooltip = ({
     }, delayHide)
   }
 
-  const handleShowTooltip = () => {
+  const handleShowTooltip = (e?: Event) => {
+    if (!e) {
+      return
+    }
     if (delayShow) {
       handleShowTooltipDelayed()
     } else {
       handleShow(true)
     }
+    setActiveAnchor({ current: e.target as HTMLElement })
 
     if (tooltipHideDelayTimerRef.current) {
       clearTimeout(tooltipHideDelayTimerRef.current)
@@ -82,6 +88,7 @@ const Tooltip = ({
     } else {
       handleShow(false)
     }
+    setActiveAnchor({ current: null })
 
     if (tooltipShowDelayTimerRef.current) {
       clearTimeout(tooltipShowDelayTimerRef.current)
@@ -102,14 +109,19 @@ const Tooltip = ({
   const debouncedHandleHideTooltip = debounce(handleHideTooltip, 50)
 
   useEffect(() => {
-    const elementReference = document.querySelector(`[id='${anchorId}']`)
+    const elementRefs = new Set(anchorRefs)
 
-    if (!elementReference) {
+    const anchorById = document.querySelector(`[id='${anchorId}']`)
+    if (anchorById) {
+      elementRefs.add({ current: anchorById as HTMLElement })
+    }
+
+    if (!elementRefs.size) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       return () => {}
     }
 
-    const enabledEvents: { event: string; listener: () => void }[] = []
+    const enabledEvents: { event: string; listener: (e?: Event) => void }[] = []
 
     if (events.find((event: string) => event === 'click')) {
       enabledEvents.push({ event: 'click', listener: handleClickTooltipAnchor })
@@ -125,18 +137,22 @@ const Tooltip = ({
     }
 
     enabledEvents.forEach(({ event, listener }) => {
-      elementReference?.addEventListener(event, listener)
+      elementRefs.forEach((ref) => {
+        ref.current?.addEventListener(event, listener)
+      })
     })
 
     return () => {
       enabledEvents.forEach(({ event, listener }) => {
-        elementReference?.removeEventListener(event, listener)
+        elementRefs.forEach((ref) => {
+          ref.current?.removeEventListener(event, listener)
+        })
       })
     }
-  }, [anchorId, events, delayHide, delayShow])
+  }, [anchorRefs, activeAnchor, anchorId, events, delayHide, delayShow])
 
   useEffect(() => {
-    const elementReference = document.querySelector(`[id='${anchorId}']`)
+    const elementReference = activeAnchor.current
 
     computeToolTipPosition({
       place,
@@ -159,7 +175,7 @@ const Tooltip = ({
       tooltipShowDelayTimerRef.current = undefined
       tooltipHideDelayTimerRef.current = undefined
     }
-  }, [show, isOpen, anchorId])
+  }, [show, isOpen, activeAnchor])
 
   return (
     <WrapperElement
