@@ -28,7 +28,6 @@ const TooltipController = ({
   delayShow = 0,
   delayHide = 0,
   style,
-  getContent,
   isOpen,
   setIsOpen,
 }: ITooltipController) => {
@@ -68,20 +67,12 @@ const TooltipController = ({
         setTooltipPlace(value)
       },
       content: (value: string) => {
-        setIsHtmlContent(true)
-        if (getContent) {
-          setTooltipContent(getContent(value))
-        } else {
-          setTooltipContent(value)
-        }
+        setIsHtmlContent(false)
+        setTooltipContent(value)
       },
       html: (value: string) => {
         setIsHtmlContent(true)
-        if (getContent) {
-          setTooltipContent(getContent(value))
-        } else {
-          setTooltipContent(value)
-        }
+        setTooltipContent(value)
       },
       variant: (value: VariantType) => {
         setTooltipVariant(value)
@@ -128,11 +119,15 @@ const TooltipController = ({
   }
 
   useEffect(() => {
-    if (!anchorId) {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      return () => {}
+    if (content) {
+      setTooltipContent(content)
     }
+    if (html) {
+      setTooltipContent(html)
+    }
+  }, [content, html])
 
+  useEffect(() => {
     const elementRefs = new Set(anchorRefs)
 
     const anchorById = document.querySelector(`[id='${anchorId}']`)
@@ -143,10 +138,6 @@ const TooltipController = ({
     if (!elementRefs.size) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       return () => {}
-    }
-
-    if (content && getContent) {
-      setTooltipContent(getContent(content))
     }
 
     // do not check for subtree and childrens, we only want to know attribute changes

@@ -7,6 +7,7 @@ function WithProvider() {
   const { attach, detach } = useTooltip()
   const buttonRef1 = useRef<HTMLButtonElement>(null)
   const buttonRef2 = useRef<HTMLButtonElement>(null)
+  const [clickCount, setClickCount] = useState(0)
 
   useEffect(() => {
     attach(buttonRef1, buttonRef2)
@@ -18,7 +19,11 @@ function WithProvider() {
   return (
     <section style={{ marginTop: '100px' }}>
       <p>
-        <button ref={buttonRef1} data-tooltip-content="Hello World from a Tooltip">
+        <button
+          ref={buttonRef1}
+          data-tooltip-content={`Hello World from a Tooltip ${clickCount}`}
+          onClick={() => setClickCount((i) => i + 1)}
+        >
           Hover or focus me
         </button>
         <button ref={buttonRef2} data-tooltip-content="Hello World from a Tooltip 2">
@@ -39,6 +44,7 @@ function App() {
       <button
         id="button"
         aria-describedby="tooltip"
+        data-tooltip-content="My big tooltip content 1"
         onClick={() => {
           setAnchorId('button')
         }}
@@ -48,7 +54,8 @@ function App() {
       <Tooltip
         place="bottom"
         anchorId={anchorId}
-        content="My big tooltip content"
+        // only shown if `data-tooltip-content` is unset
+        content={`Showing tooltip on ${anchorId}`}
         isOpen={isDarkOpen}
         setIsOpen={setIsDarkOpen}
       />
@@ -56,7 +63,6 @@ function App() {
         place="top"
         variant="success"
         anchorId="button2"
-        content="My big tooltip content"
         isOpen={isDarkOpen}
         setIsOpen={setIsDarkOpen}
       />
@@ -64,7 +70,6 @@ function App() {
         place="top"
         variant="info"
         anchorId="button3"
-        content="My big tooltip content"
         isOpen={isDarkOpen}
         setIsOpen={setIsDarkOpen}
       />
@@ -82,7 +87,7 @@ function App() {
         <p>
           <button
             id="button2"
-            data-tip="Hello World from a Tooltip"
+            data-tooltip-content="Hello World from a Tooltip 2"
             onClick={() => {
               setAnchorId('button2')
             }}
@@ -91,7 +96,7 @@ function App() {
           </button>
           <button
             id="button3"
-            data-tip="Hello World from a Tooltip 2"
+            data-tooltip-content="Hello World from a Tooltip 3"
             onClick={() => {
               setAnchorId('button3')
             }}
