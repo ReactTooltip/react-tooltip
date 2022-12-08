@@ -26,6 +26,7 @@ const TooltipController = ({
   positionStrategy = 'absolute',
   delayShow = 0,
   delayHide = 0,
+  styles,
   getContent,
   isOpen,
   setIsOpen,
@@ -191,6 +192,7 @@ const TooltipController = ({
     positionStrategy: tooltipPositionStrategy,
     delayShow: tooltipDelayShow,
     delayHide: tooltipDelayHide,
+    styles,
     isOpen,
     setIsOpen,
   }

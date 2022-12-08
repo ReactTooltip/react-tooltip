@@ -23,7 +23,8 @@ export interface ITooltipController {
   positionStrategy?: PositionStrategy
   delayShow?: number
   delayHide?: number
-  getContent?: function
+  getContent?: (value) => string
+  styles?: object
   isOpen?: boolean
   setIsOpen?: (value: boolean) => void
 }

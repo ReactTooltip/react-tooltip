@@ -21,6 +21,7 @@ const Tooltip = ({
   children = null,
   delayShow = 0,
   delayHide = 0,
+  styles: externalStyles,
   // props handled by controller
   isHtmlContent = false,
   content,
@@ -174,7 +175,7 @@ const Tooltip = ({
         [styles['show']]: isOpen || show,
         [styles['fixed']]: positionStrategy === 'fixed',
       })}
-      style={inlineStyles}
+      style={{ ...externalStyles, ...inlineStyles }}
       ref={tooltipRef as React.RefObject<HTMLDivElement>}
     >
       {children || (isHtmlContent ? <TooltipContent content={content as string} /> : content)}
