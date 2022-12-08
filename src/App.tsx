@@ -40,6 +40,15 @@ function App() {
         isOpen={isDarkOpen}
         setIsOpen={setIsDarkOpen}
       />
+      <Tooltip
+        place="right"
+        variant="info"
+        anchorId="button3"
+        content="My big tooltip content"
+        isOpen={isDarkOpen}
+        setIsOpen={setIsDarkOpen}
+        styles={{ backgroundColor: '#ff00ff' }}
+      />
 
       <section style={{ marginTop: '100px' }}>
         <p>

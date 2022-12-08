@@ -35,16 +35,8 @@
   background-color: rgb(0, 247, 255);
 }
 
-.example-container .example .example-arrow {
-  background-color: rgb(0, 247, 255);
-}
-
 .example-container .example-orange {
   color: #222;
-  background-color: rgb(255, 153, 0);
-}
-
-.example-container .example-orange .example-arrow {
   background-color: rgb(255, 153, 0);
 }
 
@@ -53,8 +45,13 @@
   background-color: rgb(255, 0, 255);
 }
 
-.example-container .example-pink .example-arrow {
-  background-color: rgb(255, 0, 255);
+.example-container .example-diff-arrow {
+  color: #fff;
+  background-color: rgb(55, 55, 55);
+}
+
+.example-container .example-diff-arrow .example-arrow {
+  background-color: rgb(222, 34, 72);
 }
 
 .example-container .example-no-radius {
