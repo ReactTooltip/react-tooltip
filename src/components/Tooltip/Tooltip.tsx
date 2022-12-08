@@ -36,7 +36,8 @@ const Tooltip = ({
   const [inlineStyles, setInlineStyles] = useState({})
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState<boolean>(false)
-  const { anchorRefs, activeAnchor, setActiveAnchor } = useTooltip()
+  const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip()
+  const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
 
   const handleShow = (value: boolean) => {
     if (setIsOpen) {
@@ -76,6 +77,7 @@ const Tooltip = ({
       handleShow(true)
     }
     setActiveAnchor({ current: e.target as HTMLElement })
+    setProviderActiveAnchor({ current: e.target as HTMLElement })
 
     if (tooltipHideDelayTimerRef.current) {
       clearTimeout(tooltipHideDelayTimerRef.current)
@@ -113,6 +115,7 @@ const Tooltip = ({
 
     const anchorById = document.querySelector(`[id='${anchorId}']`)
     if (anchorById) {
+      setActiveAnchor({ current: anchorById as HTMLElement })
       elementRefs.add({ current: anchorById as HTMLElement })
     }
 
@@ -149,7 +152,7 @@ const Tooltip = ({
         })
       })
     }
-  }, [anchorRefs, activeAnchor, anchorId, events, delayHide, delayShow])
+  }, [anchorRefs, anchorId, events, delayHide, delayShow])
 
   useEffect(() => {
     const elementReference = activeAnchor.current

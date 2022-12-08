@@ -182,6 +182,11 @@ const TooltipController = ({
       observer.observe(ref.current, observerConfig)
     })
 
+    if (anchorById) {
+      const dataAttributes = getDataAttributesFromAnchorElement(anchorById as HTMLElement)
+      applyAllDataAttributesFromAnchorElement(dataAttributes)
+    }
+
     return () => {
       // Remove the observer when the tooltip is destroyed
       observer.disconnect()
