@@ -130,7 +130,7 @@ const TooltipController = ({
       return () => {}
     }
 
-    const elementReference = document.querySelector(`#${anchorId}`)
+    const elementReference = document.querySelector(`[id='${anchorId}']`)
 
     if (!elementReference) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function

@@ -107,7 +107,7 @@ const Tooltip = ({
   const debouncedHandleHideTooltip = debounce(handleHideTooltip, 50)
 
   useEffect(() => {
-    const elementReference = document.querySelector(`#${anchorId}`)
+    const elementReference = document.querySelector(`[id='${anchorId}']`)
 
     if (!elementReference) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -141,7 +141,7 @@ const Tooltip = ({
   }, [anchorId, events, delayHide, delayShow])
 
   useEffect(() => {
-    const elementReference = document.querySelector(`#${anchorId}`)
+    const elementReference = document.querySelector(`[id='${anchorId}']`)
 
     computeToolTipPosition({
       place,
