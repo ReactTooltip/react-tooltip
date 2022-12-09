@@ -173,12 +173,18 @@ const Tooltip = ({
         setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
       }
     })
-
-    return () => {
-      tooltipShowDelayTimerRef.current = undefined
-      tooltipHideDelayTimerRef.current = undefined
-    }
   }, [show, isOpen, activeAnchor])
+
+  useEffect(() => {
+    return () => {
+      if (tooltipShowDelayTimerRef.current) {
+        clearTimeout(tooltipShowDelayTimerRef.current)
+    }
+      if (tooltipHideDelayTimerRef.current) {
+        clearTimeout(tooltipHideDelayTimerRef.current)
+      }
+    }
+  }, [])
 
   return (
     <WrapperElement
