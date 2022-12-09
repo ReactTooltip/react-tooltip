@@ -12,6 +12,10 @@ export default {
       extensions: ['.css'],
       plugins: [],
     }),
-    dts(),
+    dts({
+      compilerOptions: {
+        baseUrl: 'src',
+      },
+    }),
   ],
 }
