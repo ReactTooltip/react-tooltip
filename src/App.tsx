@@ -21,13 +21,18 @@ function WithProvider() {
       <p>
         <button
           ref={buttonRef1}
+          data-tooltip-place="right"
           data-tooltip-content={`Hello World from a Tooltip ${clickCount}`}
           onClick={() => setClickCount((i) => i + 1)}
         >
-          Hover or focus me
+          Hover or focus me 4
         </button>
-        <button ref={buttonRef2} data-tooltip-content="Hello World from a Tooltip 2">
-          Hover or focus me 2
+        <button
+          ref={buttonRef2}
+          data-tooltip-place="bottom"
+          data-tooltip-content="Hello World from a Tooltip 5"
+        >
+          Hover or focus me 5
         </button>
       </p>
       <Tooltip />
