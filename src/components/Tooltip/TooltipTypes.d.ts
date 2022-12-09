@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode, Element } from 'react'
+import type { ElementType, ReactNode, Element, CSSProperties } from 'react'
 
 export type PlacesType = 'top' | 'right' | 'bottom' | 'left'
 
@@ -29,7 +29,7 @@ export interface ITooltip {
   positionStrategy?: PositionStrategy
   delayShow?: number
   delayHide?: number
-  styles?: CSSProperties
+  style?: CSSProperties
   isOpen?: boolean
   setIsOpen?: (value: boolean) => void
 }

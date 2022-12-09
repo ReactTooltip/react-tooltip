@@ -21,7 +21,7 @@ const Tooltip = ({
   children = null,
   delayShow = 0,
   delayHide = 0,
-  styles: externalStyles,
+  style: externalStyles,
   // props handled by controller
   isHtmlContent = false,
   content,

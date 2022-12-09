@@ -47,7 +47,7 @@ function App() {
         content="My big tooltip content"
         isOpen={isDarkOpen}
         setIsOpen={setIsDarkOpen}
-        styles={{ backgroundColor: '#ff00ff' }}
+        style={{ backgroundColor: '#ff00ff' }}
       />
 
       <section style={{ marginTop: '100px' }}>
