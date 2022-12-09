@@ -24,7 +24,7 @@ export interface ITooltipController {
   delayShow?: number
   delayHide?: number
   getContent?: (value) => string
-  styles?: object
+  styles?: CSSProperties
   isOpen?: boolean
   setIsOpen?: (value: boolean) => void
 }
