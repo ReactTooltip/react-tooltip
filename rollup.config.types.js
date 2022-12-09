@@ -6,7 +6,7 @@ export default {
   output: [{ file: 'dist/react-tooltip.d.ts', format: 'es' }],
   plugins: [
     postcss({
-      extract: 'react-tooltip-tokens.css', // this will generate a specific file and override on multiples build, but the css will be the same
+      extract: 'react-tooltip-tokens.css', // this will generate a specific file not being used, but we need this part of code
       autoModules: true,
       include: '**/*.css',
       extensions: ['.css'],
