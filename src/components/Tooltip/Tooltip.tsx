@@ -1,4 +1,4 @@
-import { useEffect, useState, useId, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import classNames from 'classnames'
 import debounce from 'utils/debounce'
 import { TooltipContent } from 'components/TooltipContent'
@@ -9,7 +9,7 @@ import type { ITooltip } from './TooltipTypes'
 
 const Tooltip = ({
   // props
-  id = useId(),
+  id,
   className,
   classNameArrow,
   variant = 'dark',
@@ -36,7 +36,7 @@ const Tooltip = ({
   const [inlineStyles, setInlineStyles] = useState({})
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState<boolean>(false)
-  const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip()
+  const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip()(id)
   const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
 
   const handleShow = (value: boolean) => {

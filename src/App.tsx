@@ -4,15 +4,25 @@ import { useEffect, useRef, useState } from 'react'
 import styles from './styles.module.css'
 
 function WithProvider() {
-  const { attach, detach } = useTooltip()
+  const tooltipper = useTooltip()
+  const { attach, detach } = tooltipper()
+  const { attach: attach1, detach: detach1 } = tooltipper('tooltip-1')
+  const { attach: attach2, detach: detach2 } = tooltipper('tooltip-2')
   const buttonRef1 = useRef<HTMLButtonElement>(null)
   const buttonRef2 = useRef<HTMLButtonElement>(null)
-  const [clickCount, setClickCount] = useState(0)
+  const buttonRef3 = useRef<HTMLButtonElement>(null)
+  const buttonRef4 = useRef<HTMLButtonElement>(null)
+  const buttonRef5 = useRef<HTMLButtonElement>(null)
+  const buttonRef6 = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     attach(buttonRef1, buttonRef2)
+    attach1(buttonRef3, buttonRef4)
+    attach2(buttonRef5, buttonRef6)
     return () => {
       detach(buttonRef1, buttonRef2)
+      detach1(buttonRef3, buttonRef4)
+      detach2(buttonRef5, buttonRef6)
     }
   }, [])
 
@@ -22,20 +32,33 @@ function WithProvider() {
         <button
           ref={buttonRef1}
           data-tooltip-place="right"
-          data-tooltip-content={`Hello World from a Tooltip ${clickCount}`}
-          onClick={() => setClickCount((i) => i + 1)}
-        >
-          Hover or focus me 4
-        </button>
-        <button
-          ref={buttonRef2}
-          data-tooltip-place="bottom"
-          data-tooltip-content="Hello World from a Tooltip 5"
+          data-tooltip-content="Hello World from a Shared Global Tooltip"
         >
           Hover or focus me 5
         </button>
+        <button ref={buttonRef2} data-tooltip-content="Hello World from a Shared Global Tooltip">
+          Hover or focus me 6
+        </button>
+      </p>
+      <p>
+        <button ref={buttonRef3} data-tooltip-content="Hello World from Shared Tooltip 1">
+          Hover or focus me 7
+        </button>
+        <button ref={buttonRef4} data-tooltip-content="Hello World from Shared Tooltip 1">
+          Hover or focus me 8
+        </button>
+      </p>
+      <p>
+        <button ref={buttonRef5} data-tooltip-content="Hello World from Shared Tooltip 2">
+          Hover or focus me 9
+        </button>
+        <button ref={buttonRef6} data-tooltip-content="Hello World from Shared Tooltip 2">
+          Hover or focus me 10
+        </button>
       </p>
       <Tooltip />
+      <Tooltip id="tooltip-1" />
+      <Tooltip id="tooltip-2" />
     </section>
   )
 }

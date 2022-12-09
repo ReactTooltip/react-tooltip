@@ -1,50 +1,87 @@
-import React, { createContext, PropsWithChildren, useContext, useMemo, useState } from 'react'
+import React, {
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useId,
+  useState,
+} from 'react'
+
+type AnchorRef = React.RefObject<HTMLElement>
 
 interface TooltipContextData {
-  anchorRefs: Set<React.RefObject<HTMLElement>>
-  attach: (...ref: React.RefObject<HTMLElement>[]) => void
-  detach: (...ref: React.RefObject<HTMLElement>[]) => void
-  activeAnchor: React.RefObject<HTMLElement>
-  setActiveAnchor: React.Dispatch<React.SetStateAction<React.RefObject<HTMLElement>>>
+  // when using one tooltip
+  anchorRefs: Set<AnchorRef>
+  activeAnchor: AnchorRef
+  attach: (...refs: AnchorRef[]) => void
+  detach: (...refs: AnchorRef[]) => void
+  setActiveAnchor: (ref: AnchorRef) => void
 }
 
-const TooltipContext = createContext<TooltipContextData>({
+type TooltipContextDataBuilder = (tooltipId?: string) => TooltipContextData
+
+const TooltipContext = createContext<TooltipContextDataBuilder>(() => ({
   anchorRefs: new Set(),
+  activeAnchor: { current: null },
   attach: () => {
     /* attach anchor element */
   },
   detach: () => {
     /* detach anchor element */
   },
-  activeAnchor: { current: null },
   setActiveAnchor: () => {
     /* set active anchor */
   },
-})
+}))
 
 const TooltipProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [anchorRefs, setAnchorRefs] = useState<Set<React.RefObject<HTMLElement>>>(new Set())
-  const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
+  const defaultTooltipId = useId()
+  const [anchorRefMap, setAnchorRefMap] = useState<Record<string, Set<AnchorRef>>>({
+    [defaultTooltipId]: new Set(),
+  })
+  const [activeAnchorMap, setActiveAnchorMap] = useState<Record<string, AnchorRef>>({
+    [defaultTooltipId]: { current: null },
+  })
 
-  const attach = (...refs: React.RefObject<HTMLElement>[]) => {
-    setAnchorRefs((oldRefs) => {
-      refs.forEach((ref) => oldRefs.add(ref))
-      // create new set to trigger re-render
-      return new Set(oldRefs)
+  const attach = (tooltipId: string, ...refs: AnchorRef[]) => {
+    setAnchorRefMap((oldMap) => {
+      const tooltipRefs = oldMap[tooltipId] ?? new Set()
+      refs.forEach((ref) => tooltipRefs.add(ref))
+      // create new object to trigger re-render
+      return { ...oldMap, [tooltipId]: tooltipRefs }
     })
   }
 
-  const detach = (...refs: React.RefObject<HTMLElement>[]) => {
-    setAnchorRefs((oldRefs) => {
-      refs.forEach((ref) => oldRefs.delete(ref))
-      // create new set to trigger re-render
-      return new Set(oldRefs)
+  const detach = (tooltipId: string, ...refs: AnchorRef[]) => {
+    setAnchorRefMap((oldMap) => {
+      const tooltipRefs = oldMap[tooltipId]
+      if (!tooltipRefs) {
+        // tooltip not found
+        // maybe thow error?
+        return oldMap
+      }
+      refs.forEach((ref) => tooltipRefs.delete(ref))
+      // create new object to trigger re-render
+      return { ...oldMap }
     })
   }
 
-  const context = useMemo(
-    () => ({ anchorRefs, attach, detach, activeAnchor, setActiveAnchor }),
-    [anchorRefs, attach, detach, activeAnchor, setActiveAnchor],
+  const setActiveAnchor = (tooltipId: string, ref: React.RefObject<HTMLElement>) => {
+    setActiveAnchorMap((oldMap) => {
+      // create new object to trigger re-render
+      return { ...oldMap, [tooltipId]: ref }
+    })
+  }
+
+  const context = useCallback(
+    (tooltipId?: string) => ({
+      anchorRefs: anchorRefMap[tooltipId ?? defaultTooltipId] ?? new Set(),
+      activeAnchor: activeAnchorMap[tooltipId ?? defaultTooltipId] ?? { current: null },
+      attach: (...refs: AnchorRef[]) => attach(tooltipId ?? defaultTooltipId, ...refs),
+      detach: (...refs: AnchorRef[]) => detach(tooltipId ?? defaultTooltipId, ...refs),
+      setActiveAnchor: (ref: AnchorRef) => setActiveAnchor(tooltipId ?? defaultTooltipId, ref),
+    }),
+    [defaultTooltipId, anchorRefMap, activeAnchorMap, attach, detach],
   )
 
   return <TooltipContext.Provider value={context}>{children}</TooltipContext.Provider>
