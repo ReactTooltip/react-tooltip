@@ -12,6 +12,18 @@ export type EventsType = 'hover' | 'click'
 
 export type PositionStrategy = 'absolute' | 'fixed'
 
+export type DataAttribute =
+  | 'place'
+  | 'content'
+  | 'html'
+  | 'variant'
+  | 'offset'
+  | 'wrapper'
+  | 'events'
+  | 'position-strategy'
+  | 'delay-show'
+  | 'delay-hide'
+
 export interface ITooltip {
   className?: string
   classNameArrow?: string

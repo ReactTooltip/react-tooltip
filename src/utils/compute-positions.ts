@@ -31,22 +31,21 @@ export const computeToolTipPosition = async ({
     }).then(({ x, y, placement, middlewareData }) => {
       const styles = { left: `${x}px`, top: `${y}px` }
 
-      // @ts-ignore
-      const { x: arrowX, y: arrowY } = middlewareData.arrow
+      const { x: arrowX, y: arrowY } = middlewareData.arrow ?? { x: 0, y: 0 }
 
-      const staticSide = {
-        top: 'bottom',
-        right: 'left',
-        bottom: 'top',
-        left: 'right',
-      }[placement.split('-')[0]]
+      const staticSide =
+        {
+          top: 'bottom',
+          right: 'left',
+          bottom: 'top',
+          left: 'right',
+        }[placement.split('-')[0]] ?? 'bottom'
 
       const arrowStyle = {
         left: arrowX != null ? `${arrowX}px` : '',
         top: arrowY != null ? `${arrowY}px` : '',
         right: '',
         bottom: '',
-        // @ts-ignore
         [staticSide]: '-4px',
       }
 

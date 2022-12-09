@@ -6,9 +6,9 @@ import type {
   PlacesType,
   VariantType,
   WrapperType,
+  DataAttribute,
 } from 'components/Tooltip/TooltipTypes'
 import { useTooltip } from 'components/TooltipProvider'
-import { dataAttributesKeys } from './constants'
 import type { ITooltipController } from './TooltipControllerTypes'
 
 const TooltipController = ({
@@ -38,73 +38,63 @@ const TooltipController = ({
   const [tooltipDelayShow, setTooltipDelayShow] = useState(delayShow)
   const [tooltipDelayHide, setTooltipDelayHide] = useState(delayHide)
   const [tooltipWrapper, setTooltipWrapper] = useState<WrapperType>(wrapper)
-  const [tooltipEvents, setTooltipEvents] = useState<EventsType[]>(events)
-  const [tooltipPositionStrategy, setTooltipPositionStrategy] =
-    useState<PositionStrategy>(positionStrategy)
-  const [isHtmlContent, setIsHtmlContent] = useState<boolean>(Boolean(html))
+  const [tooltipEvents, setTooltipEvents] = useState(events)
+  const [tooltipPositionStrategy, setTooltipPositionStrategy] = useState(positionStrategy)
+  const [isHtmlContent, setIsHtmlContent] = useState(Boolean(html))
   const { anchorRefs, activeAnchor } = useTooltip()
 
   const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
     const dataAttributes = elementReference?.getAttributeNames().reduce((acc, name) => {
-      if (name.includes('data-tooltip-')) {
-        ;(acc as any)[name] = elementReference?.getAttribute(name)
+      if (name.startsWith('data-tooltip-')) {
+        acc[name] = elementReference?.getAttribute(name) ?? null
       }
-
       return acc
-    }, {})
+    }, {} as Record<string, string | null>)
 
     return dataAttributes
   }
 
-  const applyAllDataAttributesFromAnchorElement = (dataAttributes: {
-    [key: string]: string | number | boolean
-  }) => {
-    const keys = Object.keys(dataAttributes)
-    let formatedKey = null
-
-    const handleDataAttributes = {
-      place: (value: PlacesType) => {
-        setTooltipPlace(value)
+  const applyAllDataAttributesFromAnchorElement = (
+    dataAttributes: Record<string, string | null>,
+  ) => {
+    const handleDataAttributes: Record<DataAttribute, (value: string | null) => void> = {
+      place: (value) => {
+        setTooltipPlace((value as PlacesType) ?? place)
       },
-      content: (value: string) => {
+      content: (value) => {
         setIsHtmlContent(false)
-        setTooltipContent(value)
+        setTooltipContent(value ?? '')
       },
-      html: (value: string) => {
+      html: (value) => {
         setIsHtmlContent(true)
-        setTooltipContent(value)
+        setTooltipContent(value ?? '')
       },
-      variant: (value: VariantType) => {
-        setTooltipVariant(value)
+      variant: (value) => {
+        setTooltipVariant((value as VariantType) ?? variant)
       },
-      offset: (value: number) => {
-        setTooltipOffset(value)
+      offset: (value) => {
+        setTooltipOffset(Number(value) ?? offset)
       },
-      wrapper: (value: WrapperType) => {
-        setTooltipWrapper(value)
+      wrapper: (value) => {
+        setTooltipWrapper((value as WrapperType) ?? wrapper)
       },
-      events: (value: string) => {
-        const parsedEvents = value.split(' ')
-        setTooltipEvents(parsedEvents as EventsType[])
+      events: (value) => {
+        const parsedEvents = value?.split(' ')
+        setTooltipEvents((parsedEvents as EventsType[]) ?? events)
       },
-      'position-strategy': (value: PositionStrategy) => {
-        setTooltipPositionStrategy(value)
+      'position-strategy': (value) => {
+        setTooltipPositionStrategy((value as PositionStrategy) ?? positionStrategy)
       },
-      'delay-show': (value: number) => {
-        setTooltipDelayShow(Number(value))
+      'delay-show': (value) => {
+        setTooltipDelayShow(Number(value) ?? delayShow)
       },
-      'delay-hide': (value: number) => {
-        setTooltipDelayHide(Number(value))
+      'delay-hide': (value) => {
+        setTooltipDelayHide(Number(value) ?? delayHide)
       },
     }
-
-    keys.forEach((key) => {
-      formatedKey = key.replace('data-tooltip-', '')
-
-      if (dataAttributesKeys.includes(formatedKey)) {
-        // @ts-ignore
-        handleDataAttributes[formatedKey](dataAttributes[key])
-      }
+    Object.entries(dataAttributes).forEach(([key, value]) => {
+      const formattedKey = key.replace(/^data-tooltip-/, '') as DataAttribute
+      handleDataAttributes[formattedKey]?.(value)
     })
   }
 
@@ -130,9 +120,9 @@ const TooltipController = ({
   useEffect(() => {
     const elementRefs = new Set(anchorRefs)
 
-    const anchorById = document.querySelector(`[id='${anchorId}']`)
+    const anchorById = document.querySelector(`[id='${anchorId}']`) as HTMLElement
     if (anchorById) {
-      elementRefs.add({ current: anchorById as HTMLElement })
+      elementRefs.add({ current: anchorById })
     }
 
     if (!elementRefs.size) {
@@ -144,21 +134,19 @@ const TooltipController = ({
     // to stay watching `data-attributes` from anchor element
     const observerConfig = { attributes: true, childList: false, subtree: false }
 
-    const observerCallback = (mutationList: any) => {
-      mutationList.forEach((mutation: any) => {
+    const observerCallback: MutationCallback = (mutationList) => {
+      mutationList.forEach((mutation) => {
         if (!activeAnchor.current) {
           return
         }
-        if (mutation.type === 'attributes') {
-          const attributeKeyAndValue = getElementSpecificAttributeKeyAndValueParsed({
-            element: activeAnchor.current,
-            attributeName: mutation.attributeName,
-          })
-
-          applyAllDataAttributesFromAnchorElement(
-            attributeKeyAndValue as { [key: string]: string | number | boolean },
-          )
+        if (mutation.type !== 'attributes' || !mutation.attributeName) {
+          return
         }
+        const attributeKeyAndValue = getElementSpecificAttributeKeyAndValueParsed({
+          element: activeAnchor.current,
+          attributeName: mutation.attributeName,
+        })
+        applyAllDataAttributesFromAnchorElement(attributeKeyAndValue)
       })
     }
 
@@ -174,7 +162,7 @@ const TooltipController = ({
     })
 
     if (anchorById) {
-      const dataAttributes = getDataAttributesFromAnchorElement(anchorById as HTMLElement)
+      const dataAttributes = getDataAttributesFromAnchorElement(anchorById)
       applyAllDataAttributesFromAnchorElement(dataAttributes)
     }
 

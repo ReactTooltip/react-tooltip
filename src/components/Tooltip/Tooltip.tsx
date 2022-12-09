@@ -1,4 +1,4 @@
-import { createRef, useEffect, useState, useId, useRef } from 'react'
+import { useEffect, useState, useId, useRef } from 'react'
 import classNames from 'classnames'
 import debounce from 'utils/debounce'
 import { TooltipContent } from 'components/TooltipContent'
@@ -113,10 +113,10 @@ const Tooltip = ({
   useEffect(() => {
     const elementRefs = new Set(anchorRefs)
 
-    const anchorById = document.querySelector(`[id='${anchorId}']`)
+    const anchorById = document.querySelector(`[id='${anchorId}']`) as HTMLElement
     if (anchorById) {
-      setActiveAnchor({ current: anchorById as HTMLElement })
-      elementRefs.add({ current: anchorById as HTMLElement })
+      setActiveAnchor({ current: anchorById })
+      elementRefs.add({ current: anchorById })
     }
 
     if (!elementRefs.size) {
