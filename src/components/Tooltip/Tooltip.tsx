@@ -29,10 +29,10 @@ const Tooltip = ({
   isOpen,
   setIsOpen,
 }: ITooltip) => {
-  const tooltipRef = createRef()
-  const tooltipArrowRef = createRef()
-  const tooltipShowDelayTimerRef = useRef<ReturnType<typeof setTimeout>>()
-  const tooltipHideDelayTimerRef = useRef<ReturnType<typeof setTimeout>>()
+  const tooltipRef = useRef<HTMLElement>(null)
+  const tooltipArrowRef = useRef<HTMLDivElement>(null)
+  const tooltipShowDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const tooltipHideDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const [inlineStyles, setInlineStyles] = useState({})
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState<boolean>(false)
@@ -161,8 +161,8 @@ const Tooltip = ({
       place,
       offset,
       elementReference,
-      tooltipReference: tooltipRef.current as HTMLElement,
-      tooltipArrowReference: tooltipArrowRef.current as HTMLElement,
+      tooltipReference: tooltipRef.current,
+      tooltipArrowReference: tooltipArrowRef.current,
       strategy: positionStrategy,
     }).then((computedStylesData) => {
       if (Object.keys(computedStylesData.tooltipStyles).length) {
@@ -179,7 +179,7 @@ const Tooltip = ({
     return () => {
       if (tooltipShowDelayTimerRef.current) {
         clearTimeout(tooltipShowDelayTimerRef.current)
-    }
+      }
       if (tooltipHideDelayTimerRef.current) {
         clearTimeout(tooltipHideDelayTimerRef.current)
       }
@@ -195,13 +195,13 @@ const Tooltip = ({
         [styles['fixed']]: positionStrategy === 'fixed',
       })}
       style={{ ...externalStyles, ...inlineStyles }}
-      ref={tooltipRef as React.RefObject<HTMLDivElement>}
+      ref={tooltipRef}
     >
       {children || (isHtmlContent ? <TooltipContent content={content as string} /> : content)}
       <div
         className={classNames(styles['arrow'], classNameArrow)}
         style={inlineArrowStyles}
-        ref={tooltipArrowRef as React.RefObject<HTMLDivElement>}
+        ref={tooltipArrowRef}
       />
     </WrapperElement>
   )
