@@ -115,7 +115,9 @@ const Tooltip = ({
 
     const anchorById = document.querySelector(`[id='${anchorId}']`) as HTMLElement
     if (anchorById) {
-      setActiveAnchor({ current: anchorById })
+      setActiveAnchor((anchor) =>
+        anchor.current === anchorById ? anchor : { current: anchorById },
+      )
       elementRefs.add({ current: anchorById })
     }
 
