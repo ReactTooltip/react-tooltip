@@ -161,8 +161,10 @@ const TooltipController = ({
       observer.observe(ref.current, observerConfig)
     })
 
-    if (anchorById) {
-      const dataAttributes = getDataAttributesFromAnchorElement(anchorById)
+    const element = activeAnchor.current ?? anchorById
+
+    if (element) {
+      const dataAttributes = getDataAttributesFromAnchorElement(element)
       applyAllDataAttributesFromAnchorElement(dataAttributes)
     }
 

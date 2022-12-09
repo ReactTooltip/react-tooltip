@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import debounce from 'utils/debounce'
 import { TooltipContent } from 'components/TooltipContent'
 import { useTooltip } from 'components/TooltipProvider'
-import { computeToolTipPosition } from '../../utils/compute-positions'
+import { computeTooltipPosition } from '../../utils/compute-positions'
 import styles from './styles.module.css'
 import type { ITooltip } from './TooltipTypes'
 
@@ -155,9 +155,13 @@ const Tooltip = ({
   }, [anchorRefs, anchorId, events, delayHide, delayShow])
 
   useEffect(() => {
-    const elementReference = activeAnchor.current
-
-    computeToolTipPosition({
+    let elementReference = activeAnchor.current
+    if (anchorId) {
+      // `anchorId` element takes precedence
+      elementReference = document.querySelector(`[id='${anchorId}']`) as HTMLElement
+    }
+    let mounted = true
+    computeTooltipPosition({
       place,
       offset,
       elementReference,
@@ -165,6 +169,10 @@ const Tooltip = ({
       tooltipArrowReference: tooltipArrowRef.current,
       strategy: positionStrategy,
     }).then((computedStylesData) => {
+      if (!mounted) {
+        // invalidate computed positions after unmount
+        return
+      }
       if (Object.keys(computedStylesData.tooltipStyles).length) {
         setInlineStyles(computedStylesData.tooltipStyles)
       }
@@ -173,7 +181,10 @@ const Tooltip = ({
         setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
       }
     })
-  }, [show, isOpen, activeAnchor])
+    return () => {
+      mounted = false
+    }
+  }, [show, isOpen, anchorId, activeAnchor, place, offset, positionStrategy])
 
   useEffect(() => {
     return () => {

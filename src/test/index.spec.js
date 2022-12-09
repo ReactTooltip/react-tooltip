@@ -1,6 +1,6 @@
 import renderer from 'react-test-renderer'
 import debounce from 'utils/debounce'
-import { computeToolTipPosition } from 'utils/compute-positions'
+import { computeTooltipPosition } from 'utils/compute-positions'
 import { TooltipController as Tooltip } from '../components/TooltipController'
 
 // Tell Jest to mock all timeout functions
@@ -58,7 +58,7 @@ describe('tooltip props', () => {
 
 describe('compute positions', () => {
   test('empty reference elements', async () => {
-    const value = await computeToolTipPosition({
+    const value = await computeTooltipPosition({
       elementReference: null,
       tooltipReference: null,
       tooltipArrowReference: null,
@@ -69,7 +69,7 @@ describe('compute positions', () => {
 
   test('empty tooltip reference element', async () => {
     const element = document.createElement('div')
-    const value = await computeToolTipPosition({
+    const value = await computeTooltipPosition({
       elementReference: element,
       tooltipReference: null,
       tooltipArrowReference: null,
@@ -81,7 +81,7 @@ describe('compute positions', () => {
   test('empty tooltip arrow reference element', async () => {
     const element = document.createElement('div')
     const elementTooltip = document.createElement('div')
-    const value = await computeToolTipPosition({
+    const value = await computeTooltipPosition({
       elementReference: element,
       tooltipReference: elementTooltip,
       tooltipArrowReference: null,
@@ -100,7 +100,7 @@ describe('compute positions', () => {
     const element = document.createElement('div')
     const elementTooltip = document.createElement('div')
     const elementTooltipArrow = document.createElement('div')
-    const value = await computeToolTipPosition({
+    const value = await computeTooltipPosition({
       elementReference: element,
       tooltipReference: elementTooltip,
       tooltipArrowReference: elementTooltipArrow,
