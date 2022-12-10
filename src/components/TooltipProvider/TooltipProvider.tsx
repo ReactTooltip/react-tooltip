@@ -8,20 +8,11 @@ import React, {
   useState,
 } from 'react'
 
-type AnchorRef = React.RefObject<HTMLElement>
-
-interface TooltipContextData {
-  anchorRefs: Set<AnchorRef>
-  activeAnchor: AnchorRef
-  attach: (...refs: AnchorRef[]) => void
-  detach: (...refs: AnchorRef[]) => void
-  setActiveAnchor: (ref: AnchorRef) => void
-}
-
-type TooltipContextDataWrapper = TooltipContextData & {
-  // This means the context is a callable object
-  (tooltipId?: string): TooltipContextData
-}
+import type {
+  AnchorRef,
+  TooltipContextData,
+  TooltipContextDataWrapper,
+} from './TooltipProviderTypes'
 
 const defaultContextData: TooltipContextData = {
   anchorRefs: new Set(),
@@ -54,7 +45,7 @@ const TooltipProvider: React.FC<PropsWithChildren> = ({ children }) => {
       const tooltipRefs = oldMap[tooltipId] ?? new Set()
       refs.forEach((ref) => tooltipRefs.add(ref))
       // create new object to trigger re-render
-      return { ...oldMap, [tooltipId]: tooltipRefs }
+      return { ...oldMap, [tooltipId]: new Set(tooltipRefs) }
     })
   }
 
@@ -113,4 +104,4 @@ export function useTooltip() {
   return useContext(TooltipContext)
 }
 
-export { TooltipProvider }
+export default TooltipProvider

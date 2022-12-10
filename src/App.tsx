@@ -1,9 +1,32 @@
 import { TooltipController as Tooltip } from 'components/TooltipController'
-import { TooltipProvider, useTooltip } from 'components/TooltipProvider'
+import { TooltipProvider, TooltipWrapper, useTooltip } from 'components/TooltipProvider'
 import { useEffect, useRef, useState } from 'react'
 import styles from './styles.module.css'
 
-function WithProvider() {
+function WithProviderMinimal() {
+  const ref = useRef<HTMLButtonElement>(null)
+
+  return (
+    <section style={{ marginTop: '100px' }}>
+      <p>
+        <TooltipWrapper forwardRef={ref} place="bottom" content="Shared Global Tooltip">
+          <button
+            // this will not work, must use wrapper `forwardRef`
+            ref={ref}
+          >
+            Minimal 1
+          </button>
+        </TooltipWrapper>
+        <TooltipWrapper place="right" content="Shared Global Tooltip">
+          <button>Minimal 2</button>
+        </TooltipWrapper>
+      </p>
+      <Tooltip />
+    </section>
+  )
+}
+
+function WithProviderFullControl() {
   const { attach, detach } = useTooltip()
   const { attach: attach1, detach: detach1 } = useTooltip()('tooltip-1')
   const { attach: attach2, detach: detach2 } = useTooltip()('tooltip-2')
@@ -51,35 +74,9 @@ function WithProvider() {
           Provider 6
         </button>
       </p>
+      <Tooltip />
       <Tooltip id="tooltip-1" />
       <Tooltip id="tooltip-2" />
-    </section>
-  )
-}
-
-function WithProviderMinimal() {
-  const { attach, detach } = useTooltip()
-  const buttonRef1 = useRef<HTMLButtonElement>(null)
-  const buttonRef2 = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    attach(buttonRef1, buttonRef2)
-    return () => {
-      detach(buttonRef1, buttonRef2)
-    }
-  }, [])
-
-  return (
-    <section style={{ marginTop: '100px' }}>
-      <p>
-        <button ref={buttonRef1} data-tooltip-content="Shared Global Tooltip">
-          Minimal 1
-        </button>
-        <button ref={buttonRef2} data-tooltip-content="Shared Global Tooltip">
-          Minimal 2
-        </button>
-      </p>
-      <Tooltip />
     </section>
   )
 }
@@ -155,10 +152,10 @@ function App() {
         </p>
       </section>
       <TooltipProvider>
-        <WithProvider />
+        <WithProviderMinimal />
       </TooltipProvider>
       <TooltipProvider>
-        <WithProviderMinimal />
+        <WithProviderFullControl />
       </TooltipProvider>
     </main>
   )
