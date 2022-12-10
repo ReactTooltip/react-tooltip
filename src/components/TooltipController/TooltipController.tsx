@@ -68,8 +68,8 @@ const TooltipController = ({
         setTooltipContent(value ?? content)
       },
       html: (value) => {
-        setIsHtmlContent(true)
-        setTooltipContent(value ?? html)
+        setIsHtmlContent(!!value)
+        setTooltipContent(value ?? html ?? content)
       },
       variant: (value) => {
         setTooltipVariant((value as VariantType) ?? variant)
