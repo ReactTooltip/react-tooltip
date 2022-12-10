@@ -77,7 +77,9 @@ const Tooltip = ({
     } else {
       handleShow(true)
     }
-    setActiveAnchor({ current: e.target as HTMLElement })
+    setActiveAnchor((anchor) =>
+      anchor.current === e.target ? anchor : { current: e.target as HTMLElement },
+    )
     setProviderActiveAnchor({ current: e.target as HTMLElement })
 
     if (tooltipHideDelayTimerRef.current) {

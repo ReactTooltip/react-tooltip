@@ -65,6 +65,9 @@ const TooltipProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const setActiveAnchor = (tooltipId: string, ref: React.RefObject<HTMLElement>) => {
     setActiveAnchorMap((oldMap) => {
+      if (oldMap[tooltipId]?.current === ref.current) {
+        return oldMap
+      }
       // create new object to trigger re-render
       return { ...oldMap, [tooltipId]: ref }
     })
