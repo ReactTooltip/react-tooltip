@@ -4,10 +4,9 @@ import { useEffect, useRef, useState } from 'react'
 import styles from './styles.module.css'
 
 function WithProvider() {
-  const tooltipper = useTooltip()
-  const { attach, detach } = tooltipper()
-  const { attach: attach1, detach: detach1 } = tooltipper('tooltip-1')
-  const { attach: attach2, detach: detach2 } = tooltipper('tooltip-2')
+  const { attach, detach } = useTooltip()
+  const { attach: attach1, detach: detach1 } = useTooltip()('tooltip-1')
+  const { attach: attach2, detach: detach2 } = useTooltip()('tooltip-2')
   const buttonRef1 = useRef<HTMLButtonElement>(null)
   const buttonRef2 = useRef<HTMLButtonElement>(null)
   const buttonRef3 = useRef<HTMLButtonElement>(null)
@@ -29,36 +28,58 @@ function WithProvider() {
   return (
     <section style={{ marginTop: '100px' }}>
       <p>
-        <button
-          ref={buttonRef1}
-          data-tooltip-place="right"
-          data-tooltip-content="Hello World from a Shared Global Tooltip"
-        >
-          Hover or focus me 5
+        <button ref={buttonRef1} data-tooltip-content="Shared Global Tooltip">
+          Provider 1
         </button>
-        <button ref={buttonRef2} data-tooltip-content="Hello World from a Shared Global Tooltip">
-          Hover or focus me 6
+        <button ref={buttonRef2} data-tooltip-content="Shared Global Tooltip">
+          Provider 2
         </button>
       </p>
       <p>
-        <button ref={buttonRef3} data-tooltip-content="Hello World from Shared Tooltip 1">
-          Hover or focus me 7
+        <button ref={buttonRef3} data-tooltip-content="Shared Tooltip 1">
+          Provider 3
         </button>
-        <button ref={buttonRef4} data-tooltip-content="Hello World from Shared Tooltip 1">
-          Hover or focus me 8
+        <button ref={buttonRef4} data-tooltip-content="Shared Tooltip 1">
+          Provider 4
         </button>
       </p>
       <p>
-        <button ref={buttonRef5} data-tooltip-content="Hello World from Shared Tooltip 2">
-          Hover or focus me 9
+        <button ref={buttonRef5} data-tooltip-content="Shared Tooltip 2">
+          Provider 5
         </button>
-        <button ref={buttonRef6} data-tooltip-content="Hello World from Shared Tooltip 2">
-          Hover or focus me 10
+        <button ref={buttonRef6} data-tooltip-content="Shared Tooltip 2">
+          Provider 6
+        </button>
+      </p>
+      <Tooltip id="tooltip-1" />
+      <Tooltip id="tooltip-2" />
+    </section>
+  )
+}
+
+function WithProviderMinimal() {
+  const { attach, detach } = useTooltip()
+  const buttonRef1 = useRef<HTMLButtonElement>(null)
+  const buttonRef2 = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    attach(buttonRef1, buttonRef2)
+    return () => {
+      detach(buttonRef1, buttonRef2)
+    }
+  }, [])
+
+  return (
+    <section style={{ marginTop: '100px' }}>
+      <p>
+        <button ref={buttonRef1} data-tooltip-content="Shared Global Tooltip">
+          Minimal 1
+        </button>
+        <button ref={buttonRef2} data-tooltip-content="Shared Global Tooltip">
+          Minimal 2
         </button>
       </p>
       <Tooltip />
-      <Tooltip id="tooltip-1" />
-      <Tooltip id="tooltip-2" />
     </section>
   )
 }
@@ -135,6 +156,9 @@ function App() {
       </section>
       <TooltipProvider>
         <WithProvider />
+      </TooltipProvider>
+      <TooltipProvider>
+        <WithProviderMinimal />
       </TooltipProvider>
     </main>
   )

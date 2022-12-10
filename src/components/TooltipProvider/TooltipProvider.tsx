@@ -4,13 +4,13 @@ import React, {
   useCallback,
   useContext,
   useId,
+  useMemo,
   useState,
 } from 'react'
 
 type AnchorRef = React.RefObject<HTMLElement>
 
 interface TooltipContextData {
-  // when using one tooltip
   anchorRefs: Set<AnchorRef>
   activeAnchor: AnchorRef
   attach: (...refs: AnchorRef[]) => void
@@ -18,9 +18,12 @@ interface TooltipContextData {
   setActiveAnchor: (ref: AnchorRef) => void
 }
 
-type TooltipContextDataBuilder = (tooltipId?: string) => TooltipContextData
+type TooltipContextDataWrapper = TooltipContextData & {
+  // This means the context is a callable object
+  (tooltipId?: string): TooltipContextData
+}
 
-const TooltipContext = createContext<TooltipContextDataBuilder>(() => ({
+const defaultContextData: TooltipContextData = {
   anchorRefs: new Set(),
   activeAnchor: { current: null },
   attach: () => {
@@ -32,7 +35,10 @@ const TooltipContext = createContext<TooltipContextDataBuilder>(() => ({
   setActiveAnchor: () => {
     /* set active anchor */
   },
-}))
+}
+
+const defaultContextWrapper = Object.assign(() => defaultContextData, defaultContextData)
+const TooltipContext = createContext<TooltipContextDataWrapper>(defaultContextWrapper)
 
 const TooltipProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const defaultTooltipId = useId()
@@ -73,7 +79,7 @@ const TooltipProvider: React.FC<PropsWithChildren> = ({ children }) => {
     })
   }
 
-  const context = useCallback(
+  const getTooltipData = useCallback(
     (tooltipId?: string) => ({
       anchorRefs: anchorRefMap[tooltipId ?? defaultTooltipId] ?? new Set(),
       activeAnchor: activeAnchorMap[tooltipId ?? defaultTooltipId] ?? { current: null },
@@ -84,9 +90,25 @@ const TooltipProvider: React.FC<PropsWithChildren> = ({ children }) => {
     [defaultTooltipId, anchorRefMap, activeAnchorMap, attach, detach],
   )
 
+  const context = useMemo(() => {
+    const contextData: TooltipContextData = getTooltipData(defaultTooltipId)
+    const contextWrapper = Object.assign(
+      (tooltipId?: string) => getTooltipData(tooltipId),
+      contextData,
+    )
+    return contextWrapper
+  }, [getTooltipData])
+
   return <TooltipContext.Provider value={context}>{children}</TooltipContext.Provider>
 }
 
+/*
+  // this will use the "global" tooltip (same as `useTooltip()()`)
+  const { anchorRefs, attach, detach } = useTooltip()
+
+  // this will use the tooltip with id `tooltip-id`
+  const { anchorRefs, attach, detach } = useTooltip()('tooltip-id')
+*/
 export function useTooltip() {
   return useContext(TooltipContext)
 }
