@@ -6,8 +6,12 @@ sidebar_position: 1
 
 How to customize tooltip styles in ReactTooltip styles.
 
+Now tooltip arrow inherit his background color from tooltip (his parent).
+
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
+import CodeBlock from '@theme/CodeBlock'
+import TooltipStyles from '!!raw-loader!../../../src/components/Tooltip/styles.module.css'
 
 export const TooltipAnchor = ({ children, id, ...rest }) => {
   return (
@@ -33,22 +37,46 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-### Basic explanation
+### Basic explanation - Inline Styling
+
+You can add styles into the tooltip as inline styling.
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+
+<a id="custom-inline-styles" data-tooltip-content="hello world!">
+  ◕‿‿◕
+</a>
+<Tooltip
+  anchorId="custom-inline-styles"
+  style={{ backgroundColor: "rgb(0, 255, 30)", color: "#222" }}
+/>
+```
+
+<div
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor id="custom-inline-styles" data-tooltip-content="hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip anchorId="custom-inline-styles" style={{ backgroundColor: "rgb(0, 255, 30)", color: "#222" }} />
+</div>
+
+
+### Basic explanation - Classes
 
 You don't need `!important` anymore, you just need to know at least a bit about CSS Specificity ([MDN Docs](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity) | [W3c Docs](https://www.w3schools.com/css/css_specificity.asp)).
 Using CSS Specificity you can add a class with more specificity than the current used in tooltip and you can override or add new rules to the component style.
+
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 
 <style>
-.example-container .example {
+.example {
   color: #222;
-  background-color: rgb(0, 247, 255);
-}
-
-.example-container .example .example-arrow {
   background-color: rgb(0, 247, 255);
 }
 </style>
@@ -57,7 +85,7 @@ import 'react-tooltip/dist/react-tooltip.css'
   <a id="custom-styles" data-tooltip-content="hello world!">
     ◕‿‿◕
   </a>
-  <Tooltip anchorId="custom-styles" className="example" classNameArrow="example-arrow" />
+  <Tooltip anchorId="custom-styles" className="example" />
 </div>
 ```
 
@@ -68,74 +96,14 @@ import 'react-tooltip/dist/react-tooltip.css'
   <TooltipAnchor id="custom-styles" data-tooltip-content="hello world!">
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="custom-styles" className="example" classNameArrow="example-arrow" />
+  <Tooltip anchorId="custom-styles" className="example" />
 </div>
 
 #### Explanation
 
 In this example, we are adding an extra level to the CSS classes, the following styles are the default one of Tooltip component when we write this docs:
 
-```css
-.tooltip {
-  visibility: hidden;
-  width: max-content;
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 8px 16px;
-  border-radius: 3px;
-  font-size: 90%;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease-out;
-  will-change: opacity, visibility;
-}
-
-.arrow {
-  position: absolute;
-  background: var(--rt-color-dark);
-  width: 8px;
-  height: 8px;
-  transform: rotate(45deg);
-}
-
-/** Types variant **/
-.dark,
-.dark .arrow {
-  background: var(--rt-color-dark);
-  color: var(--rt-color-white);
-}
-
-.light,
-.light .arrow {
-  background-color: var(--rt-color-white);
-  color: var(--rt-color-dark);
-}
-
-.success,
-.success .arrow {
-  background-color: var(--rt-color-success);
-  color: var(--rt-color-white);
-}
-
-.warning,
-.warning .arrow {
-  background-color: var(--rt-color-warning);
-  color: var(--rt-color-white);
-}
-
-.error,
-.error .arrow {
-  background-color: var(--rt-color-error);
-  color: var(--rt-color-white);
-}
-
-.info,
-.info .arrow {
-  background-color: var(--rt-color-info);
-  color: var(--rt-color-white);
-}
-```
+<CodeBlock language="css">{TooltipStyles}</CodeBlock>
 
 So, if we only add new classes like the below, this will not work because this is the same level of specificity than the default dark variant as example, you can compare:
 
@@ -145,20 +113,9 @@ So, if we only add new classes like the below, this will not work because this i
   background-color: rgb(0, 247, 255);
 }
 
+/** add next line only if you want to have tooltip arrow with a different background color from tooltip **/
 .example .example-arrow {
-  background-color: rgb(0, 247, 255);
-}
-```
-
-```css
-.tooltip {
-  ...;
-}
-
-.dark,
-.dark .arrow {
-  background: var(--rt-color-dark);
-  color: var(--rt-color-white);
+  background-color: rgb(255, 0, 0);
 }
 ```
 
@@ -170,8 +127,9 @@ So, to make this work as expected, we need to add a new more level like this one
   background-color: rgb(0, 247, 255);
 }
 
+/** add next line only if you want to have tooltip arrow with a different background color from tooltip **/
 .some-class-or-rule .example .example-arrow {
-  background-color: rgb(0, 247, 255);
+  background-color: rgb(255, 0, 0);
 }
 ```
 
@@ -192,17 +150,13 @@ import 'react-tooltip/dist/react-tooltip.css'
   color: #222;
   background-color: rgb(255, 153, 0);
 }
-
-.example-container .example-orange .example-arrow {
-  background-color: rgb(255, 153, 0);
-}
 </style>
 
 <div className="example-container">
   <a id="custom-styles-orange" data-tooltip-content="hello world!">
     ◕‿‿◕
   </a>
-  <Tooltip anchorId="custom-styles-orange" className="example-orange" classNameArrow="example-arrow" />
+  <Tooltip anchorId="custom-styles-orange" className="example-orange" />
 </div>
 ```
 
@@ -216,7 +170,6 @@ import 'react-tooltip/dist/react-tooltip.css'
   <Tooltip
     anchorId="custom-styles-orange"
     className="example-orange"
-    classNameArrow="example-arrow"
   />
 </div>
 
@@ -231,17 +184,13 @@ import 'react-tooltip/dist/react-tooltip.css'
   color: #fff;
   background-color: rgb(255, 0, 255);
 }
-
-.example-container .example-pink .example-arrow {
-  background-color: rgb(255, 0, 255);
-}
 </style>
 
 <div className="example-container">
   <a id="custom-styles-pink" data-tooltip-content="hello world!">
     ◕‿‿◕
   </a>
-  <Tooltip anchorId="custom-styles-pink" className="example-pink" classNameArrow="example-arrow" />
+  <Tooltip anchorId="custom-styles-pink" className="example-pink" />
 </div>
 ```
 
@@ -252,7 +201,42 @@ import 'react-tooltip/dist/react-tooltip.css'
   <TooltipAnchor id="custom-styles-pink" data-tooltip-content="hello world!">
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="custom-styles-pink" className="example-pink" classNameArrow="example-arrow" />
+  <Tooltip anchorId="custom-styles-pink" className="example-pink" />
+</div>
+
+#### Tooltip Arrow with a different color from Tooltip
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+
+<style>
+.example-container .example-diff-arrow {
+  color: #fff;
+  background-color: rgb(55, 55, 55);
+}
+
+.example-container .example-diff-arrow .example-arrow {
+  background-color: rgb(222, 34, 72);
+}
+</style>
+
+<div className="example-container">
+  <a id="custom-styles-diff" data-tooltip-content="hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip anchorId="custom-styles-diff" className="example-diff-arrow" classNameArrow="example-arrow" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor id="custom-styles-diff" data-tooltip-content="hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip anchorId="custom-styles-diff" className="example-diff-arrow" classNameArrow="example-arrow" />
 </div>
 
 ### More examples - Radius

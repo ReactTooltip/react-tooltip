@@ -104,6 +104,8 @@ import ReactDOMServer from 'react-dom/server';
 
 [danielbarion](https://github.com/danielbarion) Maintainer - Creator of React Tooltip >= V5.
 
+[gabrieljablonski](https://github.com/gabrieljablonski) Maintainer.
+
 [aronhelser](https://github.com/aronhelser) Passive maintainer - accepting PRs and doing minor testing, but not fixing issues or doing active development.
 
 [alexgurr](https://github.com/alexgurr) (inactive).

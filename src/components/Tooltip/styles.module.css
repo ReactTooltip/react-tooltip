@@ -19,7 +19,7 @@
 
 .arrow {
   position: absolute;
-  background: var(--rt-color-dark);
+  background: inherit;
   width: 8px;
   height: 8px;
   transform: rotate(45deg);
@@ -31,38 +31,32 @@
 }
 
 /** Types variant **/
-.dark,
-.dark .arrow {
+.dark {
   background: var(--rt-color-dark);
   color: var(--rt-color-white);
 }
 
-.light,
-.light .arrow {
+.light {
   background-color: var(--rt-color-white);
   color: var(--rt-color-dark);
 }
 
-.success,
-.success .arrow {
+.success {
   background-color: var(--rt-color-success);
   color: var(--rt-color-white);
 }
 
-.warning,
-.warning .arrow {
+.warning {
   background-color: var(--rt-color-warning);
   color: var(--rt-color-white);
 }
 
-.error,
-.error .arrow {
+.error {
   background-color: var(--rt-color-error);
   color: var(--rt-color-white);
 }
 
-.info,
-.info .arrow {
+.info {
   background-color: var(--rt-color-info);
   color: var(--rt-color-white);
 }

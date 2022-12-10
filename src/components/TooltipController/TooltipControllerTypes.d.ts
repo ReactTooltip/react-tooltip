@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react'
+
 import type {
   PlacesType,
   VariantType,
@@ -23,7 +25,8 @@ export interface ITooltipController {
   positionStrategy?: PositionStrategy
   delayShow?: number
   delayHide?: number
-  getContent?: function
+  getContent?: (value) => string
+  style?: CSSProperties
   isOpen?: boolean
   setIsOpen?: (value: boolean) => void
 }
