@@ -36,6 +36,7 @@ const Tooltip = ({
   const [inlineStyles, setInlineStyles] = useState({})
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState<boolean>(false)
+  const [calculatingPosition, setCalculatingPosition] = useState(false)
   const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip()(id)
   const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
 
@@ -90,7 +91,6 @@ const Tooltip = ({
     } else {
       handleShow(false)
     }
-    setActiveAnchor({ current: null })
 
     if (tooltipShowDelayTimerRef.current) {
       clearTimeout(tooltipShowDelayTimerRef.current)
@@ -162,6 +162,7 @@ const Tooltip = ({
       // `anchorId` element takes precedence
       elementReference = document.querySelector(`[id='${anchorId}']`) as HTMLElement
     }
+    setCalculatingPosition(true)
     let mounted = true
     computeTooltipPosition({
       place,
@@ -175,10 +176,10 @@ const Tooltip = ({
         // invalidate computed positions after unmount
         return
       }
+      setCalculatingPosition(false)
       if (Object.keys(computedStylesData.tooltipStyles).length) {
         setInlineStyles(computedStylesData.tooltipStyles)
       }
-
       if (Object.keys(computedStylesData.tooltipArrowStyles).length) {
         setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
       }
@@ -204,7 +205,7 @@ const Tooltip = ({
       id={id}
       role="tooltip"
       className={classNames(styles['tooltip'], styles[variant], className, {
-        [styles['show']]: isOpen || show,
+        [styles['show']]: !calculatingPosition && (isOpen || show),
         [styles['fixed']]: positionStrategy === 'fixed',
       })}
       style={{ ...externalStyles, ...inlineStyles }}
