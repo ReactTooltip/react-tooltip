@@ -27,7 +27,7 @@ export type DataAttribute =
 export interface ITooltip {
   className?: string
   classNameArrow?: string
-  content?: string | number
+  content?: string
   html?: string
   place?: PlacesType
   offset?: number

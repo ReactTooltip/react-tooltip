@@ -175,7 +175,7 @@ const Tooltip = ({
       strategy: positionStrategy,
     }).then((computedStylesData) => {
       if (!mounted) {
-        // invalidate computed positions after unmount
+        // invalidate computed positions after remount
         return
       }
       setCalculatingPosition(false)

@@ -1,5 +1,5 @@
 import type { MutableRefObject, ReactElement, RefObject } from 'react'
-import type { ITooltipController } from '../TooltipController/TooltipControllerTypes'
+import type { ITooltipController } from 'components/TooltipController/TooltipControllerTypes'
 
 export type AnchorRef = RefObject<HTMLElement>
 
