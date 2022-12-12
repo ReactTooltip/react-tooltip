@@ -1,0 +1,48 @@
+import { useEffect, useRef } from 'react'
+import { useTooltip } from './TooltipProvider'
+import type { ITooltipWrapper } from './TooltipProviderTypes'
+
+const TooltipWrapper = ({
+  tooltipId,
+  children,
+  place,
+  content,
+  html,
+  variant,
+  offset,
+  wrapper,
+  events,
+  positionStrategy,
+  delayShow,
+  delayHide,
+}: ITooltipWrapper) => {
+  const { attach, detach } = useTooltip()(tooltipId)
+  const anchorRef = useRef<HTMLElement | null>(null)
+
+  useEffect(() => {
+    attach(anchorRef)
+    return () => {
+      detach(anchorRef)
+    }
+  }, [])
+
+  return (
+    <span
+      ref={anchorRef}
+      data-tooltip-place={place}
+      data-tooltip-content={content}
+      data-tooltip-html={html}
+      data-tooltip-variant={variant}
+      data-tooltip-offset={offset}
+      data-tooltip-wrapper={wrapper}
+      data-tooltip-events={events}
+      data-tooltip-position-strategy={positionStrategy}
+      data-tooltip-delay-show={delayShow}
+      data-tooltip-delay-hide={delayHide}
+    >
+      {children}
+    </span>
+  )
+}
+
+export default TooltipWrapper

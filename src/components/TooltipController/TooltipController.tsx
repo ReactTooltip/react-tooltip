@@ -6,8 +6,10 @@ import type {
   PlacesType,
   VariantType,
   WrapperType,
+  DataAttribute,
+  ITooltip,
 } from 'components/Tooltip/TooltipTypes'
-import { dataAttributesKeys } from './constants'
+import { useTooltip } from 'components/TooltipProvider'
 import type { ITooltipController } from './TooltipControllerTypes'
 
 const TooltipController = ({
@@ -27,7 +29,6 @@ const TooltipController = ({
   delayShow = 0,
   delayHide = 0,
   style,
-  getContent,
   isOpen,
   setIsOpen,
 }: ITooltipController) => {
@@ -38,146 +39,129 @@ const TooltipController = ({
   const [tooltipDelayShow, setTooltipDelayShow] = useState(delayShow)
   const [tooltipDelayHide, setTooltipDelayHide] = useState(delayHide)
   const [tooltipWrapper, setTooltipWrapper] = useState<WrapperType>(wrapper)
-  const [tooltipEvents, setTooltipEvents] = useState<EventsType[]>(events)
-  const [tooltipPositionStrategy, setTooltipPositionStrategy] =
-    useState<PositionStrategy>(positionStrategy)
-  const [isHtmlContent, setIsHtmlContent] = useState<boolean>(Boolean(html))
+  const [tooltipEvents, setTooltipEvents] = useState(events)
+  const [tooltipPositionStrategy, setTooltipPositionStrategy] = useState(positionStrategy)
+  const [isHtmlContent, setIsHtmlContent] = useState(Boolean(html))
+  const { anchorRefs, activeAnchor } = useTooltip()(id)
 
   const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
     const dataAttributes = elementReference?.getAttributeNames().reduce((acc, name) => {
-      if (name.includes('data-tooltip-')) {
-        ;(acc as any)[name] = elementReference?.getAttribute(name)
+      if (name.startsWith('data-tooltip-')) {
+        const parsedAttribute = name.replace(/^data-tooltip-/, '') as DataAttribute
+        acc[parsedAttribute] = elementReference?.getAttribute(name) ?? null
       }
-
       return acc
-    }, {})
+    }, {} as Record<DataAttribute, string | null>)
 
     return dataAttributes
   }
 
-  const applyAllDataAttributesFromAnchorElement = (dataAttributes: {
-    [key: string]: string | number | boolean
-  }) => {
-    const keys = Object.keys(dataAttributes)
-    let formatedKey = null
-
-    const handleDataAttributes = {
-      place: (value: PlacesType) => {
-        setTooltipPlace(value)
+  const applyAllDataAttributesFromAnchorElement = (
+    dataAttributes: Record<string, string | null>,
+  ) => {
+    const handleDataAttributes: Record<DataAttribute, (value: string | null) => void> = {
+      place: (value) => {
+        setTooltipPlace((value as PlacesType) ?? place)
       },
-      content: (value: string) => {
-        setIsHtmlContent(true)
-        if (getContent) {
-          setTooltipContent(getContent(value))
-        } else {
-          setTooltipContent(value)
-        }
+      content: (value) => {
+        setIsHtmlContent(false)
+        setTooltipContent(value ?? content)
       },
-      html: (value: string) => {
-        setIsHtmlContent(true)
-        if (getContent) {
-          setTooltipContent(getContent(value))
-        } else {
-          setTooltipContent(value)
-        }
+      html: (value) => {
+        setIsHtmlContent(!!value)
+        setTooltipContent(value ?? html ?? content)
       },
-      variant: (value: VariantType) => {
-        setTooltipVariant(value)
+      variant: (value) => {
+        setTooltipVariant((value as VariantType) ?? variant)
       },
-      offset: (value: number) => {
-        setTooltipOffset(value)
+      offset: (value) => {
+        setTooltipOffset(value === null ? offset : Number(value))
       },
-      wrapper: (value: WrapperType) => {
-        setTooltipWrapper(value)
+      wrapper: (value) => {
+        setTooltipWrapper((value as WrapperType) ?? 'div')
       },
-      events: (value: string) => {
-        const parsedEvents = value.split(' ')
-        setTooltipEvents(parsedEvents as EventsType[])
+      events: (value) => {
+        const parsed = value?.split(' ') as EventsType[]
+        setTooltipEvents(parsed ?? events)
       },
-      'position-strategy': (value: PositionStrategy) => {
-        setTooltipPositionStrategy(value)
+      'position-strategy': (value) => {
+        setTooltipPositionStrategy((value as PositionStrategy) ?? positionStrategy)
       },
-      'delay-show': (value: number) => {
-        setTooltipDelayShow(Number(value))
+      'delay-show': (value) => {
+        setTooltipDelayShow(value === null ? delayShow : Number(value))
       },
-      'delay-hide': (value: number) => {
-        setTooltipDelayHide(Number(value))
+      'delay-hide': (value) => {
+        setTooltipDelayHide(value === null ? delayHide : Number(value))
       },
     }
-
-    keys.forEach((key) => {
-      formatedKey = key.replace('data-tooltip-', '')
-
-      if (dataAttributesKeys.includes(formatedKey)) {
-        // @ts-ignore
-        handleDataAttributes[formatedKey](dataAttributes[key])
-      }
+    // reset unset data attributes to default values
+    // without this, data attributes from the last active anchor will still be used
+    Object.values(handleDataAttributes).forEach((handler) => handler(null))
+    Object.entries(dataAttributes).forEach(([key, value]) => {
+      handleDataAttributes[key as DataAttribute]?.(value)
     })
   }
 
-  const getElementSpecificAttributeKeyAndValueParsed = ({
-    element,
-    attributeName,
-  }: {
-    element: HTMLElement
-    attributeName: string
-  }) => {
-    return { [attributeName]: element.getAttribute(attributeName) }
-  }
+  useEffect(() => {
+    if (content) {
+      setTooltipContent(content)
+    }
+    if (html) {
+      setTooltipContent(html)
+    }
+  }, [content, html])
 
   useEffect(() => {
-    if (!anchorId) {
+    const elementRefs = new Set(anchorRefs)
+
+    const anchorById = document.querySelector(`[id='${anchorId}']`) as HTMLElement
+    if (anchorById) {
+      elementRefs.add({ current: anchorById })
+    }
+
+    if (!elementRefs.size) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       return () => {}
     }
 
-    const elementReference = document.querySelector(`[id='${anchorId}']`)
-
-    if (!elementReference) {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      return () => {}
-    }
-
-    if (content && getContent) {
-      setTooltipContent(getContent(content))
-    }
-
-    // do not check for subtree and childrens, we only want to know attribute changes
-    // to stay watching `data-attributes` from anchor element
-    const observerConfig = { attributes: true, childList: false, subtree: false }
-
-    const observerCallback = (mutationList: any) => {
-      mutationList.forEach((mutation: any) => {
-        if (mutation.type === 'attributes') {
-          const attributeKeyAndValue = getElementSpecificAttributeKeyAndValueParsed({
-            element: elementReference as HTMLElement,
-            attributeName: mutation.attributeName,
-          })
-
-          applyAllDataAttributesFromAnchorElement(
-            attributeKeyAndValue as { [key: string]: string | number | boolean },
-          )
+    const observerCallback: MutationCallback = (mutationList) => {
+      mutationList.forEach((mutation) => {
+        if (
+          !activeAnchor.current ||
+          mutation.type !== 'attributes' ||
+          !mutation.attributeName?.startsWith('data-tooltip-')
+        ) {
+          return
         }
+        // make sure to get all set attributes, since all unset attributes are reset
+        const dataAttributes = getDataAttributesFromAnchorElement(activeAnchor.current)
+        applyAllDataAttributesFromAnchorElement(dataAttributes)
       })
     }
 
     // Create an observer instance linked to the callback function
     const observer = new MutationObserver(observerCallback)
 
-    // Start observing the target node for configured mutations
-    observer.observe(elementReference, observerConfig)
+    // do not check for subtree and childrens, we only want to know attribute changes
+    // to stay watching `data-attributes-*` from anchor element
+    const observerConfig = { attributes: true, childList: false, subtree: false }
 
-    const dataAttributes = getDataAttributesFromAnchorElement(elementReference as HTMLElement)
+    const element = activeAnchor.current ?? anchorById
 
-    applyAllDataAttributesFromAnchorElement(dataAttributes)
+    if (element) {
+      const dataAttributes = getDataAttributesFromAnchorElement(element)
+      applyAllDataAttributesFromAnchorElement(dataAttributes)
+      // Start observing the target node for configured mutations
+      observer.observe(element, observerConfig)
+    }
 
     return () => {
       // Remove the observer when the tooltip is destroyed
       observer.disconnect()
     }
-  }, [anchorId])
+  }, [anchorRefs, activeAnchor, anchorId])
 
-  const props = {
+  const props: ITooltip = {
     id,
     anchorId,
     className,

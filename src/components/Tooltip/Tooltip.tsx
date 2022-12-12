@@ -1,14 +1,15 @@
-import { createRef, useEffect, useState, useId, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import classNames from 'classnames'
 import debounce from 'utils/debounce'
 import { TooltipContent } from 'components/TooltipContent'
-import { computeToolTipPosition } from '../../utils/compute-positions'
+import { useTooltip } from 'components/TooltipProvider'
+import { computeTooltipPosition } from '../../utils/compute-positions'
 import styles from './styles.module.css'
 import type { ITooltip } from './TooltipTypes'
 
 const Tooltip = ({
   // props
-  id = useId(),
+  id,
   className,
   classNameArrow,
   variant = 'dark',
@@ -28,13 +29,16 @@ const Tooltip = ({
   isOpen,
   setIsOpen,
 }: ITooltip) => {
-  const tooltipRef = createRef()
-  const tooltipArrowRef = createRef()
-  const tooltipShowDelayTimerRef = useRef<ReturnType<typeof setTimeout>>()
-  const tooltipHideDelayTimerRef = useRef<ReturnType<typeof setTimeout>>()
+  const tooltipRef = useRef<HTMLElement>(null)
+  const tooltipArrowRef = useRef<HTMLDivElement>(null)
+  const tooltipShowDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const tooltipHideDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const [inlineStyles, setInlineStyles] = useState({})
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState<boolean>(false)
+  const [calculatingPosition, setCalculatingPosition] = useState(false)
+  const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip()(id)
+  const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
 
   const handleShow = (value: boolean) => {
     if (setIsOpen) {
@@ -64,12 +68,19 @@ const Tooltip = ({
     }, delayHide)
   }
 
-  const handleShowTooltip = () => {
+  const handleShowTooltip = (event?: Event) => {
+    if (!event) {
+      return
+    }
     if (delayShow) {
       handleShowTooltipDelayed()
     } else {
       handleShow(true)
     }
+    setActiveAnchor((anchor) =>
+      anchor.current === event.target ? anchor : { current: event.target as HTMLElement },
+    )
+    setProviderActiveAnchor({ current: event.target as HTMLElement })
 
     if (tooltipHideDelayTimerRef.current) {
       clearTimeout(tooltipHideDelayTimerRef.current)
@@ -102,14 +113,22 @@ const Tooltip = ({
   const debouncedHandleHideTooltip = debounce(handleHideTooltip, 50)
 
   useEffect(() => {
-    const elementReference = document.querySelector(`[id='${anchorId}']`)
+    const elementRefs = new Set(anchorRefs)
 
-    if (!elementReference) {
+    const anchorById = document.querySelector(`[id='${anchorId}']`) as HTMLElement
+    if (anchorById) {
+      setActiveAnchor((anchor) =>
+        anchor.current === anchorById ? anchor : { current: anchorById },
+      )
+      elementRefs.add({ current: anchorById })
+    }
+
+    if (!elementRefs.size) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       return () => {}
     }
 
-    const enabledEvents: { event: string; listener: () => void }[] = []
+    const enabledEvents: { event: string; listener: (event?: Event) => void }[] = []
 
     if (events.find((event: string) => event === 'click')) {
       enabledEvents.push({ event: 'click', listener: handleClickTooltipAnchor })
@@ -125,58 +144,80 @@ const Tooltip = ({
     }
 
     enabledEvents.forEach(({ event, listener }) => {
-      elementReference?.addEventListener(event, listener)
+      elementRefs.forEach((ref) => {
+        ref.current?.addEventListener(event, listener)
+      })
     })
 
     return () => {
       enabledEvents.forEach(({ event, listener }) => {
-        elementReference?.removeEventListener(event, listener)
+        elementRefs.forEach((ref) => {
+          ref.current?.removeEventListener(event, listener)
+        })
       })
     }
-  }, [anchorId, events, delayHide, delayShow])
+  }, [anchorRefs, anchorId, events, delayHide, delayShow])
 
   useEffect(() => {
-    const elementReference = document.querySelector(`[id='${anchorId}']`)
-
-    computeToolTipPosition({
+    let elementReference = activeAnchor.current
+    if (anchorId) {
+      // `anchorId` element takes precedence
+      elementReference = document.querySelector(`[id='${anchorId}']`) as HTMLElement
+    }
+    setCalculatingPosition(true)
+    let mounted = true
+    computeTooltipPosition({
       place,
       offset,
       elementReference,
-      tooltipReference: tooltipRef.current as HTMLElement,
-      tooltipArrowReference: tooltipArrowRef.current as HTMLElement,
+      tooltipReference: tooltipRef.current,
+      tooltipArrowReference: tooltipArrowRef.current,
       strategy: positionStrategy,
     }).then((computedStylesData) => {
+      if (!mounted) {
+        // invalidate computed positions after remount
+        return
+      }
+      setCalculatingPosition(false)
       if (Object.keys(computedStylesData.tooltipStyles).length) {
         setInlineStyles(computedStylesData.tooltipStyles)
       }
-
       if (Object.keys(computedStylesData.tooltipArrowStyles).length) {
         setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
       }
     })
-
     return () => {
-      tooltipShowDelayTimerRef.current = undefined
-      tooltipHideDelayTimerRef.current = undefined
+      mounted = false
     }
-  }, [show, isOpen, anchorId])
+  }, [show, isOpen, anchorId, activeAnchor, place, offset, positionStrategy])
+
+  useEffect(() => {
+    return () => {
+      if (tooltipShowDelayTimerRef.current) {
+        clearTimeout(tooltipShowDelayTimerRef.current)
+      }
+      if (tooltipHideDelayTimerRef.current) {
+        clearTimeout(tooltipHideDelayTimerRef.current)
+      }
+    }
+  }, [])
 
   return (
     <WrapperElement
       id={id}
       role="tooltip"
       className={classNames(styles['tooltip'], styles[variant], className, {
-        [styles['show']]: isOpen || show,
+        [styles['show']]: !calculatingPosition && (isOpen || show),
         [styles['fixed']]: positionStrategy === 'fixed',
       })}
       style={{ ...externalStyles, ...inlineStyles }}
-      ref={tooltipRef as React.RefObject<HTMLDivElement>}
+      ref={tooltipRef}
     >
       {children || (isHtmlContent ? <TooltipContent content={content as string} /> : content)}
       <div
         className={classNames(styles['arrow'], classNameArrow)}
         style={inlineArrowStyles}
-        ref={tooltipArrowRef as React.RefObject<HTMLDivElement>}
+        ref={tooltipArrowRef}
       />
     </WrapperElement>
   )

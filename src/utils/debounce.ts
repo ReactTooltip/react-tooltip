@@ -1,29 +1,24 @@
-/* eslint-disable func-names */
-/* eslint-disable prefer-rest-params */
-/* eslint-disable @typescript-eslint/no-this-alias */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * This function debounce the received function
  * @param { function } 	func				Function to be debounced
  * @param { number } 		wait				Time to wait before execut the function
  * @param { boolean } 	immediate		Param to define if the function will be executed immediately
  */
-const debounce = (func: { (): void; (): void; apply?: any }, wait?: number, immediate?: true) => {
-  let timeout: string | number | NodeJS.Timeout | null | undefined
+const debounce = (func: (...args: any[]) => void, wait?: number, immediate?: true) => {
+  let timeout: NodeJS.Timeout | null = null
 
-  return function () {
-    // @ts-ignore
-    const context = this
-    const args = arguments
-
+  return function debounced(this: typeof func, ...args: any[]) {
     const later = () => {
       timeout = null
       if (!immediate) {
-        func.apply(context, args)
+        func.apply(this, args)
       }
     }
 
-    // @ts-ignore
-    clearTimeout(timeout)
+    if (timeout) {
+      clearTimeout(timeout)
+    }
 
     timeout = setTimeout(later, wait)
   }
