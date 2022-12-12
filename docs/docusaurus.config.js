@@ -29,6 +29,13 @@ const config = {
     locales: ['en'],
   },
 
+  scripts: [
+    {
+      src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7420210265158247',
+      async: true,
+    },
+  ],
+
   presets: [
     [
       'classic',
