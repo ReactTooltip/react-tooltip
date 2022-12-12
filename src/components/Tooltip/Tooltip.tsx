@@ -189,7 +189,7 @@ const Tooltip = ({
     return () => {
       mounted = false
     }
-  }, [show, isOpen, anchorId, activeAnchor, place, offset, positionStrategy])
+  }, [show, isOpen, anchorId, activeAnchor, content, place, offset, positionStrategy])
 
   useEffect(() => {
     return () => {
