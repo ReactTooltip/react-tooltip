@@ -1,6 +1,6 @@
 import { TooltipController as Tooltip } from 'components/TooltipController'
 import { TooltipProvider, TooltipWrapper } from 'components/TooltipProvider'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import styles from './styles.module.css'
 
 function WithProviderMinimal() {
@@ -32,35 +32,6 @@ function WithProviderMultiple() {
       </p>
       <Tooltip id="tooltip-1" content="Tooltip 1" />
       <Tooltip id="tooltip-2" content="Tooltip 2" />
-    </section>
-  )
-}
-
-function WithProviderForwardRef() {
-  // if access to the element's ref is needed, `TooltipWrapper.forwardRef` must be used
-  const ref = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('Ref can still be accessed: ', ref.current)
-  })
-
-  return (
-    <section style={{ marginTop: '100px' }}>
-      <p>
-        <TooltipWrapper forwardRef={ref} place="bottom" content="Shared Global Tooltip">
-          <button
-            // this will not work, must use `forwardRef` from wrapper
-            ref={ref}
-          >
-            Forward ref 1
-          </button>
-        </TooltipWrapper>
-        <TooltipWrapper place="right" content="Shared Global Tooltip">
-          <button>Forward ref 2</button>
-        </TooltipWrapper>
-      </p>
-      <Tooltip />
     </section>
   )
 }
@@ -140,9 +111,6 @@ function App() {
       </TooltipProvider>
       <TooltipProvider>
         <WithProviderMultiple />
-      </TooltipProvider>
-      <TooltipProvider>
-        <WithProviderForwardRef />
       </TooltipProvider>
     </main>
   )
