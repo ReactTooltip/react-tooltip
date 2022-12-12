@@ -9,7 +9,6 @@ exports[`tooltip props basic tooltip component 1`] = `
   </span>,
   <div
     className=""
-    id=":r2:"
     role="tooltip"
     style={{}}
   >
@@ -31,7 +30,6 @@ exports[`tooltip props tooltip component - getContent 1`] = `
   </span>,
   <div
     className=""
-    id=":r4:"
     role="tooltip"
     style={{}}
   >
@@ -53,7 +51,6 @@ exports[`tooltip props tooltip component - html 1`] = `
   </span>,
   <div
     className=""
-    id=":r3:"
     role="tooltip"
     style={{}}
   >
@@ -79,7 +76,6 @@ exports[`tooltip props tooltip component - without anchorId 1`] = `
   </span>,
   <div
     className=""
-    id=":r0:"
     role="tooltip"
     style={{}}
   >
@@ -95,7 +91,6 @@ exports[`tooltip props tooltip component - without anchorId 1`] = `
 exports[`tooltip props tooltip component - without element reference 1`] = `
 <div
   className=""
-  id=":r1:"
   role="tooltip"
   style={{}}
 >
