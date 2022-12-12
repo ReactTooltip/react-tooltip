@@ -68,8 +68,8 @@ const Tooltip = ({
     }, delayHide)
   }
 
-  const handleShowTooltip = (e?: Event) => {
-    if (!e) {
+  const handleShowTooltip = (event?: Event) => {
+    if (!event) {
       return
     }
     if (delayShow) {
@@ -78,9 +78,9 @@ const Tooltip = ({
       handleShow(true)
     }
     setActiveAnchor((anchor) =>
-      anchor.current === e.target ? anchor : { current: e.target as HTMLElement },
+      anchor.current === event.target ? anchor : { current: event.target as HTMLElement },
     )
-    setProviderActiveAnchor({ current: e.target as HTMLElement })
+    setProviderActiveAnchor({ current: event.target as HTMLElement })
 
     if (tooltipHideDelayTimerRef.current) {
       clearTimeout(tooltipHideDelayTimerRef.current)
@@ -128,7 +128,7 @@ const Tooltip = ({
       return () => {}
     }
 
-    const enabledEvents: { event: string; listener: (e?: Event) => void }[] = []
+    const enabledEvents: { event: string; listener: (event?: Event) => void }[] = []
 
     if (events.find((event: string) => event === 'click')) {
       enabledEvents.push({ event: 'click', listener: handleClickTooltipAnchor })
