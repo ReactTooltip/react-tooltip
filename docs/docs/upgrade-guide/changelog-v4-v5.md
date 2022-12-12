@@ -27,7 +27,7 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 - - If you already have a `Tooltip` component in your application and want to explicitly declare this is `ReactTooltip`, just `import { Tooltip as ReactTooltip } from "react-tooltip"`
 - CSS import is now optional, so, you can modify and/or add any styling to your floating tooltip element
 - `data-tip` attribute now is `data-content`
-- `getContent` prop now doesn't accept `any` anymore, just a `function`
+- `getContent` prop was removed. Instead, you can directly pass dynamic content to the `content` tooltip prop, or to `data-tooltip-content`
 - default behavior of tooltip now is `solid` instead of `float`
 
 ## New Props
@@ -65,7 +65,7 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 - [ ] eventOff - **Deprecated**
 - [ ] isCapture - **Deprecated**
 - [ ] globalEventOff - **Deprecated**
-- [x] getContent - Now this attribute only accepts a function instead of any
+- [ ] getContent - use dynamic `content` instead
 - [ ] afterShow - not implemented yet, if many users need this feature, we will work on this one.
 - [ ] afterHide - not implemented yet, if many users need this feature, we will work on this one.
 - [ ] overridePosition - **Deprecated**

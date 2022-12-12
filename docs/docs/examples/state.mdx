@@ -41,7 +41,7 @@ export const ControlledExample = () => {
     <>
       <TooltipAnchor
         id="tooltip-anchor"
-        data-tooltip-content="1"
+        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 1"
         onMouseEnter={() => {
           setAnchorId('tooltip-anchor')
           if (!isOpen) {
@@ -53,7 +53,7 @@ export const ControlledExample = () => {
       </TooltipAnchor>
       <TooltipAnchor
         id="tooltip-anchor-2"
-        data-tooltip-content="2"
+        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 2"
         onMouseEnter={() => {
           setAnchorId('tooltip-anchor-2')
           if (!isOpen) {
@@ -65,7 +65,7 @@ export const ControlledExample = () => {
       </TooltipAnchor>
       <TooltipAnchor
         id="tooltip-anchor-3"
-        data-tooltip-content="3"
+        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 3"
         onMouseEnter={() => {
           setAnchorId('tooltip-anchor-3')
           if (!isOpen) {
@@ -77,7 +77,7 @@ export const ControlledExample = () => {
       </TooltipAnchor>
       <TooltipAnchor
         id="tooltip-anchor-4"
-        data-tooltip-content="4"
+        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 4"
         onMouseEnter={() => {
           setAnchorId('tooltip-anchor-4')
           if (!isOpen) {
@@ -89,7 +89,7 @@ export const ControlledExample = () => {
       </TooltipAnchor>
       <TooltipAnchor
         id="tooltip-anchor-5"
-        data-tooltip-content="5"
+        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 5"
         onMouseEnter={() => {
           setAnchorId('tooltip-anchor-5')
           if (!isOpen) {
@@ -101,7 +101,7 @@ export const ControlledExample = () => {
       </TooltipAnchor>
       <TooltipAnchor
         id="tooltip-anchor-6"
-        data-tooltip-content="6"
+        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 6"
         onMouseEnter={() => {
           setAnchorId('tooltip-anchor-6')
           if (!isOpen) {
@@ -113,9 +113,6 @@ export const ControlledExample = () => {
       </TooltipAnchor>
       <Tooltip
         anchorId={anchorId}
-        getContent={(dataTip) =>
-          `Same Tooltip, different anchor element. This little buddy is ${dataTip}`
-        }
         isOpen={isOpen}
       />
     </>
@@ -191,7 +188,6 @@ const [anchorId, setAnchorId] = useState('tooltip-anchor')
 > ◕‿‿◕ </a>
 <Tooltip
   anchorId={anchorId}
-  getContent={(dataTip) => `Same Tooltip, different anchor element. This little buddy is ${dataTip}`}
   isOpen={isOpen}
 />
 ```
@@ -206,7 +202,7 @@ export const UncontrolledExample = () => {
     <>
       <TooltipAnchor
         id="tooltip-anchor-uncontrolled"
-        data-tooltip-content="1"
+        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 1"
         onMouseEnter={() => {
           setAnchorId('tooltip-anchor-uncontrolled')
         }}
@@ -215,7 +211,7 @@ export const UncontrolledExample = () => {
       </TooltipAnchor>
       <TooltipAnchor
         id="tooltip-anchor-uncontrolled-2"
-        data-tooltip-content="2"
+        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 2"
         onMouseEnter={() => {
           setAnchorId('tooltip-anchor-uncontrolled-2')
         }}
@@ -224,7 +220,7 @@ export const UncontrolledExample = () => {
       </TooltipAnchor>
       <TooltipAnchor
         id="tooltip-anchor-uncontrolled-3"
-        data-tooltip-content="3"
+        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 3"
         onMouseEnter={() => {
           setAnchorId('tooltip-anchor-uncontrolled-3')
         }}
@@ -233,7 +229,7 @@ export const UncontrolledExample = () => {
       </TooltipAnchor>
       <TooltipAnchor
         id="tooltip-anchor-uncontrolled-4"
-        data-tooltip-content="4"
+        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 4"
         onMouseEnter={() => {
           setAnchorId('tooltip-anchor-uncontrolled-4')
         }}
@@ -242,7 +238,7 @@ export const UncontrolledExample = () => {
       </TooltipAnchor>
       <TooltipAnchor
         id="tooltip-anchor-uncontrolled-5"
-        data-tooltip-content="5"
+        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 5"
         onMouseEnter={() => {
           setAnchorId('tooltip-anchor-uncontrolled-5')
         }}
@@ -251,7 +247,7 @@ export const UncontrolledExample = () => {
       </TooltipAnchor>
       <TooltipAnchor
         id="tooltip-anchor-uncontrolled-6"
-        data-tooltip-content="6"
+        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 6"
         onMouseEnter={() => {
           setAnchorId('tooltip-anchor-uncontrolled-6')
         }}
@@ -260,9 +256,6 @@ export const UncontrolledExample = () => {
       </TooltipAnchor>
       <Tooltip
         anchorId={anchorId}
-        getContent={(dataTip) =>
-          `Same Tooltip, different anchor element. This little buddy is ${dataTip}`
-        }
       />
     </>
   )
@@ -318,7 +311,6 @@ const [anchorId, setAnchorId] = useState('tooltip-anchor')
 > ◕‿‿◕ </a>
 <Tooltip
   anchorId={anchorId}
-  getContent={(dataTip) => `Same Tooltip, different anchor element. This little buddy is ${dataTip}`}
 />
 ```
 
