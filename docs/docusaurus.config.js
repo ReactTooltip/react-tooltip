@@ -34,6 +34,14 @@ const config = {
       src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7420210265158247',
       async: true,
     },
+    // {
+    //   src: 'https://securepubads.g.doubleclick.net/tag/js/gpt.js',
+    //   async: true,
+    // },
+    {
+      src: '/js/gpt.js',
+      async: true,
+    },
   ],
 
   presets: [
