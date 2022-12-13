@@ -1,4 +1,4 @@
-import type { MutableRefObject, ReactElement, RefObject } from 'react'
+import type { ReactNode, RefObject } from 'react'
 import type { ITooltipController } from 'components/TooltipController/TooltipControllerTypes'
 
 export type AnchorRef = RefObject<HTMLElement>
@@ -18,8 +18,7 @@ export type TooltipContextDataWrapper = TooltipContextData & {
 
 export interface ITooltipWrapper {
   tooltipId?: string
-  forwardRef?: MutableRefObject<HTMLElement | null>
-  children: ReactElement
+  children: ReactNode
 
   place?: ITooltipController['place']
   content?: ITooltipController['content']
