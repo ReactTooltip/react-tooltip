@@ -58,10 +58,6 @@ const config = {
           customCss: require.resolve('./src/css/custom.css'),
         },
         gtag: {
-          trackingID: 'GTM-TH6VNCW',
-          anonymizeIP: false,
-        },
-        googleAnalytics: {
           trackingID: 'G-N15QWWS0MW',
           anonymizeIP: false,
         },
