@@ -17,11 +17,16 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/digital-ocean-powered-by.svg').default,
     link: 'https://www.digitalocean.com/?refcode=0813b3be1161&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge',
   },
+  {
+    title: 'Algolia',
+    Svg: require('@site/static/img/Algolia-logo.svg').default,
+    link: 'https://docsearch.algolia.com/',
+  },
 ]
 
 function Feature({ title, Svg, link }: FeatureItem) {
   return (
-    <div className={clsx('col col--12')}>
+    <div className={clsx('col col--6')}>
       <div className="text--center">
         <a href={link} title={title} target="_blank" rel="noreferrer">
           <Svg className={styles.featureSvg} role="img" />
