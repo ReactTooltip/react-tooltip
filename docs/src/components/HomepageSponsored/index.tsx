@@ -40,7 +40,7 @@ export default function HomepageSponsored(): JSX.Element {
   return (
     <section className={styles.features}>
       <div className="container">
-        <h3 className={styles.sponsoredTitle}>Sponsors</h3>
+        <h3 className={styles.sponsoredTitle}>Powered by</h3>
         <div className="row">
           {FeatureList.map((props, idx) => (
             // eslint-disable-next-line react/no-array-index-key
