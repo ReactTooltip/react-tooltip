@@ -108,6 +108,42 @@ const Tooltip = ({
     }
   }
 
+  const handleMouseMove = (event?: MouseEvent) => {
+    if (!event) {
+      return
+    }
+    const virtualElement = {
+      getBoundingClientRect() {
+        return {
+          x: event.clientX,
+          y: event.clientY,
+          width: 0,
+          height: 0,
+          top: event.clientY,
+          left: event.clientX,
+          right: event.clientX,
+          bottom: event.clientY,
+        }
+      },
+    } as Element
+    computeTooltipPosition({
+      place,
+      offset,
+      elementReference: virtualElement,
+      tooltipReference: tooltipRef.current,
+      tooltipArrowReference: tooltipArrowRef.current,
+      strategy: positionStrategy,
+    }).then((computedStylesData) => {
+      setCalculatingPosition(false)
+      if (Object.keys(computedStylesData.tooltipStyles).length) {
+        setInlineStyles(computedStylesData.tooltipStyles)
+      }
+      if (Object.keys(computedStylesData.tooltipArrowStyles).length) {
+        setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
+      }
+    })
+  }
+
   // debounce handler to prevent call twice when
   // mouse enter and focus events being triggered toggether
   const debouncedHandleShowTooltip = debounce(handleShowTooltip, 50)
@@ -139,6 +175,7 @@ const Tooltip = ({
       enabledEvents.push(
         { event: 'mouseenter', listener: debouncedHandleShowTooltip },
         { event: 'mouseleave', listener: debouncedHandleHideTooltip },
+        { event: 'mousemove', listener: (e) => handleMouseMove(e as MouseEvent) },
         { event: 'focus', listener: debouncedHandleShowTooltip },
         { event: 'blur', listener: debouncedHandleHideTooltip },
       )
