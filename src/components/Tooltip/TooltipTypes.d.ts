@@ -41,6 +41,7 @@ export interface ITooltip {
   positionStrategy?: PositionStrategy
   delayShow?: number
   delayHide?: number
+  noArrow?: boolean
   style?: CSSProperties
   isOpen?: boolean
   setIsOpen?: (value: boolean) => void

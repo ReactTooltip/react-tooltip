@@ -22,6 +22,7 @@ const Tooltip = ({
   children = null,
   delayShow = 0,
   delayHide = 0,
+  noArrow,
   style: externalStyles,
   // props handled by controller
   isHtmlContent = false,
@@ -215,7 +216,9 @@ const Tooltip = ({
     >
       {children || (isHtmlContent ? <TooltipContent content={content as string} /> : content)}
       <div
-        className={classNames(styles['arrow'], classNameArrow)}
+        className={classNames(styles['arrow'], classNameArrow, {
+          [styles['no-arrow']]: noArrow,
+        })}
         style={inlineArrowStyles}
         ref={tooltipArrowRef}
       />
