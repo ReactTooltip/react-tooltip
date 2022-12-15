@@ -207,7 +207,7 @@ const Tooltip = ({
       id={id}
       role="tooltip"
       className={classNames(styles['tooltip'], styles[variant], className, {
-        [styles['show']]: !calculatingPosition && (isOpen || show),
+        [styles['show']]: content && !calculatingPosition && (isOpen || show),
         [styles['fixed']]: positionStrategy === 'fixed',
       })}
       style={{ ...externalStyles, ...inlineStyles }}
