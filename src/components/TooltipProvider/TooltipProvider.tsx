@@ -91,7 +91,7 @@ const TooltipProvider: React.FC<PropsWithChildren> = ({ children }) => {
       contextData,
     )
     return contextWrapper
-  }, [getTooltipData])
+  }, [getTooltipData, defaultTooltipId])
 
   return <TooltipContext.Provider value={context}>{children}</TooltipContext.Provider>
 }
