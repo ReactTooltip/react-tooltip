@@ -56,33 +56,33 @@ There are two ways to use ReactTooltip.
 
 ### ReactTooltip props
 
-1 . Require react-tooltip after installation
+1 . Import `react-tooltip` after installation
 
 ```js
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 ```
 
-2 . Add data-content = "your placeholder" to your element
+2 . Create anchor element
 
 ```jsx
 <p id="my-anchor-element">Tooltip</p>
 ```
 
-3 . Include react-tooltip component
+3 . Create `<Tooltip />` element
 
 ```jsx
-<ReactTooltip anchorId="my-anchor-element" content="hello world" place="top" />
+<Tooltip anchorId="my-anchor-element" content="hello world" place="top" />
 ```
 
 ### Anchor data attributes
 
-1 . Require react-tooltip after installation
+1 . Import `react-tooltip` after installation
 
 ```js
-import ReactTooltip from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 ```
 
-2 . Add data-content = "your placeholder" to your element
+2 . Add `data-tooltip-content="your placeholder"` to your element
 
 ```jsx
 <p id="my-anchor-element" data-tooltip-content="hello world" data-tooltip-place="top">
@@ -90,15 +90,12 @@ import ReactTooltip from 'react-tooltip'
 </p>
 ```
 
+3 . Create `<Tooltip />` element
+
+```jsx
+<Tooltip anchorId="my-anchor-element" />
+```
+
 ### Styling
 
 If you want a styled tooltip, don't forget to add the style file `import 'react-tooltip/dist/react-tooltip.css`
-
-3 . Include react-tooltip component
-
-```jsx
-<ReactTooltip anchorId="my-anchor-element" />
-```
-
-<TooltipAnchor id="props-basic">◕‿‿◕</TooltipAnchor>
-<Tooltip anchorId="props-basic" content="hello world!" />

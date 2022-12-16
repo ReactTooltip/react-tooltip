@@ -26,24 +26,24 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 - Exported module now is `Tooltip` instead of `ReactTooltip`
 - - If you already have a `Tooltip` component in your application and want to explicitly declare this is `ReactTooltip`, just `import { Tooltip as ReactTooltip } from "react-tooltip"`
 - CSS import is now optional, so, you can modify and/or add any styling to your floating tooltip element
-- `data-tip` attribute now is `data-content`
+- `data-tip` attribute now is `data-tooltip-content`
 - `getContent` prop was removed. Instead, you can directly pass dynamic content to the `content` tooltip prop, or to `data-tooltip-content`
 - default behavior of tooltip now is `solid` instead of `float`
 
 ## New Props
 
 - [x] classNameArrow
-- [x] events - `data-events` -`['hover', 'click']` - default: `['hover']` (always an array when using as prop, even with only one option, when using as data attribute: `data-events="hover click"`)
+- [x] events - `data-tooltip-events` -`['hover', 'click']` - default: `['hover']` (always an array when using as prop, even with only one option, when using as data attribute: `data-tooltip-events="hover click"`)
 - [x] isOpen - `boolean` (to control tooltip state) - if not used, internal state of tooltip will handle the show state
 - [x] setIsOpen - `function` (to control tooltip state) - if not used, internal state of tooltip will handle the show state
 
 ## `V4` props available in `V5`
 
 - [x] children
-- [x] place - `data-place`
-- [x] type - **Deprecated** | in V5 -> `variant` - `data-variant`
+- [x] place - `data-tooltip-place`
+- [x] type - **Deprecated** | in V5 -> `variant` - `data-tooltip-variant`
 - [ ] effect - not implemented yet, if many users need this feature, we will work on this one.
-- [x] offset - `data-offset`
+- [x] offset - `data-tooltip-offset`
 - [ ] padding - **Deprecated** | in V5 -> can be easy updated by className prop
 - [ ] multiline - **Deprecated** | in V5 -> this is already supported as default by `content` and `html` props
 - [ ] border - **Deprecated** | in V5 -> can be easy updated by `className` prop
@@ -58,9 +58,9 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 - [x] className
 - [x] id
 - [x] html
-- [x] delayHide - `data-delay-hide`
+- [x] delayHide - `data-tooltip-delay-hide`
 - [ ] delayUpdate - **Deprecated** | if requested, can be implemented later
-- [x] delayShow - `data-delay-show`
+- [x] delayShow - `data-tooltip-delay-show`
 - [ ] event - not implemented yet, if many users need this feature, we will work on this one.
 - [ ] eventOff - **Deprecated**
 - [ ] isCapture - **Deprecated**
@@ -72,7 +72,7 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 - [ ] disable - **Deprecated** | in V5 -> state can be controlled or uncontrolled
 - [ ] scrollHide - not implemented yet, if many users need this feature, we will validate if we wrok on this one.
 - [ ] resizeHide - not implemented yet, if many users need this feature, we will validate if we wrok on this one.
-- [x] wrapper - `data-wrapper`
+- [x] wrapper - `data-tooltip-wrapper`
 - [ ] bodyMode - **Deprecated**
 - [ ] clickable - **Deprecated** | Supported by default in V5
 - [ ] disableInternalStyle - **Deprecated** | in V5 -> CSS will be a separate file and can be imported or not
