@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, CSSProperties } from 'react'
 import classNames from 'classnames'
 import debounce from 'utils/debounce'
 import { TooltipContent } from 'components/TooltipContent'
@@ -203,15 +203,26 @@ const Tooltip = ({
     }
   }, [])
 
+  const style: CSSProperties = {
+    ...externalStyles,
+    ...inlineStyles,
+    visibility: 'hidden',
+    opacity: 0,
+  }
+  const shouldShow = content && !calculatingPosition && (isOpen || show)
+  if (shouldShow) {
+    style.opacity = externalStyles?.opacity ?? 0.9
+    style.visibility = 'visible'
+  }
+
   return (
     <WrapperElement
       id={id}
       role="tooltip"
       className={classNames(styles['tooltip'], styles[variant], className, {
-        [styles['show']]: content && !calculatingPosition && (isOpen || show),
         [styles['fixed']]: positionStrategy === 'fixed',
       })}
-      style={{ ...externalStyles, ...inlineStyles }}
+      style={style}
       ref={tooltipRef}
     >
       {children || (isHtmlContent ? <TooltipContent content={content as string} /> : content)}

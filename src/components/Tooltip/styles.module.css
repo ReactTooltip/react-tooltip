@@ -29,11 +29,6 @@
   display: none;
 }
 
-.show {
-  visibility: visible;
-  opacity: 0.9;
-}
-
 /** Types variant **/
 .dark {
   background: var(--rt-color-dark);
