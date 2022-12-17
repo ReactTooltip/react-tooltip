@@ -10,7 +10,12 @@ exports[`tooltip props basic tooltip component 1`] = `
   <div
     className=""
     role="tooltip"
-    style={{}}
+    style={
+      {
+        "opacity": 0,
+        "visibility": "hidden",
+      }
+    }
   >
     Hello World!
     <div
@@ -31,7 +36,12 @@ exports[`tooltip props tooltip component - getContent 1`] = `
   <div
     className=""
     role="tooltip"
-    style={{}}
+    style={
+      {
+        "opacity": 0,
+        "visibility": "hidden",
+      }
+    }
   >
     Hello World!
     <div
@@ -52,7 +62,12 @@ exports[`tooltip props tooltip component - html 1`] = `
   <div
     className=""
     role="tooltip"
-    style={{}}
+    style={
+      {
+        "opacity": 0,
+        "visibility": "hidden",
+      }
+    }
   >
     <span
       dangerouslySetInnerHTML={
@@ -77,7 +92,12 @@ exports[`tooltip props tooltip component - without anchorId 1`] = `
   <div
     className=""
     role="tooltip"
-    style={{}}
+    style={
+      {
+        "opacity": 0,
+        "visibility": "hidden",
+      }
+    }
   >
     Hello World!
     <div
@@ -92,7 +112,12 @@ exports[`tooltip props tooltip component - without element reference 1`] = `
 <div
   className=""
   role="tooltip"
-  style={{}}
+  style={
+    {
+      "opacity": 0,
+      "visibility": "hidden",
+    }
+  }
 >
   <div
     className=""
