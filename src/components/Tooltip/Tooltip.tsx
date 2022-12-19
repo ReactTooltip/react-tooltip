@@ -24,6 +24,7 @@ const Tooltip = ({
   delayHide = 0,
   noArrow,
   style: externalStyles,
+  type = 'fixed',
   // props handled by controller
   isHtmlContent = false,
   content,
@@ -100,14 +101,6 @@ const Tooltip = ({
     }
   }
 
-  const handleClickTooltipAnchor = () => {
-    if (setIsOpen) {
-      setIsOpen(!isOpen)
-    } else if (isOpen === undefined) {
-      setShow((currentValue) => !currentValue)
-    }
-  }
-
   const handleMouseMove = (event?: MouseEvent) => {
     if (!event) {
       return
@@ -126,6 +119,7 @@ const Tooltip = ({
         }
       },
     } as Element
+
     computeTooltipPosition({
       place,
       offset,
@@ -142,6 +136,18 @@ const Tooltip = ({
         setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
       }
     })
+  }
+
+  const handleClickTooltipAnchor = (event: MouseEvent) => {
+    if (type === 'free') {
+      handleMouseMove(event)
+    }
+
+    if (setIsOpen) {
+      setIsOpen(!isOpen)
+    } else if (!setIsOpen && isOpen === undefined) {
+      setShow((currentValue) => !currentValue)
+    }
   }
 
   // debounce handler to prevent call twice when
@@ -175,10 +181,16 @@ const Tooltip = ({
       enabledEvents.push(
         { event: 'mouseenter', listener: debouncedHandleShowTooltip },
         { event: 'mouseleave', listener: debouncedHandleHideTooltip },
-        { event: 'mousemove', listener: (e) => handleMouseMove(e as MouseEvent) },
         { event: 'focus', listener: debouncedHandleShowTooltip },
         { event: 'blur', listener: debouncedHandleHideTooltip },
       )
+
+      if (type === 'float') {
+        enabledEvents.push({
+          event: 'mousemove',
+          listener: (event) => handleMouseMove(event as MouseEvent),
+        })
+      }
     }
 
     enabledEvents.forEach(({ event, listener }) => {
@@ -197,6 +209,10 @@ const Tooltip = ({
   }, [anchorRefs, anchorId, events, delayHide, delayShow])
 
   useEffect(() => {
+    if (type === 'free') {
+      return () => null
+    }
+
     let elementReference = activeAnchor.current
     if (anchorId) {
       // `anchorId` element takes precedence
@@ -227,7 +243,7 @@ const Tooltip = ({
     return () => {
       mounted = false
     }
-  }, [show, isOpen, anchorId, activeAnchor, content, place, offset, positionStrategy])
+  }, [show, isOpen, anchorId, activeAnchor, content, place, offset, positionStrategy, type])
 
   useEffect(() => {
     return () => {

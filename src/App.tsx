@@ -112,6 +112,13 @@ function App() {
       <TooltipProvider>
         <WithProviderMultiple />
       </TooltipProvider>
+      <div id="freeTooltipAnchor" className={styles.freeAnchor} />
+      <Tooltip
+        anchorId="freeTooltipAnchor"
+        content="This is a free tooltip"
+        type="free"
+        events={['click']}
+      />
     </main>
   )
 }

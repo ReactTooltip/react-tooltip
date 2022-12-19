@@ -12,6 +12,8 @@ export type EventsType = 'hover' | 'click'
 
 export type PositionStrategy = 'absolute' | 'fixed'
 
+export type Type = 'fixed' | 'float' | 'free'
+
 export type DataAttribute =
   | 'place'
   | 'content'
@@ -39,6 +41,7 @@ export interface ITooltip {
   children?: ChildrenType
   events?: EventsType[]
   positionStrategy?: PositionStrategy
+  type?: Type
   delayShow?: number
   delayHide?: number
   noArrow?: boolean

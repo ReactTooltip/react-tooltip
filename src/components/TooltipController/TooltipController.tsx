@@ -30,6 +30,7 @@ const TooltipController = ({
   delayHide = 0,
   noArrow,
   style,
+  type,
   isOpen,
   setIsOpen,
 }: ITooltipController) => {
@@ -179,6 +180,7 @@ const TooltipController = ({
     delayHide: tooltipDelayHide,
     noArrow,
     style,
+    type,
     isOpen,
     setIsOpen,
   }

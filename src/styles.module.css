@@ -3,3 +3,9 @@
   width: 100%;
   height: 100vh;
 }
+
+.freeAnchor {
+  width: 500px;
+  height: 500px;
+  background-color: #d3d3d3;
+}
