@@ -112,7 +112,7 @@ import ReactDOMServer from 'react-dom/server';
 
 [gabrieljablonski](https://github.com/gabrieljablonski) Maintainer.
 
-[aronhelser](https://github.com/aronhelser) Passive maintainer - accepting PRs and doing minor testing, but not fixing issues or doing active development.
+[aronhelser](https://github.com/aronhelser) (inactive).
 
 [alexgurr](https://github.com/alexgurr) (inactive).
 
