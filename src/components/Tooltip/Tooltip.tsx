@@ -102,7 +102,7 @@ const Tooltip = ({
   }
 
   const handleTooltipPosition = () => {
-    if (!position?.x || !position?.y) {
+    if (!position) {
       return
     }
 
@@ -120,7 +120,7 @@ const Tooltip = ({
         }
       },
     } as Element
-
+    setCalculatingPosition(true)
     computeTooltipPosition({
       place,
       offset,
@@ -210,7 +210,8 @@ const Tooltip = ({
   }, [anchorRefs, activeAnchor, anchorId, events, delayHide, delayShow])
 
   useEffect(() => {
-    if (position?.x && position?.y) {
+    if (position) {
+      // if `position` is set, override regular positioning
       handleTooltipPosition()
       return () => null
     }

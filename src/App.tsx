@@ -42,7 +42,7 @@ function WithProviderMultiple() {
 function App() {
   const [anchorId, setAnchorId] = useState('button')
   const [isDarkOpen, setIsDarkOpen] = useState(false)
-  const [position, setPosition] = useState<IPosition>({})
+  const [position, setPosition] = useState<IPosition>({ x: 0, y: 0 })
 
   const handlePositionClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
     const x = event.clientX
