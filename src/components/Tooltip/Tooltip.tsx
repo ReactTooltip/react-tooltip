@@ -143,8 +143,15 @@ const Tooltip = ({
     if (setIsOpen) {
       setIsOpen(!isOpen)
     } else if (!setIsOpen && isOpen === undefined) {
-      setShow((currentValue) => !currentValue)
+      setShow(true)
     }
+  }
+
+  const handleClickOutsideAnchor = (e: MouseEvent) => {
+    if (e.target === activeAnchor.current) {
+      return
+    }
+    setShow(false)
   }
 
   // debounce handler to prevent call twice when
@@ -170,6 +177,7 @@ const Tooltip = ({
     const enabledEvents: { event: string; listener: (event?: Event) => void }[] = []
 
     if (events.find((event: string) => event === 'click')) {
+      window.addEventListener('click', handleClickOutsideAnchor)
       enabledEvents.push({ event: 'click', listener: handleClickTooltipAnchor })
     }
 
@@ -189,13 +197,14 @@ const Tooltip = ({
     })
 
     return () => {
+      window.removeEventListener('click', handleClickOutsideAnchor)
       enabledEvents.forEach(({ event, listener }) => {
         elementRefs.forEach((ref) => {
           ref.current?.removeEventListener(event, listener)
         })
       })
     }
-  }, [anchorRefs, anchorId, events, delayHide, delayShow])
+  }, [anchorRefs, activeAnchor, anchorId, events, delayHide, delayShow])
 
   useEffect(() => {
     if (position?.x && position?.y) {
