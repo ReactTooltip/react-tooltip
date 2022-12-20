@@ -43,7 +43,7 @@ import ReactTooltip from 'react-tooltip';
 <ReactTooltip id="tooltip" place="top" type="dark" />
 ```
 
-(v4) `data-tip` = `data-content` (v5)
+(v4) `data-tip` = `data-tooltip-content` (v5)
 
 - `V4` - CSS styles are built-in and injected by tooltip into the header (not a good practice but convenient), [issues in GitHub](https://github.com/ReactTooltip/react-tooltip/issues?q=is%3Aissue+header)
 - `V5` - CSS styles are optional and can be imported or not to the project
@@ -68,7 +68,7 @@ import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
-<a id="attributes-basic" data-content="hello world!"> ◕‿‿◕ </a>
+<a id="attributes-basic" data-tooltip-content="hello world!"> ◕‿‿◕ </a>
 
 <Tooltip anchorId="attributes-basic" />
 ```

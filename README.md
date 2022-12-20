@@ -51,7 +51,7 @@ or if you want to still use the name ReactTooltip as V4:
 import { Tooltip as ReactTooltip } from 'react-tooltip'
 ```
 
-2 . Add data-tooltip-content = "your placeholder" to your element
+2 . Add `data-tooltip-content="your placeholder"` to your element
 
 ```jsx
 <p id="my-element" data-tooltip-content="hello world">

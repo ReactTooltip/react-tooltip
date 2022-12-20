@@ -31,7 +31,7 @@
 
 .show {
   visibility: visible;
-  opacity: 0.9;
+  opacity: var(--rt-opacity);
 }
 
 /** Types variant **/
