@@ -8,7 +8,7 @@ import styles from './styles.module.css'
 
 function WithProviderMinimal() {
   return (
-    <section style={{ marginTop: '100px' }}>
+    <section style={{ marginTop: '50px' }}>
       <p>
         <TooltipWrapper place="bottom" content="Shared Global Tooltip">
           <button>Minimal 1</button>
@@ -24,7 +24,7 @@ function WithProviderMinimal() {
 
 function WithProviderMultiple() {
   return (
-    <section style={{ marginTop: '100px' }}>
+    <section style={{ marginTop: '50px' }}>
       <p>
         <TooltipWrapper tooltipId="tooltip-1" place="bottom">
           <button>Multiple 1</button>
@@ -43,27 +43,10 @@ function App() {
   const [anchorId, setAnchorId] = useState('button')
   const [isDarkOpen, setIsDarkOpen] = useState(false)
   const [position, setPosition] = useState<IPosition>({})
-  const [tooltipEffect, setTooltipEffect] = useState('float')
 
-  const handlePositionClick = (event: MouseEvent) => {
-    if (tooltipEffect === 'float') {
-      return
-    }
-
+  const handlePositionClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
     const x = event.clientX
     const y = event.clientY
-
-    setPosition({ x, y })
-  }
-
-  const handleMouseMove = (event: MouseEvent) => {
-    if (tooltipEffect !== 'float') {
-      return
-    }
-
-    const x = event.clientX
-    const y = event.clientY
-
     setPosition({ x, y })
   }
 
@@ -139,31 +122,18 @@ function App() {
       <TooltipProvider>
         <WithProviderMultiple />
       </TooltipProvider>
-
-      <button
-        onClick={() => {
-          if (tooltipEffect === 'float') {
-            setTooltipEffect('coordinates')
-          } else if (tooltipEffect === 'coordinates') {
-            setTooltipEffect('float')
-          }
+      <div
+        id="onClickAnchor"
+        className={styles['on-click-anchor']}
+        onClick={(event) => {
+          handlePositionClick(event)
         }}
       >
-        Switch tooltip effect
-      </button>
-      <div
-        id="freeTooltipAnchor"
-        className={styles.freeAnchor}
-        onClick={(event: any) => {
-          handlePositionClick(event as MouseEvent)
-        }}
-        onMouseMove={(event: any) => {
-          handleMouseMove(event as MouseEvent)
-        }}
-      />
+        Click me!
+      </div>
       <Tooltip
-        anchorId="freeTooltipAnchor"
-        content="This is a free tooltip"
+        anchorId="onClickAnchor"
+        content={`This is an on click tooltip (x:${position.x},y:${position.y})`}
         events={['click']}
         position={position}
       />

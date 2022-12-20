@@ -4,8 +4,11 @@
   height: 100vh;
 }
 
-.freeAnchor {
+.on-click-anchor {
   width: 500px;
-  height: 500px;
+  height: 300px;
   background-color: #d3d3d3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
