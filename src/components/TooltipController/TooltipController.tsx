@@ -122,8 +122,7 @@ const TooltipController = ({
     }
 
     if (!elementRefs.size) {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      return () => {}
+      return () => null
     }
 
     const observerCallback: MutationCallback = (mutationList) => {

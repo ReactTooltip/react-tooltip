@@ -164,8 +164,7 @@ const Tooltip = ({
     }
 
     if (!elementRefs.size) {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      return () => {}
+      return () => null
     }
 
     const enabledEvents: { event: string; listener: (event?: Event) => void }[] = []
