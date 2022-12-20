@@ -141,13 +141,13 @@ const Tooltip = ({
     if (!event) {
       return
     }
-    const e = event as MouseEvent
-    const p = {
-      x: e.clientX,
-      y: e.clientY,
+    const mouseEvent = event as MouseEvent
+    const mousePosition = {
+      x: mouseEvent.clientX,
+      y: mouseEvent.clientY,
     }
-    handleTooltipPosition(p)
-    setLastFloatPosition(p)
+    handleTooltipPosition(mousePosition)
+    setLastFloatPosition(mousePosition)
   }
 
   const handleClickTooltipAnchor = () => {
@@ -161,8 +161,8 @@ const Tooltip = ({
     }
   }
 
-  const handleClickOutsideAnchor = (e: MouseEvent) => {
-    if (e.target === activeAnchor.current) {
+  const handleClickOutsideAnchor = (event: MouseEvent) => {
+    if (event.target === activeAnchor.current) {
       return
     }
     setShow(false)
