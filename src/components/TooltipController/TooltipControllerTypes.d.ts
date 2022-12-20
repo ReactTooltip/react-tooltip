@@ -7,7 +7,7 @@ import type {
   ChildrenType,
   EventsType,
   PositionStrategy,
-  Type,
+  IPosition,
 } from 'components/Tooltip/TooltipTypes'
 
 export interface ITooltipController {
@@ -28,7 +28,7 @@ export interface ITooltipController {
   delayHide?: number
   noArrow?: boolean
   style?: CSSProperties
-  type?: Type
+  position?: IPosition
   isOpen?: boolean
   setIsOpen?: (value: boolean) => void
 }

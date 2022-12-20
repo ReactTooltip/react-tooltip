@@ -7,6 +7,7 @@ import type {
   PositionStrategy,
   VariantType,
   WrapperType,
+  IPosition,
 } from './components/Tooltip/TooltipTypes'
 import type { ITooltipController } from './components/TooltipController/TooltipControllerTypes'
 import type { ITooltipWrapper } from './components/TooltipProvider/TooltipProviderTypes'
@@ -23,4 +24,5 @@ export type {
   WrapperType,
   ITooltipController as ITooltip,
   ITooltipWrapper,
+  IPosition,
 }

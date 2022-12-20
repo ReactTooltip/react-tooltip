@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode, Element, CSSProperties } from 'react'
+import type { ElementType, ReactNode, CSSProperties } from 'react'
 
 export type PlacesType = 'top' | 'right' | 'bottom' | 'left'
 
@@ -26,6 +26,11 @@ export type DataAttribute =
   | 'delay-show'
   | 'delay-hide'
 
+export interface IPosition {
+  x?: number
+  y?: number
+}
+
 export interface ITooltip {
   className?: string
   classNameArrow?: string
@@ -41,11 +46,11 @@ export interface ITooltip {
   children?: ChildrenType
   events?: EventsType[]
   positionStrategy?: PositionStrategy
-  type?: Type
   delayShow?: number
   delayHide?: number
   noArrow?: boolean
   style?: CSSProperties
+  position?: IPosition
   isOpen?: boolean
   setIsOpen?: (value: boolean) => void
 }

@@ -24,7 +24,7 @@ const Tooltip = ({
   delayHide = 0,
   noArrow,
   style: externalStyles,
-  type = 'fixed',
+  position,
   // props handled by controller
   isHtmlContent = false,
   content,
@@ -101,21 +101,22 @@ const Tooltip = ({
     }
   }
 
-  const handleMouseMove = (event?: MouseEvent) => {
-    if (!event) {
+  const handleTooltipPosition = () => {
+    if (!position?.x || !position?.y) {
       return
     }
+
     const virtualElement = {
       getBoundingClientRect() {
         return {
-          x: event.clientX,
-          y: event.clientY,
+          x: position.x,
+          y: position.y,
           width: 0,
           height: 0,
-          top: event.clientY,
-          left: event.clientX,
-          right: event.clientX,
-          bottom: event.clientY,
+          top: position.y,
+          left: position.x,
+          right: position.x,
+          bottom: position.y,
         }
       },
     } as Element
@@ -138,11 +139,7 @@ const Tooltip = ({
     })
   }
 
-  const handleClickTooltipAnchor = (event: MouseEvent) => {
-    if (type === 'free') {
-      handleMouseMove(event)
-    }
-
+  const handleClickTooltipAnchor = () => {
     if (setIsOpen) {
       setIsOpen(!isOpen)
     } else if (!setIsOpen && isOpen === undefined) {
@@ -184,13 +181,6 @@ const Tooltip = ({
         { event: 'focus', listener: debouncedHandleShowTooltip },
         { event: 'blur', listener: debouncedHandleHideTooltip },
       )
-
-      if (type === 'float') {
-        enabledEvents.push({
-          event: 'mousemove',
-          listener: (event) => handleMouseMove(event as MouseEvent),
-        })
-      }
     }
 
     enabledEvents.forEach(({ event, listener }) => {
@@ -209,7 +199,8 @@ const Tooltip = ({
   }, [anchorRefs, anchorId, events, delayHide, delayShow])
 
   useEffect(() => {
-    if (type === 'free') {
+    if (position?.x && position?.y) {
+      handleTooltipPosition()
       return () => null
     }
 
@@ -243,7 +234,7 @@ const Tooltip = ({
     return () => {
       mounted = false
     }
-  }, [show, isOpen, anchorId, activeAnchor, content, place, offset, positionStrategy, type])
+  }, [show, isOpen, anchorId, activeAnchor, content, place, offset, positionStrategy, position])
 
   useEffect(() => {
     return () => {
