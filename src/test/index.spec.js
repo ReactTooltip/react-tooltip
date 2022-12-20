@@ -54,6 +54,14 @@ describe('tooltip props', () => {
     const tree = component.toJSON()
     expect(tree).toMatchSnapshot()
   })
+
+  test('tooltip component - position props', () => {
+    const component = renderer.create(
+      <TooltipProps id="position-props" content="Hello World!" position={{ x: 0, y: 0 }} />,
+    )
+    const tree = component.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
 })
 
 describe('compute positions', () => {

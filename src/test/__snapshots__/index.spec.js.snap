@@ -69,6 +69,27 @@ exports[`tooltip props tooltip component - html 1`] = `
 ]
 `;
 
+exports[`tooltip props tooltip component - position props 1`] = `
+[
+  <span
+    id="position-props"
+  >
+    Lorem Ipsum
+  </span>,
+  <div
+    className=""
+    role="tooltip"
+    style={{}}
+  >
+    Hello World!
+    <div
+      className=""
+      style={{}}
+    />
+  </div>,
+]
+`;
+
 exports[`tooltip props tooltip component - without anchorId 1`] = `
 [
   <span>
