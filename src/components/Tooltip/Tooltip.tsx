@@ -144,6 +144,9 @@ const Tooltip = ({
       setIsOpen(!isOpen)
     } else if (!setIsOpen && isOpen === undefined) {
       setShow(true)
+      if (delayHide) {
+        handleHideTooltipDelayed()
+      }
     }
   }
 
