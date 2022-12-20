@@ -23,7 +23,7 @@ export const computeTooltipPosition = async ({
   const middleware = [offset(Number(offsetValue)), flip(), shift({ padding: 5 })]
 
   if (tooltipArrowReference) {
-    middleware.push(arrow({ element: tooltipArrowReference as HTMLElement }))
+    middleware.push(arrow({ element: tooltipArrowReference as HTMLElement, padding: 5 }))
     return computePosition(elementReference as HTMLElement, tooltipReference as HTMLElement, {
       placement: place,
       strategy,
