@@ -43,6 +43,7 @@ function App() {
   const [anchorId, setAnchorId] = useState('button')
   const [isDarkOpen, setIsDarkOpen] = useState(false)
   const [position, setPosition] = useState<IPosition>({ x: 0, y: 0 })
+  const [toggle, setToggle] = useState(false)
 
   const handlePositionClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
     const x = event.clientX
@@ -122,21 +123,45 @@ function App() {
       <TooltipProvider>
         <WithProviderMultiple />
       </TooltipProvider>
-      <div
-        id="onClickAnchor"
-        className={styles['on-click-anchor']}
-        onClick={(event) => {
-          handlePositionClick(event)
-        }}
-      >
-        Click me!
+      <div style={{ display: 'flex', gap: '12px', flexDirection: 'row' }}>
+        <div>
+          <div
+            id="floatAnchor"
+            className={styles['big-anchor']}
+            onClick={() => {
+              setToggle((t) => !t)
+            }}
+          >
+            Hover me!
+          </div>
+          <Tooltip
+            anchorId="floatAnchor"
+            content={
+              toggle
+                ? 'This is a float tooltip with a very very large content string'
+                : 'This is a float tooltip'
+            }
+            float
+          />
+        </div>
+        <div>
+          <div
+            id="onClickAnchor"
+            className={styles['big-anchor']}
+            onClick={(event) => {
+              handlePositionClick(event)
+            }}
+          >
+            Click me!
+          </div>
+          <Tooltip
+            anchorId="onClickAnchor"
+            content={`This is an on click tooltip (x:${position.x},y:${position.y})`}
+            events={['click']}
+            position={position}
+          />
+        </div>
       </div>
-      <Tooltip
-        anchorId="onClickAnchor"
-        content={`This is an on click tooltip (x:${position.x},y:${position.y})`}
-        events={['click']}
-        position={position}
-      />
     </main>
   )
 }

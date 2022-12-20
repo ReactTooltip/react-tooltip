@@ -5,7 +5,7 @@ import { TooltipContent } from 'components/TooltipContent'
 import { useTooltip } from 'components/TooltipProvider'
 import { computeTooltipPosition } from '../../utils/compute-positions'
 import styles from './styles.module.css'
-import type { ITooltip } from './TooltipTypes'
+import type { IPosition, ITooltip } from './TooltipTypes'
 
 const Tooltip = ({
   // props
@@ -22,6 +22,7 @@ const Tooltip = ({
   children = null,
   delayShow = 0,
   delayHide = 0,
+  float = false,
   noArrow,
   style: externalStyles,
   position,
@@ -39,6 +40,7 @@ const Tooltip = ({
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState<boolean>(false)
   const [calculatingPosition, setCalculatingPosition] = useState(false)
+  const [lastFloatPosition, setLastFloatPosition] = useState<IPosition | null>(null)
   const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip()(id)
   const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
 
@@ -101,22 +103,18 @@ const Tooltip = ({
     }
   }
 
-  const handleTooltipPosition = () => {
-    if (!position) {
-      return
-    }
-
+  const handleTooltipPosition = ({ x, y }: IPosition) => {
     const virtualElement = {
       getBoundingClientRect() {
         return {
-          x: position.x,
-          y: position.y,
+          x,
+          y,
           width: 0,
           height: 0,
-          top: position.y,
-          left: position.x,
-          right: position.x,
-          bottom: position.y,
+          top: y,
+          left: x,
+          right: x,
+          bottom: y,
         }
       },
     } as Element
@@ -137,6 +135,19 @@ const Tooltip = ({
         setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
       }
     })
+  }
+
+  const handleMouseMove = (event?: Event) => {
+    if (!event) {
+      return
+    }
+    const e = event as MouseEvent
+    const p = {
+      x: e.clientX,
+      y: e.clientY,
+    }
+    handleTooltipPosition(p)
+    setLastFloatPosition(p)
   }
 
   const handleClickTooltipAnchor = () => {
@@ -191,6 +202,12 @@ const Tooltip = ({
         { event: 'focus', listener: debouncedHandleShowTooltip },
         { event: 'blur', listener: debouncedHandleHideTooltip },
       )
+      if (float) {
+        enabledEvents.push({
+          event: 'mousemove',
+          listener: handleMouseMove,
+        })
+      }
     }
 
     enabledEvents.forEach(({ event, listener }) => {
@@ -211,8 +228,23 @@ const Tooltip = ({
 
   useEffect(() => {
     if (position) {
-      // if `position` is set, override regular positioning
-      handleTooltipPosition()
+      // if `position` is set, override regular and `float` positioning
+      handleTooltipPosition(position)
+      return () => null
+    }
+
+    if (float) {
+      if (lastFloatPosition) {
+        /*
+          Without this, changes to `content`, `place`, `offset`, ..., will only
+          trigger a position calculation after a `mousemove` event.
+
+          To see why this matters, comment this line, run `yarn dev` and click the
+          "Hover me!" anchor.
+        */
+        handleTooltipPosition(lastFloatPosition)
+      }
+      // if `float` is set, override regular positioning
       return () => null
     }
 

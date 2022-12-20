@@ -23,6 +23,7 @@ export type DataAttribute =
   | 'position-strategy'
   | 'delay-show'
   | 'delay-hide'
+  | 'float'
 
 export interface IPosition {
   x: number
@@ -46,6 +47,7 @@ export interface ITooltip {
   positionStrategy?: PositionStrategy
   delayShow?: number
   delayHide?: number
+  float?: boolean
   noArrow?: boolean
   style?: CSSProperties
   position?: IPosition

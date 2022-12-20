@@ -26,6 +26,7 @@ export interface ITooltipController {
   positionStrategy?: PositionStrategy
   delayShow?: number
   delayHide?: number
+  float?: boolean
   noArrow?: boolean
   style?: CSSProperties
   position?: IPosition
@@ -45,5 +46,6 @@ declare module 'react' {
     'data-tooltip-position-strategy'?: PositionStrategy
     'data-tooltip-delay-show'?: number
     'data-tooltip-delay-hide'?: number
+    'data-tooltip-float'?: boolean
   }
 }
