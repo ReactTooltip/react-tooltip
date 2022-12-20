@@ -1,5 +1,8 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { TooltipController as Tooltip } from 'components/TooltipController'
 import { TooltipProvider, TooltipWrapper } from 'components/TooltipProvider'
+import { IPosition } from 'components/Tooltip/TooltipTypes.d'
 import { useState } from 'react'
 import styles from './styles.module.css'
 
@@ -39,6 +42,30 @@ function WithProviderMultiple() {
 function App() {
   const [anchorId, setAnchorId] = useState('button')
   const [isDarkOpen, setIsDarkOpen] = useState(false)
+  const [position, setPosition] = useState<IPosition>({})
+  const [tooltipEffect, setTooltipEffect] = useState('float')
+
+  const handlePositionClick = (event: MouseEvent) => {
+    if (tooltipEffect === 'float') {
+      return
+    }
+
+    const x = event.clientX
+    const y = event.clientY
+
+    setPosition({ x, y })
+  }
+
+  const handleMouseMove = (event: MouseEvent) => {
+    if (tooltipEffect !== 'float') {
+      return
+    }
+
+    const x = event.clientX
+    const y = event.clientY
+
+    setPosition({ x, y })
+  }
 
   return (
     <main className={styles['main']}>
@@ -112,12 +139,33 @@ function App() {
       <TooltipProvider>
         <WithProviderMultiple />
       </TooltipProvider>
-      <div id="freeTooltipAnchor" className={styles.freeAnchor} />
+
+      <button
+        onClick={() => {
+          if (tooltipEffect === 'float') {
+            setTooltipEffect('coordinates')
+          } else if (tooltipEffect === 'coordinates') {
+            setTooltipEffect('float')
+          }
+        }}
+      >
+        Switch tooltip effect
+      </button>
+      <div
+        id="freeTooltipAnchor"
+        className={styles.freeAnchor}
+        onClick={(event: any) => {
+          handlePositionClick(event as MouseEvent)
+        }}
+        onMouseMove={(event: any) => {
+          handleMouseMove(event as MouseEvent)
+        }}
+      />
       <Tooltip
         anchorId="freeTooltipAnchor"
         content="This is a free tooltip"
-        type="free"
         events={['click']}
+        position={position}
       />
     </main>
   )
