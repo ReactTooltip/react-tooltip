@@ -48,26 +48,6 @@ import 'react-tooltip/dist/react-tooltip.css';
   <Tooltip anchorId="tooltip-anchor" html="Hello<br />multiline<br />tooltip" />
 </div>
 
-### Using `data-tooltip-content`
-
-```jsx
-import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
-
-<a id="tooltip-anchor-data-content" data-tooltip-content="Hello<br />multiline<br />tooltip"> ◕‿‿◕ </a>
-<Tooltip anchorId="tooltip-anchor-data-content" />
-```
-
-<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
-  <TooltipAnchor
-    id="tooltip-anchor-data-content"
-    data-tooltip-content="Hello<br />multiline<br />tooltip"
-  >
-    ◕‿‿◕
-  </TooltipAnchor>
-  <Tooltip anchorId="tooltip-anchor-data-content" />
-</div>
-
 ### Using `data-tooltip-html`
 
 ```jsx
@@ -84,8 +64,3 @@ import 'react-tooltip/dist/react-tooltip.css';
   </TooltipAnchor>
   <Tooltip anchorId="tooltip-anchor-html" />
 </div>
-
-#### Observations
-
-- When using `data-tooltip-content` the `<br />` works by default
-- When using prop `content` the `<br />` doesn't work by default, use prop `html` instead of this
