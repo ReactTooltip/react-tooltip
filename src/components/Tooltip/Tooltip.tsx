@@ -7,6 +7,8 @@ import { computeTooltipPosition } from '../../utils/compute-positions'
 import styles from './styles.module.css'
 import type { IPosition, ITooltip } from './TooltipTypes'
 
+let lastFloatPosition: IPosition | null = null
+
 const Tooltip = ({
   // props
   id,
@@ -40,7 +42,6 @@ const Tooltip = ({
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState<boolean>(false)
   const [calculatingPosition, setCalculatingPosition] = useState(false)
-  const [lastFloatPosition, setLastFloatPosition] = useState<IPosition | null>(null)
   const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip()(id)
   const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
 
@@ -147,7 +148,7 @@ const Tooltip = ({
       y: mouseEvent.clientY,
     }
     handleTooltipPosition(mousePosition)
-    setLastFloatPosition(mousePosition)
+    lastFloatPosition = mousePosition
   }
 
   const handleClickTooltipAnchor = () => {
