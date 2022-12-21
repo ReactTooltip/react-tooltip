@@ -68,11 +68,10 @@ const TooltipController = ({
         setTooltipPlace((value as PlacesType) ?? place)
       },
       content: (value) => {
-        setIsHtmlContent(false)
         setTooltipContent(value ?? content)
       },
       html: (value) => {
-        setIsHtmlContent(!!value)
+        setIsHtmlContent(Boolean(value ?? html))
         setTooltipContent(value ?? html ?? content)
       },
       variant: (value) => {
@@ -111,9 +110,12 @@ const TooltipController = ({
 
   useEffect(() => {
     if (content) {
+      setIsHtmlContent(false)
       setTooltipContent(content)
     }
     if (html) {
+      // html will always take precedence
+      setIsHtmlContent(true)
       setTooltipContent(html)
     }
   }, [content, html])
