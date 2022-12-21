@@ -291,12 +291,14 @@ const Tooltip = ({
     }
   }, [])
 
+  const hasContentOrChildren = Boolean(content || children)
+
   return (
     <WrapperElement
       id={id}
       role="tooltip"
       className={classNames(styles['tooltip'], styles[variant], className, {
-        [styles['show']]: content && !calculatingPosition && (isOpen || show),
+        [styles['show']]: hasContentOrChildren && !calculatingPosition && (isOpen || show),
         [styles['fixed']]: positionStrategy === 'fixed',
       })}
       style={{ ...externalStyles, ...inlineStyles }}
