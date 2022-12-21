@@ -7,8 +7,6 @@ import { computeTooltipPosition } from '../../utils/compute-positions'
 import styles from './styles.module.css'
 import type { IPosition, ITooltip } from './TooltipTypes'
 
-let lastFloatPosition: IPosition | null = null
-
 const Tooltip = ({
   // props
   id,
@@ -42,6 +40,7 @@ const Tooltip = ({
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState<boolean>(false)
   const [calculatingPosition, setCalculatingPosition] = useState(false)
+  const lastFloatPosition = useRef<IPosition | null>(null)
   const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip()(id)
   const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
 
@@ -148,7 +147,7 @@ const Tooltip = ({
       y: mouseEvent.clientY,
     }
     handleTooltipPosition(mousePosition)
-    lastFloatPosition = mousePosition
+    lastFloatPosition.current = mousePosition
   }
 
   const handleClickTooltipAnchor = () => {
@@ -235,7 +234,7 @@ const Tooltip = ({
     }
 
     if (float) {
-      if (lastFloatPosition) {
+      if (lastFloatPosition.current) {
         /*
           Without this, changes to `content`, `place`, `offset`, ..., will only
           trigger a position calculation after a `mousemove` event.
@@ -243,7 +242,7 @@ const Tooltip = ({
           To see why this matters, comment this line, run `yarn dev` and click the
           "Hover me!" anchor.
         */
-        handleTooltipPosition(lastFloatPosition)
+        handleTooltipPosition(lastFloatPosition.current)
       }
       // if `float` is set, override regular positioning
       return () => null
