@@ -109,12 +109,10 @@ const TooltipController = ({
   }
 
   useEffect(() => {
-    if (content) {
-      setIsHtmlContent(false)
-      setTooltipContent(content)
-    }
+    setIsHtmlContent(false)
+    setTooltipContent(content)
     if (html) {
-      // html will always take precedence
+      // html will take precedence
       setIsHtmlContent(true)
       setTooltipContent(html)
     }
