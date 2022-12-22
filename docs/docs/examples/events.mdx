@@ -64,22 +64,3 @@ import 'react-tooltip/dist/react-tooltip.css';
   <TooltipAnchor id="tooltip-anchor-click">◕‿‿◕</TooltipAnchor>
   <Tooltip anchorId="tooltip-anchor-click" content="Hello World!" events={['click']} />
 </div>
-
-### Using `hover` and `click`
-
-```jsx
-import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
-
-<a id="tooltip-anchor-hover-click"> ◕‿‿◕ </a>
-<Tooltip anchorId="tooltip-anchor-hover-click" content="Hello World!" events={['hover', 'click']} />
-```
-
-<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
-  <TooltipAnchor id="tooltip-anchor-hover-click">◕‿‿◕</TooltipAnchor>
-  <Tooltip
-    anchorId="tooltip-anchor-hover-click"
-    content="Hello World!"
-    events={['hover', 'click']}
-  />
-</div>
