@@ -81,10 +81,11 @@ const Tooltip = ({
     } else {
       handleShow(true)
     }
+    const target = event.currentTarget ?? event.target
     setActiveAnchor((anchor) =>
-      anchor.current === event.target ? anchor : { current: event.target as HTMLElement },
+      anchor.current === target ? anchor : { current: target as HTMLElement },
     )
-    setProviderActiveAnchor({ current: event.target as HTMLElement })
+    setProviderActiveAnchor({ current: target as HTMLElement })
 
     if (tooltipHideDelayTimerRef.current) {
       clearTimeout(tooltipHideDelayTimerRef.current)
@@ -150,19 +151,15 @@ const Tooltip = ({
     lastFloatPosition.current = mousePosition
   }
 
-  const handleClickTooltipAnchor = () => {
-    if (setIsOpen) {
-      setIsOpen(!isOpen)
-    } else if (!setIsOpen && isOpen === undefined) {
-      setShow(true)
-      if (delayHide) {
-        handleHideTooltipDelayed()
-      }
+  const handleClickTooltipAnchor = (event?: Event) => {
+    handleShowTooltip(event)
+    if (delayHide) {
+      handleHideTooltipDelayed()
     }
   }
 
   const handleClickOutsideAnchor = (event: MouseEvent) => {
-    if (event.target === activeAnchor.current) {
+    if (activeAnchor.current?.contains(event.target as HTMLElement)) {
       return
     }
     setShow(false)
