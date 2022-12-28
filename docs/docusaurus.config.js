@@ -30,14 +30,14 @@ const config = {
   },
 
   scripts: [
-    {
-      src: 'https://securepubads.g.doubleclick.net/tag/js/gpt.js',
-      async: true,
-    },
-    {
-      src: '/js/gpt.js',
-      async: true,
-    },
+    // {
+    //   src: 'https://securepubads.g.doubleclick.net/tag/js/gpt.js',
+    //   async: true,
+    // },
+    // {
+    //   src: '/js/gpt.js',
+    //   async: true,
+    // },
   ],
 
   presets: [
