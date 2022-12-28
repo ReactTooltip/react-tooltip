@@ -1,9 +1,10 @@
 // prevent loading ads in localhost
 const development = window.location.host !== 'react-tooltip.com'
 // use sandbox ads to test in localhost
-const slotPath = development
+const slotPathRightSidebarAdUnit = development
   ? '/6355419/Travel/Europe/France/Paris'
   : '/22862227500/desktop-sidebar-right'
+const slotPathAnchorAdUnit = development ? '/6355419/Travel' : '/22862227500/desktop-sidebar-right'
 
 window.reactTooltipAds = {
   initialized: {},
@@ -13,7 +14,14 @@ window.googletag = window.googletag || { cmd: [] }
 
 window.googletag.cmd.push(function () {
   window.googletag
-    .defineSlot(slotPath, [300, 250], 'right-sidebar-ads')
+    .defineSlot(slotPathRightSidebarAdUnit, [300, 250], 'right-sidebar-ads')
+    .addService(window.googletag.pubads())
+  window.googletag.enableServices()
+})
+
+window.googletag.cmd.push(function () {
+  window.googletag
+    .defineOutOfPageSlot(slotPathAnchorAdUnit, window.googletag.enums.OutOfPageFormat.BOTTOM_ANCHOR)
     .addService(window.googletag.pubads())
   window.googletag.enableServices()
 })
@@ -21,7 +29,7 @@ window.googletag.cmd.push(function () {
 const handleLoadAds = (event) => {
   const { id } = event.detail
 
-  if (window.innerWidth < 1024) {
+  if (window.innerWidth < 1024 && !id.includes('anchor')) {
     return
   }
 
