@@ -10,7 +10,7 @@ export default function TOCWrapper(props) {
       {/* <AdsContainerElement id="right-sidebar-ads" /> */}
       <ins
         className="adsbygoogle"
-        style={{ display: 'block', position: 'fixed', width: '100%', height: '600px' }}
+        style={{ display: 'block', position: 'fixed', width: '300px', height: '600px' }}
         data-ad-client="ca-pub-7420210265158247"
         data-ad-slot="8711379942"
         data-ad-format="auto"
