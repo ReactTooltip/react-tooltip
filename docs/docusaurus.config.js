@@ -38,6 +38,10 @@ const config = {
     //   src: '/js/gpt.js',
     //   async: true,
     // },
+    {
+      src: '/js/ads.js',
+      async: true,
+    },
   ],
 
   presets: [
