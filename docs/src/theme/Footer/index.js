@@ -4,8 +4,11 @@ import Footer from '@theme-original/Footer'
 // import AdsContainerElement from '@site/src/components/AdsContainerElement'
 
 export default function FooterWrapper(props) {
+  let shadoWindow = null
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      shadoWindow = window
       const scriptElement = document.createElement('script')
       scriptElement.src =
         'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7420210265158247'
@@ -23,7 +26,7 @@ export default function FooterWrapper(props) {
 
   return (
     <>
-      {window && window.document.body.clientWidth <= 768 && (
+      {shadoWindow && shadoWindow.document.body.clientWidth <= 768 && (
         <ins
           className="adsbygoogle"
           style={{
