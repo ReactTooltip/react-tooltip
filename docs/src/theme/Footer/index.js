@@ -19,13 +19,15 @@ export default function FooterWrapper(props) {
       }
       document.body.appendChild(scriptElement)
 
-      const adsElement = document.createElement('ins')
-      adsElement.classList.add('adsbygoogle')
-      adsElement.classList.add('adsanchor')
-      adsElement.setAttribute('ad-client', 'ca-pub-7420210265158247')
-      adsElement.setAttribute('ad-slot', '8159529807')
-      adsElement.setAttribute('full-width-responsive', 'true')
-      document.body.appendChild(adsElement)
+      if (window.document.body.clientWidth <= 768) {
+        const adsElement = document.createElement('ins')
+        adsElement.classList.add('adsbygoogle')
+        adsElement.classList.add('adsanchor')
+        adsElement.setAttribute('ad-client', 'ca-pub-7420210265158247')
+        adsElement.setAttribute('ad-slot', '8159529807')
+        adsElement.setAttribute('full-width-responsive', 'true')
+        document.body.appendChild(adsElement)
+      }
     }
   }, [])
 
