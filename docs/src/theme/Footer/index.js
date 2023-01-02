@@ -23,6 +23,22 @@ export default function FooterWrapper(props) {
 
   return (
     <>
+      {window && window.document.body.clientWidth <= 768 && (
+        <ins
+          className="adsbygoogle"
+          style={{
+            bottom: 0,
+            display: 'block',
+            position: 'fixed',
+            width: '100%',
+            maxHeight: '100px',
+            height: '75px',
+          }}
+          data-ad-client="ca-pub-7420210265158247"
+          data-ad-slot="8159529807"
+          data-full-width-responsive="true"
+        />
+      )}
       <Footer {...props} />
       {/* <AdsContainerElement id="mobile-anchor-ads" /> */}
     </>
