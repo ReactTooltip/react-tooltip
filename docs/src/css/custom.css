@@ -91,3 +91,12 @@
 .example-container .example-padding {
   padding: 48px;
 }
+
+.adsanchor {
+  bottom: 0;
+  display: block;
+  position: fixed;
+  width: 100%;
+  max-height: 100px;
+  height: 75px;
+}
