@@ -30,7 +30,6 @@
     }
   ],
   "types": "dist/react-tooltip.d.ts",
-  "type": "module",
   "license": "MIT",
   "private": false,
   "author": "ReactTooltip",
