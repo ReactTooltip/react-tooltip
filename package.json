@@ -13,7 +13,8 @@
     "prepare": "husky install",
     "test": "jest"
   },
-  "main": "dist/react-tooltip.esm.min.js",
+  "main": "dist/react-tooltip.cjs.min.js",
+  "module": "dist/react-tooltip.esm.min.js",
   "buildFormats": [
     {
       "file": "dist/react-tooltip.umd.js",
