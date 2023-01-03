@@ -1,6 +1,6 @@
 # This CHANGELOG is related to version 4 of ReactTooltip
 
-We created the entire project from scrat to build v5, the flow was changed and now the changelog of version 5 is in [Github Releases](https://github.com/ReactTooltip/react-tooltip/releases).
+We created the entire project from scratch to build v5, the flow was changed and now the changelog of version 5 is in [Github Releases](https://github.com/ReactTooltip/react-tooltip/releases).
 
 ## [4.5.1](https://github.com/ReactTooltip/react-tooltip/compare/v4.5.0...v4.5.1) (2022-11-23)
 
