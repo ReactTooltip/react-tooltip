@@ -1,5 +1,5 @@
-import fs from 'fs'
-import rimraf from 'rimraf'
+const fs = require('fs') // eslint-disable-line @typescript-eslint/no-var-requires
+const rimraf = require('rimraf') // eslint-disable-line @typescript-eslint/no-var-requires
 
 const args = process.argv.slice(2)
 const parameters = args.reduce((acc, arg) => {
