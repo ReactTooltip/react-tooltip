@@ -294,7 +294,7 @@ const Tooltip = ({
     <WrapperElement
       id={id}
       role="tooltip"
-      className={classNames(styles['tooltip'], styles[variant], className, {
+      className={classNames('react-tooltip', styles['tooltip'], styles[variant], className, {
         [styles['show']]: hasContentOrChildren && !calculatingPosition && (isOpen || show),
         [styles['fixed']]: positionStrategy === 'fixed',
       })}
@@ -303,7 +303,7 @@ const Tooltip = ({
     >
       {children || (isHtmlContent ? <TooltipContent content={content as string} /> : content)}
       <div
-        className={classNames(styles['arrow'], classNameArrow, {
+        className={classNames('react-tooltip-arrow', styles['arrow'], classNameArrow, {
           [styles['no-arrow']]: noArrow,
         })}
         style={inlineArrowStyles}
