@@ -8,13 +8,13 @@ exports[`tooltip props basic tooltip component 1`] = `
     Lorem Ipsum
   </span>,
   <div
-    className=""
+    className="react-tooltip"
     role="tooltip"
     style={{}}
   >
     Hello World!
     <div
-      className=""
+      className="react-tooltip-arrow"
       style={{}}
     />
   </div>,
@@ -29,13 +29,13 @@ exports[`tooltip props tooltip component - getContent 1`] = `
     Lorem Ipsum
   </span>,
   <div
-    className=""
+    className="react-tooltip"
     role="tooltip"
     style={{}}
   >
     Hello World!
     <div
-      className=""
+      className="react-tooltip-arrow"
       style={{}}
     />
   </div>,
@@ -50,7 +50,7 @@ exports[`tooltip props tooltip component - html 1`] = `
     Lorem Ipsum
   </span>,
   <div
-    className=""
+    className="react-tooltip"
     role="tooltip"
     style={{}}
   >
@@ -62,7 +62,7 @@ exports[`tooltip props tooltip component - html 1`] = `
       }
     />
     <div
-      className=""
+      className="react-tooltip-arrow"
       style={{}}
     />
   </div>,
@@ -77,13 +77,13 @@ exports[`tooltip props tooltip component - position props 1`] = `
     Lorem Ipsum
   </span>,
   <div
-    className=""
+    className="react-tooltip"
     role="tooltip"
     style={{}}
   >
     Hello World!
     <div
-      className=""
+      className="react-tooltip-arrow"
       style={{}}
     />
   </div>,
@@ -96,13 +96,13 @@ exports[`tooltip props tooltip component - without anchorId 1`] = `
     Lorem Ipsum
   </span>,
   <div
-    className=""
+    className="react-tooltip"
     role="tooltip"
     style={{}}
   >
     Hello World!
     <div
-      className=""
+      className="react-tooltip-arrow"
       style={{}}
     />
   </div>,
@@ -111,12 +111,12 @@ exports[`tooltip props tooltip component - without anchorId 1`] = `
 
 exports[`tooltip props tooltip component - without element reference 1`] = `
 <div
-  className=""
+  className="react-tooltip"
   role="tooltip"
   style={{}}
 >
   <div
-    className=""
+    className="react-tooltip-arrow"
     style={{}}
   />
 </div>
