@@ -19,6 +19,7 @@ export type TooltipContextDataWrapper = TooltipContextData & {
 export interface ITooltipWrapper {
   tooltipId?: string
   children: ReactNode
+  className?: string
 
   place?: ITooltipController['place']
   content?: ITooltipController['content']

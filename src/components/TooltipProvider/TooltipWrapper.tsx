@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react'
+import classNames from 'classnames'
 import { useTooltip } from './TooltipProvider'
 import type { ITooltipWrapper } from './TooltipProviderTypes'
 
 const TooltipWrapper = ({
   tooltipId,
   children,
+  className,
   place,
   content,
   html,
@@ -29,6 +31,7 @@ const TooltipWrapper = ({
   return (
     <span
       ref={anchorRef}
+      className={classNames('react-tooltip-wrapper', className)}
       data-tooltip-place={place}
       data-tooltip-content={content}
       data-tooltip-html={html}
