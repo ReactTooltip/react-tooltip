@@ -101,11 +101,11 @@ import { Tooltip } from 'react-tooltip'
 By default, you can't interact with elements inside the tooltip. To allow for proper usage of elements such as buttons and inputs, use the `clickable` prop.
 
 ```jsx
-<TooltipAnchor id="not-clickable">◕‿‿◕</TooltipAnchor>
+<a id="not-clickable">◕‿‿◕</a>
 <Tooltip anchorId="not-clickable">
   <button>You can't click me :(</button>
 </Tooltip>
-<TooltipAnchor id="clickable">◕‿‿◕</TooltipAnchor>
+<a id="clickable">◕‿‿◕</a>
 <Tooltip anchorId="clickable" clickable>
   <button>You can click me!</button>
 </Tooltip>
