@@ -76,7 +76,7 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 - [ ] `resizeHide` - if requested, can be implemented later
 - [x] `wrapper` - also available on anchor element as `data-tooltip-wrapper`
 - [ ] `bodyMode`
-- [ ] `clickable` - use controlled state to keep tooltip open
+- [x] `clickable`
 - [ ] `disableInternalStyle` - CSS will be a separate file and can be imported or not
 
 ### Detailed informations
