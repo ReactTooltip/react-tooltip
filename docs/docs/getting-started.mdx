@@ -96,6 +96,32 @@ import { Tooltip } from 'react-tooltip'
 <Tooltip anchorId="my-anchor-element" />
 ```
 
+### Clickable tooltip
+
+By default, you can't interact with elements inside the tooltip. To allow for proper usage of elements such as buttons and inputs, use the `clickable` prop.
+
+```jsx
+<TooltipAnchor id="not-clickable">◕‿‿◕</TooltipAnchor>
+<Tooltip anchorId="not-clickable">
+  <button>You can't click me :(</button>
+</Tooltip>
+<TooltipAnchor id="clickable">◕‿‿◕</TooltipAnchor>
+<Tooltip anchorId="clickable" clickable>
+  <button>You can click me!</button>
+</Tooltip>
+```
+
+<div style={{ display: 'flex', columnGap: '8px', justifyContent: 'center', paddingTop: '36px' }}>
+  <TooltipAnchor id="not-clickable">◕‿‿◕</TooltipAnchor>
+  <Tooltip anchorId="not-clickable">
+    <button>You can't click me :(</button>
+  </Tooltip>
+  <TooltipAnchor id="clickable">◕‿‿◕</TooltipAnchor>
+  <Tooltip anchorId="clickable" clickable>
+    <button>You can click me!</button>
+  </Tooltip>
+</div>
+
 ### Styling
 
 If you want a styled tooltip, don't forget to add the style file `import 'react-tooltip/dist/react-tooltip.css'`.
