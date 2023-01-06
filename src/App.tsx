@@ -17,7 +17,9 @@ function WithProviderMinimal() {
           <button>Minimal 2</button>
         </TooltipWrapper>
       </p>
-      <Tooltip />
+      <Tooltip clickable>
+        <button>button</button>
+      </Tooltip>
     </section>
   )
 }
@@ -159,6 +161,7 @@ function App() {
             content={`This is an on click tooltip (x:${position.x},y:${position.y})`}
             events={['click']}
             position={position}
+            positionStrategy="fixed"
           />
         </div>
       </div>
