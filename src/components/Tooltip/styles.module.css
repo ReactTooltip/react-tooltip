@@ -29,6 +29,10 @@
   display: none;
 }
 
+.clickable {
+  pointer-events: auto;
+}
+
 .show {
   visibility: visible;
   opacity: var(--rt-opacity);

@@ -23,7 +23,8 @@ const Tooltip = ({
   delayShow = 0,
   delayHide = 0,
   float = false,
-  noArrow,
+  noArrow = false,
+  clickable = false,
   style: externalStyles,
   position,
   // props handled by controller
@@ -43,6 +44,7 @@ const Tooltip = ({
   const lastFloatPosition = useRef<IPosition | null>(null)
   const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip()(id)
   const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
+  const hoveringTooltip = useRef(false)
 
   const handleShow = (value: boolean) => {
     if (setIsOpen) {
@@ -62,14 +64,17 @@ const Tooltip = ({
     }, delayShow)
   }
 
-  const handleHideTooltipDelayed = () => {
+  const handleHideTooltipDelayed = (delay = delayHide) => {
     if (tooltipHideDelayTimerRef.current) {
       clearTimeout(tooltipHideDelayTimerRef.current)
     }
 
     tooltipHideDelayTimerRef.current = setTimeout(() => {
+      if (hoveringTooltip.current) {
+        return
+      }
       handleShow(false)
-    }, delayHide)
+    }, delay)
   }
 
   const handleShowTooltip = (event?: Event) => {
@@ -93,7 +98,10 @@ const Tooltip = ({
   }
 
   const handleHideTooltip = () => {
-    if (delayHide) {
+    if (clickable) {
+      // allow time for the mouse to reach the tooltip, in case there's a gap
+      handleHideTooltipDelayed(delayHide || 50)
+    } else if (delayHide) {
       handleHideTooltipDelayed()
     } else {
       handleShow(false)
@@ -207,6 +215,19 @@ const Tooltip = ({
       }
     }
 
+    const handleMouseEnterTooltip = () => {
+      hoveringTooltip.current = true
+    }
+    const handleMouseLeaveTooltip = () => {
+      hoveringTooltip.current = false
+      handleHideTooltip()
+    }
+
+    if (clickable) {
+      tooltipRef.current?.addEventListener('mouseenter', handleMouseEnterTooltip)
+      tooltipRef.current?.addEventListener('mouseleave', handleMouseLeaveTooltip)
+    }
+
     enabledEvents.forEach(({ event, listener }) => {
       elementRefs.forEach((ref) => {
         ref.current?.addEventListener(event, listener)
@@ -215,6 +236,10 @@ const Tooltip = ({
 
     return () => {
       window.removeEventListener('click', handleClickOutsideAnchor)
+      if (clickable) {
+        tooltipRef.current?.removeEventListener('mouseenter', handleMouseEnterTooltip)
+        tooltipRef.current?.removeEventListener('mouseleave', handleMouseLeaveTooltip)
+      }
       enabledEvents.forEach(({ event, listener }) => {
         elementRefs.forEach((ref) => {
           ref.current?.removeEventListener(event, listener)
@@ -297,6 +322,7 @@ const Tooltip = ({
       className={classNames('react-tooltip', styles['tooltip'], styles[variant], className, {
         [styles['show']]: hasContentOrChildren && !calculatingPosition && (isOpen || show),
         [styles['fixed']]: positionStrategy === 'fixed',
+        [styles['clickable']]: clickable,
       })}
       style={{ ...externalStyles, ...inlineStyles }}
       ref={tooltipRef}

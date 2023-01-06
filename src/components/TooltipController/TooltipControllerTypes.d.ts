@@ -28,6 +28,7 @@ export interface ITooltipController {
   delayHide?: number
   float?: boolean
   noArrow?: boolean
+  clickable?: boolean
   style?: CSSProperties
   position?: IPosition
   isOpen?: boolean
