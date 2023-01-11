@@ -17,6 +17,8 @@
   </a>
 </p>
 
+If you like the project, please give the project a GitHub 🌟 
+
 ## Demo
 
 [![Edit ReactTooltip](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/still-monad-yfi4fn?fontsize=14&hidenavigation=1&theme=dark)
