@@ -47,7 +47,15 @@ yarn add react-tooltip
 
 ### Using NPM
 
-1 . Require react-tooltip after installation
+1 . Import the CSS file to set default styling
+
+```js
+import 'react-tooltip/dist/react-tooltip.css'
+```
+
+This needs to be done only once. We suggest you do it on your `src/index.js` or equivalent file.
+
+2 . Import `react-tooltip` after installation
 
 ```js
 import { Tooltip } from 'react-tooltip'
@@ -59,7 +67,7 @@ or if you want to still use the name ReactTooltip as V4:
 import { Tooltip as ReactTooltip } from 'react-tooltip'
 ```
 
-2 . Add `data-tooltip-content="your placeholder"` to your element
+3 . Add `data-tooltip-content="your placeholder"` to your element
 
 ```jsx
 <p id="my-element" data-tooltip-content="hello world">
@@ -67,7 +75,7 @@ import { Tooltip as ReactTooltip } from 'react-tooltip'
 </p>
 ```
 
-3 . Include react-tooltip component
+4 . Include react-tooltip component
 
 ```jsx
 <ReactTooltip anchorId="my-element" />
