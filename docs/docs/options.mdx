@@ -73,6 +73,8 @@ import 'react-tooltip/dist/react-tooltip.css'
 | position         | `{ x: number; y: number }` | false    |                           | any `number` value for both `x` and `y`           | override the tooltip position on the viewport                                                                                                                   |
 | isOpen           | boolen                     | false    | handled by internal state | `true` `false`                                    | the tooltip can be controlled or uncontrolled, this attribute can be used to handle show and hide tooltip outside tooltip (can be used **without** `setIsOpen`) |
 | setIsOpen        | function                   | false    |                           |                                                   | the tooltip can be controlled or uncontrolled, this attribute can be used to handle show and hide tooltip outside tooltip                                       |
+| afterShow        | function                   | false    |                           |                                                   | a function to be called after the tooltip is shown                                                                                                              |
+| afterHide        | function                   | false    |                           |                                                   | a function to be called after the tooltip is hidden                                                                                                             |
 
 ### Data attributes
 
