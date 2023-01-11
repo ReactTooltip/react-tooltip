@@ -68,8 +68,8 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 - [ ] `isCapture`
 - [ ] `globalEventOff`
 - [ ] `getContent` - use dynamic `content`
-- [ ] `afterShow` - if requested, can be implemented later
-- [ ] `afterHide` - if requested, can be implemented later
+- [x] `afterShow`
+- [x] `afterHide`
 - [ ] `overridePosition` - use `position`
 - [ ] `disable` - state can be controlled or uncontrolled
 - [ ] `scrollHide` - if requested, can be implemented later
