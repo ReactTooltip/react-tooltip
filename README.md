@@ -23,6 +23,10 @@ Documentation for V4 - [Github Page](https://reacttooltip.github.io/react-toolti
 
 Documentation for V5 - [ReactTooltip](https://react-tooltip.com/docs/getting-started).
 
+[Bundle size timeline comparation from V4 -> V5](https://bundlephobia.com/package/react-tooltip@5.0.0)
+
+<img width="1073" alt="image" src="https://user-images.githubusercontent.com/9615850/211835641-f6373084-ad73-4902-9855-246d34952345.png">
+
 ## Installation
 
 ```sh
