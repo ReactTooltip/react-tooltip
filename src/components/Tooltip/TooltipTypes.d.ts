@@ -54,4 +54,5 @@ export interface ITooltip {
   position?: IPosition
   isOpen?: boolean
   setIsOpen?: (value: boolean) => void
+  afterShow?: () => void
 }
