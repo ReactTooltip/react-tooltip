@@ -27,6 +27,7 @@ const Tooltip = ({
   clickable = false,
   style: externalStyles,
   position,
+  afterShow,
   // props handled by controller
   isHtmlContent = false,
   content,
@@ -51,6 +52,10 @@ const Tooltip = ({
       setIsOpen(value)
     } else if (isOpen === undefined) {
       setShow(value)
+    }
+
+    if (value && afterShow) {
+      afterShow()
     }
   }
 

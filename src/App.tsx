@@ -165,6 +165,16 @@ function App() {
           />
         </div>
       </div>
+
+      <div style={{ marginTop: '1rem' }}>
+        <button id="buttonAfterShow">Check the dev console</button>
+        <Tooltip
+          place="bottom"
+          anchorId="buttonAfterShow"
+          afterShow={() => console.log('Hello world')}
+          content="Showing tooltip and calling afterShow method"
+        />
+      </div>
     </main>
   )
 }
