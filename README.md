@@ -87,9 +87,9 @@ You can import `node_modules/react-tooltip/dist/react-tooltip.[mode].js` into yo
 
 mode: `esm` `cjs` `umd`
 
-If you want to use default ReactTooltip styles, don't forget to import the styles: `node_modules/react-tooltip/dist/react-tooltip.css`
+Don't forget to import the CSS file from `node_modules/react-tooltip/dist/react-tooltip.css` to set default styling. This needs to be done only once in your application.
 
-PS: all the files has a minified version and a not minified version.
+PS: all the files have a minified version and a non-minified version.
 
 ![image](https://user-images.githubusercontent.com/9615850/205637814-c0ef01ae-bd77-4e7f-b4bf-df502c71e5c3.png)
 
