@@ -55,4 +55,5 @@ export interface ITooltip {
   isOpen?: boolean
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
+  afterHide?: () => void
 }

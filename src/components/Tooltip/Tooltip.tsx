@@ -28,6 +28,7 @@ const Tooltip = ({
   style: externalStyles,
   position,
   afterShow,
+  afterHide,
   // props handled by controller
   isHtmlContent = false,
   content,
@@ -54,8 +55,12 @@ const Tooltip = ({
       setShow(value)
     }
 
-    if (value && afterShow) {
+    // Callbacks
+    if (value === true && afterShow) {
       afterShow()
+    }
+    if (value === false && afterHide) {
+      afterHide()
     }
   }
 

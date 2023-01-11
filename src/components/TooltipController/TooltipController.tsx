@@ -36,6 +36,7 @@ const TooltipController = ({
   isOpen,
   setIsOpen,
   afterShow,
+  afterHide,
 }: ITooltipController) => {
   const [tooltipContent, setTooltipContent] = useState(content || html)
   const [tooltipPlace, setTooltipPlace] = useState(place)
@@ -192,6 +193,7 @@ const TooltipController = ({
     isOpen,
     setIsOpen,
     afterShow,
+    afterHide,
   }
 
   return children ? <Tooltip {...props}>{children}</Tooltip> : <Tooltip {...props} />
