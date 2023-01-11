@@ -34,6 +34,7 @@ export interface ITooltipController {
   isOpen?: boolean
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
+  afterHide?: () => void
 }
 
 declare module 'react' {
