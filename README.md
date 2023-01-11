@@ -1,10 +1,12 @@
 # react-tooltip
 
 [![Version](http://img.shields.io/npm/v/react-tooltip.svg)](https://www.npmjs.org/package/react-tooltip)
+![typescript](https://badgen.net/badge/icon/typescript?icon=typescript&label)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+![last commit](https://badgen.net/github/last-commit/reacttooltip/react-tooltip)
 [![npm download][download-image]][download-url]
-[![Build Status](https://travis-ci.org/wwayne/react-tooltip.svg?branch=master)](https://travis-ci.org/wwayne/react-tooltip)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+![minified](https://badgen.net/bundlephobia/min/react-tooltip)
+![minified gzip](https://badgen.net/bundlephobia/minzip/react-tooltip)
 
 [download-image]: https://img.shields.io/npm/dm/react-tooltip.svg?style=flat-square
 [download-url]: https://npmjs.org/package/react-tooltip
@@ -22,6 +24,10 @@
 Documentation for V4 - [Github Page](https://reacttooltip.github.io/react-tooltip/).
 
 Documentation for V5 - [ReactTooltip](https://react-tooltip.com/docs/getting-started).
+
+[Bundle size timeline comparation from V4 -> V5](https://bundlephobia.com/package/react-tooltip@5.0.0)
+
+<img width="1073" alt="image" src="https://user-images.githubusercontent.com/9615850/211835641-f6373084-ad73-4902-9855-246d34952345.png">
 
 ## Installation
 
