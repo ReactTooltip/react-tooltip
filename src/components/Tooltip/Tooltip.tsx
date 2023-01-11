@@ -180,7 +180,7 @@ const Tooltip = ({
     if (activeAnchor.current?.contains(event.target as HTMLElement)) {
       return
     }
-    setShow(false)
+    handleShow(false)
   }
 
   // debounce handler to prevent call twice when
