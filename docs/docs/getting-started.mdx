@@ -49,6 +49,15 @@ yarn add react-tooltip
 
 ## Usage
 
+### Set the default styling
+
+```js
+import 'react-tooltip/dist/react-tooltip.css'
+```
+
+This needs to be done only once. We suggest you do it on your `src/index.js` or equivalent file.
+For advanced styling, check [the examples](./examples/styling.mdx).
+
 There are two ways to use ReactTooltip.
 
 1. Using props into ReactTooltip Element.
@@ -124,9 +133,8 @@ By default, you can't interact with elements inside the tooltip. To allow for pr
 
 ### Styling
 
-If you want a styled tooltip, don't forget to add the style file `import 'react-tooltip/dist/react-tooltip.css'`.
-
 Basic styling can be done by overriding the following css variables.
+For advanced styling, check [the examples](./examples/styling.mdx).
 
 ```css
 :root {
@@ -139,5 +147,3 @@ Basic styling can be done by overriding the following css variables.
   --rt-opacity: 0.9;
 }
 ```
-
-For advanced styling, check [the examples](./examples/styling.mdx).
