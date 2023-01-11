@@ -13,20 +13,15 @@ export default function FooterWrapper(props) {
       scriptElement.onload = () => {
         if (typeof window !== 'undefined') {
           window.onload = () => {
-            ;(window.adsbygoogle = window.adsbygoogle || []).push({})
+            if (window.document.body.clientWidth <= 768) {
+              ;(window.adsbygoogle = window.adsbygoogle || []).push({
+                google_ad_client: 'ca-pub-7420210265158247',
+                enable_page_level_ads: true,
+                overlays: { bottom: true },
+              })
+            }
           }
         }
-      }
-      document.body.appendChild(scriptElement)
-
-      if (window.document.body.clientWidth <= 768) {
-        const adsElement = document.createElement('ins')
-        adsElement.classList.add('adsbygoogle')
-        adsElement.classList.add('adsanchor')
-        adsElement.setAttribute('ad-client', 'ca-pub-7420210265158247')
-        adsElement.setAttribute('ad-slot', '8159529807')
-        adsElement.setAttribute('full-width-responsive', 'true')
-        document.body.appendChild(adsElement)
       }
     }
   }, [])
