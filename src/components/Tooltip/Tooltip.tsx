@@ -41,7 +41,8 @@ const Tooltip = ({
   const tooltipHideDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const [inlineStyles, setInlineStyles] = useState({})
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
-  const [show, setShow] = useState<boolean>(false)
+  const [show, setShow] = useState(false)
+  const wasShowing = useRef(false)
   const [calculatingPosition, setCalculatingPosition] = useState(false)
   const lastFloatPosition = useRef<IPosition | null>(null)
   const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip()(id)
@@ -56,8 +57,11 @@ const Tooltip = ({
     }
   }
 
-  // Callbacks
   useEffect(() => {
+    if (show === wasShowing.current) {
+      return
+    }
+    wasShowing.current = show
     if (show) {
       afterShow?.()
     } else {
