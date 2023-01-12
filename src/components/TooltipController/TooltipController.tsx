@@ -133,17 +133,19 @@ const TooltipController = ({
       return () => null
     }
 
+    const anchorElement = activeAnchor.current ?? anchorById
+
     const observerCallback: MutationCallback = (mutationList) => {
       mutationList.forEach((mutation) => {
         if (
-          !activeAnchor.current ||
+          !anchorElement ||
           mutation.type !== 'attributes' ||
           !mutation.attributeName?.startsWith('data-tooltip-')
         ) {
           return
         }
         // make sure to get all set attributes, since all unset attributes are reset
-        const dataAttributes = getDataAttributesFromAnchorElement(activeAnchor.current)
+        const dataAttributes = getDataAttributesFromAnchorElement(anchorElement)
         applyAllDataAttributesFromAnchorElement(dataAttributes)
       })
     }
@@ -155,13 +157,11 @@ const TooltipController = ({
     // to stay watching `data-attributes-*` from anchor element
     const observerConfig = { attributes: true, childList: false, subtree: false }
 
-    const element = activeAnchor.current ?? anchorById
-
-    if (element) {
-      const dataAttributes = getDataAttributesFromAnchorElement(element)
+    if (anchorElement) {
+      const dataAttributes = getDataAttributesFromAnchorElement(anchorElement)
       applyAllDataAttributesFromAnchorElement(dataAttributes)
       // Start observing the target node for configured mutations
-      observer.observe(element, observerConfig)
+      observer.observe(anchorElement, observerConfig)
     }
 
     return () => {
