@@ -30,8 +30,8 @@ const Tooltip = ({
   afterShow,
   afterHide,
   // props handled by controller
-  isHtmlContent = false,
   content,
+  html,
   isOpen,
   setIsOpen,
 }: ITooltip) => {
@@ -315,7 +315,18 @@ const Tooltip = ({
     return () => {
       mounted = false
     }
-  }, [show, isOpen, anchorId, activeAnchor, content, place, offset, positionStrategy, position])
+  }, [
+    show,
+    isOpen,
+    anchorId,
+    activeAnchor,
+    content,
+    html,
+    place,
+    offset,
+    positionStrategy,
+    position,
+  ])
 
   useEffect(() => {
     return () => {
@@ -328,7 +339,7 @@ const Tooltip = ({
     }
   }, [])
 
-  const hasContentOrChildren = Boolean(content || children)
+  const hasContentOrChildren = Boolean(html || content || children)
 
   return (
     <WrapperElement
@@ -342,7 +353,8 @@ const Tooltip = ({
       style={{ ...externalStyles, ...inlineStyles }}
       ref={tooltipRef}
     >
-      {children || (isHtmlContent ? <TooltipContent content={content as string} /> : content)}
+      {/* content priority: children > html > content */}
+      {children || (html && <TooltipContent content={html} />) || content}
       <div
         className={classNames('react-tooltip-arrow', styles['arrow'], classNameArrow, {
           [styles['no-arrow']]: noArrow,

@@ -40,7 +40,6 @@ export interface ITooltip {
   id?: string
   variant?: VariantType
   anchorId?: string
-  isHtmlContent?: boolean
   wrapper?: WrapperType
   children?: ChildrenType
   events?: EventsType[]
