@@ -38,7 +38,8 @@ const TooltipController = ({
   afterShow,
   afterHide,
 }: ITooltipController) => {
-  const [tooltipContent, setTooltipContent] = useState(content || html)
+  const [tooltipContent, setTooltipContent] = useState(content)
+  const [tooltipHtml, setTooltipHtml] = useState(html)
   const [tooltipPlace, setTooltipPlace] = useState(place)
   const [tooltipVariant, setTooltipVariant] = useState(variant)
   const [tooltipOffset, setTooltipOffset] = useState(offset)
@@ -48,7 +49,6 @@ const TooltipController = ({
   const [tooltipWrapper, setTooltipWrapper] = useState<WrapperType>(wrapper)
   const [tooltipEvents, setTooltipEvents] = useState(events)
   const [tooltipPositionStrategy, setTooltipPositionStrategy] = useState(positionStrategy)
-  const [isHtmlContent, setIsHtmlContent] = useState(Boolean(html))
   const { anchorRefs, activeAnchor } = useTooltip()(id)
 
   const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
@@ -74,8 +74,7 @@ const TooltipController = ({
         setTooltipContent(value ?? content)
       },
       html: (value) => {
-        setIsHtmlContent(Boolean(value ?? html))
-        setTooltipContent(value ?? html ?? content)
+        setTooltipHtml(value ?? html)
       },
       variant: (value) => {
         setTooltipVariant((value as VariantType) ?? variant)
@@ -112,14 +111,12 @@ const TooltipController = ({
   }
 
   useEffect(() => {
-    setIsHtmlContent(false)
     setTooltipContent(content)
-    if (html) {
-      // html will take precedence
-      setIsHtmlContent(true)
-      setTooltipContent(html)
-    }
-  }, [content, html])
+  }, [content])
+
+  useEffect(() => {
+    setTooltipHtml(html)
+  }, [html])
 
   useEffect(() => {
     const elementRefs = new Set(anchorRefs)
@@ -176,7 +173,7 @@ const TooltipController = ({
     className,
     classNameArrow,
     content: tooltipContent,
-    isHtmlContent,
+    html: tooltipHtml,
     place: tooltipPlace,
     variant: tooltipVariant,
     offset: tooltipOffset,
