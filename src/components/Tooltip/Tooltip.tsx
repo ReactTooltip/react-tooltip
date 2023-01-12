@@ -54,15 +54,16 @@ const Tooltip = ({
     } else if (isOpen === undefined) {
       setShow(value)
     }
-
-    // Callbacks
-    if (value === true && afterShow) {
-      afterShow()
-    }
-    if (value === false && afterHide) {
-      afterHide()
-    }
   }
+
+  // Callbacks
+  useEffect(() => {
+    if (show) {
+      afterShow?.()
+    } else {
+      afterHide?.()
+    }
+  }, [show])
 
   const handleShowTooltipDelayed = () => {
     if (tooltipShowDelayTimerRef.current) {

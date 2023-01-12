@@ -177,6 +177,30 @@ function App() {
           afterHide={() => console.log('After hide')}
           content="Showing tooltip and calling afterShow method"
         />
+
+        <button id="buttonCallbacksClick">With click event</button>
+        <Tooltip
+          events={['click']}
+          place="bottom"
+          anchorId="buttonCallbacksClick"
+          // eslint-disable-next-line no-console
+          afterShow={() => console.log('After show with click')}
+          // eslint-disable-next-line no-console
+          afterHide={() => console.log('After hide with click')}
+          content="Showing tooltip and calling afterShow method"
+        />
+
+        <button id="buttonCallbacksDelay">With delay</button>
+        <Tooltip
+          delayShow={1000}
+          place="bottom"
+          anchorId="buttonCallbacksDelay"
+          // eslint-disable-next-line no-console
+          afterShow={() => console.log('After show with delay')}
+          // eslint-disable-next-line no-console
+          afterHide={() => console.log('After hide with delay')}
+          content="Showing tooltip and calling afterShow method"
+        />
       </div>
     </main>
   )
