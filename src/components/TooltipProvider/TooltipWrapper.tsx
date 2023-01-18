@@ -18,7 +18,7 @@ const TooltipWrapper = ({
   delayShow,
   delayHide,
 }: ITooltipWrapper) => {
-  const { attach, detach } = useTooltip()(tooltipId)
+  const { attach, detach } = useTooltip(tooltipId)
   const anchorRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {

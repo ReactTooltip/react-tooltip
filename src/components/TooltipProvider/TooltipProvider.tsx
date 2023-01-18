@@ -3,41 +3,38 @@ import React, {
   PropsWithChildren,
   useCallback,
   useContext,
-  useId,
   useMemo,
   useState,
 } from 'react'
 
-import type {
-  AnchorRef,
-  TooltipContextData,
-  TooltipContextDataWrapper,
-} from './TooltipProviderTypes'
+import type { AnchorRef, TooltipContextData } from './TooltipProviderTypes'
+
+const DEFAULT_TOOLTIP_ID = 'DEFAULT_TOOLTIP_ID'
 
 const defaultContextData: TooltipContextData = {
-  anchorRefs: new Set(),
-  activeAnchor: { current: null },
-  attach: () => {
-    /* attach anchor element */
-  },
-  detach: () => {
-    /* detach anchor element */
-  },
-  setActiveAnchor: () => {
-    /* set active anchor */
-  },
+  getTooltipData: () => ({
+    anchorRefs: new Set(),
+    activeAnchor: { current: null },
+    attach: () => {
+      /* attach anchor element */
+    },
+    detach: () => {
+      /* detach anchor element */
+    },
+    setActiveAnchor: () => {
+      /* set active anchor */
+    },
+  }),
 }
 
-const defaultContextWrapper = Object.assign(() => defaultContextData, defaultContextData)
-const TooltipContext = createContext<TooltipContextDataWrapper>(defaultContextWrapper)
+const TooltipContext = createContext<TooltipContextData>(defaultContextData)
 
 const TooltipProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const defaultTooltipId = useId()
   const [anchorRefMap, setAnchorRefMap] = useState<Record<string, Set<AnchorRef>>>({
-    [defaultTooltipId]: new Set(),
+    [DEFAULT_TOOLTIP_ID]: new Set(),
   })
   const [activeAnchorMap, setActiveAnchorMap] = useState<Record<string, AnchorRef>>({
-    [defaultTooltipId]: { current: null },
+    [DEFAULT_TOOLTIP_ID]: { current: null },
   })
 
   const attach = (tooltipId: string, ...refs: AnchorRef[]) => {
@@ -74,37 +71,27 @@ const TooltipProvider: React.FC<PropsWithChildren> = ({ children }) => {
   }
 
   const getTooltipData = useCallback(
-    (tooltipId?: string) => ({
-      anchorRefs: anchorRefMap[tooltipId ?? defaultTooltipId] ?? new Set(),
-      activeAnchor: activeAnchorMap[tooltipId ?? defaultTooltipId] ?? { current: null },
-      attach: (...refs: AnchorRef[]) => attach(tooltipId ?? defaultTooltipId, ...refs),
-      detach: (...refs: AnchorRef[]) => detach(tooltipId ?? defaultTooltipId, ...refs),
-      setActiveAnchor: (ref: AnchorRef) => setActiveAnchor(tooltipId ?? defaultTooltipId, ref),
+    (tooltipId = DEFAULT_TOOLTIP_ID) => ({
+      anchorRefs: anchorRefMap[tooltipId] ?? new Set(),
+      activeAnchor: activeAnchorMap[tooltipId] ?? { current: null },
+      attach: (...refs: AnchorRef[]) => attach(tooltipId, ...refs),
+      detach: (...refs: AnchorRef[]) => detach(tooltipId, ...refs),
+      setActiveAnchor: (ref: AnchorRef) => setActiveAnchor(tooltipId, ref),
     }),
-    [defaultTooltipId, anchorRefMap, activeAnchorMap, attach, detach],
+    [anchorRefMap, activeAnchorMap, attach, detach],
   )
 
   const context = useMemo(() => {
-    const contextData: TooltipContextData = getTooltipData(defaultTooltipId)
-    const contextWrapper = Object.assign(
-      (tooltipId?: string) => getTooltipData(tooltipId),
-      contextData,
-    )
-    return contextWrapper
+    return {
+      getTooltipData,
+    }
   }, [getTooltipData])
 
   return <TooltipContext.Provider value={context}>{children}</TooltipContext.Provider>
 }
 
-/*
-  // this will use the "global" tooltip (same as `useTooltip()()`)
-  const { anchorRefs, attach, detach } = useTooltip()
-
-  // this will use the tooltip with id `tooltip-id`
-  const { anchorRefs, attach, detach } = useTooltip()('tooltip-id')
-*/
-export function useTooltip() {
-  return useContext(TooltipContext)
+export function useTooltip(tooltipId = DEFAULT_TOOLTIP_ID) {
+  return useContext(TooltipContext).getTooltipData(tooltipId)
 }
 
 export default TooltipProvider

@@ -45,7 +45,7 @@ const Tooltip = ({
   const wasShowing = useRef(false)
   const [calculatingPosition, setCalculatingPosition] = useState(false)
   const lastFloatPosition = useRef<IPosition | null>(null)
-  const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip()(id)
+  const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip(id)
   const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
   const hoveringTooltip = useRef(false)
 
