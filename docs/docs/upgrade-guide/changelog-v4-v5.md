@@ -13,8 +13,6 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 ## Improvements
 
 - Dropped package dependency `uuid`
-- - Using React `useId` - [Docs](https://reactjs.org/docs/hooks-reference.html#useid)
-- - - Unfortunately `useId` was introduced only into React v18, so that is the minimum required React version to use V5
 - Dropped package dependency `prop-types`
 - V5 is written in TypeScript
 - V5 has minified and unminified files available to be used as you want
