@@ -3,10 +3,10 @@ import React, {
   PropsWithChildren,
   useCallback,
   useContext,
-  useId,
   useMemo,
   useState,
 } from 'react'
+import { v4 } from 'uuid'
 
 import type {
   AnchorRef,
@@ -32,7 +32,7 @@ const defaultContextWrapper = Object.assign(() => defaultContextData, defaultCon
 const TooltipContext = createContext<TooltipContextDataWrapper>(defaultContextWrapper)
 
 const TooltipProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const defaultTooltipId = useId()
+  const defaultTooltipId = v4()
   const [anchorRefMap, setAnchorRefMap] = useState<Record<string, Set<AnchorRef>>>({
     [defaultTooltipId]: new Set(),
   })
