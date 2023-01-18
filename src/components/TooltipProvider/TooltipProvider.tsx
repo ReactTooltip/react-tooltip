@@ -7,27 +7,32 @@ import React, {
   useState,
 } from 'react'
 
-import type { AnchorRef, TooltipContextData } from './TooltipProviderTypes'
+import type {
+  AnchorRef,
+  TooltipContextData,
+  TooltipContextDataWrapper,
+} from './TooltipProviderTypes'
 
 const DEFAULT_TOOLTIP_ID = 'DEFAULT_TOOLTIP_ID'
-
-const defaultContextData: TooltipContextData = {
-  getTooltipData: () => ({
-    anchorRefs: new Set(),
-    activeAnchor: { current: null },
-    attach: () => {
-      /* attach anchor element */
-    },
-    detach: () => {
-      /* detach anchor element */
-    },
-    setActiveAnchor: () => {
-      /* set active anchor */
-    },
-  }),
+const DEFAULT_CONTEXT_DATA: TooltipContextData = {
+  anchorRefs: new Set(),
+  activeAnchor: { current: null },
+  attach: () => {
+    /* attach anchor element */
+  },
+  detach: () => {
+    /* detach anchor element */
+  },
+  setActiveAnchor: () => {
+    /* set active anchor */
+  },
 }
 
-const TooltipContext = createContext<TooltipContextData>(defaultContextData)
+const DEFAULT_CONTEXT_DATA_WRAPPER: TooltipContextDataWrapper = {
+  getTooltipData: () => DEFAULT_CONTEXT_DATA,
+}
+
+const TooltipContext = createContext<TooltipContextDataWrapper>(DEFAULT_CONTEXT_DATA_WRAPPER)
 
 const TooltipProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [anchorRefMap, setAnchorRefMap] = useState<Record<string, Set<AnchorRef>>>({
