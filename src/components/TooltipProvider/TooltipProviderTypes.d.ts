@@ -4,16 +4,13 @@ import type { ITooltipController } from 'components/TooltipController/TooltipCon
 export type AnchorRef = RefObject<HTMLElement>
 
 export interface TooltipContextData {
-  anchorRefs: Set<AnchorRef>
-  activeAnchor: AnchorRef
-  attach: (...refs: AnchorRef[]) => void
-  detach: (...refs: AnchorRef[]) => void
-  setActiveAnchor: (ref: AnchorRef) => void
-}
-
-export type TooltipContextDataWrapper = TooltipContextData & {
-  // This means the context is a callable object
-  (tooltipId?: string): TooltipContextData
+  getTooltipData: (tooltipId?: string) => {
+    anchorRefs: Set<AnchorRef>
+    activeAnchor: AnchorRef
+    attach: (...refs: AnchorRef[]) => void
+    detach: (...refs: AnchorRef[]) => void
+    setActiveAnchor: (ref: AnchorRef) => void
+  }
 }
 
 export interface ITooltipWrapper {

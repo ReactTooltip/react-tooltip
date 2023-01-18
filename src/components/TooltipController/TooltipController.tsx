@@ -49,7 +49,7 @@ const TooltipController = ({
   const [tooltipWrapper, setTooltipWrapper] = useState<WrapperType>(wrapper)
   const [tooltipEvents, setTooltipEvents] = useState(events)
   const [tooltipPositionStrategy, setTooltipPositionStrategy] = useState(positionStrategy)
-  const { anchorRefs, activeAnchor } = useTooltip()(id)
+  const { anchorRefs, activeAnchor } = useTooltip(id)
 
   const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
     const dataAttributes = elementReference?.getAttributeNames().reduce((acc, name) => {
