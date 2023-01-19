@@ -18,6 +18,7 @@ const Tooltip = ({
   offset = 10,
   events = ['hover'],
   positionStrategy = 'absolute',
+  middlewares,
   wrapper: WrapperElement = 'div',
   children = null,
   delayShow = 0,
@@ -150,6 +151,7 @@ const Tooltip = ({
       tooltipReference: tooltipRef.current,
       tooltipArrowReference: tooltipArrowRef.current,
       strategy: positionStrategy,
+      middlewares,
     }).then((computedStylesData) => {
       setCalculatingPosition(false)
       if (Object.keys(computedStylesData.tooltipStyles).length) {
@@ -299,6 +301,7 @@ const Tooltip = ({
       tooltipReference: tooltipRef.current,
       tooltipArrowReference: tooltipArrowRef.current,
       strategy: positionStrategy,
+      middlewares,
     }).then((computedStylesData) => {
       if (!mounted) {
         // invalidate computed positions after remount
