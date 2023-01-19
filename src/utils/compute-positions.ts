@@ -1,4 +1,4 @@
-import { computePosition, offset, flip, shift, arrow } from '@floating-ui/dom'
+import { computePosition, offset, shift, arrow, flip } from '@floating-ui/dom'
 import type { IComputePositions } from './compute-positions-types'
 
 export const computeTooltipPosition = async ({
@@ -8,6 +8,7 @@ export const computeTooltipPosition = async ({
   place = 'top',
   offset: offsetValue = 10,
   strategy = 'absolute',
+  middlewares = [offset(Number(offsetValue)), flip(), shift({ padding: 5 })],
 }: IComputePositions) => {
   if (!elementReference) {
     // elementReference can be null or undefined and we will not compute the position
@@ -20,10 +21,11 @@ export const computeTooltipPosition = async ({
     return { tooltipStyles: {}, tooltipArrowStyles: {} }
   }
 
-  const middleware = [offset(Number(offsetValue)), flip(), shift({ padding: 5 })]
+  const middleware = middlewares
 
   if (tooltipArrowReference) {
     middleware.push(arrow({ element: tooltipArrowReference as HTMLElement, padding: 5 }))
+
     return computePosition(elementReference as HTMLElement, tooltipReference as HTMLElement, {
       placement: place,
       strategy,

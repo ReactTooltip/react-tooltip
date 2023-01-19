@@ -8,6 +8,7 @@ import type {
   EventsType,
   PositionStrategy,
   IPosition,
+  Middleware,
 } from 'components/Tooltip/TooltipTypes'
 
 export interface ITooltipController {
@@ -24,6 +25,7 @@ export interface ITooltipController {
   children?: ChildrenType
   events?: EventsType[]
   positionStrategy?: PositionStrategy
+  middlewares?: Middleware[]
   delayShow?: number
   delayHide?: number
   float?: boolean

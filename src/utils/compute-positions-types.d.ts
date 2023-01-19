@@ -1,3 +1,5 @@
+import type { Middleware } from '../components/Tooltip/TooltipTypes'
+
 export interface IComputePositions {
   elementReference?: Element | HTMLElement | null
   tooltipReference?: Element | HTMLElement | null
@@ -5,4 +7,5 @@ export interface IComputePositions {
   place?: 'top' | 'right' | 'bottom' | 'left'
   offset?: number
   strategy?: 'absolute' | 'fixed'
+  middlewares?: Middleware[]
 }
