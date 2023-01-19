@@ -5,6 +5,7 @@ import { TooltipProvider, TooltipWrapper } from 'components/TooltipProvider'
 import { IPosition } from 'components/Tooltip/TooltipTypes.d'
 import { useState } from 'react'
 import styles from './styles.module.css'
+import { inline, offset } from './index'
 
 function WithProviderMinimal() {
   return (
@@ -200,6 +201,65 @@ function App() {
           // eslint-disable-next-line no-console
           afterHide={() => console.log('After hide with delay')}
           content="Showing tooltip and calling afterShow method"
+        />
+      </div>
+
+      <div
+        style={{
+          width: 700,
+          position: 'relative',
+          overflow: 'hidden',
+          marginTop: '1rem',
+
+          boxSizing: 'border-box',
+        }}
+      >
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+          <span id="withoutCustomMiddleware" style={{ color: 'blue', fontWeight: 'bold' }}>
+            labore et dolore magna aliqua
+          </span>
+          . Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+          commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+          dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+        <Tooltip
+          place="top"
+          anchorId="withoutCustomMiddleware"
+          content="Showing tooltip with default middlewares"
+          positionStrategy="fixed"
+        />
+      </div>
+
+      <div
+        style={{
+          width: 700,
+          position: 'relative',
+          overflow: 'hidden',
+          marginTop: '1rem',
+
+          boxSizing: 'border-box',
+        }}
+      >
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+          <span id="withCustomMiddleware" style={{ color: 'blue', fontWeight: 'bold' }}>
+            labore et dolore magna aliqua
+          </span>
+          . Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+          commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+          dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+
+        <Tooltip
+          place="top"
+          anchorId="withCustomMiddleware"
+          content="Showing tooltip with custom inline middleware"
+          positionStrategy="fixed"
+          middlewares={[inline(), offset(10)]}
         />
       </div>
     </main>
