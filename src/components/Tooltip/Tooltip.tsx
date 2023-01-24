@@ -26,6 +26,7 @@ const Tooltip = ({
   float = false,
   noArrow = false,
   clickable = false,
+  closeOnEsc = false,
   style: externalStyles,
   position,
   afterShow,
@@ -190,6 +191,13 @@ const Tooltip = ({
     handleShow(false)
   }
 
+  const handleEsc = (event: KeyboardEvent) => {
+    if (event.key !== 'Escape') {
+      return
+    }
+    handleShow(false)
+  }
+
   // debounce handler to prevent call twice when
   // mouse enter and focus events being triggered toggether
   const debouncedHandleShowTooltip = debounce(handleShowTooltip, 50)
@@ -208,6 +216,10 @@ const Tooltip = ({
 
     if (!elementRefs.size) {
       return () => null
+    }
+
+    if (closeOnEsc) {
+      window.addEventListener('keydown', handleEsc)
     }
 
     const enabledEvents: { event: string; listener: (event?: Event) => void }[] = []
@@ -252,7 +264,12 @@ const Tooltip = ({
     })
 
     return () => {
-      window.removeEventListener('click', handleClickOutsideAnchor)
+      if (events.find((event: string) => event === 'click')) {
+        window.removeEventListener('click', handleClickOutsideAnchor)
+      }
+      if (closeOnEsc) {
+        window.removeEventListener('keydown', handleEsc)
+      }
       if (clickable) {
         tooltipRef.current?.removeEventListener('mouseenter', handleMouseEnterTooltip)
         tooltipRef.current?.removeEventListener('mouseleave', handleMouseLeaveTooltip)
@@ -263,7 +280,7 @@ const Tooltip = ({
         })
       })
     }
-  }, [anchorRefs, activeAnchor, anchorId, events, delayHide, delayShow])
+  }, [anchorRefs, activeAnchor, closeOnEsc, anchorId, events, delayHide, delayShow])
 
   useEffect(() => {
     if (position) {
