@@ -10,6 +10,7 @@
     "stylelint": "stylelint \"src/**/*.css\"",
     "prettier": "prettier --config ./.prettierrc.json --write \"src/**/*{.js,.jsx,.ts,.tsx,.css}\"",
     "prepare": "husky install",
+    "bundlesize": "bundlesize",
     "test": "jest"
   },
   "main": "dist/react-tooltip.cjs.min.js",
