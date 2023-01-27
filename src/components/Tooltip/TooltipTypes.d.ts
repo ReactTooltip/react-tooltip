@@ -1,6 +1,7 @@
 import type { ElementType, ReactNode, CSSProperties } from 'react'
+import type { Middleware } from '@floating-ui/dom'
 
-export type { Middleware } from '@floating-ui/dom'
+export type { Middleware }
 
 export type PlacesType = 'top' | 'right' | 'bottom' | 'left'
 
