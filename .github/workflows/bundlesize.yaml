@@ -11,6 +11,9 @@ jobs:
       - uses: actions/setup-node@v3
 
       - name: Install dev dependencies
+        run: yarn install
+
+      - name: Install dev dependencies
         run: yarn build
 
       - name: Bundlesize
