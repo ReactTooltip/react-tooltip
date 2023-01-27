@@ -1,5 +1,6 @@
 import type { ElementType, ReactNode, CSSProperties } from 'react'
-import type { Middleware } from '@floating-ui/dom'
+
+export type { Middleware } from '@floating-ui/dom'
 
 export type PlacesType = 'top' | 'right' | 'bottom' | 'left'
 
@@ -12,8 +13,6 @@ export type ChildrenType = Element | ElementType | ReactNode
 export type EventsType = 'hover' | 'click'
 
 export type PositionStrategy = 'absolute' | 'fixed'
-
-export type Middleware = Middleware
 
 export type DataAttribute =
   | 'place'
