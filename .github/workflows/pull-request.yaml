@@ -7,8 +7,19 @@ on:
   pull_request:
 
 jobs:
+  preparing_env:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+
+      - name: Install dev dependencies
+        run: yarn install
+
   lint:
+    needs: preparing_env
     uses: ./.github/workflows/lint.yaml
 
   bundlesize:
+    needs: preparing_env
     uses: ./.github/workflows/bundlesize.yaml
