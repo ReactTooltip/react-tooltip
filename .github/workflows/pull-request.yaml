@@ -9,3 +9,6 @@ on:
 jobs:
   lint:
     uses: ./.github/workflows/lint.yaml
+
+  bundlesize:
+    uses: ./.github/workflows/bundlesize.yaml
