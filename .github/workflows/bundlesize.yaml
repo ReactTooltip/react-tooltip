@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  build:
+  bundlesize:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,16 +15,6 @@ jobs:
 
       - name: Build ReactTooltip component package
         run: yarn build
-
-  bundlesize:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
-
-      - name: Install dev dependencies
-        run: yarn install
 
       - name: Bundlesize
         run: yarn run bundlesize
