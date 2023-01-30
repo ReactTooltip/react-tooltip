@@ -21,6 +21,7 @@ export interface ITooltipController {
   id?: string
   variant?: VariantType
   anchorId?: string
+  anchorSelect?: string
   wrapper?: WrapperType
   children?: ChildrenType
   events?: EventsType[]
