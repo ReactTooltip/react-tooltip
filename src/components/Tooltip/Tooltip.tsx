@@ -263,6 +263,31 @@ const Tooltip = ({
       })
     })
 
+    const anchorElement = anchorById ?? activeAnchor.current
+
+    const parentObserverCallback: MutationCallback = (mutationList) => {
+      if (!anchorElement) {
+        return
+      }
+      mutationList.some((mutation) => {
+        if (mutation.type !== 'childList') {
+          return false
+        }
+        return [...mutation.removedNodes].some((node) => {
+          if (node.contains(anchorElement)) {
+            handleShow(false)
+            return true
+          }
+          return false
+        })
+      })
+    }
+
+    const parentObserver = new MutationObserver(parentObserverCallback)
+
+    // watch for anchor being removed from the DOM
+    parentObserver.observe(document.body, { attributes: false, childList: true, subtree: true })
+
     return () => {
       if (events.find((event: string) => event === 'click')) {
         window.removeEventListener('click', handleClickOutsideAnchor)
@@ -279,6 +304,7 @@ const Tooltip = ({
           ref.current?.removeEventListener(event, listener)
         })
       })
+      parentObserver.disconnect()
     }
   }, [anchorRefs, activeAnchor, closeOnEsc, anchorId, events, delayHide, delayShow])
 
