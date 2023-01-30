@@ -87,7 +87,7 @@ const minifiedOutputData = pkg.buildFormats.map(({ file, format }) => ({
   plugins: [...pluginsForCSSMinification, terser(), filesize()],
 }))
 
-const outputData = [...minifiedOutputData, ...defaultOutputData]
+const outputData = [...defaultOutputData, ...minifiedOutputData]
 
 const config = outputData.map(({ file, format, plugins: specificPLugins }) => ({
   input,

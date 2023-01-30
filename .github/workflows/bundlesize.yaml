@@ -1,0 +1,21 @@
+name: Run Bundlesize
+
+on:
+  workflow_call:
+
+jobs:
+  bundlesize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+
+      - name: Install dev dependencies
+        run: yarn install
+
+      - name: Build ReactTooltip component package
+        run: yarn build
+
+      - name: Bundlesize
+        run: yarn run bundlesize
+

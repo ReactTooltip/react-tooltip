@@ -4,13 +4,13 @@
   "description": "react tooltip component",
   "scripts": {
     "dev": "node ./cli.js --env=development && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.dev.js --watch",
-    "build": "node ./cli.js --env=production && npm run types && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.prod.js",
+    "build": "node ./cli.js --env=production && npm run types && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.prod.js && npm run bundlesize",
     "types": "node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.types.js",
     "eslint": "eslint --ext=js --ext=jsx --ext=ts --ext=tsx --fix ./src",
     "stylelint": "stylelint \"src/**/*.css\"",
     "prettier": "prettier --config ./.prettierrc.json --write \"src/**/*{.js,.jsx,.ts,.tsx,.css}\"",
-    "cm": "git cz",
     "prepare": "husky install",
+    "bundlesize": "bundlesize",
     "test": "jest"
   },
   "main": "dist/react-tooltip.cjs.min.js",
@@ -57,9 +57,8 @@
     "@types/react-test-renderer": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
-    "commitizen": "^4.2.5",
+    "bundlesize": "^0.18.1",
     "css-loader": "6.7.2",
-    "cz-conventional-changelog": "^3.3.0",
     "eslint": "8.28.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-prettier": "^8.3.0",
@@ -116,11 +115,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    }
   },
   "dependencies": {
     "@floating-ui/dom": "^1.0.4",
