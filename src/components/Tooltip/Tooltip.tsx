@@ -401,7 +401,7 @@ const Tooltip = ({
     >
       {/* content priority: children > html > content */}
       {children || (html && <TooltipContent content={html} />) || content}
-      <div
+      <WrapperElement
         className={classNames('react-tooltip-arrow', styles['arrow'], classNameArrow, {
           [styles['no-arrow']]: noArrow,
         })}
