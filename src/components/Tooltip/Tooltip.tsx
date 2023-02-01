@@ -46,7 +46,6 @@ const Tooltip = ({
   const [show, setShow] = useState(false)
   const [rendered, setRendered] = useState(false)
   const wasShowing = useRef(false)
-  const [calculatingPosition, setCalculatingPosition] = useState(false)
   const lastFloatPosition = useRef<IPosition | null>(null)
   const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip(id)
   const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
@@ -62,8 +61,8 @@ const Tooltip = ({
     setRendered(true)
 
     /**
-     * this `timeout` is necessary because the component
-     * needs to be rendered to calculate the position correctly
+     * wait for the component to render and calculate position
+     * before actually showing
      */
     setTimeout(() => {
       if (setIsOpen) {
@@ -132,7 +131,7 @@ const Tooltip = ({
   const handleHideTooltip = () => {
     if (clickable) {
       // allow time for the mouse to reach the tooltip, in case there's a gap
-      handleHideTooltipDelayed(delayHide || 50)
+      handleHideTooltipDelayed(delayHide || 100)
     } else if (delayHide) {
       handleHideTooltipDelayed()
     } else {
@@ -159,7 +158,6 @@ const Tooltip = ({
         }
       },
     } as Element
-    setCalculatingPosition(true)
     computeTooltipPosition({
       place,
       offset,
@@ -169,7 +167,6 @@ const Tooltip = ({
       strategy: positionStrategy,
       middlewares,
     }).then((computedStylesData) => {
-      setCalculatingPosition(false)
       if (Object.keys(computedStylesData.tooltipStyles).length) {
         setInlineStyles(computedStylesData.tooltipStyles)
       }
@@ -350,7 +347,6 @@ const Tooltip = ({
       // `anchorId` element takes precedence
       elementReference = document.querySelector(`[id='${anchorId}']`) as HTMLElement
     }
-    setCalculatingPosition(true)
     let mounted = true
     computeTooltipPosition({
       place,
@@ -365,7 +361,6 @@ const Tooltip = ({
         // invalidate computed positions after remount
         return
       }
-      setCalculatingPosition(false)
       if (Object.keys(computedStylesData.tooltipStyles).length) {
         setInlineStyles(computedStylesData.tooltipStyles)
       }
@@ -402,10 +397,7 @@ const Tooltip = ({
 
   const hasContentOrChildren = Boolean(html || content || children)
   const canShow = Boolean(
-    hasContentOrChildren &&
-      !calculatingPosition &&
-      (isOpen || show) &&
-      Object.keys(inlineStyles).length > 0,
+    hasContentOrChildren && (isOpen || show) && Object.keys(inlineStyles).length > 0,
   )
 
   return rendered ? (
