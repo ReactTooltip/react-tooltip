@@ -44,6 +44,7 @@ const Tooltip = ({
   const [inlineStyles, setInlineStyles] = useState({})
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState(false)
+  const [rendered, setRendered] = useState(false)
   const wasShowing = useRef(false)
   const [calculatingPosition, setCalculatingPosition] = useState(false)
   const lastFloatPosition = useRef<IPosition | null>(null)
@@ -51,12 +52,26 @@ const Tooltip = ({
   const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
   const hoveringTooltip = useRef(false)
 
-  const handleShow = (value: boolean) => {
-    if (setIsOpen) {
-      setIsOpen(value)
-    } else if (isOpen === undefined) {
-      setShow(value)
+  useEffect(() => {
+    if (!show) {
+      setRendered(false)
     }
+  }, [show])
+
+  const handleShow = (value: boolean) => {
+    setRendered(true)
+
+    /**
+     * this `timeout` is necessary because the component
+     * needs to be rendered to calculate the position correctly
+     */
+    setTimeout(() => {
+      if (setIsOpen) {
+        setIsOpen(value)
+      } else if (isOpen === undefined) {
+        setShow(value)
+      }
+    }, 10)
   }
 
   useEffect(() => {
@@ -386,13 +401,19 @@ const Tooltip = ({
   }, [])
 
   const hasContentOrChildren = Boolean(html || content || children)
+  const canShow = Boolean(
+    hasContentOrChildren &&
+      !calculatingPosition &&
+      (isOpen || show) &&
+      Object.keys(inlineStyles).length > 0,
+  )
 
-  return (
+  return rendered ? (
     <WrapperElement
       id={id}
       role="tooltip"
       className={classNames('react-tooltip', styles['tooltip'], styles[variant], className, {
-        [styles['show']]: hasContentOrChildren && !calculatingPosition && (isOpen || show),
+        [styles['show']]: canShow,
         [styles['fixed']]: positionStrategy === 'fixed',
         [styles['clickable']]: clickable,
       })}
@@ -409,7 +430,7 @@ const Tooltip = ({
         ref={tooltipArrowRef}
       />
     </WrapperElement>
-  )
+  ) : null
 }
 
 export default Tooltip
