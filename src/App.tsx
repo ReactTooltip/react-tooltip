@@ -12,10 +12,10 @@ function WithProviderMinimal() {
     <section style={{ marginTop: '50px' }}>
       <p>
         <TooltipWrapper place="bottom" content="Shared Global Tooltip">
-          <button>Minimal 1</button>
+          <button>Provider 1</button>
         </TooltipWrapper>
         <TooltipWrapper place="right" content="Shared Global Tooltip">
-          <button>Minimal 2</button>
+          <button>Provider 2</button>
         </TooltipWrapper>
       </p>
       <Tooltip clickable>
@@ -29,15 +29,15 @@ function WithProviderMultiple() {
   return (
     <section style={{ marginTop: '50px' }}>
       <p>
-        <TooltipWrapper tooltipId="tooltip-1" place="bottom">
-          <button>Multiple 1</button>
+        <TooltipWrapper tooltipId="tooltip-provider-multiple-1" place="bottom">
+          <button>Provider multiple 1</button>
         </TooltipWrapper>
-        <TooltipWrapper tooltipId="tooltip-2" place="right">
-          <button>Multiple 2</button>
+        <TooltipWrapper tooltipId="tooltip-provider-multiple-2" place="right">
+          <button>Provider multiple 2</button>
         </TooltipWrapper>
       </p>
-      <Tooltip id="tooltip-1" content="Tooltip 1" />
-      <Tooltip id="tooltip-2" content="Tooltip 2" />
+      <Tooltip id="tooltip-provider-multiple-1" content="Tooltip 1" />
+      <Tooltip id="tooltip-provider-multiple-2" content="Tooltip 2" />
     </section>
   )
 }
@@ -54,26 +54,22 @@ function App() {
     setPosition({ x, y })
   }
 
+  const handleButtonClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    const target = event.target as HTMLElement
+    setAnchorId(target.id)
+  }
+
   return (
     <main className={styles['main']}>
       <button
         id="button"
         aria-describedby="tooltip"
         data-tooltip-content="My big tooltip content 1"
-        onClick={() => {
-          setAnchorId('button')
-        }}
+        onClick={handleButtonClick}
       >
         My button
       </button>
-      <Tooltip
-        place="bottom"
-        anchorId={anchorId}
-        // only shown if `data-tooltip-content` is unset
-        content={`Showing tooltip on ${anchorId}`}
-        isOpen={isDarkOpen}
-        setIsOpen={setIsDarkOpen}
-      />
+      <Tooltip place="bottom" anchorId={anchorId} isOpen={isDarkOpen} setIsOpen={setIsDarkOpen} />
       <Tooltip
         place="top"
         variant="success"
@@ -103,22 +99,35 @@ function App() {
           <button
             id="button2"
             data-tooltip-content="Hello World from a Tooltip 2"
-            onClick={() => {
-              setAnchorId('button2')
-            }}
+            onClick={handleButtonClick}
           >
             Hover or focus me
           </button>
           <button
             id="button3"
             data-tooltip-content="Hello World from a Tooltip 3"
-            onClick={() => {
-              setAnchorId('button3')
-            }}
+            onClick={handleButtonClick}
           >
             Hover or focus me 2
           </button>
         </p>
+      </section>
+      <section id="section-anchor-select" style={{ marginTop: '100px' }}>
+        <p>
+          <button data-tooltip-for="anchor-select" data-tooltip-content="this content is different">
+            Anchor select
+          </button>
+          <button data-tooltip-for="anchor-select">Anchor select 2</button>
+          <button data-tooltip-for="anchor-select">Anchor select 3</button>
+        </p>
+        <Tooltip id="anchor-select">Tooltip content</Tooltip>
+        <Tooltip
+          anchorSelect="section[id='section-anchor-select'] > p > button"
+          place="bottom"
+          events={['click']}
+        >
+          Tooltip content
+        </Tooltip>
       </section>
       <TooltipProvider>
         <WithProviderMinimal />
