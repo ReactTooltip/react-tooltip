@@ -59,19 +59,36 @@ const Tooltip = ({
 
   const handleShow = (value: boolean) => {
     setRendered(true)
-
     /**
      * wait for the component to render and calculate position
      * before actually showing
      */
     setTimeout(() => {
-      if (setIsOpen) {
-        setIsOpen(value)
-      } else if (isOpen === undefined) {
+      setIsOpen?.(value)
+      if (isOpen === undefined) {
         setShow(value)
       }
     }, 10)
   }
+
+  /**
+   * this replicates the effect from `handleShow()`
+   * when `isOpen` is changed from outside
+   */
+  useEffect(() => {
+    if (isOpen === undefined) {
+      return () => null
+    }
+    if (isOpen) {
+      setRendered(true)
+    }
+    const timeout = setTimeout(() => {
+      setShow(isOpen)
+    }, 10)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [isOpen])
 
   useEffect(() => {
     if (show === wasShowing.current) {
@@ -318,7 +335,11 @@ const Tooltip = ({
       })
       parentObserver.disconnect()
     }
-  }, [anchorRefs, activeAnchor, closeOnEsc, anchorId, events, delayHide, delayShow])
+    /**
+     * rendered is also a dependency to ensure anchor observers are re-registered
+     * since `tooltipRef` becomes stale after removing/adding the tooltip to the DOM
+     */
+  }, [rendered, anchorRefs, activeAnchor, closeOnEsc, anchorId, events, delayHide, delayShow])
 
   useEffect(() => {
     if (position) {
@@ -371,18 +392,7 @@ const Tooltip = ({
     return () => {
       mounted = false
     }
-  }, [
-    show,
-    isOpen,
-    anchorId,
-    activeAnchor,
-    content,
-    html,
-    place,
-    offset,
-    positionStrategy,
-    position,
-  ])
+  }, [show, anchorId, activeAnchor, content, html, place, offset, positionStrategy, position])
 
   useEffect(() => {
     return () => {
@@ -396,9 +406,7 @@ const Tooltip = ({
   }, [])
 
   const hasContentOrChildren = Boolean(html || content || children)
-  const canShow = Boolean(
-    hasContentOrChildren && (isOpen || show) && Object.keys(inlineStyles).length > 0,
-  )
+  const canShow = Boolean(hasContentOrChildren && show && Object.keys(inlineStyles).length > 0)
 
   return rendered ? (
     <WrapperElement
