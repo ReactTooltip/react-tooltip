@@ -3,6 +3,9 @@ import classNames from 'classnames'
 import { useTooltip } from './TooltipProvider'
 import type { ITooltipWrapper } from './TooltipProviderTypes'
 
+/**
+ * @deprecated Use the tooltip `anchorSelect` prop instead (TODO: link to docs page)
+ */
 const TooltipWrapper = ({
   tooltipId,
   children,

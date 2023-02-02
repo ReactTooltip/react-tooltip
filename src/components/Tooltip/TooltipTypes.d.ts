@@ -42,6 +42,9 @@ export interface ITooltip {
   offset?: number
   id?: string
   variant?: VariantType
+  /**
+   * @deprecated Use `anchorSelect` instead (TODO: link to docs page)
+   */
   anchorId?: string
   anchorSelect?: string
   wrapper?: WrapperType

@@ -1,6 +1,9 @@
 import type { ReactNode, RefObject } from 'react'
 import type { ITooltipController } from 'components/TooltipController/TooltipControllerTypes'
 
+/**
+ * @deprecated Use the tooltip `anchorSelect` prop instead (TODO: link to docs page)
+ */
 export type AnchorRef = RefObject<HTMLElement>
 
 export interface TooltipContextData {
@@ -15,6 +18,9 @@ export interface TooltipContextDataWrapper {
   getTooltipData: (tooltipId?: string) => TooltipContextData
 }
 
+/**
+ * @deprecated Use the tooltip `anchorSelect` prop instead (TODO: link to docs page)
+ */
 export interface ITooltipWrapper {
   tooltipId?: string
   children: ReactNode
