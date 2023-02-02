@@ -15,6 +15,7 @@ import type { ITooltipController } from './TooltipControllerTypes'
 const TooltipController = ({
   id,
   anchorId,
+  anchorSelect,
   content,
   html,
   className,
@@ -51,7 +52,11 @@ const TooltipController = ({
   const [tooltipWrapper, setTooltipWrapper] = useState<WrapperType>(wrapper)
   const [tooltipEvents, setTooltipEvents] = useState(events)
   const [tooltipPositionStrategy, setTooltipPositionStrategy] = useState(positionStrategy)
-  const { anchorRefs, activeAnchor } = useTooltip(id)
+  const [activeAnchor, setActiveAnchor] = useState<HTMLElement | null>(null)
+  /**
+   * @todo Remove this in a future version (provider/wrapper method is deprecated)
+   */
+  const { anchorRefs, activeAnchor: providerActiveAnchor } = useTooltip(id)
 
   const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
     const dataAttributes = elementReference?.getAttributeNames().reduce((acc, name) => {
@@ -123,7 +128,25 @@ const TooltipController = ({
   useEffect(() => {
     const elementRefs = new Set(anchorRefs)
 
-    const anchorById = document.querySelector(`[id='${anchorId}']`) as HTMLElement
+    let selector = anchorSelect
+    if (!selector && id) {
+      selector = `[data-tooltip-for='${id}']`
+    }
+    if (selector) {
+      try {
+        const anchorsBySelect = document.querySelectorAll<HTMLElement>(selector)
+        anchorsBySelect.forEach((anchor) => {
+          elementRefs.add({ current: anchor })
+        })
+      } catch {
+        if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
+          console.warn(`[react-tooltip] "${anchorSelect}" is not a valid CSS selector`)
+        }
+      }
+    }
+
+    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
     if (anchorById) {
       elementRefs.add({ current: anchorById })
     }
@@ -132,7 +155,7 @@ const TooltipController = ({
       return () => null
     }
 
-    const anchorElement = activeAnchor.current ?? anchorById
+    const anchorElement = activeAnchor ?? anchorById ?? providerActiveAnchor.current
 
     const observerCallback: MutationCallback = (mutationList) => {
       mutationList.forEach((mutation) => {
@@ -167,11 +190,12 @@ const TooltipController = ({
       // Remove the observer when the tooltip is destroyed
       observer.disconnect()
     }
-  }, [anchorRefs, activeAnchor, anchorId])
+  }, [anchorRefs, providerActiveAnchor, activeAnchor, anchorId, anchorSelect])
 
   const props: ITooltip = {
     id,
     anchorId,
+    anchorSelect,
     className,
     classNameArrow,
     content: tooltipContent,
@@ -195,6 +219,8 @@ const TooltipController = ({
     setIsOpen,
     afterShow,
     afterHide,
+    activeAnchor,
+    setActiveAnchor: (anchor: HTMLElement | null) => setActiveAnchor(anchor),
   }
 
   return children ? <Tooltip {...props}>{children}</Tooltip> : <Tooltip {...props} />

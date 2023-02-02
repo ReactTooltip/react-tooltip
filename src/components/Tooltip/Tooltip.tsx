@@ -14,6 +14,7 @@ const Tooltip = ({
   classNameArrow,
   variant = 'dark',
   anchorId,
+  anchorSelect,
   place = 'top',
   offset = 10,
   events = ['hover'],
@@ -36,6 +37,8 @@ const Tooltip = ({
   html,
   isOpen,
   setIsOpen,
+  activeAnchor,
+  setActiveAnchor,
 }: ITooltip) => {
   const tooltipRef = useRef<HTMLElement>(null)
   const tooltipArrowRef = useRef<HTMLDivElement>(null)
@@ -45,16 +48,36 @@ const Tooltip = ({
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState(false)
   const wasShowing = useRef(false)
-  const [calculatingPosition, setCalculatingPosition] = useState(false)
   const lastFloatPosition = useRef<IPosition | null>(null)
+  /**
+   * @todo Remove this in a future version (provider/wrapper method is deprecated)
+   */
   const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip(id)
-  const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
   const hoveringTooltip = useRef(false)
+  const [anchorsBySelect, setAnchorsBySelect] = useState<HTMLElement[]>([])
+
+  useEffect(() => {
+    let selector = anchorSelect
+    if (!selector && id) {
+      selector = `[data-tooltip-for='${id}']`
+    }
+    if (!selector) {
+      return
+    }
+    try {
+      const anchors = Array.from(document.querySelectorAll<HTMLElement>(selector))
+      setAnchorsBySelect(anchors)
+    } catch {
+      // warning was already issued in the controller
+      setAnchorsBySelect([])
+    }
+  }, [anchorSelect])
 
   const handleShow = (value: boolean) => {
     if (setIsOpen) {
       setIsOpen(value)
-    } else if (isOpen === undefined) {
+    }
+    if (isOpen === undefined) {
       setShow(value)
     }
   }
@@ -104,9 +127,7 @@ const Tooltip = ({
       handleShow(true)
     }
     const target = event.currentTarget ?? event.target
-    setActiveAnchor((anchor) =>
-      anchor.current === target ? anchor : { current: target as HTMLElement },
-    )
+    setActiveAnchor(target as HTMLElement)
     setProviderActiveAnchor({ current: target as HTMLElement })
 
     if (tooltipHideDelayTimerRef.current) {
@@ -144,7 +165,6 @@ const Tooltip = ({
         }
       },
     } as Element
-    setCalculatingPosition(true)
     computeTooltipPosition({
       place,
       offset,
@@ -154,7 +174,6 @@ const Tooltip = ({
       strategy: positionStrategy,
       middlewares,
     }).then((computedStylesData) => {
-      setCalculatingPosition(false)
       if (Object.keys(computedStylesData.tooltipStyles).length) {
         setInlineStyles(computedStylesData.tooltipStyles)
       }
@@ -184,10 +203,16 @@ const Tooltip = ({
     }
   }
 
-  const handleClickOutsideAnchor = (event: MouseEvent) => {
-    if (activeAnchor.current?.contains(event.target as HTMLElement)) {
+  const handleClickOutsideAnchors = (event: MouseEvent) => {
+    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
+    if (anchorById?.contains(event.target as HTMLElement)) {
       return
     }
+
+    if (anchorsBySelect.some((anchor) => anchor.contains(event.target as HTMLElement))) {
+      return
+    }
+
     handleShow(false)
   }
 
@@ -206,11 +231,12 @@ const Tooltip = ({
   useEffect(() => {
     const elementRefs = new Set(anchorRefs)
 
-    const anchorById = document.querySelector(`[id='${anchorId}']`) as HTMLElement
+    anchorsBySelect.forEach((anchor) => {
+      elementRefs.add({ current: anchor })
+    })
+
+    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
     if (anchorById) {
-      setActiveAnchor((anchor) =>
-        anchor.current === anchorById ? anchor : { current: anchorById },
-      )
       elementRefs.add({ current: anchorById })
     }
 
@@ -225,7 +251,7 @@ const Tooltip = ({
     const enabledEvents: { event: string; listener: (event?: Event) => void }[] = []
 
     if (events.find((event: string) => event === 'click')) {
-      window.addEventListener('click', handleClickOutsideAnchor)
+      window.addEventListener('click', handleClickOutsideAnchors)
       enabledEvents.push({ event: 'click', listener: handleClickTooltipAnchor })
     }
 
@@ -263,10 +289,8 @@ const Tooltip = ({
       })
     })
 
-    const anchorElement = anchorById ?? activeAnchor.current
-
     const parentObserverCallback: MutationCallback = (mutationList) => {
-      if (!anchorElement) {
+      if (!activeAnchor) {
         return
       }
       mutationList.some((mutation) => {
@@ -274,7 +298,7 @@ const Tooltip = ({
           return false
         }
         return [...mutation.removedNodes].some((node) => {
-          if (node.contains(anchorElement)) {
+          if (node.contains(activeAnchor)) {
             handleShow(false)
             return true
           }
@@ -290,7 +314,7 @@ const Tooltip = ({
 
     return () => {
       if (events.find((event: string) => event === 'click')) {
-        window.removeEventListener('click', handleClickOutsideAnchor)
+        window.removeEventListener('click', handleClickOutsideAnchors)
       }
       if (closeOnEsc) {
         window.removeEventListener('keydown', handleEsc)
@@ -306,7 +330,16 @@ const Tooltip = ({
       })
       parentObserver.disconnect()
     }
-  }, [anchorRefs, activeAnchor, closeOnEsc, anchorId, events, delayHide, delayShow])
+  }, [
+    anchorRefs,
+    activeAnchor,
+    closeOnEsc,
+    anchorId,
+    anchorsBySelect,
+    events,
+    delayHide,
+    delayShow,
+  ])
 
   useEffect(() => {
     if (position) {
@@ -330,17 +363,11 @@ const Tooltip = ({
       return () => null
     }
 
-    let elementReference = activeAnchor.current
-    if (anchorId) {
-      // `anchorId` element takes precedence
-      elementReference = document.querySelector(`[id='${anchorId}']`) as HTMLElement
-    }
-    setCalculatingPosition(true)
     let mounted = true
     computeTooltipPosition({
       place,
       offset,
-      elementReference,
+      elementReference: activeAnchor,
       tooltipReference: tooltipRef.current,
       tooltipArrowReference: tooltipArrowRef.current,
       strategy: positionStrategy,
@@ -350,7 +377,6 @@ const Tooltip = ({
         // invalidate computed positions after remount
         return
       }
-      setCalculatingPosition(false)
       if (Object.keys(computedStylesData.tooltipStyles).length) {
         setInlineStyles(computedStylesData.tooltipStyles)
       }
@@ -365,6 +391,7 @@ const Tooltip = ({
     show,
     isOpen,
     anchorId,
+    anchorsBySelect,
     activeAnchor,
     content,
     html,
@@ -373,6 +400,19 @@ const Tooltip = ({
     positionStrategy,
     position,
   ])
+
+  useEffect(() => {
+    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
+    const anchors = [...anchorsBySelect, anchorById]
+    if (!activeAnchor || !anchors.includes(activeAnchor)) {
+      /**
+       * if there is no active anchor,
+       * or if the current active anchor is not amongst the allowed ones,
+       * reset it
+       */
+      setActiveAnchor(anchorsBySelect[0] ?? anchorById)
+    }
+  }, [anchorId, anchorsBySelect, activeAnchor])
 
   useEffect(() => {
     return () => {
@@ -392,15 +432,18 @@ const Tooltip = ({
       id={id}
       role="tooltip"
       className={classNames('react-tooltip', styles['tooltip'], styles[variant], className, {
-        [styles['show']]: hasContentOrChildren && !calculatingPosition && (isOpen || show),
+        [styles['show']]: hasContentOrChildren && (isOpen || show),
         [styles['fixed']]: positionStrategy === 'fixed',
         [styles['clickable']]: clickable,
       })}
       style={{ ...externalStyles, ...inlineStyles }}
       ref={tooltipRef}
     >
-      {/* content priority: children > html > content */}
-      {children || (html && <TooltipContent content={html} />) || content}
+      {/**
+       * content priority: html > content > children
+       * children should be last so that it can be used as the "default" content
+       */}
+      {(html && <TooltipContent content={html} />) || content || children}
       <div
         className={classNames('react-tooltip-arrow', styles['arrow'], classNameArrow, {
           [styles['no-arrow']]: noArrow,

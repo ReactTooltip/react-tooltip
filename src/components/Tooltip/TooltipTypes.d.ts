@@ -64,4 +64,6 @@ export interface ITooltip {
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
   afterHide?: () => void
+  activeAnchor: HTMLElement | null
+  setActiveAnchor: (anchor: HTMLElement | null) => void
 }
