@@ -43,7 +43,7 @@ export interface ITooltip {
   id?: string
   variant?: VariantType
   anchorId?: string
-  wrapper?: WrapperType
+  wrapper: WrapperType
   children?: ChildrenType
   events?: EventsType[]
   positionStrategy?: PositionStrategy

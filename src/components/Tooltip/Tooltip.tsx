@@ -19,7 +19,7 @@ const Tooltip = ({
   events = ['hover'],
   positionStrategy = 'absolute',
   middlewares,
-  wrapper: WrapperElement = 'div',
+  wrapper: WrapperElement,
   children = null,
   delayShow = 0,
   delayHide = 0,
@@ -38,7 +38,7 @@ const Tooltip = ({
   setIsOpen,
 }: ITooltip) => {
   const tooltipRef = useRef<HTMLElement>(null)
-  const tooltipArrowRef = useRef<HTMLDivElement>(null)
+  const tooltipArrowRef = useRef<HTMLElement>(null)
   const tooltipShowDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const tooltipHideDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const [inlineStyles, setInlineStyles] = useState({})
