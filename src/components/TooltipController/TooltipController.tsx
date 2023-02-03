@@ -85,7 +85,7 @@ const TooltipController = ({
         setTooltipOffset(value === null ? offset : Number(value))
       },
       wrapper: (value) => {
-        setTooltipWrapper((value as WrapperType) ?? 'div')
+        setTooltipWrapper((value as WrapperType) ?? wrapper)
       },
       events: (value) => {
         const parsed = value?.split(' ') as EventsType[]
