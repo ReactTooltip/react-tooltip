@@ -4,7 +4,7 @@ import { computeTooltipPosition } from 'utils/compute-positions'
 import { TooltipController as Tooltip } from '../components/TooltipController'
 
 // Tell Jest to mock all timeout functions
-jest.useFakeTimers()
+jest.useRealTimers()
 
 // eslint-disable-next-line react/prop-types
 const TooltipProps = ({ id, ...tooltipParams }) => (
@@ -208,6 +208,8 @@ describe('compute positions', () => {
 })
 
 describe('debounce', () => {
+  jest.useFakeTimers()
+
   let func
   let debouncedFunc
 
