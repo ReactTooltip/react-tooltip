@@ -13,6 +13,15 @@ const TooltipProps = ({ id, ...tooltipParams }) => (
     <Tooltip anchorId={id} {...tooltipParams} />
   </>
 )
+// eslint-disable-next-line react/prop-types
+const TooltipAttrs = ({ id, ...anchorParams }) => (
+  <>
+    <span id={id} {...anchorParams}>
+      Lorem Ipsum
+    </span>
+    <Tooltip anchorId={id} />
+  </>
+)
 
 describe('tooltip props', () => {
   test('tooltip component - without anchorId', () => {
@@ -55,9 +64,78 @@ describe('tooltip props', () => {
     expect(tree).toMatchSnapshot()
   })
 
+  test('tooltip component - delayShow', () => {
+    const component = renderer.create(
+      <TooltipProps id="basic-example-delay-show" content="Hello World!" delayShow={1000} />,
+    )
+    const tree = component.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
+
+  test('tooltip component - delayHide', () => {
+    const component = renderer.create(
+      <TooltipProps id="basic-example-delay-hide" content="Hello World!" delayHide={1000} />,
+    )
+    const tree = component.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
+
   test('tooltip component - position props', () => {
     const component = renderer.create(
       <TooltipProps id="position-props" content="Hello World!" position={{ x: 0, y: 0 }} />,
+    )
+    const tree = component.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
+})
+
+describe('tooltip attributes', () => {
+  test('tooltip component - without anchorId', () => {
+    const component = renderer.create(<TooltipAttrs data-tooltip-content="Hello World!" />)
+    const tree = component.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
+
+  test('basic tooltip component', () => {
+    const component = renderer.create(
+      <TooltipAttrs id="basic-example-attr" data-tooltip-content="Hello World!" />,
+    )
+    const tree = component.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
+
+  test('tooltip component - html', () => {
+    const component = renderer.create(
+      <TooltipAttrs
+        id="basic-example-html-attr"
+        data-tooltip-html="Hello World!"
+        data-tooltip-variant="info"
+        data-tooltip-place="top"
+      />,
+    )
+    const tree = component.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
+
+  test('tooltip component - delayShow', () => {
+    const component = renderer.create(
+      <TooltipAttrs
+        id="basic-example-delay-show-attr"
+        data-tooltip-content="Hello World!"
+        data-tooltip-delay-show={1000}
+      />,
+    )
+    const tree = component.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
+
+  test('tooltip component - delayHide', () => {
+    const component = renderer.create(
+      <TooltipAttrs
+        id="basic-example-delay-hide-attr"
+        data-tooltip-content="Hello World!"
+        data-tooltip-delay-hide={1000}
+      />,
     )
     const tree = component.toJSON()
     expect(tree).toMatchSnapshot()
@@ -122,7 +200,7 @@ describe('compute positions', () => {
         top: '',
       },
       tooltipStyles: {
-        left: '-5px',
+        left: '5px',
         top: '-10px',
       },
     })
