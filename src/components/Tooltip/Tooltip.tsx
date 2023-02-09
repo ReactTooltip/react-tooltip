@@ -44,20 +44,51 @@ const Tooltip = ({
   const [inlineStyles, setInlineStyles] = useState({})
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState(false)
+  const [rendered, setRendered] = useState(false)
   const wasShowing = useRef(false)
-  const [calculatingPosition, setCalculatingPosition] = useState(false)
   const lastFloatPosition = useRef<IPosition | null>(null)
   const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip(id)
   const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
   const hoveringTooltip = useRef(false)
 
-  const handleShow = (value: boolean) => {
-    if (setIsOpen) {
-      setIsOpen(value)
-    } else if (isOpen === undefined) {
-      setShow(value)
+  useEffect(() => {
+    if (!show) {
+      setRendered(false)
     }
+  }, [show])
+
+  const handleShow = (value: boolean) => {
+    setRendered(true)
+    /**
+     * wait for the component to render and calculate position
+     * before actually showing
+     */
+    setTimeout(() => {
+      setIsOpen?.(value)
+      if (isOpen === undefined) {
+        setShow(value)
+      }
+    }, 10)
   }
+
+  /**
+   * this replicates the effect from `handleShow()`
+   * when `isOpen` is changed from outside
+   */
+  useEffect(() => {
+    if (isOpen === undefined) {
+      return () => null
+    }
+    if (isOpen) {
+      setRendered(true)
+    }
+    const timeout = setTimeout(() => {
+      setShow(isOpen)
+    }, 10)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [isOpen])
 
   useEffect(() => {
     if (show === wasShowing.current) {
@@ -117,7 +148,7 @@ const Tooltip = ({
   const handleHideTooltip = () => {
     if (clickable) {
       // allow time for the mouse to reach the tooltip, in case there's a gap
-      handleHideTooltipDelayed(delayHide || 50)
+      handleHideTooltipDelayed(delayHide || 100)
     } else if (delayHide) {
       handleHideTooltipDelayed()
     } else {
@@ -144,7 +175,6 @@ const Tooltip = ({
         }
       },
     } as Element
-    setCalculatingPosition(true)
     computeTooltipPosition({
       place,
       offset,
@@ -154,7 +184,6 @@ const Tooltip = ({
       strategy: positionStrategy,
       middlewares,
     }).then((computedStylesData) => {
-      setCalculatingPosition(false)
       if (Object.keys(computedStylesData.tooltipStyles).length) {
         setInlineStyles(computedStylesData.tooltipStyles)
       }
@@ -306,7 +335,11 @@ const Tooltip = ({
       })
       parentObserver.disconnect()
     }
-  }, [anchorRefs, activeAnchor, closeOnEsc, anchorId, events, delayHide, delayShow])
+    /**
+     * rendered is also a dependency to ensure anchor observers are re-registered
+     * since `tooltipRef` becomes stale after removing/adding the tooltip to the DOM
+     */
+  }, [rendered, anchorRefs, activeAnchor, closeOnEsc, anchorId, events, delayHide, delayShow])
 
   useEffect(() => {
     if (position) {
@@ -335,7 +368,6 @@ const Tooltip = ({
       // `anchorId` element takes precedence
       elementReference = document.querySelector(`[id='${anchorId}']`) as HTMLElement
     }
-    setCalculatingPosition(true)
     let mounted = true
     computeTooltipPosition({
       place,
@@ -350,7 +382,6 @@ const Tooltip = ({
         // invalidate computed positions after remount
         return
       }
-      setCalculatingPosition(false)
       if (Object.keys(computedStylesData.tooltipStyles).length) {
         setInlineStyles(computedStylesData.tooltipStyles)
       }
@@ -361,18 +392,7 @@ const Tooltip = ({
     return () => {
       mounted = false
     }
-  }, [
-    show,
-    isOpen,
-    anchorId,
-    activeAnchor,
-    content,
-    html,
-    place,
-    offset,
-    positionStrategy,
-    position,
-  ])
+  }, [show, anchorId, activeAnchor, content, html, place, offset, positionStrategy, position])
 
   useEffect(() => {
     return () => {
@@ -386,13 +406,14 @@ const Tooltip = ({
   }, [])
 
   const hasContentOrChildren = Boolean(html || content || children)
+  const canShow = Boolean(hasContentOrChildren && show && Object.keys(inlineStyles).length > 0)
 
-  return (
+  return rendered ? (
     <WrapperElement
       id={id}
       role="tooltip"
       className={classNames('react-tooltip', styles['tooltip'], styles[variant], className, {
-        [styles['show']]: hasContentOrChildren && !calculatingPosition && (isOpen || show),
+        [styles['show']]: canShow,
         [styles['fixed']]: positionStrategy === 'fixed',
         [styles['clickable']]: clickable,
       })}
@@ -409,7 +430,7 @@ const Tooltip = ({
         ref={tooltipArrowRef}
       />
     </WrapperElement>
-  )
+  ) : null
 }
 
 export default Tooltip
