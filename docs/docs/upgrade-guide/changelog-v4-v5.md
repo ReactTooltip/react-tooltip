@@ -8,7 +8,7 @@ If you are using V4 and want to use V5, please read this doc.
 
 ## From V4 to V5
 
-V4 was a great react tooltip component but was built a few years ago, he was built with react class components and it's hard to maintain and to the community give contributions, so, with this in mind, we build a new version of react tooltip using [floating-ui](https://floating-ui.com/) behind the scenes. This gives a great improvement in performance and in a new and easier code to let the community contribute to the project.
+V4 was a great react tooltip component but was built a few years ago, it was built with react class components and it's hard to maintain and to the community give contributions, so, with this in mind, we built a new version of react tooltip using [floating-ui](https://floating-ui.com/) behind the scenes. This gives a great improvement in performance and a new and easier code to let the community contribute to the project.
 
 ## Improvements
 
@@ -22,7 +22,7 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 - All data attributes are now prefixed with `data-tooltip-`
 - Default Padding changed from `padding: 8px 21px;` to `padding: 8px 16px;`
 - Exported module now is `Tooltip` instead of `ReactTooltip`
-- - If you already have a `Tooltip` component in your application and want to explicitly declare this is `ReactTooltip`, just `import { Tooltip as ReactTooltip } from "react-tooltip"`
+- If you already have a `Tooltip` component in your application and want to explicitly declare this as `ReactTooltip`, just `import { Tooltip as ReactTooltip } from "react-tooltip"`
 - CSS import is now optional, so you can modify and/or add any styling to your floating tooltip element
 - `data-tip` attribute now is `data-tooltip-content`
 - `getContent` prop was removed. Instead, you can directly pass dynamic content to the `content` tooltip prop, or to `data-tooltip-content` in the anchor element
