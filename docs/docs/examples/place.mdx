@@ -4,8 +4,9 @@ sidebar_position: 1
 
 # Place
 
-Available places of ReactTooltip component.
+Changing the placement for the ReactTooltip component.
 
+import { useState } from 'react';
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 
@@ -16,6 +17,7 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
       style={{
         display: 'flex',
         justifyContent: 'center',
+        margin: 'auto',
         alignItems: 'center',
         width: '60px',
         height: '60px',
@@ -33,23 +35,68 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-`place` available values `top` | `right` | `bottom` | `left`
+The `place` prop and the `data-tooltip-place` attribute accept the following values: `'top' | 'right' | 'bottom' | 'left'`.
+
+### Using `data-tooltip-place` attribute
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
-<a id="tooltip-anchor"> ◕‿‿◕ </a>
-<Tooltip anchorId="tooltip-anchor" content="Hello World - top" place="top" />
-<Tooltip anchorId="tooltip-anchor" content="Hello World - right" place="right" />
-<Tooltip anchorId="tooltip-anchor" content="Hello World - bottom" place="bottom" />
-<Tooltip anchorId="tooltip-anchor" content="Hello World - left" place="left" />
+<a id="my-tooltip-anchor">◕‿‿◕</a>
+<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the top!" place="top" />
+<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the right!" place="right" />
+<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the bottom!" place="bottom" />
+<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the left!" place="left" />
 ```
 
-<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
-  <TooltipAnchor id="tooltip-anchor">◕‿‿◕</TooltipAnchor>
-  <Tooltip anchorId="tooltip-anchor" content="Hello World - top" place="top" />
-  <Tooltip anchorId="tooltip-anchor" content="Hello World - right" place="right" />
-  <Tooltip anchorId="tooltip-anchor" content="Hello World - bottom" place="bottom" />
-  <Tooltip anchorId="tooltip-anchor" content="Hello World - left" place="left" />
-</div>
+<TooltipAnchor id="my-tooltip-anchor">◕‿‿◕</TooltipAnchor>
+<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the top!" place="top" />
+<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the right!" place="right" />
+<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the bottom!" place="bottom" />
+<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the left!" place="left" />
+
+### Using `place` prop
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
+
+const PLACES = ['top', 'right', 'bottom', 'left']
+const [place, setPlace] = useState(0)
+
+<a 
+  data-tooltip-id="my-tooltip"
+  onClick={() => setPlace(p => (p + 1) % 4)}
+>
+  ◕‿‿◕
+</a>
+<Tooltip
+  id="my-tooltip"
+  content={`I'm on the ${PLACES[place]}`}
+  place={PLACES[place]}
+/>
+```
+
+export const PlacementExample = () => {
+  const PLACES = ['top', 'right', 'bottom', 'left']
+  const [place, setPlace] = useState(0)
+  
+  return (
+    <>
+      <TooltipAnchor
+        data-tooltip-id="my-tooltip"
+        onClick={() => setPlace(p => (p + 1) % 4)}
+      >
+        ◕‿‿◕
+      </TooltipAnchor>
+      <Tooltip
+        id="my-tooltip"
+        content={`I'm on the ${PLACES[place]}`}
+        place={PLACES[place]}
+      />
+    </>
+  )
+}
+
+<PlacementExample />

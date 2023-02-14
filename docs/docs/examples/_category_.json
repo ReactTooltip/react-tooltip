@@ -3,6 +3,6 @@
   "position": 4,
   "link": {
     "type": "generated-index",
-    "description": "Examples using props and some use cases with ReactTooltip component"
+    "description": "Examples for the tooltip props and some interesting use cases."
   }
 }

@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Children
 
-Children for content example of ReactTooltip component use case.
+Using children for setting the ReactTooltip content.
 
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
@@ -35,32 +35,38 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
 
 ### Using `children` as content
 
-When using `children` as content, `content` and `html` params will be ignored and only children will be shown.
+When using `children` as content, `html` and `content` props (and their respective data attributes) will take priority.
+
+This is useful for setting a placeholder for the tooltip content.
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
-<a id="tooltip-anchor-children"> ◕‿‿◕ </a>
-<Tooltip anchorId="tooltip-anchor-children">
+<a data-tooltip-id="my-tooltip">◕‿‿◕</a>
+<Tooltip id="my-tooltip">
   <div>
-    <h1>Tooltip</h1>
+    <h3>This is a very interesting header</h3>
+    <p>Here's some interesting stuff:</p>
     <ul>
-      <li>Lorem</li>
-      <li>Ipsum</li>
+      <li>Some</li>
+      <li>Interesting</li>
+      <li>Stuff</li>
     </ul>
   </div>
 </Tooltip>
 ```
 
-<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
-  <TooltipAnchor id="tooltip-anchor-children">◕‿‿◕</TooltipAnchor>
-  <Tooltip anchorId="tooltip-anchor-children">
+<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '18px' }}>
+  <TooltipAnchor data-tooltip-id="my-tooltip">◕‿‿◕</TooltipAnchor>
+  <Tooltip id="my-tooltip">
     <div>
-      <h1>Tooltip</h1>
+      <h3>This is a very interesting header</h3>
+      <p>Here's some interesting stuff:</p>
       <ul>
-        <li>Lorem</li>
-        <li>Ipsum</li>
+        <li>Some</li>
+        <li>Interesting</li>
+        <li>Stuff</li>
       </ul>
     </div>
   </Tooltip>

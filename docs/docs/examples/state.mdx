@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # State
 
-Controlled and uncontrolled state examples of ReactTooltip component.
+Controlled state example for the ReactTooltip component.
 
 import { useState } from 'react'
 import { Tooltip } from 'react-tooltip'
@@ -34,95 +34,19 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-export const ControlledExample = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [anchorId, setAnchorId] = useState('tooltip-anchor')
-  return (
-    <>
-      <TooltipAnchor
-        id="tooltip-anchor"
-        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 1"
-        onMouseEnter={() => {
-          setAnchorId('tooltip-anchor')
-          if (!isOpen) {
-            setIsOpen(true)
-          }
-        }}
-      >
-        ◕‿‿◕
-      </TooltipAnchor>
-      <TooltipAnchor
-        id="tooltip-anchor-2"
-        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 2"
-        onMouseEnter={() => {
-          setAnchorId('tooltip-anchor-2')
-          if (!isOpen) {
-            setIsOpen(true)
-          }
-        }}
-      >
-        ◕‿‿◕
-      </TooltipAnchor>
-      <TooltipAnchor
-        id="tooltip-anchor-3"
-        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 3"
-        onMouseEnter={() => {
-          setAnchorId('tooltip-anchor-3')
-          if (!isOpen) {
-            setIsOpen(true)
-          }
-        }}
-      >
-        ◕‿‿◕
-      </TooltipAnchor>
-      <TooltipAnchor
-        id="tooltip-anchor-4"
-        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 4"
-        onMouseEnter={() => {
-          setAnchorId('tooltip-anchor-4')
-          if (!isOpen) {
-            setIsOpen(true)
-          }
-        }}
-      >
-        ◕‿‿◕
-      </TooltipAnchor>
-      <TooltipAnchor
-        id="tooltip-anchor-5"
-        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 5"
-        onMouseEnter={() => {
-          setAnchorId('tooltip-anchor-5')
-          if (!isOpen) {
-            setIsOpen(true)
-          }
-        }}
-      >
-        ◕‿‿◕
-      </TooltipAnchor>
-      <TooltipAnchor
-        id="tooltip-anchor-6"
-        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 6"
-        onMouseEnter={() => {
-          setAnchorId('tooltip-anchor-6')
-          if (!isOpen) {
-            setIsOpen(true)
-          }
-        }}
-      >
-        ◕‿‿◕
-      </TooltipAnchor>
-      <Tooltip
-        anchorId={anchorId}
-        isOpen={isOpen}
-      />
-    </>
-  )
-}
-
 ### Controlled tooltip state
 
-We can have a situation when we want to change the anchor id (the reference element id) and we want to let the tooltip being displayed.
-In this case, the code is only updating isOpen to `true` and never to `false`, but this can be easy changed if you want.
+:::caution
+
+Most of the time, leaving the state to be handled internally will be enough.
+
+Only do this if you need some more complex behavior.
+
+:::
+
+This is a very simple example in which hovering over any anchor element opens the tooltip, but it can only be closed by clicking the last anchor.
+
+It is just a demonstration, but you can come up with use cases as complex as you can imagine.
 
 ```jsx
 import { useState } from 'react';
@@ -130,194 +54,85 @@ import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
 const [isOpen, setIsOpen] = useState(false)
-const [anchorId, setAnchorId] = useState('tooltip-anchor')
 
-<a id="tooltip-anchor"
-  onMouseEnter={() => {
-    setAnchorId('tooltip-anchor')
-    // in this example we only want to trigger the isOpen as true by one time
-    if (!isOpen) {
-      setIsOpen(true)
-    }
-  }}
-> ◕‿‿◕ </a>
-<a id="tooltip-anchor-2"
-  onMouseEnter={() => {
-    setAnchorId('tooltip-anchor-2')
-    // in this example we only want to trigger the isOpen as true by one time
-    if (!isOpen) {
-      setIsOpen(true)
-    }
-  }}
-> ◕‿‿◕ </a>
-<a id="tooltip-anchor-3"
-  onMouseEnter={() => {
-    setAnchorId('tooltip-anchor-3')
-    // in this example we only want to trigger the isOpen as true by one time
-    if (!isOpen) {
-      setIsOpen(true)
-    }
-  }}
-> ◕‿‿◕ </a>
-<a id="tooltip-anchor-4"
-  onMouseEnter={() => {
-    setAnchorId('tooltip-anchor-4')
-    // in this example we only want to trigger the isOpen as true by one time
-    if (!isOpen) {
-      setIsOpen(true)
-    }
-  }}
-> ◕‿‿◕ </a>
-<a id="tooltip-anchor-5"
-  onMouseEnter={() => {
-    setAnchorId('tooltip-anchor-5')
-    // in this example we only want to trigger the isOpen as true by one time
-    if (!isOpen) {
-      setIsOpen(true)
-    }
-  }}
-> ◕‿‿◕ </a>
-<a id="tooltip-anchor-6"
-  onMouseEnter={() => {
-    setAnchorId('tooltip-anchor-6')
-    // in this example we only want to trigger the isOpen as true by one time
-    if (!isOpen) {
-      setIsOpen(true)
-    }
-  }}
-> ◕‿‿◕ </a>
+<a data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+  ◕‿‿◕
+</a>
+<a data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+  ◕‿‿◕
+</a>
+<a data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+  ◕‿‿◕
+</a>
+<a data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+  ◕‿‿◕
+</a>
+<a data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+  ◕‿‿◕
+</a>
+<a
+  data-tooltip-id="my-tooltip"
+  onMouseEnter={() => setIsOpen(true)}
+  onClick={() => setIsOpen(false)}
+>
+  ◕‿‿◕
+</a>
 <Tooltip
-  anchorId={anchorId}
+  id="my-tooltip"
   isOpen={isOpen}
 />
 ```
 
-<div style={{ display: 'flex', columnGap: '8px', justifyContent: 'center', paddingTop: '36px' }}>
-  <ControlledExample />
-</div>
-
-export const UncontrolledExample = () => {
-  const [anchorId, setAnchorId] = useState('tooltip-anchor-uncontrolled')
+export const ControlledStateExample = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  console.log(isOpen)
   return (
     <>
       <TooltipAnchor
-        id="tooltip-anchor-uncontrolled"
-        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 1"
-        onMouseEnter={() => {
-          setAnchorId('tooltip-anchor-uncontrolled')
-        }}
+        data-tooltip-id="my-tooltip"
+        onMouseEnter={() => setIsOpen(true)}
       >
         ◕‿‿◕
       </TooltipAnchor>
       <TooltipAnchor
-        id="tooltip-anchor-uncontrolled-2"
-        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 2"
-        onMouseEnter={() => {
-          setAnchorId('tooltip-anchor-uncontrolled-2')
-        }}
+        data-tooltip-id="my-tooltip"
+        onMouseEnter={() => setIsOpen(true)}
       >
         ◕‿‿◕
       </TooltipAnchor>
       <TooltipAnchor
-        id="tooltip-anchor-uncontrolled-3"
-        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 3"
-        onMouseEnter={() => {
-          setAnchorId('tooltip-anchor-uncontrolled-3')
-        }}
+        data-tooltip-id="my-tooltip"
+        onMouseEnter={() => setIsOpen(true)}
       >
         ◕‿‿◕
       </TooltipAnchor>
       <TooltipAnchor
-        id="tooltip-anchor-uncontrolled-4"
-        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 4"
-        onMouseEnter={() => {
-          setAnchorId('tooltip-anchor-uncontrolled-4')
-        }}
+        data-tooltip-id="my-tooltip"
+        onMouseEnter={() => setIsOpen(true)}
       >
         ◕‿‿◕
       </TooltipAnchor>
       <TooltipAnchor
-        id="tooltip-anchor-uncontrolled-5"
-        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 5"
-        onMouseEnter={() => {
-          setAnchorId('tooltip-anchor-uncontrolled-5')
-        }}
+        data-tooltip-id="my-tooltip"
+        onMouseEnter={() => setIsOpen(true)}
       >
         ◕‿‿◕
       </TooltipAnchor>
       <TooltipAnchor
-        id="tooltip-anchor-uncontrolled-6"
-        data-tooltip-content="Same Tooltip, different anchor element. This little buddy is 6"
-        onMouseEnter={() => {
-          setAnchorId('tooltip-anchor-uncontrolled-6')
-        }}
+        data-tooltip-id="my-tooltip"
+        onMouseEnter={() => setIsOpen(true)}
+        onClick={() => setIsOpen(false)}
       >
         ◕‿‿◕
       </TooltipAnchor>
       <Tooltip
-        anchorId={anchorId}
+        id="my-tooltip"
+        isOpen={isOpen}
       />
     </>
   )
 }
 
-#### Observation
-
-If we pass `setIsOpen` to the tooltip, the `isOpen` from parent will be updated by Tooltip events instead of the internal tooltip state, but if we don't and only use `isOpen` value,
-we can control this state outside tooltip.
-
-### Uncontrolled tooltip state
-
-This is almost the same example as before, but now we doesn't control `isOpen` and the tooltip will handle the state internally.
-With this, when the mouse leaves the element, the state is updated to `open` as `false`, because of that, we need to leave and enter a tooltip again.
-So, the controlled state can be a great option to handle this situation.
-
-```jsx
-import { useState } from 'react';
-import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
-
-const [anchorId, setAnchorId] = useState('tooltip-anchor')
-
-<a id="tooltip-anchor"
-  onMouseEnter={() => {
-    setAnchorId('tooltip-anchor')
-  }}
-> ◕‿‿◕ </a>
-<a id="tooltip-anchor-2"
-  onMouseEnter={() => {
-    setAnchorId('tooltip-anchor-2')
-  }}
-> ◕‿‿◕ </a>
-<a id="tooltip-anchor-3"
-  onMouseEnter={() => {
-    setAnchorId('tooltip-anchor-3')
-  }}
-> ◕‿‿◕ </a>
-<a id="tooltip-anchor-4"
-  onMouseEnter={() => {
-    setAnchorId('tooltip-anchor-4')
-  }}
-> ◕‿‿◕ </a>
-<a id="tooltip-anchor-5"
-  onMouseEnter={() => {
-    setAnchorId('tooltip-anchor-5')
-  }}
-> ◕‿‿◕ </a>
-<a id="tooltip-anchor-6"
-  onMouseEnter={() => {
-    setAnchorId('tooltip-anchor-6')
-  }}
-> ◕‿‿◕ </a>
-<Tooltip
-  anchorId={anchorId}
-/>
-```
-
 <div style={{ display: 'flex', columnGap: '8px', justifyContent: 'center', paddingTop: '36px' }}>
-  <UncontrolledExample />
+  <ControlledStateExample />
 </div>
-
-#### Observation
-
-In this case, the internal state behavior will be very similar as using `setIsOpen` together with `isOpen` prop, the only difference is that state can be modified outside tooltip when using `setIsOpen` too.
