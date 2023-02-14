@@ -444,7 +444,7 @@ const Tooltip = ({
        * children should be last so that it can be used as the "default" content
        */}
       {(html && <TooltipContent content={html} />) || content || children}
-      <div
+      <WrapperElement
         className={classNames('react-tooltip-arrow', styles['arrow'], classNameArrow, {
           [styles['no-arrow']]: noArrow,
         })}
