@@ -46,9 +46,9 @@ yarn add react-tooltip
 
 ## Usage
 
-### Using NPM
+### Using NPM package
 
-1 . Import the CSS file to set default styling
+1 . Import the CSS file to set default styling.
 
 ```js
 import 'react-tooltip/dist/react-tooltip.css'
@@ -56,7 +56,7 @@ import 'react-tooltip/dist/react-tooltip.css'
 
 This needs to be done only once. We suggest you do it on your `src/index.js` or equivalent file.
 
-2 . Import `react-tooltip` after installation
+2 . Import `react-tooltip` after installation.
 
 ```js
 import { Tooltip } from 'react-tooltip'
@@ -68,19 +68,40 @@ or if you want to still use the name ReactTooltip as V4:
 import { Tooltip as ReactTooltip } from 'react-tooltip'
 ```
 
-3 . Add `data-tooltip-content="your placeholder"` to your element
+3 . Add `data-tooltip-content="<your placeholder>"` and `data-tooltip-id="<tooltip id>"` to your element.
+
+> `data-tooltip-id` is the equivalent of V4's `data-for`.
 
 ```jsx
-<p id="my-element" data-tooltip-content="hello world">
-  Tooltip
-</p>
+<a data-tooltip-id="my-tooltip" data-tooltip-content="Hello world!">
+  ◕‿‿◕
+</a>
 ```
 
-4 . Include react-tooltip component
+4 . Include the `<Tooltip />` element.
+
+> Don't forget to set the id, it won't work without it!
 
 ```jsx
-<ReactTooltip anchorId="my-element" />
+<Tooltip id="my-tooltip" />
 ```
+
+#### Using multiple anchor elements
+
+You can also set the `anchorSelect` tooltip prop to use the tooltip with multiple anchor elements without having to set `data-tooltip-id` on each of them.
+`anchorSelect` must be a valid [CSS selector](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors).
+
+```jsx
+<a className="my-anchor-element" data-tooltip-content="Hello world!">
+  ◕‿‿◕
+</a>
+<a className="my-anchor-element" data-tooltip-content="Hello to you too!">
+  ◕‿‿◕
+</a>
+<Tooltip anchorSelect=".my-anchor-element" />
+```
+
+Check [the V5 docs](https://react-tooltip.com/docs/getting-started) for more complex use cases.
 
 ### Standalone
 
@@ -98,26 +119,25 @@ PS: all the files have a minified version and a non-minified version.
 
 For all available options, please check [React Tooltip Options](https://react-tooltip.com/docs/options)
 
-### Security Note
+### Security note
 
 The `html` option allows a tooltip to directly display raw HTML. This is a security risk if any of that content is supplied by the user. Any user-supplied content must be sanitized, using a package like [sanitize-html](https://www.npmjs.com/package/sanitize-html). We chose not to include sanitization after discovering it [increased our package size](https://github.com/wwayne/react-tooltip/issues/429) too much - we don't want to penalize people who don't use the `html` option.
 
-#### JSX Note
+#### JSX note
 
-You can use React's [`renderToStaticMarkup`-function](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to use JSX instead of HTML.
+You can use [`React.renderToStaticMarkup()` function](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to use JSX instead of HTML.
 **Example:**
 
 ```jsx
 import ReactDOMServer from 'react-dom/server';
 [...]
-<p id="my-element" data-tooltip-html={ReactDOMServer.renderToString(<div>I am <b>JSX</b> content</div>)}>
-  Hover me
-</p>
+<a 
+  data-tooltip-id="my-tooltip"
+  data-tooltip-html={ReactDOMServer.renderToStaticMarkup(<div>I am <b>JSX</b> content</div>)}
+>
+  ◕‿‿◕
+</a>
 ```
-
-#### Note
-
-- **id** is necessary, because `<ReactTooltip anchorId="my-element" />` finds the tooltip via this attribute
 
 ## Article
 
