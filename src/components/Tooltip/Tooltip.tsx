@@ -76,8 +76,18 @@ const Tooltip = ({
 
   useEffect(() => {
     if (!show) {
-      setRendered(false)
+      /**
+       * this fixes weird behavior when switching between two anchor elements very quickly
+       * remove the timeout and switch quickly between two adjancent anchor elements to see it
+       */
+      const timeout = setTimeout(() => {
+        setRendered(false)
+      })
+      return () => {
+        clearTimeout(timeout)
+      }
     }
+    return () => null
   }, [show])
 
   const handleShow = (value: boolean) => {
