@@ -82,7 +82,7 @@ const Tooltip = ({
        */
       const timeout = setTimeout(() => {
         setRendered(false)
-      })
+      }, 150)
       return () => {
         clearTimeout(timeout)
       }
