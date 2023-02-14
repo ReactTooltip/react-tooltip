@@ -126,6 +126,10 @@ const TooltipController = ({
   }, [html])
 
   useEffect(() => {
+    setTooltipPlace(place)
+  }, [place])
+
+  useEffect(() => {
     const elementRefs = new Set(anchorRefs)
 
     let selector = anchorSelect
