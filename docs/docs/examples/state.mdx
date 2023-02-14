@@ -10,7 +10,7 @@ import { useState } from 'react'
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 
-export const TooltipAnchor = ({ children, id, ...rest }) => {
+export const TooltipAnchor = ({ children, id, background, ...rest }) => {
   return (
     <span
       id={id}
@@ -22,7 +22,7 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
         height: '60px',
         borderRadius: '60px',
         color: '#222',
-        background: 'rgba(255, 255, 255, 1)',
+        background: background || 'rgba(255, 255, 255, 1)',
         cursor: 'pointer',
         boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
         border: '1px solid #333',
@@ -72,6 +72,7 @@ const [isOpen, setIsOpen] = useState(false)
 </a>
 <a
   data-tooltip-id="my-tooltip"
+  data-tooltip-content="Click me!"
   onMouseEnter={() => setIsOpen(true)}
   onClick={() => setIsOpen(false)}
 >
@@ -79,6 +80,7 @@ const [isOpen, setIsOpen] = useState(false)
 </a>
 <Tooltip
   id="my-tooltip"
+  content="Hello world!"
   isOpen={isOpen}
 />
 ```
@@ -119,7 +121,9 @@ export const ControlledStateExample = () => {
         ◕‿‿◕
       </TooltipAnchor>
       <TooltipAnchor
+        background="lightgray"
         data-tooltip-id="my-tooltip"
+        data-tooltip-content="Click me!"
         onMouseEnter={() => setIsOpen(true)}
         onClick={() => setIsOpen(false)}
       >
@@ -127,6 +131,7 @@ export const ControlledStateExample = () => {
       </TooltipAnchor>
       <Tooltip
         id="my-tooltip"
+        content="Hello world!"
         isOpen={isOpen}
       />
     </>
