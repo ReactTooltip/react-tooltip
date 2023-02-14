@@ -21,7 +21,8 @@ export interface ITooltipController {
   id?: string
   variant?: VariantType
   /**
-   * @deprecated Use `anchorSelect` instead (TODO: link to docs page)
+   * @deprecated Use `anchorSelect` instead.
+   * See https://react-tooltip.com/docs/examples/anchor-select
    */
   anchorId?: string
   anchorSelect?: string

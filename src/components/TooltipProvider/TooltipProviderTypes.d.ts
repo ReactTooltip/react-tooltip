@@ -2,7 +2,8 @@ import type { ReactNode, RefObject } from 'react'
 import type { ITooltipController } from 'components/TooltipController/TooltipControllerTypes'
 
 /**
- * @deprecated Use the tooltip `anchorSelect` prop instead (TODO: link to docs page)
+ * @deprecated Use `anchorSelect` instead.
+ * See https://react-tooltip.com/docs/examples/anchor-select
  */
 export type AnchorRef = RefObject<HTMLElement>
 
@@ -19,7 +20,8 @@ export interface TooltipContextDataWrapper {
 }
 
 /**
- * @deprecated Use the tooltip `anchorSelect` prop instead (TODO: link to docs page)
+ * @deprecated Use `anchorSelect` instead.
+ * See https://react-tooltip.com/docs/examples/anchor-select
  */
 export interface ITooltipWrapper {
   tooltipId?: string

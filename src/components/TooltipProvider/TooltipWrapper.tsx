@@ -4,7 +4,8 @@ import { useTooltip } from './TooltipProvider'
 import type { ITooltipWrapper } from './TooltipProviderTypes'
 
 /**
- * @deprecated Use the tooltip `anchorSelect` prop instead (TODO: link to docs page)
+ * @deprecated Use `anchorSelect` instead.
+ * See https://react-tooltip.com/docs/examples/anchor-select
  */
 const TooltipWrapper = ({
   tooltipId,
