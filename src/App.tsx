@@ -114,11 +114,11 @@ function App() {
       </section>
       <section id="section-anchor-select" style={{ marginTop: '100px' }}>
         <p>
-          <button data-tooltip-for="anchor-select" data-tooltip-content="this content is different">
+          <button data-tooltip-id="anchor-select" data-tooltip-content="this content is different">
             Anchor select
           </button>
-          <button data-tooltip-for="anchor-select">Anchor select 2</button>
-          <button data-tooltip-for="anchor-select">Anchor select 3</button>
+          <button data-tooltip-id="anchor-select">Anchor select 2</button>
+          <button data-tooltip-id="anchor-select">Anchor select 3</button>
         </p>
         <Tooltip id="anchor-select">Tooltip content</Tooltip>
         <Tooltip

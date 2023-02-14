@@ -46,7 +46,7 @@ export interface ITooltipController {
 
 declare module 'react' {
   interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
-    'data-tooltip-for'?: boolean | string
+    'data-tooltip-id'?: string
     'data-tooltip-place'?: PlacesType
     'data-tooltip-content'?: string
     'data-tooltip-html'?: string

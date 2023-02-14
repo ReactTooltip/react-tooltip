@@ -60,7 +60,7 @@ const Tooltip = ({
   useEffect(() => {
     let selector = anchorSelect
     if (!selector && id) {
-      selector = `[data-tooltip-for='${id}']`
+      selector = `[data-tooltip-id='${id}']`
     }
     if (!selector) {
       return
