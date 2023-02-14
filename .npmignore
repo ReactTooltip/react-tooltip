@@ -21,7 +21,15 @@ coverage/
 .travis.yml
 .editorconfig
 
-// others
+// misc folders
 .vscode/
 .husky/
 .github/
+
+// misc files
+bundlesize.config.json
+
+// bundler - rollup
+rollup.config.dev.js
+rollup.config.prod.js
+rollup.config.types.js

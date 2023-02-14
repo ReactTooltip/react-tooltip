@@ -20,7 +20,7 @@ const Tooltip = ({
   events = ['hover'],
   positionStrategy = 'absolute',
   middlewares,
-  wrapper: WrapperElement = 'div',
+  wrapper: WrapperElement,
   children = null,
   delayShow = 0,
   delayHide = 0,
@@ -41,12 +41,13 @@ const Tooltip = ({
   setActiveAnchor,
 }: ITooltip) => {
   const tooltipRef = useRef<HTMLElement>(null)
-  const tooltipArrowRef = useRef<HTMLDivElement>(null)
+  const tooltipArrowRef = useRef<HTMLElement>(null)
   const tooltipShowDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const tooltipHideDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const [inlineStyles, setInlineStyles] = useState({})
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState(false)
+  const [rendered, setRendered] = useState(false)
   const wasShowing = useRef(false)
   const lastFloatPosition = useRef<IPosition | null>(null)
   /**
@@ -73,14 +74,44 @@ const Tooltip = ({
     }
   }, [anchorSelect])
 
+  useEffect(() => {
+    if (!show) {
+      setRendered(false)
+    }
+  }, [show])
+
   const handleShow = (value: boolean) => {
-    if (setIsOpen) {
-      setIsOpen(value)
-    }
-    if (isOpen === undefined) {
-      setShow(value)
-    }
+    setRendered(true)
+    /**
+     * wait for the component to render and calculate position
+     * before actually showing
+     */
+    setTimeout(() => {
+      setIsOpen?.(value)
+      if (isOpen === undefined) {
+        setShow(value)
+      }
+    }, 10)
   }
+
+  /**
+   * this replicates the effect from `handleShow()`
+   * when `isOpen` is changed from outside
+   */
+  useEffect(() => {
+    if (isOpen === undefined) {
+      return () => null
+    }
+    if (isOpen) {
+      setRendered(true)
+    }
+    const timeout = setTimeout(() => {
+      setShow(isOpen)
+    }, 10)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [isOpen])
 
   useEffect(() => {
     if (show === wasShowing.current) {
@@ -138,7 +169,7 @@ const Tooltip = ({
   const handleHideTooltip = () => {
     if (clickable) {
       // allow time for the mouse to reach the tooltip, in case there's a gap
-      handleHideTooltipDelayed(delayHide || 50)
+      handleHideTooltipDelayed(delayHide || 100)
     } else if (delayHide) {
       handleHideTooltipDelayed()
     } else {
@@ -330,7 +361,12 @@ const Tooltip = ({
       })
       parentObserver.disconnect()
     }
+    /**
+     * rendered is also a dependency to ensure anchor observers are re-registered
+     * since `tooltipRef` becomes stale after removing/adding the tooltip to the DOM
+     */
   }, [
+    rendered,
     anchorRefs,
     activeAnchor,
     closeOnEsc,
@@ -389,7 +425,6 @@ const Tooltip = ({
     }
   }, [
     show,
-    isOpen,
     anchorId,
     anchorsBySelect,
     activeAnchor,
@@ -426,13 +461,14 @@ const Tooltip = ({
   }, [])
 
   const hasContentOrChildren = Boolean(html || content || children)
+  const canShow = hasContentOrChildren && show && Object.keys(inlineStyles).length > 0
 
-  return (
+  return rendered ? (
     <WrapperElement
       id={id}
       role="tooltip"
       className={classNames('react-tooltip', styles['tooltip'], styles[variant], className, {
-        [styles['show']]: hasContentOrChildren && (isOpen || show),
+        [styles['show']]: canShow,
         [styles['fixed']]: positionStrategy === 'fixed',
         [styles['clickable']]: clickable,
       })}
@@ -452,7 +488,7 @@ const Tooltip = ({
         ref={tooltipArrowRef}
       />
     </WrapperElement>
-  )
+  ) : null
 }
 
 export default Tooltip
