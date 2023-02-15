@@ -24,11 +24,11 @@ const TooltipAttrs = ({ id, ...anchorParams }) => (
 )
 
 describe('tooltip props', () => {
-  test('tooltip component - without element reference', async () => {
+  test('tooltip without element reference', async () => {
     const { container } = render(<TooltipProps content="Hello World!" />)
     const anchorElement = screen.getByText('Lorem Ipsum')
 
-    userEvent.hover(anchorElement)
+    await userEvent.hover(anchorElement)
 
     await waitFor(() => {
       expect(screen.queryByText('Hello World!')).not.toBeInTheDocument()
@@ -38,11 +38,11 @@ describe('tooltip props', () => {
     expect(container).toMatchSnapshot()
   })
 
-  test('basic tooltip component', async () => {
+  test('basic tooltip', async () => {
     const { container } = render(<TooltipProps id="basic-example" content="Hello World!" />)
     const anchorElement = screen.getByText('Lorem Ipsum')
 
-    userEvent.hover(anchorElement)
+    await userEvent.hover(anchorElement)
 
     let tooltip = null
 
@@ -54,13 +54,13 @@ describe('tooltip props', () => {
     expect(container).toMatchSnapshot()
   })
 
-  test('tooltip component with place', async () => {
+  test('tooltip with place', async () => {
     const { container } = render(
       <TooltipProps id="example-place" content="Hello World!" place="right" />,
     )
     const anchorElement = screen.getByText('Lorem Ipsum')
 
-    userEvent.hover(anchorElement)
+    await userEvent.hover(anchorElement)
 
     let tooltip = null
 
@@ -72,11 +72,11 @@ describe('tooltip props', () => {
     expect(container).toMatchSnapshot()
   })
 
-  test('tooltip component with html', async () => {
+  test('tooltip with html', async () => {
     const { container } = render(<TooltipProps id="example-html" html="<div>Hello World!<div>" />)
     const anchorElement = screen.getByText('Lorem Ipsum')
 
-    userEvent.hover(anchorElement)
+    await userEvent.hover(anchorElement)
 
     let tooltip = null
 
@@ -85,16 +85,48 @@ describe('tooltip props', () => {
     })
 
     expect(tooltip).toBeInTheDocument()
+    expect(container).toMatchSnapshot()
+  })
+
+  test('clickable tooltip', async () => {
+    const id = 'example-clickable'
+
+    const mockCallBack = jest.fn()
+    const { container } = render(
+      <>
+        <span id={id}>Lorem Ipsum</span>
+        <Tooltip anchorId={id} clickable>
+          <button onClick={mockCallBack}>button</button>
+        </Tooltip>
+      </>,
+    )
+    const anchorElement = screen.getByText('Lorem Ipsum')
+
+    await userEvent.hover(anchorElement)
+
+    let tooltip = null
+    let button = null
+
+    await waitFor(() => {
+      tooltip = screen.getByRole('tooltip')
+      button = screen.getByRole('button')
+    })
+
+    await userEvent.click(button)
+
+    expect(tooltip).toBeInTheDocument()
+    expect(button).toBeInTheDocument()
+    expect(mockCallBack).toHaveBeenCalled()
     expect(container).toMatchSnapshot()
   })
 })
 
 describe('tooltip attributes', () => {
-  test('tooltip component - without element reference', async () => {
+  test('tooltip without element reference', async () => {
     const { container } = render(<TooltipAttrs data-tooltip-content="Hello World!" />)
     const anchorElement = screen.getByText('Lorem Ipsum')
 
-    userEvent.hover(anchorElement)
+    await userEvent.hover(anchorElement)
 
     await waitFor(() => {
       expect(screen.queryByText('Hello World!')).not.toBeInTheDocument()
@@ -104,13 +136,13 @@ describe('tooltip attributes', () => {
     expect(container).toMatchSnapshot()
   })
 
-  test('basic tooltip component', async () => {
+  test('basic tooltip', async () => {
     const { container } = render(
       <TooltipAttrs id="basic-example-attr" data-tooltip-content="Hello World!" />,
     )
     const anchorElement = screen.getByText('Lorem Ipsum')
 
-    userEvent.hover(anchorElement)
+    await userEvent.hover(anchorElement)
 
     let tooltip = null
 
@@ -123,7 +155,7 @@ describe('tooltip attributes', () => {
     expect(container).toMatchSnapshot()
   })
 
-  test('tooltip component with place', async () => {
+  test('tooltip with place', async () => {
     const { container } = render(
       <TooltipAttrs
         id="example-place-attr"
@@ -133,7 +165,7 @@ describe('tooltip attributes', () => {
     )
     const anchorElement = screen.getByText('Lorem Ipsum')
 
-    userEvent.hover(anchorElement)
+    await userEvent.hover(anchorElement)
 
     let tooltip = null
 

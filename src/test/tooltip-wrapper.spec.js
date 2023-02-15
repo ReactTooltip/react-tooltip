@@ -21,7 +21,7 @@ describe('tooltip props', () => {
     )
     const anchorElement = screen.getByText('Minimal 1')
 
-    userEvent.hover(anchorElement)
+    await userEvent.hover(anchorElement)
 
     let tooltip = null
 
