@@ -1,0 +1,122 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tooltip attributes basic tooltip component 1`] = `
+<div>
+  <span
+    data-tooltip-content="Hello World!"
+    id="basic-example-attr"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip attributes tooltip component - without element reference 1`] = `
+<div>
+  <span
+    data-tooltip-content="Hello World!"
+  >
+    Lorem Ipsum
+  </span>
+</div>
+`;
+
+exports[`tooltip attributes tooltip component with place 1`] = `
+<div>
+  <span
+    data-tooltip-content="Hello World!"
+    data-tooltip-place="right"
+    id="example-place-attr"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip props basic tooltip component 1`] = `
+<div>
+  <span
+    id="basic-example"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip props tooltip component - without element reference 1`] = `
+<div>
+  <span>
+    Lorem Ipsum
+  </span>
+</div>
+`;
+
+exports[`tooltip props tooltip component with html 1`] = `
+<div>
+  <span
+    id="example-html"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    <span>
+      <div>
+        Hello World!
+        <div />
+      </div>
+    </span>
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip props tooltip component with place 1`] = `
+<div>
+  <span
+    id="example-place"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
