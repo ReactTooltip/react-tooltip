@@ -19,7 +19,13 @@ function WithProviderMinimal() {
         </TooltipWrapper>
       </p>
       <Tooltip clickable>
-        <button>button</button>
+        <button
+          onClick={() => {
+            console.log('button clicked')
+          }}
+        >
+          button
+        </button>
       </Tooltip>
     </section>
   )

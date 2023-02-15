@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`tooltip attributes basic tooltip component 1`] = `
+exports[`tooltip attributes basic tooltip 1`] = `
 <div>
   <span
     data-tooltip-content="Hello World!"
@@ -20,17 +20,7 @@ exports[`tooltip attributes basic tooltip component 1`] = `
 </div>
 `;
 
-exports[`tooltip attributes tooltip component - without element reference 1`] = `
-<div>
-  <span
-    data-tooltip-content="Hello World!"
-  >
-    Lorem Ipsum
-  </span>
-</div>
-`;
-
-exports[`tooltip attributes tooltip component with place 1`] = `
+exports[`tooltip attributes tooltip with place 1`] = `
 <div>
   <span
     data-tooltip-content="Hello World!"
@@ -51,7 +41,17 @@ exports[`tooltip attributes tooltip component with place 1`] = `
 </div>
 `;
 
-exports[`tooltip props basic tooltip component 1`] = `
+exports[`tooltip attributes tooltip without element reference 1`] = `
+<div>
+  <span
+    data-tooltip-content="Hello World!"
+  >
+    Lorem Ipsum
+  </span>
+</div>
+`;
+
+exports[`tooltip props basic tooltip 1`] = `
 <div>
   <span
     id="basic-example"
@@ -70,15 +70,30 @@ exports[`tooltip props basic tooltip component 1`] = `
 </div>
 `;
 
-exports[`tooltip props tooltip component - without element reference 1`] = `
+exports[`tooltip props clickable tooltip 1`] = `
 <div>
-  <span>
+  <span
+    id="example-clickable"
+  >
     Lorem Ipsum
   </span>
+  <div
+    class="react-tooltip undefined"
+    role="tooltip"
+    style="left: 5px; top: -10px;"
+  >
+    <button>
+      button
+    </button>
+    <div
+      class="react-tooltip-arrow"
+      style="left: 5px; bottom: -4px;"
+    />
+  </div>
 </div>
 `;
 
-exports[`tooltip props tooltip component with html 1`] = `
+exports[`tooltip props tooltip with html 1`] = `
 <div>
   <span
     id="example-html"
@@ -102,7 +117,7 @@ exports[`tooltip props tooltip component with html 1`] = `
 </div>
 `;
 
-exports[`tooltip props tooltip component with place 1`] = `
+exports[`tooltip props tooltip with place 1`] = `
 <div>
   <span
     id="example-place"
@@ -118,5 +133,13 @@ exports[`tooltip props tooltip component with place 1`] = `
       class="react-tooltip-arrow"
     />
   </div>
+</div>
+`;
+
+exports[`tooltip props tooltip without element reference 1`] = `
+<div>
+  <span>
+    Lorem Ipsum
+  </span>
 </div>
 `;
