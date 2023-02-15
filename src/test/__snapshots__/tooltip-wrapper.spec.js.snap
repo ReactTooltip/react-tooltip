@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tooltip props basic tooltip component 1`] = `
+<div>
+  <span
+    class="react-tooltip-wrapper"
+    data-tooltip-content="Shared Global Tooltip"
+    data-tooltip-place="bottom"
+  >
+    <button>
+      Minimal 1
+    </button>
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+    style="left: 5px; top: 10px;"
+  >
+    <button>
+      button
+    </button>
+    <div
+      class="react-tooltip-arrow"
+      style="left: 5px; top: -4px;"
+    />
+  </div>
+</div>
+`;
