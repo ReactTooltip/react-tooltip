@@ -13,15 +13,6 @@ const TooltipProps = ({ id, ...tooltipParams }) => (
     <Tooltip anchorId={id} {...tooltipParams} />
   </>
 )
-// eslint-disable-next-line react/prop-types
-const TooltipAttrs = ({ id, ...anchorParams }) => (
-  <>
-    <span id={id} {...anchorParams}>
-      Lorem Ipsum
-    </span>
-    <Tooltip anchorId={id} />
-  </>
-)
 
 describe('tooltip props', () => {
   test('tooltip without element reference', async () => {
@@ -119,26 +110,10 @@ describe('tooltip props', () => {
     expect(mockCallBack).toHaveBeenCalled()
     expect(container).toMatchSnapshot()
   })
-})
 
-describe('tooltip attributes', () => {
-  test('tooltip without element reference', async () => {
-    const { container } = render(<TooltipAttrs data-tooltip-content="Hello World!" />)
-    const anchorElement = screen.getByText('Lorem Ipsum')
-
-    await userEvent.hover(anchorElement)
-
-    await waitFor(() => {
-      expect(screen.queryByText('Hello World!')).not.toBeInTheDocument()
-      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
-    })
-
-    expect(container).toMatchSnapshot()
-  })
-
-  test('basic tooltip', async () => {
+  test('tooltip with delay show', async () => {
     const { container } = render(
-      <TooltipAttrs id="basic-example-attr" data-tooltip-content="Hello World!" />,
+      <TooltipProps id="example-delay-show" content="Hello World!" delayShow={300} />,
     )
     const anchorElement = screen.getByText('Lorem Ipsum')
 
@@ -146,22 +121,63 @@ describe('tooltip attributes', () => {
 
     let tooltip = null
 
+    await waitFor(
+      () => {
+        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+      },
+      {
+        timeout: 250,
+      },
+    )
+
+    await userEvent.unhover(anchorElement)
+
     await waitFor(() => {
       tooltip = screen.getByRole('tooltip')
     })
 
-    expect(anchorElement).toHaveAttribute('data-tooltip-content')
     expect(tooltip).toBeInTheDocument()
     expect(container).toMatchSnapshot()
   })
 
-  test('tooltip with place', async () => {
+  test('tooltip with delay hide', async () => {
     const { container } = render(
-      <TooltipAttrs
-        id="example-place-attr"
-        data-tooltip-content="Hello World!"
-        data-tooltip-place="right"
-      />,
+      <TooltipProps id="example-delay-hide" content="Hello World!" delayHide={300} />,
+    )
+    const anchorElement = screen.getByText('Lorem Ipsum')
+
+    await userEvent.hover(anchorElement)
+
+    await waitFor(() => {
+      expect(screen.queryByRole('tooltip')).toBeInTheDocument()
+    })
+
+    await userEvent.unhover(anchorElement)
+
+    await waitFor(
+      () => {
+        expect(screen.queryByRole('tooltip')).toBeInTheDocument()
+      },
+      {
+        timeout: 200,
+      },
+    )
+
+    await waitFor(
+      () => {
+        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+      },
+      {
+        timeout: 500,
+      },
+    )
+
+    expect(container).toMatchSnapshot()
+  })
+
+  test('tooltip with custom position', async () => {
+    const { container } = render(
+      <TooltipProps id="example-place" content="Hello World!" position={{ x: 0, y: 0 }} />,
     )
     const anchorElement = screen.getByText('Lorem Ipsum')
 
@@ -173,8 +189,22 @@ describe('tooltip attributes', () => {
       tooltip = screen.getByRole('tooltip')
     })
 
-    expect(anchorElement).toHaveAttribute('data-tooltip-place')
-    expect(anchorElement).toHaveAttribute('data-tooltip-content')
+    expect(tooltip).toBeInTheDocument()
+    expect(container).toMatchSnapshot()
+  })
+
+  test('tooltip with float', async () => {
+    const { container } = render(<TooltipProps id="example-float" content="Hello World!" float />)
+    const anchorElement = screen.getByText('Lorem Ipsum')
+
+    await userEvent.hover(anchorElement)
+
+    let tooltip = null
+
+    await waitFor(() => {
+      tooltip = screen.getByRole('tooltip')
+    })
+
     expect(tooltip).toBeInTheDocument()
     expect(container).toMatchSnapshot()
   })

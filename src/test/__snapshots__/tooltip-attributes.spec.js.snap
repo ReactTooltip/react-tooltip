@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tooltip attributes basic tooltip 1`] = `
+<div>
+  <span
+    data-tooltip-content="Hello World!"
+    id="basic-example-attr"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip attributes tooltip with place 1`] = `
+<div>
+  <span
+    data-tooltip-content="Hello World!"
+    data-tooltip-place="right"
+    id="example-place-attr"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip attributes tooltip without element reference 1`] = `
+<div>
+  <span
+    data-tooltip-content="Hello World!"
+  >
+    Lorem Ipsum
+  </span>
+</div>
+`;
