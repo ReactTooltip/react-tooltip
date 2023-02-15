@@ -1,56 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`tooltip attributes basic tooltip 1`] = `
-<div>
-  <span
-    data-tooltip-content="Hello World!"
-    id="basic-example-attr"
-  >
-    Lorem Ipsum
-  </span>
-  <div
-    class="react-tooltip"
-    role="tooltip"
-  >
-    Hello World!
-    <div
-      class="react-tooltip-arrow"
-    />
-  </div>
-</div>
-`;
-
-exports[`tooltip attributes tooltip with place 1`] = `
-<div>
-  <span
-    data-tooltip-content="Hello World!"
-    data-tooltip-place="right"
-    id="example-place-attr"
-  >
-    Lorem Ipsum
-  </span>
-  <div
-    class="react-tooltip"
-    role="tooltip"
-  >
-    Hello World!
-    <div
-      class="react-tooltip-arrow"
-    />
-  </div>
-</div>
-`;
-
-exports[`tooltip attributes tooltip without element reference 1`] = `
-<div>
-  <span
-    data-tooltip-content="Hello World!"
-  >
-    Lorem Ipsum
-  </span>
-</div>
-`;
-
 exports[`tooltip props basic tooltip 1`] = `
 <div>
   <span
@@ -88,6 +37,73 @@ exports[`tooltip props clickable tooltip 1`] = `
     <div
       class="react-tooltip-arrow"
       style="left: 5px; bottom: -4px;"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip props tooltip with custom position 1`] = `
+<div>
+  <span
+    id="example-place"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip props tooltip with delay hide 1`] = `
+<div>
+  <span
+    id="example-delay-hide"
+  >
+    Lorem Ipsum
+  </span>
+</div>
+`;
+
+exports[`tooltip props tooltip with delay show 1`] = `
+<div>
+  <span
+    id="example-delay-show"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip props tooltip with float 1`] = `
+<div>
+  <span
+    id="example-float"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
     />
   </div>
 </div>
