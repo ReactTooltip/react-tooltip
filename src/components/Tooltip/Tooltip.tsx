@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useLayoutEffect } from 'react'
 import classNames from 'classnames'
 import debounce from 'utils/debounce'
 import { TooltipContent } from 'components/TooltipContent'
@@ -50,6 +50,19 @@ const Tooltip = ({
   const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip(id)
   const [activeAnchor, setActiveAnchor] = useState<React.RefObject<HTMLElement>>({ current: null })
   const hoveringTooltip = useRef(false)
+  const mounted = useRef(false)
+
+  /**
+   * useLayoutEffect runs before useEffect,
+   * but should be used carefully because of caveats
+   * https://beta.reactjs.org/reference/react/useLayoutEffect#caveats
+   */
+  useLayoutEffect(() => {
+    mounted.current = true
+    return () => {
+      mounted.current = false
+    }
+  }, [])
 
   useEffect(() => {
     if (!show) {
@@ -58,12 +71,20 @@ const Tooltip = ({
   }, [show])
 
   const handleShow = (value: boolean) => {
+    if (!mounted.current) {
+      return
+    }
+
     setRendered(true)
     /**
      * wait for the component to render and calculate position
      * before actually showing
      */
     setTimeout(() => {
+      if (!mounted.current) {
+        return
+      }
+
       setIsOpen?.(value)
       if (isOpen === undefined) {
         setShow(value)
@@ -345,7 +366,7 @@ const Tooltip = ({
     if (position) {
       // if `position` is set, override regular and `float` positioning
       handleTooltipPosition(position)
-      return () => null
+      return
     }
 
     if (float) {
@@ -360,7 +381,7 @@ const Tooltip = ({
         handleTooltipPosition(lastFloatPosition.current)
       }
       // if `float` is set, override regular positioning
-      return () => null
+      return
     }
 
     let elementReference = activeAnchor.current
@@ -368,7 +389,6 @@ const Tooltip = ({
       // `anchorId` element takes precedence
       elementReference = document.querySelector(`[id='${anchorId}']`) as HTMLElement
     }
-    let mounted = true
     computeTooltipPosition({
       place,
       offset,
@@ -378,7 +398,7 @@ const Tooltip = ({
       strategy: positionStrategy,
       middlewares,
     }).then((computedStylesData) => {
-      if (!mounted) {
+      if (!mounted.current) {
         // invalidate computed positions after remount
         return
       }
@@ -389,9 +409,6 @@ const Tooltip = ({
         setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
       }
     })
-    return () => {
-      mounted = false
-    }
   }, [show, anchorId, activeAnchor, content, html, place, offset, positionStrategy, position])
 
   useEffect(() => {
