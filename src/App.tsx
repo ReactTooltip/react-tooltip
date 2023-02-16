@@ -21,6 +21,7 @@ function WithProviderMinimal() {
       <Tooltip clickable>
         <button
           onClick={() => {
+            // eslint-disable-next-line no-console
             console.log('button clicked')
           }}
         >
