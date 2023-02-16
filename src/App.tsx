@@ -1,53 +1,10 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { TooltipController as Tooltip } from 'components/TooltipController'
-import { TooltipProvider, TooltipWrapper } from 'components/TooltipProvider'
 import { IPosition } from 'components/Tooltip/TooltipTypes.d'
 import { useState } from 'react'
 import styles from './styles.module.css'
 import { inline, offset } from './index'
-
-function WithProviderMinimal() {
-  return (
-    <section style={{ marginTop: '50px' }}>
-      <p>
-        <TooltipWrapper place="bottom" content="Shared Global Tooltip">
-          <button>Provider 1</button>
-        </TooltipWrapper>
-        <TooltipWrapper place="right" content="Shared Global Tooltip">
-          <button>Provider 2</button>
-        </TooltipWrapper>
-      </p>
-      <Tooltip clickable>
-        <button
-          onClick={() => {
-            // eslint-disable-next-line no-console
-            console.log('button clicked')
-          }}
-        >
-          button
-        </button>
-      </Tooltip>
-    </section>
-  )
-}
-
-function WithProviderMultiple() {
-  return (
-    <section style={{ marginTop: '50px' }}>
-      <p>
-        <TooltipWrapper tooltipId="tooltip-provider-multiple-1" place="bottom">
-          <button>Provider multiple 1</button>
-        </TooltipWrapper>
-        <TooltipWrapper tooltipId="tooltip-provider-multiple-2" place="right">
-          <button>Provider multiple 2</button>
-        </TooltipWrapper>
-      </p>
-      <Tooltip id="tooltip-provider-multiple-1" content="Tooltip 1" />
-      <Tooltip id="tooltip-provider-multiple-2" content="Tooltip 2" />
-    </section>
-  )
-}
 
 function App() {
   const [anchorId, setAnchorId] = useState('button')
@@ -136,12 +93,6 @@ function App() {
           Tooltip content
         </Tooltip>
       </section>
-      <TooltipProvider>
-        <WithProviderMinimal />
-      </TooltipProvider>
-      <TooltipProvider>
-        <WithProviderMultiple />
-      </TooltipProvider>
       <div style={{ display: 'flex', gap: '12px', flexDirection: 'row' }}>
         <div>
           <div
