@@ -19,7 +19,14 @@ function WithProviderMinimal() {
         </TooltipWrapper>
       </p>
       <Tooltip clickable>
-        <button>button</button>
+        <button
+          onClick={() => {
+            // eslint-disable-next-line no-console
+            console.log('button clicked')
+          }}
+        >
+          button
+        </button>
       </Tooltip>
     </section>
   )

@@ -1,0 +1,161 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tooltip props basic tooltip 1`] = `
+<div>
+  <span
+    id="basic-example"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip props clickable tooltip 1`] = `
+<div>
+  <span
+    id="example-clickable"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip undefined"
+    role="tooltip"
+    style="left: 5px; top: -10px;"
+  >
+    <button>
+      button
+    </button>
+    <div
+      class="react-tooltip-arrow"
+      style="left: 5px; bottom: -4px;"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip props tooltip with custom position 1`] = `
+<div>
+  <span
+    id="example-place"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip props tooltip with delay hide 1`] = `
+<div>
+  <span
+    id="example-delay-hide"
+  >
+    Lorem Ipsum
+  </span>
+</div>
+`;
+
+exports[`tooltip props tooltip with delay show 1`] = `
+<div>
+  <span
+    id="example-delay-show"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip props tooltip with float 1`] = `
+<div>
+  <span
+    id="example-float"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip props tooltip with html 1`] = `
+<div>
+  <span
+    id="example-html"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    <span>
+      <div>
+        Hello World!
+        <div />
+      </div>
+    </span>
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip props tooltip with place 1`] = `
+<div>
+  <span
+    id="example-place"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip"
+    role="tooltip"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
+    />
+  </div>
+</div>
+`;
+
+exports[`tooltip props tooltip without element reference 1`] = `
+<div>
+  <span>
+    Lorem Ipsum
+  </span>
+</div>
+`;
