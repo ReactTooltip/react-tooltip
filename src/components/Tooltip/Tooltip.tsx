@@ -109,7 +109,9 @@ const Tooltip = ({
     if (!mounted.current) {
       return
     }
-    setRendered(true)
+    if (value) {
+      setRendered(true)
+    }
     /**
      * wait for the component to render and calculate position
      * before actually showing
