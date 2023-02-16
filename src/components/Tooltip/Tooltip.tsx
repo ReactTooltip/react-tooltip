@@ -73,7 +73,7 @@ const Tooltip = ({
       // warning was already issued in the controller
       setAnchorsBySelect([])
     }
-  }, [anchorSelect])
+  }, [anchorSelect, activeAnchor])
 
   /**
    * useLayoutEffect runs before useEffect,
@@ -360,6 +360,7 @@ const Tooltip = ({
         return [...mutation.removedNodes].some((node) => {
           if (node.contains(activeAnchor)) {
             handleShow(false)
+            setActiveAnchor(null)
             return true
           }
           return false
