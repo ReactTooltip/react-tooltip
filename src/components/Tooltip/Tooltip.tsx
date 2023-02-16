@@ -56,6 +56,7 @@ const Tooltip = ({
   const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip(id)
   const hoveringTooltip = useRef(false)
   const [anchorsBySelect, setAnchorsBySelect] = useState<HTMLElement[]>([])
+  const mounted = useRef(false)
 
   useEffect(() => {
     let selector = anchorSelect
@@ -73,7 +74,6 @@ const Tooltip = ({
       setAnchorsBySelect([])
     }
   }, [anchorSelect])
-  const mounted = useRef(false)
 
   /**
    * useLayoutEffect runs before useEffect,
@@ -92,6 +92,8 @@ const Tooltip = ({
       /**
        * this fixes weird behavior when switching between two anchor elements very quickly
        * remove the timeout and switch quickly between two adjancent anchor elements to see it
+       *
+       * in practice, this means the tooltip is not immediately removed from the DOM on hide
        */
       const timeout = setTimeout(() => {
         setRendered(false)
@@ -268,11 +270,9 @@ const Tooltip = ({
     if (anchorById?.contains(event.target as HTMLElement)) {
       return
     }
-
     if (anchorsBySelect.some((anchor) => anchor.contains(event.target as HTMLElement))) {
       return
     }
-
     handleShow(false)
   }
 
