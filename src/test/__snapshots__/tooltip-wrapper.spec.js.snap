@@ -14,14 +14,12 @@ exports[`tooltip props basic tooltip component 1`] = `
   <div
     class="react-tooltip"
     role="tooltip"
-    style="left: 5px; top: 10px;"
+    style="left: 5px; top: -10px;"
   >
-    <button>
-      button
-    </button>
+    Shared Global Tooltip
     <div
       class="react-tooltip-arrow"
-      style="left: 5px; top: -4px;"
+      style="left: 5px; bottom: -4px;"
     />
   </div>
 </div>
