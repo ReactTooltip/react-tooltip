@@ -35,8 +35,8 @@ const DEFAULT_CONTEXT_DATA_WRAPPER: TooltipContextDataWrapper = {
 const TooltipContext = createContext<TooltipContextDataWrapper>(DEFAULT_CONTEXT_DATA_WRAPPER)
 
 /**
- * @deprecated Use `anchorSelect` instead.
- * See https://react-tooltip.com/docs/examples/anchor-select
+ * @deprecated Use the `data-tooltip-id` attribute, or the `anchorSelect` prop instead.
+ * See https://react-tooltip.com/docs/getting-started
  */
 const TooltipProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [anchorRefMap, setAnchorRefMap] = useState<Record<string, Set<AnchorRef>>>({

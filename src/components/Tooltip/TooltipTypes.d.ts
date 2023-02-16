@@ -43,8 +43,8 @@ export interface ITooltip {
   id?: string
   variant?: VariantType
   /**
-   * @deprecated Use `anchorSelect` instead.
-   * See https://react-tooltip.com/docs/examples/anchor-select
+   * @deprecated Use the `data-tooltip-id` attribute, or the `anchorSelect` prop instead.
+   * See https://react-tooltip.com/docs/getting-started
    */
   anchorId?: string
   anchorSelect?: string
