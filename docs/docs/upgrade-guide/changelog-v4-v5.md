@@ -4,13 +4,13 @@ sidebar_position: 1
 
 # Changelog V4 -> V5
 
-If you are using V4 and want to upgrade to V5, you see what changed below.
+If you are using V4 and want to upgrade to V5, you can see what changed below.
 
 ## From V4 to V5
 
-V4 was a great react tooltip component but was built a few years ago, it was built with react class components and it's hard to maintain and for the community give contributions. 
+V4 was a great react tooltip component but was built a while ago using React class components, whick makes it hard to maintain, and for the community give contributions.
 
-With this in mind, we built a new version of react tooltip using [floating-ui](https://floating-ui.com/) behind the scenes. 
+With this in mind, we built a new version of ReactTooltip using [floating-ui](https://floating-ui.com/) behind the scenes. 
 This resulted in a great improvement in performance, and made it easier for the community to contribute to the project.
 
 ## Improvements
@@ -87,4 +87,4 @@ This resulted in a great improvement in performance, and made it easier for the 
 
 ---
 
-Please see [all V5 options here](../options.mdx).
+Check [all V5 options here](../options.mdx).
