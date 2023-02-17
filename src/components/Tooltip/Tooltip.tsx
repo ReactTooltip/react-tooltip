@@ -57,6 +57,7 @@ const Tooltip = ({
   const hoveringTooltip = useRef(false)
   const [anchorsBySelect, setAnchorsBySelect] = useState<HTMLElement[]>([])
   const mounted = useRef(false)
+  const shouldShow = useRef(false)
 
   useEffect(() => {
     let selector = anchorSelect
@@ -88,63 +89,43 @@ const Tooltip = ({
   }, [])
 
   useEffect(() => {
-    if (!show) {
+    if (rendered) {
       /**
-       * this fixes weird behavior when switching between two anchor elements very quickly
-       * remove the timeout and switch quickly between two adjancent anchor elements to see it
-       *
-       * in practice, this means the tooltip is not immediately removed from the DOM on hide
+       * just render the tooltip and wait for the position calculation
+       * i.e. wait for `afterCalculatingPosition()` to be called
        */
-      const timeout = setTimeout(() => {
-        setRendered(false)
-      }, 150)
-      return () => {
-        clearTimeout(timeout)
-      }
+      return () => null
     }
-    return () => null
-  }, [show])
+    /**
+     * if closing, wait so the tooltip doesn't get immediately closed.
+     * useful so the tooltip doesn't close when switching quickly between anchors
+     */
+    const timeout = setTimeout(() => {
+      setShow(shouldShow.current)
+      setIsOpen?.(shouldShow.current)
+    }, 150)
+    return () => clearTimeout(timeout)
+  }, [rendered])
 
   const handleShow = (value: boolean) => {
     if (!mounted.current) {
       return
     }
-    if (value) {
-      setRendered(true)
-    }
-    /**
-     * wait for the component to render and calculate position
-     * before actually showing
-     */
-    setTimeout(() => {
-      if (!mounted.current) {
-        return
-      }
-      setIsOpen?.(value)
-      if (isOpen === undefined) {
-        setShow(value)
-      }
-    }, 10)
+    shouldShow.current = value
+    setRendered(value)
   }
 
-  /**
-   * this replicates the effect from `handleShow()`
-   * when `isOpen` is changed from outside
-   */
   useEffect(() => {
     if (isOpen === undefined) {
-      return () => null
+      return
     }
-    if (isOpen) {
-      setRendered(true)
-    }
-    const timeout = setTimeout(() => {
-      setShow(isOpen)
-    }, 10)
-    return () => {
-      clearTimeout(timeout)
-    }
+    handleShow(isOpen)
   }, [isOpen])
+
+  const afterCalculatingPosition = () => {
+    setShow(shouldShow.current)
+    setIsOpen?.(shouldShow.current)
+  }
 
   useEffect(() => {
     if (show === wasShowing.current) {
@@ -244,6 +225,7 @@ const Tooltip = ({
       if (Object.keys(computedStylesData.tooltipArrowStyles).length) {
         setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
       }
+      afterCalculatingPosition()
     })
   }
 
@@ -441,8 +423,9 @@ const Tooltip = ({
       if (Object.keys(computedStylesData.tooltipArrowStyles).length) {
         setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
       }
+      afterCalculatingPosition()
     })
-  }, [show, activeAnchor, content, html, place, offset, positionStrategy, position])
+  }, [rendered, show, activeAnchor, content, html, place, offset, positionStrategy, position])
 
   useEffect(() => {
     const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
