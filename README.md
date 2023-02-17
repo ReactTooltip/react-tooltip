@@ -128,7 +128,7 @@ The `html` option allows a tooltip to directly display raw HTML. This is a secur
 
 #### JSX note
 
-You can use [`React.renderToStaticMarkup()` function](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to use JSX instead of HTML.
+You can use [`renderToStaticMarkup()` function](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to use JSX instead of HTML.
 **Example:**
 
 ```jsx
