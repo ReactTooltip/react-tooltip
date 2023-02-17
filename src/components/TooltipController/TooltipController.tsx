@@ -8,8 +8,10 @@ import type {
   WrapperType,
   DataAttribute,
   ITooltip,
+  ChildrenType,
 } from 'components/Tooltip/TooltipTypes'
 import { useTooltip } from 'components/TooltipProvider'
+import { TooltipContent } from 'components/TooltipContent'
 import type { ITooltipController } from './TooltipControllerTypes'
 
 const TooltipController = ({
@@ -18,6 +20,7 @@ const TooltipController = ({
   anchorSelect,
   content,
   html,
+  render,
   className,
   classNameArrow,
   variant = 'dark',
@@ -196,14 +199,27 @@ const TooltipController = ({
     }
   }, [anchorRefs, providerActiveAnchor, activeAnchor, anchorId, anchorSelect])
 
+  /**
+   * content priority: children < renderContent or content < html
+   * children should be lower priority so that it can be used as the "default" content
+   */
+  let renderedContent: ChildrenType = children
+  if (render) {
+    renderedContent = render({ content: tooltipContent ?? null, activeAnchor })
+  } else if (tooltipContent) {
+    renderedContent = tooltipContent
+  }
+  if (tooltipHtml) {
+    renderedContent = <TooltipContent content={tooltipHtml} />
+  }
+
   const props: ITooltip = {
     id,
     anchorId,
     anchorSelect,
     className,
     classNameArrow,
-    content: tooltipContent,
-    html: tooltipHtml,
+    content: renderedContent,
     place: tooltipPlace,
     variant: tooltipVariant,
     offset: tooltipOffset,
@@ -227,7 +243,7 @@ const TooltipController = ({
     setActiveAnchor: (anchor: HTMLElement | null) => setActiveAnchor(anchor),
   }
 
-  return children ? <Tooltip {...props}>{children}</Tooltip> : <Tooltip {...props} />
+  return <Tooltip {...props} />
 }
 
 export default TooltipController

@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef, useLayoutEffect } from 'react'
 import classNames from 'classnames'
 import debounce from 'utils/debounce'
-import { TooltipContent } from 'components/TooltipContent'
 import { useTooltip } from 'components/TooltipProvider'
 import { computeTooltipPosition } from '../../utils/compute-positions'
 import styles from './styles.module.css'
@@ -21,7 +20,6 @@ const Tooltip = ({
   positionStrategy = 'absolute',
   middlewares,
   wrapper: WrapperElement,
-  children = null,
   delayShow = 0,
   delayHide = 0,
   float = false,
@@ -34,7 +32,6 @@ const Tooltip = ({
   afterHide,
   // props handled by controller
   content,
-  html,
   isOpen,
   setIsOpen,
   activeAnchor,
@@ -441,7 +438,7 @@ const Tooltip = ({
         setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
       }
     })
-  }, [show, activeAnchor, content, html, place, offset, positionStrategy, position])
+  }, [show, activeAnchor, content, place, offset, positionStrategy, position])
 
   useEffect(() => {
     const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
@@ -467,8 +464,7 @@ const Tooltip = ({
     }
   }, [])
 
-  const hasContentOrChildren = Boolean(html || content || children)
-  const canShow = hasContentOrChildren && show && Object.keys(inlineStyles).length > 0
+  const canShow = content && show && Object.keys(inlineStyles).length > 0
 
   return rendered ? (
     <WrapperElement
@@ -482,11 +478,7 @@ const Tooltip = ({
       style={{ ...externalStyles, ...inlineStyles }}
       ref={tooltipRef}
     >
-      {/**
-       * content priority: html > content > children
-       * children should be last so that it can be used as the "default" content
-       */}
-      {(html && <TooltipContent content={html} />) || content || children}
+      {content}
       <WrapperElement
         className={classNames('react-tooltip-arrow', styles['arrow'], classNameArrow, {
           [styles['no-arrow']]: noArrow,
