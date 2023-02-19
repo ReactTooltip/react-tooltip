@@ -58,23 +58,6 @@ const Tooltip = ({
   const [anchorsBySelect, setAnchorsBySelect] = useState<HTMLElement[]>([])
   const mounted = useRef(false)
 
-  useEffect(() => {
-    let selector = anchorSelect
-    if (!selector && id) {
-      selector = `[data-tooltip-id='${id}']`
-    }
-    if (!selector) {
-      return
-    }
-    try {
-      const anchors = Array.from(document.querySelectorAll<HTMLElement>(selector))
-      setAnchorsBySelect(anchors)
-    } catch {
-      // warning was already issued in the controller
-      setAnchorsBySelect([])
-    }
-  }, [anchorSelect, activeAnchor])
-
   /**
    * useLayoutEffect runs before useEffect,
    * but should be used carefully because of caveats
@@ -347,11 +330,35 @@ const Tooltip = ({
       })
     })
 
-    const parentObserverCallback: MutationCallback = (mutationList) => {
-      let selector = anchorSelect ?? ''
-      if (!selector && id) {
-        selector = `[data-tooltip-id='${id}']`
+    return () => {
+      if (events.find((event: string) => event === 'click')) {
+        window.removeEventListener('click', handleClickOutsideAnchors)
       }
+      if (closeOnEsc) {
+        window.removeEventListener('keydown', handleEsc)
+      }
+      if (clickable) {
+        tooltipRef.current?.removeEventListener('mouseenter', handleMouseEnterTooltip)
+        tooltipRef.current?.removeEventListener('mouseleave', handleMouseLeaveTooltip)
+      }
+      enabledEvents.forEach(({ event, listener }) => {
+        elementRefs.forEach((ref) => {
+          ref.current?.removeEventListener(event, listener)
+        })
+      })
+    }
+    /**
+     * rendered is also a dependency to ensure anchor observers are re-registered
+     * since `tooltipRef` becomes stale after removing/adding the tooltip to the DOM
+     */
+  }, [rendered, anchorRefs, anchorsBySelect, closeOnEsc, events])
+
+  useEffect(() => {
+    let selector = anchorSelect ?? ''
+    if (!selector && id) {
+      selector = `[data-tooltip-id='${id}']`
+    }
+    const documentObserverCallback: MutationCallback = (mutationList) => {
       mutationList.forEach((mutation) => {
         if (mutation.type !== 'childList') {
           return
@@ -389,44 +396,13 @@ const Tooltip = ({
         }
       })
     }
-
-    const parentObserver = new MutationObserver(parentObserverCallback)
-
+    const documentObserver = new MutationObserver(documentObserverCallback)
     // watch for anchor being removed from the DOM
-    parentObserver.observe(document.body, { attributes: false, childList: true, subtree: true })
-
+    documentObserver.observe(document.body, { attributes: false, childList: true, subtree: true })
     return () => {
-      if (events.find((event: string) => event === 'click')) {
-        window.removeEventListener('click', handleClickOutsideAnchors)
-      }
-      if (closeOnEsc) {
-        window.removeEventListener('keydown', handleEsc)
-      }
-      if (clickable) {
-        tooltipRef.current?.removeEventListener('mouseenter', handleMouseEnterTooltip)
-        tooltipRef.current?.removeEventListener('mouseleave', handleMouseLeaveTooltip)
-      }
-      enabledEvents.forEach(({ event, listener }) => {
-        elementRefs.forEach((ref) => {
-          ref.current?.removeEventListener(event, listener)
-        })
-      })
-      parentObserver.disconnect()
+      documentObserver.disconnect()
     }
-    /**
-     * rendered is also a dependency to ensure anchor observers are re-registered
-     * since `tooltipRef` becomes stale after removing/adding the tooltip to the DOM
-     */
-  }, [
-    rendered,
-    anchorRefs,
-    activeAnchor,
-    anchorsBySelect,
-    closeOnEsc,
-    events,
-    delayHide,
-    delayShow,
-  ])
+  }, [id, anchorSelect, activeAnchor])
 
   useEffect(() => {
     if (position) {
@@ -495,6 +471,23 @@ const Tooltip = ({
       }
     }
   }, [])
+
+  useEffect(() => {
+    let selector = anchorSelect
+    if (!selector && id) {
+      selector = `[data-tooltip-id='${id}']`
+    }
+    if (!selector) {
+      return
+    }
+    try {
+      const anchors = Array.from(document.querySelectorAll<HTMLElement>(selector))
+      setAnchorsBySelect(anchors)
+    } catch {
+      // warning was already issued in the controller
+      setAnchorsBySelect([])
+    }
+  }, [id, anchorSelect])
 
   const hasContentOrChildren = Boolean(html || content || children)
   const canShow = hasContentOrChildren && show && Object.keys(inlineStyles).length > 0
