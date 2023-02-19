@@ -130,8 +130,6 @@ describe('tooltip props', () => {
       },
     )
 
-    await userEvent.unhover(anchorElement)
-
     await waitFor(() => {
       tooltip = screen.getByRole('tooltip')
     })
