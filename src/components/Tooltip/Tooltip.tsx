@@ -352,21 +352,45 @@ const Tooltip = ({
     })
 
     const parentObserverCallback: MutationCallback = (mutationList) => {
-      if (!activeAnchor) {
-        return
+      let selector = anchorSelect ?? ''
+      if (!selector && id) {
+        selector = `[data-tooltip-id='${id}']`
       }
-      mutationList.some((mutation) => {
+      mutationList.forEach((mutation) => {
         if (mutation.type !== 'childList') {
-          return false
+          return
         }
-        return [...mutation.removedNodes].some((node) => {
-          if (node.contains(activeAnchor)) {
-            handleShow(false)
-            setActiveAnchor(null)
-            return true
+        if (activeAnchor) {
+          ;[...mutation.removedNodes].some((node) => {
+            if (node.contains(activeAnchor)) {
+              setRendered(false)
+              handleShow(false)
+              setActiveAnchor(null)
+              return true
+            }
+            return false
+          })
+        }
+        if (!selector) {
+          return
+        }
+        try {
+          const elements = [...mutation.addedNodes].filter((node) => node.nodeType === 1)
+          const newAnchors = [
+            ...elements.filter((element) => (element as HTMLElement).matches(selector)),
+            ...elements.flatMap((element) => [
+              ...(element as HTMLElement).querySelectorAll(selector),
+            ]),
+          ] as HTMLElement[]
+          if (newAnchors.length) {
+            setAnchorsBySelect((anchors) => [...anchors, ...newAnchors])
           }
-          return false
-        })
+        } catch {
+          /**
+           * invalid CSS selector.
+           * already warned on tooltip controller
+           */
+        }
       })
     }
 
@@ -397,7 +421,16 @@ const Tooltip = ({
      * rendered is also a dependency to ensure anchor observers are re-registered
      * since `tooltipRef` becomes stale after removing/adding the tooltip to the DOM
      */
-  }, [rendered, anchorRefs, activeAnchor, closeOnEsc, events, delayHide, delayShow])
+  }, [
+    rendered,
+    anchorRefs,
+    activeAnchor,
+    anchorsBySelect,
+    closeOnEsc,
+    events,
+    delayHide,
+    delayShow,
+  ])
 
   useEffect(() => {
     if (position) {
