@@ -302,10 +302,6 @@ const Tooltip = ({
       elementRefs.add({ current: anchorById })
     }
 
-    if (!elementRefs.size) {
-      return () => null
-    }
-
     if (closeOnEsc) {
       window.addEventListener('keydown', handleEsc)
     }
