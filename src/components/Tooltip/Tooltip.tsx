@@ -359,7 +359,14 @@ const Tooltip = ({
       selector = `[data-tooltip-id='${id}']`
     }
     const documentObserverCallback: MutationCallback = (mutationList) => {
+      const newAnchors: HTMLElement[] = []
       mutationList.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-tooltip-id') {
+          const newId = (mutation.target as HTMLElement).getAttribute('data-tooltip-id')
+          if (newId === id) {
+            newAnchors.push(mutation.target as HTMLElement)
+          }
+        }
         if (mutation.type !== 'childList') {
           return
         }
@@ -379,15 +386,19 @@ const Tooltip = ({
         }
         try {
           const elements = [...mutation.addedNodes].filter((node) => node.nodeType === 1)
-          const newAnchors = [
-            ...elements.filter((element) => (element as HTMLElement).matches(selector)),
-            ...elements.flatMap((element) => [
-              ...(element as HTMLElement).querySelectorAll(selector),
-            ]),
-          ] as HTMLElement[]
-          if (newAnchors.length) {
-            setAnchorsBySelect((anchors) => [...anchors, ...newAnchors])
-          }
+          newAnchors.push(
+            // the element itself is an anchor
+            ...(elements.filter((element) =>
+              (element as HTMLElement).matches(selector),
+            ) as HTMLElement[]),
+          )
+          newAnchors.push(
+            // the element has children which are anchors
+            ...elements.flatMap(
+              (element) =>
+                [...(element as HTMLElement).querySelectorAll(selector)] as HTMLElement[],
+            ),
+          )
         } catch {
           /**
            * invalid CSS selector.
@@ -395,10 +406,18 @@ const Tooltip = ({
            */
         }
       })
+      if (newAnchors.length) {
+        setAnchorsBySelect((anchors) => [...anchors, ...newAnchors])
+      }
     }
     const documentObserver = new MutationObserver(documentObserverCallback)
     // watch for anchor being removed from the DOM
-    documentObserver.observe(document.body, { attributes: false, childList: true, subtree: true })
+    documentObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-tooltip-id'],
+    })
     return () => {
       documentObserver.disconnect()
     }
