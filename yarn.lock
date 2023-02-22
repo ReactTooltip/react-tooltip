@@ -7168,6 +7168,11 @@ rollup-plugin-html-scaffold@^0.2.0:
   resolved "https://registry.yarnpkg.com/rollup-plugin-html-scaffold/-/rollup-plugin-html-scaffold-0.2.0.tgz#10c9278ec7dc83e2ee069d6de9988b98d8afa5f2"
   integrity sha512-YklCL0amFzdrevcA+HELwMld5ih52aaHEGXeiS8hue+ZVCTziUDz0eVWQTNY1CogobgEtWV/EtXQNSGBbMRPwQ==
 
+rollup-plugin-peer-deps-external@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-peer-deps-external/-/rollup-plugin-peer-deps-external-2.2.4.tgz#8a420bbfd6dccc30aeb68c9bf57011f2f109570d"
+  integrity sha512-AWdukIM1+k5JDdAqV/Cxd+nejvno2FVLVeZ74NKggm3Q5s9cbbcOgUPGdbxPi4BXu7xGaZ8HG12F+thImYu/0g==
+
 rollup-plugin-postcss@^4.0.1:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/rollup-plugin-postcss/-/rollup-plugin-postcss-4.0.2.tgz#15e9462f39475059b368ce0e49c800fa4b1f7050"

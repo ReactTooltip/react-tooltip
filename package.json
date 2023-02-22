@@ -89,6 +89,7 @@
     "rollup-plugin-dts": "^5.0.0",
     "rollup-plugin-filesize": "^9.1.1",
     "rollup-plugin-html-scaffold": "^0.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.1",
     "rollup-plugin-progress": "^1.1.2",
     "rollup-plugin-string": "^3.0.0",

@@ -7,6 +7,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import ts from '@rollup/plugin-typescript'
 import { terser } from 'rollup-plugin-terser'
 import typescript from 'typescript'
+import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 import pkg from './package.json'
 
 const input = ['src/index.tsx']
@@ -77,14 +78,14 @@ const pluginsForCSSMinification = [
 const defaultOutputData = pkg.buildFormats.map(({ file, format }) => ({
   file,
   format,
-  plugins: [...plugins, filesize()],
+  plugins: [peerDepsExternal(), ...plugins, filesize()],
 }))
 
 // this step is just to build the minified css and es modules javascript
 const minifiedOutputData = pkg.buildFormats.map(({ file, format }) => ({
   file: file.replace('.js', '.min.js'),
   format,
-  plugins: [...pluginsForCSSMinification, terser(), filesize()],
+  plugins: [peerDepsExternal(), ...pluginsForCSSMinification, terser(), filesize()],
 }))
 
 const outputData = [...defaultOutputData, ...minifiedOutputData]
