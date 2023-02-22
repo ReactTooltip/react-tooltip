@@ -531,7 +531,11 @@ const Tooltip = ({
       {(html && <TooltipContent content={html} />) || content || children}
       <WrapperElement
         className={classNames('react-tooltip-arrow', styles['arrow'], classNameArrow, {
-          [styles['no-arrow']]: noArrow,
+          /**
+           * changed from dash `no-arrow` to camelcase because of:
+           * https://github.com/indooorsman/esbuild-css-modules-plugin/issues/42
+           */
+          [styles['noArrow']]: noArrow,
         })}
         style={inlineArrowStyles}
         ref={tooltipArrowRef}

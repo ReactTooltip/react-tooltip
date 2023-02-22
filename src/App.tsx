@@ -97,7 +97,11 @@ function App() {
         <div>
           <div
             id="floatAnchor"
-            className={styles['big-anchor']}
+            /**
+             * changed from dash `no-arrow` to camelcase because of:
+             * https://github.com/indooorsman/esbuild-css-modules-plugin/issues/42
+             */
+            className={styles['bigAnchor']}
             onClick={() => {
               setToggle((t) => !t)
             }}
@@ -117,7 +121,11 @@ function App() {
         <div>
           <div
             id="onClickAnchor"
-            className={styles['big-anchor']}
+            /**
+             * changed from dash `no-arrow` to camelcase because of:
+             * https://github.com/indooorsman/esbuild-css-modules-plugin/issues/42
+             */
+            className={styles['bigAnchor']}
             onClick={(event) => {
               handlePositionClick(event)
             }}
