@@ -1,7 +1,4 @@
 import type { ElementType, ReactNode, CSSProperties } from 'react'
-import type { Middleware } from '@floating-ui/dom'
-
-export type { Middleware }
 
 export type PlacesType = 'top' | 'right' | 'bottom' | 'left'
 
@@ -27,6 +24,12 @@ export type DataAttribute =
   | 'delay-show'
   | 'delay-hide'
   | 'float'
+
+/**
+ * @description floating-ui middleware
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Middleware = any
 
 export interface IPosition {
   x: number
