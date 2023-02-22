@@ -1,8 +1,9 @@
-import { useEffect, useState, useRef, useLayoutEffect } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import classNames from 'classnames'
 import debounce from 'utils/debounce'
 import { TooltipContent } from 'components/TooltipContent'
 import { useTooltip } from 'components/TooltipProvider'
+import useIsomorphicLayoutEffect from 'utils/use-isomorphic-layout-effect'
 import { computeTooltipPosition } from '../../utils/compute-positions'
 import styles from './styles.module.css'
 import type { IPosition, ITooltip } from './TooltipTypes'
@@ -63,7 +64,7 @@ const Tooltip = ({
    * but should be used carefully because of caveats
    * https://beta.reactjs.org/reference/react/useLayoutEffect#caveats
    */
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     mounted.current = true
     return () => {
       mounted.current = false
