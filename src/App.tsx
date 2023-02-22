@@ -3,8 +3,8 @@
 import { TooltipController as Tooltip } from 'components/TooltipController'
 import { IPosition } from 'components/Tooltip/TooltipTypes.d'
 import { useState } from 'react'
+import { inline, offset } from '@floating-ui/dom'
 import styles from './styles.module.css'
-import { inline, offset } from './index'
 
 function App() {
   const [anchorId, setAnchorId] = useState('button')
