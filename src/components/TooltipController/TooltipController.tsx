@@ -106,7 +106,7 @@ const TooltipController = ({
         setTooltipDelayHide(value === null ? delayHide : Number(value))
       },
       float: (value) => {
-        setTooltipFloat(value === null ? float : Boolean(value))
+        setTooltipFloat(value === null ? float : value === 'true')
       },
     }
     // reset unset data attributes to default values
