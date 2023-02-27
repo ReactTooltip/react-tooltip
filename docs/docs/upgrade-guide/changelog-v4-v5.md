@@ -32,6 +32,15 @@ This resulted in a great improvement in performance, and made it easier for the 
 - `getContent` prop was removed. Instead, you can directly pass dynamic content to the `content` tooltip prop, or to `data-tooltip-content` in the anchor element
 - Default behavior of tooltip now is equivalent to V4's `solid` effect, instead of `float`. The new `float` prop can be set to achieve V4's `effect="float"`. See [Options](../options.mdx) for more details
 
+## What about `ReactTooltip.rebuild()`?
+
+A common question V4 users have when upgrading to V5 is about `ReactTooltip.rebuild()`.
+Rebuilding the tooltip was a required step when using V4 with dynamic content. It isn't necessary when using V5.
+
+The tooltip component now automatically watches for any changes made to the DOM and updates accordingly, without any extra steps needed.
+
+If you run into any problems with the tooltip not updating after changes are made in other components, please open a [GitHub issue](https://github.com/ReactTooltip/react-tooltip/issues/new/choose) reporting what you find, ideally with a sample [CodeSandbox](https://codesandbox.io/) (or something similar) to help us pinpoint the problem.
+
 ## New Props
 
 - [x] `classNameArrow`
