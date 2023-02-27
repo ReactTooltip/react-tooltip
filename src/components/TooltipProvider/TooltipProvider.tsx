@@ -34,9 +34,7 @@ const DEFAULT_CONTEXT_DATA_WRAPPER: TooltipContextDataWrapper = {
 
 const TooltipContext = createContext<TooltipContextDataWrapper>(DEFAULT_CONTEXT_DATA_WRAPPER)
 
-interface TooltipProviderProps {}
-
-const TooltipProvider: React.FC<PropsWithChildren<TooltipProviderProps>> = ({ children }) => {
+const TooltipProvider: React.FC<PropsWithChildren<void>> = ({ children }) => {
   const [anchorRefMap, setAnchorRefMap] = useState<Record<string, Set<AnchorRef>>>({
     [DEFAULT_TOOLTIP_ID]: new Set(),
   })
