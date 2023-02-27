@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Getting Started
 
-This docs is related to V5, [if you are using V4 please check here](https://reacttooltip.github.io/react-tooltip/)
+This docs is related to V5, [if you are using V4 please check here](https://reacttooltip.github.io/react-tooltip/).
 
 A react tooltip is a floating react element that displays information related to an anchor element when it receives keyboard focus or the mouse hovers over it.
 
@@ -49,6 +49,13 @@ yarn add react-tooltip
 
 ## Usage
 
+:::info
+
+If you've been using V5 for a while, you'll notice we've deprecated the `anchorId` prop in favor of the `data-tooltip-id` attribute, or the `anchorSelect` prop.
+For more info and more complex use cases using `anchorSelect`, check [the examples](./examples/anchor-select.mdx).
+
+:::
+
 ### Set the default styling
 
 ```js
@@ -63,47 +70,111 @@ There are two ways to use ReactTooltip.
 1. Using props into ReactTooltip Element.
 2. Using data-attributes on anchor element.
 
-### ReactTooltip props
 
-1 . Import `react-tooltip` after installation
+### Using anchor data attributes
 
-```js
-import { Tooltip } from 'react-tooltip'
-```
-
-2 . Create anchor element
-
-```jsx
-<p id="my-anchor-element">Tooltip</p>
-```
-
-3 . Create `<Tooltip />` element
-
-```jsx
-<Tooltip anchorId="my-anchor-element" content="hello world" place="top" />
-```
-
-### Anchor data attributes
-
-1 . Import `react-tooltip` after installation
+1 . Import `react-tooltip` after installation.
 
 ```js
 import { Tooltip } from 'react-tooltip'
 ```
 
-2 . Add `data-tooltip-content="your placeholder"` to your element
+2 . Add `data-tooltip-id="<tooltip id>"`, `data-tooltip-content="<your placeholder>"` and other attributes to your elements.
+
+:::info
+
+[Click here](./options.mdx#available-attributes) the full list of available data attributes.
+
+:::
 
 ```jsx
-<p id="my-anchor-element" data-tooltip-content="hello world" data-tooltip-place="top">
-  Tooltip
-</p>
+<a 
+  data-tooltip-id="my-tooltip" 
+  data-tooltip-content="Hello world!" 
+  data-tooltip-place="top"
+>
+  ◕‿‿◕
+</a>
+<a data-tooltip-id="my-tooltip" data-tooltip-content="Hello to you too!">
+  ◕‿‿◕
+</a>
 ```
 
-3 . Create `<Tooltip />` element
+3 . Create `<Tooltip />` element and set the `id` prop.
+
+:::caution
+
+Don't forget to set the tooltip id, or it will not work!
+
+:::
 
 ```jsx
-<Tooltip anchorId="my-anchor-element" />
+<Tooltip id="my-tooltip" />
 ```
+
+<div style={{ display: 'flex', columnGap: '8px', justifyContent: 'center', paddingTop: '18px' }}>
+  <TooltipAnchor 
+    data-tooltip-id="my-tooltip" 
+    data-tooltip-content="Hello world!" 
+    data-tooltip-place="top"
+  >
+    ◕‿‿◕
+  </TooltipAnchor><TooltipAnchor 
+    data-tooltip-id="my-tooltip" 
+    data-tooltip-content="Hello to you too!" 
+  >
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip" />
+</div>
+
+
+### Using ReactTooltip props
+
+1 . Import `react-tooltip` after installation.
+
+```js
+import { Tooltip } from 'react-tooltip'
+```
+
+2 . Create anchor elements.
+
+```jsx
+<a className="my-anchor-element">◕‿‿◕</p>
+<a className="my-anchor-element">◕‿‿◕</p>
+<a className="my-anchor-element">◕‿‿◕</p>
+```
+
+3 . Create `<Tooltip />` element and set the `anchorSelect` prop.
+
+:::caution
+
+`anchorSelect` must be a valid CSS selector. [Click here](./examples/anchor-select.mdx) for more info.
+
+:::
+
+:::info
+
+[Click here](./options.mdx#available-props) the full list of available tooltip props.
+
+:::
+
+```jsx
+<Tooltip anchorSelect=".my-anchor-element" place="top">
+  Hello world!
+</Tooltip>
+```
+
+
+<div style={{ display: 'flex', columnGap: '8px', justifyContent: 'center', paddingTop: '18px' }}>
+  <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
+  <Tooltip anchorSelect=".my-anchor-element">
+    Hello world!
+  </Tooltip>
+</div>
+
 
 ### Clickable tooltip
 
@@ -111,22 +182,22 @@ By default, you can't interact with elements inside the tooltip. To allow for pr
 
 ```jsx
 <a id="not-clickable">◕‿‿◕</a>
-<Tooltip anchorId="not-clickable">
+<Tooltip anchorSelect="#not-clickable">
   <button>You can't click me :(</button>
 </Tooltip>
 <a id="clickable">◕‿‿◕</a>
-<Tooltip anchorId="clickable" clickable>
+<Tooltip anchorSelect="#clickable" clickable>
   <button>You can click me!</button>
 </Tooltip>
 ```
 
-<div style={{ display: 'flex', columnGap: '8px', justifyContent: 'center', paddingTop: '36px' }}>
+<div style={{ display: 'flex', columnGap: '8px', justifyContent: 'center', paddingTop: '18px' }}>
   <TooltipAnchor id="not-clickable">◕‿‿◕</TooltipAnchor>
-  <Tooltip anchorId="not-clickable">
+  <Tooltip anchorSelect="#not-clickable">
     <button>You can't click me :(</button>
   </Tooltip>
   <TooltipAnchor id="clickable">◕‿‿◕</TooltipAnchor>
-  <Tooltip anchorId="clickable" clickable>
+  <Tooltip anchorSelect="#clickable" clickable>
     <button>You can click me!</button>
   </Tooltip>
 </div>

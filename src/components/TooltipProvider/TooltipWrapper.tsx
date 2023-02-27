@@ -3,6 +3,10 @@ import classNames from 'classnames'
 import { useTooltip } from './TooltipProvider'
 import type { ITooltipWrapper } from './TooltipProviderTypes'
 
+/**
+ * @deprecated Use the `data-tooltip-id` attribute, or the `anchorSelect` prop instead.
+ * See https://react-tooltip.com/docs/getting-started
+ */
 const TooltipWrapper = ({
   tooltipId,
   children,

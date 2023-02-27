@@ -1,10 +1,10 @@
 ---
-sidebar_position: 1
+sidebar_position: 0
 ---
 
 # Basic examples
 
-Basic examples of use ReactTooltip component.
+Some basic examples of how to use the ReactTooltip component.
 
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
@@ -15,6 +15,7 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
       id={id}
       style={{
         display: 'flex',
+        margin: 'auto',
         justifyContent: 'center',
         alignItems: 'center',
         width: '60px',
@@ -33,36 +34,78 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-### Props
-
-```jsx
-import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css'
-
-<a id="props-basic"> ◕‿‿◕ </a>
-
-<Tooltip anchorId="props-basic" content="hello world!" />
-```
-
-<TooltipAnchor id="props-basic">◕‿‿◕</TooltipAnchor>
-<Tooltip anchorId="props-basic" content="hello world!" />
-
 ### Data attributes
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
-<a id="attributes-basic" data-tooltip-content="hello world!"> ◕‿‿◕ </a>
-
-<Tooltip anchorId="attributes-basic" />
+<a data-tooltip-id="my-tooltip" data-tooltip-content="Hello world!">
+  ◕‿‿◕
+</a>
+<a data-tooltip-id="my-tooltip" data-tooltip-content="Hello to you too!">
+  ◕‿‿◕
+</a>
+<Tooltip id="my-tooltip" />
 ```
 
-<TooltipAnchor id="attributes-basic" data-tooltip-content="hello world!">
-  ◕‿‿◕
-</TooltipAnchor>
-<Tooltip anchorId="attributes-basic" />
+<div style={{ display: 'flex', flexDirection: 'row', width: 'fit-content', margin: 'auto', gap: '5px' }}>
+  <TooltipAnchor data-tooltip-id="my-tooltip" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <TooltipAnchor data-tooltip-id="my-tooltip" data-tooltip-content="Hello to you too!">
+    ◕‿‿◕
+  </TooltipAnchor>
+</div>
+<Tooltip id="my-tooltip" />
 
----
+### Props
 
-To check all available options, please check `options` docs
+
+#### Using anchor element `id`
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css'
+
+<a id="my-anchor-element">◕‿‿◕</a>
+<Tooltip 
+  anchorSelect="#my-anchor-element"
+  content="Hello world!"
+/>
+```
+
+<TooltipAnchor id="my-anchor-element">◕‿‿◕</TooltipAnchor>
+<Tooltip 
+  anchorSelect="#my-anchor-element"
+  content="Hello world!"
+/>
+
+#### Using anchor elements `className`
+
+:::info
+
+Check the [Anchor select examples](./anchor-select.mdx) for more complex use cases.
+
+:::
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css'
+
+<a className="my-anchor-element">◕‿‿◕</a>
+<a className="my-anchor-element">◕‿‿◕</a>
+<Tooltip 
+  anchorSelect=".my-anchor-element"
+  content="Hello world!"
+/>
+```
+
+<div style={{ display: 'flex', flexDirection: 'row', width: 'fit-content', margin: 'auto', gap: '5px' }}>
+  <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
+</div>
+<Tooltip 
+  anchorSelect=".my-anchor-element"
+  content="Hello world!"
+/>

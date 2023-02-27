@@ -2,9 +2,15 @@
 sidebar_position: 1
 ---
 
-# Multiple anchors
+# Provider/wrapper
 
-Using multiple anchors elements with a single tooltip component.
+Using multiple anchors elements with a single ReactTooltip component.
+
+:::danger
+
+This has been deprecated. Use the `data-tooltip-id` attribute, or the `anchorSelect` prop instead. [Click here](../getting-started.mdx) for more details.
+
+:::
 
 import { Tooltip, TooltipProvider, TooltipWrapper } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
@@ -43,7 +49,7 @@ export const WithProvider = ({ children }) => {
 
 ### Setting up `<TooltipProvider />`
 
-To work with multiple anchors on a single tooltip, your component must be inside the `<TooltipProvider />`.
+To get the `<TooltipWrapper />` to work, your component must be inside the `<TooltipProvider />`.
 For simplicity, just wrap your whole application with the provider.
 
 ```jsx
@@ -95,6 +101,12 @@ import 'react-tooltip/dist/react-tooltip.css';
 </div>
 
 ### Multiple tooltips
+
+:::danger
+
+Reminder that this has been deprecated. Use the `data-tooltip-id` attribute, or the `anchorSelect` prop instead. [Click here](../getting-started.mdx) for more details.
+
+:::
 
 If you need to use multiple tooltips, each with multiple anchors, use the tooltip `id` prop, and the wrapper `tooltipId` prop.
 

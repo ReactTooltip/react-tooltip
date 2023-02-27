@@ -6,7 +6,7 @@ sidebar_position: 1
 
 How to customize tooltip styles in ReactTooltip styles.
 
-Now tooltip arrow inherit his background color from tooltip (his parent).
+Tooltip arrow inherits its background color from tooltip (its parent).
 
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
@@ -37,19 +37,22 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-### Basic explanation - Inline Styling
+### Inline Styling
 
-You can add styles into the tooltip as inline styling.
+You can add styles into the tooltip with inline styling.
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 
-<a id="custom-inline-styles" data-tooltip-content="hello world!">
+<a
+  data-tooltip-id="my-tooltip-inline"
+  data-tooltip-content="Hello world!"
+>
   ◕‿‿◕
 </a>
 <Tooltip
-  anchorId="custom-inline-styles"
+  id="my-tooltip-inline"
   style={{ backgroundColor: "rgb(0, 255, 30)", color: "#222" }}
 />
 ```
@@ -57,18 +60,17 @@ import 'react-tooltip/dist/react-tooltip.css'
 <div
   style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
 >
-  <TooltipAnchor id="custom-inline-styles" data-tooltip-content="hello world!">
+  <TooltipAnchor data-tooltip-id="my-tooltip-inline" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="custom-inline-styles" style={{ backgroundColor: "rgb(0, 255, 30)", color: "#222" }} />
+  <Tooltip id="my-tooltip-inline" style={{ backgroundColor: "rgb(0, 255, 30)", color: "#222" }} />
 </div>
 
+### Classes
 
-### Basic explanation - Classes
+You don't need to use `!important` to override the styles, take advantage of CSS Specificity instead ([MDN Docs](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity) | [W3c Docs](https://www.w3schools.com/css/css_specificity.asp)).
 
-You don't need `!important` anymore, you just need to know at least a bit about CSS Specificity ([MDN Docs](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity) | [W3c Docs](https://www.w3schools.com/css/css_specificity.asp)).
-Using CSS Specificity you can add a class with more specificity than the current used in tooltip and you can override or add new rules to the component style.
-
+Using CSS Specificity you can add a class with more specificity than the default used in tooltip so you can override or add new rules to the component style.
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
@@ -82,10 +84,13 @@ import 'react-tooltip/dist/react-tooltip.css'
 </style>
 
 <div className="example-container">
-  <a id="custom-styles" data-tooltip-content="hello world!">
+  <a
+    data-tooltip-id="my-tooltip-styles"
+    data-tooltip-content="Hello world!"
+  >
     ◕‿‿◕
   </a>
-  <Tooltip anchorId="custom-styles" className="example" />
+  <Tooltip id="my-tooltip-styles" className="example" />
 </div>
 ```
 
@@ -93,19 +98,22 @@ import 'react-tooltip/dist/react-tooltip.css'
   className="example-container"
   style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
 >
-  <TooltipAnchor id="custom-styles" data-tooltip-content="hello world!">
+  <TooltipAnchor
+    data-tooltip-id="my-tooltip-styles"
+    data-tooltip-content="Hello world!"
+  >
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="custom-styles" className="example" />
+  <Tooltip id="my-tooltip-styles" className="example" />
 </div>
 
 #### Explanation
 
-In this example, we are adding an extra level to the CSS classes, the following styles are the default one of Tooltip component when we write this docs:
+In this example, we are adding an extra level to the CSS classes. The following are the default styles for the tooltip:
 
 <CodeBlock language="css">{TooltipStyles}</CodeBlock>
 
-So, if we only add new classes like the below, this will not work because this is the same level of specificity than the default dark variant as example, you can compare:
+If we only add new classes like below, it will not work because it has the same level of specificity than the default dark variant.
 
 ```css
 .example {
@@ -119,7 +127,7 @@ So, if we only add new classes like the below, this will not work because this i
 }
 ```
 
-So, to make this work as expected, we need to add a new more level like this one:
+To make this work as expected, we need to add another level of specificity:
 
 ```css
 .some-class-or-rule .example {
@@ -133,11 +141,9 @@ So, to make this work as expected, we need to add a new more level like this one
 }
 ```
 
-Now this will work as expected.
-
 ---
 
-### More examples - Colors
+### Changing colors
 
 #### Orange
 
@@ -153,10 +159,10 @@ import 'react-tooltip/dist/react-tooltip.css'
 </style>
 
 <div className="example-container">
-  <a id="custom-styles-orange" data-tooltip-content="hello world!">
+  <a data-tooltip-id="my-tooltip-orange" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </a>
-  <Tooltip anchorId="custom-styles-orange" className="example-orange" />
+  <Tooltip id="my-tooltip-orange" className="example-orange" />
 </div>
 ```
 
@@ -164,11 +170,11 @@ import 'react-tooltip/dist/react-tooltip.css'
   className="example-container"
   style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
 >
-  <TooltipAnchor id="custom-styles-orange" data-tooltip-content="hello world!">
+  <TooltipAnchor data-tooltip-id="my-tooltip-orange" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </TooltipAnchor>
   <Tooltip
-    anchorId="custom-styles-orange"
+    id="my-tooltip-orange"
     className="example-orange"
   />
 </div>
@@ -187,10 +193,10 @@ import 'react-tooltip/dist/react-tooltip.css'
 </style>
 
 <div className="example-container">
-  <a id="custom-styles-pink" data-tooltip-content="hello world!">
+  <a data-tooltip-id="my-tooltip-pink" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </a>
-  <Tooltip anchorId="custom-styles-pink" className="example-pink" />
+  <Tooltip id="my-tooltip-pink" className="example-pink" />
 </div>
 ```
 
@@ -198,10 +204,10 @@ import 'react-tooltip/dist/react-tooltip.css'
   className="example-container"
   style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
 >
-  <TooltipAnchor id="custom-styles-pink" data-tooltip-content="hello world!">
+  <TooltipAnchor data-tooltip-id="my-tooltip-pink" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="custom-styles-pink" className="example-pink" />
+  <Tooltip id="my-tooltip-pink" className="example-pink" />
 </div>
 
 #### Tooltip Arrow with a different color from Tooltip
@@ -222,10 +228,10 @@ import 'react-tooltip/dist/react-tooltip.css'
 </style>
 
 <div className="example-container">
-  <a id="custom-styles-diff" data-tooltip-content="hello world!">
+  <a data-tooltip-id="my-tooltip-diff" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </a>
-  <Tooltip anchorId="custom-styles-diff" className="example-diff-arrow" classNameArrow="example-arrow" />
+  <Tooltip id="my-tooltip-diff" className="example-diff-arrow" classNameArrow="example-arrow" />
 </div>
 ```
 
@@ -233,13 +239,13 @@ import 'react-tooltip/dist/react-tooltip.css'
   className="example-container"
   style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
 >
-  <TooltipAnchor id="custom-styles-diff" data-tooltip-content="hello world!">
+  <TooltipAnchor data-tooltip-id="my-tooltip-diff" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="custom-styles-diff" className="example-diff-arrow" classNameArrow="example-arrow" />
+  <Tooltip id="my-tooltip-diff" className="example-diff-arrow" classNameArrow="example-arrow" />
 </div>
 
-### More examples - Radius
+### Changing the border radius
 
 #### Removing radius
 
@@ -254,10 +260,10 @@ import 'react-tooltip/dist/react-tooltip.css'
 </style>
 
 <div className="example-container">
-  <a id="custom-styles-no-radius" data-tooltip-content="hello world!">
+  <a data-tooltip-id="my-tooltip-no-radius" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </a>
-  <Tooltip anchorId="custom-styles-no-radius" className="example-no-radius" />
+  <Tooltip id="my-tooltip-no-radius" className="example-no-radius" />
 </div>
 ```
 
@@ -265,10 +271,10 @@ import 'react-tooltip/dist/react-tooltip.css'
   className="example-container"
   style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
 >
-  <TooltipAnchor id="custom-styles-no-radius" data-tooltip-content="hello world!">
+  <TooltipAnchor data-tooltip-id="my-tooltip-no-radius" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="custom-styles-no-radius" className="example-no-radius" />
+  <Tooltip id="my-tooltip-no-radius" className="example-no-radius" />
 </div>
 
 #### Rounded
@@ -284,10 +290,10 @@ import 'react-tooltip/dist/react-tooltip.css'
 </style>
 
 <div className="example-container">
-  <a id="custom-styles-rounded" data-tooltip-content="hello world!">
+  <a data-tooltip-id="my-tooltip-rounded" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </a>
-  <Tooltip anchorId="custom-styles-rounded" className="example-rounded" />
+  <Tooltip id="my-tooltip-rounded" className="example-rounded" />
 </div>
 ```
 
@@ -295,13 +301,13 @@ import 'react-tooltip/dist/react-tooltip.css'
   className="example-container"
   style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
 >
-  <TooltipAnchor id="custom-styles-rounded" data-tooltip-content="hello world!">
+  <TooltipAnchor data-tooltip-id="my-tooltip-rounded" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="custom-styles-rounded" className="example-rounded" />
+  <Tooltip id="my-tooltip-rounded" className="example-rounded" />
 </div>
 
-### More examples - Padding
+### Changing the padding
 
 #### Removing padding
 
@@ -316,10 +322,10 @@ import 'react-tooltip/dist/react-tooltip.css'
 </style>
 
 <div className="example-container">
-  <a id="custom-styles-no-padding" data-tooltip-content="hello world!">
+  <a data-tooltip-id="my-tooltip-no-padding" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </a>
-  <Tooltip anchorId="custom-styles-no-padding" className="example-no-padding" />
+  <Tooltip id="my-tooltip-no-padding" className="example-no-padding" />
 </div>
 ```
 
@@ -327,10 +333,10 @@ import 'react-tooltip/dist/react-tooltip.css'
   className="example-container"
   style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
 >
-  <TooltipAnchor id="custom-styles-no-padding" data-tooltip-content="hello world!">
+  <TooltipAnchor data-tooltip-id="my-tooltip-no-padding" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="custom-styles-no-padding" className="example-no-padding" />
+  <Tooltip id="my-tooltip-no-padding" className="example-no-padding" />
 </div>
 
 #### Adding more padding
@@ -346,10 +352,10 @@ import 'react-tooltip/dist/react-tooltip.css'
 </style>
 
 <div className="example-container">
-  <a id="custom-styles-padding" data-tooltip-content="hello world!">
+  <a data-tooltip-id="my-tooltip-padding" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </a>
-  <Tooltip anchorId="custom-styles-padding" className="example-padding" />
+  <Tooltip id="my-tooltip-padding" className="example-padding" />
 </div>
 ```
 
@@ -357,14 +363,16 @@ import 'react-tooltip/dist/react-tooltip.css'
   className="example-container"
   style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
 >
-  <TooltipAnchor id="custom-styles-padding" data-tooltip-content="hello world!">
+  <TooltipAnchor data-tooltip-id="my-tooltip-padding" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="custom-styles-padding" className="example-padding" />
+  <Tooltip id="my-tooltip-padding" className="example-padding" />
 </div>
 
-#### Observation
+----
 
-With CSS specificity everything can be overridden if you know what are you doing.
+:::info
 
-The necessity of `!important` was removed because `!important` cut a lot of levels/possibilities related to CSS specificity.
+In summary, if you do it correctly you can use CSS specificity instead of `!important`.
+
+:::

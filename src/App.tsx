@@ -1,46 +1,10 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { TooltipController as Tooltip } from 'components/TooltipController'
-import { TooltipProvider, TooltipWrapper } from 'components/TooltipProvider'
 import { IPosition } from 'components/Tooltip/TooltipTypes.d'
 import { useState } from 'react'
+import { inline, offset } from '@floating-ui/dom'
 import styles from './styles.module.css'
-import { inline, offset } from './index'
-
-function WithProviderMinimal() {
-  return (
-    <section style={{ marginTop: '50px' }}>
-      <p>
-        <TooltipWrapper place="bottom" content="Shared Global Tooltip">
-          <button>Minimal 1</button>
-        </TooltipWrapper>
-        <TooltipWrapper place="right" content="Shared Global Tooltip">
-          <button>Minimal 2</button>
-        </TooltipWrapper>
-      </p>
-      <Tooltip clickable>
-        <button>button</button>
-      </Tooltip>
-    </section>
-  )
-}
-
-function WithProviderMultiple() {
-  return (
-    <section style={{ marginTop: '50px' }}>
-      <p>
-        <TooltipWrapper tooltipId="tooltip-1" place="bottom">
-          <button>Multiple 1</button>
-        </TooltipWrapper>
-        <TooltipWrapper tooltipId="tooltip-2" place="right">
-          <button>Multiple 2</button>
-        </TooltipWrapper>
-      </p>
-      <Tooltip id="tooltip-1" content="Tooltip 1" />
-      <Tooltip id="tooltip-2" content="Tooltip 2" />
-    </section>
-  )
-}
 
 function App() {
   const [anchorId, setAnchorId] = useState('button')
@@ -54,26 +18,22 @@ function App() {
     setPosition({ x, y })
   }
 
+  const handleButtonClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    const target = event.target as HTMLElement
+    setAnchorId(target.id)
+  }
+
   return (
     <main className={styles['main']}>
       <button
         id="button"
         aria-describedby="tooltip"
         data-tooltip-content="My big tooltip content 1"
-        onClick={() => {
-          setAnchorId('button')
-        }}
+        onClick={handleButtonClick}
       >
         My button
       </button>
-      <Tooltip
-        place="bottom"
-        anchorId={anchorId}
-        // only shown if `data-tooltip-content` is unset
-        content={`Showing tooltip on ${anchorId}`}
-        isOpen={isDarkOpen}
-        setIsOpen={setIsDarkOpen}
-      />
+      <Tooltip place="bottom" anchorId={anchorId} isOpen={isDarkOpen} setIsOpen={setIsDarkOpen} />
       <Tooltip
         place="top"
         variant="success"
@@ -103,29 +63,36 @@ function App() {
           <button
             id="button2"
             data-tooltip-content="Hello World from a Tooltip 2"
-            onClick={() => {
-              setAnchorId('button2')
-            }}
+            onClick={handleButtonClick}
           >
             Hover or focus me
           </button>
           <button
             id="button3"
             data-tooltip-content="Hello World from a Tooltip 3"
-            onClick={() => {
-              setAnchorId('button3')
-            }}
+            onClick={handleButtonClick}
           >
             Hover or focus me 2
           </button>
         </p>
       </section>
-      <TooltipProvider>
-        <WithProviderMinimal />
-      </TooltipProvider>
-      <TooltipProvider>
-        <WithProviderMultiple />
-      </TooltipProvider>
+      <section id="section-anchor-select" style={{ marginTop: '100px' }}>
+        <p>
+          <button data-tooltip-id="anchor-select" data-tooltip-content="this content is different">
+            Anchor select
+          </button>
+          <button data-tooltip-id="anchor-select">Anchor select 2</button>
+          <button data-tooltip-id="anchor-select">Anchor select 3</button>
+        </p>
+        <Tooltip id="anchor-select">Tooltip content</Tooltip>
+        <Tooltip
+          anchorSelect="section[id='section-anchor-select'] > p > button"
+          place="bottom"
+          events={['click']}
+        >
+          Tooltip content
+        </Tooltip>
+      </section>
       <div style={{ display: 'flex', gap: '12px', flexDirection: 'row' }}>
         <div>
           <div

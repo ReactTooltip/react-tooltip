@@ -20,7 +20,12 @@ export interface ITooltipController {
   offset?: number
   id?: string
   variant?: VariantType
+  /**
+   * @deprecated Use the `data-tooltip-id` attribute, or the `anchorSelect` prop instead.
+   * See https://react-tooltip.com/docs/getting-started
+   */
   anchorId?: string
+  anchorSelect?: string
   wrapper?: WrapperType
   children?: ChildrenType
   events?: EventsType[]
@@ -42,6 +47,7 @@ export interface ITooltipController {
 
 declare module 'react' {
   interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
+    'data-tooltip-id'?: string
     'data-tooltip-place'?: PlacesType
     'data-tooltip-content'?: string
     'data-tooltip-html'?: string

@@ -2,15 +2,15 @@
   "files": [
     {
       "path": "./dist/react-tooltip.cjs.min.js",
-      "maxSize": "14 kB"
+      "maxSize": "13.5 kB"
     },
     {
       "path": "./dist/react-tooltip.esm.min.js",
-      "maxSize": "14 kB"
+      "maxSize": "13.5 kB"
     },
     {
       "path": "./dist/react-tooltip.umd.min.js",
-      "maxSize": "14 kB"
+      "maxSize": "13.5 kB"
     }
   ]
 }

@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Options
 
-All available prop and data-attribute options of ReactTooltip.
+All available data attributes for the anchor element and props for the tooltip component.
 
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
@@ -16,6 +16,7 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
       style={{
         display: 'flex',
         justifyContent: 'center',
+        margin: 'auto',
         alignItems: 'center',
         width: '60px',
         height: '60px',
@@ -33,79 +34,93 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-### Props
-
-```jsx
-import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css'
-
-<a id="props-basic"> ◕‿‿◕ </a>
-
-<Tooltip anchorId="props-basic" content="hello world!" />
-```
-
-<TooltipAnchor id="props-basic">◕‿‿◕</TooltipAnchor>
-<Tooltip anchorId="props-basic" content="hello world!" />
-
-#### Available props
-
-| name             | type                       | required | default                   | values                                            | description                                                                                                                                                     |
-| ---------------- | -------------------------- | -------- | ------------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| className        | string                     | false    |                           |                                                   | class name to customize tooltip element                                                                                                                         |
-| classNameArrow   | string                     | false    |                           |                                                   | class name to customize tooltip arrow element                                                                                                                   |
-| content          | string                     | false    |                           |                                                   | content to de displayed in tooltip (`content` prop is priorized over `html`)                                                                                    |
-| html             | string                     | false    |                           |                                                   | html content to de displayed in tooltip                                                                                                                         |
-| place            | string                     | false    | `top`                     | `top` `right` `bottom` `left`                     | place related to anchor element where the tooltip will be rendered if possible                                                                                  |
-| offset           | number                     | false    | `10`                      | any `number`                                      | space between the tooltip element and anchor element (arrow not included in calc)                                                                               |
-| id               | string                     | false    |                           | any `string`                                      | set an internal tooltip id. required when using [multiple tooltips with a provider](./examples/multiple-anchors.mdx)                                            |
-| anchorId         | string                     | false    | `undefined`               | any `string`                                      | id reference from the element that the tooltip will be positioned around                                                                                        |
-| variant          | string                     | false    | `dark`                    | `dark` `light` `success` `warning` `error` `info` | change the colors of tooltip with pre-defined values                                                                                                            |
-| wrapper          | valid element              | false    | `div`                     | `ElementType` `div` `span`                        | element wrapper of tooltip container, can be `div`, `span` or any valid Element                                                                                 |
-| children         | valid React children       | false    | `undefined`               | valid React children                              | content can be pass through props, data-attributes or as children, children will be priorized over other options                                                |
-| events           | array                      | false    | `hover`                   | `hover` `click`                                   | pre-defined events to handle show or hide tooltip                                                                                                               |
-| positionStrategy | string                     | false    | `absolute`                | `absolute` `fixed`                                | the position strategy used for the tooltip. set to `fixed` if you run into issues with `overflow: hidden` on the tooltip parent container                       |
-| delayShow        | number                     | false    |                           | any `number`                                      | tooltip show will be delayed in miliseconds by the amount of value                                                                                              |
-| delayHide        | number                     | false    |                           | any `number`                                      | tooltip hide will be delayed in miliseconds by the amount of value                                                                                              |
-| float            | boolean                    | false    | `false`                   | `true` `false`                                    | tooltip will follow the mouse position when it moves inside the anchor element (same as V4's `effect="float"`)                                                  |
-| noArrow          | boolean                    | false    | `false`                   | `true` `false`                                    | tooltip arrow will not be shown                                                                                                                                 |
-| clickable        | boolean                    | false    | `false`                   | `true` `false`                                    | allow interaction with elements inside the tooltip. useful when using buttons and inputs                                                                        |
-| closeOnEsc       | boolean                    | false    | `false`                   | `true` `false`                                    | pressing escape key will close the tooltip                                                                                                                      |
-| style            | CSSProperties              | false    |                           | any React inline style                            | add styles directly to the component by `style` attribute                                                                                                       |
-| position         | `{ x: number; y: number }` | false    |                           | any `number` value for both `x` and `y`           | override the tooltip position on the viewport                                                                                                                   |
-| isOpen           | boolen                     | false    | handled by internal state | `true` `false`                                    | the tooltip can be controlled or uncontrolled, this attribute can be used to handle show and hide tooltip outside tooltip (can be used **without** `setIsOpen`) |
-| setIsOpen        | function                   | false    |                           |                                                   | the tooltip can be controlled or uncontrolled, this attribute can be used to handle show and hide tooltip outside tooltip                                       |
-| afterShow        | function                   | false    |                           |                                                   | a function to be called after the tooltip is shown                                                                                                              |
-| afterHide        | function                   | false    |                           |                                                   | a function to be called after the tooltip is hidden                                                                                                             |
-| middlewares      | array                      | false    |                           | array of valid `floating-ui` middlewares          | allows for advanced customization. check the [`floating-ui` docs](https://floating-ui.com/docs/middleware) for more information                                 |
-
 ### Data attributes
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
-<a id="attributes-basic" data-tooltip-content="hello world!"> ◕‿‿◕ </a>
-
-<Tooltip anchorId="attributes-basic" />
+<a 
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="Hello world!"
+>
+  ◕‿‿◕
+</a>
+<Tooltip id="my-tooltip" />
 ```
 
-<TooltipAnchor id="attributes-basic" data-tooltip-content="hello world!">
+<TooltipAnchor 
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="Hello world!"
+>
   ◕‿‿◕
 </TooltipAnchor>
-<Tooltip anchorId="attributes-basic" />
+<Tooltip id="my-tooltip" />
 
 #### Available attributes
 
 | name                           | type    | required | default    | values                                            | description                                                                                                                               |
 | ------------------------------ | ------- | -------- | ---------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| data-tooltip-content           | string  | false    |            |                                                   | content to de displayed in tooltip (`content` prop is priorized over `html`)                                                              |
-| data-tooltip-html              | string  | false    |            |                                                   | html content to de displayed in tooltip                                                                                                   |
-| data-tooltip-place             | string  | false    | `top`      | `top` `right` `bottom` `left`                     | place related to anchor element where the tooltip will be rendered if possible                                                            |
-| data-tooltip-offset            | number  | false    | `10`       | any `number`                                      | space between the tooltip element and anchor element (arrow not included in calc)                                                         |
-| data-tooltip-variant           | string  | false    | `dark`     | `dark` `light` `success` `warning` `error` `info` | change the colors of tooltip with pre-defined values                                                                                      |
-| data-tooltip-wrapper           | string  | false    | `div`      | `div` `span`                                      | element wrapper of tooltip container, can be `div`, `span` or any valid Element                                                           |
-| data-tooltip-events            | string  | false    | `hover`    | `hover click` `hover` `click`                     | pre-defined events to handle show or hide tooltip                                                                                         |
-| data-tooltip-position-strategy | string  | false    | `absolute` | `absolute` `fixed`                                | the position strategy used for the tooltip. set to `fixed` if you run into issues with `overflow: hidden` on the tooltip parent container |
-| data-tooltip-show              | number  | false    |            | any `number`                                      | tooltip show will be delayed in miliseconds by the amount of value                                                                        |
-| data-tooltip-hide              | number  | false    |            | any `number`                                      | tooltip hide will be delayed in miliseconds by the amount of value                                                                        |
-| data-tooltip-float             | boolean | false    | `false`    | `true` `false`                                    | tooltip will follow the mouse position when it moves inside the anchor element (same as V4's `effect="float"`)                            |
+| data-tooltip-id                | string  | false    |            |                                                   | The id set on the tooltip element (same as V4's `data-for`)                                                                               |
+| data-tooltip-content           | string  | false    |            |                                                   | Content to de displayed in tooltip (`html` is priorized over `content`)                                                                   |
+| data-tooltip-html              | string  | false    |            |                                                   | HTML content to de displayed in tooltip                                                                                                   |
+| data-tooltip-place             | string  | false    | `top`      | `top` `right` `bottom` `left`                     | Position relative to the anchor element where the tooltip will be rendered (if possible)                                                  |
+| data-tooltip-offset            | number  | false    | `10`       | any `number`                                      | Space between the tooltip element and anchor element (arrow not included in calculation)                                                  |
+| data-tooltip-variant           | string  | false    | `dark`     | `dark` `light` `success` `warning` `error` `info` | Change the tooltip style with default presets                                                                                             |
+| data-tooltip-wrapper           | string  | false    | `div`      | `div` `span`                                      | Element wrapper for the tooltip container, can be `div`, `span`, `p` or any valid HTML tag                                                |
+| data-tooltip-events            | string  | false    | `hover`    | `hover click` `hover` `click`                     | Events to watch for when handling the tooltip state                                                                                       |
+| data-tooltip-position-strategy | string  | false    | `absolute` | `absolute` `fixed`                                | The position strategy used for the tooltip. Set to `fixed` if you run into issues with `overflow: hidden` on the tooltip parent container |
+| data-tooltip-show              | number  | false    |            | any `number`                                      | The delay (in ms) before showing the tooltip                                                                                              |
+| data-tooltip-hide              | number  | false    |            | any `number`                                      | The delay (in ms) before hiding the tooltip                                                                                               |
+| data-tooltip-float             | boolean | false    | `false`    | `true` `false`                                    | Tooltip will follow the mouse position when it moves inside the anchor element (same as V4's `effect="float"`)                            |
+
+### Props
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css'
+
+<a id="my-anchor-element">◕‿‿◕</a>
+<Tooltip 
+  anchorSelect="#my-anchor-element" 
+  content="Hello world!" 
+/>
+```
+
+<TooltipAnchor id="my-anchor-element">◕‿‿◕</TooltipAnchor>
+<Tooltip 
+  anchorSelect="#my-anchor-element"
+  content="Hello world!" 
+/>
+
+#### Available props
+
+| name               | type                       | required  | default                   | values                                            | description                                                                                                                                                     |
+| ------------------ | -------------------------- | --------- | ------------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `className`        | `string`                   | no        |                           |                                                   | Class name to customize tooltip element                                                                                                                         |
+| `classNameArrow`   | `string`                   | no        |                           |                                                   | Class name to customize tooltip arrow element                                                                                                                   |
+| `content`          | `string`                   | no        |                           |                                                   | Content to de displayed in tooltip (`html` prop is priorized over `content`)                                                                                    |
+| `html`             | `string`                   | no        |                           |                                                   | HTML content to de displayed in tooltip                                                                                                                         |
+| `place`            | `string`                   | no        | `top`                     | `top` `right` `bottom` `left`                     | Position relative to the anchor element where the tooltip will be rendered (if possible)                                                                        |
+| `offset`           | `number`                   | no        | `10`                      | any `number`                                      | Space between the tooltip element and anchor element (arrow not included in calculation)                                                                        |
+| `id`               | `string`                   | no        |                           | any `string`                                      | The tooltip id. Must be set when using `data-tooltip-id` on the anchor element                                                                                  |
+| ~~`anchorId`~~     | ~~`string`~~               | ~~no~~    |                           | ~~any `string`~~                                  | ~~The id for the anchor element for the tooltip~~ <br/>**DEPRECATED**<br/>Use `data-tooltip-id` or `anchorSelect` instead                                                            |
+| `anchorSelect`     | CSS selector               | no        |                           | any valid CSS selector                            | The selector for the anchor elements. Check [the examples](./examples/anchor-select.mdx) for more details                                                      |
+| `variant`          | `string`                   | no        | `dark`                    | `dark` `light` `success` `warning` `error` `info` | Change the tooltip style with default presets                                                                                                            |
+| `wrapper`          | HTML tag                   | no        | `div`                     | `div` `span` `p` ...                              | Element wrapper for the tooltip container, can be `div`, `span`, `p` or any valid HTML tag                                                                           |
+| `children`         | React node                 | no        | `undefined`               | valid React children                              | The tooltip children have lower priority compared to the `content` prop and the `data-tooltip-content` attribute. Useful for setting default content            |
+| `events`           | `string[]`                 | no        | `hover`                   | `hover` `click`                                   | Events to watch for when handling the tooltip state                                                                                                             |
+| `positionStrategy` | `string`                   | no        | `absolute`                | `absolute` `fixed`                                | The position strategy used for the tooltip. Set to `fixed` if you run into issues with `overflow: hidden` on the tooltip parent container                       |
+| `delayShow`        | `number`                   | no        |                           | any `number`                                      | The delay (in ms) before showing the tooltip                                                                                                                    |
+| `delayHide`        | `number`                   | no        |                           | any `number`                                      | The delay (in ms) before hiding the tooltip                                                                                                                     |
+| `float`            | `boolean`                  | no        | `false`                   | `true` `false`                                    | Tooltip will follow the mouse position when it moves inside the anchor element (same as V4's `effect="float"`)                                                  |
+| `noArrow`          | `boolean`                  | no        | `false`                   | `true` `false`                                    | Tooltip arrow will not be shown                                                                                                                                 |
+| `clickable`        | `boolean`                  | no        | `false`                   | `true` `false`                                    | Allow interaction with elements inside the tooltip. Useful when using buttons and inputs                                                                        |
+| `closeOnEsc`       | `boolean`                  | no        | `false`                   | `true` `false`                                    | Pressing escape key will close the tooltip                                                                                                                      |
+| `style`            | `CSSProperties`            | no        |                           | a React inline style                              | Add inline styles directly to the tooltip                                                                                                                       |
+| `position`         | `{ x: number; y: number }` | no        |                           | any `number` value for both `x` and `y`           | Override the tooltip position on the DOM                                                                                                                        |
+| `isOpen`           | `boolen`                   | no        | handled by internal state | `true` `false`                                    | The tooltip can be controlled or uncontrolled, this attribute can be used to handle show and hide tooltip outside tooltip (can be used **without** `setIsOpen`) |
+| `setIsOpen`        | `function`                 | no        |                           |                                                   | The tooltip can be controlled or uncontrolled, this attribute can be used to handle show and hide tooltip outside tooltip                                       |
+| `afterShow`        | `function`                 | no        |                           |                                                   | A function to be called after the tooltip is shown                                                                                                              |
+| `afterHide`        | `function`                 | no        |                           |                                                   | A function to be called after the tooltip is hidden                                                                                                             |
+| `middlewares`      | `Middleware[]`             | no        |                           | array of valid `floating-ui` middlewares          | Allows for advanced customization. Check the [`floating-ui` docs](https://floating-ui.com/docs/middleware) for more information                                 |

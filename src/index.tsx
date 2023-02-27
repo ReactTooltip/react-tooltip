@@ -13,7 +13,6 @@ import type {
 import type { ITooltipController } from './components/TooltipController/TooltipControllerTypes'
 import type { ITooltipWrapper } from './components/TooltipProvider/TooltipProviderTypes'
 
-export { offset, inline, shift, flip, autoPlacement, size } from '@floating-ui/dom'
 export { TooltipController as Tooltip } from './components/TooltipController'
 export { TooltipProvider, TooltipWrapper } from './components/TooltipProvider'
 export type {

@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Variant
 
-Standard colors available in ReactTooltip styles.
+Default color stylings available for the ReactTooltip component.
 
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
@@ -33,68 +33,64 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-`variant` available values `dark` | `light` | `success` | `warning` | `error` | `info`
+`variant` can be one of `'dark' | 'light' | 'success' | 'warning' | 'error' | 'info'`
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
 <a
-  id="attributes-variant"
-  data-tooltip-content="hello world!"
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="Hello world!"
   data-tooltip-variant="success"
-> ◕‿‿◕ </a>
-
-<Tooltip anchorId="attributes-variant" />
+>
+  ◕‿‿◕
+</a>
+<Tooltip id="my-tooltip" />
 ```
 
 <div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}>
   <TooltipAnchor
-    id="attributes-variant-success"
-    data-tooltip-content="success tooltip color"
+    data-tooltip-id="my-tooltip"
+    data-tooltip-content="Success tooltip variant"
     data-tooltip-variant="success"
   >
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="attributes-variant-success" />
   <TooltipAnchor
-    id="attributes-variant-error"
-    data-tooltip-content="error tooltip color"
+    data-tooltip-id="my-tooltip"
+    data-tooltip-content="Error tooltip variant"
     data-tooltip-variant="error"
   >
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="attributes-variant-error" />
   <TooltipAnchor
-    id="attributes-variant-warning"
-    data-tooltip-content="warning tooltip color"
+    data-tooltip-id="my-tooltip"
+    data-tooltip-content="Warning tooltip variant"
     data-tooltip-variant="warning"
   >
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="attributes-variant-warning" />
-  <Tooltip anchorId="attributes-variant-info" />
   <TooltipAnchor
-    id="attributes-variant-info"
-    data-tooltip-content="info tooltip color"
+    data-tooltip-id="my-tooltip"
+    data-tooltip-content="Info tooltip variant"
     data-tooltip-variant="info"
   >
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="attributes-variant-dark" />
   <TooltipAnchor
-    id="attributes-variant-dark"
-    data-tooltip-content="dark tooltip color"
+    data-tooltip-id="my-tooltip"
+    data-tooltip-content="Dark tooltip variant"
     data-tooltip-variant="dark"
   >
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip anchorId="attributes-variant-light" />
   <TooltipAnchor
-    id="attributes-variant-light"
-    data-tooltip-content="light tooltip color"
+    data-tooltip-id="my-tooltip"
+    data-tooltip-content="Light tooltip variant"
     data-tooltip-variant="light"
   >
     ◕‿‿◕
   </TooltipAnchor>
+  <Tooltip id="my-tooltip" />
 </div>

@@ -4,11 +4,14 @@ sidebar_position: 1
 
 # Changelog V4 -> V5
 
-If you are using V4 and want to use V5, please read this doc.
+If you are using V4 and want to upgrade to V5, you can see what changed below.
 
 ## From V4 to V5
 
-V4 was a great react tooltip component but was built a few years ago, he was built with react class components and it's hard to maintain and to the community give contributions, so, with this in mind, we build a new version of react tooltip using [floating-ui](https://floating-ui.com/) behind the scenes. This gives a great improvement in performance and in a new and easier code to let the community contribute to the project.
+V4 was a great react tooltip component but was built a while ago using React class components, whick makes it hard to maintain, and for the community give contributions.
+
+With this in mind, we built a new version of ReactTooltip using [floating-ui](https://floating-ui.com/) behind the scenes. 
+This resulted in a great improvement in performance, and made it easier for the community to contribute to the project.
 
 ## Improvements
 
@@ -22,11 +25,12 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 - All data attributes are now prefixed with `data-tooltip-`
 - Default Padding changed from `padding: 8px 21px;` to `padding: 8px 16px;`
 - Exported module now is `Tooltip` instead of `ReactTooltip`
-- - If you already have a `Tooltip` component in your application and want to explicitly declare this is `ReactTooltip`, just `import { Tooltip as ReactTooltip } from "react-tooltip"`
+- If you already have a `Tooltip` component in your application and want to explicitly declare this as `ReactTooltip`, just `import { Tooltip as ReactTooltip } from "react-tooltip"`
 - CSS import is now optional, so you can modify and/or add any styling to your floating tooltip element
+- `data-for` attribute now is `data-tooltip-id`
 - `data-tip` attribute now is `data-tooltip-content`
 - `getContent` prop was removed. Instead, you can directly pass dynamic content to the `content` tooltip prop, or to `data-tooltip-content` in the anchor element
-- Default behavior of tooltip now is equivalent to V4's `solid` effect, instead of `float`. The new `float` prop can be set to achieve V4's `effect="float"`. See [Options](../options.mdx) for more details.
+- Default behavior of tooltip now is equivalent to V4's `solid` effect, instead of `float`. The new `float` prop can be set to achieve V4's `effect="float"`. See [Options](../options.mdx) for more details
 
 ## New Props
 
@@ -54,33 +58,33 @@ V4 was a great react tooltip component but was built a few years ago, he was bui
 - [ ] `arrowColor` - use `className` and custom CSS
 - [ ] `arrowRadius` - use `className` and custom CSS
 - [ ] `tooltipRadius` - use `className` and custom CSS
-- [ ] `insecure` - CSS will be a separate file and can be imported or not
+- [ ] `insecure`
 - [x] `className`
 - [x] `id`
 - [x] `html`
 - [x] `delayHide` - also available on anchor element as `data-delay-hide`
-- [ ] `delayUpdate` - if requested, can be implemented later
+- [ ] `delayUpdate` - can be implemented if requested
 - [x] `delayShow` - also available on anchor element as `data-delay-show`
 - [ ] `event`
 - [ ] `eventOff`
 - [ ] `isCapture`
 - [ ] `globalEventOff`
-- [ ] `getContent` - use dynamic `content`
+- [ ] `getContent` - pass dynamic values to `content` instead
 - [x] `afterShow`
 - [x] `afterHide`
 - [ ] `overridePosition` - use `position`
-- [ ] `disable` - state can be controlled or uncontrolled
-- [ ] `scrollHide` - if requested, can be implemented later
-- [ ] `resizeHide` - if requested, can be implemented later
+- [ ] `disable`
+- [ ] `scrollHide` - can be implemented if requested
+- [ ] `resizeHide` - can be implemented if requested
 - [x] `wrapper` - also available on anchor element as `data-tooltip-wrapper`
 - [ ] `bodyMode`
 - [x] `clickable`
-- [ ] `disableInternalStyle` - CSS will be a separate file and can be imported or not
+- [ ] `disableInternalStyle`
 
 ### Detailed informations
 
-- [The Pull Request of V5](https://github.com/ReactTooltip/react-tooltip/pull/820)
+- [The V5 pull request](https://github.com/ReactTooltip/react-tooltip/pull/820).
 
 ---
 
-Please see [all V5 Options here](../options.mdx).
+Check [all V5 options here](../options.mdx).

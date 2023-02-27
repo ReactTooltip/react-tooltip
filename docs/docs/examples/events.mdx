@@ -16,6 +16,7 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
       style={{
         display: 'flex',
         justifyContent: 'center',
+        margin: 'auto',
         alignItems: 'center',
         width: '60px',
         height: '60px',
@@ -33,34 +34,65 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
+:::note
+
+In a previous version, `click` had a different behavior, so it made sense to be enabled alongside `hover`.
+Since that's changed, enabling both events `events={['hover', 'click']}` has the same effect of simply enabling `hover`.
+
+In the future, we should simply have a prop to enable `click` mode.
+
+:::
+
 ### Using `hover`
 
-This is the default of ReactTooltip events options.
+:::info
+
+This is the default event option, so it doesn't have to be manually set.
+
+:::
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
-<a id="tooltip-anchor"> ◕‿‿◕ </a>
-<Tooltip anchorId="tooltip-anchor" content="Hello World!" events={['hover']} />
+<a data-tooltip-id="my-tooltip"> ◕‿‿◕ </a>
+<Tooltip 
+  id="my-tooltip"
+  content="Hello world!"
+  events={['hover']}
+/>
 ```
 
-<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
-  <TooltipAnchor id="tooltip-anchor">◕‿‿◕</TooltipAnchor>
-  <Tooltip anchorId="tooltip-anchor" content="Hello World!" events={['hover']} />
-</div>
+<TooltipAnchor data-tooltip-id="my-tooltip">◕‿‿◕</TooltipAnchor>
+<Tooltip
+  id="my-tooltip"
+  content="Hello world!"
+  events={['hover']}
+/>
 
 ### Using `click`
 
+:::info
+
+Clicking anywhere outside the anchor element will close the tooltip.
+
+:::
+
 ```jsx
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
-<a id="tooltip-anchor-click"> ◕‿‿◕ </a>
-<Tooltip anchorId="tooltip-anchor-click" content="Hello World!" events={['click']} />
+<a data-tooltip-id="my-tooltip"> ◕‿‿◕ </a>
+<Tooltip 
+  id="my-tooltip-click"
+  content="Hello world!"
+  events={['click']}
+/>
 ```
 
-<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
-  <TooltipAnchor id="tooltip-anchor-click">◕‿‿◕</TooltipAnchor>
-  <Tooltip anchorId="tooltip-anchor-click" content="Hello World!" events={['click']} />
-</div>
+<TooltipAnchor data-tooltip-id="my-tooltip-click">◕‿‿◕</TooltipAnchor>
+<Tooltip
+  id="my-tooltip-click"
+  content="Hello world!"
+  events={['click']}
+/>

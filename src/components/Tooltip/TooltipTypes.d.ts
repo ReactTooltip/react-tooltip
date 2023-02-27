@@ -1,7 +1,4 @@
 import type { ElementType, ReactNode, CSSProperties } from 'react'
-import type { Middleware } from '@floating-ui/dom'
-
-export type { Middleware }
 
 export type PlacesType = 'top' | 'right' | 'bottom' | 'left'
 
@@ -28,6 +25,12 @@ export type DataAttribute =
   | 'delay-hide'
   | 'float'
 
+/**
+ * @description floating-ui middleware
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Middleware = any
+
 export interface IPosition {
   x: number
   y: number
@@ -42,7 +45,12 @@ export interface ITooltip {
   offset?: number
   id?: string
   variant?: VariantType
+  /**
+   * @deprecated Use the `data-tooltip-id` attribute, or the `anchorSelect` prop instead.
+   * See https://react-tooltip.com/docs/getting-started
+   */
   anchorId?: string
+  anchorSelect?: string
   wrapper: WrapperType
   children?: ChildrenType
   events?: EventsType[]
@@ -60,4 +68,6 @@ export interface ITooltip {
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
   afterHide?: () => void
+  activeAnchor: HTMLElement | null
+  setActiveAnchor: (anchor: HTMLElement | null) => void
 }

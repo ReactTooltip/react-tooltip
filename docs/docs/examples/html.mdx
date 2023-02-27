@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # HTML
 
-HTML content in ReactTooltip component.
+Using HTML content in ReactTooltip component.
 
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
@@ -16,6 +16,7 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
       style={{
         display: 'flex',
         justifyContent: 'center',
+        margin: 'auto',
         alignItems: 'center',
         width: '60px',
         height: '60px',
@@ -33,43 +34,57 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-### Using `html`
+### Using `data-tooltip-html` attribute
 
-```jsx
-import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
+:::info
 
-<a id="tooltip-anchor"> ◕‿‿◕ </a>
-<Tooltip anchorId="tooltip-anchor" html="Hello<br /><s>multiline</s><br /><b>HTML</b><br />tooltip" place="left" />
-```
+You can also use [`renderToStaticMarkup()`](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to render HTML/JSX.
 
-<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
-  <TooltipAnchor id="tooltip-anchor">◕‿‿◕</TooltipAnchor>
-  <Tooltip
-    anchorId="tooltip-anchor"
-    html="Hello<br /><s>multiline</s><br /><b>HTML</b><br />tooltip"
-  />
-</div>
-
-### Using `data-tooltip-html`
+:::
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
 <a
-  id="tooltip-anchor-data-html"
-  data-tooltip-html="<div><h1>Tooltip</h1><ul><li>Lorem</li><li>Ipsum</li></ul></div>"
-> ◕‿‿◕ </a>
-<Tooltip anchorId="tooltip-anchor-data-html" />
+  data-tooltip-id="my-tooltip-data-html"
+  data-tooltip-html="<div><h3>Cool stuff</h3><ul><li>This is cool</li><li>This too</li></ul></div>"
+>
+  ◕‿‿◕
+</a>
+<Tooltip id="my-tooltip-data-html" />
 ```
 
-<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
-  <TooltipAnchor
-    id="tooltip-anchor-html"
-    data-tooltip-html="<div><h1>Tooltip</h1><ul><li>Lorem</li><li>Ipsum</li></ul></div>"
-  >
-    ◕‿‿◕
-  </TooltipAnchor>
-  <Tooltip anchorId="tooltip-anchor-html" />
-</div>
+<TooltipAnchor
+  data-tooltip-id="my-tooltip-data-html"
+  data-tooltip-html="<div><h3>Cool stuff</h3><ul><li>This is cool</li><li>This too</li></ul></div>"
+>
+  ◕‿‿◕
+</TooltipAnchor>
+<Tooltip id="my-tooltip-data-html" />
+
+
+### Using `html` prop
+
+:::info
+
+You should probably pass the content as children to the tooltip instead.
+
+:::
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
+
+<a data-tooltip-id="my-tooltip-html-prop">◕‿‿◕</a>
+<Tooltip 
+  id="my-tooltip-html-prop"
+  html="Hello<br /><s>multiline</s><br /><b>HTML</b><br />tooltip"
+/>
+```
+
+<TooltipAnchor data-tooltip-id="my-tooltip-html-prop">◕‿‿◕</TooltipAnchor>
+<Tooltip 
+  id="my-tooltip-html-prop"
+  html="Hello<br /><s>multiline</s><br /><b>HTML</b><br />tooltip"
+/>

@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # Basic examples V4 -> V5
 
-Examples of use in V4 -> V5
+Examples of use in V4 -> V5.
 
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
@@ -15,6 +15,7 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
       id={id}
       style={{
         display: 'flex',
+        margin: 'auto',
         justifyContent: 'center',
         alignItems: 'center',
         width: '60px',
@@ -33,89 +34,117 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
+The main changes you should be aware of is the new names for the data attributes.
+
+| V4         | V5                     |
+| ---------- | ---------------------- |
+| `data-for` | `data-tooltip-id`      |
+| `data-tip` | `data-tooltip-content` |
+
 ### V4 or less
 
 ```jsx
 import ReactTooltip from 'react-tooltip';
 
-<a data-tip="hello world!" data-for="tooltip"> ◕‿‿◕ </a>
-
-<ReactTooltip id="tooltip" place="top" type="dark" />
+<a
+  data-tip="Hello world!"
+  data-for="tooltip"
+>
+  ◕‿‿◕
+</a>
+<ReactTooltip id="tooltip" place="top" />
 ```
 
-(v4) `data-tip` = `data-tooltip-content` (v5)
+### V5 using data attributes
 
-- `V4` - CSS styles are built-in and injected by tooltip into the header (not a good practice but convenient), [issues in GitHub](https://github.com/ReactTooltip/react-tooltip/issues?q=is%3Aissue+header)
-- `V5` - CSS styles are optional and can be imported or not to the project
+```jsx
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
 
-### V5 - props option
+<a 
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="Hello world!"
+>
+  ◕‿‿◕
+</a>
+<Tooltip id="my-tooltip" place="top" />
+```
+
+<TooltipAnchor
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="Hello world!"
+>
+  ◕‿‿◕
+</TooltipAnchor>
+<Tooltip id="my-tooltip" place="top" />
+
+### V5 using tooltip props
+
+:::info
+
+Don't forget to check [the examples](../examples/basic-examples) for more details!
+
+:::
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css'
 
-<a id="props-basic"> ◕‿‿◕ </a>
-
-<Tooltip anchorId="props-basic" content="hello world!" />
+<a className="my-anchor-element">◕‿‿◕</a>
+<a className="my-anchor-element">◕‿‿◕</a>
+<Tooltip anchorSelect=".my-anchor-element" content="Hello world!" />
 ```
 
-<TooltipAnchor id="props-basic">◕‿‿◕</TooltipAnchor>
-<Tooltip anchorId="props-basic" content="hello world!" />
-
-### V5 - data attributes
-
-```jsx
-import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
-
-<a id="attributes-basic" data-tooltip-content="hello world!"> ◕‿‿◕ </a>
-
-<Tooltip anchorId="attributes-basic" />
-```
-
-<TooltipAnchor id="attributes-basic" data-tooltip-content="hello world!">
-  ◕‿‿◕
-</TooltipAnchor>
-<Tooltip anchorId="attributes-basic" />
+<div style={{ display: 'flex', flexDirection: 'row', width: 'fit-content', margin: 'auto', gap: '5px' }}>
+  <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
+</div>
+<Tooltip anchorSelect=".my-anchor-element" content="Hello world!" />
 
 ---
 
 ## Colors
 
-### V4 or less - type
+| V4         | V5                     |
+| ---------- | ---------------------- |
+| `type`     | `variant`              |
+
+### V4 -> `type`
 
 ```jsx
 import ReactTooltip from 'react-tooltip';
 
 <a data-tip="hello world!" data-for="tooltip"> ◕‿‿◕ </a>
-
 <ReactTooltip id="tooltip" place="top" type="success" />
 ```
 
-(v4) `type` = `variant` (v5)
+### V5 -> `variant`
 
-### V5 - variant
-
-Available values `dark` | `light` | `success` | `warning` | `error` | `info`
+Available values `'dark' | 'light' | 'success' | 'warning' | 'error' | 'info'`
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
-<a id="attributes-variant" data-tooltip-content="hello world!" data-tooltip-variant="success"> ◕‿‿◕ </a>
-
-<Tooltip anchorId="attributes-variant" />
+<a 
+  data-tooltip-id="my-tooltip" 
+  data-tooltip-content="Hello world!" 
+  data-tooltip-variant="success"
+>
+  ◕‿‿◕
+</a>
+<Tooltip id="my-tooltip" />
 ```
 
 <TooltipAnchor
-  id="attributes-variant"
-  data-tooltip-content="hello world!"
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="Hello world!"
   data-tooltip-variant="success"
 >
   ◕‿‿◕
 </TooltipAnchor>
-<Tooltip anchorId="attributes-variant" />
+<Tooltip id="my-tooltip" />
 
 ---
 
-Please see [all V5 Options here](../options.mdx).
+See [all V5 options here](../options.mdx).

@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Delays
 
-Delays available in ReactTooltip component.
+Delay showing/hiding the ReactTooltip component.
 
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
@@ -16,6 +16,7 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
       style={{
         display: 'flex',
         justifyContent: 'center',
+        margin: 'auto',
         alignItems: 'center',
         width: '60px',
         height: '60px',
@@ -33,52 +34,52 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-### Delay to Hide tooltip
+### Delay to hide tooltip
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
 <a
-  id="tooltip-anchor-hide"
+  data-tooltip-id="tooltip-anchor-hide"
   data-tooltip-content="It will take me 1000ms to close"
   data-tooltip-delay-hide={1000}
-> ◕‿‿◕ </a>
-<Tooltip anchorId="tooltip-anchor-hide" />
+>
+  ◕‿‿◕
+</a>
+<Tooltip id="tooltip-anchor-hide" />
 ```
 
-<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
-  <TooltipAnchor
-    id="tooltip-anchor-hide"
-    data-tooltip-content="It will take me 1000ms to close"
-    data-tooltip-delay-hide={1000}
-  >
-    ◕‿‿◕
-  </TooltipAnchor>
-  <Tooltip anchorId="tooltip-anchor-hide" />
-</div>
+<TooltipAnchor
+  data-tooltip-id="tooltip-anchor-hide"
+  data-tooltip-content="It will take me 1000ms to close"
+  data-tooltip-delay-hide={1000}
+>
+  ◕‿‿◕
+</TooltipAnchor>
+<Tooltip id="tooltip-anchor-hide" />
 
-### Delay to Show tooltip
+### Delay to show tooltip
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
 <a
-  id="tooltip-anchor-show"
+  data-tooltip-id="tooltip-anchor-show"
   data-tooltip-content="It took me 1000ms to open"
   data-tooltip-delay-show={1000}
-> ◕‿‿◕ </a>
-<Tooltip anchorId="tooltip-anchor-show" />
+>
+  ◕‿‿◕
+</a>
+<Tooltip id="tooltip-anchor-show" />
 ```
 
-<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
-  <TooltipAnchor
-    id="tooltip-anchor-show"
-    data-tooltip-content="It took me 1000ms to open"
-    data-tooltip-delay-show={1000}
-  >
-    ◕‿‿◕
-  </TooltipAnchor>
-  <Tooltip anchorId="tooltip-anchor-show" />
-</div>
+<TooltipAnchor
+  data-tooltip-id="tooltip-anchor-show"
+  data-tooltip-content="It took me 1000ms to open"
+  data-tooltip-delay-show={1000}
+>
+  ◕‿‿◕
+</TooltipAnchor>
+<Tooltip id="tooltip-anchor-show" />
