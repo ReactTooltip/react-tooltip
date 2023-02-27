@@ -53,6 +53,8 @@ In versions >=5.8.0, we've introduced the `data-tooltip-id` attribute, and the `
 
 1 . Import the CSS file to set default styling.
 
+> :warning: You must import the CSS file or the tooltip won't show!
+
 ```js
 import 'react-tooltip/dist/react-tooltip.css'
 ```
