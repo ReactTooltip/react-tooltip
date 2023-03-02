@@ -14,7 +14,8 @@
     "prepare": "husky install",
     "bundlesize": "bundlesize",
     "esbuild": "esbuild",
-    "test": "jest"
+    "test": "jest",
+    "postbuild": "npm run types"
   },
   "main": "dist/react-tooltip.cjs.min.js",
   "module": "dist/react-tooltip.esm.min.js",
