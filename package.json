@@ -15,7 +15,7 @@
     "bundlesize": "bundlesize",
     "esbuild": "esbuild",
     "test": "jest",
-    "postbuild": "npm run types"
+    "postbuild": "npm run types && npm run bundlesize"
   },
   "main": "dist/react-tooltip.cjs.min.js",
   "module": "dist/react-tooltip.esm.min.js",
