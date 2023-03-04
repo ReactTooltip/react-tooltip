@@ -1,6 +1,6 @@
 {
   "name": "react-tooltip",
-  "version": "5.8.3",
+  "version": "5.8.4-beta.2",
   "description": "react tooltip component",
   "scripts": {
     "dev-rollup": "node ./cli.js --env=development && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.dev.js --watch",
@@ -15,7 +15,8 @@
     "bundlesize": "bundlesize",
     "esbuild": "esbuild",
     "test": "jest",
-    "postbuild": "npm run types && npm run bundlesize"
+    "postbuild": "npm run types && npm run bundlesize",
+    "prepublishOnly": "npm run build"
   },
   "main": "dist/react-tooltip.cjs.min.js",
   "module": "dist/react-tooltip.esm.min.js",
@@ -85,8 +86,8 @@
     "prettier": "^2.4.1",
     "process": "^0.11.10",
     "prop-types": "^15.7.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "16.14.0",
+    "react-dom": "16.14.0",
     "rimraf": "^3.0.2",
     "rollup": "2.79.1",
     "rollup-plugin-analyzer": "^4.0.0",
