@@ -45,31 +45,27 @@ const buildsConfig = [
   },
 ]
 
-const builds = []
-
-buildsConfig.forEach(({ format, outfile, minify }) => {
-  builds.push(
-    esbuild.build({
-      entryPoints: ['./src/index.tsx'],
-      bundle: true,
-      outfile,
-      format,
-      treeShaking: true,
-      minify,
-      sourcemap: true,
-      external: ['react', 'react-dom', 'prop-types'],
-      plugins: [
-        cssModulesPlugin({
-          // inject: true,
-          v2: true,
-          v2CssModulesOption: {
-            pattern: `react-tooltip__[local]_[hash]`,
-          },
-        }),
-      ],
-    }),
-  )
-})
+const builds = buildsConfig.map(({ format, outfile, minify }) =>
+  esbuild.build({
+    entryPoints: ['./src/index.tsx'],
+    bundle: true,
+    outfile,
+    format,
+    treeShaking: true,
+    minify,
+    sourcemap: true,
+    external: ['react', 'react-dom', 'prop-types'],
+    plugins: [
+      cssModulesPlugin({
+        // inject: true,
+        v2: true,
+        v2CssModulesOption: {
+          pattern: `react-tooltip__[local]_[hash]`,
+        },
+      }),
+    ],
+  }),
+)
 
 await Promise.all(builds)
 
