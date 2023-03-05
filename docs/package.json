@@ -23,7 +23,7 @@
     "raw-loader": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-tooltip": "5.8.4-beta.2"
+    "react-tooltip": "5.9.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.3.0",
