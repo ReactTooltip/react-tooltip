@@ -7,6 +7,7 @@ const ctx = await esbuild.context({
   bundle: true,
   outdir: 'build',
   treeShaking: true,
+  logLevel: 'info',
   plugins: [
     cssModulesPlugin({
       v2: true,
@@ -22,11 +23,8 @@ fs.copyFile('./public/index.html', './build/index.html', (err) => {
 })
 
 await ctx.watch()
-
-const { port } = await ctx.serve({
+await ctx.serve({
   servedir: 'build',
   port: 3000,
   host: 'localhost',
 })
-
-console.log(`\n\n# Live Server: localhost:${port}`)
