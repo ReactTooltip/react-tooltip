@@ -25,7 +25,7 @@ const globals = {
 const plugins = [
   progress(),
   html({
-    input: './public/index.html',
+    input: './public/index-rollup.html',
     output: './build/index.html',
     template: { appBundle: 'index.js' },
   }),

@@ -20,7 +20,7 @@ jobs:
     needs: lint
     strategy:
       matrix:
-        version: [14, 16, 18]
+        version: [16, 18]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

@@ -7,7 +7,6 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import ts from '@rollup/plugin-typescript'
 import { terser } from 'rollup-plugin-terser'
 import typescript from 'typescript'
-import pkg from './package.json'
 
 const input = ['src/index.tsx']
 
@@ -21,6 +20,21 @@ const globals = {
   classnames: 'classNames',
   'prop-types': 'PropTypes',
 }
+
+const buildFormats = [
+  {
+    file: 'dist/react-tooltip.umd.js',
+    format: 'umd',
+  },
+  {
+    file: 'dist/react-tooltip.cjs.js',
+    format: 'cjs',
+  },
+  {
+    file: 'dist/react-tooltip.esm.js',
+    format: 'es',
+  },
+]
 
 // splitted to be reusable by minified css build and unminified css
 const pluginsBeforePostCSS = [
@@ -74,14 +88,14 @@ const pluginsForCSSMinification = [
   ...pluginsAfterPostCSS,
 ]
 
-const defaultOutputData = pkg.buildFormats.map(({ file, format }) => ({
+const defaultOutputData = buildFormats.map(({ file, format }) => ({
   file,
   format,
   plugins: [...plugins, filesize()],
 }))
 
 // this step is just to build the minified css and es modules javascript
-const minifiedOutputData = pkg.buildFormats.map(({ file, format }) => ({
+const minifiedOutputData = buildFormats.map(({ file, format }) => ({
   file: file.replace('.js', '.min.js'),
   format,
   plugins: [...pluginsForCSSMinification, terser(), filesize()],
