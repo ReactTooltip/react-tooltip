@@ -22,8 +22,8 @@
   "module": "dist/react-tooltip.esm.min.js",
   "buildFormats": [
     {
-      "file": "dist/react-tooltip.umd.js",
-      "format": "umd"
+      "file": "dist/react-tooltip.iife.js",
+      "format": "iife"
     },
     {
       "file": "dist/react-tooltip.cjs.js",
