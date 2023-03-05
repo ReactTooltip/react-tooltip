@@ -16,13 +16,16 @@ const bundleFolder = {
 // Build folder
 const dir = bundleFolder[parameters.env]
 
-const log = (message) => console.log(`### ${message} ###`)
+const log = (message) => {
+  // eslint-disable-next-line no-console
+  console.log(`### ${message} ###`)
+}
 
 log(`Building for env: ${parameters.env}`)
 
 // check if directory exists
 if (fs.existsSync(dir)) {
-  rimraf(dir, function () {
+  rimraf(dir, () => {
     fs.mkdirSync(dir)
   })
 } else {
