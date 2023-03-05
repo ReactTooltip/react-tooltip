@@ -30,9 +30,15 @@ Documentation for V5 - [ReactTooltip](https://react-tooltip.com/docs/getting-sta
 ## [Bundle size comparison V4 -> V5](https://bundlephobia.com/package/react-tooltip)
 
 <p align="center">
-  <img alt="Bundlephobia v4.5.1" style="height: 250px" src="https://user-images.githubusercontent.com/21102974/222977995-a5ae7c12-e945-454e-ad96-5c73b76a88a0.png" />
-  <img alt="Bundlephobia v5.8.4" style="height: 250px" src="https://user-images.githubusercontent.com/21102974/222977970-8574434d-77de-4aa3-b8ad-a2b8924d75a4.png" />
-  <img alt="Bundlezise timeline" style="height: 250px" src="https://user-images.githubusercontent.com/21102974/222978188-f6db8679-da69-4da7-9c0d-b6fde8bd9517.png" />
+  <a href="https://bundlephobia.com/package/react-tooltip@4.5.1">
+    <img alt="Bundlephobia v4.5.1" style="height: 250px" src="https://user-images.githubusercontent.com/21102974/222977995-a5ae7c12-e945-454e-ad96-5c73b76a88a0.png" />
+  </a>
+  <a href="https://bundlephobia.com/package/react-tooltip@5.8.4">
+    <img alt="Bundlephobia v5.8.4" style="height: 250px" src="https://user-images.githubusercontent.com/21102974/222977970-8574434d-77de-4aa3-b8ad-a2b8924d75a4.png" />
+  </a>
+  <a href="https://bundlephobia.com/package/react-tooltip@4.5.1">
+    <img alt="Bundlezise timeline" style="height: 250px" src="https://user-images.githubusercontent.com/21102974/222978188-f6db8679-da69-4da7-9c0d-b6fde8bd9517.png" />
+  </a>
 </p>
 
 ## Installation
