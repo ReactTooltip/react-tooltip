@@ -4,7 +4,7 @@
   "description": "react tooltip component",
   "scripts": {
     "dev-rollup": "node ./prebuild.js --env=development && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.dev.js --watch",
-    "build-rollup": "node ./prebuild.js --env=production && npm run types && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.prod.js && npm run bundlesize",
+    "build-rollup": "node ./prebuild.js --env=production && npm run types && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.prod.js",
     "dev": "node ./prebuild.js --env=development && node ./esbuild.config.dev.mjs",
     "build": "node ./prebuild.js --env=production && node ./esbuild.config.prod.mjs",
     "types": "node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.types.js",
@@ -20,20 +20,6 @@
   },
   "main": "dist/react-tooltip.cjs.min.js",
   "module": "dist/react-tooltip.esm.min.js",
-  "buildFormats": [
-    {
-      "file": "dist/react-tooltip.iife.js",
-      "format": "iife"
-    },
-    {
-      "file": "dist/react-tooltip.cjs.js",
-      "format": "cjs"
-    },
-    {
-      "file": "dist/react-tooltip.esm.js",
-      "format": "es"
-    }
-  ],
   "types": "dist/react-tooltip.d.ts",
   "license": "MIT",
   "private": false,
