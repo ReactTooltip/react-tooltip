@@ -6,7 +6,7 @@ import { useTooltip } from 'components/TooltipProvider'
 import useIsomorphicLayoutEffect from 'utils/use-isomorphic-layout-effect'
 import { computeTooltipPosition } from '../../utils/compute-positions'
 import styles from './styles.module.css'
-import type { IPosition, ITooltip } from './TooltipTypes'
+import type { IPosition, ITooltip, PlacesType } from './TooltipTypes'
 
 const Tooltip = ({
   // props
@@ -45,6 +45,7 @@ const Tooltip = ({
   const tooltipArrowRef = useRef<HTMLElement>(null)
   const tooltipShowDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const tooltipHideDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const [actualPlacement, setActualPlacement] = useState(place)
   const [inlineStyles, setInlineStyles] = useState({})
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState(false)
@@ -228,6 +229,7 @@ const Tooltip = ({
       if (Object.keys(computedStylesData.tooltipArrowStyles).length) {
         setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
       }
+      setActualPlacement(computedStylesData.place as PlacesType)
     })
   }
 
@@ -465,6 +467,7 @@ const Tooltip = ({
       if (Object.keys(computedStylesData.tooltipArrowStyles).length) {
         setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
       }
+      setActualPlacement(computedStylesData.place as PlacesType)
     })
   }, [show, activeAnchor, content, html, place, offset, positionStrategy, position])
 
@@ -520,6 +523,10 @@ const Tooltip = ({
         [styles['show']]: canShow,
         [styles['fixed']]: positionStrategy === 'fixed',
         [styles['clickable']]: clickable,
+        'react-tooltip__place-top': actualPlacement === 'top',
+        'react-tooltip__place-right': actualPlacement === 'right',
+        'react-tooltip__place-bottom': actualPlacement === 'bottom',
+        'react-tooltip__place-left': actualPlacement === 'left',
       })}
       style={{ ...externalStyles, ...inlineStyles }}
       ref={tooltipRef}

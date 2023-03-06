@@ -14,11 +14,11 @@ export const computeTooltipPosition = async ({
     // elementReference can be null or undefined and we will not compute the position
     // eslint-disable-next-line no-console
     // console.error('The reference element for tooltip was not defined: ', elementReference)
-    return { tooltipStyles: {}, tooltipArrowStyles: {} }
+    return { tooltipStyles: {}, tooltipArrowStyles: {}, place }
   }
 
   if (tooltipReference === null) {
-    return { tooltipStyles: {}, tooltipArrowStyles: {} }
+    return { tooltipStyles: {}, tooltipArrowStyles: {}, place }
   }
 
   const middleware = middlewares
@@ -51,7 +51,7 @@ export const computeTooltipPosition = async ({
         [staticSide]: '-4px',
       }
 
-      return { tooltipStyles: styles, tooltipArrowStyles: arrowStyle }
+      return { tooltipStyles: styles, tooltipArrowStyles: arrowStyle, place: placement }
     })
   }
 
@@ -59,9 +59,9 @@ export const computeTooltipPosition = async ({
     placement: 'bottom',
     strategy,
     middleware,
-  }).then(({ x, y }) => {
+  }).then(({ x, y, placement }) => {
     const styles = { left: `${x}px`, top: `${y}px` }
 
-    return { tooltipStyles: styles, tooltipArrowStyles: {} }
+    return { tooltipStyles: styles, tooltipArrowStyles: {}, place: placement }
   })
 }
