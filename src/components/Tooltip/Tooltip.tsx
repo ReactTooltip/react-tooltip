@@ -519,15 +519,18 @@ const Tooltip = ({
     <WrapperElement
       id={id}
       role="tooltip"
-      className={classNames('react-tooltip', styles['tooltip'], styles[variant], className, {
-        [styles['show']]: canShow,
-        [styles['fixed']]: positionStrategy === 'fixed',
-        [styles['clickable']]: clickable,
-        'react-tooltip__place-top': actualPlacement === 'top',
-        'react-tooltip__place-right': actualPlacement === 'right',
-        'react-tooltip__place-bottom': actualPlacement === 'bottom',
-        'react-tooltip__place-left': actualPlacement === 'left',
-      })}
+      className={classNames(
+        'react-tooltip',
+        styles['tooltip'],
+        styles[variant],
+        className,
+        `react-tooltip__place-${actualPlacement}`,
+        {
+          [styles['show']]: canShow,
+          [styles['fixed']]: positionStrategy === 'fixed',
+          [styles['clickable']]: clickable,
+        },
+      )}
       style={{ ...externalStyles, ...inlineStyles }}
       ref={tooltipRef}
     >
