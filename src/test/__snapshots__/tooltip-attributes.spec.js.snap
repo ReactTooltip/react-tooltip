@@ -9,7 +9,7 @@ exports[`tooltip attributes basic tooltip 1`] = `
     Lorem Ipsum
   </span>
   <div
-    class="react-tooltip"
+    class="react-tooltip react-tooltip__place-top"
     role="tooltip"
   >
     Hello World!
@@ -30,7 +30,7 @@ exports[`tooltip attributes tooltip with place 1`] = `
     Lorem Ipsum
   </span>
   <div
-    class="react-tooltip"
+    class="react-tooltip react-tooltip__place-right"
     role="tooltip"
   >
     Hello World!
