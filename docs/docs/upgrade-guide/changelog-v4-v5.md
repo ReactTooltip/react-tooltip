@@ -49,6 +49,7 @@ If you run into any problems with the tooltip not updating after changes are mad
 - [x] `setIsOpen` - `function` (to control tooltip state) - if not used, tooltip state will be handled internally
 - [x] `position` - `{ x: number; y: number }` - similar to V4's `overridePosition`
 - [x] `float` - `boolean` - used to achieve V4's `effect="float"`
+- [x] `render` - `function` - can be used to render dynamic content based on the active anchor element (check [the examples](../examples/render.mdx) for more details)
 
 ## `V4` props available in `V5`
 
