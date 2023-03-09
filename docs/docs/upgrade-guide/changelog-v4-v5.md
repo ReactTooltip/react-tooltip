@@ -44,7 +44,7 @@ If you run into any problems with the tooltip not updating after changes are mad
 ## New Props
 
 - [x] `classNameArrow`
-- [x] `events` (or `data-tooltip-events` on anchor element) - `['hover', 'click']` - default: `['hover']` (always an array when using as prop, even with only one option, when using as data attribute: `data-tooltip-events="hover click"`)
+- [x] `openOnClick` - `boolean` - when set, the tooltip will open on click instead of on hover
 - [x] `isOpen` - `boolean` (to control tooltip state) - if not used, tooltip state will be handled internally
 - [x] `setIsOpen` - `function` (to control tooltip state) - if not used, tooltip state will be handled internally
 - [x] `position` - `{ x: number; y: number }` - similar to V4's `overridePosition`

@@ -6,6 +6,12 @@ sidebar_position: 1
 
 Events available in ReactTooltip component.
 
+:::danger
+
+This has been deprecated. Use the `openOnClick` tooltip prop instead.
+
+:::
+
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 
@@ -33,15 +39,6 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
     </span>
   )
 }
-
-:::note
-
-In a previous version, `click` had a different behavior, so it made sense to be enabled alongside `hover`.
-Since that's changed, enabling both events `events={['hover', 'click']}` has the same effect of simply enabling `hover`.
-
-In the future, we should simply have a prop to enable `click` mode.
-
-:::
 
 ### Using `hover`
 
