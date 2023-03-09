@@ -28,7 +28,11 @@ export interface ITooltipController {
   anchorSelect?: string
   wrapper?: WrapperType
   children?: ChildrenType
+  /**
+   * @deprecated Use `openOnClick` instead.
+   */
   events?: EventsType[]
+  openOnClick?: boolean
   positionStrategy?: PositionStrategy
   middlewares?: Middleware[]
   delayShow?: number
@@ -54,6 +58,9 @@ declare module 'react' {
     'data-tooltip-variant'?: VariantType
     'data-tooltip-offset'?: number
     'data-tooltip-wrapper'?: WrapperType
+    /**
+     * @deprecated Use `openOnClick` tooltip prop instead.
+     */
     'data-tooltip-events'?: EventsType[]
     'data-tooltip-position-strategy'?: PositionStrategy
     'data-tooltip-delay-show'?: number

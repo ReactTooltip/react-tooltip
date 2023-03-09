@@ -19,6 +19,7 @@ const Tooltip = ({
   place = 'top',
   offset = 10,
   events = ['hover'],
+  openOnClick = false,
   positionStrategy = 'absolute',
   middlewares,
   wrapper: WrapperElement,
@@ -59,6 +60,8 @@ const Tooltip = ({
   const hoveringTooltip = useRef(false)
   const [anchorsBySelect, setAnchorsBySelect] = useState<HTMLElement[]>([])
   const mounted = useRef(false)
+
+  const shouldOpenOnClick = openOnClick || events.includes('click')
 
   /**
    * useLayoutEffect runs before useEffect,
@@ -255,10 +258,11 @@ const Tooltip = ({
 
   const handleClickOutsideAnchors = (event: MouseEvent) => {
     const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
-    if (anchorById?.contains(event.target as HTMLElement)) {
+    const anchors = [anchorById, ...anchorsBySelect]
+    if (anchors.some((anchor) => anchor?.contains(event.target as HTMLElement))) {
       return
     }
-    if (anchorsBySelect.some((anchor) => anchor.contains(event.target as HTMLElement))) {
+    if (tooltipRef.current?.contains(event.target as HTMLElement)) {
       return
     }
     handleShow(false)
@@ -294,12 +298,10 @@ const Tooltip = ({
 
     const enabledEvents: { event: string; listener: (event?: Event) => void }[] = []
 
-    if (events.find((event: string) => event === 'click')) {
+    if (shouldOpenOnClick) {
       window.addEventListener('click', handleClickOutsideAnchors)
       enabledEvents.push({ event: 'click', listener: handleClickTooltipAnchor })
-    }
-
-    if (events.find((event: string) => event === 'hover')) {
+    } else {
       enabledEvents.push(
         { event: 'mouseenter', listener: debouncedHandleShowTooltip },
         { event: 'mouseleave', listener: debouncedHandleHideTooltip },
@@ -322,7 +324,7 @@ const Tooltip = ({
       handleHideTooltip()
     }
 
-    if (clickable) {
+    if (clickable && !shouldOpenOnClick) {
       tooltipRef.current?.addEventListener('mouseenter', handleMouseEnterTooltip)
       tooltipRef.current?.addEventListener('mouseleave', handleMouseLeaveTooltip)
     }
@@ -334,13 +336,13 @@ const Tooltip = ({
     })
 
     return () => {
-      if (events.find((event: string) => event === 'click')) {
+      if (shouldOpenOnClick) {
         window.removeEventListener('click', handleClickOutsideAnchors)
       }
       if (closeOnEsc) {
         window.removeEventListener('keydown', handleEsc)
       }
-      if (clickable) {
+      if (clickable && !shouldOpenOnClick) {
         tooltipRef.current?.removeEventListener('mouseenter', handleMouseEnterTooltip)
         tooltipRef.current?.removeEventListener('mouseleave', handleMouseLeaveTooltip)
       }

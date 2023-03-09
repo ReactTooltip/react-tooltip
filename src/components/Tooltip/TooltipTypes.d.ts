@@ -53,7 +53,11 @@ export interface ITooltip {
   anchorSelect?: string
   wrapper: WrapperType
   children?: ChildrenType
+  /**
+   * @deprecated Use `openOnClick` instead.
+   */
   events?: EventsType[]
+  openOnClick?: boolean
   positionStrategy?: PositionStrategy
   middlewares?: Middleware[]
   delayShow?: number
