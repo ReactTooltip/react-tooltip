@@ -73,7 +73,6 @@
     "postcss": "8.4.21",
     "prettier": "2.8.4",
     "process": "^0.11.10",
-    "prop-types": ">=15.0.0",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "rimraf": "^3.0.2",
@@ -100,7 +99,6 @@
   "peerDependencies": {
     "@floating-ui/dom": "^1.0.0",
     "classnames": "^2.3.0",
-    "prop-types": ">=15.0.0",
     "react": ">=16.14.0",
     "react-dom": ">=16.14.0"
   },
