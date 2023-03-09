@@ -39,8 +39,7 @@ export interface IPosition {
 export interface ITooltip {
   className?: string
   classNameArrow?: string
-  content?: string
-  html?: string
+  content?: ChildrenType
   place?: PlacesType
   offset?: number
   id?: string
@@ -52,7 +51,6 @@ export interface ITooltip {
   anchorId?: string
   anchorSelect?: string
   wrapper: WrapperType
-  children?: ChildrenType
   /**
    * @deprecated Use `openOnClick` instead.
    */
