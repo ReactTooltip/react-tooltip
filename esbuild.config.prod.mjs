@@ -1,6 +1,7 @@
 import * as esbuild from 'esbuild'
 import cssModulesPlugin from 'esbuild-css-modules-plugin'
 import fs from 'fs'
+import pkg from './package.json' assert { type: 'json' }
 
 const buildsConfig = [
   {
@@ -44,6 +45,7 @@ const buildsConfig = [
     minify: true,
   },
 ]
+const externals = Object.keys({ ...(pkg.peerDependencies ?? {}), ...(pkg.dependencies ?? {}) })
 
 const builds = await Promise.all(
   buildsConfig.map(({ format, outfile, minify }) =>
@@ -55,7 +57,7 @@ const builds = await Promise.all(
       treeShaking: true,
       minify,
       sourcemap: true,
-      external: ['react', 'react-dom', 'prop-types'],
+      external: externals,
       plugins: [
         cssModulesPlugin({
           // inject: true,
