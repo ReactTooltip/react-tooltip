@@ -6,6 +6,7 @@
 [![npm download][download-image]][download-url]
 ![minified](https://badgen.net/bundlephobia/min/react-tooltip)
 ![minified gzip](https://badgen.net/bundlephobia/minzip/react-tooltip)
+
 <!-- ![last commit](https://badgen.net/github/last-commit/reacttooltip/react-tooltip) -->
 
 [download-image]: https://img.shields.io/npm/dm/react-tooltip.svg?style=flat-square
@@ -17,7 +18,7 @@
   </a>
 </p>
 
-If you like the project, please give the project a GitHub 🌟 
+If you like the project, please give the project a GitHub 🌟
 
 ## Demo
 
@@ -56,7 +57,7 @@ yarn add react-tooltip
 ## Usage
 
 > :warning: If you were already using `react-tooltip<=5.7.5`, you'll be getting some deprecation warnings regarding the `anchorId` prop and some other features.
-In versions >=5.8.0, we've introduced the `data-tooltip-id` attribute, and the `anchorSelect` prop, which are our recommended methods of using the tooltip moving forward. Check [the docs](https://react-tooltip.com/docs/getting-started) for more details.
+> In versions >=5.8.0, we've introduced the `data-tooltip-id` attribute, and the `anchorSelect` prop, which are our recommended methods of using the tooltip moving forward. Check [the docs](https://react-tooltip.com/docs/getting-started) for more details.
 
 ### Using NPM package
 
@@ -121,11 +122,11 @@ Check [the V5 docs](https://react-tooltip.com/docs/getting-started) for more com
 
 You can import `node_modules/react-tooltip/dist/react-tooltip.[mode].js` into your page. Please make sure that you have already imported `react` and `react-dom` into your page.
 
-mode: `esm` `cjs` `umd`
+mode: `esm` `cjs` `iife`
 
 Don't forget to import the CSS file from `node_modules/react-tooltip/dist/react-tooltip.css` to set default styling. This needs to be done only once in your application.
 
-PS: all the files have a minified version and a non-minified version.
+PS: all the files have a minified version and a non-minified version and the default to be imported are the not minified files.
 
 ![image](https://user-images.githubusercontent.com/9615850/205637814-c0ef01ae-bd77-4e7f-b4bf-df502c71e5c3.png)
 
@@ -145,7 +146,7 @@ You can use [`renderToStaticMarkup()` function](https://reactjs.org/docs/react-d
 ```jsx
 import ReactDOMServer from 'react-dom/server';
 [...]
-<a 
+<a
   data-tooltip-id="my-tooltip"
   data-tooltip-html={ReactDOMServer.renderToStaticMarkup(<div>I am <b>JSX</b> content</div>)}
 >
@@ -174,7 +175,6 @@ import ReactDOMServer from 'react-dom/server';
 [huumanoid](https://github.com/huumanoid) (inactive)
 
 [wwayne](https://github.com/wwayne) (inactive) - Creator of the original React Tooltip (V1.x ~ V4.x.)
-
 
 We would gladly accept a new maintainer to help out!
 
