@@ -18,9 +18,16 @@
     "postbuild": "npm run types && npm run bundlesize",
     "prepublishOnly": "npm run build"
   },
-  "main": "dist/react-tooltip.cjs.min.js",
-  "module": "dist/react-tooltip.esm.min.js",
+  "main": "dist/react-tooltip.cjs.js",
+  "module": "dist/react-tooltip.esm.js",
   "types": "dist/react-tooltip.d.ts",
+  "exports": {
+    ".": "./dist/react-tooltip.cjs.js",
+    "./dist/*.js": "./dist/*.js",
+    "./dist/react-tooltip.css": "./dist/react-tooltip.css",
+    "./dist/react-tooltip.d.ts": "./dist/react-tooltip.d.ts",
+    "./package.json": "./package.json"
+  },
   "license": "MIT",
   "private": false,
   "author": "ReactTooltip",
