@@ -57,7 +57,8 @@ yarn add react-tooltip
 ## Usage
 
 > :warning: If you were already using `react-tooltip<=5.7.5`, you'll be getting some deprecation warnings regarding the `anchorId` prop and some other features.
-> In versions >=5.8.0, we've introduced the `data-tooltip-id` attribute, and the `anchorSelect` prop, which are our recommended methods of using the tooltip moving forward. Check [the docs](https://react-tooltip.com/docs/getting-started) for more details.
+
+In versions >=5.8.0, we've introduced the `data-tooltip-id` attribute, and the `anchorSelect` prop, which are our recommended methods of using the tooltip moving forward. Check [the docs](https://react-tooltip.com/docs/getting-started) for more details.
 
 ### Using NPM package
 
