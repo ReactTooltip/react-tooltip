@@ -5,12 +5,12 @@ import fs from 'fs'
 const buildsConfig = [
   {
     format: 'esm',
-    outfile: 'dist/react-tooltip.esm.js',
+    outfile: 'dist/react-tooltip.mjs',
     minify: false,
   },
   {
     format: 'cjs',
-    outfile: 'dist/react-tooltip.cjs.js',
+    outfile: 'dist/react-tooltip.cjs',
     minify: false,
   },
   {
@@ -25,22 +25,17 @@ const buildsConfig = [
   },
   {
     format: 'esm',
-    outfile: 'dist/react-tooltip.esm.min.js',
+    outfile: 'dist/react-tooltip.min.mjs',
     minify: true,
   },
   {
     format: 'cjs',
-    outfile: 'dist/react-tooltip.cjs.min.js',
+    outfile: 'dist/react-tooltip.min.cjs',
     minify: true,
   },
   {
     format: 'iife',
-    outfile: 'dist/react-tooltip.iife.min.js',
-    minify: true,
-  },
-  {
-    format: 'esm',
-    outfile: 'dist/react-tooltip.min.js',
+    outfile: 'dist/react-tooltip.min.iife.js',
     minify: true,
   },
 ]

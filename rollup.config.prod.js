@@ -27,11 +27,11 @@ const buildFormats = [
     format: 'umd',
   },
   {
-    file: 'dist/react-tooltip.cjs.js',
+    file: 'dist/react-tooltip.cjs',
     format: 'cjs',
   },
   {
-    file: 'dist/react-tooltip.esm.js',
+    file: 'dist/react-tooltip.mjs',
     format: 'es',
   },
 ]

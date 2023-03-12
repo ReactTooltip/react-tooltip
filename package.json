@@ -18,12 +18,15 @@
     "postbuild": "npm run types && npm run bundlesize",
     "prepublishOnly": "npm run build"
   },
-  "main": "dist/react-tooltip.cjs.js",
-  "module": "dist/react-tooltip.esm.js",
+  "main": "dist/react-tooltip.cjs",
+  "module": "dist/react-tooltip.mjs",
   "types": "dist/react-tooltip.d.ts",
   "exports": {
-    ".": "./dist/react-tooltip.cjs.js",
-    "./dist/*.js": "./dist/*.js",
+    ".": {
+      "require": "./dist/react-tooltip.cjs",
+      "import": "./dist/react-tooltip.mjs",
+      "default": "./dist/react-tooltip.cjs"
+    },
     "./dist/react-tooltip.css": "./dist/react-tooltip.css",
     "./dist/react-tooltip.d.ts": "./dist/react-tooltip.d.ts",
     "./package.json": "./package.json"
