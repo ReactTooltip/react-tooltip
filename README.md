@@ -127,7 +127,7 @@ mode: `esm` `cjs` `iife`
 
 Don't forget to import the CSS file from `node_modules/react-tooltip/dist/react-tooltip.css` to set default styling. This needs to be done only once in your application.
 
-PS: all the files have a minified version and a non-minified version and the default to be imported are the not minified files.
+PS: all the files have a minified version and a non-minified version and the default to be imported are the minified files.
 
 ![image](https://user-images.githubusercontent.com/9615850/205637814-c0ef01ae-bd77-4e7f-b4bf-df502c71e5c3.png)
 
