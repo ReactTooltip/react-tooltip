@@ -96,7 +96,7 @@ const defaultOutputData = buildFormats.map(({ file, format }) => ({
 
 // this step is just to build the minified css and es modules javascript
 const minifiedOutputData = buildFormats.map(({ file, format }) => ({
-  file: file.replace('.js', '.min.js'),
+  file: file.replace('.js', '.min.js').replace('.cjs', '.min.cjs').replace('.mjs', '.min.mjs'),
   format,
   plugins: [...pluginsForCSSMinification, terser(), filesize()],
 }))
