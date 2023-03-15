@@ -30,11 +30,11 @@ const buildFormats = [
     },
   },
   {
-    file: 'dist/react-tooltip.cjs.js',
+    file: 'dist/react-tooltip.cjs',
     format: 'cjs',
   },
   {
-    file: 'dist/react-tooltip.esm.js',
+    file: 'dist/react-tooltip.mjs',
     format: 'es',
   },
 ]
@@ -100,7 +100,7 @@ const defaultOutputData = buildFormats.map(({ file, format, globals }) => ({
 
 // this step is just to build the minified css and es modules javascript
 const minifiedOutputData = buildFormats.map(({ file, format, globals }) => ({
-  file: file.replace('.js', '.min.js'),
+  file: file.replace('.js', '.min.js').replace('.cjs', '.min.cjs').replace('.mjs', '.min.mjs'),
   format,
   plugins: [...pluginsForCSSMinification, terser(), filesize()],
   globals,
