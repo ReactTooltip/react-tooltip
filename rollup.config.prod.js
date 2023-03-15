@@ -7,24 +7,27 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import ts from '@rollup/plugin-typescript'
 import { terser } from 'rollup-plugin-terser'
 import typescript from 'typescript'
+import * as pkg from './package.json'
 
 const input = ['src/index.tsx']
 
 const name = 'ReactTooltip'
 
-const external = ['react', 'react-dom', 'prop-types']
-
-const globals = {
-  react: 'React',
-  'react-dom': 'ReactDOM',
-  classnames: 'classNames',
-  'prop-types': 'PropTypes',
-}
+const external = [
+  ...Object.keys({ ...(pkg.peerDependencies ?? {}), ...(pkg.dependencies ?? {}) }),
+  'react/jsx-runtime'
+];
 
 const buildFormats = [
   {
     file: 'dist/react-tooltip.umd.js',
     format: 'umd',
+    globals: {
+      react: 'React',
+      'react-dom': 'ReactDOM',
+      classnames: 'classNames',
+      'prop-types': 'PropTypes',
+    },
   },
   {
     file: 'dist/react-tooltip.cjs.js',
@@ -88,22 +91,24 @@ const pluginsForCSSMinification = [
   ...pluginsAfterPostCSS,
 ]
 
-const defaultOutputData = buildFormats.map(({ file, format }) => ({
+const defaultOutputData = buildFormats.map(({ file, format, globals }) => ({
   file,
   format,
   plugins: [...plugins, filesize()],
+  globals,
 }))
 
 // this step is just to build the minified css and es modules javascript
-const minifiedOutputData = buildFormats.map(({ file, format }) => ({
+const minifiedOutputData = buildFormats.map(({ file, format, globals }) => ({
   file: file.replace('.js', '.min.js'),
   format,
   plugins: [...pluginsForCSSMinification, terser(), filesize()],
+  globals,
 }))
 
 const outputData = [...defaultOutputData, ...minifiedOutputData]
 
-const config = outputData.map(({ file, format, plugins: specificPLugins }) => ({
+const config = outputData.map(({ file, format, plugins: specificPLugins, globals }) => ({
   input,
   output: {
     file,
@@ -114,5 +119,7 @@ const config = outputData.map(({ file, format, plugins: specificPLugins }) => ({
   external,
   plugins: specificPLugins,
 }))
+
+console.log(config)
 
 export default config

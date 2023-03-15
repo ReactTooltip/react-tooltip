@@ -46,6 +46,7 @@
     "@types/css": "^0.0.33",
     "@types/css-modules": "^1.0.2",
     "@types/jest": "29.4.0",
+    "@types/node": "^18.15.3",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
     "@types/react-test-renderer": "^18.0.0",
