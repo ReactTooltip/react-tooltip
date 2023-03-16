@@ -120,6 +120,4 @@ const config = outputData.map(({ file, format, plugins: specificPLugins, globals
   plugins: specificPLugins,
 }))
 
-console.log(config)
-
 export default config
