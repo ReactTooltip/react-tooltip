@@ -374,7 +374,7 @@ const Tooltip = ({
         }
         if (activeAnchor) {
           ;[...mutation.removedNodes].some((node) => {
-            if (node.contains(activeAnchor)) {
+            if (node?.contains && node.contains(activeAnchor)) {
               setRendered(false)
               handleShow(false)
               setActiveAnchor(null)
