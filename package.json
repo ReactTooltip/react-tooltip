@@ -16,7 +16,7 @@
     "esbuild": "esbuild",
     "test": "jest",
     "postbuild": "npm run types && npm run bundlesize",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build-rollup"
   },
   "main": "dist/react-tooltip.cjs.min.js",
   "module": "dist/react-tooltip.esm.min.js",

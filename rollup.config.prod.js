@@ -15,8 +15,8 @@ const name = 'ReactTooltip'
 
 const external = [
   ...Object.keys({ ...(pkg.peerDependencies ?? {}), ...(pkg.dependencies ?? {}) }),
-  'react/jsx-runtime'
-];
+  'react/jsx-runtime',
+]
 
 const buildFormats = [
   {
@@ -115,6 +115,7 @@ const config = outputData.map(({ file, format, plugins: specificPLugins, globals
     format,
     name,
     globals,
+    sourcemap: true,
   },
   external,
   plugins: specificPLugins,
