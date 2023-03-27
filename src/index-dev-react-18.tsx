@@ -1,4 +1,4 @@
-import { StrictMode, version } from 'react'
+import React, { StrictMode, version } from 'react'
 // eslint-disable-next-line import/no-unresolved
 import { createRoot } from 'react-dom/client' // this is we are now using react < 18
 import './tokens.css'
