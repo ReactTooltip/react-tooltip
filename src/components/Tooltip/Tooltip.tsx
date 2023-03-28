@@ -468,7 +468,7 @@ const Tooltip = ({
       }
       setActualPlacement(computedStylesData.place as PlacesType)
     })
-  }, [show, activeAnchor, content, place, offset, positionStrategy, position])
+  }, [show, activeAnchor, content, externalStyles, place, offset, positionStrategy, position])
 
   useEffect(() => {
     const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
