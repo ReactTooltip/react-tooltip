@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Tooltip } from 'components/Tooltip'
 import type {
   EventsType,
@@ -205,8 +205,9 @@ const TooltipController = ({
    * children should be lower priority so that it can be used as the "default" content
    */
   let renderedContent: ChildrenType = children
+  const contentRef = useRef<HTMLElement>(null)
   if (render) {
-    renderedContent = render({ content: tooltipContent ?? null, activeAnchor })
+    renderedContent = render({ ref: contentRef, content: tooltipContent ?? null, activeAnchor })
   } else if (tooltipContent) {
     renderedContent = tooltipContent
   }
@@ -221,6 +222,7 @@ const TooltipController = ({
     className,
     classNameArrow,
     content: renderedContent,
+    contentRef,
     place: tooltipPlace,
     variant: tooltipVariant,
     offset: tooltipOffset,
