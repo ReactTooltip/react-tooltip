@@ -34,7 +34,7 @@ const Tooltip = ({
   afterHide,
   // props handled by controller
   content,
-  contentRef,
+  contentWrapperRef,
   isOpen,
   setIsOpen,
   activeAnchor,
@@ -476,21 +476,17 @@ const Tooltip = ({
   }, [show, activeAnchor, content, externalStyles, place, offset, positionStrategy, position])
 
   useEffect(() => {
-    if (!contentRef?.current) {
+    if (!contentWrapperRef?.current) {
       return () => null
     }
-    const contentObserver = new MutationObserver(() => {
+    const contentObserver = new ResizeObserver(() => {
       updateTooltipPosition()
     })
-    contentObserver.observe(contentRef.current, {
-      attributes: true,
-      childList: true,
-      subtree: true,
-    })
+    contentObserver.observe(contentWrapperRef.current)
     return () => {
       contentObserver.disconnect()
     }
-  }, [content, contentRef?.current])
+  }, [content, contentWrapperRef?.current])
 
   useEffect(() => {
     const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)

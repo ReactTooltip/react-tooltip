@@ -1,4 +1,4 @@
-import type { CSSProperties, RefObject } from 'react'
+import type { CSSProperties } from 'react'
 
 import type {
   PlacesType,
@@ -19,11 +19,7 @@ export interface ITooltipController {
    * @deprecated Use `children` or `render` instead
    */
   html?: string
-  render?: (render: {
-    ref: RefObject<HTMLElement>
-    content: string | null
-    activeAnchor: HTMLElement | null
-  }) => ChildrenType
+  render?: (render: { content: string | null; activeAnchor: HTMLElement | null }) => ChildrenType
   place?: PlacesType
   offset?: number
   id?: string
