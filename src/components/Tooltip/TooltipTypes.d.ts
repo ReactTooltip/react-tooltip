@@ -40,7 +40,7 @@ export interface ITooltip {
   className?: string
   classNameArrow?: string
   content?: ChildrenType
-  contentRef?: RefObject<HTMLElement>
+  contentWrapperRef?: RefObject<HTMLDivElement>
   place?: PlacesType
   offset?: number
   id?: string
