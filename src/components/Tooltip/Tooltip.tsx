@@ -34,6 +34,7 @@ const Tooltip = ({
   afterHide,
   // props handled by controller
   content,
+  contentWrapperRef,
   isOpen,
   setIsOpen,
   activeAnchor,
@@ -425,7 +426,7 @@ const Tooltip = ({
     }
   }, [id, anchorSelect, activeAnchor])
 
-  useEffect(() => {
+  const updateTooltipPosition = () => {
     if (position) {
       // if `position` is set, override regular and `float` positioning
       handleTooltipPosition(position)
@@ -468,7 +469,24 @@ const Tooltip = ({
       }
       setActualPlacement(computedStylesData.place as PlacesType)
     })
-  }, [show, activeAnchor, content, place, offset, positionStrategy, position])
+  }
+
+  useEffect(() => {
+    updateTooltipPosition()
+  }, [show, activeAnchor, content, externalStyles, place, offset, positionStrategy, position])
+
+  useEffect(() => {
+    if (!contentWrapperRef?.current) {
+      return () => null
+    }
+    const contentObserver = new ResizeObserver(() => {
+      updateTooltipPosition()
+    })
+    contentObserver.observe(contentWrapperRef.current)
+    return () => {
+      contentObserver.disconnect()
+    }
+  }, [content, contentWrapperRef?.current])
 
   useEffect(() => {
     const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)

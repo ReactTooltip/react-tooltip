@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode, CSSProperties } from 'react'
+import type { ElementType, ReactNode, CSSProperties, RefObject } from 'react'
 
 export type PlacesType = 'top' | 'right' | 'bottom' | 'left'
 
@@ -40,6 +40,7 @@ export interface ITooltip {
   className?: string
   classNameArrow?: string
   content?: ChildrenType
+  contentWrapperRef?: RefObject<HTMLDivElement>
   place?: PlacesType
   offset?: number
   id?: string
