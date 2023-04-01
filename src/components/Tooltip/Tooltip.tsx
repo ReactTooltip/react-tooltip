@@ -171,14 +171,23 @@ const Tooltip = ({
     if (!event) {
       return
     }
+    const target = (event.currentTarget ?? event.target) as HTMLElement | null
+    if (!target?.isConnected) {
+      /**
+       * this happens when the target is removed from the DOM
+       * at the same time the tooltip gets triggered
+       */
+      setActiveAnchor(null)
+      setProviderActiveAnchor({ current: null })
+      return
+    }
     if (delayShow) {
       handleShowTooltipDelayed()
     } else {
       handleShow(true)
     }
-    const target = event.currentTarget ?? event.target
-    setActiveAnchor(target as HTMLElement)
-    setProviderActiveAnchor({ current: target as HTMLElement })
+    setActiveAnchor(target)
+    setProviderActiveAnchor({ current: target })
 
     if (tooltipHideDelayTimerRef.current) {
       clearTimeout(tooltipHideDelayTimerRef.current)
