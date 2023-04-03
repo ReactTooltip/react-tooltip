@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { TooltipController as Tooltip } from 'components/TooltipController'
 import { IPosition } from 'components/Tooltip/TooltipTypes.d'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { inline, offset } from '@floating-ui/dom'
 import styles from './styles.module.css'
 

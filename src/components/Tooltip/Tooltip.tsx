@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import classNames from 'classnames'
 import debounce from 'utils/debounce'
 import { useTooltip } from 'components/TooltipProvider'

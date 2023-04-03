@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Tooltip } from 'components/Tooltip'
 import type {
   EventsType,

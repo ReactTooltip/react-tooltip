@@ -16,10 +16,8 @@
     "esbuild": "esbuild",
     "test": "jest",
     "postbuild": "npm run types && npm run bundlesize",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build-rollup"
   },
-  "main": "dist/react-tooltip.cjs.min.js",
-  "module": "dist/react-tooltip.esm.min.js",
   "types": "dist/react-tooltip.d.ts",
   "license": "MIT",
   "private": false,
@@ -34,6 +32,17 @@
   "bugs": {
     "url": "https://github.com/ReactTooltip/react-tooltip/issues"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/react-tooltip.d.ts",
+      "require": "./dist/react-tooltip.min.cjs",
+      "import": "./dist/react-tooltip.min.mjs",
+      "default": "./dist/react-tooltip.min.cjs"
+    },
+    "./dist/react-tooltip.css": "./dist/react-tooltip.min.css",
+    "./dist/react-tooltip.d.ts": "./dist/react-tooltip.d.ts",
+    "./package.json": "./package.json"
+  },
   "homepage": "https://github.com/ReactTooltip/react-tooltip#readme",
   "devDependencies": {
     "@rollup/plugin-commonjs": "22.0.2",
@@ -46,6 +55,7 @@
     "@types/css": "^0.0.33",
     "@types/css-modules": "^1.0.2",
     "@types/jest": "29.4.0",
+    "@types/node": "^18.15.3",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
     "@types/react-test-renderer": "^18.0.0",

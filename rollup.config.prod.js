@@ -7,37 +7,40 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import ts from '@rollup/plugin-typescript'
 import { terser } from 'rollup-plugin-terser'
 import typescript from 'typescript'
+import * as pkg from './package.json'
 
 const input = ['src/index.tsx']
 
 const name = 'ReactTooltip'
 
-const external = ['react', 'react-dom', 'prop-types']
-
-const globals = {
-  react: 'React',
-  'react-dom': 'ReactDOM',
-  classnames: 'classNames',
-  'prop-types': 'PropTypes',
-}
+const external = [
+  ...Object.keys(pkg.peerDependencies ?? {}),
+  ...Object.keys(pkg.dependencies ?? {}),
+]
 
 const buildFormats = [
   {
     file: 'dist/react-tooltip.umd.js',
     format: 'umd',
+    globals: {
+      '@floating-ui/dom': 'FloatingUIDOM',
+      react: 'React',
+      'react-dom': 'ReactDOM',
+      classnames: 'classNames',
+      'prop-types': 'PropTypes',
+    },
   },
   {
-    file: 'dist/react-tooltip.cjs.js',
+    file: 'dist/react-tooltip.cjs',
     format: 'cjs',
   },
   {
-    file: 'dist/react-tooltip.esm.js',
+    file: 'dist/react-tooltip.mjs',
     format: 'es',
   },
 ]
 
-// splitted to be reusable by minified css build and unminified css
-const pluginsBeforePostCSS = [
+const sharedPlugins = [
   progress(),
   replace({
     preventAssignment: true,
@@ -45,10 +48,14 @@ const pluginsBeforePostCSS = [
       'process.env.NODE_ENV': JSON.stringify('development'),
     },
   }),
-]
-
-// splitted to be reusable by minified css build and unminified css
-const pluginsAfterPostCSS = [
+  postcss({
+    extract: 'react-tooltip.min.css', // this will generate a specific file and override on multiples build, but the css will be the same
+    autoModules: true,
+    include: '**/*.css',
+    extensions: ['.css'],
+    plugins: [],
+    minimize: true,
+  }),
   nodeResolve(),
   ts({
     typescript,
@@ -61,58 +68,24 @@ const pluginsAfterPostCSS = [
     include: 'node_modules/**',
   }),
 ]
-
-const plugins = [
-  ...pluginsBeforePostCSS,
-  postcss({
-    // extract: true, // this will generate a css file based on output file name
-    extract: 'react-tooltip.css', // this will generate a specific file and override on multiples build, but the css will be the same
-    autoModules: true,
-    include: '**/*.css',
-    extensions: ['.css'],
-    plugins: [],
-  }),
-  ...pluginsAfterPostCSS,
-]
-
-const pluginsForCSSMinification = [
-  ...pluginsBeforePostCSS,
-  postcss({
-    extract: 'react-tooltip.min.css', // this will generate a specific file and override on multiples build, but the css will be the same
-    autoModules: true,
-    include: '**/*.css',
-    extensions: ['.css'],
-    plugins: [],
-    minimize: true,
-  }),
-  ...pluginsAfterPostCSS,
-]
-
-const defaultOutputData = buildFormats.map(({ file, format }) => ({
-  file,
-  format,
-  plugins: [...plugins, filesize()],
-}))
-
 // this step is just to build the minified css and es modules javascript
-const minifiedOutputData = buildFormats.map(({ file, format }) => ({
-  file: file.replace('.js', '.min.js'),
-  format,
-  plugins: [...pluginsForCSSMinification, terser(), filesize()],
+const minifiedBuildFormats = buildFormats.map(({ file, ...rest }) => ({
+  file: file.replace(/(\.[cm]?js)$/, '.min$1'),
+  ...rest,
+  plugins: [terser(), filesize()],
 }))
 
-const outputData = [...defaultOutputData, ...minifiedOutputData]
+const allBuildFormats = [...buildFormats, ...minifiedBuildFormats]
 
-const config = outputData.map(({ file, format, plugins: specificPLugins }) => ({
+const config = {
   input,
-  output: {
-    file,
-    format,
+  output: allBuildFormats.map((buildFormat) => ({
     name,
-    globals,
-  },
+    ...buildFormat,
+    sourcemap: true,
+  })),
   external,
-  plugins: specificPLugins,
-}))
+  plugins: sharedPlugins,
+}
 
 export default config

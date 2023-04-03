@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import classNames from 'classnames'
 import { useTooltip } from './TooltipProvider'
 import type { ITooltipWrapper } from './TooltipProviderTypes'
