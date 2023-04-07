@@ -41,6 +41,7 @@
       "import": "./dist/react-tooltip.min.mjs",
       "default": "./dist/react-tooltip.min.cjs"
     },
+    "./dist/react-tooltip": "./dist/react-tooltip.min.cjs",
     "./dist/react-tooltip.css": "./dist/react-tooltip.min.css",
     "./dist/react-tooltip.d.ts": "./dist/react-tooltip.d.ts",
     "./package.json": "./package.json"
