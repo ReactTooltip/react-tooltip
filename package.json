@@ -32,6 +32,8 @@
   "bugs": {
     "url": "https://github.com/ReactTooltip/react-tooltip/issues"
   },
+  "main": "dist/react-tooltip.min.cjs",
+  "module": "dist/react-tooltip.min.mjs",
   "exports": {
     ".": {
       "types": "./dist/react-tooltip.d.ts",
