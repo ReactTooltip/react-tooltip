@@ -48,14 +48,6 @@ const sharedPlugins = [
       'process.env.NODE_ENV': JSON.stringify('development'),
     },
   }),
-  postcss({
-    extract: 'react-tooltip.min.css', // this will generate a specific file and override on multiples build, but the css will be the same
-    autoModules: true,
-    include: '**/*.css',
-    extensions: ['.css'],
-    plugins: [],
-    minimize: true,
-  }),
   nodeResolve(),
   ts({
     typescript,
@@ -68,24 +60,47 @@ const sharedPlugins = [
     include: 'node_modules/**',
   }),
 ]
-// this step is just to build the minified css and es modules javascript
+// this step is just to build the minified javascript files
 const minifiedBuildFormats = buildFormats.map(({ file, ...rest }) => ({
   file: file.replace(/(\.[cm]?js)$/, '.min$1'),
   ...rest,
+  minify: true,
   plugins: [terser(), filesize()],
 }))
 
 const allBuildFormats = [...buildFormats, ...minifiedBuildFormats]
 
-const config = {
-  input,
-  output: allBuildFormats.map((buildFormat) => ({
-    name,
-    ...buildFormat,
-    sourcemap: true,
-  })),
-  external,
-  plugins: sharedPlugins,
-}
+const config = allBuildFormats.map(
+  ({ file, format, globals, plugins: specificPlugins, minify }) => {
+    const plugins = [
+      ...sharedPlugins,
+      postcss({
+        extract: minify ? 'react-tooltip.min.css' : 'react-tooltip.css', // this will generate a specific file and override on multiples build, but the css will be the same
+        autoModules: true,
+        include: '**/*.css',
+        extensions: ['.css'],
+        plugins: [],
+        minimize: Boolean(minify),
+      }),
+    ]
+
+    if (specificPlugins && specificPlugins.length) {
+      plugins.push(...specificPlugins)
+    }
+
+    return {
+      input,
+      output: {
+        file,
+        format,
+        name,
+        globals,
+        sourcemap: true,
+      },
+      external,
+      plugins,
+    }
+  },
+)
 
 export default config
