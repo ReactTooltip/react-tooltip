@@ -26,10 +26,9 @@ This resulted in a great improvement in performance, and made it easier for the 
 - Default Padding changed from `padding: 8px 21px;` to `padding: 8px 16px;`
 - Exported module now is `Tooltip` instead of `ReactTooltip`
 - If you already have a `Tooltip` component in your application and want to explicitly declare this as `ReactTooltip`, just `import { Tooltip as ReactTooltip } from "react-tooltip"`
-- CSS import is now optional, so you can modify and/or add any styling to your floating tooltip element
 - `data-for` attribute now is `data-tooltip-id`
 - `data-tip` attribute now is `data-tooltip-content`
-- `getContent` prop was removed. Instead, you can directly pass dynamic content to the `content` tooltip prop, or to `data-tooltip-content` in the anchor element
+- `getContent` prop was removed. Instead, you can directly pass dynamic content to the `content` tooltip prop, or to `data-tooltip-content` in the anchor element, or use the new `render` tooltip prop
 - Default behavior of tooltip now is equivalent to V4's `solid` effect, instead of `float`. The new `float` prop can be set to achieve V4's `effect="float"`. See [Options](../options.mdx) for more details
 
 ## What about `ReactTooltip.rebuild()`?
