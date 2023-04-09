@@ -153,6 +153,86 @@ import ReactDOMServer from 'react-dom/server';
 </a>
 ```
 
+## Troubleshooting
+
+Before trying these, make sure you're running the latest ReactTooltip version with
+
+```sh
+npm install react-tooltip@latest
+```
+
+or
+
+```sh
+yarn add react-tooltip@latest
+```
+
+If you can't find your problem here, make sure there isn't [an open issue](https://github.com/ReactTooltip/react-tooltip/issues) already covering it.
+If there isn't, feel free to [submit a new issue](https://github.com/ReactTooltip/react-tooltip/issues/new/choose).
+
+### Next.js `TypeError: f is not a function`
+
+This problem seems to be caused by a bug related to the SWC bundler used by Next.js. 
+The best way to solve this is to upgrade to `next@13.3.0` or later versions.
+
+Less ideally, if you're unable to upgrade, you can set `swcMinify: false` on your `next.config.js` file.
+
+### Bad performance
+
+If you're experiencing any kind of unexpected behavior or bad performance on your application when using ReactTooltip, here are a few things you can try.
+
+#### Move `<Tooltip />` on the DOM
+
+This is specially relevant when using components that are conditionally rendered.
+
+Always try to keep the `<Tooltip />` component rendered, so if you're having issues with a tooltip you've placed inside a component which is placed/removed from the DOM dynamically, try to move the tooltip outside of it.
+
+We usually recommend placing the tooltip component directly inside the root component of your application (usually on `App.jsx`/`App.tsx`). You can also move the `import 'react-tooltip/dist/react-tooltip.css'` there.
+
+#### Dynamically generated anchor elements
+
+You should avoid needlessly using a large amount of `<Tooltip />` components. One tooltip component that you use across your whole application should be good enough in most cases, but you should be fine to add a few more if you need to use different styled tooltips.
+
+Here's a simple example on how to improve performance when using dynamically generated items.
+Check the docs for examples for the [`anchorSelect`](https://react-tooltip.com/docs/examples/anchor-select) and [`render`](https://react-tooltip.com/docs/examples/render) props for more complex use cases.
+
+```jsx
+// ❌ BAD
+<div className="items-container">
+  {
+    myItems.map(({ id, content, tooltip }) => (
+      <div
+        key={id}
+        className="item"
+        data-tooltip-id={`tooltip-${id}`}
+      >
+        {content}
+        <Tooltip id={`tooltip-${id}`} content={tooltip} />
+      </div>
+    ))
+  }
+</div>
+```
+
+```jsx
+// ✅ GOOD
+<div className="items-container">
+  {
+    myItems.map(({ id, content, tooltip }) => (
+      <div
+        key={id}
+        className="item"
+        data-tooltip-id="my-tooltip"
+        data-tooltip-content={tooltip}
+      >
+        {content}
+      </div>
+    ))
+  }
+</div>
+<Tooltip id="my-tooltip" />
+```
+
 ## Article
 
 [How I insert sass into react component](https://medium.com/@wwayne_me/how-i-insert-sass-into-my-npm-react-component-b46b9811c226#.gi4hxu44a)
