@@ -170,6 +170,18 @@ yarn add react-tooltip@latest
 If you can't find your problem here, make sure there isn't [an open issue](https://github.com/ReactTooltip/react-tooltip/issues) already covering it.
 If there isn't, feel free to [submit a new issue](https://github.com/ReactTooltip/react-tooltip/issues/new/choose).
 
+### The tooltip is broken/not showing up
+
+Make sure you've imported the default styling. You only need to do this once on your application, `App.jsx`/`App.tsx` is usually a good place to do it.
+
+```jsx
+import 'react-tooltip/dist/react-tooltip.css'
+```
+
+If you've imported the default styling and the tooltip is still not showing up when you hover on your anchor element, make sure you have content to be displayed by the tooltip.
+
+If `data-tooltip-content` and `data-tooltip-html` are both unset (or they have empty values) on the anchor element, and also the `content`, `render`, and `children` props on the tooltip are unset (or have empty values), the tooltip is not shown by default.
+
 ### Next.js `TypeError: f is not a function`
 
 This problem seems to be caused by a bug related to the SWC bundler used by Next.js. 
