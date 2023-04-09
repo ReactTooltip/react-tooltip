@@ -194,7 +194,8 @@ We usually recommend placing the tooltip component directly inside the root comp
 You should avoid needlessly using a large amount of `<Tooltip />` components. One tooltip component that you use across your whole application should be good enough in most cases, but you should be fine to add a few more if you need to use different styled tooltips.
 
 Here's a simple example on how to improve performance when using dynamically generated items.
-Check the docs for examples for the [`anchorSelect`](https://react-tooltip.com/docs/examples/anchor-select) and [`render`](https://react-tooltip.com/docs/examples/render) props for more complex use cases.
+
+> Check the docs for examples for the [`anchorSelect`](https://react-tooltip.com/docs/examples/anchor-select) and [`render`](https://react-tooltip.com/docs/examples/render) props for more complex use cases.
 
 ```jsx
 // ❌ BAD
