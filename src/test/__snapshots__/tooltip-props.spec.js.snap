@@ -10,12 +10,10 @@ exports[`tooltip props basic tooltip 1`] = `
   <div
     class="react-tooltip react-tooltip__place-top"
     role="tooltip"
-    style="left: 5px; top: -10px;"
   >
     Hello World!
     <div
       class="react-tooltip-arrow"
-      style="left: 5px; bottom: -4px;"
     />
   </div>
 </div>
