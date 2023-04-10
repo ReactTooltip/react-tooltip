@@ -16,11 +16,21 @@ const debounce = (func: (...args: any[]) => void, wait?: number, immediate?: tru
       }
     }
 
-    if (timeout) {
-      clearTimeout(timeout)
+    if (immediate && !timeout) {
+      /**
+       * there's not need to clear the timeout
+       * since we expect it to resolve and set `timeout = null`
+       */
+      func.apply(this, args)
+      timeout = setTimeout(later, wait)
     }
 
-    timeout = setTimeout(later, wait)
+    if (!immediate) {
+      if (timeout) {
+        clearTimeout(timeout)
+      }
+      timeout = setTimeout(later, wait)
+    }
   }
 }
 

@@ -284,8 +284,8 @@ const Tooltip = ({
 
   // debounce handler to prevent call twice when
   // mouse enter and focus events being triggered toggether
-  const debouncedHandleShowTooltip = debounce(handleShowTooltip, 50)
-  const debouncedHandleHideTooltip = debounce(handleHideTooltip, 50)
+  const debouncedHandleShowTooltip = debounce(handleShowTooltip, 50, true)
+  const debouncedHandleHideTooltip = debounce(handleHideTooltip, 50, true)
 
   useEffect(() => {
     const elementRefs = new Set(anchorRefs)
