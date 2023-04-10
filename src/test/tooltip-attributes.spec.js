@@ -43,6 +43,7 @@ describe('tooltip attributes', () => {
 
     await waitFor(() => {
       tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveAttribute('style')
     })
 
     expect(anchorElement).toHaveAttribute('data-tooltip-content')
@@ -66,6 +67,7 @@ describe('tooltip attributes', () => {
 
     await waitFor(() => {
       tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveAttribute('style')
     })
 
     expect(anchorElement).toHaveAttribute('data-tooltip-place')

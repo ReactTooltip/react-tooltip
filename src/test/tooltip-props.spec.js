@@ -39,6 +39,7 @@ describe('tooltip props', () => {
 
     await waitFor(() => {
       tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveAttribute('style')
     })
 
     expect(tooltip).toBeInTheDocument()
@@ -57,6 +58,7 @@ describe('tooltip props', () => {
 
     await waitFor(() => {
       tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveAttribute('style')
     })
 
     expect(tooltip).toBeInTheDocument()
@@ -73,6 +75,7 @@ describe('tooltip props', () => {
 
     await waitFor(() => {
       tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveAttribute('style')
     })
 
     expect(tooltip).toBeInTheDocument()
@@ -101,6 +104,7 @@ describe('tooltip props', () => {
     await waitFor(() => {
       tooltip = screen.getByRole('tooltip')
       button = screen.getByRole('button')
+      expect(tooltip).toHaveAttribute('style')
     })
 
     await userEvent.click(button)
@@ -132,6 +136,7 @@ describe('tooltip props', () => {
 
     await waitFor(() => {
       tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveAttribute('style')
     })
 
     expect(tooltip).toBeInTheDocument()
@@ -185,6 +190,7 @@ describe('tooltip props', () => {
 
     await waitFor(() => {
       tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveAttribute('style')
     })
 
     expect(tooltip).toBeInTheDocument()
@@ -201,6 +207,7 @@ describe('tooltip props', () => {
 
     await waitFor(() => {
       tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveAttribute('style')
     })
 
     expect(tooltip).toBeInTheDocument()
