@@ -34,10 +34,12 @@ exports[`tooltip attributes tooltip with place 1`] = `
   <div
     class="react-tooltip react-tooltip__place-right"
     role="tooltip"
+    style="left: 10px; top: 5px;"
   >
     Hello World!
     <div
       class="react-tooltip-arrow"
+      style="left: -4px; top: 5px;"
     />
   </div>
 </div>

@@ -54,10 +54,12 @@ exports[`tooltip props tooltip with custom position 1`] = `
   <div
     class="react-tooltip react-tooltip__place-top"
     role="tooltip"
+    style="left: 5px; top: -10px;"
   >
     Hello World!
     <div
       class="react-tooltip-arrow"
+      style="left: 5px; bottom: -4px;"
     />
   </div>
 </div>
@@ -83,10 +85,12 @@ exports[`tooltip props tooltip with delay show 1`] = `
   <div
     class="react-tooltip react-tooltip__place-top"
     role="tooltip"
+    style="left: 5px; top: -10px;"
   >
     Hello World!
     <div
       class="react-tooltip-arrow"
+      style="left: 5px; bottom: -4px;"
     />
   </div>
 </div>
@@ -123,6 +127,7 @@ exports[`tooltip props tooltip with html 1`] = `
   <div
     class="react-tooltip react-tooltip__place-top"
     role="tooltip"
+    style="left: 5px; top: -10px;"
   >
     <span>
       <div>
@@ -132,6 +137,7 @@ exports[`tooltip props tooltip with html 1`] = `
     </span>
     <div
       class="react-tooltip-arrow"
+      style="left: 5px; bottom: -4px;"
     />
   </div>
 </div>
@@ -147,10 +153,12 @@ exports[`tooltip props tooltip with place 1`] = `
   <div
     class="react-tooltip react-tooltip__place-right"
     role="tooltip"
+    style="left: 10px; top: 5px;"
   >
     Hello World!
     <div
       class="react-tooltip-arrow"
+      style="left: -4px; top: 5px;"
     />
   </div>
 </div>
