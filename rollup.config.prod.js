@@ -19,6 +19,19 @@ const external = [
 ]
 
 const buildFormats = [
+  /**
+   * Temporary build to keep the extracted CSS file.
+   * I don't want to do a major release now with only the CSS change,
+   * so, we will keep the css being exported by the lib and now
+   * we will inject the css into the head by default.
+   * The CSS file import is deprecated and the file is only
+   * for style reference now.
+   */
+  {
+    file: 'dist/react-tooltip.mjs',
+    format: 'es',
+    extractCSS: true,
+  },
   {
     file: 'dist/react-tooltip.umd.js',
     format: 'umd',
@@ -61,21 +74,23 @@ const sharedPlugins = [
   }),
 ]
 // this step is just to build the minified javascript files
-const minifiedBuildFormats = buildFormats.map(({ file, ...rest }) => ({
+const minifiedBuildFormats = buildFormats.map(({ file, extractCSS, ...rest }) => ({
   file: file.replace(/(\.[cm]?js)$/, '.min$1'),
   ...rest,
   minify: true,
+  extractCSS,
   plugins: [terser(), filesize()],
 }))
 
 const allBuildFormats = [...buildFormats, ...minifiedBuildFormats]
 
 const config = allBuildFormats.map(
-  ({ file, format, globals, plugins: specificPlugins, minify }) => {
+  ({ file, format, globals, plugins: specificPlugins, minify, extractCSS }) => {
     const plugins = [
       ...sharedPlugins,
       postcss({
-        extract: minify ? 'react-tooltip.min.css' : 'react-tooltip.css', // this will generate a specific file and override on multiples build, but the css will be the same
+        // eslint-disable-next-line no-nested-ternary
+        extract: extractCSS ? (minify ? 'react-tooltip.min.css' : 'react-tooltip.css') : false, // this will generate a specific file and override on multiples build, but the css will be the same
         autoModules: true,
         include: '**/*.css',
         extensions: ['.css'],
