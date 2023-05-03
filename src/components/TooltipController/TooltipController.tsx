@@ -201,17 +201,18 @@ const TooltipController = ({
   }, [anchorRefs, providerActiveAnchor, activeAnchor, anchorId, anchorSelect])
 
   /**
-   * content priority: children < renderContent or content < html
+   * content priority: children < render or content < html
    * children should be lower priority so that it can be used as the "default" content
    */
   let renderedContent: ChildrenType = children
   const contentWrapperRef = useRef<HTMLDivElement>(null)
   if (render) {
-    renderedContent = (
+    const rendered = render({ content: tooltipContent ?? null, activeAnchor }) as React.ReactNode
+    renderedContent = rendered ? (
       <div ref={contentWrapperRef} className="react-tooltip-content-wrapper">
-        {render({ content: tooltipContent ?? null, activeAnchor }) as React.ReactNode}
+        {rendered}
       </div>
-    )
+    ) : null
   } else if (tooltipContent) {
     renderedContent = tooltipContent
   }
