@@ -24,6 +24,7 @@ export type DataAttribute =
   | 'delay-show'
   | 'delay-hide'
   | 'float'
+  | 'hidden'
 
 /**
  * @description floating-ui middleware
@@ -62,6 +63,7 @@ export interface ITooltip {
   delayShow?: number
   delayHide?: number
   float?: boolean
+  hidden?: boolean
   noArrow?: boolean
   clickable?: boolean
   closeOnEsc?: boolean
