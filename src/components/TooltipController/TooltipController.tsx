@@ -35,6 +35,7 @@ const TooltipController = ({
   delayShow = 0,
   delayHide = 0,
   float = false,
+  hidden = false,
   noArrow = false,
   clickable = false,
   closeOnEsc = false,
@@ -53,6 +54,7 @@ const TooltipController = ({
   const [tooltipDelayShow, setTooltipDelayShow] = useState(delayShow)
   const [tooltipDelayHide, setTooltipDelayHide] = useState(delayHide)
   const [tooltipFloat, setTooltipFloat] = useState(float)
+  const [tooltipHidden, setTooltipHidden] = useState(hidden)
   const [tooltipWrapper, setTooltipWrapper] = useState<WrapperType>(wrapper)
   const [tooltipEvents, setTooltipEvents] = useState(events)
   const [tooltipPositionStrategy, setTooltipPositionStrategy] = useState(positionStrategy)
@@ -111,6 +113,9 @@ const TooltipController = ({
       },
       float: (value) => {
         setTooltipFloat(value === null ? float : value === 'true')
+      },
+      hidden: (value) => {
+        setTooltipHidden(value === null ? hidden : value === 'true')
       },
     }
     // reset unset data attributes to default values
@@ -239,6 +244,7 @@ const TooltipController = ({
     delayShow: tooltipDelayShow,
     delayHide: tooltipDelayHide,
     float: tooltipFloat,
+    hidden: tooltipHidden,
     noArrow,
     clickable,
     closeOnEsc,

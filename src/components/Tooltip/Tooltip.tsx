@@ -25,6 +25,7 @@ const Tooltip = ({
   delayShow = 0,
   delayHide = 0,
   float = false,
+  hidden = false,
   noArrow = false,
   clickable = false,
   closeOnEsc = false,
@@ -538,7 +539,7 @@ const Tooltip = ({
     }
   }, [id, anchorSelect])
 
-  const canShow = content && show && Object.keys(inlineStyles).length > 0
+  const canShow = !hidden && content && show && Object.keys(inlineStyles).length > 0
 
   return rendered ? (
     <WrapperElement

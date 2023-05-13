@@ -42,6 +42,7 @@ export interface ITooltipController {
   delayShow?: number
   delayHide?: number
   float?: boolean
+  hidden?: boolean
   noArrow?: boolean
   clickable?: boolean
   closeOnEsc?: boolean
@@ -70,5 +71,6 @@ declare module 'react' {
     'data-tooltip-delay-show'?: number
     'data-tooltip-delay-hide'?: number
     'data-tooltip-float'?: boolean
+    'data-tooltip-hidden'?: boolean
   }
 }
