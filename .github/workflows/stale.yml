@@ -21,10 +21,10 @@ jobs:
     - uses: actions/stale@v5
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        days-before-issue-stale: 30
-        days-before-issue-close: 14
-        days-before-pr-stale: 30
-        days-before-pr-close: 14
+        days-before-issue-stale: 90
+        days-before-issue-close: 30
+        days-before-pr-stale: 90
+        days-before-pr-close: 30
         stale-issue-message: 'This issue is stale because it has not seen activity in 30 days. Remove the `stale` label or comment within 14 days, or it will be closed.'
         stale-pr-message: 'This pull request is stale because it has not seen activity in 30 days. Remove the `stale` label or comment within 14 days, or it will be closed.'
         stale-issue-label: 'stale'
