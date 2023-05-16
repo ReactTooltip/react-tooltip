@@ -6,6 +6,7 @@
 [![npm download][download-image]][download-url]
 ![minified](https://badgen.net/bundlephobia/min/react-tooltip)
 ![minified gzip](https://badgen.net/bundlephobia/minzip/react-tooltip)
+
 <!-- ![last commit](https://badgen.net/github/last-commit/reacttooltip/react-tooltip) -->
 
 [download-image]: https://img.shields.io/npm/dm/react-tooltip.svg?style=flat-square
@@ -17,7 +18,7 @@
   </a>
 </p>
 
-If you like the project, please give the project a GitHub 🌟 
+If you like the project, please give the project a GitHub 🌟
 
 ## Demo
 
@@ -55,20 +56,23 @@ yarn add react-tooltip
 
 ## Usage
 
+> :warning: ReactTooltip will inject the default styles into the page by default on version `5.13.0` or newer.
+> The `react-tooltip/dist/react-tooltip.css` file is only for style reference and doesn't need to be imported manually anymore if you are already using `v5.13.0` or upper.
+
 > :warning: If you were already using `react-tooltip<=5.7.5`, you'll be getting some deprecation warnings regarding the `anchorId` prop and some other features.
-In versions >=5.8.0, we've introduced the `data-tooltip-id` attribute, and the `anchorSelect` prop, which are our recommended methods of using the tooltip moving forward. Check [the docs](https://react-tooltip.com/docs/getting-started) for more details.
+> In versions >=5.8.0, we've introduced the `data-tooltip-id` attribute, and the `anchorSelect` prop, which are our recommended methods of using the tooltip moving forward. Check [the docs](https://react-tooltip.com/docs/getting-started) for more details.
 
 ### Using NPM package
 
 1 . Import the CSS file to set default styling.
 
-> :warning: You must import the CSS file or the tooltip won't show!
+> :warning: If you are using a version before than `v5.13.0`, you must import the CSS file or the tooltip won't show!
 
 ```js
 import 'react-tooltip/dist/react-tooltip.css'
 ```
 
-This needs to be done only once. We suggest you do it on your `src/index.js` or equivalent file.
+This needs to be done only once and only if you are using a version before than `5.13.0`. We suggest you do it on your `src/index.js` or equivalent file.
 
 2 . Import `react-tooltip` after installation.
 
@@ -123,7 +127,7 @@ You can import `node_modules/react-tooltip/dist/react-tooltip.[mode].js` into yo
 
 mode: `esm` `cjs` `umd`
 
-Don't forget to import the CSS file from `node_modules/react-tooltip/dist/react-tooltip.css` to set default styling. This needs to be done only once in your application.
+If you are using a version older than `v5.13.0` don't forget to import the CSS file from `node_modules/react-tooltip/dist/react-tooltip.css` to set default styling. This needs to be done only once in your application. Version `v5.13.0` or newer already inject the default styles into the page by default.
 
 PS: all the files have a minified version and a non-minified version.
 
@@ -145,7 +149,7 @@ You can use [`renderToStaticMarkup()` function](https://reactjs.org/docs/react-d
 ```jsx
 import ReactDOMServer from 'react-dom/server';
 [...]
-<a 
+<a
   data-tooltip-id="my-tooltip"
   data-tooltip-html={ReactDOMServer.renderToStaticMarkup(<div>I am <b>JSX</b> content</div>)}
 >
@@ -172,7 +176,7 @@ If there isn't, feel free to [submit a new issue](https://github.com/ReactToolti
 
 ### The tooltip is broken/not showing up
 
-Make sure you've imported the default styling. You only need to do this once on your application, `App.jsx`/`App.tsx` is usually a good place to do it.
+Make sure you've imported the default styling. You only need to do this once on your application and only if you are using a version before `5.13.0`, `App.jsx`/`App.tsx` is usually a good place to do it.
 
 ```jsx
 import 'react-tooltip/dist/react-tooltip.css'
@@ -184,7 +188,7 @@ If `data-tooltip-content` and `data-tooltip-html` are both unset (or they have e
 
 ### Next.js `TypeError: f is not a function`
 
-This problem seems to be caused by a bug related to the SWC bundler used by Next.js. 
+This problem seems to be caused by a bug related to the SWC bundler used by Next.js.
 The best way to solve this is to upgrade to `next@13.3.0` or later versions.
 
 Less ideally, if you're unable to upgrade, you can set `swcMinify: false` on your `next.config.js` file.
@@ -199,7 +203,7 @@ This is specially relevant when using components that are conditionally rendered
 
 Always try to keep the `<Tooltip />` component rendered, so if you're having issues with a tooltip you've placed inside a component which is placed/removed from the DOM dynamically, try to move the tooltip outside of it.
 
-We usually recommend placing the tooltip component directly inside the root component of your application (usually on `App.jsx`/`App.tsx`). You can also move the `import 'react-tooltip/dist/react-tooltip.css'` there.
+We usually recommend placing the tooltip component directly inside the root component of your application (usually on `App.jsx`/`App.tsx`).
 
 #### Dynamically generated anchor elements
 
@@ -212,18 +216,12 @@ Here's a simple example on how to improve performance when using dynamically gen
 ```jsx
 // ❌ BAD
 <div className="items-container">
-  {
-    myItems.map(({ id, content, tooltip }) => (
-      <div
-        key={id}
-        className="item"
-        data-tooltip-id={`tooltip-${id}`}
-      >
-        {content}
-        <Tooltip id={`tooltip-${id}`} content={tooltip} />
-      </div>
-    ))
-  }
+  {myItems.map(({ id, content, tooltip }) => (
+    <div key={id} className="item" data-tooltip-id={`tooltip-${id}`}>
+      {content}
+      <Tooltip id={`tooltip-${id}`} content={tooltip} />
+    </div>
+  ))}
 </div>
 ```
 
@@ -267,7 +265,6 @@ Here's a simple example on how to improve performance when using dynamically gen
 [huumanoid](https://github.com/huumanoid) (inactive)
 
 [wwayne](https://github.com/wwayne) (inactive) - Creator of the original React Tooltip (V1.x ~ V4.x.)
-
 
 We would gladly accept a new maintainer to help out!
 
