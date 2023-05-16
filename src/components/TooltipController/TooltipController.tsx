@@ -139,6 +139,34 @@ const TooltipController = ({
   }, [place])
 
   useEffect(() => {
+    setTooltipVariant(variant)
+  }, [variant])
+
+  useEffect(() => {
+    setTooltipOffset(offset)
+  }, [offset])
+
+  useEffect(() => {
+    setTooltipDelayShow(delayShow)
+  }, [delayShow])
+
+  useEffect(() => {
+    setTooltipDelayHide(delayHide)
+  }, [delayHide])
+
+  useEffect(() => {
+    setTooltipFloat(float)
+  }, [float])
+
+  useEffect(() => {
+    setTooltipHidden(hidden)
+  }, [hidden])
+
+  useEffect(() => {
+    setTooltipPositionStrategy(positionStrategy)
+  }, [positionStrategy])
+
+  useEffect(() => {
     const elementRefs = new Set(anchorRefs)
 
     let selector = anchorSelect
