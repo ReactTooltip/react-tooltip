@@ -13,6 +13,16 @@ const input = ['src/index.tsx']
 
 const name = 'ReactTooltip'
 
+const banner = `
+/*
+* React Tooltip
+* {@link https://github.com/ReactTooltip/react-tooltip}
+* @copyright ReactTooltip Team
+* @license MIT
+*/
+
+'use client';` // this 'use client' prevent break Next.js 13 projects when using tooltip on server side components
+
 const external = [
   ...Object.keys(pkg.peerDependencies ?? {}),
   ...Object.keys(pkg.dependencies ?? {}),
@@ -79,7 +89,7 @@ const minifiedBuildFormats = buildFormats.map(({ file, extractCSS, ...rest }) =>
   ...rest,
   minify: true,
   extractCSS,
-  plugins: [terser(), filesize()],
+  plugins: [terser({ compress: { directives: false } }), filesize()],
 }))
 
 const allBuildFormats = [...buildFormats, ...minifiedBuildFormats]
@@ -111,6 +121,7 @@ const config = allBuildFormats.map(
         name,
         globals,
         sourcemap: true,
+        banner,
       },
       external,
       plugins,
