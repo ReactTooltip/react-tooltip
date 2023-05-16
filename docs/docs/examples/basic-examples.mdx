@@ -7,7 +7,6 @@ sidebar_position: 0
 Some basic examples of how to use the ReactTooltip component.
 
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 export const TooltipAnchor = ({ children, id, ...rest }) => {
   return (
@@ -38,7 +37,6 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <a data-tooltip-id="my-tooltip" data-tooltip-content="Hello world!">
   ◕‿‿◕
@@ -49,7 +47,15 @@ import 'react-tooltip/dist/react-tooltip.css';
 <Tooltip id="my-tooltip" />
 ```
 
-<div style={{ display: 'flex', flexDirection: 'row', width: 'fit-content', margin: 'auto', gap: '5px' }}>
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'row',
+    width: 'fit-content',
+    margin: 'auto',
+    gap: '5px',
+  }}
+>
   <TooltipAnchor data-tooltip-id="my-tooltip" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </TooltipAnchor>
@@ -61,25 +67,20 @@ import 'react-tooltip/dist/react-tooltip.css';
 
 ### Props
 
-
 #### Using anchor element `id`
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css'
 
 <a id="my-anchor-element">◕‿‿◕</a>
-<Tooltip 
+<Tooltip
   anchorSelect="#my-anchor-element"
   content="Hello world!"
 />
 ```
 
 <TooltipAnchor id="my-anchor-element">◕‿‿◕</TooltipAnchor>
-<Tooltip 
-  anchorSelect="#my-anchor-element"
-  content="Hello world!"
-/>
+<Tooltip anchorSelect="#my-anchor-element" content="Hello world!" />
 
 #### Using anchor elements `className`
 
@@ -91,21 +92,25 @@ Check the [Anchor select examples](./anchor-select.mdx) for more complex use cas
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css'
 
 <a className="my-anchor-element">◕‿‿◕</a>
 <a className="my-anchor-element">◕‿‿◕</a>
-<Tooltip 
+<Tooltip
   anchorSelect=".my-anchor-element"
   content="Hello world!"
 />
 ```
 
-<div style={{ display: 'flex', flexDirection: 'row', width: 'fit-content', margin: 'auto', gap: '5px' }}>
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'row',
+    width: 'fit-content',
+    margin: 'auto',
+    gap: '5px',
+  }}
+>
   <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
   <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
 </div>
-<Tooltip 
-  anchorSelect=".my-anchor-element"
-  content="Hello world!"
-/>
+<Tooltip anchorSelect=".my-anchor-element" content="Hello world!" />

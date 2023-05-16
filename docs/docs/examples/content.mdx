@@ -7,7 +7,6 @@ sidebar_position: 1
 Setting the ReactTooltip content.
 
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 export const TooltipAnchor = ({ children, id, ...rest }) => {
   return (
@@ -34,12 +33,10 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-
 ### Using `data-tooltip-content` anchor element attribute
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <a
   data-tooltip-id="my-tooltip"
@@ -50,10 +47,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 <Tooltip id="my-tooltip" />
 ```
 
-<TooltipAnchor
-  data-tooltip-id="my-tooltip"
-  data-tooltip-content="Hello world!"
->
+<TooltipAnchor data-tooltip-id="my-tooltip" data-tooltip-content="Hello world!">
   ◕‿‿◕
 </TooltipAnchor>
 <Tooltip id="my-tooltip" />
@@ -62,17 +56,13 @@ import 'react-tooltip/dist/react-tooltip.css';
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <a id="my-anchor-element">◕‿‿◕</a>
-<Tooltip 
+<Tooltip
   anchorSelect="#my-anchor-element"
   content="Hello world!"
 />
 ```
 
 <TooltipAnchor id="my-anchor-element">◕‿‿◕</TooltipAnchor>
-<Tooltip
-  anchorSelect="#my-anchor-element"
-  content="Hello world!"
-/>
+<Tooltip anchorSelect="#my-anchor-element" content="Hello world!" />

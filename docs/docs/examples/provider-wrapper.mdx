@@ -13,7 +13,6 @@ This has been deprecated. Use the `data-tooltip-id` attribute, or the `anchorSel
 :::
 
 import { Tooltip, TooltipProvider, TooltipWrapper } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 export const TooltipAnchor = ({ children, id, ...rest }) => {
   return (
@@ -40,11 +39,7 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
 }
 
 export const WithProvider = ({ children }) => {
-  return (
-    <TooltipProvider>
-      {children}
-    </TooltipProvider>
-  )
+  return <TooltipProvider>{children}</TooltipProvider>
 }
 
 ### Setting up `<TooltipProvider />`
@@ -54,8 +49,7 @@ For simplicity, just wrap your whole application with the provider.
 
 ```jsx
 // this is usually the `src/App.jsx` (or `src/App.tsx`) file
-import { TooltipProvider } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
+import { TooltipProvider } from 'react-tooltip'
 
 function App() {
   return (
@@ -65,14 +59,13 @@ function App() {
   )
 }
 
-export default App;
+export default App
 ```
 
 ### Using `<TooltipWrapper />`
 
 ```jsx
 import { Tooltip, TooltipWrapper } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <TooltipWrapper content="I am using a global tooltip!">
   <a> ◕‿‿◕ </a>
@@ -87,14 +80,10 @@ import 'react-tooltip/dist/react-tooltip.css';
 <div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
   <WithProvider>
     <TooltipWrapper content="I am using a global tooltip!">
-      <TooltipAnchor>
-        ◕‿‿◕
-      </TooltipAnchor>
+      <TooltipAnchor>◕‿‿◕</TooltipAnchor>
     </TooltipWrapper>
     <TooltipWrapper content="This is the same tooltip!">
-      <TooltipAnchor>
-        ◕‿‿◕
-      </TooltipAnchor>
+      <TooltipAnchor>◕‿‿◕</TooltipAnchor>
     </TooltipWrapper>
     <Tooltip />
   </WithProvider>
@@ -112,7 +101,6 @@ If you need to use multiple tooltips, each with multiple anchors, use the toolti
 
 ```jsx
 import { Tooltip, TooltipWrapper } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <TooltipWrapper tooltipId="tooltip-1">
   <a> ◕‿‿◕ </a>
@@ -133,24 +121,16 @@ import 'react-tooltip/dist/react-tooltip.css';
 <div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
   <WithProvider>
     <TooltipWrapper tooltipId="tooltip-1">
-      <TooltipAnchor>
-        ◕‿‿◕
-      </TooltipAnchor>
+      <TooltipAnchor>◕‿‿◕</TooltipAnchor>
     </TooltipWrapper>
     <TooltipWrapper tooltipId="tooltip-1">
-      <TooltipAnchor>
-        ◕‿‿◕
-      </TooltipAnchor>
+      <TooltipAnchor>◕‿‿◕</TooltipAnchor>
     </TooltipWrapper>
     <TooltipWrapper tooltipId="tooltip-2">
-      <TooltipAnchor>
-        ◕‿‿◕
-      </TooltipAnchor>
+      <TooltipAnchor>◕‿‿◕</TooltipAnchor>
     </TooltipWrapper>
     <TooltipWrapper tooltipId="tooltip-2">
-      <TooltipAnchor>
-        ◕‿‿◕
-      </TooltipAnchor>
+      <TooltipAnchor>◕‿‿◕</TooltipAnchor>
     </TooltipWrapper>
     <Tooltip id="tooltip-1" content="I am using tooltip-1" />
     <Tooltip id="tooltip-2" content="I am using tooltip-2" />

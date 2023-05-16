@@ -8,7 +8,6 @@ Controlled state example for the ReactTooltip component.
 
 import { useState } from 'react'
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 export const TooltipAnchor = ({ children, id, background, ...rest }) => {
   return (
@@ -51,7 +50,6 @@ It is just a demonstration, and you can come up with use cases as complex as you
 ```jsx
 import { useState } from 'react';
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 const [isOpen, setIsOpen] = useState(false)
 
@@ -89,34 +87,19 @@ export const ControlledStateExample = () => {
   const [isOpen, setIsOpen] = useState(false)
   return (
     <>
-      <TooltipAnchor
-        data-tooltip-id="my-tooltip"
-        onMouseEnter={() => setIsOpen(true)}
-      >
+      <TooltipAnchor data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
         ◕‿‿◕
       </TooltipAnchor>
-      <TooltipAnchor
-        data-tooltip-id="my-tooltip"
-        onMouseEnter={() => setIsOpen(true)}
-      >
+      <TooltipAnchor data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
         ◕‿‿◕
       </TooltipAnchor>
-      <TooltipAnchor
-        data-tooltip-id="my-tooltip"
-        onMouseEnter={() => setIsOpen(true)}
-      >
+      <TooltipAnchor data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
         ◕‿‿◕
       </TooltipAnchor>
-      <TooltipAnchor
-        data-tooltip-id="my-tooltip"
-        onMouseEnter={() => setIsOpen(true)}
-      >
+      <TooltipAnchor data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
         ◕‿‿◕
       </TooltipAnchor>
-      <TooltipAnchor
-        data-tooltip-id="my-tooltip"
-        onMouseEnter={() => setIsOpen(true)}
-      >
+      <TooltipAnchor data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
         ◕‿‿◕
       </TooltipAnchor>
       <TooltipAnchor
@@ -128,11 +111,7 @@ export const ControlledStateExample = () => {
       >
         ◕‿‿◕
       </TooltipAnchor>
-      <Tooltip
-        id="my-tooltip"
-        content="Hello world!"
-        isOpen={isOpen}
-      />
+      <Tooltip id="my-tooltip" content="Hello world!" isOpen={isOpen} />
     </>
   )
 }

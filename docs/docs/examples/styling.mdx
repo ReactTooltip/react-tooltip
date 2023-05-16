@@ -9,7 +9,6 @@ How to customize tooltip styles in ReactTooltip styles.
 Tooltip arrow inherits its background color from tooltip (its parent).
 
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 import CodeBlock from '@theme/CodeBlock'
 import TooltipStyles from '!!raw-loader!../../../src/components/Tooltip/styles.module.css'
 
@@ -43,7 +42,6 @@ You can add styles into the tooltip with inline styling.
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 <a
   data-tooltip-id="my-tooltip-inline"
@@ -57,13 +55,11 @@ import 'react-tooltip/dist/react-tooltip.css'
 />
 ```
 
-<div
-  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
->
+<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}>
   <TooltipAnchor data-tooltip-id="my-tooltip-inline" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip id="my-tooltip-inline" style={{ backgroundColor: "rgb(0, 255, 30)", color: "#222" }} />
+  <Tooltip id="my-tooltip-inline" style={{ backgroundColor: 'rgb(0, 255, 30)', color: '#222' }} />
 </div>
 
 ### Classes
@@ -74,7 +70,6 @@ Using CSS Specificity you can add a class with more specificity than the default
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 <style>
 .example {
@@ -98,10 +93,7 @@ import 'react-tooltip/dist/react-tooltip.css'
   className="example-container"
   style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
 >
-  <TooltipAnchor
-    data-tooltip-id="my-tooltip-styles"
-    data-tooltip-content="Hello world!"
-  >
+  <TooltipAnchor data-tooltip-id="my-tooltip-styles" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </TooltipAnchor>
   <Tooltip id="my-tooltip-styles" className="example" />
@@ -149,7 +141,6 @@ To make this work as expected, we need to add another level of specificity:
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 <style>
 .example-container .example-orange {
@@ -173,17 +164,13 @@ import 'react-tooltip/dist/react-tooltip.css'
   <TooltipAnchor data-tooltip-id="my-tooltip-orange" data-tooltip-content="Hello world!">
     ◕‿‿◕
   </TooltipAnchor>
-  <Tooltip
-    id="my-tooltip-orange"
-    className="example-orange"
-  />
+  <Tooltip id="my-tooltip-orange" className="example-orange" />
 </div>
 
 #### Pink
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 <style>
 .example-container .example-pink {
@@ -214,7 +201,6 @@ import 'react-tooltip/dist/react-tooltip.css'
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 <style>
 .example-container .example-diff-arrow {
@@ -251,7 +237,6 @@ import 'react-tooltip/dist/react-tooltip.css'
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 <style>
 .example-container .example-no-radius {
@@ -281,7 +266,6 @@ import 'react-tooltip/dist/react-tooltip.css'
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 <style>
 .example-container .example-rounded {
@@ -313,7 +297,6 @@ import 'react-tooltip/dist/react-tooltip.css'
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 <style>
 .example-container .example-no-padding {
@@ -343,7 +326,6 @@ import 'react-tooltip/dist/react-tooltip.css'
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 <style>
 .example-container .example-padding {
@@ -369,7 +351,7 @@ import 'react-tooltip/dist/react-tooltip.css'
   <Tooltip id="my-tooltip-padding" className="example-padding" />
 </div>
 
-----
+---
 
 :::info
 

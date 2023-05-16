@@ -13,7 +13,6 @@ This has been deprecated. Use the `openOnClick` tooltip prop instead.
 :::
 
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 export const TooltipAnchor = ({ children, id, ...rest }) => {
   return (
@@ -50,10 +49,9 @@ This is the default event option, so it doesn't have to be manually set.
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <a data-tooltip-id="my-tooltip"> ◕‿‿◕ </a>
-<Tooltip 
+<Tooltip
   id="my-tooltip"
   content="Hello world!"
   events={['hover']}
@@ -61,11 +59,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 ```
 
 <TooltipAnchor data-tooltip-id="my-tooltip">◕‿‿◕</TooltipAnchor>
-<Tooltip
-  id="my-tooltip"
-  content="Hello world!"
-  events={['hover']}
-/>
+<Tooltip id="my-tooltip" content="Hello world!" events={['hover']} />
 
 ### Using `click`
 
@@ -77,10 +71,9 @@ Clicking anywhere outside the anchor element will close the tooltip.
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <a data-tooltip-id="my-tooltip-click"> ◕‿‿◕ </a>
-<Tooltip 
+<Tooltip
   id="my-tooltip-click"
   content="Hello world!"
   events={['click']}
@@ -88,8 +81,4 @@ import 'react-tooltip/dist/react-tooltip.css';
 ```
 
 <TooltipAnchor data-tooltip-id="my-tooltip-click">◕‿‿◕</TooltipAnchor>
-<Tooltip
-  id="my-tooltip-click"
-  content="Hello world!"
-  events={['click']}
-/>
+<Tooltip id="my-tooltip-click" content="Hello world!" events={['click']} />
