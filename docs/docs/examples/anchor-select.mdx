@@ -7,7 +7,6 @@ sidebar_position: 1
 Using the ReactTooltip anchor select prop.
 
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 export const TooltipAnchor = ({ children, id, ...rest }) => {
   return (
@@ -48,7 +47,6 @@ A CSS selector for a specific id begins with a `#`. Don't forget to put it befor
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <a id="my-anchor-element-id">◕‿‿◕</a>
 <Tooltip
@@ -59,10 +57,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 ```
 
 <TooltipAnchor id="my-anchor-element-id">◕‿‿◕</TooltipAnchor>
-<Tooltip
-  anchorSelect="#my-anchor-element-id"
-  content="Hello world!"
-/>
+<Tooltip anchorSelect="#my-anchor-element-id" content="Hello world!" />
 
 #### Using class attribute
 
@@ -74,7 +69,6 @@ A CSS selector for a specific id begins with a `.`. Don't forget to put it befor
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <a className="my-anchor-element-class">◕‿‿◕</a>
 <a className="my-anchor-element-class">◕‿‿◕</a>
@@ -88,23 +82,12 @@ import 'react-tooltip/dist/react-tooltip.css';
 ```
 
 <div style={{ display: 'flex', gap: '5px', width: 'fit-content', margin: 'auto' }}>
-  <TooltipAnchor className="my-anchor-element-class">
-    ◕‿‿◕
-  </TooltipAnchor>
-  <TooltipAnchor className="my-anchor-element-class">
-    ◕‿‿◕
-  </TooltipAnchor>
-  <TooltipAnchor className="my-anchor-element-class">
-    ◕‿‿◕
-  </TooltipAnchor>
-  <TooltipAnchor className="my-anchor-element-class">
-    ◕‿‿◕
-  </TooltipAnchor>
+  <TooltipAnchor className="my-anchor-element-class">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor className="my-anchor-element-class">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor className="my-anchor-element-class">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor className="my-anchor-element-class">◕‿‿◕</TooltipAnchor>
 </div>
-<Tooltip
-  anchorSelect=".my-anchor-element-class"
-  content="Hello world!"
-/>
+<Tooltip anchorSelect=".my-anchor-element-class" content="Hello world!" />
 
 ### Complex selectors
 
@@ -122,7 +105,6 @@ This example uses the name attribute, but it works for any HTML attribute (id, c
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <a name="my-anchor-element-1">◕‿‿◕</a>
 <a name="my-anchor-element-2">◕‿‿◕</a>
@@ -135,23 +117,12 @@ import 'react-tooltip/dist/react-tooltip.css';
 ```
 
 <div style={{ display: 'flex', gap: '5px', width: 'fit-content', margin: 'auto' }}>
-  <TooltipAnchor name="my-anchor-element-1">
-    ◕‿‿◕
-  </TooltipAnchor>
-  <TooltipAnchor name="my-anchor-element-2">
-    ◕‿‿◕
-  </TooltipAnchor>
-  <TooltipAnchor name="my-anchor-element-3">
-    ◕‿‿◕
-  </TooltipAnchor>
-  <TooltipAnchor name="my-anchor-element-4">
-    ◕‿‿◕
-  </TooltipAnchor>
+  <TooltipAnchor name="my-anchor-element-1">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor name="my-anchor-element-2">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor name="my-anchor-element-3">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor name="my-anchor-element-4">◕‿‿◕</TooltipAnchor>
 </div>
-<Tooltip
-  anchorSelect="[name^='my-anchor-element-']"
-  content="Hello world!"
-/>
+<Tooltip anchorSelect="[name^='my-anchor-element-']" content="Hello world!" />
 
 #### Child selector
 
@@ -165,7 +136,6 @@ Often you can just use a class selector or something else much simpler.
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <section id="section-anchor-select" style={{ marginTop: '100px' }}>
   <a>◕‿‿◕</a>
@@ -183,7 +153,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 />
 ```
 
-<section 
+<section
   id="section-anchor-select"
   style={{ display: 'flex', gap: '5px', width: 'fit-content', margin: 'auto' }}
 >

@@ -8,7 +8,6 @@ Changing the placement for the ReactTooltip component.
 
 import { useState } from 'react';
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 export const TooltipAnchor = ({ children, id, ...rest }) => {
   return (
@@ -41,7 +40,6 @@ The `place` prop and the `data-tooltip-place` attribute accept the following val
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <a id="my-tooltip-anchor">◕‿‿◕</a>
 <Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the top!" place="top" />
@@ -60,7 +58,6 @@ import 'react-tooltip/dist/react-tooltip.css';
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 const PLACES = ['top', 'right', 'bottom', 'left']
 const [place, setPlace] = useState(0)

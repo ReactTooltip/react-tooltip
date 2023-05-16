@@ -7,7 +7,6 @@ sidebar_position: 4
 Examples of use in V4 -> V5.
 
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 export const TooltipAnchor = ({ children, id, ...rest }) => {
   return (
@@ -59,9 +58,8 @@ import ReactTooltip from 'react-tooltip';
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
-<a 
+<a
   data-tooltip-id="my-tooltip"
   data-tooltip-content="Hello world!"
 >
@@ -70,10 +68,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 <Tooltip id="my-tooltip" place="top" />
 ```
 
-<TooltipAnchor
-  data-tooltip-id="my-tooltip"
-  data-tooltip-content="Hello world!"
->
+<TooltipAnchor data-tooltip-id="my-tooltip" data-tooltip-content="Hello world!">
   ◕‿‿◕
 </TooltipAnchor>
 <Tooltip id="my-tooltip" place="top" />
@@ -88,14 +83,21 @@ Don't forget to check [the examples](../examples/basic-examples) for more detail
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css'
 
 <a className="my-anchor-element">◕‿‿◕</a>
 <a className="my-anchor-element">◕‿‿◕</a>
 <Tooltip anchorSelect=".my-anchor-element" content="Hello world!" />
 ```
 
-<div style={{ display: 'flex', flexDirection: 'row', width: 'fit-content', margin: 'auto', gap: '5px' }}>
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'row',
+    width: 'fit-content',
+    margin: 'auto',
+    gap: '5px',
+  }}
+>
   <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
   <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
 </div>
@@ -105,9 +107,9 @@ import 'react-tooltip/dist/react-tooltip.css'
 
 ## Colors
 
-| V4         | V5                     |
-| ---------- | ---------------------- |
-| `type`     | `variant`              |
+| V4     | V5        |
+| ------ | --------- |
+| `type` | `variant` |
 
 ### V4 -> `type`
 
@@ -124,11 +126,10 @@ Available values `'dark' | 'light' | 'success' | 'warning' | 'error' | 'info'`
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
-<a 
-  data-tooltip-id="my-tooltip" 
-  data-tooltip-content="Hello world!" 
+<a
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="Hello world!"
   data-tooltip-variant="success"
 >
   ◕‿‿◕

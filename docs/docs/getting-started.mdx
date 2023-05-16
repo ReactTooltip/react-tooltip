@@ -9,7 +9,6 @@ This docs is related to V5, [if you are using V4 please check here](https://reac
 A react tooltip is a floating react element that displays information related to an anchor element when it receives keyboard focus or the mouse hovers over it.
 
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 export const TooltipAnchor = ({ children, id, ...rest }) => {
   return (
@@ -60,7 +59,13 @@ For more info and more complex use cases using `anchorSelect`, check [the exampl
 
 :::caution
 
-You must import the CSS file or the tooltip won't show!
+If you are using a version before than `v5.13.0`, you must import the CSS file or the tooltip won't show!
+
+:::
+
+:::info
+
+If you are using `v5.13.0` or newer, you don't need to import the css file manually, the styles will be injected into the page by default.
 
 :::
 
@@ -75,7 +80,6 @@ There are two ways to use ReactTooltip.
 
 1. Using props into ReactTooltip Element.
 2. Using data-attributes on anchor element.
-
 
 ### Using anchor data attributes
 
@@ -94,9 +98,9 @@ import { Tooltip } from 'react-tooltip'
 :::
 
 ```jsx
-<a 
-  data-tooltip-id="my-tooltip" 
-  data-tooltip-content="Hello world!" 
+<a
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="Hello world!"
   data-tooltip-place="top"
 >
   ◕‿‿◕
@@ -119,21 +123,18 @@ Don't forget to set the tooltip id, or it will not work!
 ```
 
 <div style={{ display: 'flex', columnGap: '8px', justifyContent: 'center', paddingTop: '18px' }}>
-  <TooltipAnchor 
-    data-tooltip-id="my-tooltip" 
-    data-tooltip-content="Hello world!" 
+  <TooltipAnchor
+    data-tooltip-id="my-tooltip"
+    data-tooltip-content="Hello world!"
     data-tooltip-place="top"
   >
     ◕‿‿◕
-  </TooltipAnchor><TooltipAnchor 
-    data-tooltip-id="my-tooltip" 
-    data-tooltip-content="Hello to you too!" 
-  >
+  </TooltipAnchor>
+  <TooltipAnchor data-tooltip-id="my-tooltip" data-tooltip-content="Hello to you too!">
     ◕‿‿◕
   </TooltipAnchor>
   <Tooltip id="my-tooltip" />
 </div>
-
 
 ### Using ReactTooltip props
 
@@ -171,16 +172,12 @@ import { Tooltip } from 'react-tooltip'
 </Tooltip>
 ```
 
-
 <div style={{ display: 'flex', columnGap: '8px', justifyContent: 'center', paddingTop: '18px' }}>
   <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
   <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
   <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
-  <Tooltip anchorSelect=".my-anchor-element">
-    Hello world!
-  </Tooltip>
+  <Tooltip anchorSelect=".my-anchor-element">Hello world!</Tooltip>
 </div>
-
 
 ### Clickable tooltip
 

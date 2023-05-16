@@ -7,7 +7,6 @@ sidebar_position: 1
 Multiline content in ReactTooltip component.
 
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 export const TooltipAnchor = ({ children, id, ...rest }) => {
   return (
@@ -42,10 +41,8 @@ You can also use [`renderToStaticMarkup()`](https://reactjs.org/docs/react-dom-s
 
 :::
 
-
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <a
   data-tooltip-id="my-tooltip-multiline"
@@ -64,12 +61,10 @@ import 'react-tooltip/dist/react-tooltip.css';
 </TooltipAnchor>
 <Tooltip id="my-tooltip-multiline" />
 
-
 ### Using tooltip children and JSX
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <a data-tooltip-id="my-tooltip-children-multiline"> ◕‿‿◕ </a>
 <Tooltip id="my-tooltip-children-multiline">

@@ -7,7 +7,6 @@ sidebar_position: 1
 Using children for setting the ReactTooltip content.
 
 import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
 
 export const TooltipAnchor = ({ children, id, ...rest }) => {
   return (
@@ -41,7 +40,6 @@ This is useful for setting a placeholder for the tooltip content.
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
 
 <a data-tooltip-id="my-tooltip">◕‿‿◕</a>
 <Tooltip id="my-tooltip">
