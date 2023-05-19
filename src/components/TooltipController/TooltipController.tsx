@@ -182,7 +182,7 @@ const TooltipController = ({
       } catch {
         if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
           // eslint-disable-next-line no-console
-          console.warn(`[react-tooltip] "${anchorSelect}" is not a valid CSS selector`)
+          console.warn(`[react-tooltip] "${selector}" is not a valid CSS selector`)
         }
       }
     }
