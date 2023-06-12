@@ -71,6 +71,37 @@ The best way to solve this is to upgrade to `next@13.3.0` or later versions.
 
 Less ideally, if you're unable to upgrade, you can set `swcMinify: false` on your `next.config.js` file.
 
+## Next.js `"use client"` error
+
+This normally happens when you use `react-tooltip` inside a component that is not tagged as client component. For more info, see the [Next.js docs](https://nextjs.org/docs/getting-started/react-essentials#client-components).
+
+To use `react-tooltip` on Next.js 13 without having to tag your component or page as a client component, just create a new file `ReactTooltip.tsx` (for this example, the file path is `src/components/ReactTooltip.tsx`) and place the following code inside of the created file:
+
+:::caution
+
+Avoid naming the file `react-tooltip.tsx` (or with whichever extension your project uses), since it may interfere with your editor's autocomplete funcionality.
+
+:::
+
+```jsx
+// src/components/ReactTooltip.tsx
+'use client'
+
+export * from 'react-tooltip'
+```
+
+And in the place that you are importing React Tooltip:
+
+```jsx
+// ❌ Old
+import { Tooltip } from 'react-tooltip'
+```
+
+```jsx
+// ✅ New
+import { Tooltip } from 'components/react-tooltip'
+```
+
 ## Bad performance
 
 If you're experiencing any kind of unexpected behavior or bad performance on your application when using ReactTooltip, here are a few things you can try.

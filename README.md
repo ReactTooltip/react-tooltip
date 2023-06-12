@@ -20,6 +20,12 @@
 
 If you like the project, please give the project a GitHub 🌟
 
+---
+
+Why do we show ads on our docs?
+
+- ReactTooltip is an open source project, this is the way we found to be financed by the community.
+
 ## Demo
 
 [![Edit ReactTooltip](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/still-monad-yfi4fn?fontsize=14&hidenavigation=1&theme=dark)
@@ -42,6 +48,8 @@ Documentation for V5 - [ReactTooltip](https://react-tooltip.com/docs/getting-sta
   </a>
 </p>
 
+---
+
 ## Installation
 
 ```sh
@@ -55,14 +63,6 @@ yarn add react-tooltip
 ```
 
 ## Usage
-
-> :warning: ReactTooltip will inject the default styles into the page by default on version `5.13.0` or newer.
-> The `react-tooltip/dist/react-tooltip.css` file is only for style reference and doesn't need to be imported manually anymore if you are already using `v5.13.0` or upper.
-
-> :warning: If you were already using `react-tooltip<=5.7.5`, you'll be getting some deprecation warnings regarding the `anchorId` prop and some other features.
-> In versions >=5.8.0, we've introduced the `data-tooltip-id` attribute, and the `anchorSelect` prop, which are our recommended methods of using the tooltip moving forward. Check [the docs](https://react-tooltip.com/docs/getting-started) for more details.
-
-### Using NPM package
 
 1 . Import the CSS file to set default styling.
 
@@ -104,59 +104,6 @@ import { Tooltip as ReactTooltip } from 'react-tooltip'
 <Tooltip id="my-tooltip" />
 ```
 
-#### Using multiple anchor elements
-
-You can also set the `anchorSelect` tooltip prop to use the tooltip with multiple anchor elements without having to set `data-tooltip-id` on each of them.
-`anchorSelect` must be a valid [CSS selector](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors).
-
-```jsx
-<a className="my-anchor-element" data-tooltip-content="Hello world!">
-  ◕‿‿◕
-</a>
-<a className="my-anchor-element" data-tooltip-content="Hello to you too!">
-  ◕‿‿◕
-</a>
-<Tooltip anchorSelect=".my-anchor-element" />
-```
-
-Check [the V5 docs](https://react-tooltip.com/docs/getting-started) for more complex use cases.
-
-### Standalone
-
-You can import `node_modules/react-tooltip/dist/react-tooltip.[mode].js` into your page. Please make sure that you have already imported `react` and `react-dom` into your page.
-
-mode: `esm` `cjs` `umd`
-
-If you are using a version older than `v5.13.0` don't forget to import the CSS file from `node_modules/react-tooltip/dist/react-tooltip.css` to set default styling. This needs to be done only once in your application. Version `v5.13.0` or newer already inject the default styles into the page by default.
-
-PS: all the files have a minified version and a non-minified version.
-
-![image](https://user-images.githubusercontent.com/9615850/205637814-c0ef01ae-bd77-4e7f-b4bf-df502c71e5c3.png)
-
-## Options
-
-For all available options, please check [React Tooltip Options](https://react-tooltip.com/docs/options)
-
-### Security note
-
-The `html` option allows a tooltip to directly display raw HTML. This is a security risk if any of that content is supplied by the user. Any user-supplied content must be sanitized, using a package like [sanitize-html](https://www.npmjs.com/package/sanitize-html). We chose not to include sanitization after discovering it [increased our package size](https://github.com/wwayne/react-tooltip/issues/429) too much - we don't want to penalize people who don't use the `html` option.
-
-#### JSX note
-
-You can use [`renderToStaticMarkup()` function](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to use JSX instead of HTML.
-**Example:**
-
-```jsx
-import ReactDOMServer from 'react-dom/server';
-[...]
-<a
-  data-tooltip-id="my-tooltip"
-  data-tooltip-html={ReactDOMServer.renderToStaticMarkup(<div>I am <b>JSX</b> content</div>)}
->
-  ◕‿‿◕
-</a>
-```
-
 ## Troubleshooting
 
 Before trying these, make sure you're running the latest ReactTooltip version with
@@ -171,78 +118,10 @@ or
 yarn add react-tooltip@latest
 ```
 
+Please check our [troubleshooting section](https://react-tooltip.com/docs/troubleshooting) on our docs.
+
 If you can't find your problem here, make sure there isn't [an open issue](https://github.com/ReactTooltip/react-tooltip/issues) already covering it.
 If there isn't, feel free to [submit a new issue](https://github.com/ReactTooltip/react-tooltip/issues/new/choose).
-
-### The tooltip is broken/not showing up
-
-Make sure you've imported the default styling. You only need to do this once on your application and only if you are using a version before `5.13.0`, `App.jsx`/`App.tsx` is usually a good place to do it.
-
-```jsx
-import 'react-tooltip/dist/react-tooltip.css'
-```
-
-If you've imported the default styling and the tooltip is still not showing up when you hover on your anchor element, make sure you have content to be displayed by the tooltip.
-
-If `data-tooltip-content` and `data-tooltip-html` are both unset (or they have empty values) on the anchor element, and also the `content`, `render`, and `children` props on the tooltip are unset (or have empty values), the tooltip is not shown by default.
-
-### Next.js `TypeError: f is not a function`
-
-This problem seems to be caused by a bug related to the SWC bundler used by Next.js.
-The best way to solve this is to upgrade to `next@13.3.0` or later versions.
-
-Less ideally, if you're unable to upgrade, you can set `swcMinify: false` on your `next.config.js` file.
-
-### Bad performance
-
-If you're experiencing any kind of unexpected behavior or bad performance on your application when using ReactTooltip, here are a few things you can try.
-
-#### Move `<Tooltip />` on the DOM
-
-This is specially relevant when using components that are conditionally rendered.
-
-Always try to keep the `<Tooltip />` component rendered, so if you're having issues with a tooltip you've placed inside a component which is placed/removed from the DOM dynamically, try to move the tooltip outside of it.
-
-We usually recommend placing the tooltip component directly inside the root component of your application (usually on `App.jsx`/`App.tsx`).
-
-#### Dynamically generated anchor elements
-
-You should avoid needlessly using a large amount of `<Tooltip />` components. One tooltip component that you use across your whole application should be good enough in most cases, but you should be fine to add a few more if you need to use different styled tooltips.
-
-Here's a simple example on how to improve performance when using dynamically generated items.
-
-> Check the docs for examples for the [`anchorSelect`](https://react-tooltip.com/docs/examples/anchor-select) and [`render`](https://react-tooltip.com/docs/examples/render) props for more complex use cases.
-
-```jsx
-// ❌ BAD
-<div className="items-container">
-  {myItems.map(({ id, content, tooltip }) => (
-    <div key={id} className="item" data-tooltip-id={`tooltip-${id}`}>
-      {content}
-      <Tooltip id={`tooltip-${id}`} content={tooltip} />
-    </div>
-  ))}
-</div>
-```
-
-```jsx
-// ✅ GOOD
-<div className="items-container">
-  {
-    myItems.map(({ id, content, tooltip }) => (
-      <div
-        key={id}
-        className="item"
-        data-tooltip-id="my-tooltip"
-        data-tooltip-content={tooltip}
-      >
-        {content}
-      </div>
-    ))
-  }
-</div>
-<Tooltip id="my-tooltip" />
-```
 
 ## Article
 
@@ -270,7 +149,7 @@ We would gladly accept a new maintainer to help out!
 
 ## Contributing
 
-We welcome your contribution! Fork the repo, make some changes, submit a pull-request! Our [contributing](contributing.md) doc has some details.
+We welcome your contribution! Fork the repo, make some changes, submit a pull-request! Our [contributing](CONTRIBUTION.md) doc has some details.
 
 ## License
 
