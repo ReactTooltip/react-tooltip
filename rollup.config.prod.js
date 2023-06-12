@@ -19,9 +19,7 @@ const banner = `
 * {@link https://github.com/ReactTooltip/react-tooltip}
 * @copyright ReactTooltip Team
 * @license MIT
-*/
-
-'use client';` // this 'use client' prevent break Next.js 13 projects when using tooltip on server side components
+*/`
 
 const external = [
   ...Object.keys(pkg.peerDependencies ?? {}),
