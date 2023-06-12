@@ -48,6 +48,62 @@ Documentation for V5 - [ReactTooltip](https://react-tooltip.com/docs/getting-sta
   </a>
 </p>
 
+---
+
+## Installation
+
+```sh
+npm install react-tooltip
+```
+
+or
+
+```sh
+yarn add react-tooltip
+```
+
+## Usage
+
+1 . Import the CSS file to set default styling.
+
+> :warning: If you are using a version before than `v5.13.0`, you must import the CSS file or the tooltip won't show!
+
+```js
+import 'react-tooltip/dist/react-tooltip.css'
+```
+
+This needs to be done only once and only if you are using a version before than `5.13.0`. We suggest you do it on your `src/index.js` or equivalent file.
+
+2 . Import `react-tooltip` after installation.
+
+```js
+import { Tooltip } from 'react-tooltip'
+```
+
+or if you want to still use the name ReactTooltip as V4:
+
+```js
+import { Tooltip as ReactTooltip } from 'react-tooltip'
+```
+
+3 . Add `data-tooltip-id="<tooltip id>"` and `data-tooltip-content="<your placeholder>"` to your element.
+
+> `data-tooltip-id` is the equivalent of V4's `data-for`.
+
+```jsx
+<a data-tooltip-id="my-tooltip" data-tooltip-content="Hello world!">
+  ◕‿‿◕
+</a>
+```
+
+4 . Include the `<Tooltip />` element.
+
+> Don't forget to set the id, it won't work without it!
+
+```jsx
+<Tooltip id="my-tooltip" />
+```
+
 ## Troubleshooting
 
 Before trying these, make sure you're running the latest ReactTooltip version with
