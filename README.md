@@ -22,9 +22,9 @@ If you like the project, please give the project a GitHub 🌟
 
 ---
 
-Why do we use ADS on our docs?
+Why do we show ads on our docs?
 
-- ReactTooltip is an open source project, this is the way that we find to be financed by the community.
+- ReactTooltip is an open source project, this is the way we found to be financed by the community.
 
 ## Demo
 
