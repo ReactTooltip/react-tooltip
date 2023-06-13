@@ -8,7 +8,7 @@ import styles from './styles.module.css'
 
 function App() {
   const [anchorId, setAnchorId] = useState('button')
-  const [isDarkOpen, setIsDarkOpen] = useState(false)
+  const [isDarkOpen, setIsDarkOpen] = useState(true)
   const [position, setPosition] = useState<IPosition>({ x: 0, y: 0 })
   const [toggle, setToggle] = useState(false)
 
