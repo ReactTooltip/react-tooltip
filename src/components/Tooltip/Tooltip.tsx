@@ -5,6 +5,7 @@ import { useTooltip } from 'components/TooltipProvider'
 import useIsomorphicLayoutEffect from 'utils/use-isomorphic-layout-effect'
 import { computeTooltipPosition } from '../../utils/compute-positions'
 import styles from './styles.module.css'
+import normalStyles from './styles'
 import type { IPosition, ITooltip, PlacesType } from './TooltipTypes'
 
 const Tooltip = ({
@@ -63,6 +64,12 @@ const Tooltip = ({
   const shouldOpenOnClick = openOnClick || events.includes('click')
 
   /**
+   * web components support
+   */
+  const root = tooltipRef.current && tooltipRef.current.getRootNode()
+  const isOnShadowDOM = root instanceof ShadowRoot
+
+  /**
    * useLayoutEffect runs before useEffect,
    * but should be used carefully because of caveats
    * https://beta.reactjs.org/reference/react/useLayoutEffect#caveats
@@ -73,6 +80,18 @@ const Tooltip = ({
       mounted.current = false
     }
   }, [])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && tooltipRef.current) {
+      if (isOnShadowDOM && !root.getElementById('react-tooltip-styles')) {
+        const style = document.createElement('style')
+        style.id = 'react-tooltip-styles'
+        style.textContent = normalStyles
+
+        root.appendChild(style)
+      }
+    }
+  })
 
   useEffect(() => {
     if (!show) {
@@ -339,7 +358,11 @@ const Tooltip = ({
 
     enabledEvents.forEach(({ event, listener }) => {
       elementRefs.forEach((ref) => {
-        ref.current?.addEventListener(event, listener)
+        if (isOnShadowDOM) {
+          root.addEventListener(event, listener)
+        } else {
+          ref.current?.addEventListener(event, listener)
+        }
       })
     })
 
@@ -547,6 +570,7 @@ const Tooltip = ({
       role="tooltip"
       className={classNames(
         'react-tooltip',
+        'rt-tooltip',
         styles['tooltip'],
         styles[variant],
         className,
@@ -555,6 +579,9 @@ const Tooltip = ({
           [styles['show']]: canShow,
           [styles['fixed']]: positionStrategy === 'fixed',
           [styles['clickable']]: clickable,
+          'rt-show': canShow,
+          'rt-fixed': positionStrategy === 'fixed',
+          'rt-clickable': clickable,
         },
       )}
       style={{ ...externalStyles, ...inlineStyles }}
@@ -562,12 +589,13 @@ const Tooltip = ({
     >
       {content}
       <WrapperElement
-        className={classNames('react-tooltip-arrow', styles['arrow'], classNameArrow, {
+        className={classNames('react-tooltip-arrow', 'rt-arrow', styles['arrow'], classNameArrow, {
           /**
            * changed from dash `no-arrow` to camelcase because of:
            * https://github.com/indooorsman/esbuild-css-modules-plugin/issues/42
            */
           [styles['noArrow']]: noArrow,
+          'rt-noArrow': noArrow,
         })}
         style={inlineArrowStyles}
         ref={tooltipArrowRef}
