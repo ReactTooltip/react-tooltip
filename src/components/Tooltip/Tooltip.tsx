@@ -308,7 +308,6 @@ const Tooltip = ({
     if (closeOnResize) {
       window.addEventListener('resize', debouncedHandleHideTooltip)
     }
-
     if (closeOnEsc) {
       window.addEventListener('keydown', handleEsc)
     }
