@@ -29,6 +29,8 @@ const Tooltip = ({
   noArrow = false,
   clickable = false,
   closeOnEsc = false,
+  closeOnScroll = false,
+  closeOnResize = false,
   style: externalStyles,
   position,
   afterShow,
@@ -300,6 +302,13 @@ const Tooltip = ({
       elementRefs.add({ current: anchorById })
     }
 
+    if (closeOnScroll) {
+      window.addEventListener('scroll', debouncedHandleHideTooltip)
+    }
+    if (closeOnResize) {
+      window.addEventListener('resize', debouncedHandleHideTooltip)
+    }
+
     if (closeOnEsc) {
       window.addEventListener('keydown', handleEsc)
     }
@@ -344,6 +353,12 @@ const Tooltip = ({
     })
 
     return () => {
+      if (closeOnScroll) {
+        window.removeEventListener('scroll', debouncedHandleHideTooltip)
+      }
+      if (closeOnResize) {
+        window.removeEventListener('resize', debouncedHandleHideTooltip)
+      }
       if (shouldOpenOnClick) {
         window.removeEventListener('click', handleClickOutsideAnchors)
       }

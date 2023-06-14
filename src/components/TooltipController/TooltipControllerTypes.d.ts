@@ -46,6 +46,8 @@ export interface ITooltipController {
   noArrow?: boolean
   clickable?: boolean
   closeOnEsc?: boolean
+  closeOnScroll?: boolean
+  closeOnResize?: boolean
   style?: CSSProperties
   position?: IPosition
   isOpen?: boolean
