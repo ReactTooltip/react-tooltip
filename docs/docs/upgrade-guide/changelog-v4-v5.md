@@ -50,8 +50,9 @@ If you run into any problems with the tooltip not updating after changes are mad
 - [x] `float` - `boolean` - used to achieve V4's `effect="float"`
 - [x] `hidden` - `boolean` - when set, the tooltip will not show
 - [x] `render` - `function` - can be used to render dynamic content based on the active anchor element (check [the examples](../examples/render.mdx) for more details)
-- [x] `closeOnScroll` - `boolean` - when set, the tooltip will close when scrolling anywhere on the window
-- [x] `closeOnResize` - `boolean` - when set, the tooltip will close when resizing the window
+- [x] `closeOnEsc` - `boolean` - when set, the tooltip will close after pressing the escape key
+- [x] `closeOnScroll` - `boolean` - when set, the tooltip will close when scrolling anywhere on the window (same as V4's `scrollHide`)
+- [x] `closeOnResize` - `boolean` - when set, the tooltip will close when resizing the window (same as V4's `resizeHide`)
 
 ## `V4` props available in `V5`
 
@@ -86,8 +87,8 @@ If you run into any problems with the tooltip not updating after changes are mad
 - [x] `afterHide`
 - [ ] `overridePosition` - use `position`
 - [ ] `disable`
-- [ ] `scrollHide` - can be implemented if requested
-- [ ] `resizeHide` - can be implemented if requested
+- [x] `scrollHide` - renamed to `closeOnScroll`
+- [x] `resizeHide` - renamed to `closeOnResize`
 - [x] `wrapper` - also available on anchor element as `data-tooltip-wrapper`
 - [ ] `bodyMode`
 - [x] `clickable`
