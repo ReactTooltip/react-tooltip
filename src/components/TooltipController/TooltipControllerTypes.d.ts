@@ -45,8 +45,17 @@ export interface ITooltipController {
   hidden?: boolean
   noArrow?: boolean
   clickable?: boolean
+  /**
+   * @todo refactor to `hideOnEsc` for naming consistency
+   */
   closeOnEsc?: boolean
+  /**
+   * @todo refactor to `hideOnScroll` for naming consistency
+   */
   closeOnScroll?: boolean
+  /**
+   * @todo refactor to `hideOnResize` for naming consistency
+   */
   closeOnResize?: boolean
   style?: CSSProperties
   position?: IPosition
