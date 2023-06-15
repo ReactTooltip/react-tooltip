@@ -98,8 +98,8 @@ const config = allBuildFormats.map(
       replaceBeforeSaveFile({
         // this only works for the react-tooltip.css because it's the first file
         // writen in our build process before the javascript files.
-        "'temp-content-for-styles'": 'file:react-tooltip.css',
-        '"temp-content-for-styles"': 'file:react-tooltip.css',
+        "'react-tooltip-css-placeholder'": 'file:react-tooltip.css',
+        '"react-tooltip-css-placeholder"': 'file:react-tooltip.css',
       }),
     ]
 

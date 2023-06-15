@@ -1,6 +1,6 @@
 import './tokens.css'
 
-import styleInject from 'utils/style-inject'
+import { injectStyle } from 'utils/handle-style'
 
 import type {
   ChildrenType,
@@ -17,10 +17,9 @@ import type { ITooltipController } from './components/TooltipController/TooltipC
 import type { ITooltipWrapper } from './components/TooltipProvider/TooltipProviderTypes'
 
 // this content will be replaced in build time with the `react-tooltip.css` builded content
-const TooltipStyles = 'temp-content-for-styles'
+const TooltipStyles = 'react-tooltip-css-placeholder'
 
-// @ts-ignore
-styleInject(TooltipStyles)
+injectStyle(TooltipStyles)
 
 export { TooltipController as Tooltip } from './components/TooltipController'
 export { TooltipProvider, TooltipWrapper } from './components/TooltipProvider'
@@ -37,3 +36,5 @@ export type {
   IPosition,
   Middleware,
 }
+
+export { removeStyle } from './utils/handle-style'
