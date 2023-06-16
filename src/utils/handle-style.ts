@@ -37,10 +37,7 @@ function injectStyle(css: string, ref?: any) {
 
 function removeStyle() {
   const style = document.getElementById(REACT_TOOLTIP_STYLES_ID)
-  if (!style) {
-    return
-  }
-  style.remove()
+  style?.remove()
 }
 
 export { injectStyle, removeStyle }
