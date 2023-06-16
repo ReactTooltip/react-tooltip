@@ -100,6 +100,8 @@ const config = allBuildFormats.map(
         // writen in our build process before the javascript files.
         "'react-tooltip-css-placeholder'": 'file:react-tooltip.css',
         '"react-tooltip-css-placeholder"': 'file:react-tooltip.css',
+        "'react-tooltip-core-css-placeholder'": 'file:react-tooltip.css',
+        '"react-tooltip-core-css-placeholder"': 'file:react-tooltip.css',
       }),
     ]
 

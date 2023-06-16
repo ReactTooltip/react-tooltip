@@ -41,17 +41,36 @@ export default function replaceBeforeSaveFile(replaceObject = {}) {
               regex = new RegExp(key, 'g')
 
               if (bundle[file].code.includes(key)) {
-                if (replaceObject[key].includes('file:')) {
+                if (key.includes('css') && replaceObject[key].includes('file:')) {
                   const [, fileName] = replaceObject[key].split(':')
                   const fileContent = await readFile(`./dist/${fileName}`, 'utf8')
 
-                  if (options.file.includes('.min')) {
-                    bundle[file].code = bundle[file].code.replace(
-                      regex,
-                      `\`${cssMinifier(fileContent)}\``,
-                    )
-                  } else {
-                    bundle[file].code = bundle[file].code.replace(regex, `\`${fileContent}\``)
+                  const splittedCSSContent = fileContent.split('/** end - core styles **/')
+
+                  if (key.includes('core-css')) {
+                    if (options.file.includes('.min')) {
+                      bundle[file].code = bundle[file].code.replace(
+                        regex,
+                        `\`${cssMinifier(splittedCSSContent[0])}\``,
+                      )
+                    } else {
+                      bundle[file].code = bundle[file].code.replace(
+                        regex,
+                        `\`${splittedCSSContent[0]}\``,
+                      )
+                    }
+                  } else if (!key.includes('core-css')) {
+                    if (options.file.includes('.min')) {
+                      bundle[file].code = bundle[file].code.replace(
+                        regex,
+                        `\`${cssMinifier(splittedCSSContent[1])}\``,
+                      )
+                    } else {
+                      bundle[file].code = bundle[file].code.replace(
+                        regex,
+                        `\`${splittedCSSContent[1]}\``,
+                      )
+                    }
                   }
                 } else {
                   bundle[file].code = bundle[file].code.replace(regex, replaceObject[key])

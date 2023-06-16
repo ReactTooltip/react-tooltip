@@ -16,9 +16,11 @@ import type {
 import type { ITooltipController } from './components/TooltipController/TooltipControllerTypes'
 import type { ITooltipWrapper } from './components/TooltipProvider/TooltipProviderTypes'
 
-// this content will be replaced in build time with the `react-tooltip.css` builded content
+// those content will be replaced in build time with the `react-tooltip.css` builded content
+const TooltipCoreStyles = 'react-tooltip-core-css-placeholder'
 const TooltipStyles = 'react-tooltip-css-placeholder'
 
+injectStyle(TooltipCoreStyles, 'react-tooltip-core-styles')
 injectStyle(TooltipStyles)
 
 export { TooltipController as Tooltip } from './components/TooltipController'

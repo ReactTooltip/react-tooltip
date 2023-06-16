@@ -5,6 +5,7 @@ import { useTooltip } from 'components/TooltipProvider'
 import useIsomorphicLayoutEffect from 'utils/use-isomorphic-layout-effect'
 import { getScrollParent } from 'utils/get-scroll-parent'
 import { computeTooltipPosition } from 'utils/compute-positions'
+import coreStyles from './core-styles.module.css'
 import styles from './styles.module.css'
 import type { IPosition, ITooltip, PlacesType } from './TooltipTypes'
 
@@ -583,14 +584,14 @@ const Tooltip = ({
       role="tooltip"
       className={classNames(
         'react-tooltip',
-        styles['tooltip'],
+        coreStyles['tooltip'],
         styles[variant],
         className,
         `react-tooltip__place-${actualPlacement}`,
         {
-          [styles['show']]: canShow,
-          [styles['fixed']]: positionStrategy === 'fixed',
-          [styles['clickable']]: clickable,
+          [coreStyles['show']]: canShow,
+          [coreStyles['fixed']]: positionStrategy === 'fixed',
+          [coreStyles['clickable']]: clickable,
         },
       )}
       style={{ ...externalStyles, ...inlineStyles }}
@@ -598,13 +599,19 @@ const Tooltip = ({
     >
       {content}
       <WrapperElement
-        className={classNames('react-tooltip-arrow', styles['arrow'], classNameArrow, {
-          /**
-           * changed from dash `no-arrow` to camelcase because of:
-           * https://github.com/indooorsman/esbuild-css-modules-plugin/issues/42
-           */
-          [styles['noArrow']]: noArrow,
-        })}
+        className={classNames(
+          'react-tooltip-arrow',
+          coreStyles['arrow'],
+          styles['arrow'],
+          classNameArrow,
+          {
+            /**
+             * changed from dash `no-arrow` to camelcase because of:
+             * https://github.com/indooorsman/esbuild-css-modules-plugin/issues/42
+             */
+            [coreStyles['noArrow']]: noArrow,
+          },
+        )}
         style={inlineArrowStyles}
         ref={tooltipArrowRef}
       />

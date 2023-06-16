@@ -1,7 +1,7 @@
 const REACT_TOOLTIP_STYLES_ID = 'react-tooltip-styles'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function injectStyle(css: string, ref?: any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, default-param-last
+function injectStyle(css: string, id = REACT_TOOLTIP_STYLES_ID, ref?: any) {
   if (!ref) {
     // eslint-disable-next-line no-param-reassign
     ref = {}
@@ -15,7 +15,7 @@ function injectStyle(css: string, ref?: any) {
   const head = document.head || document.getElementsByTagName('head')[0]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const style: any = document.createElement('style')
-  style.id = REACT_TOOLTIP_STYLES_ID
+  style.id = id
   style.type = 'text/css'
 
   if (insertAt === 'top') {
@@ -35,8 +35,8 @@ function injectStyle(css: string, ref?: any) {
   }
 }
 
-function removeStyle() {
-  const style = document.getElementById(REACT_TOOLTIP_STYLES_ID)
+function removeStyle(id = REACT_TOOLTIP_STYLES_ID) {
+  const style = document.getElementById(id)
   style?.remove()
 }
 
