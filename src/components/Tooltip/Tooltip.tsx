@@ -276,6 +276,9 @@ const Tooltip = ({
       return
     }
     handleShow(false)
+    if (tooltipShowDelayTimerRef.current) {
+      clearTimeout(tooltipShowDelayTimerRef.current)
+    }
   }
 
   const handleEsc = (event: KeyboardEvent) => {
@@ -403,6 +406,12 @@ const Tooltip = ({
               setRendered(false)
               handleShow(false)
               setActiveAnchor(null)
+              if (tooltipShowDelayTimerRef.current) {
+                clearTimeout(tooltipShowDelayTimerRef.current)
+              }
+              if (tooltipHideDelayTimerRef.current) {
+                clearTimeout(tooltipHideDelayTimerRef.current)
+              }
               return true
             }
             return false
