@@ -51,7 +51,7 @@ If you run into any problems with the tooltip not updating after changes are mad
 - [x] `hidden` - `boolean` - when set, the tooltip will not show
 - [x] `render` - `function` - can be used to render dynamic content based on the active anchor element (check [the examples](../examples/render.mdx) for more details)
 - [x] `closeOnEsc` - `boolean` - when set, the tooltip will close after pressing the escape key
-- [x] `closeOnScroll` - `boolean` - when set, the tooltip will close when scrolling anywhere on the window (same as V4's `scrollHide`)
+- [x] `closeOnScroll` - `boolean` - when set, the tooltip will close when scrolling the root html tag, the tooltip parent, or the anchor parent (similar to V4's `scrollHide`)
 - [x] `closeOnResize` - `boolean` - when set, the tooltip will close when resizing the window (same as V4's `resizeHide`)
 
 ## `V4` props available in `V5`
