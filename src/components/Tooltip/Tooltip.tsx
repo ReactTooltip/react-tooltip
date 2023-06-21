@@ -281,13 +281,6 @@ const Tooltip = ({
     }
   }
 
-  const handleEsc = (event: KeyboardEvent) => {
-    if (event.key !== 'Escape') {
-      return
-    }
-    handleShow(false)
-  }
-
   // debounce handler to prevent call twice when
   // mouse enter and focus events being triggered toggether
   const debouncedHandleShowTooltip = debounce(handleShowTooltip, 50, true)
@@ -305,12 +298,29 @@ const Tooltip = ({
       elementRefs.add({ current: anchorById })
     }
 
+    const handleScrollResize = () => {
+      handleShow(false)
+    }
+
+    const tooltipParent = tooltipRef.current?.parentElement
+    const anchorParent = activeAnchor?.parentElement
+
     if (closeOnScroll) {
-      window.addEventListener('scroll', debouncedHandleHideTooltip)
+      window.addEventListener('scroll', handleScrollResize)
+      tooltipParent?.addEventListener('scroll', handleScrollResize)
+      anchorParent?.addEventListener('scroll', handleScrollResize)
     }
     if (closeOnResize) {
-      window.addEventListener('resize', debouncedHandleHideTooltip)
+      window.addEventListener('resize', handleScrollResize)
     }
+
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') {
+        return
+      }
+      handleShow(false)
+    }
+
     if (closeOnEsc) {
       window.addEventListener('keydown', handleEsc)
     }
@@ -356,10 +366,12 @@ const Tooltip = ({
 
     return () => {
       if (closeOnScroll) {
-        window.removeEventListener('scroll', debouncedHandleHideTooltip)
+        window.removeEventListener('scroll', handleScrollResize)
+        tooltipParent?.removeEventListener('scroll', handleScrollResize)
+        anchorParent?.removeEventListener('scroll', handleScrollResize)
       }
       if (closeOnResize) {
-        window.removeEventListener('resize', debouncedHandleHideTooltip)
+        window.removeEventListener('resize', handleScrollResize)
       }
       if (shouldOpenOnClick) {
         window.removeEventListener('click', handleClickOutsideAnchors)
