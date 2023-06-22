@@ -1,6 +1,6 @@
 const isScrollable = (node: Element) => {
   if (!(node instanceof HTMLElement || node instanceof SVGElement)) {
-    return null
+    return false
   }
   const style = getComputedStyle(node)
   return ['overflow', 'overflow-x', 'overflow-y'].some((propertyName) => {
