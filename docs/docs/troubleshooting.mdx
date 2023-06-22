@@ -163,7 +163,7 @@ To use `react-tooltip` on Next.js 13 without having to tag your component or pag
 
 :::caution
 
-Avoid naming the file `react-tooltip.tsx` (or with whichever extension your project uses), since it may interfere with your editor's autocomplete functionality.
+Avoid naming the file `react-tooltip.tsx` (or with whichever extension your project uses), since it may interfere with your editor's autocomplete functionality, and your bundling/compiling process.
 
 :::
 
@@ -174,14 +174,14 @@ Avoid naming the file `react-tooltip.tsx` (or with whichever extension your proj
 export { Tooltip } from 'react-tooltip'
 ```
 
-And in the place that you are importing React Tooltip:
+When importing the tooltip:
 
 ```jsx
-// ❌ Old
+// ❌ OLD
 import { Tooltip } from 'react-tooltip'
 ```
 
 ```jsx
-// ✅ New
-import { Tooltip } from 'components/react-tooltip'
+// ✅ NEW
+import { Tooltip } from 'components/ReactTooltip'
 ```
