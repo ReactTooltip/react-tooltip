@@ -3,7 +3,8 @@ import classNames from 'classnames'
 import debounce from 'utils/debounce'
 import { useTooltip } from 'components/TooltipProvider'
 import useIsomorphicLayoutEffect from 'utils/use-isomorphic-layout-effect'
-import { computeTooltipPosition } from '../../utils/compute-positions'
+import { getScrollParent } from 'utils/get-scroll-parent'
+import { computeTooltipPosition } from 'utils/compute-positions'
 import styles from './styles.module.css'
 import type { IPosition, ITooltip, PlacesType } from './TooltipTypes'
 
@@ -302,13 +303,13 @@ const Tooltip = ({
       handleShow(false)
     }
 
-    const tooltipParent = tooltipRef.current?.parentElement
-    const anchorParent = activeAnchor?.parentElement
+    const anchorScrollParent = getScrollParent(activeAnchor)
+    const tooltipScrollParent = getScrollParent(tooltipRef.current)
 
     if (closeOnScroll) {
       window.addEventListener('scroll', handleScrollResize)
-      tooltipParent?.addEventListener('scroll', handleScrollResize)
-      anchorParent?.addEventListener('scroll', handleScrollResize)
+      anchorScrollParent?.addEventListener('scroll', handleScrollResize)
+      tooltipScrollParent?.addEventListener('scroll', handleScrollResize)
     }
     if (closeOnResize) {
       window.addEventListener('resize', handleScrollResize)
@@ -367,8 +368,8 @@ const Tooltip = ({
     return () => {
       if (closeOnScroll) {
         window.removeEventListener('scroll', handleScrollResize)
-        tooltipParent?.removeEventListener('scroll', handleScrollResize)
-        anchorParent?.removeEventListener('scroll', handleScrollResize)
+        anchorScrollParent?.removeEventListener('scroll', handleScrollResize)
+        tooltipScrollParent?.removeEventListener('scroll', handleScrollResize)
       }
       if (closeOnResize) {
         window.removeEventListener('resize', handleScrollResize)
