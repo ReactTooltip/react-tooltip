@@ -85,19 +85,13 @@ This means the tooltip component doesn't have to be a direct child of the scroll
 
 :::
 
-### Use `closeOnEsc` prop
+### Use `closeOnScroll` prop
 
 ```tsx
-<Tooltip closeOnEsc={true} />
+<Tooltip closeOnScroll={true} />
 ```
 
-When `closeOnEsc` is set, scrolling will immediately close the tooltip (`closeOnResize` also exists for closing when resizing the window).
-
-:::caution
-
-For this to work properly, the scrolling element must either be the root `html` tag, the tooltip parent element, or the anchor parent element.
- 
-:::
+When `closeOnScroll` is set, scrolling will immediately close the tooltip (`closeOnResize` also exists for closing when resizing the window).
 
 ## Bad performance
 
