@@ -7,7 +7,6 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import ts from '@rollup/plugin-typescript'
 import { terser } from 'rollup-plugin-terser'
 import typescript from 'typescript'
-import { fileURLToPath } from 'node:url'
 import replaceBeforeSaveFile from './rollup-plugins/replace-before-save-file.js'
 import * as pkg from './package.json'
 
@@ -26,7 +25,6 @@ const banner = `
 const external = [
   ...Object.keys(pkg.peerDependencies ?? {}),
   ...Object.keys(pkg.dependencies ?? {}),
-  fileURLToPath(new URL('temp-path-for-styles', import.meta.url)),
 ]
 
 const buildFormats = [
