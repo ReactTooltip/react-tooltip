@@ -1,9 +1,9 @@
 import type { Middleware } from '../components/Tooltip/TooltipTypes'
 
 export interface IComputePositions {
-  elementReference?: Element | HTMLElement | null;
-  tooltipReference?: Element | HTMLElement | null;
-  tooltipArrowReference?: Element | HTMLElement | null;
+  elementReference?: Element | HTMLElement | null
+  tooltipReference?: Element | HTMLElement | null
+  tooltipArrowReference?: Element | HTMLElement | null
   place?:
     | 'top'
     | 'top-start'
@@ -17,7 +17,7 @@ export interface IComputePositions {
     | 'left'
     | 'left-start'
     | 'left-end';
-  offset?: number;
-  strategy?: 'absolute' | 'fixed';
-  middlewares?: Middleware[];
+  offset?: number
+  strategy?: 'absolute' | 'fixed'
+  middlewares?: Middleware[]
 }
