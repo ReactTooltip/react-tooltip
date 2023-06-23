@@ -1,14 +1,40 @@
-const REACT_TOOLTIP_STYLES_ID = 'react-tooltip-styles'
+// This is the ID for the core styles of ReactTooltip
+const REACT_TOOLTIP_CORE_STYLES_ID = 'react-tooltip-core-styles'
+// This is the ID for the visual styles of ReactTooltip
+const REACT_TOOLTIP_BASE_STYLES_ID = 'react-tooltip-base-styles'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, default-param-last
-function injectStyle(css: string, id = REACT_TOOLTIP_STYLES_ID, ref?: any) {
+function injectStyle({
+  css,
+  id = REACT_TOOLTIP_BASE_STYLES_ID,
+  type = 'base',
+  ref,
+}: {
+  css: string
+  id?: string
+  type?: string
+  ref?: any
+}) {
+  if (type === 'core' && process.env.REACT_TOOLTIP_DISABLE_CORE_STYLES) {
+    return
+  }
+
+  if (type !== 'core' && process.env.REACT_TOOLTIP_DISABLE_BASE_STYLES) {
+    return
+  }
+
+  if (type === 'core') {
+    // eslint-disable-next-line no-param-reassign
+    id = REACT_TOOLTIP_CORE_STYLES_ID
+  }
+
   if (!ref) {
     // eslint-disable-next-line no-param-reassign
     ref = {}
   }
   const { insertAt } = ref
 
-  if (!css || typeof document === 'undefined' || document.getElementById(REACT_TOOLTIP_STYLES_ID)) {
+  if (!css || typeof document === 'undefined' || document.getElementById(id)) {
     return
   }
 
@@ -35,7 +61,18 @@ function injectStyle(css: string, id = REACT_TOOLTIP_STYLES_ID, ref?: any) {
   }
 }
 
-function removeStyle(id = REACT_TOOLTIP_STYLES_ID) {
+function removeStyle({
+  type = 'base',
+  id = REACT_TOOLTIP_BASE_STYLES_ID,
+}: {
+  type?: string
+  id?: string
+}) {
+  if (type === 'core') {
+    // eslint-disable-next-line no-param-reassign
+    id = REACT_TOOLTIP_CORE_STYLES_ID
+  }
+
   const style = document.getElementById(id)
   style?.remove()
 }

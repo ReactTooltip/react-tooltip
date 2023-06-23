@@ -20,8 +20,8 @@ import type { ITooltipWrapper } from './components/TooltipProvider/TooltipProvid
 const TooltipCoreStyles = 'react-tooltip-core-css-placeholder'
 const TooltipStyles = 'react-tooltip-css-placeholder'
 
-injectStyle(TooltipCoreStyles, 'react-tooltip-core-styles')
-injectStyle(TooltipStyles)
+injectStyle({ css: TooltipCoreStyles, type: 'core' })
+injectStyle({ css: TooltipStyles })
 
 export { TooltipController as Tooltip } from './components/TooltipController'
 export { TooltipProvider, TooltipWrapper } from './components/TooltipProvider'
