@@ -3,7 +3,6 @@ const REACT_TOOLTIP_CORE_STYLES_ID = 'react-tooltip-core-styles'
 // This is the ID for the visual styles of ReactTooltip
 const REACT_TOOLTIP_BASE_STYLES_ID = 'react-tooltip-base-styles'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, default-param-last
 function injectStyle({
   css,
   id = REACT_TOOLTIP_BASE_STYLES_ID,
@@ -13,6 +12,7 @@ function injectStyle({
   css: string
   id?: string
   type?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref?: any
 }) {
   if (type === 'core' && process.env.REACT_TOOLTIP_DISABLE_CORE_STYLES) {
