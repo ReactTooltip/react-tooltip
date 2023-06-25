@@ -59,7 +59,7 @@ export const computeTooltipPosition = async ({
         right: '',
         bottom: '',
         ...{ ...borderSide },
-        [staticSide]: '-5px',
+        [staticSide]: border ? '-5px' : '-4px',
       }
 
       return { tooltipStyles: styles, tooltipArrowStyles: arrowStyle, place: placement }
