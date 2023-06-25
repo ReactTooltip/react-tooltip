@@ -63,6 +63,7 @@ describe('compute positions', () => {
         top: '',
       },
       tooltipStyles: {
+        border: null,
         left: '5px',
         top: '-10px',
       },

@@ -8,4 +8,5 @@ export interface IComputePositions {
   offset?: number
   strategy?: 'absolute' | 'fixed'
   middlewares?: Middleware[]
+  border?: string | null
 }
