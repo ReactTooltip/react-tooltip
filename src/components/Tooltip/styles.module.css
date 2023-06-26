@@ -1,3 +1,10 @@
+.tooltip {
+  padding: 8px 16px;
+  border-radius: 3px;
+  font-size: 90%;
+  width: max-content;
+}
+
 .arrow {
   width: 8px;
   height: 8px;

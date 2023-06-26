@@ -585,6 +585,7 @@ const Tooltip = ({
       className={classNames(
         'react-tooltip',
         coreStyles['tooltip'],
+        styles['tooltip'],
         styles[variant],
         className,
         `react-tooltip__place-${actualPlacement}`,
