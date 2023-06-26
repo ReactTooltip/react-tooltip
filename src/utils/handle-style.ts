@@ -67,7 +67,7 @@ function removeStyle({
 }: {
   type?: string
   id?: string
-}) {
+} = {}) {
   if (type === 'core') {
     // eslint-disable-next-line no-param-reassign
     id = REACT_TOOLTIP_CORE_STYLES_ID
