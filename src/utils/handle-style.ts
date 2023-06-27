@@ -15,11 +15,19 @@ function injectStyle({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref?: any
 }) {
-  if (type === 'core' && process.env.REACT_TOOLTIP_DISABLE_CORE_STYLES) {
+  if (
+    type === 'core' &&
+    typeof process !== 'undefined' && // this validation prevents docs from breaking even with `process?`
+    process?.env?.REACT_TOOLTIP_DISABLE_CORE_STYLES
+  ) {
     return
   }
 
-  if (type !== 'core' && process.env.REACT_TOOLTIP_DISABLE_BASE_STYLES) {
+  if (
+    type !== 'core' &&
+    typeof process !== 'undefined' && // this validation prevents docs from breaking even with `process?`
+    process?.env?.REACT_TOOLTIP_DISABLE_BASE_STYLES
+  ) {
     return
   }
 
