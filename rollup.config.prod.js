@@ -7,6 +7,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import ts from '@rollup/plugin-typescript'
 import { terser } from 'rollup-plugin-terser'
 import typescript from 'typescript'
+import replaceBeforeSaveFile from './rollup-plugins/replace-before-save-file.js'
 import * as pkg from './package.json'
 
 const input = ['src/index.tsx']
@@ -27,18 +28,9 @@ const external = [
 ]
 
 const buildFormats = [
-  /**
-   * Temporary build to keep the extracted CSS file.
-   * I don't want to do a major release now with only the CSS change,
-   * so, we will keep the css being exported by the lib and now
-   * we will inject the css into the head by default.
-   * The CSS file import is deprecated and the file is only
-   * for style reference now.
-   */
   {
     file: 'dist/react-tooltip.mjs',
     format: 'es',
-    extractCSS: true,
   },
   {
     file: 'dist/react-tooltip.umd.js',
@@ -74,36 +66,40 @@ const sharedPlugins = [
     typescript,
     tsconfig: './tsconfig.json',
     noEmitOnError: false,
-    // declaration: true,
-    // declarationDir: './build',
   }),
   commonjs({
     include: 'node_modules/**',
   }),
 ]
 // this step is just to build the minified javascript files
-const minifiedBuildFormats = buildFormats.map(({ file, extractCSS, ...rest }) => ({
+const minifiedBuildFormats = buildFormats.map(({ file, ...rest }) => ({
   file: file.replace(/(\.[cm]?js)$/, '.min$1'),
   ...rest,
   minify: true,
-  extractCSS,
   plugins: [terser({ compress: { directives: false } }), filesize()],
 }))
 
 const allBuildFormats = [...buildFormats, ...minifiedBuildFormats]
 
 const config = allBuildFormats.map(
-  ({ file, format, globals, plugins: specificPlugins, minify, extractCSS }) => {
+  ({ file, format, globals, plugins: specificPlugins, minify }) => {
     const plugins = [
       ...sharedPlugins,
       postcss({
-        // eslint-disable-next-line no-nested-ternary
-        extract: extractCSS ? (minify ? 'react-tooltip.min.css' : 'react-tooltip.css') : false, // this will generate a specific file and override on multiples build, but the css will be the same
+        extract: minify ? 'react-tooltip.min.css' : 'react-tooltip.css', // this will generate a specific file and override on multiples build, but the css will be the same
         autoModules: true,
         include: '**/*.css',
         extensions: ['.css'],
         plugins: [],
         minimize: Boolean(minify),
+      }),
+      replaceBeforeSaveFile({
+        // this only works for the react-tooltip.css because it's the first file
+        // writen in our build process before the javascript files.
+        "'react-tooltip-css-placeholder'": 'file:react-tooltip.css',
+        '"react-tooltip-css-placeholder"': 'file:react-tooltip.css',
+        "'react-tooltip-core-css-placeholder'": 'file:react-tooltip.css',
+        '"react-tooltip-core-css-placeholder"': 'file:react-tooltip.css',
       }),
     ]
 

@@ -25,11 +25,18 @@ coverage/
 .vscode/
 .husky/
 .github/
+rollup-plugins/
 
 // misc files
 bundlesize.config.json
+prebuild.js
+jest.config.ts
 
 // bundler - rollup
 rollup.config.dev.js
 rollup.config.prod.js
 rollup.config.types.js
+
+// bundler - esbuild
+esbuild.config.dev.mjs
+esbuild.config.prod.mjs
