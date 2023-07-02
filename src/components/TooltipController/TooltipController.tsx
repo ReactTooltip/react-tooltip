@@ -245,13 +245,11 @@ const TooltipController = ({
       // eslint-disable-next-line no-console
       console.warn('[react-tooltip] Do not set `style.border`. Use `border` prop instead.')
     }
-    if (border) {
-      if (!cssAttrIsValid('border', border)) {
-        // eslint-disable-next-line no-console
-        console.warn(
-          `[react-tooltip] "${border}" is not a valid \`border\`. See https://developer.mozilla.org/en-US/docs/Web/CSS/border`,
-        )
-      }
+    if (border && !cssAttrIsValid('border', border)) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[react-tooltip] "${border}" is not a valid \`border\`. See https://developer.mozilla.org/en-US/docs/Web/CSS/border`,
+      )
     }
   }, [])
 
