@@ -76,8 +76,8 @@ declare module 'react' {
   interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
     'data-tooltip-id'?: string
     'data-tooltip-place'?: PlacesType
-    'data-tooltip-content'?: string
-    'data-tooltip-html'?: string
+    'data-tooltip-content'?: string | null
+    'data-tooltip-html'?: string | null
     'data-tooltip-variant'?: VariantType
     'data-tooltip-offset'?: number
     'data-tooltip-wrapper'?: WrapperType
