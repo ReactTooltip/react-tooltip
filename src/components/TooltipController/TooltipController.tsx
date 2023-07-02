@@ -12,6 +12,7 @@ import type {
 } from 'components/Tooltip/TooltipTypes'
 import { useTooltip } from 'components/TooltipProvider'
 import { TooltipContent } from 'components/TooltipContent'
+import { cssAttrIsValid } from 'utils/css-attr-is-valid'
 import type { ITooltipController } from './TooltipControllerTypes'
 
 const TooltipController = ({
@@ -235,6 +236,24 @@ const TooltipController = ({
       observer.disconnect()
     }
   }, [anchorRefs, providerActiveAnchor, activeAnchor, anchorId, anchorSelect])
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') {
+      return
+    }
+    if (style?.border) {
+      // eslint-disable-next-line no-console
+      console.warn('[react-tooltip] Do not set `style.border`. Use `border` prop instead.')
+    }
+    if (border) {
+      if (!cssAttrIsValid('border', border)) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `[react-tooltip] "${border}" is not a valid \`border\`. See https://developer.mozilla.org/en-US/docs/Web/CSS/border`,
+        )
+      }
+    }
+  }, [])
 
   /**
    * content priority: children < render or content < html

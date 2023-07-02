@@ -60,7 +60,13 @@ export interface ITooltipController {
   style?: CSSProperties
   position?: IPosition
   isOpen?: boolean
-  border?: string | null
+  /**
+   * @description see https://developer.mozilla.org/en-US/docs/Web/CSS/border.
+   *
+   * Adding a border with width > 3px, or with `em/cm/rem/...` instead of `px`
+   * might break the tooltip arrow positioning.
+   */
+  border?: CSSProperties['border']
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
   afterHide?: () => void

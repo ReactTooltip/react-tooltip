@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react'
 import type { Middleware } from '../components/Tooltip/TooltipTypes'
 
 export interface IComputePositions {
@@ -8,5 +9,5 @@ export interface IComputePositions {
   offset?: number
   strategy?: 'absolute' | 'fixed'
   middlewares?: Middleware[]
-  border?: string | null
+  border?: CSSProperties['border']
 }

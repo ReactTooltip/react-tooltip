@@ -9,7 +9,7 @@ export const computeTooltipPosition = async ({
   offset: offsetValue = 10,
   strategy = 'absolute',
   middlewares = [offset(Number(offsetValue)), flip(), shift({ padding: 5 })],
-  border = null,
+  border,
 }: IComputePositions) => {
   if (!elementReference) {
     // elementReference can be null or undefined and we will not compute the position
@@ -53,13 +53,26 @@ export const computeTooltipPosition = async ({
           left: { borderTop: border, borderRight: border },
         }[placement.split('-')[0]]
 
+      let borderWidth = 0
+      if (border) {
+        const match = `${border}`.match(/(\d+)px/)
+        if (match?.[1]) {
+          borderWidth = Number(match[1])
+        } else {
+          /**
+           * this means `border` was set without `width`, or non-px value
+           */
+          borderWidth = 1
+        }
+      }
+
       const arrowStyle = {
         left: arrowX != null ? `${arrowX}px` : '',
         top: arrowY != null ? `${arrowY}px` : '',
         right: '',
         bottom: '',
-        ...{ ...borderSide },
-        [staticSide]: border ? '-5px' : '-4px',
+        ...borderSide,
+        [staticSide]: `-${4 + borderWidth}px`,
       }
 
       return { tooltipStyles: styles, tooltipArrowStyles: arrowStyle, place: placement }
