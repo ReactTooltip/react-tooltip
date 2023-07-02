@@ -12,7 +12,6 @@ import type {
 } from 'components/Tooltip/TooltipTypes'
 import { useTooltip } from 'components/TooltipProvider'
 import { TooltipContent } from 'components/TooltipContent'
-import { cssAttrIsValid } from 'utils/css-attr-is-valid'
 import type { ITooltipController } from './TooltipControllerTypes'
 
 const TooltipController = ({
@@ -245,11 +244,9 @@ const TooltipController = ({
       // eslint-disable-next-line no-console
       console.warn('[react-tooltip] Do not set `style.border`. Use `border` prop instead.')
     }
-    if (border && !cssAttrIsValid('border', border)) {
+    if (border && !CSS.supports('border', `${border}`)) {
       // eslint-disable-next-line no-console
-      console.warn(
-        `[react-tooltip] "${border}" is not a valid \`border\`. See https://developer.mozilla.org/en-US/docs/Web/CSS/border`,
-      )
+      console.warn(`[react-tooltip] "${border}" is not a valid \`border\`.`)
     }
   }, [])
 
