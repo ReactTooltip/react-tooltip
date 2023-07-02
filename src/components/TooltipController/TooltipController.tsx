@@ -169,6 +169,14 @@ const TooltipController = ({
   }, [positionStrategy])
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // here we can do validations related to the props before inject the styles,
+      // we can also send something into the 'detail' to the inject style function
+      window.dispatchEvent(new CustomEvent('rt_inject_styles', { detail: {} }))
+    }
+  }, [])
+
+  useEffect(() => {
     const elementRefs = new Set(anchorRefs)
 
     let selector = anchorSelect
