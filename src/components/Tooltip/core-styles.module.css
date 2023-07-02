@@ -1,0 +1,34 @@
+.tooltip {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  will-change: opacity, visibility;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.arrow {
+  position: absolute;
+  background: inherit;
+}
+
+.noArrow {
+  display: none;
+}
+
+.clickable {
+  pointer-events: auto;
+}
+
+.show {
+  visibility: visible;
+  opacity: var(--rt-opacity);
+}
+
+/** end - core styles **/

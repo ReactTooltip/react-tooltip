@@ -34,37 +34,82 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-The `place` prop and the `data-tooltip-place` attribute accept the following values: `'top' | 'right' | 'bottom' | 'left'`.
+The `place` prop and the `data-tooltip-place` attribute accept the following values: `'top' | 'top-start' | 'top-end' | 'right' | 'right-start' | 'right-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end'`.
 
 ### Using `data-tooltip-place` attribute
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
+const PLACES = ['top', 'top-start', 'top-end', 'right', 'right-start', 'right-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end']
 
 <a id="my-tooltip-anchor">◕‿‿◕</a>
-<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the top!" place="top" />
-<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the right!" place="right" />
-<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the bottom!" place="bottom" />
-<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the left!" place="left" />
+{PLACES.map(place => (
+  <Tooltip
+    key={place}
+    anchorSelect="#my-tooltip-anchor"
+    content={`Hello world from the ${place}!`}
+    place={place}
+  />
+))}
 ```
 
-<TooltipAnchor id="my-tooltip-anchor">◕‿‿◕</TooltipAnchor>
-<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the top!" place="top" />
-<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the right!" place="right" />
-<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the bottom!" place="bottom" />
-<Tooltip anchorSelect="#my-tooltip-anchor" content="Hello world from the left!" place="left" />
+export const PlacementExampleAttributes = () => {
+  const PLACES1 = ['top', 'right', 'bottom', 'left'];
+  const PLACES2 = ['top-start', 'right-start', 'bottom-start', 'left-start'];
+  const PLACES3 = ['top-end', 'right-end', 'bottom-end', 'left-end'];
+  
+  return (
+    <>
+      <div style={{display: 'flex', gap: '16px'}}>
+      <TooltipAnchor id="my-tooltip-anchor1">◕‿‿◕</TooltipAnchor>
+      <TooltipAnchor id="my-tooltip-anchor2">◕‿‿◕</TooltipAnchor>
+      <TooltipAnchor id="my-tooltip-anchor3">◕‿‿◕</TooltipAnchor>
+      </div>
+      <div>
+      {PLACES1.map(place => (
+        <Tooltip
+          key={place}
+          anchorSelect="#my-tooltip-anchor1"
+          content={`Hello world from the ${place}!`}
+          place={place}
+        />
+      ))}
+      {PLACES2.map(place => (
+        <Tooltip
+          key={place}
+          anchorSelect="#my-tooltip-anchor2"
+          content={`Hello world from the ${place}!`}
+          place={place}
+        />
+      ))}
+      {PLACES3.map(place => (
+        <Tooltip
+          key={place}
+          anchorSelect="#my-tooltip-anchor3"
+          content={`Hello world from the ${place}!`}
+          place={place}
+        />
+      ))}
+      </div>
+    </>
+  )
+}
+
+<PlacementExampleAttributes />
+
+
 
 ### Using `place` prop
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 
-const PLACES = ['top', 'right', 'bottom', 'left']
+const PLACES = ['top', 'top-start', 'top-end', 'right', 'right-start', 'right-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end']
 const [place, setPlace] = useState(0)
 
 <a 
   data-tooltip-id="my-tooltip"
-  onClick={() => setPlace(p => (p + 1) % 4)}
+  onClick={() => setPlace(p => (p + 1) % 12)}
 >
   ◕‿‿◕
 </a>
@@ -76,14 +121,14 @@ const [place, setPlace] = useState(0)
 ```
 
 export const PlacementExample = () => {
-  const PLACES = ['top', 'right', 'bottom', 'left']
+  const PLACES = ['top', 'top-start', 'top-end', 'right', 'right-start', 'right-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end'];
   const [place, setPlace] = useState(0)
   
   return (
     <>
       <TooltipAnchor
         data-tooltip-id="my-tooltip"
-        onClick={() => setPlace(p => (p + 1) % 4)}
+        onClick={() => setPlace(p => (p + 1) % 12)}
       >
         ◕‿‿◕
       </TooltipAnchor>

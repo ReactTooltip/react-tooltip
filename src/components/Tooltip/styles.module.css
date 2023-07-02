@@ -1,41 +1,14 @@
 .tooltip {
-  visibility: hidden;
-  width: max-content;
-  position: absolute;
-  top: 0;
-  left: 0;
   padding: 8px 16px;
   border-radius: 3px;
   font-size: 90%;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease-out;
-  will-change: opacity, visibility;
-}
-
-.fixed {
-  position: fixed;
+  width: max-content;
 }
 
 .arrow {
-  position: absolute;
-  background: inherit;
   width: 8px;
   height: 8px;
   transform: rotate(45deg);
-}
-
-.noArrow {
-  display: none;
-}
-
-.clickable {
-  pointer-events: auto;
-}
-
-.show {
-  visibility: visible;
-  opacity: var(--rt-opacity);
 }
 
 /** Types variant **/

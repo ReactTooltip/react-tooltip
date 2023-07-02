@@ -1,20 +1,26 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a report to help us improve. Please check our troubleshooting docs beforehand.
 title: "[BUG]"
 labels: Bug
 assignees: ''
 
 ---
 
-**Describe the bug**
+# Check the troubleshooting page before opening an issue!
+
+Make sure your problem isn't already covered at the troubleshooting page: https://react-tooltip.com/docs/troubleshooting
+
+----
+
+**Bug description**
 A clear and concise description of what the bug is.
 
 **Version of Package**
 vX.X.X
 
 **To Reproduce**
-Steps to reproduce the behavior
+Steps to reproduce the behavior.
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
