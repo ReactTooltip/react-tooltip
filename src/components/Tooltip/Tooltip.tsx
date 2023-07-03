@@ -45,6 +45,7 @@ const Tooltip = ({
   activeAnchor,
   setActiveAnchor,
   border,
+  opacity,
 }: ITooltip) => {
   const tooltipRef = useRef<HTMLElement>(null)
   const tooltipArrowRef = useRef<HTMLElement>(null)
@@ -598,7 +599,11 @@ const Tooltip = ({
           [coreStyles['clickable']]: clickable,
         },
       )}
-      style={{ ...externalStyles, ...inlineStyles }}
+      style={{
+        ...externalStyles,
+        ...inlineStyles,
+        opacity: opacity !== undefined && canShow ? opacity : undefined,
+      }}
       ref={tooltipRef}
     >
       {content}

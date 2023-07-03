@@ -45,6 +45,7 @@ const TooltipController = ({
   position,
   isOpen,
   border,
+  opacity,
   setIsOpen,
   afterShow,
   afterHide,
@@ -248,6 +249,14 @@ const TooltipController = ({
       // eslint-disable-next-line no-console
       console.warn(`[react-tooltip] "${border}" is not a valid \`border\`.`)
     }
+    if (style?.opacity) {
+      // eslint-disable-next-line no-console
+      console.warn('[react-tooltip] Do not set `style.opacity`. Use `opacity` prop instead.')
+    }
+    if (opacity && !CSS.supports('opacity', `${opacity}`)) {
+      // eslint-disable-next-line no-console
+      console.warn(`[react-tooltip] "${opacity}" is not a valid \`opacity\`.`)
+    }
   }, [])
 
   /**
@@ -299,6 +308,7 @@ const TooltipController = ({
     position,
     isOpen,
     border,
+    opacity,
     setIsOpen,
     afterShow,
     afterHide,

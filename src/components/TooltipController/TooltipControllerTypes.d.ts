@@ -67,6 +67,7 @@ export interface ITooltipController {
    * might break the tooltip arrow positioning.
    */
   border?: CSSProperties['border']
+  opacity?: CSSProperties['opacity']
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
   afterHide?: () => void
