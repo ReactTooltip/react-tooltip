@@ -18,7 +18,8 @@ function injectStyle({
   if (
     type === 'core' &&
     typeof process !== 'undefined' && // this validation prevents docs from breaking even with `process?`
-    process?.env?.REACT_TOOLTIP_DISABLE_CORE_STYLES
+    (process?.env?.REACT_TOOLTIP_DISABLE_CORE_STYLES ||
+      process?.env?.REACT_APP_REACT_TOOLTIP_DISABLE_CORE_STYLES)
   ) {
     return
   }
@@ -26,7 +27,8 @@ function injectStyle({
   if (
     type !== 'core' &&
     typeof process !== 'undefined' && // this validation prevents docs from breaking even with `process?`
-    process?.env?.REACT_TOOLTIP_DISABLE_BASE_STYLES
+    (process?.env?.REACT_TOOLTIP_DISABLE_BASE_STYLES ||
+      process?.env?.REACT_APP_REACT_TOOLTIP_DISABLE_BASE_STYLES)
   ) {
     return
   }
