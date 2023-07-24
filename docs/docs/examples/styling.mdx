@@ -393,3 +393,40 @@ Do not set `disableStyleInjection` dynamically. Changing its value requires a pa
 Check out more details about the [base](#base-styles) and [core](#core-styles) styles.
 
 :::
+
+#### Environment variables
+
+:::danger
+
+This has been deprecated. Use [`disableStyleInjection`](#disabling-reacttooltip-css) instead.
+
+:::
+
+You can prevent ReactTooltip from injecting styles into the page by using environment variables.
+
+| name                                | type      | required | default | values         | description                                                                                                                                                                                                                                   |
+| ----------------------------------- | --------- | -------- | ------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `REACT_TOOLTIP_DISABLE_CORE_STYLES` | `boolean` | no       | `false` | `true` `false` | Environment variable to disable **core** styles from being injected into the page by ReactTooltip.<br /><br /> We strongly recommend to keep the core styles being injected into the project unless you know what you are doing.              |
+| `REACT_TOOLTIP_DISABLE_BASE_STYLES` | `boolean` | no       | `false` | `true` `false` | Environment variable to disable **base** styles from being injected into the page by ReactTooltip.<br /><br /> Those styles are just visual styles like colors, padding, etc... And can be disabled if you want to write your tooltip styles. |
+
+
+#### `removeStyle()` function
+
+:::danger
+
+This has been deprecated. Use [`disableStyleInjection`](#disabling-reacttooltip-css) instead.
+
+:::
+
+You can also use the `removeStyle()` function to remove injected styles from the page. It accepts the following parameters:
+
+| name | type   | required | default | values        | description                                                                                                                                |
+| ---- | ------ | -------- | ------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| type | string | no       | `base`  | `base` `core` | If `core` is defined, the core styles will be removed from the page, if nothing is defined, `base` styles will be removed as default value |
+
+```jsx
+import { removeStyle } from 'react-tooltip'
+
+removeStyle() // removes the injected base style of ReactTooltip
+removeStyle({ type: 'core' }) // removes the injected core style of ReactTooltip - this can affect the basic functionality of ReactTooltip
+```
