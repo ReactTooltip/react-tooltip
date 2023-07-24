@@ -39,7 +39,7 @@ const buildFormats = [
       '@floating-ui/dom': 'FloatingUIDOM',
       react: 'React',
       'react-dom': 'ReactDOM',
-      classnames: 'classNames',
+      clsx: 'clsx',
       'prop-types': 'PropTypes',
     },
   },
