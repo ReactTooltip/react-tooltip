@@ -125,6 +125,6 @@
   },
   "dependencies": {
     "@floating-ui/dom": "^1.0.0",
-    "classnames": "^2.3.0"
+    "clsx": "^2.0.0"
   }
 }

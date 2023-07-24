@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { useTooltip } from './TooltipProvider'
 import type { ITooltipWrapper } from './TooltipProviderTypes'
 
@@ -35,7 +35,7 @@ const TooltipWrapper = ({
   return (
     <span
       ref={anchorRef}
-      className={classNames('react-tooltip-wrapper', className)}
+      className={clsx('react-tooltip-wrapper', className)}
       data-tooltip-place={place}
       data-tooltip-content={content}
       data-tooltip-html={html}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import debounce from 'utils/debounce'
 import { useTooltip } from 'components/TooltipProvider'
 import useIsomorphicLayoutEffect from 'utils/use-isomorphic-layout-effect'
@@ -586,7 +586,7 @@ const Tooltip = ({
     <WrapperElement
       id={id}
       role="tooltip"
-      className={classNames(
+      className={clsx(
         'react-tooltip',
         coreStyles['tooltip'],
         styles['tooltip'],
@@ -608,7 +608,7 @@ const Tooltip = ({
     >
       {content}
       <WrapperElement
-        className={classNames(
+        className={clsx(
           'react-tooltip-arrow',
           coreStyles['arrow'],
           styles['arrow'],
