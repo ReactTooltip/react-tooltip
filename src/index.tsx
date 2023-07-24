@@ -48,3 +48,5 @@ export type {
   IPosition,
   Middleware,
 }
+
+export { removeStyle } from './utils/handle-style'

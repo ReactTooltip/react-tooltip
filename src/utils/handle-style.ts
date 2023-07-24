@@ -20,6 +20,26 @@ function injectStyle({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref?: any
 }) {
+  if (!css || typeof document === 'undefined' || injected[type]) {
+    return
+  }
+
+  if (
+    type === 'core' &&
+    typeof process !== 'undefined' && // this validation prevents docs from breaking even with `process?`
+    process?.env?.REACT_TOOLTIP_DISABLE_CORE_STYLES
+  ) {
+    return
+  }
+
+  if (
+    type !== 'base' &&
+    typeof process !== 'undefined' && // this validation prevents docs from breaking even with `process?`
+    process?.env?.REACT_TOOLTIP_DISABLE_BASE_STYLES
+  ) {
+    return
+  }
+
   if (type === 'core') {
     // eslint-disable-next-line no-param-reassign
     id = REACT_TOOLTIP_CORE_STYLES_ID
@@ -30,10 +50,6 @@ function injectStyle({
     ref = {}
   }
   const { insertAt } = ref
-
-  if (!css || typeof document === 'undefined' || injected[type]) {
-    return
-  }
 
   if (document.getElementById(id)) {
     // this should never happen because of `injected[type]`
@@ -71,6 +87,10 @@ function injectStyle({
   injected[type] = true
 }
 
+/**
+ * @deprecated Use the `disableStyleInjection` tooltip prop instead.
+ * See https://react-tooltip.com/docs/examples/styling#disabling-reacttooltip-css
+ */
 function removeStyle({
   type = 'base',
   id = REACT_TOOLTIP_BASE_STYLES_ID,
