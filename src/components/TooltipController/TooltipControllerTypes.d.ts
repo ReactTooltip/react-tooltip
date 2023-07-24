@@ -60,6 +60,7 @@ export interface ITooltipController {
   style?: CSSProperties
   position?: IPosition
   isOpen?: boolean
+  disableStyleInjection?: boolean | 'core'
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
   afterHide?: () => void

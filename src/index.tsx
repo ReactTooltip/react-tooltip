@@ -21,10 +21,16 @@ const TooltipCoreStyles = 'react-tooltip-core-css-placeholder'
 const TooltipStyles = 'react-tooltip-css-placeholder'
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('rt_inject_styles', () => {
-    injectStyle({ css: TooltipCoreStyles, type: 'core' })
-    injectStyle({ css: TooltipStyles })
-  })
+  window.addEventListener('react-tooltip-inject-styles', ((
+    event: CustomEvent<{ disableCore: boolean; disableBase: boolean }>,
+  ) => {
+    if (!event.detail.disableCore) {
+      injectStyle({ css: TooltipCoreStyles, type: 'core' })
+    }
+    if (!event.detail.disableBase) {
+      injectStyle({ css: TooltipStyles, type: 'base' })
+    }
+  }) as EventListener)
 }
 
 export { TooltipController as Tooltip } from './components/TooltipController'
@@ -42,5 +48,3 @@ export type {
   IPosition,
   Middleware,
 }
-
-export { removeStyle } from './utils/handle-style'

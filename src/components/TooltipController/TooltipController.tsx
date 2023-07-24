@@ -44,6 +44,7 @@ const TooltipController = ({
   style,
   position,
   isOpen,
+  disableStyleInjection = false,
   setIsOpen,
   afterShow,
   afterHide,
@@ -61,6 +62,7 @@ const TooltipController = ({
   const [tooltipEvents, setTooltipEvents] = useState(events)
   const [tooltipPositionStrategy, setTooltipPositionStrategy] = useState(positionStrategy)
   const [activeAnchor, setActiveAnchor] = useState<HTMLElement | null>(null)
+  const styleInjectionRef = useRef(disableStyleInjection)
   /**
    * @todo Remove this in a future version (provider/wrapper method is deprecated)
    */
@@ -169,10 +171,25 @@ const TooltipController = ({
   }, [positionStrategy])
 
   useEffect(() => {
+    if (styleInjectionRef.current === disableStyleInjection) {
+      return
+    }
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.warn('[react-tooltip] Do not change `disableStyleInjection` dynamically.')
+    }
+  }, [disableStyleInjection])
+
+  useEffect(() => {
     if (typeof window !== 'undefined') {
-      // here we can do validations related to the props before inject the styles,
-      // we can also send something into the 'detail' to the inject style function
-      window.dispatchEvent(new CustomEvent('rt_inject_styles', { detail: {} }))
+      window.dispatchEvent(
+        new CustomEvent('react-tooltip-inject-styles', {
+          detail: {
+            disableCore: disableStyleInjection === 'core',
+            disableBase: disableStyleInjection,
+          },
+        }),
+      )
     }
   }, [])
 
