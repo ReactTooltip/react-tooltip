@@ -63,11 +63,11 @@ If you run into any problems with the tooltip not updating after changes are mad
 - [x] `offset` - also available on anchor element as `data-tooltip-offset`
 - [ ] `padding` - use `className` and custom CSS
 - [ ] `multiline` - supported by default in `content` and `html` props
-- [ ] `border` - use `className` and custom CSS
-- [ ] `borderClass` - use `className` and custom CSS
+- [x] `border`
+- [ ] `borderClass` - use `border` prop
 - [ ] `textColor` - use `className` and custom CSS
 - [ ] `backgroundColor` - use `className` and custom CSS
-- [ ] `borderColor` - use `className` and custom CSS
+- [ ] `borderColor` - use `border` prop
 - [ ] `arrowColor` - use `className` and custom CSS
 - [ ] `arrowRadius` - use `className` and custom CSS
 - [ ] `tooltipRadius` - use `className` and custom CSS

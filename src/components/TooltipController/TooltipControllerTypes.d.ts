@@ -61,6 +61,14 @@ export interface ITooltipController {
   position?: IPosition
   isOpen?: boolean
   disableStyleInjection?: boolean | 'core'
+  /**
+   * @description see https://developer.mozilla.org/en-US/docs/Web/CSS/border.
+   *
+   * Adding a border with width > 3px, or with `em/cm/rem/...` instead of `px`
+   * might break the tooltip arrow positioning.
+   */
+  border?: CSSProperties['border']
+  opacity?: CSSProperties['opacity']
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
   afterHide?: () => void
@@ -70,8 +78,8 @@ declare module 'react' {
   interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
     'data-tooltip-id'?: string
     'data-tooltip-place'?: PlacesType
-    'data-tooltip-content'?: string
-    'data-tooltip-html'?: string
+    'data-tooltip-content'?: string | null
+    'data-tooltip-html'?: string | null
     'data-tooltip-variant'?: VariantType
     'data-tooltip-offset'?: number
     'data-tooltip-wrapper'?: WrapperType

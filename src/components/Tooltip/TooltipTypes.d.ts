@@ -89,4 +89,6 @@ export interface ITooltip {
   afterHide?: () => void
   activeAnchor: HTMLElement | null
   setActiveAnchor: (anchor: HTMLElement | null) => void
+  border?: CSSProperties['border']
+  opacity?: CSSProperties['opacity']
 }

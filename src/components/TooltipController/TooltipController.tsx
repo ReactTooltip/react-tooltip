@@ -45,6 +45,8 @@ const TooltipController = ({
   position,
   isOpen,
   disableStyleInjection = false,
+  border,
+  opacity,
   setIsOpen,
   afterShow,
   afterHide,
@@ -260,6 +262,28 @@ const TooltipController = ({
     }
   }, [anchorRefs, providerActiveAnchor, activeAnchor, anchorId, anchorSelect])
 
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') {
+      return
+    }
+    if (style?.border) {
+      // eslint-disable-next-line no-console
+      console.warn('[react-tooltip] Do not set `style.border`. Use `border` prop instead.')
+    }
+    if (border && !CSS.supports('border', `${border}`)) {
+      // eslint-disable-next-line no-console
+      console.warn(`[react-tooltip] "${border}" is not a valid \`border\`.`)
+    }
+    if (style?.opacity) {
+      // eslint-disable-next-line no-console
+      console.warn('[react-tooltip] Do not set `style.opacity`. Use `opacity` prop instead.')
+    }
+    if (opacity && !CSS.supports('opacity', `${opacity}`)) {
+      // eslint-disable-next-line no-console
+      console.warn(`[react-tooltip] "${opacity}" is not a valid \`opacity\`.`)
+    }
+  }, [])
+
   /**
    * content priority: children < render or content < html
    * children should be lower priority so that it can be used as the "default" content
@@ -308,6 +332,8 @@ const TooltipController = ({
     style,
     position,
     isOpen,
+    border,
+    opacity,
     setIsOpen,
     afterShow,
     afterHide,

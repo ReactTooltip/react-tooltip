@@ -44,6 +44,8 @@ const Tooltip = ({
   setIsOpen,
   activeAnchor,
   setActiveAnchor,
+  border,
+  opacity,
 }: ITooltip) => {
   const tooltipRef = useRef<HTMLElement>(null)
   const tooltipArrowRef = useRef<HTMLElement>(null)
@@ -237,6 +239,7 @@ const Tooltip = ({
       tooltipArrowReference: tooltipArrowRef.current,
       strategy: positionStrategy,
       middlewares,
+      border,
     }).then((computedStylesData) => {
       if (Object.keys(computedStylesData.tooltipStyles).length) {
         setInlineStyles(computedStylesData.tooltipStyles)
@@ -503,6 +506,7 @@ const Tooltip = ({
       tooltipArrowReference: tooltipArrowRef.current,
       strategy: positionStrategy,
       middlewares,
+      border,
     }).then((computedStylesData) => {
       if (!mounted.current) {
         // invalidate computed positions after remount
@@ -595,7 +599,11 @@ const Tooltip = ({
           [coreStyles['clickable']]: clickable,
         },
       )}
-      style={{ ...externalStyles, ...inlineStyles }}
+      style={{
+        ...externalStyles,
+        ...inlineStyles,
+        opacity: opacity !== undefined && canShow ? opacity : undefined,
+      }}
       ref={tooltipRef}
     >
       {content}
