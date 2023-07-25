@@ -28,7 +28,7 @@ Why do we show ads on our docs?
 
 ## Demo
 
-[![Edit ReactTooltip](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/still-monad-yfi4fn?fontsize=14&hidenavigation=1&theme=dark)
+[![Edit ReactTooltip](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/gallant-leftpad-8kvtn7?file=/src/App.js)
 
 Documentation for V4 - [Github Page](https://reacttooltip.github.io/react-tooltip/).
 
