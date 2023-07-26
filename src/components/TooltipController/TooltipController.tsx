@@ -63,6 +63,7 @@ const TooltipController = ({
   const [tooltipEvents, setTooltipEvents] = useState(events)
   const [tooltipPositionStrategy, setTooltipPositionStrategy] = useState(positionStrategy)
   const [activeAnchor, setActiveAnchor] = useState<HTMLElement | null>(null)
+  // Same shit that in Tooltip.tsx here, don't wanted to bother factorizing this someway
   const [isShadowChecked, setIsShadowChecked] = useState(false)
   const shadowCheckRef = useRef<HTMLDivElement>(null)
   const [root, setRoot] = useState<ShadowRoot | Document>(document)
@@ -84,6 +85,7 @@ const TooltipController = ({
     return dataAttributes
   }
 
+  // Same shit that in Tooltip.tsx here, don't wanted to bother factorizing this someway
   useEffect(() => {
     if (!isShadowChecked && shadowCheckRef.current) {
       setIsShadowChecked(true)
@@ -182,6 +184,7 @@ const TooltipController = ({
   }, [positionStrategy])
 
   useEffect(() => {
+    // Whenever the Shadow Dom is checked, run the useEffect with the correct Root
     if (isShadowChecked) {
       const elementRefs = new Set(anchorRefs)
 
