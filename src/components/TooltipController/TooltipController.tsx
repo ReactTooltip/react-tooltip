@@ -44,7 +44,6 @@ const TooltipController = ({
   style,
   position,
   isOpen,
-  disableStyleInjection = false,
   border,
   opacity,
   setIsOpen,
@@ -64,7 +63,10 @@ const TooltipController = ({
   const [tooltipEvents, setTooltipEvents] = useState(events)
   const [tooltipPositionStrategy, setTooltipPositionStrategy] = useState(positionStrategy)
   const [activeAnchor, setActiveAnchor] = useState<HTMLElement | null>(null)
-  const styleInjectionRef = useRef(disableStyleInjection)
+  const [isShadowChecked, setIsShadowChecked] = useState(false)
+  const shadowCheckRef = useRef<HTMLDivElement>(null)
+  const [root, setRoot] = useState<ShadowRoot | Document>(document)
+
   /**
    * @todo Remove this in a future version (provider/wrapper method is deprecated)
    */
@@ -81,6 +83,13 @@ const TooltipController = ({
 
     return dataAttributes
   }
+
+  useEffect(() => {
+    if (!isShadowChecked && shadowCheckRef.current) {
+      setIsShadowChecked(true)
+      setRoot(shadowCheckRef.current.getRootNode() as ShadowRoot)
+    }
+  }, [isShadowChecked, shadowCheckRef])
 
   const applyAllDataAttributesFromAnchorElement = (
     dataAttributes: Record<string, string | null>,
@@ -173,94 +182,74 @@ const TooltipController = ({
   }, [positionStrategy])
 
   useEffect(() => {
-    if (styleInjectionRef.current === disableStyleInjection) {
-      return
-    }
-    if (process.env.NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
-      console.warn('[react-tooltip] Do not change `disableStyleInjection` dynamically.')
-    }
-  }, [disableStyleInjection])
+    if (isShadowChecked) {
+      const elementRefs = new Set(anchorRefs)
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.dispatchEvent(
-        new CustomEvent('react-tooltip-inject-styles', {
-          detail: {
-            disableCore: disableStyleInjection === 'core',
-            disableBase: disableStyleInjection,
-          },
-        }),
-      )
-    }
-  }, [])
-
-  useEffect(() => {
-    const elementRefs = new Set(anchorRefs)
-
-    let selector = anchorSelect
-    if (!selector && id) {
-      selector = `[data-tooltip-id='${id}']`
-    }
-    if (selector) {
-      try {
-        const anchorsBySelect = document.querySelectorAll<HTMLElement>(selector)
-        anchorsBySelect.forEach((anchor) => {
-          elementRefs.add({ current: anchor })
-        })
-      } catch {
-        if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
-          // eslint-disable-next-line no-console
-          console.warn(`[react-tooltip] "${selector}" is not a valid CSS selector`)
+      let selector = anchorSelect
+      if (!selector && id) {
+        selector = `[data-tooltip-id='${id}']`
+      }
+      if (selector) {
+        try {
+          const anchorsBySelect = root.querySelectorAll<HTMLElement>(selector)
+          anchorsBySelect.forEach((anchor) => {
+            elementRefs.add({ current: anchor })
+          })
+        } catch {
+          if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
+            // eslint-disable-next-line no-console
+            console.warn(`[react-tooltip] "${selector}" is not a valid CSS selector`)
+          }
         }
       }
-    }
 
-    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
-    if (anchorById) {
-      elementRefs.add({ current: anchorById })
-    }
+      const anchorById = root.querySelector<HTMLElement>(`[id='${anchorId}']`)
+      if (anchorById) {
+        elementRefs.add({ current: anchorById })
+      }
 
-    if (!elementRefs.size) {
-      return () => null
-    }
+      if (!elementRefs.size) {
+        return () => null
+      }
 
-    const anchorElement = activeAnchor ?? anchorById ?? providerActiveAnchor.current
+      const anchorElement = activeAnchor ?? anchorById ?? providerActiveAnchor.current
 
-    const observerCallback: MutationCallback = (mutationList) => {
-      mutationList.forEach((mutation) => {
-        if (
-          !anchorElement ||
-          mutation.type !== 'attributes' ||
-          !mutation.attributeName?.startsWith('data-tooltip-')
-        ) {
-          return
-        }
-        // make sure to get all set attributes, since all unset attributes are reset
+      const observerCallback: MutationCallback = (mutationList) => {
+        mutationList.forEach((mutation) => {
+          if (
+            !anchorElement ||
+            mutation.type !== 'attributes' ||
+            !mutation.attributeName?.startsWith('data-tooltip-')
+          ) {
+            return
+          }
+          // make sure to get all set attributes, since all unset attributes are reset
+          const dataAttributes = getDataAttributesFromAnchorElement(anchorElement)
+          applyAllDataAttributesFromAnchorElement(dataAttributes)
+        })
+      }
+
+      // Create an observer instance linked to the callback function
+      const observer = new MutationObserver(observerCallback)
+
+      // do not check for subtree and childrens, we only want to know attribute changes
+      // to stay watching `data-attributes-*` from anchor element
+      const observerConfig = { attributes: true, childList: false, subtree: false }
+
+      if (anchorElement) {
         const dataAttributes = getDataAttributesFromAnchorElement(anchorElement)
         applyAllDataAttributesFromAnchorElement(dataAttributes)
-      })
+        // Start observing the target node for configured mutations
+        observer.observe(anchorElement, observerConfig)
+      }
+
+      return () => {
+        // Remove the observer when the tooltip is destroyed
+        observer.disconnect()
+      }
     }
-
-    // Create an observer instance linked to the callback function
-    const observer = new MutationObserver(observerCallback)
-
-    // do not check for subtree and childrens, we only want to know attribute changes
-    // to stay watching `data-attributes-*` from anchor element
-    const observerConfig = { attributes: true, childList: false, subtree: false }
-
-    if (anchorElement) {
-      const dataAttributes = getDataAttributesFromAnchorElement(anchorElement)
-      applyAllDataAttributesFromAnchorElement(dataAttributes)
-      // Start observing the target node for configured mutations
-      observer.observe(anchorElement, observerConfig)
-    }
-
-    return () => {
-      // Remove the observer when the tooltip is destroyed
-      observer.disconnect()
-    }
-  }, [anchorRefs, providerActiveAnchor, activeAnchor, anchorId, anchorSelect])
+    return () => null
+  }, [anchorRefs, providerActiveAnchor, activeAnchor, anchorId, anchorSelect, isShadowChecked])
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'production') {
@@ -304,6 +293,8 @@ const TooltipController = ({
     renderedContent = <TooltipContent content={tooltipHtml} />
   }
 
+  const renderCheck = () => (isShadowChecked ? null : <div ref={shadowCheckRef} />)
+
   const props: ITooltip = {
     id,
     anchorId,
@@ -341,7 +332,12 @@ const TooltipController = ({
     setActiveAnchor: (anchor: HTMLElement | null) => setActiveAnchor(anchor),
   }
 
-  return <Tooltip {...props} />
+  return (
+    <>
+      <Tooltip {...props} />
+      {renderCheck()}
+    </>
+  )
 }
 
 export default TooltipController

@@ -33,25 +33,30 @@ function App() {
       >
         My button
       </button>
-      <Tooltip place="bottom" anchorId={anchorId} isOpen={isDarkOpen} setIsOpen={setIsDarkOpen} />
+      <Tooltip
+        place="bottom"
+        anchorSelect={anchorId}
+        isOpen={isDarkOpen}
+        setIsOpen={setIsDarkOpen}
+      />
       <Tooltip
         place="top"
         variant="success"
-        anchorId="button2"
+        anchorSelect="button2"
         isOpen={isDarkOpen}
         setIsOpen={setIsDarkOpen}
       />
       <Tooltip
         place="top"
         variant="info"
-        anchorId="button3"
+        anchorSelect="button3"
         isOpen={isDarkOpen}
         setIsOpen={setIsDarkOpen}
       />
       <Tooltip
         place="right"
         variant="info"
-        anchorId="button3"
+        anchorSelect="button3"
         content="My big tooltip content"
         isOpen={isDarkOpen}
         setIsOpen={setIsDarkOpen}
@@ -109,7 +114,7 @@ function App() {
             Hover me!
           </div>
           <Tooltip
-            anchorId="floatAnchor"
+            anchorSelect="floatAnchor"
             content={
               toggle
                 ? 'This is a float tooltip with a very very large content string'
@@ -133,7 +138,7 @@ function App() {
             Click me!
           </div>
           <Tooltip
-            anchorId="onClickAnchor"
+            anchorSelect="onClickAnchor"
             content={`This is an on click tooltip (x:${position.x},y:${position.y})`}
             events={['click']}
             position={position}
@@ -146,7 +151,7 @@ function App() {
         <button id="buttonCallbacks">Check the dev console</button>
         <Tooltip
           place="bottom"
-          anchorId="buttonCallbacks"
+          anchorSelect="buttonCallbacks"
           // eslint-disable-next-line no-console
           afterShow={() => console.log('After show')}
           // eslint-disable-next-line no-console
@@ -158,7 +163,7 @@ function App() {
         <Tooltip
           events={['click']}
           place="bottom"
-          anchorId="buttonCallbacksClick"
+          anchorSelect="buttonCallbacksClick"
           // eslint-disable-next-line no-console
           afterShow={() => console.log('After show with click')}
           // eslint-disable-next-line no-console
@@ -170,7 +175,7 @@ function App() {
         <Tooltip
           delayShow={1000}
           place="bottom"
-          anchorId="buttonCallbacksDelay"
+          anchorSelect="buttonCallbacksDelay"
           // eslint-disable-next-line no-console
           afterShow={() => console.log('After show with delay')}
           // eslint-disable-next-line no-console
@@ -202,7 +207,7 @@ function App() {
 
         <Tooltip
           place="top"
-          anchorId="withoutCustomMiddleware"
+          anchorSelect="withoutCustomMiddleware"
           content="Showing tooltip with default middlewares"
           positionStrategy="fixed"
         />
@@ -231,7 +236,7 @@ function App() {
 
         <Tooltip
           place="top"
-          anchorId="withCustomMiddleware"
+          anchorSelect="withCustomMiddleware"
           content="Showing tooltip with custom inline middleware"
           positionStrategy="fixed"
           middlewares={[inline(), offset(10)]}

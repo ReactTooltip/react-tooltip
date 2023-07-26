@@ -5,9 +5,9 @@ import { useTooltip } from 'components/TooltipProvider'
 import useIsomorphicLayoutEffect from 'utils/use-isomorphic-layout-effect'
 import { getScrollParent } from 'utils/get-scroll-parent'
 import { computeTooltipPosition } from 'utils/compute-positions'
-import coreStyles from './core-styles.module.css'
 import styles from './styles.module.css'
 import type { IPosition, ITooltip, PlacesType } from './TooltipTypes'
+import coreStyles from './core-styles.module.css'
 
 const Tooltip = ({
   // props
@@ -56,8 +56,15 @@ const Tooltip = ({
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState(false)
   const [rendered, setRendered] = useState(false)
+
   const wasShowing = useRef(false)
   const lastFloatPosition = useRef<IPosition | null>(null)
+
+  // State / Ref for Shadow DOM stuff
+  const [isShadowChecked, setIsShadowChecked] = useState(false)
+  const [isShadowDom, setIsShadowDom] = useState(false)
+  const shadowCheckRef = useRef<HTMLDivElement>(null)
+  const [root, setRoot] = useState<ShadowRoot | Document>(document)
   /**
    * @todo Remove this in a future version (provider/wrapper method is deprecated)
    */
@@ -68,6 +75,38 @@ const Tooltip = ({
 
   const shouldOpenOnClick = openOnClick || events.includes('click')
 
+  // Set the Root to either ShadowDom or leave it as Document
+  useEffect(() => {
+    if (!isShadowChecked && shadowCheckRef.current) {
+      setIsShadowChecked(true)
+      setIsShadowDom(shadowCheckRef.current.getRootNode() instanceof ShadowRoot)
+      setRoot(shadowCheckRef.current.getRootNode() as ShadowRoot)
+    }
+  }, [isShadowChecked, shadowCheckRef])
+
+  // If isShadowDom update to true, set the inline CSS to the shadow DOM
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (isShadowDom && !document.getElementById('react-tooltip-styles')) {
+        const externalStylesheet = document.getElementById('style-rt')
+        const hrefCss = externalStylesheet!.getAttribute('href')!
+
+        // Fetch the CSS file, should be easier tbh but this works
+        fetch(hrefCss)
+          .then((response) => response.text())
+          .then((cssContent) => {
+            const styleElement = document.createElement('style')
+            styleElement.textContent = cssContent
+
+            // Add the new <style> tag to the document's head or any other appropriate location
+            root.appendChild(styleElement)
+          })
+          .catch((error) => {
+            console.error('Error fetching the CSS file:', error)
+          })
+      }
+    }
+  }, [isShadowDom, root])
   /**
    * useLayoutEffect runs before useEffect,
    * but should be used carefully because of caveats
@@ -272,7 +311,8 @@ const Tooltip = ({
   }
 
   const handleClickOutsideAnchors = (event: MouseEvent) => {
-    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
+    // Root querySelector on either Shadow DOM or document, seems to work
+    const anchorById = root.querySelector(`[id='${anchorId}']`)
     const anchors = [anchorById, ...anchorsBySelect]
     if (anchors.some((anchor) => anchor?.contains(event.target as HTMLElement))) {
       return
@@ -298,7 +338,8 @@ const Tooltip = ({
       elementRefs.add({ current: anchor })
     })
 
-    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
+    // Root querySelector on either Shadow DOM or document, seems to work
+    const anchorById = root.querySelector<HTMLElement>(`[id='${anchorId}']`)
     if (anchorById) {
       elementRefs.add({ current: anchorById })
     }
@@ -371,6 +412,8 @@ const Tooltip = ({
 
     return () => {
       if (closeOnScroll) {
+        // window to remove with Shadow DOM somewhat
+        // Click event doesn't work yet
         window.removeEventListener('scroll', handleScrollResize)
         anchorScrollParent?.removeEventListener('scroll', handleScrollResize)
         tooltipScrollParent?.removeEventListener('scroll', handleScrollResize)
@@ -540,7 +583,8 @@ const Tooltip = ({
   }, [content, contentWrapperRef?.current])
 
   useEffect(() => {
-    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
+    // Root querySelector on either Shadow DOM or document, seems to work
+    const anchorById = root.querySelector(`[id='${anchorId}']`)
     const anchors = [...anchorsBySelect, anchorById]
     if (!activeAnchor || !anchors.includes(activeAnchor)) {
       /**
@@ -572,15 +616,19 @@ const Tooltip = ({
       return
     }
     try {
-      const anchors = Array.from(document.querySelectorAll<HTMLElement>(selector))
+      // Root querySelector on either Shadow DOM or document, seems to work
+      const anchors: HTMLElement[] = Array.from(root.querySelectorAll(selector))
       setAnchorsBySelect(anchors)
     } catch {
       // warning was already issued in the controller
       setAnchorsBySelect([])
     }
-  }, [id, anchorSelect])
+  }, [id, anchorSelect, isShadowDom])
 
   const canShow = !hidden && content && show && Object.keys(inlineStyles).length > 0
+
+  // Render an empty div to check the shadow DOM existance or not, remove the div after check
+  const renderCheck = () => (isShadowChecked ? null : <div ref={shadowCheckRef} />)
 
   return rendered ? (
     <WrapperElement
@@ -625,7 +673,9 @@ const Tooltip = ({
         ref={tooltipArrowRef}
       />
     </WrapperElement>
-  ) : null
+  ) : (
+    renderCheck()
+  )
 }
 
 export default Tooltip
