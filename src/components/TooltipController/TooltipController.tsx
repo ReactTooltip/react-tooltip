@@ -63,8 +63,9 @@ const TooltipController = ({
   const [tooltipEvents, setTooltipEvents] = useState(events)
   const [tooltipPositionStrategy, setTooltipPositionStrategy] = useState(positionStrategy)
   const [activeAnchor, setActiveAnchor] = useState<HTMLElement | null>(null)
-  // Same shit that in Tooltip.tsx here, don't wanted to bother factorizing this someway
+  /** Shadow Root Check */
   const [isShadowChecked, setIsShadowChecked] = useState(false)
+  /** ShadowRoot or Document if the tooltip isn't in one */
   const shadowCheckRef = useRef<HTMLDivElement>(null)
   const [root, setRoot] = useState<ShadowRoot | Document>(document)
 
@@ -85,11 +86,15 @@ const TooltipController = ({
     return dataAttributes
   }
 
-  // Same shit that in Tooltip.tsx here, don't wanted to bother factorizing this someway
+  /** Checking if Root node is shadow dom once */
   useEffect(() => {
     if (!isShadowChecked && shadowCheckRef.current) {
       setIsShadowChecked(true)
-      setRoot(shadowCheckRef.current.getRootNode() as ShadowRoot)
+      setRoot(
+        shadowCheckRef.current.getRootNode() instanceof ShadowRoot
+          ? (shadowCheckRef.current.getRootNode() as ShadowRoot)
+          : document,
+      )
     }
   }, [isShadowChecked, shadowCheckRef])
 
@@ -296,6 +301,7 @@ const TooltipController = ({
     renderedContent = <TooltipContent content={tooltipHtml} />
   }
 
+  /** Render an empty div to check the shadow DOM existance or not, remove the div after check */
   const renderCheck = () => (isShadowChecked ? null : <div ref={shadowCheckRef} />)
 
   const props: ITooltip = {
@@ -306,6 +312,7 @@ const TooltipController = ({
     classNameArrow,
     content: renderedContent,
     contentWrapperRef,
+    root,
     place: tooltipPlace,
     variant: tooltipVariant,
     offset: tooltipOffset,

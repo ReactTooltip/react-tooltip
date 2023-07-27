@@ -54,6 +54,7 @@ export interface ITooltip {
   classNameArrow?: string
   content?: ChildrenType
   contentWrapperRef?: RefObject<HTMLDivElement>
+  root: Document | ShadowRoot
   place?: PlacesType
   offset?: number
   id?: string

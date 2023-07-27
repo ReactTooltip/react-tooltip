@@ -17,6 +17,7 @@ const Tooltip = ({
   variant = 'dark',
   anchorId,
   anchorSelect,
+  root,
   place = 'top',
   offset = 10,
   events = ['hover'],
@@ -60,11 +61,9 @@ const Tooltip = ({
   const wasShowing = useRef(false)
   const lastFloatPosition = useRef<IPosition | null>(null)
 
-  // State / Ref for Shadow DOM stuff
-  const [isShadowChecked, setIsShadowChecked] = useState(false)
-  const [isShadowDom, setIsShadowDom] = useState(false)
-  const shadowCheckRef = useRef<HTMLDivElement>(null)
-  const [root, setRoot] = useState<ShadowRoot | Document>(document)
+  /** Set IsShadowRoot const */
+  const isShadowDom = root instanceof ShadowRoot
+
   /**
    * @todo Remove this in a future version (provider/wrapper method is deprecated)
    */
@@ -75,24 +74,15 @@ const Tooltip = ({
 
   const shouldOpenOnClick = openOnClick || events.includes('click')
 
-  // Set the Root to either ShadowDom or leave it as Document
-  useEffect(() => {
-    if (!isShadowChecked && shadowCheckRef.current) {
-      setIsShadowChecked(true)
-      setIsShadowDom(shadowCheckRef.current.getRootNode() instanceof ShadowRoot)
-      setRoot(shadowCheckRef.current.getRootNode() as ShadowRoot)
-    }
-  }, [isShadowChecked, shadowCheckRef])
-
   // If isShadowDom update to true, set the inline CSS to the shadow DOM
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      if (isShadowDom && !document.getElementById('react-tooltip-styles')) {
+      if (isShadowDom && document.getElementById('style-rt')) {
         const externalStylesheet = document.getElementById('style-rt')
-        const hrefCss = externalStylesheet!.getAttribute('href')!
+        const hrefCss = externalStylesheet!.getAttribute('href')
 
         // Fetch the CSS file, should be easier tbh but this works
-        fetch(hrefCss)
+        fetch(hrefCss as string)
           .then((response) => response.text())
           .then((cssContent) => {
             const styleElement = document.createElement('style')
@@ -517,7 +507,7 @@ const Tooltip = ({
     return () => {
       documentObserver.disconnect()
     }
-  }, [id, anchorSelect, activeAnchor])
+  }, [id, anchorSelect, activeAnchor, isShadowDom, root])
 
   const updateTooltipPosition = () => {
     if (position) {
@@ -594,7 +584,7 @@ const Tooltip = ({
        */
       setActiveAnchor(anchorsBySelect[0] ?? anchorById)
     }
-  }, [anchorId, anchorsBySelect, activeAnchor])
+  }, [anchorId, anchorsBySelect, activeAnchor, isShadowDom, root])
 
   useEffect(() => {
     return () => {
@@ -623,12 +613,9 @@ const Tooltip = ({
       // warning was already issued in the controller
       setAnchorsBySelect([])
     }
-  }, [id, anchorSelect, isShadowDom])
+  }, [id, anchorSelect, isShadowDom, root])
 
   const canShow = !hidden && content && show && Object.keys(inlineStyles).length > 0
-
-  // Render an empty div to check the shadow DOM existance or not, remove the div after check
-  const renderCheck = () => (isShadowChecked ? null : <div ref={shadowCheckRef} />)
 
   return rendered ? (
     <WrapperElement
@@ -673,9 +660,7 @@ const Tooltip = ({
         ref={tooltipArrowRef}
       />
     </WrapperElement>
-  ) : (
-    renderCheck()
-  )
+  ) : null
 }
 
 export default Tooltip
