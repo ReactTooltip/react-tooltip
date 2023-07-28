@@ -148,6 +148,31 @@ Check the examples for the [`anchorSelect`](./examples/anchor-select) and [`rend
 <Tooltip id="my-tooltip" />
 ```
 
+## `Can't import the named export 'xxx' from non EcmaScript module (only default export is available)`
+
+This problem can be fixed by adding a rule to your `webpack.config.js` file (or equivalent).
+
+```js
+module.exports = {
+  ...
+  module: {
+    rules: [
+      {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
+      }
+    ]
+  }
+}
+```
+
+:::info
+
+If you're running into this on a project not using webpack, please [submit a bug report](https://github.com/ReactTooltip/react-tooltip/issues/new/choose) with information about your setup.
+
+:::
+
 ## Next.js `TypeError: f is not a function`
 
 This problem seems to be caused by a bug related to the SWC bundler used by Next.js.
