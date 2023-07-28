@@ -180,6 +180,26 @@ If you're running into this on a project not using webpack, please [submit a bug
 
 :::
 
+## The tooltip component is `undefined` ([#1067](https://github.com/ReactTooltip/react-tooltip/issues/1067))
+
+This might be related to an issue with `create-react-app` not supporting `.cjs` files, which is the default extension for the ReactTooltip dist file (`react-tooltip.min.cjs`).
+See [`cra`'s issue #12700](https://github.com/facebook/create-react-app/issues/12700#issuecomment-1463040093) for the recommended way to fix this for all of your project dependencies.
+
+If you wish to only fix this for `react-tooltip`, see below.
+
+By default, your project will be importing the `react-tooltip.min.cjs` file. To workaround this, you must change the ReactTooltip `package.json` file (not the one on the root of your project!).
+To do this, run the following inside your project directory:
+
+```sh
+// if you're on Windows, just download the `.patch` file manually
+wget https://github.com/ReactTooltip/react-tooltip/files/12195501/react-tooltip-1067.patch
+git diff react-tooltip-1067.patch
+```
+
+This will apply the necessary changes (which you can check out for yourself).
+The only problem with this approach is that reinstalling `react-tooltip`, or cloning your project into a new environment, means you'll have to apply the changes again.
+For that reason, consider the [recommended solution](https://github.com/facebook/create-react-app/issues/12700#issuecomment-1463040093) mentioned above, or using [`patch-package`](https://www.npmjs.com/package/patch-package).
+
 ## Next.js `TypeError: f is not a function`
 
 This problem seems to be caused by a bug related to the SWC bundler used by Next.js.
