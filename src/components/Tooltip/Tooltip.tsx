@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import debounce from 'utils/debounce'
 import { useTooltip } from 'components/TooltipProvider'
 import useIsomorphicLayoutEffect from 'utils/use-isomorphic-layout-effect'
+import { autoUpdate } from '@floating-ui/dom'
 import { getScrollParent } from 'utils/get-scroll-parent'
 import { computeTooltipPosition } from 'utils/compute-positions'
 import coreStyles from './core-styles.module.css'
@@ -335,7 +336,6 @@ const Tooltip = ({
       setActualPlacement(computedStylesData.place as PlacesType)
     })
   }
-  const debouncedUpdateTooltipPosition = debounce(updateTooltipPosition, 100, true)
 
   useEffect(() => {
     const elementRefs = new Set(anchorRefs)
@@ -361,10 +361,20 @@ const Tooltip = ({
       anchorScrollParent?.addEventListener('scroll', handleScrollResize)
       tooltipScrollParent?.addEventListener('scroll', handleScrollResize)
     }
+    let updateTooltipCleanup: null | (() => void) = null
     if (closeOnResize) {
       window.addEventListener('resize', handleScrollResize)
-    } else {
-      window.addEventListener('resize', debouncedUpdateTooltipPosition)
+    } else if (activeAnchor && tooltipRef.current) {
+      updateTooltipCleanup = autoUpdate(
+        activeAnchor as HTMLElement,
+        tooltipRef.current as HTMLElement,
+        updateTooltipPosition,
+        {
+          ancestorResize: true,
+          elementResize: true,
+          layoutShift: true,
+        },
+      )
     }
 
     const handleEsc = (event: KeyboardEvent) => {
@@ -426,7 +436,7 @@ const Tooltip = ({
       if (closeOnResize) {
         window.removeEventListener('resize', handleScrollResize)
       } else {
-        window.removeEventListener('resize', debouncedUpdateTooltipPosition)
+        updateTooltipCleanup?.()
       }
       if (shouldOpenOnClick) {
         window.removeEventListener('click', handleClickOutsideAnchors)
