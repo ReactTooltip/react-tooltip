@@ -59,6 +59,7 @@
     "@types/css-modules": "^1.0.2",
     "@types/jest": "29.4.0",
     "@types/node": "^18.15.3",
+    "@types/react": "^18.2.17",
     "@types/react-dom": "18.0.11",
     "@types/react-test-renderer": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "5.54.0",
@@ -124,7 +125,6 @@
   },
   "dependencies": {
     "@floating-ui/dom": "^1.0.0",
-    "@types/react": "^18.2.17",
     "classnames": "^2.3.0"
   }
 }
