@@ -290,6 +290,52 @@ const Tooltip = ({
   // mouse enter and focus events being triggered toggether
   const debouncedHandleShowTooltip = debounce(handleShowTooltip, 50, true)
   const debouncedHandleHideTooltip = debounce(handleHideTooltip, 50, true)
+  const updateTooltipPosition = () => {
+    if (position) {
+      // if `position` is set, override regular and `float` positioning
+      handleTooltipPosition(position)
+      return
+    }
+
+    if (float) {
+      if (lastFloatPosition.current) {
+        /*
+          Without this, changes to `content`, `place`, `offset`, ..., will only
+          trigger a position calculation after a `mousemove` event.
+
+          To see why this matters, comment this line, run `yarn dev` and click the
+          "Hover me!" anchor.
+        */
+        handleTooltipPosition(lastFloatPosition.current)
+      }
+      // if `float` is set, override regular positioning
+      return
+    }
+
+    computeTooltipPosition({
+      place,
+      offset,
+      elementReference: activeAnchor,
+      tooltipReference: tooltipRef.current,
+      tooltipArrowReference: tooltipArrowRef.current,
+      strategy: positionStrategy,
+      middlewares,
+      border,
+    }).then((computedStylesData) => {
+      if (!mounted.current) {
+        // invalidate computed positions after remount
+        return
+      }
+      if (Object.keys(computedStylesData.tooltipStyles).length) {
+        setInlineStyles(computedStylesData.tooltipStyles)
+      }
+      if (Object.keys(computedStylesData.tooltipArrowStyles).length) {
+        setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
+      }
+      setActualPlacement(computedStylesData.place as PlacesType)
+    })
+  }
+  const debouncedUpdateTooltipPosition = debounce(updateTooltipPosition, 100, true)
 
   useEffect(() => {
     const elementRefs = new Set(anchorRefs)
@@ -317,6 +363,8 @@ const Tooltip = ({
     }
     if (closeOnResize) {
       window.addEventListener('resize', handleScrollResize)
+    } else {
+      window.addEventListener('resize', debouncedUpdateTooltipPosition)
     }
 
     const handleEsc = (event: KeyboardEvent) => {
@@ -377,6 +425,8 @@ const Tooltip = ({
       }
       if (closeOnResize) {
         window.removeEventListener('resize', handleScrollResize)
+      } else {
+        window.removeEventListener('resize', debouncedUpdateTooltipPosition)
       }
       if (shouldOpenOnClick) {
         window.removeEventListener('click', handleClickOutsideAnchors)
@@ -475,52 +525,6 @@ const Tooltip = ({
       documentObserver.disconnect()
     }
   }, [id, anchorSelect, activeAnchor])
-
-  const updateTooltipPosition = () => {
-    if (position) {
-      // if `position` is set, override regular and `float` positioning
-      handleTooltipPosition(position)
-      return
-    }
-
-    if (float) {
-      if (lastFloatPosition.current) {
-        /*
-          Without this, changes to `content`, `place`, `offset`, ..., will only
-          trigger a position calculation after a `mousemove` event.
-
-          To see why this matters, comment this line, run `yarn dev` and click the
-          "Hover me!" anchor.
-        */
-        handleTooltipPosition(lastFloatPosition.current)
-      }
-      // if `float` is set, override regular positioning
-      return
-    }
-
-    computeTooltipPosition({
-      place,
-      offset,
-      elementReference: activeAnchor,
-      tooltipReference: tooltipRef.current,
-      tooltipArrowReference: tooltipArrowRef.current,
-      strategy: positionStrategy,
-      middlewares,
-      border,
-    }).then((computedStylesData) => {
-      if (!mounted.current) {
-        // invalidate computed positions after remount
-        return
-      }
-      if (Object.keys(computedStylesData.tooltipStyles).length) {
-        setInlineStyles(computedStylesData.tooltipStyles)
-      }
-      if (Object.keys(computedStylesData.tooltipArrowStyles).length) {
-        setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
-      }
-      setActualPlacement(computedStylesData.place as PlacesType)
-    })
-  }
 
   useEffect(() => {
     updateTooltipPosition()
