@@ -8,7 +8,7 @@ exports[`tooltip props basic tooltip 1`] = `
     Lorem Ipsum
   </span>
   <div
-    class="react-tooltip react-tooltip__place-top"
+    class="react-tooltip react-tooltip__place-top react-tooltip__show"
     role="tooltip"
     style="left: 5px; top: -10px;"
   >
@@ -29,7 +29,7 @@ exports[`tooltip props clickable tooltip 1`] = `
     Lorem Ipsum
   </span>
   <div
-    class="react-tooltip react-tooltip__place-top undefined"
+    class="react-tooltip react-tooltip__place-top react-tooltip__show undefined"
     role="tooltip"
     style="left: 5px; top: -10px;"
   >
@@ -52,7 +52,7 @@ exports[`tooltip props tooltip with custom position 1`] = `
     Lorem Ipsum
   </span>
   <div
-    class="react-tooltip react-tooltip__place-top"
+    class="react-tooltip react-tooltip__place-top react-tooltip__show"
     role="tooltip"
     style="left: 5px; top: -10px;"
   >
@@ -83,7 +83,7 @@ exports[`tooltip props tooltip with delay show 1`] = `
     Lorem Ipsum
   </span>
   <div
-    class="react-tooltip react-tooltip__place-top"
+    class="react-tooltip react-tooltip__place-top react-tooltip__show"
     role="tooltip"
     style="left: 5px; top: -10px;"
   >
@@ -104,7 +104,7 @@ exports[`tooltip props tooltip with float 1`] = `
     Lorem Ipsum
   </span>
   <div
-    class="react-tooltip react-tooltip__place-top"
+    class="react-tooltip react-tooltip__place-top react-tooltip__show"
     role="tooltip"
     style="left: 5px; top: -10px;"
   >
@@ -125,7 +125,7 @@ exports[`tooltip props tooltip with html 1`] = `
     Lorem Ipsum
   </span>
   <div
-    class="react-tooltip react-tooltip__place-top"
+    class="react-tooltip react-tooltip__place-top react-tooltip__show"
     role="tooltip"
     style="left: 5px; top: -10px;"
   >
@@ -151,7 +151,7 @@ exports[`tooltip props tooltip with place 1`] = `
     Lorem Ipsum
   </span>
   <div
-    class="react-tooltip react-tooltip__place-right"
+    class="react-tooltip react-tooltip__place-right react-tooltip__show"
     role="tooltip"
     style="left: 10px; top: 5px;"
   >
