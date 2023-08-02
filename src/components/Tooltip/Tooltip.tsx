@@ -594,6 +594,7 @@ const Tooltip = ({
         className,
         `react-tooltip__place-${actualPlacement}`,
         {
+          'react-tooltip__show': canShow,
           [coreStyles['show']]: canShow,
           [coreStyles['fixed']]: positionStrategy === 'fixed',
           [coreStyles['clickable']]: clickable,
