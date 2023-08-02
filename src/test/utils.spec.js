@@ -55,19 +55,7 @@ describe('compute positions', () => {
       tooltipArrowReference: elementTooltipArrow,
     })
 
-    expect(value).toEqual({
-      tooltipArrowStyles: {
-        bottom: '-4px',
-        left: '5px',
-        right: '',
-        top: '',
-      },
-      tooltipStyles: {
-        left: '5px',
-        top: '-10px',
-      },
-      place: 'top',
-    })
+    expect(value).toMatchSnapshot()
   })
 })
 
