@@ -64,35 +64,6 @@ If you've imported the default styling and the tooltip is still not showing up w
 
 If `data-tooltip-content` and `data-tooltip-html` are both unset (or they have empty values) on the anchor element, and also the `content`, `render`, and `children` props on the tooltip are unset (or have empty values), the tooltip is not shown by default.
 
-
-## The tooltip doesn't move when scrolling
-
-If your anchor element is inside a scrolling element, your tooltip might get "stuck" in place when scrolling.
-There are two ways to avoid this.
-
-### Change your CSS (recommended)
-
-For the tooltip to be properly placed inside a scrolling element, the following conditions must be met:
-
-1. The tooltip component has to be inside the scrolling element (placing it as a direct child is **not** required)
-2. The `positionStrategy` tooltip prop must be unset, or set to the default (`absolute`)
-3. The scrolling element should have the CSS attribute `position: relative`
-
-:::info
-
-The `position: relative` attribute can be set on any element on the DOM structure between the scrolling element and the tooltip. 
-This means the tooltip component doesn't have to be a direct child of the scrolling element.
-
-:::
-
-### Use `closeOnScroll` prop
-
-```tsx
-<Tooltip closeOnScroll={true} />
-```
-
-When `closeOnScroll` is set, scrolling will immediately close the tooltip (`closeOnResize` also exists for closing when resizing the window).
-
 ## Bad performance
 
 If you're experiencing any kind of unexpected behavior or bad performance on your application when using ReactTooltip, here are a few things you can try.
