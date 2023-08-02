@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
+import { autoUpdate } from '@floating-ui/dom'
 import classNames from 'classnames'
 import debounce from 'utils/debounce'
 import { useTooltip } from 'components/TooltipProvider'
 import useIsomorphicLayoutEffect from 'utils/use-isomorphic-layout-effect'
-import { autoUpdate } from '@floating-ui/dom'
 import { getScrollParent } from 'utils/get-scroll-parent'
 import { computeTooltipPosition } from 'utils/compute-positions'
 import coreStyles from './core-styles.module.css'
@@ -291,7 +291,7 @@ const Tooltip = ({
   // mouse enter and focus events being triggered toggether
   const debouncedHandleShowTooltip = debounce(handleShowTooltip, 50, true)
   const debouncedHandleHideTooltip = debounce(handleHideTooltip, 50, true)
-  const updateTooltipPosition = () => {
+  const updateTooltipPosition = useCallback(() => {
     if (position) {
       // if `position` is set, override regular and `float` positioning
       handleTooltipPosition(position)
@@ -335,7 +335,17 @@ const Tooltip = ({
       }
       setActualPlacement(computedStylesData.place as PlacesType)
     })
-  }
+  }, [
+    show,
+    activeAnchor,
+    content,
+    externalStyles,
+    place,
+    offset,
+    positionStrategy,
+    position,
+    float,
+  ])
 
   useEffect(() => {
     const elementRefs = new Set(anchorRefs)
@@ -458,7 +468,15 @@ const Tooltip = ({
      * rendered is also a dependency to ensure anchor observers are re-registered
      * since `tooltipRef` becomes stale after removing/adding the tooltip to the DOM
      */
-  }, [rendered, anchorRefs, anchorsBySelect, closeOnEsc, events])
+  }, [
+    activeAnchor,
+    updateTooltipPosition,
+    rendered,
+    anchorRefs,
+    anchorsBySelect,
+    closeOnEsc,
+    events,
+  ])
 
   useEffect(() => {
     let selector = anchorSelect ?? ''
@@ -538,7 +556,7 @@ const Tooltip = ({
 
   useEffect(() => {
     updateTooltipPosition()
-  }, [show, activeAnchor, content, externalStyles, place, offset, positionStrategy, position])
+  }, [updateTooltipPosition])
 
   useEffect(() => {
     if (!contentWrapperRef?.current) {
