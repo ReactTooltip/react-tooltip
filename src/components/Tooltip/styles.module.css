@@ -8,7 +8,22 @@
 .arrow {
   width: 8px;
   height: 8px;
+}
+
+[class*='react-tooltip__place-top'] > .arrow {
   transform: rotate(45deg);
+}
+
+[class*='react-tooltip__place-right'] > .arrow {
+  transform: rotate(135deg);
+}
+
+[class*='react-tooltip__place-bottom'] > .arrow {
+  transform: rotate(225deg);
+}
+
+[class*='react-tooltip__place-left'] > .arrow {
+  transform: rotate(315deg);
 }
 
 /** Types variant **/

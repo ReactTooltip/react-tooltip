@@ -44,14 +44,10 @@ export const computeTooltipPosition = async ({
           left: 'right',
         }[placement.split('-')[0]] ?? 'bottom'
 
-      const borderSide =
-        border &&
-        {
-          top: { borderBottom: border, borderRight: border },
-          right: { borderBottom: border, borderLeft: border },
-          bottom: { borderTop: border, borderLeft: border },
-          left: { borderTop: border, borderRight: border },
-        }[placement.split('-')[0]]
+      const borderSide = border && {
+        borderBottom: border,
+        borderRight: border,
+      }
 
       let borderWidth = 0
       if (border) {
