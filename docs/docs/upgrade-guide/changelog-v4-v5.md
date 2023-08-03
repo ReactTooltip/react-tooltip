@@ -68,7 +68,7 @@ If you run into any problems with the tooltip not updating after changes are mad
 - [ ] `textColor` - use `className` and custom CSS
 - [ ] `backgroundColor` - use `className` and custom CSS
 - [ ] `borderColor` - use `border` prop
-- [ ] `arrowColor` - use `className` and custom CSS
+- [x] `arrowColor`
 - [ ] `arrowRadius` - use `className` and custom CSS
 - [ ] `tooltipRadius` - use `className` and custom CSS
 - [ ] `insecure`
