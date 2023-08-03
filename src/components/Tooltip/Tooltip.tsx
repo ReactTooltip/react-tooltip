@@ -47,6 +47,7 @@ const Tooltip = ({
   setActiveAnchor,
   border,
   opacity,
+  arrowColor,
 }: ITooltip) => {
   const tooltipRef = useRef<HTMLElement>(null)
   const tooltipArrowRef = useRef<HTMLElement>(null)
@@ -654,7 +655,12 @@ const Tooltip = ({
             [coreStyles['noArrow']]: noArrow,
           },
         )}
-        style={inlineArrowStyles}
+        style={{
+          ...inlineArrowStyles,
+          background: arrowColor
+            ? `linear-gradient(to right bottom, transparent 50%, ${arrowColor} 50%)`
+            : undefined,
+        }}
         ref={tooltipArrowRef}
       />
     </WrapperElement>

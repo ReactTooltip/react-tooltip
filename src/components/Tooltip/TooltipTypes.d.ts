@@ -91,4 +91,5 @@ export interface ITooltip {
   setActiveAnchor: (anchor: HTMLElement | null) => void
   border?: CSSProperties['border']
   opacity?: CSSProperties['opacity']
+  arrowColor?: CSSProperties['backgroundColor']
 }
