@@ -1,14 +1,24 @@
-import React, { useEffect } from 'react'
-import styles from './styles.module.css'
+import React, { useEffect, useRef } from 'react'
+import './styles.css'
 
-const AdsContainerElement = ({ id }) => {
+const AdsContainerElement = () => {
+  const containerRef = useRef<any>()
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('AdsContainerMounted', { detail: { id } }))
+      const scriptElement = document.createElement('script')
+      scriptElement.src = '//cdn.carbonads.com/carbon.js?serve=CWYD553L&placement=react-tooltipcom'
+      scriptElement.id = '_carbonads_js'
+      scriptElement.async = true
+
+      if (containerRef?.current) {
+        containerRef.current.innerHTML = ''
+        containerRef.current.appendChild(scriptElement)
+      }
     }
   }, [])
 
-  return <div id={id} className={styles.adsContainer} />
+  return <div className="carbon-ads" ref={containerRef} />
 }
 
 export default AdsContainerElement
