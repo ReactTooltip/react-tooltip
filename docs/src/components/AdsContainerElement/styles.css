@@ -1,5 +1,4 @@
 .carbon-ads {
-  position: fixed;
   display: grid;
   row-gap: 16px;
 }
