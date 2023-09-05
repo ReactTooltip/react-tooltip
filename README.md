@@ -123,6 +123,14 @@ Please check our [troubleshooting section](https://react-tooltip.com/docs/troubl
 If you can't find your problem here, make sure there isn't [an open issue](https://github.com/ReactTooltip/react-tooltip/issues) already covering it.
 If there isn't, feel free to [submit a new issue](https://github.com/ReactTooltip/react-tooltip/issues/new/choose).
 
+## Sponsors
+
+<a href="https://frigade.com/?source=react-tooltip">
+  <img alt="Frigade" style="height: 250px" src="docs/static/img/sponsors/frigade.png" />
+</a>
+
+React Tooltip is proud to be sponsored by [Frigade](https://frigade.com/?source=react-tooltip), a developer tool for building better product onboarding: guided tours, getting started checklists, announcements, etc.
+
 ## Article
 
 [How I insert sass into react component](https://medium.com/@wwayne_me/how-i-insert-sass-into-my-npm-react-component-b46b9811c226#.gi4hxu44a)
