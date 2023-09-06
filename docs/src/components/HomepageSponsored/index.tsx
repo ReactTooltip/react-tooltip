@@ -11,6 +11,8 @@ type FeatureItem = {
   Svg?: React.ComponentType<React.ComponentProps<'svg'>>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, react/no-unused-prop-types
   src?: any
+  // eslint-disable-next-line react/no-unused-prop-types
+  eventTitle?: string
   link: string
 }
 
@@ -32,6 +34,7 @@ const SponsorList: FeatureItem[] = [
     title: 'Frigade',
     src: require('@site/static/img/sponsors/frigade.png').default,
     link: 'https://frigade.com/?source=react-tooltip',
+    eventTitle: 'frigade',
   },
 ]
 
@@ -48,16 +51,37 @@ function Feature({ title, Svg, link }: FeatureItem) {
 }
 
 export default function HomepageSponsored(): JSX.Element {
+  const onClickFrigadeBannerEventHandler = (title: string) => {
+    if (typeof window !== 'undefined') {
+      window.dataLayer = window.dataLayer || []
+
+      window.dataLayer.push({
+        event: `click_${title}_banner`,
+        place: 'home',
+      })
+    }
+
+    return true
+  }
+
   return (
     <section className={styles.features}>
       <div className="container">
         <h3 className={styles.sponsoredTitle}>Sponsored by</h3>
         <div className="row">
-          {SponsorList.map(({ link, title, src }, idx) => (
+          {SponsorList.map(({ link, title, src, eventTitle }, idx) => (
             // eslint-disable-next-line react/no-array-index-key
             <div key={idx} className={clsx('col col--12')}>
               <div className="text--center">
-                <a href={link} title={title} target="_blank" rel="noreferrer">
+                <a
+                  href={link}
+                  title={title}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => {
+                    onClickFrigadeBannerEventHandler(eventTitle)
+                  }}
+                >
                   <img src={src} alt={title} width={480} />
                 </a>
               </div>
