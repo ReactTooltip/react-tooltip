@@ -1,13 +1,13 @@
 /* eslint-disable import/no-unresolved */
 import React from 'react'
 import TOC from '@theme-original/TOC'
-import AdsContainerElement from '@site/src/components/AdsContainerElement'
+import AdsContainer from '@site/src/components/AdsContainer'
 
 export default function TOCWrapper(props) {
   return (
     <>
       <TOC {...props} />
-      <AdsContainerElement />
+      <AdsContainer />
       {/* <ins
         className="adsbygoogle"
         style={{ display: 'block', position: 'fixed', width: '300px', height: '600px' }}

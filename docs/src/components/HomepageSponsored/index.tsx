@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable global-require */
@@ -7,7 +8,9 @@ import styles from './styles.module.css'
 
 type FeatureItem = {
   title: string
-  Svg: React.ComponentType<React.ComponentProps<'svg'>>
+  Svg?: React.ComponentType<React.ComponentProps<'svg'>>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, react/no-unused-prop-types
+  src?: any
   link: string
 }
 
@@ -21,6 +24,14 @@ const FeatureList: FeatureItem[] = [
     title: 'Algolia',
     Svg: require('@site/static/img/Algolia-logo.svg').default,
     link: 'https://docsearch.algolia.com/',
+  },
+]
+
+const SponsorList: FeatureItem[] = [
+  {
+    title: 'Frigade',
+    src: require('@site/static/img/sponsors/frigade.png').default,
+    link: 'https://frigade.com/?source=react-tooltip',
   },
 ]
 
@@ -39,6 +50,21 @@ function Feature({ title, Svg, link }: FeatureItem) {
 export default function HomepageSponsored(): JSX.Element {
   return (
     <section className={styles.features}>
+      <div className="container">
+        <h3 className={styles.sponsoredTitle}>Sponsored by</h3>
+        <div className="row">
+          {SponsorList.map(({ link, title, src }, idx) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <div key={idx} className={clsx('col col--12')}>
+              <div className="text--center">
+                <a href={link} title={title} target="_blank" rel="noreferrer">
+                  <img src={src} alt={title} width={480} />
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
       <div className="container">
         <h3 className={styles.sponsoredTitle}>Powered by</h3>
         <div className="row">
