@@ -1,0 +1,9 @@
+.sponsor-frigade {
+  /* same as `--carbon-max-char` */
+  --frigade-max-char: 20ch;
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 130px;
+  max-inline-size: calc(130px + var(--frigade-max-char) + 8ch);
+  max-width: 377px;
+}

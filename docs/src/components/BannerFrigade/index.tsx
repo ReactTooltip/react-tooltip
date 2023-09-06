@@ -2,6 +2,7 @@
 import React from 'react'
 // @ts-ignore
 import LogoFrigade from '@site/static/img/sponsors/frigade.png'
+import './styles.css'
 
 const BannerFrigade = () => {
   return (
