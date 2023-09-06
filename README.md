@@ -12,12 +12,6 @@
 [download-image]: https://img.shields.io/npm/dm/react-tooltip.svg?style=flat-square
 [download-url]: https://npmjs.org/package/react-tooltip
 
-<p>
-  <a href="https://www.digitalocean.com/?refcode=0813b3be1161&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge">
-    <img src="https://opensource.nyc3.cdn.digitaloceanspaces.com/attribution/assets/PoweredByDO/DO_Powered_by_Badge_blue.svg" width="201px">
-  </a>
-</p>
-
 If you like the project, please give the project a GitHub 🌟
 
 ---
@@ -130,6 +124,14 @@ If there isn't, feel free to [submit a new issue](https://github.com/ReactToolti
 </a>
 
 React Tooltip is proud to be sponsored by [Frigade](https://frigade.com/?source=react-tooltip), a developer tool for building better product onboarding: guided tours, getting started checklists, announcements, etc.
+
+## Powered by
+
+<p>
+  <a href="https://www.digitalocean.com/?refcode=0813b3be1161&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge">
+    <img src="https://opensource.nyc3.cdn.digitaloceanspaces.com/attribution/assets/PoweredByDO/DO_Powered_by_Badge_blue.svg" width="201px">
+  </a>
+</p>
 
 ## Article
 
