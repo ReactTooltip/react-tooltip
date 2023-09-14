@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { TooltipController as Tooltip } from 'components/TooltipController'
 import { IPosition } from 'components/Tooltip/TooltipTypes.d'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { inline, offset } from '@floating-ui/dom'
 import styles from './styles.module.css'
 
@@ -22,6 +22,26 @@ function App() {
     const target = event.target as HTMLElement
     setAnchorId(target.id)
   }
+
+  const [which, setWhich] = useState<'1' | '2'>('1')
+  const [show, setShow] = useState(true)
+
+  const button1 = useMemo(
+    () => (
+      <button data-tooltip-id="hold" data-tooltip-content="button 1" className="anchor-button">
+        button 1
+      </button>
+    ),
+    [],
+  )
+  const button2 = useMemo(
+    () => (
+      <button data-tooltip-id="hold" data-tooltip-content="button 2" className="anchor-button">
+        button 2
+      </button>
+    ),
+    [],
+  )
 
   return (
     <main className={styles['main']}>
@@ -92,6 +112,25 @@ function App() {
         >
           Tooltip content
         </Tooltip>
+      </section>
+      <section style={{ marginTop: '100px', marginBottom: '100px' }}>
+        <div style={{ height: '21px' }}>
+          {show && <div>{which === '1' ? button1 : button2}</div>}
+        </div>
+        <Tooltip id="hold" isOpen holdPositionOnRender>
+          Hello world!
+        </Tooltip>
+        <button
+          onClick={() => {
+            setShow(false)
+            setTimeout(() => {
+              setShow(true)
+            }, 1000)
+            setWhich((w) => (w === '2' ? '1' : '2'))
+          }}
+        >
+          switch
+        </button>
       </section>
       <div style={{ display: 'flex', gap: '12px', flexDirection: 'row' }}>
         <div>

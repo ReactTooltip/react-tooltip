@@ -42,6 +42,7 @@ const Tooltip = ({
   content,
   contentWrapperRef,
   isOpen,
+  holdPositionOnRender,
   setIsOpen,
   activeAnchor,
   setActiveAnchor,
@@ -379,7 +380,7 @@ const Tooltip = ({
     let updateTooltipCleanup: null | (() => void) = null
     if (closeOnResize) {
       window.addEventListener('resize', handleScrollResize)
-    } else if (activeAnchor && tooltipRef.current) {
+    } else if (activeAnchor && tooltipRef.current && !holdPositionOnRender) {
       updateTooltipCleanup = autoUpdate(
         activeAnchor as HTMLElement,
         tooltipRef.current as HTMLElement,
@@ -639,7 +640,7 @@ const Tooltip = ({
 
   const canShow = !hidden && content && show && Object.keys(inlineStyles).length > 0
 
-  return rendered ? (
+  return rendered || (wasShowing.current && holdPositionOnRender) ? (
     <WrapperElement
       id={id}
       role="tooltip"
