@@ -314,6 +314,10 @@ const Tooltip = ({
       return
     }
 
+    if (!activeAnchor?.isConnected) {
+      return
+    }
+
     computeTooltipPosition({
       place,
       offset,
