@@ -486,6 +486,7 @@ const Tooltip = ({
     }
     const documentObserverCallback: MutationCallback = (mutationList) => {
       const newAnchors: HTMLElement[] = []
+      const removedAnchors: HTMLElement[] = []
       mutationList.forEach((mutation) => {
         if (mutation.type === 'attributes' && mutation.attributeName === 'data-tooltip-id') {
           const newId = (mutation.target as HTMLElement).getAttribute('data-tooltip-id')
@@ -497,7 +498,23 @@ const Tooltip = ({
           return
         }
         if (activeAnchor) {
-          ;[...mutation.removedNodes].some((node) => {
+          const elements = [...mutation.removedNodes].filter((node) => node.nodeType === 1)
+          if (selector) {
+            removedAnchors.push(
+              // the element itself is an anchor
+              ...(elements.filter((element) =>
+                (element as HTMLElement).matches(selector),
+              ) as HTMLElement[]),
+            )
+            removedAnchors.push(
+              // the element has children which are anchors
+              ...elements.flatMap(
+                (element) =>
+                  [...(element as HTMLElement).querySelectorAll(selector)] as HTMLElement[],
+              ),
+            )
+          }
+          elements.some((node) => {
             if (node?.contains?.(activeAnchor)) {
               setRendered(false)
               handleShow(false)
@@ -539,7 +556,10 @@ const Tooltip = ({
         }
       })
       if (newAnchors.length) {
-        setAnchorsBySelect((anchors) => [...anchors, ...newAnchors])
+        setAnchorsBySelect((anchors) => [
+          ...anchors.filter((anchor) => removedAnchors.includes(anchor)),
+          ...newAnchors,
+        ])
       }
     }
     const documentObserver = new MutationObserver(documentObserverCallback)
