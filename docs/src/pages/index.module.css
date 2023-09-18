@@ -10,6 +10,62 @@
   overflow: hidden;
 }
 
+.heroAds {
+  position: absolute;
+  left: 0;
+  top: 12px;
+}
+
+@media screen and (min-width: 375px) {
+  .heroAds {
+    top: 4rem;
+  }
+}
+
+@media screen and (min-width: 425px) {
+  .heroAds {
+    left: unset;
+    top: 8px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .heroAds {
+    transform: translateX(calc(50% - 30px));
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .heroAds {
+    top: 10rem;
+    transform: unset;
+  }
+}
+
+@media screen and (min-width: 1256px) {
+  .heroAds {
+    left: 4rem;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .heroAds {
+    left: 8rem;
+  }
+}
+
+@media screen and (min-width: 2000px) {
+  .heroAds {
+    left: 16rem;
+  }
+}
+
+@media screen and (min-width: 2560px) {
+  .heroAds {
+    left: 32rem;
+  }
+}
+
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 2rem;

@@ -1,8 +1,6 @@
 .features {
   display: flex;
-  align-items: center;
-  padding: 2rem 0;
-  width: 100%;
+  flex-direction: column;
 }
 
 .featureSvg {
@@ -14,4 +12,14 @@
   font-size: xx-large;
   display: flex;
   justify-content: center;
+}
+
+@media screen and (min-width: 1024px) {
+  .features {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    padding: 2rem 0;
+    width: 100%;
+  }
 }

@@ -6,6 +6,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import Layout from '@theme/Layout'
 import HomepageFeatures from '@site/src/components/HomepageFeatures'
 import HomepageSponsored from '@site/src/components/HomepageSponsored'
+import AdsContainerElement from '@site/src/components/AdsContainerElement'
 
 import styles from './index.module.css'
 
@@ -27,6 +28,9 @@ function HomepageHeader() {
             Getting Started with V5
           </Link>
         </div>
+      </div>
+      <div className={styles.heroAds}>
+        <AdsContainerElement />
       </div>
     </header>
   )
