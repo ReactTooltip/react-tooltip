@@ -36,6 +36,12 @@ const SponsorList: FeatureItem[] = [
     link: 'https://frigade.com/?source=react-tooltip',
     eventTitle: 'frigade',
   },
+  {
+    title: 'Dopt',
+    src: require('@site/static/img/sponsors/dopt.png').default,
+    link: 'https://dopt.com/?source=react-tooltip',
+    eventTitle: 'dopt',
+  },
 ]
 
 function Feature({ title, Svg, link }: FeatureItem) {
@@ -51,7 +57,7 @@ function Feature({ title, Svg, link }: FeatureItem) {
 }
 
 export default function HomepageSponsored(): JSX.Element {
-  const onClickFrigadeBannerEventHandler = (title: string) => {
+  const onClickSponsorBannerEventHandler = (title: string) => {
     if (typeof window !== 'undefined') {
       window.dataLayer = window.dataLayer || []
 
@@ -71,7 +77,7 @@ export default function HomepageSponsored(): JSX.Element {
         <div className="row">
           {SponsorList.map(({ link, title, src, eventTitle }, idx) => (
             // eslint-disable-next-line react/no-array-index-key
-            <div key={idx} className={clsx('col col--12')}>
+            <div key={idx} className={clsx(`col col--${12 / SponsorList.length}`)}>
               <div className="text--center">
                 <a
                   href={link}
@@ -79,7 +85,7 @@ export default function HomepageSponsored(): JSX.Element {
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => {
-                    onClickFrigadeBannerEventHandler(eventTitle)
+                    onClickSponsorBannerEventHandler(eventTitle)
                   }}
                 >
                   <img src={src} alt={title} width={480} />
