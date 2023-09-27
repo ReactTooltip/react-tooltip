@@ -17,10 +17,12 @@ const SPONSORS = {
   frigade: {
     logo: LogoFrigade,
     title: 'Frigade',
+    href: 'https://frigade.com/',
   },
   dopt: {
     logo: LogoDopt,
     title: 'Dopt',
+    href: 'https://dopt.com/',
   },
 }
 
@@ -47,7 +49,7 @@ const BannerSponsor = ({ sponsorKey }: BannerSponsorProps) => {
   return (
     <div className="sponsor-banner">
       <a
-        href="https://frigade.com/?source=react-tooltip"
+        href={`${sponsor.href}?source=react-tooltip`}
         title={sponsor.title}
         target="_blank"
         rel="noreferrer"
