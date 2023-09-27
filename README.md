@@ -65,7 +65,7 @@ yarn add react-tooltip
 React Tooltip is proud to be sponsored by [Frigade](https://frigade.com/?source=react-tooltip), a developer tool for building better product onboarding: guided tours, getting started checklists, announcements, etc.
 
 <a href="https://dopt.com/?source=react-tooltip">
-  <img alt="Frigade" style="height: 250px" src="docs/static/img/sponsors/dopt.png" />
+  <img alt="Dopt" style="height: 250px" src="docs/static/img/sponsors/dopt.png" />
 </a>
 
 [Dopt](https://dopt.com/?source=react-tooltip) gives developers UI components and SDKs to build seamless onboarding and education experiences in minutes.
