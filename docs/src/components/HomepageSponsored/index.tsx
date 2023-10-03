@@ -16,6 +16,10 @@ type FeatureItem = {
   link: string
 }
 
+type SponsorItem = FeatureItem & {
+  tier: 'gold' | 'silver'
+}
+
 const FeatureList: FeatureItem[] = [
   {
     title: 'Digital Ocean',
@@ -29,18 +33,20 @@ const FeatureList: FeatureItem[] = [
   },
 ]
 
-const SponsorList: FeatureItem[] = [
+const SponsorList: SponsorItem[] = [
   {
     title: 'Frigade',
     src: require('@site/static/img/sponsors/frigade.png').default,
     link: 'https://frigade.com/?source=react-tooltip',
     eventTitle: 'frigade',
+    tier: 'gold',
   },
   {
     title: 'Dopt',
     src: require('@site/static/img/sponsors/dopt.png').default,
     link: 'https://dopt.com/?source=react-tooltip',
     eventTitle: 'dopt',
+    tier: 'silver',
   },
 ]
 
@@ -70,14 +76,17 @@ export default function HomepageSponsored(): JSX.Element {
     return true
   }
 
+  const goldSponsors = SponsorList.filter(({ tier }) => tier === 'gold')
+  const silverSponsors = SponsorList.filter(({ tier }) => tier === 'silver')
+
   return (
     <section className={styles.features}>
       <div className="container">
-        <h3 className={styles.sponsoredTitle}>Sponsored by</h3>
+        <h1 className={styles.sponsoredTitle}>Gold Sponsors 🌟</h1>
         <div className="row">
-          {SponsorList.map(({ link, title, src, eventTitle }, idx) => (
+          {goldSponsors.map(({ link, title, src, eventTitle }, idx) => (
             // eslint-disable-next-line react/no-array-index-key
-            <div key={idx} className={clsx(`col col--${12 / SponsorList.length}`)}>
+            <div key={idx} className={clsx(`col col--${12 / goldSponsors.length}`)}>
               <div className="text--center">
                 <a
                   href={link}
@@ -94,9 +103,30 @@ export default function HomepageSponsored(): JSX.Element {
             </div>
           ))}
         </div>
+        <h2 className={styles.sponsoredTitle}>Silver Sponsors ✪</h2>
+        <div className="row">
+          {silverSponsors.map(({ link, title, src, eventTitle }, idx) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <div key={idx} className={clsx(`col col--${12 / silverSponsors.length}`)}>
+              <div className="text--center">
+                <a
+                  href={link}
+                  title={title}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => {
+                    onClickSponsorBannerEventHandler(eventTitle)
+                  }}
+                >
+                  <img src={src} alt={title} width={200} />
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       <div className="container">
-        <h3 className={styles.sponsoredTitle}>Powered by</h3>
+        <h1 className={styles.sponsoredTitle}>Powered by</h1>
         <div className="row">
           {FeatureList.map((props, idx) => (
             // eslint-disable-next-line react/no-array-index-key

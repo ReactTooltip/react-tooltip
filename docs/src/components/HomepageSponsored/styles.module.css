@@ -1,6 +1,7 @@
 .features {
   display: flex;
   flex-direction: column;
+  gap: 25px;
 }
 
 .featureSvg {
@@ -9,7 +10,6 @@
 }
 
 .sponsoredTitle {
-  font-size: xx-large;
   display: flex;
   justify-content: center;
 }

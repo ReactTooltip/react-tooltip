@@ -6,10 +6,10 @@ import './styles.css'
 
 const AdsContainer = () => {
   return (
-    <div className="fixed">
-      <BannerSponsor sponsorKey="frigade" />
-      <BannerSponsor sponsorKey="dopt" />
+    <div className="ads-container fixed">
+      <BannerSponsor sponsorKey="frigade" tier="gold" />
       <AdsContainerElement />
+      <BannerSponsor sponsorKey="dopt" tier="silver" />
     </div>
   )
 }
