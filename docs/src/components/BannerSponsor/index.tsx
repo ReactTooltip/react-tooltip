@@ -28,9 +28,10 @@ const SPONSORS = {
 
 interface BannerSponsorProps {
   sponsorKey: keyof typeof SPONSORS
+  tier: 'gold' | 'silver'
 }
 
-const BannerSponsor = ({ sponsorKey }: BannerSponsorProps) => {
+const BannerSponsor = ({ sponsorKey, tier }: BannerSponsorProps) => {
   const sponsor = SPONSORS[sponsorKey]
 
   const onClickSponsorBannerEventHandler = () => {
@@ -47,7 +48,7 @@ const BannerSponsor = ({ sponsorKey }: BannerSponsorProps) => {
   }
 
   return (
-    <div className="sponsor-banner">
+    <div className={`sponsor-banner sponsor-banner-${tier}`}>
       <a
         href={`${sponsor.href}?source=react-tooltip`}
         title={sponsor.title}

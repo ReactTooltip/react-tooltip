@@ -5,5 +5,17 @@
   flex-direction: column;
   min-inline-size: 130px;
   max-inline-size: calc(130px + var(--sponsor-max-char) + 8ch);
-  max-width: 377px;
+  height: fit-content;
+
+  a {
+    display: flex;
+  }
+}
+
+.sponsor-banner-gold {
+  max-width: 341px;
+}
+
+.sponsor-banner-silver {
+  max-width: 163px;
 }
