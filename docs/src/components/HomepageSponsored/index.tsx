@@ -82,47 +82,53 @@ export default function HomepageSponsored(): JSX.Element {
   return (
     <section className={styles.features}>
       <div className="container">
-        <h1 className={styles.sponsoredTitle}>Gold Sponsors 🌟</h1>
-        <div className="row">
-          {goldSponsors.map(({ link, title, src, eventTitle }, idx) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <div key={idx} className={clsx(`col col--${12 / goldSponsors.length}`)}>
-              <div className="text--center">
-                <a
-                  href={link}
-                  title={title}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => {
-                    onClickSponsorBannerEventHandler(eventTitle)
-                  }}
-                >
-                  <img src={src} alt={title} width={480} />
-                </a>
-              </div>
+        <div className={styles.sponsoredBy}>
+          <div>
+            <h1 className={styles.sponsoredTitle}>Gold Sponsors 🌟</h1>
+            <div className="row">
+              {goldSponsors.map(({ link, title, src, eventTitle }, idx) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <div key={idx} className={clsx(`col col--${12 / goldSponsors.length}`)}>
+                  <div className="text--center">
+                    <a
+                      href={link}
+                      title={title}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => {
+                        onClickSponsorBannerEventHandler(eventTitle)
+                      }}
+                    >
+                      <img src={src} alt={title} width={480} />
+                    </a>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <h2 className={styles.sponsoredTitle}>Silver Sponsors ✪</h2>
-        <div className="row">
-          {silverSponsors.map(({ link, title, src, eventTitle }, idx) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <div key={idx} className={clsx(`col col--${12 / silverSponsors.length}`)}>
-              <div className="text--center">
-                <a
-                  href={link}
-                  title={title}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => {
-                    onClickSponsorBannerEventHandler(eventTitle)
-                  }}
-                >
-                  <img src={src} alt={title} width={200} />
-                </a>
-              </div>
+          </div>
+          <div>
+            <h2 className={styles.sponsoredTitle}>Silver Sponsors ✪</h2>
+            <div className="row">
+              {silverSponsors.map(({ link, title, src, eventTitle }, idx) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <div key={idx} className={clsx(`col col--${12 / silverSponsors.length}`)}>
+                  <div className="text--center">
+                    <a
+                      href={link}
+                      title={title}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => {
+                        onClickSponsorBannerEventHandler(eventTitle)
+                      }}
+                    >
+                      <img src={src} alt={title} width={200} />
+                    </a>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
       <div className="container">
