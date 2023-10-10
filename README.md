@@ -76,7 +76,8 @@ React Tooltip is proud to be sponsored by [Frigade](https://frigade.com/?source=
 
 1 . Import the CSS file to set default styling.
 
-> :warning: If you are using a version before than `v5.13.0`, you must import the CSS file or the tooltip won't show!
+> [!WARNING]\
+> If you are using a version before than `v5.13.0`, you must import the CSS file or the tooltip won't show!
 
 ```js
 import 'react-tooltip/dist/react-tooltip.css'
@@ -108,6 +109,7 @@ import { Tooltip as ReactTooltip } from 'react-tooltip'
 
 4 . Include the `<Tooltip />` element.
 
+> [!NOTE]\
 > Don't forget to set the id, it won't work without it!
 
 ```jsx
