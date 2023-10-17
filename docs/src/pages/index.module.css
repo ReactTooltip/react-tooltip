@@ -12,6 +12,12 @@
   flex-direction: column;
 }
 
+.heroContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .heroAds {
   padding-top: 2rem;
   min-height: 196px;
