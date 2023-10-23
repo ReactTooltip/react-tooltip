@@ -61,7 +61,6 @@ export interface ITooltipController {
   position?: IPosition
   isOpen?: boolean
   disableStyleInjection?: boolean | 'core'
-  holdPositionOnRender?: boolean
   /**
    * @description see https://developer.mozilla.org/en-US/docs/Web/CSS/border.
    *
