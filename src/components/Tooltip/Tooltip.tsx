@@ -504,19 +504,26 @@ const Tooltip = ({
         if (activeAnchor) {
           const elements = [...mutation.removedNodes].filter((node) => node.nodeType === 1)
           if (selector) {
-            removedAnchors.push(
-              // the element itself is an anchor
-              ...(elements.filter((element) =>
-                (element as HTMLElement).matches(selector),
-              ) as HTMLElement[]),
-            )
-            removedAnchors.push(
-              // the element has children which are anchors
-              ...elements.flatMap(
-                (element) =>
-                  [...(element as HTMLElement).querySelectorAll(selector)] as HTMLElement[],
-              ),
-            )
+            try {
+              removedAnchors.push(
+                // the element itself is an anchor
+                ...(elements.filter((element) =>
+                  (element as HTMLElement).matches(selector),
+                ) as HTMLElement[]),
+              )
+              removedAnchors.push(
+                // the element has children which are anchors
+                ...elements.flatMap(
+                  (element) =>
+                    [...(element as HTMLElement).querySelectorAll(selector)] as HTMLElement[],
+                ),
+              )
+            } catch {
+              /**
+               * invalid CSS selector.
+               * already warned on tooltip controller
+               */
+            }
           }
           elements.some((node) => {
             if (node?.contains?.(activeAnchor)) {
