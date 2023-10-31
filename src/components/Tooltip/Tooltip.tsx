@@ -82,24 +82,6 @@ const Tooltip = ({
     }
   }, [])
 
-  useEffect(() => {
-    if (!show) {
-      /**
-       * this fixes weird behavior when switching between two anchor elements very quickly
-       * remove the timeout and switch quickly between two adjancent anchor elements to see it
-       *
-       * in practice, this means the tooltip is not immediately removed from the DOM on hide
-       */
-      const timeout = setTimeout(() => {
-        setRendered(false)
-      }, 150)
-      return () => {
-        clearTimeout(timeout)
-      }
-    }
-    return () => null
-  }, [show])
-
   const handleShow = (value: boolean) => {
     if (!mounted.current) {
       return
@@ -657,13 +639,21 @@ const Tooltip = ({
         styles[variant],
         className,
         `react-tooltip__place-${actualPlacement}`,
-        {
-          'react-tooltip__show': canShow,
-          [coreStyles['show']]: canShow,
-          [coreStyles['fixed']]: positionStrategy === 'fixed',
-          [coreStyles['clickable']]: clickable,
-        },
+        coreStyles[canShow ? 'show' : 'closing'],
+        canShow ? 'react-tooltip__show' : 'react-tooltip__closing',
+        positionStrategy === 'fixed' && coreStyles['fixed'],
+        clickable && coreStyles['clickable'],
       )}
+      onTransitionEnd={(event: TransitionEvent) => {
+        /**
+         * @warning if `--rt-transition-closing-delay` is set to 0,
+         * the tooltip will be stuck (but not visible) on the DOM
+         */
+        if (show || event.propertyName !== 'opacity') {
+          return
+        }
+        setRendered(false)
+      }}
       style={{
         ...externalStyles,
         ...inlineStyles,
@@ -678,13 +668,7 @@ const Tooltip = ({
           coreStyles['arrow'],
           styles['arrow'],
           classNameArrow,
-          {
-            /**
-             * changed from dash `no-arrow` to camelcase because of:
-             * https://github.com/indooorsman/esbuild-css-modules-plugin/issues/42
-             */
-            [coreStyles['noArrow']]: noArrow,
-          },
+          noArrow && coreStyles['noArrow'],
         )}
         style={{
           ...inlineArrowStyles,
