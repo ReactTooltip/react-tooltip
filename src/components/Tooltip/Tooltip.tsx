@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react'
+import React, { useEffect, useState, useRef, useCallback, useImperativeHandle } from 'react'
 import { autoUpdate } from '@floating-ui/dom'
 import classNames from 'classnames'
 import debounce from 'utils/debounce'
@@ -8,10 +8,11 @@ import { getScrollParent } from 'utils/get-scroll-parent'
 import { computeTooltipPosition } from 'utils/compute-positions'
 import coreStyles from './core-styles.module.css'
 import styles from './styles.module.css'
-import type { IPosition, ITooltip, PlacesType } from './TooltipTypes'
+import type { IPosition, ITooltip, PlacesType, TooltipImperativeOpenOptions } from './TooltipTypes'
 
 const Tooltip = ({
   // props
+  forwardRef,
   id,
   className,
   classNameArrow,
@@ -58,6 +59,9 @@ const Tooltip = ({
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState(false)
   const [rendered, setRendered] = useState(false)
+  const [imperativeOptions, setImperativeOptions] = useState<TooltipImperativeOpenOptions | null>(
+    null,
+  )
   const wasShowing = useRef(false)
   const lastFloatPosition = useRef<IPosition | null>(null)
   /**
@@ -149,6 +153,7 @@ const Tooltip = ({
     if (show) {
       afterShow?.()
     } else {
+      setImperativeOptions(null)
       afterHide?.()
     }
   }, [show])
@@ -274,6 +279,9 @@ const Tooltip = ({
   }
 
   const handleClickOutsideAnchors = (event: MouseEvent) => {
+    if (!show) {
+      return
+    }
     const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
     const anchors = [anchorById, ...anchorsBySelect]
     if (anchors.some((anchor) => anchor?.contains(event.target as HTMLElement))) {
@@ -293,9 +301,10 @@ const Tooltip = ({
   const debouncedHandleShowTooltip = debounce(handleShowTooltip, 50, true)
   const debouncedHandleHideTooltip = debounce(handleHideTooltip, 50, true)
   const updateTooltipPosition = useCallback(() => {
-    if (position) {
+    const actualPosition = imperativeOptions?.position ?? position
+    if (actualPosition) {
       // if `position` is set, override regular and `float` positioning
-      handleTooltipPosition(position)
+      handleTooltipPosition(actualPosition)
       return
     }
 
@@ -349,6 +358,7 @@ const Tooltip = ({
     offset,
     positionStrategy,
     position,
+    imperativeOptions?.position,
     float,
   ])
 
@@ -484,7 +494,7 @@ const Tooltip = ({
   ])
 
   useEffect(() => {
-    let selector = anchorSelect ?? ''
+    let selector = imperativeOptions?.anchorSelect ?? anchorSelect ?? ''
     if (!selector && id) {
       selector = `[data-tooltip-id='${id}']`
     }
@@ -584,7 +594,7 @@ const Tooltip = ({
     return () => {
       documentObserver.disconnect()
     }
-  }, [id, anchorSelect, activeAnchor])
+  }, [id, anchorSelect, imperativeOptions?.anchorSelect, activeAnchor])
 
   useEffect(() => {
     updateTooltipPosition()
@@ -628,7 +638,7 @@ const Tooltip = ({
   }, [])
 
   useEffect(() => {
-    let selector = anchorSelect
+    let selector = imperativeOptions?.anchorSelect ?? anchorSelect
     if (!selector && id) {
       selector = `[data-tooltip-id='${id}']`
     }
@@ -642,9 +652,34 @@ const Tooltip = ({
       // warning was already issued in the controller
       setAnchorsBySelect([])
     }
-  }, [id, anchorSelect])
+  }, [id, anchorSelect, imperativeOptions?.anchorSelect])
 
-  const canShow = !hidden && content && show && Object.keys(inlineStyles).length > 0
+  const actualContent = imperativeOptions?.content ?? content
+  const canShow = Boolean(!hidden && actualContent && show && Object.keys(inlineStyles).length > 0)
+
+  useImperativeHandle(forwardRef, () => ({
+    open: (options) => {
+      if (options?.anchorSelect) {
+        try {
+          document.querySelector(options.anchorSelect)
+        } catch {
+          if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
+            // eslint-disable-next-line no-console
+            console.warn(`[react-tooltip] "${options.anchorSelect}" is not a valid CSS selector`)
+          }
+          return
+        }
+      }
+      setImperativeOptions(options ?? null)
+      handleShow(true)
+    },
+    close: () => {
+      handleShow(false)
+    },
+    activeAnchor,
+    place: actualPlacement,
+    isOpen: rendered && canShow,
+  }))
 
   return rendered ? (
     <WrapperElement
@@ -671,7 +706,7 @@ const Tooltip = ({
       }}
       ref={tooltipRef}
     >
-      {content}
+      {actualContent}
       <WrapperElement
         className={classNames(
           'react-tooltip-arrow',

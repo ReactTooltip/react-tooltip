@@ -49,7 +49,31 @@ export interface IPosition {
   y: number
 }
 
+export interface TooltipImperativeOpenOptions {
+  anchorSelect?: string
+  position?: IPosition
+  content?: ChildrenType
+}
+
+export interface TooltipImperativeProps {
+  open: (options?: TooltipImperativeOpenOptions) => void
+  close: () => void
+  /**
+   * @readonly
+   */
+  activeAnchor: HTMLElement | null
+  /**
+   * @readonly
+   */
+  place: PlacesType
+  /**
+   * @readonly
+   */
+  isOpen: boolean
+}
+
 export interface ITooltip {
+  forwardRef?: React.ForwardedRef<TooltipImperativeProps>
   className?: string
   classNameArrow?: string
   content?: ChildrenType
