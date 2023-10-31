@@ -49,6 +49,27 @@ export interface IPosition {
   y: number
 }
 
+export type AnchorOpenEvents = {
+  mouseenter?: boolean
+  focus?: boolean
+  click?: boolean
+  dblclick?: boolean
+  mousedown?: boolean
+}
+export type AnchorCloseEvents = {
+  mouseleave?: boolean
+  blur?: boolean
+  click?: boolean
+  dblclick?: boolean
+  mouseup?: boolean
+}
+export type GlobalCloseEvents = {
+  escape?: boolean
+  scroll?: boolean
+  resize?: boolean
+  clickOutsideAnchor?: boolean
+}
+
 export interface ITooltip {
   className?: string
   classNameArrow?: string
@@ -81,6 +102,9 @@ export interface ITooltip {
   closeOnEsc?: boolean
   closeOnScroll?: boolean
   closeOnResize?: boolean
+  openEvents?: AnchorOpenEvents
+  closeEvents?: AnchorCloseEvents
+  globalCloseEvents?: GlobalCloseEvents
   style?: CSSProperties
   position?: IPosition
   isOpen?: boolean
