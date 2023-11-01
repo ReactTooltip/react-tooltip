@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Imperative mode (ref)
 
-Using the ReactTooltip imperative mode to control the tooltip programatically.
+Using the ReactTooltip imperative mode to control the tooltip programmatically.
 
 import { useRef } from 'react';
 import { Tooltip } from 'react-tooltip'
@@ -36,10 +36,10 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
 
 ### Basic usage
 
-A ref object created with `React.useRef()` can passed to the `ref` tooltip prop.
-It allows you to expose internal state variables (read-only), and also to control the tooltip programatically.
+A ref object created with `React.useRef()` can be passed to the `ref` tooltip prop.
+It allows you to expose internal state variables (read-only), and to also control the tooltip programmatically.
 
-The relevant interfaces are as follows:
+#### API
 
 ```ts
 interface TooltipImperativeOpenOptions {
@@ -85,19 +85,19 @@ interface TooltipImperativeProps {
 
 :::info
 
-The imperative methods <b>can</b> be applied alongside regular tooltip usage. For example, you could use just `close()` to close a regular tooltip after an API request is finished.
+The imperative methods <b>can</b> be applied alongside regular tooltip usage. For example, you could use just `close()` to close a regular tooltip after an HTTP request is finished.
 
-If you intend on using the tooltip exclusively with these methods, setting the `imperativeModeOnly` tooltip prop to disable default behavior is recommended. Otherwise, you might face undesired behavior.
+If you intend to use the tooltip exclusively with these methods, setting the `imperativeModeOnly` prop to disable default behavior is recommended. Otherwise, you might face undesired behavior.
 
 :::
 
-- `open()` opens the tooltip programatically. All of the arguments are optional
-  - `anchorSelect` overrides the selector currently in use. Ideally, it should match only one element (e.g. `#some-element`)
-  - `position` overrides the tooltip position. Behaves the same as the `position` tooltip prop
-  - `place` overrides the tooltip placement relative to the anchor. Behaves the same as the `place` tooltip prop
-  - `content` overrides the tooltip content
+- `open()` opens the tooltip programmatically. All arguments are optional
+  - `anchorSelect` overrides the current selector. Ideally, it should match only one element (e.g. `#my-element`)
+  - `position` overrides the `position` tooltip prop
+  - `place` overrides the `place` tooltip prop
+  - `content` overrides the tooltip content, whether it was set through `content`, `render`, or any other way
   - `delay` indicates how long (in ms) before the tooltip actually opens
-- `close()` closes the tooltip programatically
+- `close()` closes the tooltip programmatically
   - `delay` indicates how long (in ms) before the tooltip actually closes
 
 #### Internal state
