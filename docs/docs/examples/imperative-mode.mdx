@@ -50,6 +50,17 @@ interface TooltipImperativeOpenOptions {
    * In practice, `ChildrenType` -> `React.ReactNode`
    */
   content?: ChildrenType
+  /**
+   * Delay (in ms) before opening the tooltip.
+   */
+  delay?: number
+}
+
+interface TooltipImperativeCloseOptions {
+  /**
+   * Delay (in ms) before closing the tooltip.
+   */
+  delay?: number
 }
 
 interface TooltipImperativeProps {
@@ -83,7 +94,9 @@ The imperative methods <b>can</b> be applied alongside regular tooltip usage. Fo
   - `position` overrides the tooltip position. Behaves the same as the `position` tooltip prop
   - `place` overrides the tooltip placement relative to the anchor. Behaves the same as the `place` tooltip prop
   - `content` overrides the tooltip content
+  - `delay` indicates how long (in ms) before the tooltip actually opens
 - `close()` closes the tooltip programatically
+  - `delay` indicates how long (in ms) before the tooltip actually closes
 
 #### Internal state
 

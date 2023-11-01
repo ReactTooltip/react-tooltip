@@ -54,10 +54,16 @@ export interface TooltipImperativeOpenOptions {
   position?: IPosition
   place?: PlacesType
   content?: ChildrenType
+  /**
+   * @description Delay (in ms) before opening the tooltip.
+   */
   delay?: number
 }
 
 export interface TooltipImperativeCloseOptions {
+  /**
+   * @description Delay (in ms) before closing the tooltip.
+   */
   delay?: number
 }
 
