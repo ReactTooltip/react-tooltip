@@ -8,7 +8,15 @@ import { getScrollParent } from 'utils/get-scroll-parent'
 import { computeTooltipPosition } from 'utils/compute-positions'
 import coreStyles from './core-styles.module.css'
 import styles from './styles.module.css'
-import type { IPosition, ITooltip, PlacesType, TooltipImperativeOpenOptions } from './TooltipTypes'
+import type {
+  AnchorCloseEvents,
+  AnchorOpenEvents,
+  GlobalCloseEvents,
+  IPosition,
+  ITooltip,
+  PlacesType,
+  TooltipImperativeOpenOptions,
+} from './TooltipTypes'
 
 const Tooltip = ({
   // props
@@ -35,6 +43,9 @@ const Tooltip = ({
   closeOnEsc = false,
   closeOnScroll = false,
   closeOnResize = false,
+  openEvents,
+  closeEvents,
+  globalCloseEvents,
   style: externalStyles,
   position,
   afterShow,
@@ -72,7 +83,49 @@ const Tooltip = ({
   const [anchorsBySelect, setAnchorsBySelect] = useState<HTMLElement[]>([])
   const mounted = useRef(false)
 
+  /**
+   * @todo Update when deprecated stuff gets removed.
+   */
   const shouldOpenOnClick = openOnClick || events.includes('click')
+  const hasClickEvent =
+    shouldOpenOnClick || openEvents?.click || openEvents?.dblclick || openEvents?.mousedown
+  const actualOpenEvents: AnchorOpenEvents = openEvents
+    ? { ...openEvents }
+    : {
+        mouseenter: true,
+        focus: true,
+        click: false,
+        dblclick: false,
+        mousedown: false,
+      }
+  if (!openEvents && shouldOpenOnClick) {
+    Object.assign(actualOpenEvents, {
+      mouseenter: false,
+      focus: false,
+      click: true,
+    })
+  }
+  const actualCloseEvents: AnchorCloseEvents = closeEvents
+    ? { ...closeEvents }
+    : {
+        mouseleave: true,
+        blur: true,
+        click: false,
+      }
+  if (!closeEvents && shouldOpenOnClick) {
+    Object.assign(actualCloseEvents, {
+      mouseleave: false,
+      blur: false,
+    })
+  }
+  const actualGlobalCloseEvents: GlobalCloseEvents = globalCloseEvents
+    ? { ...globalCloseEvents }
+    : {
+        escape: closeOnEsc || false,
+        scroll: closeOnScroll || false,
+        resize: closeOnResize || false,
+        clickOutsideAnchor: hasClickEvent || false,
+      }
 
   /**
    * useLayoutEffect runs before useEffect,
@@ -85,24 +138,6 @@ const Tooltip = ({
       mounted.current = false
     }
   }, [])
-
-  useEffect(() => {
-    if (!show) {
-      /**
-       * this fixes weird behavior when switching between two anchor elements very quickly
-       * remove the timeout and switch quickly between two adjancent anchor elements to see it
-       *
-       * in practice, this means the tooltip is not immediately removed from the DOM on hide
-       */
-      const timeout = setTimeout(() => {
-        setRendered(false)
-      }, 150)
-      return () => {
-        clearTimeout(timeout)
-      }
-    }
-    return () => null
-  }, [show])
 
   const handleShow = (value: boolean) => {
     if (!mounted.current) {
@@ -271,13 +306,6 @@ const Tooltip = ({
     lastFloatPosition.current = mousePosition
   }
 
-  const handleClickTooltipAnchor = (event?: Event) => {
-    handleShowTooltip(event)
-    if (delayHide) {
-      handleHideTooltipDelayed()
-    }
-  }
-
   const handleClickOutsideAnchors = (event: MouseEvent) => {
     if (!show) {
       return
@@ -383,13 +411,13 @@ const Tooltip = ({
     const anchorScrollParent = getScrollParent(activeAnchor)
     const tooltipScrollParent = getScrollParent(tooltipRef.current)
 
-    if (closeOnScroll) {
+    if (actualGlobalCloseEvents.scroll) {
       window.addEventListener('scroll', handleScrollResize)
       anchorScrollParent?.addEventListener('scroll', handleScrollResize)
       tooltipScrollParent?.addEventListener('scroll', handleScrollResize)
     }
     let updateTooltipCleanup: null | (() => void) = null
-    if (closeOnResize) {
+    if (actualGlobalCloseEvents.resize) {
       window.addEventListener('resize', handleScrollResize)
     } else if (activeAnchor && tooltipRef.current) {
       updateTooltipCleanup = autoUpdate(
@@ -410,29 +438,63 @@ const Tooltip = ({
       }
       handleShow(false)
     }
-
-    if (closeOnEsc) {
+    if (actualGlobalCloseEvents.escape) {
       window.addEventListener('keydown', handleEsc)
+    }
+
+    if (actualGlobalCloseEvents.clickOutsideAnchor) {
+      window.addEventListener('click', handleClickOutsideAnchors)
     }
 
     const enabledEvents: { event: string; listener: (event?: Event) => void }[] = []
 
-    if (shouldOpenOnClick) {
-      window.addEventListener('click', handleClickOutsideAnchors)
-      enabledEvents.push({ event: 'click', listener: handleClickTooltipAnchor })
-    } else {
-      enabledEvents.push(
-        { event: 'mouseenter', listener: debouncedHandleShowTooltip },
-        { event: 'mouseleave', listener: debouncedHandleHideTooltip },
-        { event: 'focus', listener: debouncedHandleShowTooltip },
-        { event: 'blur', listener: debouncedHandleHideTooltip },
-      )
-      if (float) {
-        enabledEvents.push({
-          event: 'mousemove',
-          listener: handleMouseMove,
-        })
+    const handleClickOpenTooltipAnchor = (event?: Event) => {
+      if (show) {
+        return
       }
+      handleShowTooltip(event)
+    }
+    const handleClickCloseTooltipAnchor = () => {
+      if (!show) {
+        return
+      }
+      handleHideTooltip()
+    }
+
+    const regularEvents = ['mouseenter', 'mouseleave', 'focus', 'blur']
+    const clickEvents = ['click', 'dblclick', 'mousedown', 'mouseup']
+
+    Object.entries(actualOpenEvents).forEach(([event, enabled]) => {
+      if (!enabled) {
+        return
+      }
+      if (regularEvents.includes(event)) {
+        enabledEvents.push({ event, listener: debouncedHandleShowTooltip })
+      } else if (clickEvents.includes(event)) {
+        enabledEvents.push({ event, listener: handleClickOpenTooltipAnchor })
+      } else {
+        // never happens
+      }
+    })
+
+    Object.entries(actualCloseEvents).forEach(([event, enabled]) => {
+      if (!enabled) {
+        return
+      }
+      if (regularEvents.includes(event)) {
+        enabledEvents.push({ event, listener: debouncedHandleHideTooltip })
+      } else if (clickEvents.includes(event)) {
+        enabledEvents.push({ event, listener: handleClickCloseTooltipAnchor })
+      } else {
+        // never happens
+      }
+    })
+
+    if (float) {
+      enabledEvents.push({
+        event: 'mousemove',
+        listener: handleMouseMove,
+      })
     }
 
     const handleMouseEnterTooltip = () => {
@@ -443,7 +505,9 @@ const Tooltip = ({
       handleHideTooltip()
     }
 
-    if (clickable && !shouldOpenOnClick) {
+    if (clickable && !hasClickEvent) {
+      // used to keep the tooltip open when hovering content.
+      // not needed if using click events.
       tooltipRef.current?.addEventListener('mouseenter', handleMouseEnterTooltip)
       tooltipRef.current?.addEventListener('mouseleave', handleMouseLeaveTooltip)
     }
@@ -455,23 +519,23 @@ const Tooltip = ({
     })
 
     return () => {
-      if (closeOnScroll) {
+      if (actualGlobalCloseEvents.scroll) {
         window.removeEventListener('scroll', handleScrollResize)
         anchorScrollParent?.removeEventListener('scroll', handleScrollResize)
         tooltipScrollParent?.removeEventListener('scroll', handleScrollResize)
       }
-      if (closeOnResize) {
+      if (actualGlobalCloseEvents.resize) {
         window.removeEventListener('resize', handleScrollResize)
       } else {
         updateTooltipCleanup?.()
       }
-      if (shouldOpenOnClick) {
+      if (actualGlobalCloseEvents.clickOutsideAnchor) {
         window.removeEventListener('click', handleClickOutsideAnchors)
       }
-      if (closeOnEsc) {
+      if (actualGlobalCloseEvents.escape) {
         window.removeEventListener('keydown', handleEsc)
       }
-      if (clickable && !shouldOpenOnClick) {
+      if (clickable && !hasClickEvent) {
         tooltipRef.current?.removeEventListener('mouseenter', handleMouseEnterTooltip)
         tooltipRef.current?.removeEventListener('mouseleave', handleMouseLeaveTooltip)
       }
@@ -491,8 +555,11 @@ const Tooltip = ({
     rendered,
     anchorRefs,
     anchorsBySelect,
-    closeOnEsc,
-    events,
+    // the effect uses the `actual*Events` objects, but this should work
+    openEvents,
+    closeEvents,
+    globalCloseEvents,
+    shouldOpenOnClick,
   ])
 
   useEffect(() => {
@@ -580,7 +647,7 @@ const Tooltip = ({
       })
       if (newAnchors.length || removedAnchors.length) {
         setAnchorsBySelect((anchors) => [
-          ...anchors.filter((anchor) => removedAnchors.includes(anchor)),
+          ...anchors.filter((anchor) => !removedAnchors.includes(anchor)),
           ...newAnchors,
         ])
       }
@@ -702,13 +769,21 @@ const Tooltip = ({
         styles[variant],
         className,
         `react-tooltip__place-${actualPlacement}`,
-        {
-          'react-tooltip__show': canShow,
-          [coreStyles['show']]: canShow,
-          [coreStyles['fixed']]: positionStrategy === 'fixed',
-          [coreStyles['clickable']]: clickable,
-        },
+        coreStyles[canShow ? 'show' : 'closing'],
+        canShow ? 'react-tooltip__show' : 'react-tooltip__closing',
+        positionStrategy === 'fixed' && coreStyles['fixed'],
+        clickable && coreStyles['clickable'],
       )}
+      onTransitionEnd={(event: TransitionEvent) => {
+        /**
+         * @warning if `--rt-transition-closing-delay` is set to 0,
+         * the tooltip will be stuck (but not visible) on the DOM
+         */
+        if (show || event.propertyName !== 'opacity') {
+          return
+        }
+        setRendered(false)
+      }}
       style={{
         ...externalStyles,
         ...inlineStyles,
@@ -723,13 +798,7 @@ const Tooltip = ({
           coreStyles['arrow'],
           styles['arrow'],
           classNameArrow,
-          {
-            /**
-             * changed from dash `no-arrow` to camelcase because of:
-             * https://github.com/indooorsman/esbuild-css-modules-plugin/issues/42
-             */
-            [coreStyles['noArrow']]: noArrow,
-          },
+          noArrow && coreStyles['noArrow'],
         )}
         style={{
           ...inlineArrowStyles,

@@ -372,6 +372,26 @@ In summary, if you do it correctly you can use CSS specificity instead of `!impo
 
 :::
 
+### Customizing opening/closing animation
+
+By default, the tooltip has a fade-in/fade-out transition when opening/closing, with a delay of 150ms for both.
+If you wish to change the delay for any of them, override the following CSS variables:
+
+:::caution
+
+Do not set `--rt-transition-closing-delay` to `0`. Doing so will result in the tooltip component being stuck (but not visible) on the DOM. This isn't itself a problem, but may lead to performance issues.
+
+Set to `1ms` or a similar value if you want to disable the fade-out transition when closing.
+
+:::
+
+```css
+:root {
+  --rt-transition-show-delay: 0.15s;
+  --rt-transition-closing-delay: 0.15s;
+}
+```
+
 ### Disabling ReactTooltip CSS
 
 ReactTooltip works seamlessly by automatically injecting CSS into your application. To disable this functionality, use the tooltip prop `disableStyleInjection`.

@@ -103,7 +103,9 @@ function App() {
           ref={tooltipRef}
           anchorSelect="section[id='section-anchor-select'] > p > button"
           place="bottom"
-          events={['click']}
+          openEvents={{ click: true }}
+          closeEvents={{ click: true }}
+          globalCloseEvents={{ clickOutsideAnchor: true }}
         >
           Tooltip content
         </Tooltip>
