@@ -239,7 +239,7 @@ const Tooltip = ({
       },
     } as Element
     computeTooltipPosition({
-      place,
+      place: imperativeOptions?.place ?? place,
       offset,
       elementReference: virtualElement,
       tooltipReference: tooltipRef.current,
@@ -328,7 +328,7 @@ const Tooltip = ({
     }
 
     computeTooltipPosition({
-      place,
+      place: imperativeOptions?.place ?? place,
       offset,
       elementReference: activeAnchor,
       tooltipReference: tooltipRef.current,
@@ -355,6 +355,7 @@ const Tooltip = ({
     content,
     externalStyles,
     place,
+    imperativeOptions?.place,
     offset,
     positionStrategy,
     position,

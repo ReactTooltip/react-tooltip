@@ -52,6 +52,7 @@ export interface IPosition {
 export interface TooltipImperativeOpenOptions {
   anchorSelect?: string
   position?: IPosition
+  place?: PlacesType
   content?: ChildrenType
 }
 
