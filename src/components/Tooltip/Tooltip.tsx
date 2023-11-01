@@ -568,7 +568,7 @@ const Tooltip = ({
       })
       if (newAnchors.length || removedAnchors.length) {
         setAnchorsBySelect((anchors) => [
-          ...anchors.filter((anchor) => removedAnchors.includes(anchor)),
+          ...anchors.filter((anchor) => !removedAnchors.includes(anchor)),
           ...newAnchors,
         ])
       }
