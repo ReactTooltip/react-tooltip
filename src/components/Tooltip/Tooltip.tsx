@@ -158,14 +158,14 @@ const Tooltip = ({
     }
   }, [show])
 
-  const handleShowTooltipDelayed = () => {
+  const handleShowTooltipDelayed = (delay = delayShow) => {
     if (tooltipShowDelayTimerRef.current) {
       clearTimeout(tooltipShowDelayTimerRef.current)
     }
 
     tooltipShowDelayTimerRef.current = setTimeout(() => {
       handleShow(true)
-    }, delayShow)
+    }, delay)
   }
 
   const handleHideTooltipDelayed = (delay = delayHide) => {
@@ -672,10 +672,18 @@ const Tooltip = ({
         }
       }
       setImperativeOptions(options ?? null)
-      handleShow(true)
+      if (options?.delay) {
+        handleShowTooltipDelayed(options.delay)
+      } else {
+        handleShow(true)
+      }
     },
-    close: () => {
-      handleShow(false)
+    close: (options) => {
+      if (options?.delay) {
+        handleHideTooltipDelayed(options.delay)
+      } else {
+        handleShow(false)
+      }
     },
     activeAnchor,
     place: actualPlacement,

@@ -54,11 +54,16 @@ export interface TooltipImperativeOpenOptions {
   position?: IPosition
   place?: PlacesType
   content?: ChildrenType
+  delay?: number
+}
+
+export interface TooltipImperativeCloseOptions {
+  delay?: number
 }
 
 export interface TooltipImperativeProps {
   open: (options?: TooltipImperativeOpenOptions) => void
-  close: () => void
+  close: (options?: TooltipImperativeCloseOptions) => void
   /**
    * @readonly
    */
