@@ -87,6 +87,8 @@ interface TooltipImperativeProps {
 
 The imperative methods <b>can</b> be applied alongside regular tooltip usage. For example, you could use just `close()` to close a regular tooltip after an API request is finished.
 
+If you intend on using the tooltip exclusively with these methods, setting the `imperativeModeOnly` tooltip prop to disable default behavior is recommended. Otherwise, you might face undesired behavior.
+
 :::
 
 - `open()` opens the tooltip programatically. All of the arguments are optional
@@ -149,6 +151,14 @@ const tooltipRef2 = useRef<TooltipImperativeProps>(null)
 <Tooltip ref={tooltipRef1} />
 <Tooltip ref={tooltipRef2} />
 ```
+
+:::caution
+
+Notice the tooltip still closes when unhovering the anchor element. This might be undesired if you're using the imperative methods exclusively.
+
+If that's the case, use the `imperativeModeOnly` tooltip prop to disable default tooltip behavior.
+
+:::
 
 export const ImperativeModeExample = () => {
   const tooltipRef1 = useRef(null)
