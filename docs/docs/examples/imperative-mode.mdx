@@ -70,12 +70,22 @@ interface TooltipImperativeProps {
 }
 ```
 
-- `open()` opens the tooltip programatically. All of the function arguments are optional
+#### Methods
+
+:::info
+
+The imperative methods <b>can</b> be applied alongside regular tooltip usage. For example, you could use just `close()` to close a regular tooltip after an API request is finished.
+
+:::
+
+- `open()` opens the tooltip programatically. All of the arguments are optional
   - `anchorSelect` overrides the selector currently in use. Ideally, it should match only one element (e.g. `#some-element`)
   - `position` overrides the tooltip position. Behaves the same way as the `position` tooltip prop
   - `place` overrides the tooltip placement relative to the anchor. Behaves the same was the `place` tooltip prop
   - `content` overrides the tooltip content
 - `close()` closes the tooltip programatically
+
+#### Internal state
 
 :::note
 
@@ -86,12 +96,6 @@ These are read-only. Updating their values has no effect on the tooltip.
 - `activeAnchor` is a reference to the current anchor element
 - `place` is the current tooltip placement relative to the anchor element. Can differ from the `place` tooltip prop if the tooltip is close to the edges of its container
 - `isOpen` indicates whether the tooltip is currently being shown or not
-
-:::info
-
-The imperative methods <b>can</b> be applied alongside regular tooltip usage. For example, you could use just `close()` to close a regular tooltip after an API request is finished.
-
-:::
 
 ```jsx
 import { useRef } from 'react';
