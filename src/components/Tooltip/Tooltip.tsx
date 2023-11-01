@@ -282,12 +282,13 @@ const Tooltip = ({
     if (!show) {
       return
     }
-    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
-    const anchors = [anchorById, ...anchorsBySelect]
-    if (anchors.some((anchor) => anchor?.contains(event.target as HTMLElement))) {
+    const target = event.target as HTMLElement
+    if (tooltipRef.current?.contains(target)) {
       return
     }
-    if (tooltipRef.current?.contains(event.target as HTMLElement)) {
+    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
+    const anchors = [anchorById, ...anchorsBySelect]
+    if (anchors.some((anchor) => anchor?.contains(target))) {
       return
     }
     handleShow(false)
