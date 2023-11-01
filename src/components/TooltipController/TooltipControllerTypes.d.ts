@@ -72,6 +72,11 @@ export interface ITooltipController {
    * @description The global events listened to close the tooltip.
    */
   globalCloseEvents?: GlobalCloseEvents
+  /**
+   * @description Used to disable default tooltip behavior.
+   * Overrides `openEvents`, `closeEvents`, and `globalCloseEvents`.
+   */
+  imperativeModeOnly?: boolean
   style?: CSSProperties
   position?: IPosition
   isOpen?: boolean

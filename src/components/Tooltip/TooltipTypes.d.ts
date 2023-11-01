@@ -141,6 +141,7 @@ export interface ITooltip {
   openEvents?: AnchorOpenEvents
   closeEvents?: AnchorCloseEvents
   globalCloseEvents?: GlobalCloseEvents
+  imperativeModeOnly?: boolean
   style?: CSSProperties
   position?: IPosition
   isOpen?: boolean

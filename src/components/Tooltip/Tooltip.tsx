@@ -46,6 +46,7 @@ const Tooltip = ({
   openEvents,
   closeEvents,
   globalCloseEvents,
+  imperativeModeOnly,
   style: externalStyles,
   position,
   afterShow,
@@ -111,6 +112,8 @@ const Tooltip = ({
         mouseleave: true,
         blur: true,
         click: false,
+        dblclick: false,
+        mouseup: false,
       }
   if (!closeEvents && shouldOpenOnClick) {
     Object.assign(actualCloseEvents, {
@@ -126,6 +129,29 @@ const Tooltip = ({
         resize: closeOnResize || false,
         clickOutsideAnchor: hasClickEvent || false,
       }
+
+  if (imperativeModeOnly) {
+    Object.assign(actualOpenEvents, {
+      mouseenter: false,
+      focus: false,
+      click: false,
+      dblclick: false,
+      mousedown: false,
+    })
+    Object.assign(actualCloseEvents, {
+      mouseleave: false,
+      blur: false,
+      click: false,
+      dblclick: false,
+      mouseup: false,
+    })
+    Object.assign(actualGlobalCloseEvents, {
+      escape: false,
+      scroll: false,
+      resize: false,
+      clickOutsideAnchor: false,
+    })
+  }
 
   /**
    * useLayoutEffect runs before useEffect,
