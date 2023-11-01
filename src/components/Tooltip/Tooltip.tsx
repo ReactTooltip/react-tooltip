@@ -188,8 +188,9 @@ const Tooltip = ({
     if (show) {
       afterShow?.()
     } else {
-      setImperativeOptions(null)
-      afterHide?.()
+      /**
+       * see `onTransitionEnd` on tooltip wrapper
+       */
     }
   }, [show])
 
@@ -783,6 +784,8 @@ const Tooltip = ({
           return
         }
         setRendered(false)
+        setImperativeOptions(null)
+        afterHide?.()
       }}
       style={{
         ...externalStyles,
