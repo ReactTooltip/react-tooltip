@@ -64,6 +64,26 @@ If you've imported the default styling and the tooltip is still not showing up w
 
 If `data-tooltip-content` and `data-tooltip-html` are both unset (or they have empty values) on the anchor element, and also the `content`, `render`, and `children` props on the tooltip are unset (or have empty values), the tooltip is not shown by default.
 
+## The tooltip doesn't close
+
+This usually happens when you try to set the tooltip opacity via CSS. Due to the opacity being used internally to control the tooltip state, overriding it breaks functionality.
+
+Instead, use [the `opacity` prop](./examples/styling#changing-the-opacity).
+
+```jsx
+<Tooltip opacity={1} />
+```
+
+## The border doesn't show for the arrow
+
+Simply setting the border for the tooltip through CSS will not work for the arrow.
+
+Instead, use [the `border` prop](./examples/styling#changing-the-border).
+
+```jsx
+<Tooltip border="1px solid red" />
+```
+
 ## Bad performance
 
 If you're experiencing any kind of unexpected behavior or bad performance on your application when using ReactTooltip, here are a few things you can try.
