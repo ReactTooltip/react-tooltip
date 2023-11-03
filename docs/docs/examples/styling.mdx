@@ -256,7 +256,7 @@ import { Tooltip } from 'react-tooltip'
 
 ### Changing the opacity
 
-Overriding the opacity through CSS breaks the tooltip. Use the `opacity` prop instead.
+Setting the opacity through CSS directly on the tooltip element breaks functionality. Use the `opacity` prop, or override the `--rt-opacity` CSS variable instead.
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
@@ -267,6 +267,13 @@ import { Tooltip } from 'react-tooltip'
   </a>
   <Tooltip id="my-tooltip-opacity" opacity={0.3} />
 </div>
+```
+
+```css
+/* To be used instead of the `opacity` prop, not required otherwise */
+:root {
+  --rt-opacity: 0.3;
+}
 ```
 
 <div

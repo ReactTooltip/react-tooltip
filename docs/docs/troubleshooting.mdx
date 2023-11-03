@@ -68,10 +68,18 @@ If `data-tooltip-content` and `data-tooltip-html` are both unset (or they have e
 
 This usually happens when you try to set the tooltip opacity via CSS. Due to the opacity being used internally to control the tooltip state, overriding it breaks functionality.
 
-Instead, use [the `opacity` prop](./examples/styling#changing-the-opacity).
+Instead, use the `opacity` prop, or override the `--rt-opacity` CSS variable. See [the examples](./examples/styling#changing-the-opacity) for more details.
 
 ```jsx
 <Tooltip opacity={1} />
+```
+
+or
+
+```css
+:root {
+  --rt-opacity: 1;
+}
 ```
 
 ## The border doesn't show for the arrow
