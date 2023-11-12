@@ -12,6 +12,7 @@ import type {
 } from 'components/Tooltip/TooltipTypes'
 import { useTooltip } from 'components/TooltipProvider'
 import { TooltipContent } from 'components/TooltipContent'
+import cssSupports from 'utils/css-supports'
 import type { ITooltipController } from './TooltipControllerTypes'
 
 const TooltipController = ({
@@ -274,7 +275,7 @@ const TooltipController = ({
       // eslint-disable-next-line no-console
       console.warn('[react-tooltip] Do not set `style.border`. Use `border` prop instead.')
     }
-    if (border && !CSS.supports('border', `${border}`)) {
+    if (border && !cssSupports('border', `${border}`)) {
       // eslint-disable-next-line no-console
       console.warn(`[react-tooltip] "${border}" is not a valid \`border\`.`)
     }
@@ -282,7 +283,7 @@ const TooltipController = ({
       // eslint-disable-next-line no-console
       console.warn('[react-tooltip] Do not set `style.opacity`. Use `opacity` prop instead.')
     }
-    if (opacity && !CSS.supports('opacity', `${opacity}`)) {
+    if (opacity && !cssSupports('opacity', `${opacity}`)) {
       // eslint-disable-next-line no-console
       console.warn(`[react-tooltip] "${opacity}" is not a valid \`opacity\`.`)
     }
