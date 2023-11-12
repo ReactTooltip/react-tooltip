@@ -710,9 +710,9 @@ const Tooltip = ({
     }
   }, [id, anchorSelect])
 
-  const canShow = !hidden && content && show && Object.keys(inlineStyles).length > 0
+  const canShow = show && Object.keys(inlineStyles).length > 0
 
-  return rendered ? (
+  return rendered && !hidden && content ? (
     <WrapperElement
       id={id}
       role="tooltip"
