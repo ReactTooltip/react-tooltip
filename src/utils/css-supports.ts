@@ -1,9 +1,6 @@
 const cssSupports = (property: string, value: string): boolean => {
   const hasCssSupports = 'CSS' in window && 'supports' in window.CSS
-  if (!hasCssSupports) {
-    return true
-  }
-  return window.CSS.supports(property, value)
+  return hasCssSupports ? window.CSS.supports(property, value) : true
 }
 
 export default cssSupports
