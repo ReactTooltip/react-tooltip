@@ -12,7 +12,7 @@ import type {
   WrapperType,
   IPosition,
   Middleware,
-  TooltipImperativeProps,
+  TooltipRefProps,
 } from './components/Tooltip/TooltipTypes'
 import type { ITooltipController } from './components/TooltipController/TooltipControllerTypes'
 import type { ITooltipWrapper } from './components/TooltipProvider/TooltipProviderTypes'
@@ -48,7 +48,7 @@ export type {
   ITooltipWrapper,
   IPosition,
   Middleware,
-  TooltipImperativeProps as TooltipRefProps,
+  TooltipRefProps,
 }
 
 export { removeStyle } from './utils/handle-style'

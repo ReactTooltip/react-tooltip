@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { TooltipController as Tooltip } from 'components/TooltipController'
-import { IPosition, TooltipImperativeProps } from 'components/Tooltip/TooltipTypes.d'
+import { IPosition, TooltipRefProps } from 'components/Tooltip/TooltipTypes.d'
 import React, { useEffect, useRef, useState } from 'react'
 import { inline, offset } from '@floating-ui/dom'
 import styles from './styles.module.css'
@@ -11,7 +11,7 @@ function App() {
   const [isDarkOpen, setIsDarkOpen] = useState(false)
   const [position, setPosition] = useState<IPosition>({ x: 0, y: 0 })
   const [toggle, setToggle] = useState(false)
-  const tooltipRef = useRef<TooltipImperativeProps>(null)
+  const tooltipRef = useRef<TooltipRefProps>(null)
 
   const handlePositionClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
     const x = event.clientX

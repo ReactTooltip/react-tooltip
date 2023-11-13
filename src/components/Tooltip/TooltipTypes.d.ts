@@ -67,7 +67,7 @@ export interface TooltipImperativeCloseOptions {
   delay?: number
 }
 
-export interface TooltipImperativeProps {
+export interface TooltipRefProps {
   open: (options?: TooltipImperativeOpenOptions) => void
   close: (options?: TooltipImperativeCloseOptions) => void
   /**
@@ -106,7 +106,7 @@ export type GlobalCloseEvents = {
 }
 
 export interface ITooltip {
-  forwardRef?: React.ForwardedRef<TooltipImperativeProps>
+  forwardRef?: React.ForwardedRef<TooltipRefProps>
   className?: string
   classNameArrow?: string
   content?: ChildrenType

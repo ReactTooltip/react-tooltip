@@ -9,14 +9,14 @@ import type {
   DataAttribute,
   ITooltip,
   ChildrenType,
-  TooltipImperativeProps,
+  TooltipRefProps,
 } from 'components/Tooltip/TooltipTypes'
 import { useTooltip } from 'components/TooltipProvider'
 import { TooltipContent } from 'components/TooltipContent'
 import cssSupports from 'utils/css-supports'
 import type { ITooltipController } from './TooltipControllerTypes'
 
-const TooltipController = React.forwardRef<TooltipImperativeProps, ITooltipController>(
+const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
   (
     {
       id,
