@@ -212,6 +212,16 @@ import { Tooltip } from 'react-tooltip'
 
 #### Tooltip Arrow with a different color from Tooltip
 
+:::info
+
+This is for demonstration purposes only. Using `arrowColor` instead is recommended.
+
+```jsx
+<Tooltip arrowColor="red" />
+```
+
+:::
+
 ```jsx
 import { Tooltip } from 'react-tooltip'
 
@@ -242,6 +252,38 @@ import { Tooltip } from 'react-tooltip'
     ◕‿‿◕
   </TooltipAnchor>
   <Tooltip id="my-tooltip-diff" className="example-diff-arrow" classNameArrow="example-arrow" />
+</div>
+
+### Changing the opacity
+
+Setting the opacity through CSS directly on the tooltip element breaks functionality. Use the `opacity` prop, or override the `--rt-opacity` CSS variable instead.
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<div className="example-container">
+  <a data-tooltip-id="my-tooltip-opacity" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip id="my-tooltip-opacity" opacity={0.3} />
+</div>
+```
+
+```css
+/* To be used instead of the `opacity` prop, not required otherwise */
+:root {
+  --rt-opacity: 0.3;
+}
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor data-tooltip-id="my-tooltip-opacity" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-opacity" opacity={0.3} />
 </div>
 
 ### Changing the border radius
@@ -362,6 +404,33 @@ import { Tooltip } from 'react-tooltip'
     ◕‿‿◕
   </TooltipAnchor>
   <Tooltip id="my-tooltip-padding" className="example-padding" />
+</div>
+
+### Changing the border
+
+If you're using the tooltip with the arrow, setting a border through CSS will not work for the arrow.
+
+We recommend using the `border` prop to avoid that.
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<div className="example-container">
+  <a data-tooltip-id="my-tooltip-border" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip id="my-tooltip-border" border="1px solid red" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor data-tooltip-id="my-tooltip-border" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-border" border="1px solid red" />
 </div>
 
 ---

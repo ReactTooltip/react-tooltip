@@ -751,7 +751,7 @@ const Tooltip = ({
   }, [id, anchorSelect, imperativeOptions?.anchorSelect])
 
   const actualContent = imperativeOptions?.content ?? content
-  const canShow = Boolean(!hidden && actualContent && show && Object.keys(inlineStyles).length > 0)
+  const canShow = show && Object.keys(inlineStyles).length > 0
 
   useImperativeHandle(forwardRef, () => ({
     open: (options) => {
@@ -782,10 +782,10 @@ const Tooltip = ({
     },
     activeAnchor,
     place: actualPlacement,
-    isOpen: rendered && canShow,
+    isOpen: rendered && !hidden && actualContent && canShow,
   }))
 
-  return rendered ? (
+  return rendered && !hidden && actualContent ? (
     <WrapperElement
       id={id}
       role="tooltip"
