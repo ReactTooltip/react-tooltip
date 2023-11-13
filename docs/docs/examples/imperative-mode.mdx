@@ -63,7 +63,7 @@ interface TooltipImperativeCloseOptions {
   delay?: number
 }
 
-interface TooltipImperativeProps {
+interface TooltipRefProps {
   open: (options?: TooltipImperativeOpenOptions) => void
   close: (options?: TooltipImperativeCloseOptions) => void
   /**
@@ -114,10 +114,10 @@ These are read-only. Updating their values has no effect on the tooltip.
 
 ```jsx
 import { useRef } from 'react';
-import { Tooltip, TooltipImperativeProps } from 'react-tooltip';
+import { Tooltip, TooltipRefProps } from 'react-tooltip';
 
-const tooltipRef1 = useRef<TooltipImperativeProps>(null)
-const tooltipRef2 = useRef<TooltipImperativeProps>(null)
+const tooltipRef1 = useRef<TooltipRefProps>(null)
+const tooltipRef2 = useRef<TooltipRefProps>(null)
 
 <a id="my-element">
   ◕‿‿◕
