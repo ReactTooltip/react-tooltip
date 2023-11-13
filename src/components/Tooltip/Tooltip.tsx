@@ -782,7 +782,7 @@ const Tooltip = ({
     },
     activeAnchor,
     place: actualPlacement,
-    isOpen: rendered && !hidden && actualContent && canShow,
+    isOpen: Boolean(rendered && !hidden && actualContent && canShow),
   }))
 
   return rendered && !hidden && actualContent ? (
