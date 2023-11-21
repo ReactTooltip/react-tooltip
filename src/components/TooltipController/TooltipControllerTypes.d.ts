@@ -93,6 +93,7 @@ export interface ITooltipController {
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
   afterHide?: () => void
+  role?: 'tooltip' | 'dialog'
 }
 
 declare module 'react' {

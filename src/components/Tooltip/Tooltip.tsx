@@ -61,6 +61,7 @@ const Tooltip = ({
   border,
   opacity,
   arrowColor,
+  role = 'tooltip',
 }: ITooltip) => {
   const tooltipRef = useRef<HTMLElement>(null)
   const tooltipArrowRef = useRef<HTMLElement>(null)
@@ -788,7 +789,7 @@ const Tooltip = ({
   return rendered && !hidden && actualContent ? (
     <WrapperElement
       id={id}
-      role="tooltip"
+      role={role}
       className={classNames(
         'react-tooltip',
         coreStyles['tooltip'],
