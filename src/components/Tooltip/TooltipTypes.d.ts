@@ -153,5 +153,5 @@ export interface ITooltip {
   border?: CSSProperties['border']
   opacity?: CSSProperties['opacity']
   arrowColor?: CSSProperties['backgroundColor']
-  role?: 'tooltip' | 'dialog'
+  role?: React.AriaRole
 }
