@@ -59,7 +59,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       setIsOpen,
       afterShow,
       afterHide,
-      role,
+      role = 'tooltip',
     }: ITooltipController,
     ref,
   ) => {
