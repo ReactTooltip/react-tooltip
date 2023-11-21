@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable max-len */
 // @ts-check
@@ -5,6 +6,19 @@
 
 const lightCodeTheme = require('prism-react-renderer/themes/github')
 const darkCodeTheme = require('prism-react-renderer/themes/dracula')
+const postcssPresetEnv = require('postcss-preset-env')
+
+/** @return {import('@docusaurus/types').Plugin} */
+function customPostCssPlugin() {
+  return {
+    name: 'custom-postcss',
+    configurePostCss(options) {
+      // Append new PostCSS plugins here.
+      options.plugins.push(postcssPresetEnv) // allow newest CSS syntax
+      return options
+    },
+  }
+}
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -28,6 +42,8 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+
+  plugins: [customPostCssPlugin],
 
   scripts: [
     // {
