@@ -59,6 +59,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       setIsOpen,
       afterShow,
       afterHide,
+      role,
     }: ITooltipController,
     ref,
   ) => {
@@ -356,6 +357,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       afterHide,
       activeAnchor,
       setActiveAnchor: (anchor: HTMLElement | null) => setActiveAnchor(anchor),
+      role,
     }
 
     return <Tooltip {...props} />
