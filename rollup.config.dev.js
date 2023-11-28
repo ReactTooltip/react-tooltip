@@ -18,7 +18,7 @@ const name = 'ReactTooltip'
 const globals = {
   react: 'React',
   'react-dom': 'ReactDOM',
-  classnames: 'classNames',
+  clsx: 'clsx',
   'prop-types': 'PropTypes',
 }
 
