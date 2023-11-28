@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback, useImperativeHandle } from 'react'
 import { autoUpdate } from '@floating-ui/dom'
-import classNames from 'clsx'
+import clsx from 'clsx'
 
 import debounce from 'utils/debounce'
 import { useTooltip } from 'components/TooltipProvider'
@@ -791,7 +791,7 @@ const Tooltip = ({
     <WrapperElement
       id={id}
       role={role}
-      className={classNames(
+      className={clsx(
         'react-tooltip',
         coreStyles['tooltip'],
         styles['tooltip'],
