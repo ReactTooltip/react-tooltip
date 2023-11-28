@@ -1,0 +1,21 @@
+.sponsor-banner {
+  /* same as `--carbon-max-char` */
+  --sponsor-max-char: 20ch;
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 130px;
+  max-inline-size: calc(130px + var(--sponsor-max-char) + 8ch);
+  height: fit-content;
+
+  a {
+    display: flex;
+  }
+}
+
+.sponsor-banner-gold {
+  max-width: 341px;
+}
+
+.sponsor-banner-silver {
+  max-width: 163px;
+}

@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable global-require */
@@ -7,8 +8,16 @@ import styles from './styles.module.css'
 
 type FeatureItem = {
   title: string
-  Svg: React.ComponentType<React.ComponentProps<'svg'>>
+  Svg?: React.ComponentType<React.ComponentProps<'svg'>>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, react/no-unused-prop-types
+  src?: any
+  // eslint-disable-next-line react/no-unused-prop-types
+  eventTitle?: string
   link: string
+}
+
+type SponsorItem = FeatureItem & {
+  tier: 'gold' | 'silver'
 }
 
 const FeatureList: FeatureItem[] = [
@@ -21,6 +30,23 @@ const FeatureList: FeatureItem[] = [
     title: 'Algolia',
     Svg: require('@site/static/img/Algolia-logo.svg').default,
     link: 'https://docsearch.algolia.com/',
+  },
+]
+
+const SponsorList: SponsorItem[] = [
+  {
+    title: 'Frigade',
+    src: require('@site/static/img/sponsors/frigade.png').default,
+    link: 'https://frigade.com/?source=react-tooltip',
+    eventTitle: 'frigade',
+    tier: 'gold',
+  },
+  {
+    title: 'Dopt',
+    src: require('@site/static/img/sponsors/dopt.png').default,
+    link: 'https://dopt.com/?source=react-tooltip',
+    eventTitle: 'dopt',
+    tier: 'silver',
   },
 ]
 
@@ -37,10 +63,76 @@ function Feature({ title, Svg, link }: FeatureItem) {
 }
 
 export default function HomepageSponsored(): JSX.Element {
+  const onClickSponsorBannerEventHandler = (title: string) => {
+    if (typeof window !== 'undefined') {
+      window.dataLayer = window.dataLayer || []
+
+      window.dataLayer.push({
+        event: `click_${title}_banner`,
+        place: 'home',
+      })
+    }
+
+    return true
+  }
+
+  const goldSponsors = SponsorList.filter(({ tier }) => tier === 'gold')
+  const silverSponsors = SponsorList.filter(({ tier }) => tier === 'silver')
+
   return (
     <section className={styles.features}>
       <div className="container">
-        <h3 className={styles.sponsoredTitle}>Powered by</h3>
+        <div className={styles.sponsoredBy}>
+          <div>
+            <h1 className={styles.sponsoredTitle}>Gold Sponsors 🌟</h1>
+            <div className="row">
+              {goldSponsors.map(({ link, title, src, eventTitle }, idx) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <div key={idx} className={clsx(`col col--${12 / goldSponsors.length}`)}>
+                  <div className="text--center">
+                    <a
+                      href={link}
+                      title={title}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => {
+                        onClickSponsorBannerEventHandler(eventTitle)
+                      }}
+                    >
+                      <img src={src} alt={title} width={480} />
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h2 className={styles.sponsoredTitle}>Silver Sponsors ✪</h2>
+            <div className="row">
+              {silverSponsors.map(({ link, title, src, eventTitle }, idx) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <div key={idx} className={clsx(`col col--${12 / silverSponsors.length}`)}>
+                  <div className="text--center">
+                    <a
+                      href={link}
+                      title={title}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => {
+                        onClickSponsorBannerEventHandler(eventTitle)
+                      }}
+                    >
+                      <img src={src} alt={title} width={200} />
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="container">
+        <h1 className={styles.sponsoredTitle}>Powered by</h1>
         <div className="row">
           {FeatureList.map((props, idx) => (
             // eslint-disable-next-line react/no-array-index-key

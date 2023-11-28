@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`compute positions all reference elements 1`] = `
+{
+  "place": "top",
+  "tooltipArrowStyles": {
+    "bottom": "-4px",
+    "left": "-1px",
+    "right": "",
+    "top": "",
+  },
+  "tooltipStyles": {
+    "border": undefined,
+    "left": "5px",
+    "top": "-10px",
+  },
+}
+`;

@@ -49,7 +49,64 @@ export interface IPosition {
   y: number
 }
 
+export interface TooltipImperativeOpenOptions {
+  anchorSelect?: string
+  position?: IPosition
+  place?: PlacesType
+  content?: ChildrenType
+  /**
+   * @description Delay (in ms) before opening the tooltip.
+   */
+  delay?: number
+}
+
+export interface TooltipImperativeCloseOptions {
+  /**
+   * @description Delay (in ms) before closing the tooltip.
+   */
+  delay?: number
+}
+
+export interface TooltipRefProps {
+  open: (options?: TooltipImperativeOpenOptions) => void
+  close: (options?: TooltipImperativeCloseOptions) => void
+  /**
+   * @readonly
+   */
+  activeAnchor: HTMLElement | null
+  /**
+   * @readonly
+   */
+  place: PlacesType
+  /**
+   * @readonly
+   */
+  isOpen: boolean
+}
+
+export type AnchorOpenEvents = {
+  mouseenter?: boolean
+  focus?: boolean
+  click?: boolean
+  dblclick?: boolean
+  mousedown?: boolean
+}
+export type AnchorCloseEvents = {
+  mouseleave?: boolean
+  blur?: boolean
+  click?: boolean
+  dblclick?: boolean
+  mouseup?: boolean
+}
+export type GlobalCloseEvents = {
+  escape?: boolean
+  scroll?: boolean
+  resize?: boolean
+  clickOutsideAnchor?: boolean
+}
+
 export interface ITooltip {
+  forwardRef?: React.ForwardedRef<TooltipRefProps>
   className?: string
   classNameArrow?: string
   content?: ChildrenType
@@ -81,6 +138,10 @@ export interface ITooltip {
   closeOnEsc?: boolean
   closeOnScroll?: boolean
   closeOnResize?: boolean
+  openEvents?: AnchorOpenEvents
+  closeEvents?: AnchorCloseEvents
+  globalCloseEvents?: GlobalCloseEvents
+  imperativeModeOnly?: boolean
   style?: CSSProperties
   position?: IPosition
   isOpen?: boolean
@@ -91,4 +152,6 @@ export interface ITooltip {
   setActiveAnchor: (anchor: HTMLElement | null) => void
   border?: CSSProperties['border']
   opacity?: CSSProperties['opacity']
+  arrowColor?: CSSProperties['backgroundColor']
+  role?: React.AriaRole
 }

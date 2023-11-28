@@ -12,12 +12,6 @@
 [download-image]: https://img.shields.io/npm/dm/react-tooltip.svg?style=flat-square
 [download-url]: https://npmjs.org/package/react-tooltip
 
-<p>
-  <a href="https://www.digitalocean.com/?refcode=0813b3be1161&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge">
-    <img src="https://opensource.nyc3.cdn.digitaloceanspaces.com/attribution/assets/PoweredByDO/DO_Powered_by_Badge_blue.svg" width="201px">
-  </a>
-</p>
-
 If you like the project, please give the project a GitHub 🌟
 
 ---
@@ -28,7 +22,7 @@ Why do we show ads on our docs?
 
 ## Demo
 
-[![Edit ReactTooltip](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/still-monad-yfi4fn?fontsize=14&hidenavigation=1&theme=dark)
+[![Edit ReactTooltip](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/gallant-leftpad-8kvtn7?file=/src/App.js)
 
 Documentation for V4 - [Github Page](https://reacttooltip.github.io/react-tooltip/).
 
@@ -62,11 +56,36 @@ or
 yarn add react-tooltip
 ```
 
+## Sponsors
+
+### Gold Sponsors 🌟
+
+<a href="https://frigade.com/?source=react-tooltip">
+  <img alt="Frigade" style="height: 250px;" src="docs/static/img/sponsors/frigade.png" />
+</a>
+
+React Tooltip is proud to be sponsored by [Frigade](https://frigade.com/?source=react-tooltip), a developer tool for building better product onboarding: guided tours, getting started checklists, announcements, etc.
+
+#### Silver Sponsors ✪
+
+<a href="https://dopt.com/?source=react-tooltip">
+  <img alt="Dopt" style="height: 200px; width: 200px;" src="docs/static/img/sponsors/dopt.png" />
+</a>
+
+## Powered by
+
+<p>
+  <a href="https://www.digitalocean.com/?refcode=0813b3be1161&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge">
+    <img src="https://opensource.nyc3.cdn.digitaloceanspaces.com/attribution/assets/PoweredByDO/DO_Powered_by_Badge_blue.svg" width="201px">
+  </a>
+</p>
+
 ## Usage
 
 1 . Import the CSS file to set default styling.
 
-> :warning: If you are using a version before than `v5.13.0`, you must import the CSS file or the tooltip won't show!
+> [!WARNING]\
+> If you are using a version before than `v5.13.0`, you must import the CSS file or the tooltip won't show!
 
 ```js
 import 'react-tooltip/dist/react-tooltip.css'
@@ -98,6 +117,7 @@ import { Tooltip as ReactTooltip } from 'react-tooltip'
 
 4 . Include the `<Tooltip />` element.
 
+> [!NOTE]\
 > Don't forget to set the id, it won't work without it!
 
 ```jsx

@@ -6,6 +6,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import Layout from '@theme/Layout'
 import HomepageFeatures from '@site/src/components/HomepageFeatures'
 import HomepageSponsored from '@site/src/components/HomepageSponsored'
+import AdsContainerElement from '@site/src/components/AdsContainerElement'
 
 import styles from './index.module.css'
 
@@ -13,7 +14,7 @@ function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext()
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className="container">
+      <div className={clsx('container', styles.heroContainer)}>
         <h1 className="hero__title">{siteConfig.title}</h1>
         <p className="hero__logo">
           <img src="img/logo.svg" alt="Happy face with a tooltip saying 'Hello I'm a tooltip'" />
@@ -27,6 +28,9 @@ function HomepageHeader() {
             Getting Started with V5
           </Link>
         </div>
+      </div>
+      <div className={styles.heroAds}>
+        <AdsContainerElement />
       </div>
     </header>
   )

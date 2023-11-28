@@ -1,0 +1,14 @@
+.fixed {
+  position: fixed;
+}
+
+.ads-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  #carbonads {
+    width: 100%;
+    max-width: 341px;
+  }
+}

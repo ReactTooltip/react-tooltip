@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { TooltipController as Tooltip } from 'components/TooltipController'
-import { IPosition } from 'components/Tooltip/TooltipTypes.d'
-import React, { useState } from 'react'
+import { IPosition, TooltipRefProps } from 'components/Tooltip/TooltipTypes.d'
+import React, { useEffect, useRef, useState } from 'react'
 import { inline, offset } from '@floating-ui/dom'
 import styles from './styles.module.css'
 
@@ -11,6 +11,7 @@ function App() {
   const [isDarkOpen, setIsDarkOpen] = useState(false)
   const [position, setPosition] = useState<IPosition>({ x: 0, y: 0 })
   const [toggle, setToggle] = useState(false)
+  const tooltipRef = useRef<TooltipRefProps>(null)
 
   const handlePositionClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
     const x = event.clientX
@@ -22,6 +23,19 @@ function App() {
     const target = event.target as HTMLElement
     setAnchorId(target.id)
   }
+
+  useEffect(() => {
+    const handleQ = (event: KeyboardEvent) => {
+      if (event.key === 'q') {
+        // q
+        tooltipRef.current?.close()
+      }
+    }
+    window.addEventListener('keydown', handleQ)
+    return () => {
+      window.removeEventListener('keydown', handleQ)
+    }
+  })
 
   return (
     <main className={styles['main']}>
@@ -86,9 +100,12 @@ function App() {
         </p>
         <Tooltip id="anchor-select">Tooltip content</Tooltip>
         <Tooltip
+          ref={tooltipRef}
           anchorSelect="section[id='section-anchor-select'] > p > button"
           place="bottom"
-          events={['click']}
+          openEvents={{ click: true }}
+          closeEvents={{ click: true }}
+          globalCloseEvents={{ clickOutsideAnchor: true }}
         >
           Tooltip content
         </Tooltip>
@@ -140,6 +157,25 @@ function App() {
             positionStrategy="fixed"
           />
         </div>
+        <button
+          id="imperativeTooltipButton"
+          style={{ height: 40, marginLeft: 100 }}
+          onClick={() => {
+            tooltipRef.current?.open({
+              anchorSelect: '#imperativeTooltipButton',
+              content: (
+                <div style={{ fontSize: 32 }}>
+                  Opened imperatively!
+                  <br />
+                  <br />
+                  Press Q to close imperatively too!
+                </div>
+              ),
+            })
+          }}
+        >
+          imperative tooltip
+        </button>
       </div>
 
       <div style={{ marginTop: '1rem' }}>

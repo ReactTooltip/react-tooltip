@@ -1,5 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react'
-import clsx from 'clsx'
+import React, { useEffect, useState, useRef, useCallback, useImperativeHandle } from 'react'
+import { autoUpdate } from '@floating-ui/dom'
+import classNames from 'clsx'
+
 import debounce from 'utils/debounce'
 import { useTooltip } from 'components/TooltipProvider'
 import useIsomorphicLayoutEffect from 'utils/use-isomorphic-layout-effect'
@@ -7,10 +9,19 @@ import { getScrollParent } from 'utils/get-scroll-parent'
 import { computeTooltipPosition } from 'utils/compute-positions'
 import coreStyles from './core-styles.module.css'
 import styles from './styles.module.css'
-import type { IPosition, ITooltip, PlacesType } from './TooltipTypes'
+import type {
+  AnchorCloseEvents,
+  AnchorOpenEvents,
+  GlobalCloseEvents,
+  IPosition,
+  ITooltip,
+  PlacesType,
+  TooltipImperativeOpenOptions,
+} from './TooltipTypes'
 
 const Tooltip = ({
   // props
+  forwardRef,
   id,
   className,
   classNameArrow,
@@ -33,6 +44,10 @@ const Tooltip = ({
   closeOnEsc = false,
   closeOnScroll = false,
   closeOnResize = false,
+  openEvents,
+  closeEvents,
+  globalCloseEvents,
+  imperativeModeOnly,
   style: externalStyles,
   position,
   afterShow,
@@ -46,6 +61,8 @@ const Tooltip = ({
   setActiveAnchor,
   border,
   opacity,
+  arrowColor,
+  role = 'tooltip',
 }: ITooltip) => {
   const tooltipRef = useRef<HTMLElement>(null)
   const tooltipArrowRef = useRef<HTMLElement>(null)
@@ -56,6 +73,9 @@ const Tooltip = ({
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
   const [show, setShow] = useState(false)
   const [rendered, setRendered] = useState(false)
+  const [imperativeOptions, setImperativeOptions] = useState<TooltipImperativeOpenOptions | null>(
+    null,
+  )
   const wasShowing = useRef(false)
   const lastFloatPosition = useRef<IPosition | null>(null)
   /**
@@ -66,7 +86,74 @@ const Tooltip = ({
   const [anchorsBySelect, setAnchorsBySelect] = useState<HTMLElement[]>([])
   const mounted = useRef(false)
 
+  /**
+   * @todo Update when deprecated stuff gets removed.
+   */
   const shouldOpenOnClick = openOnClick || events.includes('click')
+  const hasClickEvent =
+    shouldOpenOnClick || openEvents?.click || openEvents?.dblclick || openEvents?.mousedown
+  const actualOpenEvents: AnchorOpenEvents = openEvents
+    ? { ...openEvents }
+    : {
+        mouseenter: true,
+        focus: true,
+        click: false,
+        dblclick: false,
+        mousedown: false,
+      }
+  if (!openEvents && shouldOpenOnClick) {
+    Object.assign(actualOpenEvents, {
+      mouseenter: false,
+      focus: false,
+      click: true,
+    })
+  }
+  const actualCloseEvents: AnchorCloseEvents = closeEvents
+    ? { ...closeEvents }
+    : {
+        mouseleave: true,
+        blur: true,
+        click: false,
+        dblclick: false,
+        mouseup: false,
+      }
+  if (!closeEvents && shouldOpenOnClick) {
+    Object.assign(actualCloseEvents, {
+      mouseleave: false,
+      blur: false,
+    })
+  }
+  const actualGlobalCloseEvents: GlobalCloseEvents = globalCloseEvents
+    ? { ...globalCloseEvents }
+    : {
+        escape: closeOnEsc || false,
+        scroll: closeOnScroll || false,
+        resize: closeOnResize || false,
+        clickOutsideAnchor: hasClickEvent || false,
+      }
+
+  if (imperativeModeOnly) {
+    Object.assign(actualOpenEvents, {
+      mouseenter: false,
+      focus: false,
+      click: false,
+      dblclick: false,
+      mousedown: false,
+    })
+    Object.assign(actualCloseEvents, {
+      mouseleave: false,
+      blur: false,
+      click: false,
+      dblclick: false,
+      mouseup: false,
+    })
+    Object.assign(actualGlobalCloseEvents, {
+      escape: false,
+      scroll: false,
+      resize: false,
+      clickOutsideAnchor: false,
+    })
+  }
 
   /**
    * useLayoutEffect runs before useEffect,
@@ -79,24 +166,6 @@ const Tooltip = ({
       mounted.current = false
     }
   }, [])
-
-  useEffect(() => {
-    if (!show) {
-      /**
-       * this fixes weird behavior when switching between two anchor elements very quickly
-       * remove the timeout and switch quickly between two adjancent anchor elements to see it
-       *
-       * in practice, this means the tooltip is not immediately removed from the DOM on hide
-       */
-      const timeout = setTimeout(() => {
-        setRendered(false)
-      }, 150)
-      return () => {
-        clearTimeout(timeout)
-      }
-    }
-    return () => null
-  }, [show])
 
   const handleShow = (value: boolean) => {
     if (!mounted.current) {
@@ -147,18 +216,20 @@ const Tooltip = ({
     if (show) {
       afterShow?.()
     } else {
-      afterHide?.()
+      /**
+       * see `onTransitionEnd` on tooltip wrapper
+       */
     }
   }, [show])
 
-  const handleShowTooltipDelayed = () => {
+  const handleShowTooltipDelayed = (delay = delayShow) => {
     if (tooltipShowDelayTimerRef.current) {
       clearTimeout(tooltipShowDelayTimerRef.current)
     }
 
     tooltipShowDelayTimerRef.current = setTimeout(() => {
       handleShow(true)
-    }, delayShow)
+    }, delay)
   }
 
   const handleHideTooltipDelayed = (delay = delayHide) => {
@@ -232,7 +303,7 @@ const Tooltip = ({
       },
     } as Element
     computeTooltipPosition({
-      place,
+      place: imperativeOptions?.place ?? place,
       offset,
       elementReference: virtualElement,
       tooltipReference: tooltipRef.current,
@@ -264,20 +335,17 @@ const Tooltip = ({
     lastFloatPosition.current = mousePosition
   }
 
-  const handleClickTooltipAnchor = (event?: Event) => {
-    handleShowTooltip(event)
-    if (delayHide) {
-      handleHideTooltipDelayed()
-    }
-  }
-
   const handleClickOutsideAnchors = (event: MouseEvent) => {
-    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
-    const anchors = [anchorById, ...anchorsBySelect]
-    if (anchors.some((anchor) => anchor?.contains(event.target as HTMLElement))) {
+    if (!show) {
       return
     }
-    if (tooltipRef.current?.contains(event.target as HTMLElement)) {
+    const target = event.target as HTMLElement
+    if (tooltipRef.current?.contains(target)) {
+      return
+    }
+    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
+    const anchors = [anchorById, ...anchorsBySelect]
+    if (anchors.some((anchor) => anchor?.contains(target))) {
       return
     }
     handleShow(false)
@@ -290,6 +358,68 @@ const Tooltip = ({
   // mouse enter and focus events being triggered toggether
   const debouncedHandleShowTooltip = debounce(handleShowTooltip, 50, true)
   const debouncedHandleHideTooltip = debounce(handleHideTooltip, 50, true)
+  const updateTooltipPosition = useCallback(() => {
+    const actualPosition = imperativeOptions?.position ?? position
+    if (actualPosition) {
+      // if `position` is set, override regular and `float` positioning
+      handleTooltipPosition(actualPosition)
+      return
+    }
+
+    if (float) {
+      if (lastFloatPosition.current) {
+        /*
+          Without this, changes to `content`, `place`, `offset`, ..., will only
+          trigger a position calculation after a `mousemove` event.
+
+          To see why this matters, comment this line, run `yarn dev` and click the
+          "Hover me!" anchor.
+        */
+        handleTooltipPosition(lastFloatPosition.current)
+      }
+      // if `float` is set, override regular positioning
+      return
+    }
+
+    if (!activeAnchor?.isConnected) {
+      return
+    }
+
+    computeTooltipPosition({
+      place: imperativeOptions?.place ?? place,
+      offset,
+      elementReference: activeAnchor,
+      tooltipReference: tooltipRef.current,
+      tooltipArrowReference: tooltipArrowRef.current,
+      strategy: positionStrategy,
+      middlewares,
+      border,
+    }).then((computedStylesData) => {
+      if (!mounted.current) {
+        // invalidate computed positions after remount
+        return
+      }
+      if (Object.keys(computedStylesData.tooltipStyles).length) {
+        setInlineStyles(computedStylesData.tooltipStyles)
+      }
+      if (Object.keys(computedStylesData.tooltipArrowStyles).length) {
+        setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
+      }
+      setActualPlacement(computedStylesData.place as PlacesType)
+    })
+  }, [
+    show,
+    activeAnchor,
+    content,
+    externalStyles,
+    place,
+    imperativeOptions?.place,
+    offset,
+    positionStrategy,
+    position,
+    imperativeOptions?.position,
+    float,
+  ])
 
   useEffect(() => {
     const elementRefs = new Set(anchorRefs)
@@ -310,13 +440,25 @@ const Tooltip = ({
     const anchorScrollParent = getScrollParent(activeAnchor)
     const tooltipScrollParent = getScrollParent(tooltipRef.current)
 
-    if (closeOnScroll) {
+    if (actualGlobalCloseEvents.scroll) {
       window.addEventListener('scroll', handleScrollResize)
       anchorScrollParent?.addEventListener('scroll', handleScrollResize)
       tooltipScrollParent?.addEventListener('scroll', handleScrollResize)
     }
-    if (closeOnResize) {
+    let updateTooltipCleanup: null | (() => void) = null
+    if (actualGlobalCloseEvents.resize) {
       window.addEventListener('resize', handleScrollResize)
+    } else if (activeAnchor && tooltipRef.current) {
+      updateTooltipCleanup = autoUpdate(
+        activeAnchor as HTMLElement,
+        tooltipRef.current as HTMLElement,
+        updateTooltipPosition,
+        {
+          ancestorResize: true,
+          elementResize: true,
+          layoutShift: true,
+        },
+      )
     }
 
     const handleEsc = (event: KeyboardEvent) => {
@@ -325,29 +467,63 @@ const Tooltip = ({
       }
       handleShow(false)
     }
-
-    if (closeOnEsc) {
+    if (actualGlobalCloseEvents.escape) {
       window.addEventListener('keydown', handleEsc)
+    }
+
+    if (actualGlobalCloseEvents.clickOutsideAnchor) {
+      window.addEventListener('click', handleClickOutsideAnchors)
     }
 
     const enabledEvents: { event: string; listener: (event?: Event) => void }[] = []
 
-    if (shouldOpenOnClick) {
-      window.addEventListener('click', handleClickOutsideAnchors)
-      enabledEvents.push({ event: 'click', listener: handleClickTooltipAnchor })
-    } else {
-      enabledEvents.push(
-        { event: 'mouseenter', listener: debouncedHandleShowTooltip },
-        { event: 'mouseleave', listener: debouncedHandleHideTooltip },
-        { event: 'focus', listener: debouncedHandleShowTooltip },
-        { event: 'blur', listener: debouncedHandleHideTooltip },
-      )
-      if (float) {
-        enabledEvents.push({
-          event: 'mousemove',
-          listener: handleMouseMove,
-        })
+    const handleClickOpenTooltipAnchor = (event?: Event) => {
+      if (show) {
+        return
       }
+      handleShowTooltip(event)
+    }
+    const handleClickCloseTooltipAnchor = () => {
+      if (!show) {
+        return
+      }
+      handleHideTooltip()
+    }
+
+    const regularEvents = ['mouseenter', 'mouseleave', 'focus', 'blur']
+    const clickEvents = ['click', 'dblclick', 'mousedown', 'mouseup']
+
+    Object.entries(actualOpenEvents).forEach(([event, enabled]) => {
+      if (!enabled) {
+        return
+      }
+      if (regularEvents.includes(event)) {
+        enabledEvents.push({ event, listener: debouncedHandleShowTooltip })
+      } else if (clickEvents.includes(event)) {
+        enabledEvents.push({ event, listener: handleClickOpenTooltipAnchor })
+      } else {
+        // never happens
+      }
+    })
+
+    Object.entries(actualCloseEvents).forEach(([event, enabled]) => {
+      if (!enabled) {
+        return
+      }
+      if (regularEvents.includes(event)) {
+        enabledEvents.push({ event, listener: debouncedHandleHideTooltip })
+      } else if (clickEvents.includes(event)) {
+        enabledEvents.push({ event, listener: handleClickCloseTooltipAnchor })
+      } else {
+        // never happens
+      }
+    })
+
+    if (float) {
+      enabledEvents.push({
+        event: 'mousemove',
+        listener: handleMouseMove,
+      })
     }
 
     const handleMouseEnterTooltip = () => {
@@ -358,7 +534,9 @@ const Tooltip = ({
       handleHideTooltip()
     }
 
-    if (clickable && !shouldOpenOnClick) {
+    if (clickable && !hasClickEvent) {
+      // used to keep the tooltip open when hovering content.
+      // not needed if using click events.
       tooltipRef.current?.addEventListener('mouseenter', handleMouseEnterTooltip)
       tooltipRef.current?.addEventListener('mouseleave', handleMouseLeaveTooltip)
     }
@@ -370,21 +548,23 @@ const Tooltip = ({
     })
 
     return () => {
-      if (closeOnScroll) {
+      if (actualGlobalCloseEvents.scroll) {
         window.removeEventListener('scroll', handleScrollResize)
         anchorScrollParent?.removeEventListener('scroll', handleScrollResize)
         tooltipScrollParent?.removeEventListener('scroll', handleScrollResize)
       }
-      if (closeOnResize) {
+      if (actualGlobalCloseEvents.resize) {
         window.removeEventListener('resize', handleScrollResize)
+      } else {
+        updateTooltipCleanup?.()
       }
-      if (shouldOpenOnClick) {
+      if (actualGlobalCloseEvents.clickOutsideAnchor) {
         window.removeEventListener('click', handleClickOutsideAnchors)
       }
-      if (closeOnEsc) {
+      if (actualGlobalCloseEvents.escape) {
         window.removeEventListener('keydown', handleEsc)
       }
-      if (clickable && !shouldOpenOnClick) {
+      if (clickable && !hasClickEvent) {
         tooltipRef.current?.removeEventListener('mouseenter', handleMouseEnterTooltip)
         tooltipRef.current?.removeEventListener('mouseleave', handleMouseLeaveTooltip)
       }
@@ -398,15 +578,27 @@ const Tooltip = ({
      * rendered is also a dependency to ensure anchor observers are re-registered
      * since `tooltipRef` becomes stale after removing/adding the tooltip to the DOM
      */
-  }, [rendered, anchorRefs, anchorsBySelect, closeOnEsc, events])
+  }, [
+    activeAnchor,
+    updateTooltipPosition,
+    rendered,
+    anchorRefs,
+    anchorsBySelect,
+    // the effect uses the `actual*Events` objects, but this should work
+    openEvents,
+    closeEvents,
+    globalCloseEvents,
+    shouldOpenOnClick,
+  ])
 
   useEffect(() => {
-    let selector = anchorSelect ?? ''
+    let selector = imperativeOptions?.anchorSelect ?? anchorSelect ?? ''
     if (!selector && id) {
       selector = `[data-tooltip-id='${id}']`
     }
     const documentObserverCallback: MutationCallback = (mutationList) => {
       const newAnchors: HTMLElement[] = []
+      const removedAnchors: HTMLElement[] = []
       mutationList.forEach((mutation) => {
         if (mutation.type === 'attributes' && mutation.attributeName === 'data-tooltip-id') {
           const newId = (mutation.target as HTMLElement).getAttribute('data-tooltip-id')
@@ -418,7 +610,30 @@ const Tooltip = ({
           return
         }
         if (activeAnchor) {
-          ;[...mutation.removedNodes].some((node) => {
+          const elements = [...mutation.removedNodes].filter((node) => node.nodeType === 1)
+          if (selector) {
+            try {
+              removedAnchors.push(
+                // the element itself is an anchor
+                ...(elements.filter((element) =>
+                  (element as HTMLElement).matches(selector),
+                ) as HTMLElement[]),
+              )
+              removedAnchors.push(
+                // the element has children which are anchors
+                ...elements.flatMap(
+                  (element) =>
+                    [...(element as HTMLElement).querySelectorAll(selector)] as HTMLElement[],
+                ),
+              )
+            } catch {
+              /**
+               * invalid CSS selector.
+               * already warned on tooltip controller
+               */
+            }
+          }
+          elements.some((node) => {
             if (node?.contains?.(activeAnchor)) {
               setRendered(false)
               handleShow(false)
@@ -459,8 +674,11 @@ const Tooltip = ({
            */
         }
       })
-      if (newAnchors.length) {
-        setAnchorsBySelect((anchors) => [...anchors, ...newAnchors])
+      if (newAnchors.length || removedAnchors.length) {
+        setAnchorsBySelect((anchors) => [
+          ...anchors.filter((anchor) => !removedAnchors.includes(anchor)),
+          ...newAnchors,
+        ])
       }
     }
     const documentObserver = new MutationObserver(documentObserverCallback)
@@ -474,57 +692,11 @@ const Tooltip = ({
     return () => {
       documentObserver.disconnect()
     }
-  }, [id, anchorSelect, activeAnchor])
-
-  const updateTooltipPosition = () => {
-    if (position) {
-      // if `position` is set, override regular and `float` positioning
-      handleTooltipPosition(position)
-      return
-    }
-
-    if (float) {
-      if (lastFloatPosition.current) {
-        /*
-          Without this, changes to `content`, `place`, `offset`, ..., will only
-          trigger a position calculation after a `mousemove` event.
-
-          To see why this matters, comment this line, run `yarn dev` and click the
-          "Hover me!" anchor.
-        */
-        handleTooltipPosition(lastFloatPosition.current)
-      }
-      // if `float` is set, override regular positioning
-      return
-    }
-
-    computeTooltipPosition({
-      place,
-      offset,
-      elementReference: activeAnchor,
-      tooltipReference: tooltipRef.current,
-      tooltipArrowReference: tooltipArrowRef.current,
-      strategy: positionStrategy,
-      middlewares,
-      border,
-    }).then((computedStylesData) => {
-      if (!mounted.current) {
-        // invalidate computed positions after remount
-        return
-      }
-      if (Object.keys(computedStylesData.tooltipStyles).length) {
-        setInlineStyles(computedStylesData.tooltipStyles)
-      }
-      if (Object.keys(computedStylesData.tooltipArrowStyles).length) {
-        setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
-      }
-      setActualPlacement(computedStylesData.place as PlacesType)
-    })
-  }
+  }, [id, anchorSelect, imperativeOptions?.anchorSelect, activeAnchor])
 
   useEffect(() => {
     updateTooltipPosition()
-  }, [show, activeAnchor, content, externalStyles, place, offset, positionStrategy, position])
+  }, [updateTooltipPosition])
 
   useEffect(() => {
     if (!contentWrapperRef?.current) {
@@ -564,7 +736,7 @@ const Tooltip = ({
   }, [])
 
   useEffect(() => {
-    let selector = anchorSelect
+    let selector = imperativeOptions?.anchorSelect ?? anchorSelect
     if (!selector && id) {
       selector = `[data-tooltip-id='${id}']`
     }
@@ -578,27 +750,71 @@ const Tooltip = ({
       // warning was already issued in the controller
       setAnchorsBySelect([])
     }
-  }, [id, anchorSelect])
+  }, [id, anchorSelect, imperativeOptions?.anchorSelect])
 
-  const canShow = !hidden && content && show && Object.keys(inlineStyles).length > 0
+  const actualContent = imperativeOptions?.content ?? content
+  const canShow = show && Object.keys(inlineStyles).length > 0
 
-  return rendered ? (
+  useImperativeHandle(forwardRef, () => ({
+    open: (options) => {
+      if (options?.anchorSelect) {
+        try {
+          document.querySelector(options.anchorSelect)
+        } catch {
+          if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
+            // eslint-disable-next-line no-console
+            console.warn(`[react-tooltip] "${options.anchorSelect}" is not a valid CSS selector`)
+          }
+          return
+        }
+      }
+      setImperativeOptions(options ?? null)
+      if (options?.delay) {
+        handleShowTooltipDelayed(options.delay)
+      } else {
+        handleShow(true)
+      }
+    },
+    close: (options) => {
+      if (options?.delay) {
+        handleHideTooltipDelayed(options.delay)
+      } else {
+        handleShow(false)
+      }
+    },
+    activeAnchor,
+    place: actualPlacement,
+    isOpen: Boolean(rendered && !hidden && actualContent && canShow),
+  }))
+
+  return rendered && !hidden && actualContent ? (
     <WrapperElement
       id={id}
-      role="tooltip"
-      className={clsx(
+      role={role}
+      className={classNames(
         'react-tooltip',
         coreStyles['tooltip'],
         styles['tooltip'],
         styles[variant],
         className,
         `react-tooltip__place-${actualPlacement}`,
-        {
-          [coreStyles['show']]: canShow,
-          [coreStyles['fixed']]: positionStrategy === 'fixed',
-          [coreStyles['clickable']]: clickable,
-        },
+        coreStyles[canShow ? 'show' : 'closing'],
+        canShow ? 'react-tooltip__show' : 'react-tooltip__closing',
+        positionStrategy === 'fixed' && coreStyles['fixed'],
+        clickable && coreStyles['clickable'],
       )}
+      onTransitionEnd={(event: TransitionEvent) => {
+        /**
+         * @warning if `--rt-transition-closing-delay` is set to 0,
+         * the tooltip will be stuck (but not visible) on the DOM
+         */
+        if (show || event.propertyName !== 'opacity') {
+          return
+        }
+        setRendered(false)
+        setImperativeOptions(null)
+        afterHide?.()
+      }}
       style={{
         ...externalStyles,
         ...inlineStyles,
@@ -606,22 +822,21 @@ const Tooltip = ({
       }}
       ref={tooltipRef}
     >
-      {content}
+      {actualContent}
       <WrapperElement
         className={clsx(
           'react-tooltip-arrow',
           coreStyles['arrow'],
           styles['arrow'],
           classNameArrow,
-          {
-            /**
-             * changed from dash `no-arrow` to camelcase because of:
-             * https://github.com/indooorsman/esbuild-css-modules-plugin/issues/42
-             */
-            [coreStyles['noArrow']]: noArrow,
-          },
+          noArrow && coreStyles['noArrow'],
         )}
-        style={inlineArrowStyles}
+        style={{
+          ...inlineArrowStyles,
+          background: arrowColor
+            ? `linear-gradient(to right bottom, transparent 50%, ${arrowColor} 50%)`
+            : undefined,
+        }}
         ref={tooltipArrowRef}
       />
     </WrapperElement>

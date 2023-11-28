@@ -1,6 +1,6 @@
 {
   "name": "react-tooltip",
-  "version": "5.18.0",
+  "version": "5.24.0",
   "description": "react tooltip component",
   "scripts": {
     "dev-rollup": "node ./prebuild.js --env=development && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.dev.js --watch",
@@ -59,7 +59,7 @@
     "@types/css-modules": "^1.0.2",
     "@types/jest": "29.4.0",
     "@types/node": "^18.15.3",
-    "@types/react": "18.0.28",
+    "@types/react": "^18.2.17",
     "@types/react-dom": "18.0.11",
     "@types/react-test-renderer": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "5.54.0",

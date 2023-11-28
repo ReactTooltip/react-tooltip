@@ -1,8 +1,7 @@
 .features {
   display: flex;
-  align-items: center;
-  padding: 2rem 0;
-  width: 100%;
+  flex-direction: column;
+  gap: 25px;
 }
 
 .featureSvg {
@@ -11,7 +10,22 @@
 }
 
 .sponsoredTitle {
-  font-size: xx-large;
   display: flex;
   justify-content: center;
+}
+
+.sponsoredBy {
+  display: flex;
+  flex-direction: column;
+  gap: 21px;
+}
+
+@media screen and (min-width: 1024px) {
+  .features {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    padding: 2rem 0;
+    width: 100%;
+  }
 }

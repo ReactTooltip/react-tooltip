@@ -106,9 +106,13 @@ import { Tooltip } from 'react-tooltip'
 Please note that **Core** styles are different from **Base** styles, for more information, please check the [Disabling ReactTooltip CSS](#disabling-reacttooltip-css) section.
 :::
 
+##### Base styles
+
 In this example, we are adding an extra level to the CSS classes. The following are the default **base** styles for the tooltip:
 
 <CodeBlock language="css">{TooltipStyles}</CodeBlock>
+
+##### Core styles
 
 And the following are the **core** styles for the tooltip:
 
@@ -208,6 +212,16 @@ import { Tooltip } from 'react-tooltip'
 
 #### Tooltip Arrow with a different color from Tooltip
 
+:::info
+
+This is for demonstration purposes only. Using `arrowColor` instead is recommended.
+
+```jsx
+<Tooltip arrowColor="red" />
+```
+
+:::
+
 ```jsx
 import { Tooltip } from 'react-tooltip'
 
@@ -238,6 +252,38 @@ import { Tooltip } from 'react-tooltip'
     ◕‿‿◕
   </TooltipAnchor>
   <Tooltip id="my-tooltip-diff" className="example-diff-arrow" classNameArrow="example-arrow" />
+</div>
+
+### Changing the opacity
+
+Setting the opacity through CSS directly on the tooltip element breaks functionality. Use the `opacity` prop, or override the `--rt-opacity` CSS variable instead.
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<div className="example-container">
+  <a data-tooltip-id="my-tooltip-opacity" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip id="my-tooltip-opacity" opacity={0.3} />
+</div>
+```
+
+```css
+/* To be used instead of the `opacity` prop, not required otherwise */
+:root {
+  --rt-opacity: 0.3;
+}
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor data-tooltip-id="my-tooltip-opacity" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-opacity" opacity={0.3} />
 </div>
 
 ### Changing the border radius
@@ -360,6 +406,33 @@ import { Tooltip } from 'react-tooltip'
   <Tooltip id="my-tooltip-padding" className="example-padding" />
 </div>
 
+### Changing the border
+
+If you're using the tooltip with the arrow, setting a border through CSS will not work for the arrow.
+
+We recommend using the `border` prop to avoid that.
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<div className="example-container">
+  <a data-tooltip-id="my-tooltip-border" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip id="my-tooltip-border" border="1px solid red" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor data-tooltip-id="my-tooltip-border" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-border" border="1px solid red" />
+</div>
+
 ---
 
 :::info
@@ -368,37 +441,73 @@ In summary, if you do it correctly you can use CSS specificity instead of `!impo
 
 :::
 
+### Customizing opening/closing animation
+
+By default, the tooltip has a fade-in/fade-out transition when opening/closing, with a delay of 150ms for both.
+If you wish to change the delay for any of them, override the following CSS variables:
+
+:::caution
+
+Do not set `--rt-transition-closing-delay` to `0`. Doing so will result in the tooltip component being stuck (but not visible) on the DOM. This isn't itself a problem, but may lead to performance issues.
+
+Set to `1ms` or a similar value if you want to disable the fade-out transition when closing.
+
+:::
+
+```css
+:root {
+  --rt-transition-show-delay: 0.15s;
+  --rt-transition-closing-delay: 0.15s;
+}
+```
+
 ### Disabling ReactTooltip CSS
 
-There are two ways to remove the ReactTooltip CSS:
+ReactTooltip works seamlessly by automatically injecting CSS into your application. To disable this functionality, use the tooltip prop `disableStyleInjection`.
+Details on how it works:
 
-#### Environment Variables
+- Set to `true`: what we call "base" styles will be disabled. Useful if you wish to style your tooltip from scratch.
+- Set to `'core'`: both the "base" and the "core" styles will be disabled. This means the tooltip will not work properly without adding specific CSS attributes to it.
 
-You can prevent ReactTooltip from injecting styles into the page by using environment variables, we currently support two types of styles: `core styles` and `base styles`.
+In both cases, you can add `import 'react-tooltip/dist/react-tooltip.css'` to your project to get the tooltip working again, or add your own custom CSS.
 
-- Core Styles: basic styles that are necessary to make the tooltip work.
-- Base Styles: visual styles to make the tooltip pretty.
+:::caution
+
+Do not set `disableStyleInjection` dynamically. Changing its value requires a page refresh, so that will not work.
+
+:::
 
 :::info
 
-We strongly recommend using this way because it's cleaner and better for performance to choose not to inject the styles instead of injecting and removing them when the page loads.
+Check out more details about the [base](#base-styles) and [core](#core-styles) styles.
 
 :::
+
+#### Environment variables
+
+:::danger
+
+This has been deprecated. Use [`disableStyleInjection`](#disabling-reacttooltip-css) instead.
+
+:::
+
+You can prevent ReactTooltip from injecting styles into the page by using environment variables.
 
 | name                                | type      | required | default | values         | description                                                                                                                                                                                                                                   |
 | ----------------------------------- | --------- | -------- | ------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `REACT_TOOLTIP_DISABLE_CORE_STYLES` | `boolean` | no       | `false` | `true` `false` | Environment variable to disable **core** styles from being injected into the page by ReactTooltip.<br /><br /> We strongly recommend to keep the core styles being injected into the project unless you know what you are doing.              |
 | `REACT_TOOLTIP_DISABLE_BASE_STYLES` | `boolean` | no       | `false` | `true` `false` | Environment variable to disable **base** styles from being injected into the page by ReactTooltip.<br /><br /> Those styles are just visual styles like colors, padding, etc... And can be disabled if you want to write your tooltip styles. |
 
-#### Using removeStyle function
 
-:::caution
+#### `removeStyle()` function
 
-Only use this method if you really can't use the environment variables to disable the style injection of ReactTooltip because this can impact the page performance.
+:::danger
+
+This has been deprecated. Use [`disableStyleInjection`](#disabling-reacttooltip-css) instead.
 
 :::
 
-The function `removeStyle` accepts the following params:
+You can also use the `removeStyle()` function to remove injected styles from the page. It accepts the following parameters:
 
 | name | type   | required | default | values        | description                                                                                                                                |
 | ---- | ------ | -------- | ------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -406,8 +515,6 @@ The function `removeStyle` accepts the following params:
 
 ```jsx
 import { removeStyle } from 'react-tooltip'
-
-...
 
 removeStyle() // removes the injected base style of ReactTooltip
 removeStyle({ type: 'core' }) // removes the injected core style of ReactTooltip - this can affect the basic functionality of ReactTooltip

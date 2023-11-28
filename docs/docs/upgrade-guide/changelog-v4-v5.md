@@ -50,9 +50,15 @@ If you run into any problems with the tooltip not updating after changes are mad
 - [x] `float` - `boolean` - used to achieve V4's `effect="float"`
 - [x] `hidden` - `boolean` - when set, the tooltip will not show
 - [x] `render` - `function` - can be used to render dynamic content based on the active anchor element (check [the examples](../examples/render.mdx) for more details)
-- [x] `closeOnEsc` - `boolean` - when set, the tooltip will close after pressing the escape key
-- [x] `closeOnScroll` - `boolean` - when set, the tooltip will close when scrolling (similar to V4's `scrollHide`)
-- [x] `closeOnResize` - `boolean` - when set, the tooltip will close when resizing the window (same as V4's `resizeHide`)
+- [x] `closeOnEsc` - **DEPRECATED** - ~~`boolean` - when set, the tooltip will close after pressing the escape key~~
+- [x] `closeOnScroll` - **DEPRECATED** - ~~`boolean` - when set, the tooltip will close when scrolling (similar to V4's `scrollHide`)~~
+- [x] `closeOnResize` - **DEPRECATED** - ~~`boolean` - when set, the tooltip will close when resizing the window (same as V4's `resizeHide`)~~
+
+:::note
+
+Use `globalCloseEvents` instead of `closeOnEsc`, `closeOnScroll`, and `closeOnResize`. See the [options page](../options.mdx#available-props) for more details.
+
+:::
 
 ## `V4` props available in `V5`
 
@@ -68,7 +74,7 @@ If you run into any problems with the tooltip not updating after changes are mad
 - [ ] `textColor` - use `className` and custom CSS
 - [ ] `backgroundColor` - use `className` and custom CSS
 - [ ] `borderColor` - use `border` prop
-- [ ] `arrowColor` - use `className` and custom CSS
+- [x] `arrowColor`
 - [ ] `arrowRadius` - use `className` and custom CSS
 - [ ] `tooltipRadius` - use `className` and custom CSS
 - [ ] `insecure`
@@ -78,10 +84,10 @@ If you run into any problems with the tooltip not updating after changes are mad
 - [x] `delayHide` - also available on anchor element as `data-delay-hide`
 - [ ] `delayUpdate` - can be implemented if requested
 - [x] `delayShow` - also available on anchor element as `data-delay-show`
-- [ ] `event`
-- [ ] `eventOff`
+- [x] `event` - functionality changed and renamed to `openEvents`
+- [x] `eventOff` - functionality changed and renamed to `closeEvents`
 - [ ] `isCapture`
-- [ ] `globalEventOff`
+- [x] `globalEventOff` - functionality changed and renamed to `globalCloseEvents`
 - [ ] `getContent` - pass dynamic values to `content` instead
 - [x] `afterShow`
 - [x] `afterHide`
@@ -92,7 +98,7 @@ If you run into any problems with the tooltip not updating after changes are mad
 - [x] `wrapper` - also available on anchor element as `data-tooltip-wrapper`
 - [ ] `bodyMode`
 - [x] `clickable`
-- [ ] `disableInternalStyle`
+- [x] `disableInternalStyle` - renamed to `disableStyleInjection`
 
 ### Detailed informations
 

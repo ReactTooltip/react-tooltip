@@ -8,6 +8,19 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.heroContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heroAds {
+  padding-top: 2rem;
+  min-height: 196px;
 }
 
 @media screen and (max-width: 996px) {

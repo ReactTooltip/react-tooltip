@@ -12,6 +12,7 @@ import type {
   WrapperType,
   IPosition,
   Middleware,
+  TooltipRefProps,
 } from './components/Tooltip/TooltipTypes'
 import type { ITooltipController } from './components/TooltipController/TooltipControllerTypes'
 import type { ITooltipWrapper } from './components/TooltipProvider/TooltipProviderTypes'
@@ -20,8 +21,18 @@ import type { ITooltipWrapper } from './components/TooltipProvider/TooltipProvid
 const TooltipCoreStyles = 'react-tooltip-core-css-placeholder'
 const TooltipStyles = 'react-tooltip-css-placeholder'
 
-injectStyle({ css: TooltipCoreStyles, type: 'core' })
-injectStyle({ css: TooltipStyles })
+if (typeof window !== 'undefined') {
+  window.addEventListener('react-tooltip-inject-styles', ((
+    event: CustomEvent<{ disableCore: boolean; disableBase: boolean }>,
+  ) => {
+    if (!event.detail.disableCore) {
+      injectStyle({ css: TooltipCoreStyles, type: 'core' })
+    }
+    if (!event.detail.disableBase) {
+      injectStyle({ css: TooltipStyles, type: 'base' })
+    }
+  }) as EventListener)
+}
 
 export { TooltipController as Tooltip } from './components/TooltipController'
 export { TooltipProvider, TooltipWrapper } from './components/TooltipProvider'
@@ -37,6 +48,7 @@ export type {
   ITooltipWrapper,
   IPosition,
   Middleware,
+  TooltipRefProps,
 }
 
 export { removeStyle } from './utils/handle-style'

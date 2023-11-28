@@ -64,34 +64,33 @@ If you've imported the default styling and the tooltip is still not showing up w
 
 If `data-tooltip-content` and `data-tooltip-html` are both unset (or they have empty values) on the anchor element, and also the `content`, `render`, and `children` props on the tooltip are unset (or have empty values), the tooltip is not shown by default.
 
+## The tooltip doesn't close
 
-## The tooltip doesn't move when scrolling
+This usually happens when you try to set the tooltip opacity via CSS. Due to the opacity being used internally to control the tooltip state, overriding it breaks functionality.
 
-If your anchor element is inside a scrolling element, your tooltip might get "stuck" in place when scrolling.
-There are two ways to avoid this.
+Instead, use the `opacity` prop, or override the `--rt-opacity` CSS variable. See [the examples](./examples/styling#changing-the-opacity) for more details.
 
-### Change your CSS (recommended)
-
-For the tooltip to be properly placed inside a scrolling element, the following conditions must be met:
-
-1. The tooltip component has to be inside the scrolling element (placing it as a direct child is **not** required)
-2. The `positionStrategy` tooltip prop must be unset, or set to the default (`absolute`)
-3. The scrolling element should have the CSS attribute `position: relative`
-
-:::info
-
-The `position: relative` attribute can be set on any element on the DOM structure between the scrolling element and the tooltip. 
-This means the tooltip component doesn't have to be a direct child of the scrolling element.
-
-:::
-
-### Use `closeOnScroll` prop
-
-```tsx
-<Tooltip closeOnScroll={true} />
+```jsx
+<Tooltip opacity={1} />
 ```
 
-When `closeOnScroll` is set, scrolling will immediately close the tooltip (`closeOnResize` also exists for closing when resizing the window).
+or
+
+```css
+:root {
+  --rt-opacity: 1;
+}
+```
+
+## The border doesn't show for the arrow
+
+Simply setting the border for the tooltip through CSS will not work for the arrow.
+
+Instead, use [the `border` prop](./examples/styling#changing-the-border).
+
+```jsx
+<Tooltip border="1px solid red" />
+```
 
 ## Bad performance
 
@@ -147,6 +146,58 @@ Check the examples for the [`anchorSelect`](./examples/anchor-select) and [`rend
 </div>
 <Tooltip id="my-tooltip" />
 ```
+
+## The tooltip doesn't work when using a Shadow DOM
+
+ReactTooltip currently does not support Shadow DOM usage, but it is on our roadmap.
+
+See [issue #1029](https://github.com/ReactTooltip/react-tooltip/issues/1029) and [PR #1068](https://github.com/ReactTooltip/react-tooltip/pull/1068) for more info.
+
+
+## `Can't import the named export 'xxx' from non EcmaScript module (only default export is available)`
+
+This problem can be fixed by adding a rule to your `webpack.config.js` file (or equivalent).
+
+```js
+module.exports = {
+  ...
+  module: {
+    rules: [
+      {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
+      }
+    ]
+  }
+}
+```
+
+:::info
+
+If you're running into this on a project not using webpack, please [submit a bug report](https://github.com/ReactTooltip/react-tooltip/issues/new/choose) with information about your setup.
+
+:::
+
+## The tooltip component is `undefined` ([#1067](https://github.com/ReactTooltip/react-tooltip/issues/1067))
+
+This might be related to an issue with `create-react-app` not supporting `.cjs` files, which is the default extension for the ReactTooltip dist file (`react-tooltip.min.cjs`).
+See [`cra`'s issue #12700](https://github.com/facebook/create-react-app/issues/12700#issuecomment-1463040093) for the recommended way to fix this for all of your project dependencies.
+
+If you wish to only fix this for `react-tooltip`, see below.
+
+By default, your project will be importing the `react-tooltip.min.cjs` file. To workaround this, you must change the ReactTooltip `package.json` file (not the one on the root of your project!).
+To do this, run the following inside your project directory:
+
+```sh
+# if you're on Windows, just download the `.patch` file manually
+wget https://github.com/ReactTooltip/react-tooltip/files/12195501/react-tooltip-1067.patch
+git diff react-tooltip-1067.patch
+```
+
+This will apply the necessary changes (which you can check out for yourself).
+The only problem with this approach is that reinstalling `react-tooltip`, or cloning your project into a new environment, means you'll have to apply the changes again.
+For that reason, consider the [recommended solution](https://github.com/facebook/create-react-app/issues/12700#issuecomment-1463040093) mentioned above, or using [`patch-package`](https://www.npmjs.com/package/patch-package).
 
 ## Next.js `TypeError: f is not a function`
 
