@@ -75,4 +75,28 @@ describe('tooltip attributes', () => {
     expect(tooltip).toBeInTheDocument()
     expect(container).toMatchSnapshot()
   })
+
+  test('tooltip with class name', async () => {
+    const { container } = render(
+      <TooltipAttrs
+        id="example-class-name-attr"
+        data-tooltip-content="Hello World!"
+        data-tooltip-class-name="tooltip-class-name"
+      />,
+    )
+    const anchorElement = screen.getByText('Lorem Ipsum')
+
+    await userEvent.hover(anchorElement)
+
+    let tooltip = null
+
+    await waitFor(() => {
+      tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveClass('tooltip-class-name')
+    })
+
+    expect(anchorElement).toHaveAttribute('data-tooltip-class-name')
+    expect(tooltip).toBeInTheDocument()
+    expect(container).toMatchSnapshot()
+  })
 })

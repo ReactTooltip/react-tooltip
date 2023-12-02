@@ -37,6 +37,7 @@ export type DataAttribute =
   | 'delay-hide'
   | 'float'
   | 'hidden'
+  | 'class-name'
 
 /**
  * @description floating-ui middleware

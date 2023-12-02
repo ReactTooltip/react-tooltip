@@ -22,6 +22,29 @@ exports[`tooltip attributes basic tooltip 1`] = `
 </div>
 `;
 
+exports[`tooltip attributes tooltip with class name 1`] = `
+<div>
+  <span
+    data-tooltip-class-name="tooltip-class-name"
+    data-tooltip-content="Hello World!"
+    id="example-class-name-attr"
+  >
+    Lorem Ipsum
+  </span>
+  <div
+    class="react-tooltip tooltip-class-name react-tooltip__place-top react-tooltip__show"
+    role="tooltip"
+    style="left: 5px; top: -10px;"
+  >
+    Hello World!
+    <div
+      class="react-tooltip-arrow"
+      style="left: -1px; bottom: -4px;"
+    />
+  </div>
+</div>
+`;
+
 exports[`tooltip attributes tooltip with place 1`] = `
 <div>
   <span

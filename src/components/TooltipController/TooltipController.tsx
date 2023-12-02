@@ -14,6 +14,7 @@ import type {
 import { useTooltip } from 'components/TooltipProvider'
 import { TooltipContent } from 'components/TooltipContent'
 import cssSupports from 'utils/css-supports'
+import classNames from 'classnames'
 import type { ITooltipController } from './TooltipControllerTypes'
 
 const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
@@ -75,6 +76,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     const [tooltipWrapper, setTooltipWrapper] = useState<WrapperType>(wrapper)
     const [tooltipEvents, setTooltipEvents] = useState(events)
     const [tooltipPositionStrategy, setTooltipPositionStrategy] = useState(positionStrategy)
+    const [tooltipClassName, setTooltipClassName] = useState<string | null>(null)
     const [activeAnchor, setActiveAnchor] = useState<HTMLElement | null>(null)
     const styleInjectionRef = useRef(disableStyleInjection)
     /**
@@ -134,6 +136,9 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
         },
         hidden: (value) => {
           setTooltipHidden(value === null ? hidden : value === 'true')
+        },
+        'class-name': (value) => {
+          setTooltipClassName(value)
         },
       }
       // reset unset data attributes to default values
@@ -321,7 +326,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       id,
       anchorId,
       anchorSelect,
-      className,
+      className: classNames(className, tooltipClassName),
       classNameArrow,
       content: renderedContent,
       contentWrapperRef,

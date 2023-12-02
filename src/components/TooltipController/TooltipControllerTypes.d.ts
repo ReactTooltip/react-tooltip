@@ -114,5 +114,6 @@ declare module 'react' {
     'data-tooltip-delay-hide'?: number
     'data-tooltip-float'?: boolean
     'data-tooltip-hidden'?: boolean
+    'data-tooltip-class-name'?: string
   }
 }
