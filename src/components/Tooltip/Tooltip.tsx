@@ -702,7 +702,7 @@ const Tooltip = ({
       return () => null
     }
     const contentObserver = new ResizeObserver(() => {
-      updateTooltipPosition()
+      setTimeout(() => updateTooltipPosition())
     })
     contentObserver.observe(contentWrapperRef.current)
     return () => {
