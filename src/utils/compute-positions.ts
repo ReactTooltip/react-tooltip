@@ -8,7 +8,13 @@ export const computeTooltipPosition = async ({
   place = 'top',
   offset: offsetValue = 10,
   strategy = 'absolute',
-  middlewares = [offset(Number(offsetValue)), flip(), shift({ padding: 5 })],
+  middlewares = [
+    offset(Number(offsetValue)),
+    flip({
+      fallbackAxisSideDirection: 'start',
+    }),
+    shift({ padding: 5 }),
+  ],
   border,
 }: IComputePositions) => {
   if (!elementReference) {
