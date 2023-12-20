@@ -477,13 +477,20 @@ const Tooltip = ({
     const enabledEvents: { event: string; listener: (event?: Event) => void }[] = []
 
     const handleClickOpenTooltipAnchor = (event?: Event) => {
-      if (show) {
+      if (show && event?.target === activeAnchor) {
+        /**
+         * ignore clicking the anchor that was used to open the tooltip.
+         * this avoids conflict with the click close event.
+         */
         return
       }
       handleShowTooltip(event)
     }
-    const handleClickCloseTooltipAnchor = () => {
-      if (!show) {
+    const handleClickCloseTooltipAnchor = (event?: Event) => {
+      if (!show || event?.target !== activeAnchor) {
+        /**
+         * same reasoning as above, opposite logic.
+         */
         return
       }
       handleHideTooltip()
