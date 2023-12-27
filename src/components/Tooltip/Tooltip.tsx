@@ -507,7 +507,8 @@ const Tooltip = ({
       if (!show || event?.target !== activeAnchor) {
         /**
          * ignore clicking the anchor that was NOT used to open the tooltip.
-         * this avoids closing the tooltip when clicking on a new anchor with the tooltip already open.
+         * this avoids closing the tooltip when clicking on a
+         * new anchor with the tooltip already open.
          */
         return
       }
