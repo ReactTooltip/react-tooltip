@@ -6,6 +6,7 @@ import { useTooltip } from 'components/TooltipProvider'
 import useIsomorphicLayoutEffect from 'utils/use-isomorphic-layout-effect'
 import { getScrollParent } from 'utils/get-scroll-parent'
 import { computeTooltipPosition } from 'utils/compute-positions'
+import { cssTimeToMs } from 'utils/css-time-to-ms'
 import coreStyles from './core-styles.module.css'
 import styles from './styles.module.css'
 import type {
@@ -67,6 +68,7 @@ const Tooltip = ({
   const tooltipArrowRef = useRef<HTMLElement>(null)
   const tooltipShowDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const tooltipHideDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const missedTransitionTimerRef = useRef<NodeJS.Timeout | null>(null)
   const [actualPlacement, setActualPlacement] = useState(place)
   const [inlineStyles, setInlineStyles] = useState({})
   const [inlineArrowStyles, setInlineArrowStyles] = useState({})
@@ -211,6 +213,9 @@ const Tooltip = ({
     if (show === wasShowing.current) {
       return
     }
+    if (missedTransitionTimerRef.current) {
+      clearTimeout(missedTransitionTimerRef.current)
+    }
     wasShowing.current = show
     if (show) {
       afterShow?.()
@@ -218,6 +223,18 @@ const Tooltip = ({
       /**
        * see `onTransitionEnd` on tooltip wrapper
        */
+      const style = getComputedStyle(document.body)
+      const transitionShowDelay = cssTimeToMs(style.getPropertyValue('--rt-transition-show-delay'))
+      missedTransitionTimerRef.current = setTimeout(() => {
+        /**
+         * if the tooltip switches from `show === true` to `show === false` too fast
+         * the transition never runs, so `onTransitionEnd` callback never gets fired
+         */
+        setRendered(false)
+        setImperativeOptions(null)
+        afterHide?.()
+        // +25ms just to make sure `onTransitionEnd` (if it gets fired) has time to run
+      }, transitionShowDelay + 25)
     }
   }, [show])
 
@@ -803,10 +820,9 @@ const Tooltip = ({
         clickable && coreStyles['clickable'],
       )}
       onTransitionEnd={(event: TransitionEvent) => {
-        /**
-         * @warning if `--rt-transition-closing-delay` is set to 0,
-         * the tooltip will be stuck (but not visible) on the DOM
-         */
+        if (missedTransitionTimerRef.current) {
+          clearTimeout(missedTransitionTimerRef.current)
+        }
         if (show || event.propertyName !== 'opacity') {
           return
         }
