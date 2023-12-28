@@ -5,10 +5,14 @@
  * @param { number } 		wait				Time to wait before execut the function
  * @param { boolean } 	immediate		Param to define if the function will be executed immediately
  */
-const debounce = (func: (...args: any[]) => void, wait?: number, immediate?: boolean) => {
+const debounce = <T, A extends any[]>(
+  func: (...args: A) => void,
+  wait?: number,
+  immediate?: boolean,
+) => {
   let timeout: NodeJS.Timeout | null = null
 
-  return function debounced(this: typeof func, ...args: any[]) {
+  return function debounced(this: T, ...args: A): void {
     const later = () => {
       timeout = null
       if (!immediate) {
