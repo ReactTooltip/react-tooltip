@@ -12,7 +12,7 @@ const debounce = <T, A extends any[]>(
 ) => {
   let timeout: NodeJS.Timeout | null = null
 
-  return function debounced(this: T, ...args: A): void {
+  const debounced = function debounced(this: T, ...args: A): void {
     const later = () => {
       timeout = null
       if (!immediate) {
@@ -36,6 +36,16 @@ const debounce = <T, A extends any[]>(
       timeout = setTimeout(later, wait)
     }
   }
+
+  debounced.reset = () => {
+    if (!timeout) {
+      return
+    }
+    clearTimeout(timeout)
+    timeout = null
+  }
+
+  return debounced
 }
 
 export default debounce
