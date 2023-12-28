@@ -372,8 +372,22 @@ const Tooltip = ({
 
   // debounce handler to prevent call twice when
   // mouse enter and focus events being triggered toggether
-  const debouncedHandleShowTooltip = debounce(handleShowTooltip, 50, true)
-  const debouncedHandleHideTooltip = debounce(handleHideTooltip, 50, true)
+  const internalDebouncedHandleShowTooltip = debounce(handleShowTooltip, 50, true)
+  const internalDebouncedHandleHideTooltip = debounce(handleHideTooltip, 50, true)
+  // If either of the functions is called while the other is still debounced,
+  // reset the timeout. Otherwise if there is a sub-50ms (leave A, enter B, leave B)
+  // sequence of events, the tooltip will stay open because the hide debounce
+  // from leave A prevented the leave B event from calling it, leaving the
+  // tooltip visible.
+  const debouncedHandleShowTooltip = (e?: Event) => {
+    internalDebouncedHandleHideTooltip.reset()
+    internalDebouncedHandleShowTooltip(e)
+  }
+  const debouncedHandleHideTooltip = () => {
+    internalDebouncedHandleShowTooltip.reset()
+    internalDebouncedHandleHideTooltip()
+  }
+
   const updateTooltipPosition = useCallback(() => {
     const actualPosition = imperativeOptions?.position ?? position
     if (actualPosition) {
