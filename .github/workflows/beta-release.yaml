@@ -58,6 +58,7 @@ jobs:
 
       - uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.DANIEL_TOKEN_AUTO_RELEASE_BOT }}
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
