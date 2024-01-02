@@ -380,11 +380,11 @@ const Tooltip = ({
   // from leave A prevented the leave B event from calling it, leaving the
   // tooltip visible.
   const debouncedHandleShowTooltip = (e?: Event) => {
-    internalDebouncedHandleHideTooltip.reset()
+    internalDebouncedHandleHideTooltip.cancel()
     internalDebouncedHandleShowTooltip(e)
   }
   const debouncedHandleHideTooltip = () => {
-    internalDebouncedHandleShowTooltip.reset()
+    internalDebouncedHandleShowTooltip.cancel()
     internalDebouncedHandleHideTooltip()
   }
 
