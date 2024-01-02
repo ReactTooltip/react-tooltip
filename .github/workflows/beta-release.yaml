@@ -27,8 +27,8 @@ jobs:
 
       - name: Setup git credentials
         run: |
-          git config --global user.name 'danielbarion'
-          git config --global user.email 'danielbarionn@gmail.com'
+          git config --global user.name 'Auto Release Bot'
+          git config --global user.email 'auto-release-bot@users.noreply.github.com'
 
       - name: Get current package.json version
         run: echo "PACKAGE_VERSION=$(npm pkg get version)" >> $GITHUB_ENV
@@ -58,7 +58,6 @@ jobs:
 
       - uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.DANIEL_TOKEN_AUTO_RELEASE_BOT }}
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
