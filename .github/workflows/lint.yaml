@@ -1,4 +1,4 @@
-name: Run basic linting and testing
+name: Lint
 
 on:
   workflow_call:
@@ -7,8 +7,8 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
 
       - name: Install dev dependencies
         run: yarn install
@@ -20,11 +20,11 @@ jobs:
     needs: lint
     strategy:
       matrix:
-        version: [16, 18]
+        version: [16, 18, 20]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.version }}
 
