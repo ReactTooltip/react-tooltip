@@ -27,7 +27,7 @@ jobs:
 
       - name: Setup git credentials
         run: |
-          git config --global user.name 'Auto Release Bot'
+          git config --global user.name 'github-actions[bot]'
           git config --global user.email 'auto-release-bot@users.noreply.github.com'
 
       - name: Get current package.json version
