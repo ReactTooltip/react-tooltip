@@ -37,7 +37,7 @@ const debounce = <T, A extends any[]>(
     }
   }
 
-  debounced.reset = () => {
+  debounced.cancel = () => {
     if (!timeout) {
       return
     }
