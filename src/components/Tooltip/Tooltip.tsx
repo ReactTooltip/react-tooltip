@@ -338,7 +338,7 @@ const Tooltip = ({
     })
   }
 
-  const handleMouseMove = (event?: Event) => {
+  const handlePointerMove = (event?: Event) => {
     if (!event) {
       return
     }
@@ -560,8 +560,8 @@ const Tooltip = ({
 
     if (float) {
       enabledEvents.push({
-        event: 'mousemove',
-        listener: handleMouseMove,
+        event: 'pointermove',
+        listener: handlePointerMove,
       })
     }
 
