@@ -643,6 +643,9 @@ const Tooltip = ({
           const newId = (mutation.target as HTMLElement).getAttribute('data-tooltip-id')
           if (newId === id) {
             newAnchors.push(mutation.target as HTMLElement)
+          } else if (mutation.oldValue === id) {
+            // data-tooltip-id has now been changed, so we need to remove this anchor
+            removedAnchors.push(mutation.target as HTMLElement)
           }
         }
         if (mutation.type !== 'childList') {
@@ -727,6 +730,8 @@ const Tooltip = ({
       subtree: true,
       attributes: true,
       attributeFilter: ['data-tooltip-id'],
+      // to track the prev value if we need to remove anchor when data-tooltip-id gets changed
+      attributeOldValue: true,
     })
     return () => {
       documentObserver.disconnect()
