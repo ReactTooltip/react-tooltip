@@ -80,6 +80,7 @@ export interface ITooltipController {
   style?: CSSProperties
   position?: IPosition
   isOpen?: boolean
+  defaultIsOpen?: boolean
   disableStyleInjection?: boolean | 'core'
   /**
    * @description see https://developer.mozilla.org/en-US/docs/Web/CSS/border.
