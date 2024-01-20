@@ -56,6 +56,7 @@ const Tooltip = ({
   content,
   contentWrapperRef,
   isOpen,
+  defaultIsOpen = false,
   setIsOpen,
   activeAnchor,
   setActiveAnchor,
@@ -769,6 +770,9 @@ const Tooltip = ({
   }, [anchorId, anchorsBySelect, activeAnchor])
 
   useEffect(() => {
+    if (defaultIsOpen) {
+      handleShow(true)
+    }
     return () => {
       if (tooltipShowDelayTimerRef.current) {
         clearTimeout(tooltipShowDelayTimerRef.current)

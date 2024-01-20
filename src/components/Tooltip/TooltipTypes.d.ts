@@ -146,6 +146,7 @@ export interface ITooltip {
   style?: CSSProperties
   position?: IPosition
   isOpen?: boolean
+  defaultIsOpen?: boolean
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
   afterHide?: () => void
