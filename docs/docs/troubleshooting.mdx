@@ -156,7 +156,15 @@ See [issue #1029](https://github.com/ReactTooltip/react-tooltip/issues/1029) and
 
 ## `Can't import the named export 'xxx' from non EcmaScript module (only default export is available)`
 
-This problem can be fixed by adding a rule to your `webpack.config.js` file (or equivalent).
+:::info
+
+If you're running into this message on a project not using `webpack` or `react-scripts`, please [submit a bug report](https://github.com/ReactTooltip/react-tooltip/issues/new/choose) with information about your setup.
+
+:::
+
+### If you're using `webpack`
+
+This problem can be fixed by adding a rule to your `webpack.config.js` file.
 
 ```js
 module.exports = {
@@ -173,11 +181,19 @@ module.exports = {
 }
 ```
 
-:::info
+### If you're using `react-scripts`
 
-If you're running into this on a project not using webpack, please [submit a bug report](https://github.com/ReactTooltip/react-tooltip/issues/new/choose) with information about your setup.
+Try upgrading to the latest `react-scripts` version (v5.0.1 at the time of writing).
 
-:::
+```sh
+npm i react-scripts@latest
+```
+
+or
+
+```sh
+yarn add react-scripts@latest
+```
 
 ## The tooltip component is `undefined` ([#1067](https://github.com/ReactTooltip/react-tooltip/issues/1067))
 
