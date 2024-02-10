@@ -635,6 +635,8 @@ const Tooltip = ({
     closeEvents,
     globalCloseEvents,
     shouldOpenOnClick,
+    delayShow,
+    delayHide,
   ])
 
   useEffect(() => {
@@ -805,6 +807,13 @@ const Tooltip = ({
       setAnchorsBySelect([])
     }
   }, [id, anchorSelect, imperativeOptions?.anchorSelect])
+
+  useEffect(() => {
+    if (tooltipShowDelayTimerRef.current) {
+      clearTimeout(tooltipShowDelayTimerRef.current)
+      handleShowTooltipDelayed(delayShow)
+    }
+  }, [delayShow])
 
   const actualContent = imperativeOptions?.content ?? content
   const canShow = show && Object.keys(inlineStyles).length > 0
