@@ -1,5 +1,6 @@
 import debounce from 'utils/debounce'
 import { computeTooltipPosition } from 'utils/compute-positions'
+import { cssTimeToMs } from 'utils/css-time-to-ms'
 
 // Tell Jest to mock all timeout functions
 jest.useRealTimers()
@@ -106,4 +107,24 @@ describe('debounce', () => {
     expect(func).not.toHaveBeenCalled()
   })
 })
+
+describe('css time to ms', () => {
+  test('converts time correctly', () => {
+    expect(cssTimeToMs('1s')).toBe(1000)
+    expect(cssTimeToMs('1ms')).toBe(1)
+    expect(cssTimeToMs('1.5s')).toBe(1500)
+    expect(cssTimeToMs('1.5ms')).toBe(1.5)
+  })
+
+  test('returns 0 if no time is provided', () => {
+    expect(cssTimeToMs('')).toBe(0)
+  })
+
+  test('returns 0 if unsupported unit', () => {
+    expect(cssTimeToMs('1h')).toBe(0)
+  })
+
+  test('returns 0 if no unit', () => {
+    expect(cssTimeToMs('1000')).toBe(0)
+  })
 })
