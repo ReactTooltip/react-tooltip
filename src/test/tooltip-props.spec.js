@@ -99,7 +99,7 @@ describe('tooltip props', () => {
     expect(container).toMatchSnapshot()
   })
 
-  test.only('tooltip with delay show', async () => {
+  test('tooltip with delay show', async () => {
     const { container } = render(
       <TooltipProps id="example-delay-show" content="Hello World!" delayShow={300} />,
     )
