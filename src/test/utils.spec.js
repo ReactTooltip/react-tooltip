@@ -62,22 +62,48 @@ describe('compute positions', () => {
 describe('debounce', () => {
   jest.useFakeTimers()
 
-  let func
-  let debouncedFunc
-
-  beforeEach((timeout = 1000) => {
-    func = jest.fn()
-    debouncedFunc = debounce(func, timeout)
-  })
+  const func = jest.fn()
 
   test('execute just once', () => {
+    const debouncedFunc = debounce(func, 1000)
     for (let i = 0; i < 100; i += 1) {
       debouncedFunc()
     }
 
-    // Fast-forward time
+    expect(func).not.toHaveBeenCalled()
+
     jest.runAllTimers()
 
     expect(func).toBeCalledTimes(1)
   })
+
+  test('execute immediately just once', () => {
+    const debouncedFunc = debounce(func, 1000, true)
+
+    debouncedFunc()
+    expect(func).toBeCalledTimes(1)
+
+    for (let i = 0; i < 100; i += 1) {
+      debouncedFunc()
+    }
+
+    jest.runAllTimers()
+
+    expect(func).toHaveBeenCalledTimes(1)
+  })
+
+  test('does not execute after cancel', () => {
+    const debouncedFunc = debounce(func, 1000)
+
+    debouncedFunc()
+
+    expect(func).not.toHaveBeenCalled()
+
+    debouncedFunc.cancel()
+
+    jest.runAllTimers()
+
+    expect(func).not.toHaveBeenCalled()
+  })
+})
 })

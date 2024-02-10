@@ -22,7 +22,7 @@ const debounce = <T, A extends any[]>(
 
     if (immediate && !timeout) {
       /**
-       * there's not need to clear the timeout
+       * there's no need to clear the timeout
        * since we expect it to resolve and set `timeout = null`
        */
       func.apply(this, args)
@@ -38,9 +38,11 @@ const debounce = <T, A extends any[]>(
   }
 
   debounced.cancel = () => {
+    /* c8 ignore start */
     if (!timeout) {
       return
     }
+    /* c8 ignore end */
     clearTimeout(timeout)
     timeout = null
   }
