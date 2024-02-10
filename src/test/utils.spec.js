@@ -1,6 +1,6 @@
 import debounce from 'utils/debounce'
-import { computeTooltipPosition } from 'utils/compute-positions'
-import { cssTimeToMs } from 'utils/css-time-to-ms'
+import computeTooltipPosition from 'utils/compute-positions'
+import cssTimeToMs from 'utils/css-time-to-ms'
 
 // Tell Jest to mock all timeout functions
 jest.useRealTimers()

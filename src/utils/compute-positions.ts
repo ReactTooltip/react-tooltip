@@ -1,7 +1,7 @@
 import { computePosition, offset, shift, arrow, flip } from '@floating-ui/dom'
 import type { IComputePositions } from './compute-positions-types'
 
-export const computeTooltipPosition = async ({
+const computeTooltipPosition = async ({
   elementReference = null,
   tooltipReference = null,
   tooltipArrowReference = null,
@@ -96,3 +96,5 @@ export const computeTooltipPosition = async ({
     return { tooltipStyles: styles, tooltipArrowStyles: {}, place: placement }
   })
 }
+
+export default computeTooltipPosition
