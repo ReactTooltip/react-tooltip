@@ -39,12 +39,8 @@ describe('tooltip attributes', () => {
 
     await userEvent.hover(anchorElement)
 
-    let tooltip = null
-
-    await waitFor(() => {
-      tooltip = screen.getByRole('tooltip')
-      expect(tooltip).toHaveAttribute('style')
-    })
+    const tooltip = await screen.findByRole('tooltip')
+    expect(tooltip).toHaveAttribute('style')
 
     expect(anchorElement).toHaveAttribute('data-tooltip-content')
     expect(tooltip).toBeInTheDocument()
@@ -63,12 +59,8 @@ describe('tooltip attributes', () => {
 
     await userEvent.hover(anchorElement)
 
-    let tooltip = null
-
-    await waitFor(() => {
-      tooltip = screen.getByRole('tooltip')
-      expect(tooltip).toHaveAttribute('style')
-    })
+    const tooltip = await screen.findByRole('tooltip')
+    expect(tooltip).toHaveAttribute('style')
 
     expect(anchorElement).toHaveAttribute('data-tooltip-place')
     expect(anchorElement).toHaveAttribute('data-tooltip-content')
@@ -88,12 +80,8 @@ describe('tooltip attributes', () => {
 
     await userEvent.hover(anchorElement)
 
-    let tooltip = null
-
-    await waitFor(() => {
-      tooltip = screen.getByRole('tooltip')
-      expect(tooltip).toHaveClass('tooltip-class-name')
-    })
+    const tooltip = await screen.findByRole('tooltip')
+    expect(tooltip).toHaveClass('tooltip-class-name')
 
     expect(anchorElement).toHaveAttribute('data-tooltip-class-name')
     expect(tooltip).toBeInTheDocument()
