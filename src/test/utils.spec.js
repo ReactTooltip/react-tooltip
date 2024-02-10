@@ -58,6 +58,34 @@ describe('compute positions', () => {
 
     expect(value).toMatchSnapshot()
   })
+
+  test('all reference elements with border', async () => {
+    const element = document.createElement('div')
+    const elementTooltip = document.createElement('div')
+    const elementTooltipArrow = document.createElement('div')
+    const value = await computeTooltipPosition({
+      elementReference: element,
+      tooltipReference: elementTooltip,
+      tooltipArrowReference: elementTooltipArrow,
+      border: '1px solid red',
+    })
+
+    expect(value).toMatchSnapshot()
+  })
+
+  test('all reference elements with non-px border', async () => {
+    const element = document.createElement('div')
+    const elementTooltip = document.createElement('div')
+    const elementTooltipArrow = document.createElement('div')
+    const value = await computeTooltipPosition({
+      elementReference: element,
+      tooltipReference: elementTooltip,
+      tooltipArrowReference: elementTooltipArrow,
+      border: 'medium solid red',
+    })
+
+    expect(value).toMatchSnapshot()
+  })
 })
 
 describe('debounce', () => {

@@ -16,3 +16,41 @@ exports[`compute positions all reference elements 1`] = `
   },
 }
 `;
+
+exports[`compute positions all reference elements with border 1`] = `
+{
+  "place": "top",
+  "tooltipArrowStyles": {
+    "borderBottom": "1px solid red",
+    "borderRight": "1px solid red",
+    "bottom": "-5px",
+    "left": "-1px",
+    "right": "",
+    "top": "",
+  },
+  "tooltipStyles": {
+    "border": "1px solid red",
+    "left": "5px",
+    "top": "-10px",
+  },
+}
+`;
+
+exports[`compute positions all reference elements with non-px border 1`] = `
+{
+  "place": "top",
+  "tooltipArrowStyles": {
+    "borderBottom": "medium solid red",
+    "borderRight": "medium solid red",
+    "bottom": "-5px",
+    "left": "-1px",
+    "right": "",
+    "top": "",
+  },
+  "tooltipStyles": {
+    "border": "medium solid red",
+    "left": "5px",
+    "top": "-10px",
+  },
+}
+`;
