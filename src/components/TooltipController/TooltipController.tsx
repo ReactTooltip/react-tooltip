@@ -194,10 +194,12 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       if (styleInjectionRef.current === disableStyleInjection) {
         return
       }
+      /* c8 ignore start */
       if (process.env.NODE_ENV !== 'production') {
         // eslint-disable-next-line no-console
         console.warn('[react-tooltip] Do not change `disableStyleInjection` dynamically.')
       }
+      /* c8 ignore end */
     }, [disableStyleInjection])
 
     useEffect(() => {
@@ -227,10 +229,12 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
             elementRefs.add({ current: anchor })
           })
         } catch {
+          /* c8 ignore start */
           if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
             // eslint-disable-next-line no-console
             console.warn(`[react-tooltip] "${selector}" is not a valid CSS selector`)
           }
+          /* c8 ignore end */
         }
       }
 
@@ -281,9 +285,11 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     }, [anchorRefs, providerActiveAnchor, activeAnchor, anchorId, anchorSelect])
 
     useEffect(() => {
+      /* c8 ignore start */
       if (process.env.NODE_ENV === 'production') {
         return
       }
+      /* c8 ignore end */
       if (style?.border) {
         // eslint-disable-next-line no-console
         console.warn('[react-tooltip] Do not set `style.border`. Use `border` prop instead.')
