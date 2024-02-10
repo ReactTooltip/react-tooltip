@@ -6,7 +6,9 @@ import { useTooltip } from 'components/TooltipProvider'
 import useIsomorphicLayoutEffect from 'utils/use-isomorphic-layout-effect'
 import { getScrollParent } from 'utils/get-scroll-parent'
 import { computeTooltipPosition } from 'utils/compute-positions'
+import type { IComputedPosition } from 'utils/compute-positions-types'
 import { cssTimeToMs } from 'utils/css-time-to-ms'
+import { deepEqual } from 'utils/deep-equal'
 import coreStyles from './core-styles.module.css'
 import styles from './styles.module.css'
 import type {
@@ -15,7 +17,6 @@ import type {
   GlobalCloseEvents,
   IPosition,
   ITooltip,
-  PlacesType,
   TooltipImperativeOpenOptions,
 } from './TooltipTypes'
 
@@ -70,9 +71,11 @@ const Tooltip = ({
   const tooltipShowDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const tooltipHideDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const missedTransitionTimerRef = useRef<NodeJS.Timeout | null>(null)
-  const [actualPlacement, setActualPlacement] = useState(place)
-  const [inlineStyles, setInlineStyles] = useState({})
-  const [inlineArrowStyles, setInlineArrowStyles] = useState({})
+  const [computedPosition, setComputedPosition] = useState<IComputedPosition>({
+    tooltipStyles: {},
+    tooltipArrowStyles: {},
+    place,
+  })
   const [show, setShow] = useState(false)
   const [rendered, setRendered] = useState(false)
   const [imperativeOptions, setImperativeOptions] = useState<TooltipImperativeOpenOptions | null>(
@@ -239,6 +242,14 @@ const Tooltip = ({
     }
   }, [show])
 
+  const handleComputedPosition = (newComputedPosition: IComputedPosition) => {
+    setComputedPosition((oldComputedPosition) =>
+      deepEqual(oldComputedPosition, newComputedPosition)
+        ? oldComputedPosition
+        : newComputedPosition,
+    )
+  }
+
   const handleShowTooltipDelayed = (delay = delayShow) => {
     if (tooltipShowDelayTimerRef.current) {
       clearTimeout(tooltipShowDelayTimerRef.current)
@@ -329,13 +340,7 @@ const Tooltip = ({
       middlewares,
       border,
     }).then((computedStylesData) => {
-      if (Object.keys(computedStylesData.tooltipStyles).length) {
-        setInlineStyles(computedStylesData.tooltipStyles)
-      }
-      if (Object.keys(computedStylesData.tooltipArrowStyles).length) {
-        setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
-      }
-      setActualPlacement(computedStylesData.place as PlacesType)
+      handleComputedPosition(computedStylesData)
     })
   }
 
@@ -430,13 +435,7 @@ const Tooltip = ({
         // invalidate computed positions after remount
         return
       }
-      if (Object.keys(computedStylesData.tooltipStyles).length) {
-        setInlineStyles(computedStylesData.tooltipStyles)
-      }
-      if (Object.keys(computedStylesData.tooltipArrowStyles).length) {
-        setInlineArrowStyles(computedStylesData.tooltipArrowStyles)
-      }
-      setActualPlacement(computedStylesData.place as PlacesType)
+      handleComputedPosition(computedStylesData)
     })
   }, [
     show,
@@ -801,7 +800,7 @@ const Tooltip = ({
   }, [id, anchorSelect, imperativeOptions?.anchorSelect])
 
   const actualContent = imperativeOptions?.content ?? content
-  const canShow = show && Object.keys(inlineStyles).length > 0
+  const canShow = show && Object.keys(computedPosition.tooltipStyles).length > 0
 
   useImperativeHandle(forwardRef, () => ({
     open: (options) => {
@@ -831,7 +830,7 @@ const Tooltip = ({
       }
     },
     activeAnchor,
-    place: actualPlacement,
+    place: computedPosition.place,
     isOpen: Boolean(rendered && !hidden && actualContent && canShow),
   }))
 
@@ -845,7 +844,7 @@ const Tooltip = ({
         styles['tooltip'],
         styles[variant],
         className,
-        `react-tooltip__place-${actualPlacement}`,
+        `react-tooltip__place-${computedPosition.place}`,
         coreStyles[canShow ? 'show' : 'closing'],
         canShow ? 'react-tooltip__show' : 'react-tooltip__closing',
         positionStrategy === 'fixed' && coreStyles['fixed'],
@@ -864,7 +863,7 @@ const Tooltip = ({
       }}
       style={{
         ...externalStyles,
-        ...inlineStyles,
+        ...computedPosition.tooltipStyles,
         opacity: opacity !== undefined && canShow ? opacity : undefined,
       }}
       ref={tooltipRef}
@@ -879,7 +878,7 @@ const Tooltip = ({
           noArrow && coreStyles['noArrow'],
         )}
         style={{
-          ...inlineArrowStyles,
+          ...computedPosition.tooltipArrowStyles,
           background: arrowColor
             ? `linear-gradient(to right bottom, transparent 50%, ${arrowColor} 50%)`
             : undefined,
