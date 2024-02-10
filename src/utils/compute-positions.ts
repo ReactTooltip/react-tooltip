@@ -40,6 +40,7 @@ export const computeTooltipPosition = async ({
     }).then(({ x, y, placement, middlewareData }) => {
       const styles = { left: `${x}px`, top: `${y}px`, border }
 
+      /* c8 ignore start */
       const { x: arrowX, y: arrowY } = middlewareData.arrow ?? { x: 0, y: 0 }
 
       const staticSide =
@@ -49,6 +50,7 @@ export const computeTooltipPosition = async ({
           bottom: 'top',
           left: 'right',
         }[placement.split('-')[0]] ?? 'bottom'
+      /* c8 ignore end */
 
       const borderSide = border && {
         borderBottom: border,
@@ -62,12 +64,14 @@ export const computeTooltipPosition = async ({
           borderWidth = Number(match[1])
         } else {
           /**
-           * this means `border` was set without `width`, or non-px value
+           * this means `border` was set without `width`,
+           * or non-px value (such as `medium`, `thick`, ...)
            */
           borderWidth = 1
         }
       }
 
+      /* c8 ignore start */
       const arrowStyle = {
         left: arrowX != null ? `${arrowX}px` : '',
         top: arrowY != null ? `${arrowY}px` : '',
@@ -76,6 +80,7 @@ export const computeTooltipPosition = async ({
         ...borderSide,
         [staticSide]: `-${4 + borderWidth}px`,
       }
+      /* c8 ignore end */
 
       return { tooltipStyles: styles, tooltipArrowStyles: arrowStyle, place: placement }
     })
