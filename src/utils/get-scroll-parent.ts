@@ -9,7 +9,7 @@ const isScrollable = (node: Element) => {
   })
 }
 
-export const getScrollParent = (node: Element | null) => {
+const getScrollParent = (node: Element | null) => {
   if (!node) {
     return null
   }
@@ -22,3 +22,5 @@ export const getScrollParent = (node: Element | null) => {
   }
   return document.scrollingElement || document.documentElement
 }
+
+export default getScrollParent
