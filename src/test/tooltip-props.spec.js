@@ -9,8 +9,8 @@ jest.useRealTimers()
 // eslint-disable-next-line react/prop-types
 const TooltipProps = ({ id, ...tooltipParams }) => (
   <>
-    <span id={id}>Lorem Ipsum</span>
-    <Tooltip anchorId={id} {...tooltipParams} />
+    <span data-tooltip-id={id}>Lorem Ipsum</span>
+    <Tooltip id={id} {...tooltipParams} />
   </>
 )
 
@@ -88,8 +88,8 @@ describe('tooltip props', () => {
     const mockCallBack = jest.fn()
     const { container } = render(
       <>
-        <span id={id}>Lorem Ipsum</span>
-        <Tooltip anchorId={id} clickable>
+        <span data-tooltip-id={id}>Lorem Ipsum</span>
+        <Tooltip id={id} clickable>
           <button onClick={mockCallBack}>button</button>
         </Tooltip>
       </>,
