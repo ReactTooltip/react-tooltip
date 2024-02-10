@@ -244,6 +244,12 @@ const Tooltip = ({
       clearTimeout(tooltipShowDelayTimerRef.current)
     }
 
+    if (rendered) {
+      // if the tooltip is already rendered, ignore delay
+      handleShow(true)
+      return
+    }
+
     tooltipShowDelayTimerRef.current = setTimeout(() => {
       handleShow(true)
     }, delay)
