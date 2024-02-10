@@ -1,5 +1,5 @@
 import { computePosition, offset, shift, arrow, flip } from '@floating-ui/dom'
-import type { IComputePositions } from './compute-positions-types'
+import type { IComputePositionArgs } from './compute-tooltip-position-types'
 
 const computeTooltipPosition = async ({
   elementReference = null,
@@ -16,7 +16,7 @@ const computeTooltipPosition = async ({
     shift({ padding: 5 }),
   ],
   border,
-}: IComputePositions) => {
+}: IComputePositionArgs) => {
   if (!elementReference) {
     // elementReference can be null or undefined and we will not compute the position
     // eslint-disable-next-line no-console
