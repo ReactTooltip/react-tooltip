@@ -357,6 +357,9 @@ const Tooltip = ({
       return
     }
     const target = event.target as HTMLElement
+    if (!target.isConnected) {
+      return
+    }
     if (tooltipRef.current?.contains(target)) {
       return
     }
