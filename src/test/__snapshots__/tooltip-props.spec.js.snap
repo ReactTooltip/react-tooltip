@@ -29,7 +29,7 @@ exports[`tooltip props clickable tooltip 1`] = `
     Lorem Ipsum
   </span>
   <div
-    class="react-tooltip react-tooltip__place-top react-tooltip__show undefined"
+    class="react-tooltip react-tooltip__place-top react-tooltip__show"
     role="tooltip"
     style="left: 5px; top: -10px;"
   >
