@@ -13,7 +13,7 @@ import type {
 } from 'components/Tooltip/TooltipTypes'
 import { useTooltip } from 'components/TooltipProvider'
 import { TooltipContent } from 'components/TooltipContent'
-import cssSupports from 'utils/css-supports'
+import { cssSupports } from 'utils'
 import classNames from 'classnames'
 import type { ITooltipController } from './TooltipControllerTypes'
 

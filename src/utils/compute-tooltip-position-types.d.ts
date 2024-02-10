@@ -1,7 +1,7 @@
 import { CSSProperties } from 'react'
 import type { Middleware, PlacesType } from '../components/Tooltip/TooltipTypes'
 
-export interface IComputePositions {
+export interface IComputePositionArgs {
   elementReference?: Element | HTMLElement | null
   tooltipReference?: Element | HTMLElement | null
   tooltipArrowReference?: Element | HTMLElement | null

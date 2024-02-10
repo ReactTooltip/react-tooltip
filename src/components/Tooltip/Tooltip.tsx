@@ -1,14 +1,16 @@
 import React, { useEffect, useState, useRef, useCallback, useImperativeHandle } from 'react'
 import { autoUpdate } from '@floating-ui/dom'
 import classNames from 'classnames'
-import debounce from 'utils/debounce'
+import {
+  debounce,
+  deepEqual,
+  useIsomorphicLayoutEffect,
+  getScrollParent,
+  computeTooltipPosition,
+  cssTimeToMs,
+} from 'utils'
+import type { IComputedPosition } from 'utils'
 import { useTooltip } from 'components/TooltipProvider'
-import useIsomorphicLayoutEffect from 'utils/use-isomorphic-layout-effect'
-import computeTooltipPosition from 'utils/compute-positions'
-import type { IComputedPosition } from 'utils/compute-positions-types'
-import cssTimeToMs from 'utils/css-time-to-ms'
-import { deepEqual } from 'utils/deep-equal'
-import getScrollParent from 'utils/get-scroll-parent'
 import coreStyles from './core-styles.module.css'
 import styles from './styles.module.css'
 import type {

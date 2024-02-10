@@ -2,7 +2,7 @@ const isObject = (object: unknown): object is Record<string, unknown> => {
   return object !== null && typeof object === 'object'
 }
 
-export const deepEqual = (object1: unknown, object2: unknown): boolean => {
+const deepEqual = (object1: unknown, object2: unknown): boolean => {
   if (!isObject(object1) || !isObject(object2)) {
     return object1 === object2
   }
@@ -23,3 +23,5 @@ export const deepEqual = (object1: unknown, object2: unknown): boolean => {
     return val1 === val2
   })
 }
+
+export default deepEqual
