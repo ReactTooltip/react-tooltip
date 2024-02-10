@@ -9,10 +9,10 @@ jest.useRealTimers()
 // eslint-disable-next-line react/prop-types
 const TooltipAttrs = ({ id, ...anchorParams }) => (
   <>
-    <span id={id} {...anchorParams}>
+    <span data-tooltip-id={id} {...anchorParams}>
       Lorem Ipsum
     </span>
-    <Tooltip anchorId={id} />
+    <Tooltip id={id} />
   </>
 )
 
