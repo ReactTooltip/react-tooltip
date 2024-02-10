@@ -1,8 +1,5 @@
 import { debounce, computeTooltipPosition, cssTimeToMs } from 'utils'
 
-// Tell Jest to mock all timeout functions
-jest.useRealTimers()
-
 describe('compute positions', () => {
   test('empty reference elements', async () => {
     const value = await computeTooltipPosition({

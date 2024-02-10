@@ -35,12 +35,8 @@ describe('tooltip props', () => {
 
     await userEvent.hover(anchorElement)
 
-    let tooltip = null
-
-    await waitFor(() => {
-      tooltip = screen.getByRole('tooltip')
-      expect(tooltip).toHaveAttribute('style')
-    })
+    const tooltip = await screen.findByRole('tooltip')
+    expect(tooltip).toHaveAttribute('style')
 
     expect(tooltip).toBeInTheDocument()
     expect(container).toMatchSnapshot()
@@ -54,12 +50,8 @@ describe('tooltip props', () => {
 
     await userEvent.hover(anchorElement)
 
-    let tooltip = null
-
-    await waitFor(() => {
-      tooltip = screen.getByRole('tooltip')
-      expect(tooltip).toHaveAttribute('style')
-    })
+    const tooltip = await screen.findByRole('tooltip')
+    expect(tooltip).toHaveAttribute('style')
 
     expect(tooltip).toBeInTheDocument()
     expect(container).toMatchSnapshot()
@@ -71,12 +63,8 @@ describe('tooltip props', () => {
 
     await userEvent.hover(anchorElement)
 
-    let tooltip = null
-
-    await waitFor(() => {
-      tooltip = screen.getByRole('tooltip')
-      expect(tooltip).toHaveAttribute('style')
-    })
+    const tooltip = await screen.findByRole('tooltip')
+    expect(tooltip).toHaveAttribute('style')
 
     expect(tooltip).toBeInTheDocument()
     expect(container).toMatchSnapshot()
@@ -98,14 +86,10 @@ describe('tooltip props', () => {
 
     await userEvent.hover(anchorElement)
 
-    let tooltip = null
-    let button = null
+    const tooltip = await screen.findByRole('tooltip')
+    expect(tooltip).toHaveAttribute('style')
 
-    await waitFor(() => {
-      tooltip = screen.getByRole('tooltip')
-      button = screen.getByRole('button')
-      expect(tooltip).toHaveAttribute('style')
-    })
+    const button = await screen.findByRole('button')
 
     await userEvent.click(button)
 
@@ -123,21 +107,12 @@ describe('tooltip props', () => {
 
     await userEvent.hover(anchorElement)
 
-    let tooltip = null
-
-    await waitFor(
-      () => {
-        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
-      },
-      {
-        timeout: 250,
-      },
-    )
-
     await waitFor(() => {
-      tooltip = screen.getByRole('tooltip')
-      expect(tooltip).toHaveAttribute('style')
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
     })
+
+    const tooltip = await screen.findByRole('tooltip')
+    expect(tooltip).toHaveAttribute('style')
 
     expect(tooltip).toBeInTheDocument()
     expect(container).toMatchSnapshot()
@@ -151,15 +126,16 @@ describe('tooltip props', () => {
 
     await userEvent.hover(anchorElement)
 
-    await waitFor(() => {
-      expect(screen.queryByRole('tooltip')).toBeInTheDocument()
-    })
+    const tooltip = await screen.findByRole('tooltip')
+    expect(tooltip).toHaveAttribute('style')
+
+    expect(tooltip).toBeInTheDocument()
 
     await userEvent.unhover(anchorElement)
 
     await waitFor(
       () => {
-        expect(screen.queryByRole('tooltip')).toBeInTheDocument()
+        expect(tooltip).toBeInTheDocument()
       },
       {
         timeout: 200,
@@ -168,7 +144,7 @@ describe('tooltip props', () => {
 
     await waitFor(
       () => {
-        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+        expect(tooltip).not.toBeInTheDocument()
       },
       {
         timeout: 500,
@@ -186,12 +162,8 @@ describe('tooltip props', () => {
 
     await userEvent.hover(anchorElement)
 
-    let tooltip = null
-
-    await waitFor(() => {
-      tooltip = screen.getByRole('tooltip')
-      expect(tooltip).toHaveAttribute('style')
-    })
+    const tooltip = await screen.findByRole('tooltip')
+    expect(tooltip).toHaveAttribute('style')
 
     expect(tooltip).toBeInTheDocument()
     expect(container).toMatchSnapshot()
@@ -203,12 +175,8 @@ describe('tooltip props', () => {
 
     await userEvent.hover(anchorElement)
 
-    let tooltip = null
-
-    await waitFor(() => {
-      tooltip = screen.getByRole('tooltip')
-      expect(tooltip).toHaveAttribute('style')
-    })
+    const tooltip = await screen.findByRole('tooltip')
+    expect(tooltip).toHaveAttribute('style')
 
     expect(tooltip).toBeInTheDocument()
     expect(container).toMatchSnapshot()
