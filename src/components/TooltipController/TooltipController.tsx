@@ -309,7 +309,9 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     let renderedContent: ChildrenType = children
     const contentWrapperRef = useRef<HTMLDivElement>(null)
     if (render) {
-      const rendered = render({ content: tooltipContent ?? null, activeAnchor }) as React.ReactNode
+      const actualContent =
+        activeAnchor?.getAttribute('data-tooltip-content') || tooltipContent || null
+      const rendered = render({ content: actualContent, activeAnchor }) as React.ReactNode
       renderedContent = rendered ? (
         <div ref={contentWrapperRef} className="react-tooltip-content-wrapper">
           {rendered}
