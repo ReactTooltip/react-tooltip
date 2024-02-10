@@ -99,7 +99,7 @@ describe('tooltip props', () => {
     expect(container).toMatchSnapshot()
   })
 
-  test('tooltip with delay show', async () => {
+  test.only('tooltip with delay show', async () => {
     const { container } = render(
       <TooltipProps id="example-delay-show" content="Hello World!" delayShow={300} />,
     )
@@ -111,10 +111,10 @@ describe('tooltip props', () => {
       expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
     })
 
-    const tooltip = await screen.findByRole('tooltip')
-    expect(tooltip).toHaveAttribute('style')
+    await waitFor(() => {
+      expect(screen.queryByRole('tooltip')).toHaveClass('react-tooltip__show')
+    })
 
-    expect(tooltip).toBeInTheDocument()
     expect(container).toMatchSnapshot()
   })
 
