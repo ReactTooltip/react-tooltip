@@ -4,12 +4,13 @@ exports[`tooltip attributes basic tooltip 1`] = `
 <div>
   <span
     data-tooltip-content="Hello World!"
-    id="basic-example-attr"
+    data-tooltip-id="basic-example-attr"
   >
     Lorem Ipsum
   </span>
   <div
     class="react-tooltip react-tooltip__place-top react-tooltip__show"
+    id="basic-example-attr"
     role="tooltip"
     style="left: 5px; top: -10px;"
   >
@@ -27,12 +28,13 @@ exports[`tooltip attributes tooltip with class name 1`] = `
   <span
     data-tooltip-class-name="tooltip-class-name"
     data-tooltip-content="Hello World!"
-    id="example-class-name-attr"
+    data-tooltip-id="example-class-name-attr"
   >
     Lorem Ipsum
   </span>
   <div
     class="react-tooltip tooltip-class-name react-tooltip__place-top react-tooltip__show"
+    id="example-class-name-attr"
     role="tooltip"
     style="left: 5px; top: -10px;"
   >
@@ -49,13 +51,14 @@ exports[`tooltip attributes tooltip with place 1`] = `
 <div>
   <span
     data-tooltip-content="Hello World!"
+    data-tooltip-id="example-place-attr"
     data-tooltip-place="right"
-    id="example-place-attr"
   >
     Lorem Ipsum
   </span>
   <div
     class="react-tooltip react-tooltip__place-right react-tooltip__show"
+    id="example-place-attr"
     role="tooltip"
     style="left: 10px; top: 5px;"
   >
