@@ -1,4 +1,4 @@
-import { debounce, computeTooltipPosition, cssTimeToMs, cssSupports } from 'utils'
+import { debounce, computeTooltipPosition, cssTimeToMs } from 'utils'
 
 // Tell Jest to mock all timeout functions
 jest.useRealTimers()
@@ -83,35 +83,6 @@ describe('compute positions', () => {
     })
 
     expect(value).toMatchSnapshot()
-  })
-})
-
-describe('css supports', () => {
-  let windowSpy
-
-  beforeEach(() => {
-    windowSpy = jest.spyOn(window, 'window', 'get')
-  })
-
-  afterEach(() => {
-    windowSpy.mockRestore()
-  })
-
-  test('returns true if css property is supported', () => {
-    expect(cssSupports('position', 'relative')).toBe(true)
-  })
-
-  test('returns false if css property is not supported', () => {
-    expect(cssSupports('position', 'foo')).toBe(false)
-  })
-
-  test('returns true if `window.CSS.supports` is not available', () => {
-    windowSpy.mockImplementation(() => ({
-      CSS: {
-        supports: undefined,
-      },
-    }))
-    expect(cssSupports('position', 'foo')).toBe(true)
   })
 })
 
