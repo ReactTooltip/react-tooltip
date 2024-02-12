@@ -1,4 +1,4 @@
-import { debounce, computeTooltipPosition, cssTimeToMs } from 'utils'
+import { debounce, deepEqual, computeTooltipPosition, cssTimeToMs } from 'utils'
 
 describe('compute positions', () => {
   test('empty reference elements', async () => {
@@ -149,5 +149,110 @@ describe('debounce', () => {
     jest.runAllTimers()
 
     expect(func).not.toHaveBeenCalled()
+  })
+})
+
+describe('deepEqual', () => {
+  test('returns true for equal primitives', () => {
+    expect(deepEqual(1, 1)).toBe(true)
+    expect(deepEqual('a', 'a')).toBe(true)
+    expect(deepEqual(true, true)).toBe(true)
+  })
+
+  test('returns false for different primitives', () => {
+    expect(deepEqual(1, 2)).toBe(false)
+    expect(deepEqual('a', 'b')).toBe(false)
+    expect(deepEqual(true, false)).toBe(false)
+  })
+
+  test('returns true for equal objects', () => {
+    const obj1 = { a: 1, b: 2 }
+    const obj2 = { a: 1, b: 2 }
+
+    expect(deepEqual(obj1, obj2)).toBe(true)
+  })
+
+  test('returns false for different objects', () => {
+    const obj1 = { a: 1, b: 2 }
+    const obj2 = { a: 1, b: 3 }
+
+    expect(deepEqual(obj1, obj2)).toBe(false)
+  })
+
+  test('returns false for object with different amount of keys', () => {
+    const obj1 = { a: 1, b: 2 }
+    const obj2 = { a: 1 }
+
+    expect(deepEqual(obj1, obj2)).toBe(false)
+  })
+
+  test('returns true for equal nested objects', () => {
+    const obj1 = { a: 1, b: { c: 2, d: 3 } }
+    const obj2 = { a: 1, b: { c: 2, d: 3 } }
+
+    expect(deepEqual(obj1, obj2)).toBe(true)
+  })
+
+  test('returns false for different nested objects', () => {
+    const obj1 = { a: 1, b: { c: 2, d: 3 } }
+    const obj2 = { a: 1, b: { c: 2, d: 4 } }
+
+    expect(deepEqual(obj1, obj2)).toBe(false)
+  })
+
+  test('returns true for equal arrays', () => {
+    const obj1 = [1, 2, 3]
+    const obj2 = [1, 2, 3]
+
+    expect(deepEqual(obj1, obj2)).toBe(true)
+  })
+
+  test('returns false for different arrays', () => {
+    const obj1 = [1, 2, 3]
+    const obj2 = [1, 2, 4]
+
+    expect(deepEqual(obj1, obj2)).toBe(false)
+  })
+
+  test('returns false for different length arrays', () => {
+    const obj1 = [1, 2, 3]
+    const obj2 = [1, 2]
+
+    expect(deepEqual(obj1, obj2)).toBe(false)
+  })
+
+  test('returns false for array with non-array', () => {
+    const obj1 = [1, 2, 3]
+    const obj2 = 1
+
+    expect(deepEqual(obj1, obj2)).toBe(false)
+  })
+
+  test('returns true for equal nested arrays', () => {
+    const obj1 = [1, [2, 3]]
+    const obj2 = [1, [2, 3]]
+
+    expect(deepEqual(obj1, obj2)).toBe(true)
+  })
+
+  test('returns false for different nested arrays', () => {
+    const obj1 = [1, [2, 3]]
+    const obj2 = [1, [2, 4]]
+
+    expect(deepEqual(obj1, obj2)).toBe(false)
+  })
+
+  test('returns true for equal mixed objects and arrays', () => {
+    const obj1 = { a: 1, b: [2, 3] }
+    const obj2 = { a: 1, b: [2, 3] }
+
+    expect(deepEqual(obj1, obj2)).toBe(true)
+  })
+
+  test('returns false for different mixed objects and arrays', () => {
+    const obj1 = { a: 1, b: [2, 3] }
+    const obj2 = { a: 1, b: [2, 4] }
+
+    expect(deepEqual(obj1, obj2)).toBe(false)
   })
 })
