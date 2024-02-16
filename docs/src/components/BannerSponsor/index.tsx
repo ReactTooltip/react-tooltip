@@ -42,7 +42,7 @@ const BannerSponsor = ({ sponsorKey, tier }: BannerSponsorProps) => {
         event: `click_sponsor_banner`,
         place: 'sidebar',
         sponsorKey,
-        sponserTitle: sponsor.title,
+        sponsorTitle: sponsor.title,
       })
     }
 
