@@ -39,8 +39,10 @@ const BannerSponsor = ({ sponsorKey, tier }: BannerSponsorProps) => {
       window.dataLayer = window.dataLayer || []
 
       window.dataLayer.push({
-        event: `click_${sponsorKey}_banner`,
+        event: `click_sponsor_banner`,
         place: 'sidebar',
+        sponsorKey,
+        sponserTitle: sponsor.title,
       })
     }
 
