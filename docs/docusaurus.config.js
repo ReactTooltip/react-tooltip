@@ -85,6 +85,9 @@ const config = {
           trackingID: 'G-N15QWWS0MW',
           anonymizeIP: false,
         },
+        googleTagManager: {
+          containerId: 'GTM-TH6VNCW',
+        },
       }),
     ],
   ],
