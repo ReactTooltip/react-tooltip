@@ -81,10 +81,10 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
-        // gtag: {
-        //   trackingID: 'G-N15QWWS0MW',
-        //   anonymizeIP: false,
-        // },
+        gtag: {
+          trackingID: 'G-N15QWWS0MW',
+          anonymizeIP: false,
+        },
         googleTagManager: {
           containerId: 'GTM-TH6VNCW',
         },
