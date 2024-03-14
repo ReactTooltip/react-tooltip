@@ -14,7 +14,7 @@ import type {
 import { useTooltip } from 'components/TooltipProvider'
 import { TooltipContent } from 'components/TooltipContent'
 import { cssSupports } from 'utils'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import type { ITooltipController } from './TooltipControllerTypes'
 
 const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
@@ -335,7 +335,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       id,
       anchorId,
       anchorSelect,
-      className: classNames(className, tooltipClassName),
+      className: clsx(className, tooltipClassName),
       classNameArrow,
       content: renderedContent,
       contentWrapperRef,
