@@ -4,7 +4,7 @@
   "description": "react tooltip component",
   "scripts": {
     "dev-rollup": "node ./prebuild.js --env=development && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.dev.js --watch",
-    "build": "node ./prebuild.js --env=production && npm run types && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.prod.js",
+    "build": "node ./prebuild.js --env=production && npm run types && node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.prod.js && npm run test",
     "dev": "node ./prebuild.js --env=development && node ./esbuild.config.dev.mjs",
     "build-esbuild": "node ./prebuild.js --env=production && node ./esbuild.config.prod.mjs",
     "types": "node --max_old_space_size=2048 ./node_modules/rollup/dist/bin/rollup -c rollup.config.types.js",
