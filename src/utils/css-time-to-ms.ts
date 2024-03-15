@@ -1,5 +1,5 @@
 const cssTimeToMs = (time: string): number => {
-  const match = time.match(/^([\d.]+)(ms|s)$/)
+  const match = time.match(/^([\d.]+)(m?s)$/)
   if (!match) {
     return 0
   }
