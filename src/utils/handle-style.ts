@@ -81,37 +81,4 @@ function injectStyle({
   injected[type] = true
 }
 
-/**
- * @deprecated Use the `disableStyleInjection` tooltip prop instead.
- * See https://react-tooltip.com/docs/examples/styling#disabling-reacttooltip-css
- */
-function removeStyle({
-  type = 'base',
-  id = REACT_TOOLTIP_BASE_STYLES_ID,
-}: {
-  type?: 'core' | 'base'
-  id?: string
-} = {}) {
-  if (!injected[type]) {
-    return
-  }
-
-  if (type === 'core') {
-    // eslint-disable-next-line no-param-reassign
-    id = REACT_TOOLTIP_CORE_STYLES_ID
-  }
-
-  const style = document.getElementById(id)
-  if (style?.tagName === 'style') {
-    style?.remove()
-  } else if (process.env.NODE_ENV !== 'production') {
-    // eslint-disable-next-line no-console
-    console.warn(
-      `[react-tooltip] Failed to remove 'style' element with id '${id}'. Call \`injectStyle()\` first`,
-    )
-  }
-
-  injected[type] = false
-}
-
-export { injectStyle, removeStyle }
+export { injectStyle }

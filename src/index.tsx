@@ -50,5 +50,3 @@ export type {
   Middleware,
   TooltipRefProps,
 }
-
-export { removeStyle } from './utils/handle-style'
