@@ -18,10 +18,6 @@ export interface ITooltipController {
   className?: string
   classNameArrow?: string
   content?: string
-  /**
-   * @deprecated Use `children` or `render` instead
-   */
-  html?: string
   render?: (render: { content: string | null; activeAnchor: HTMLElement | null }) => ChildrenType
   place?: PlacesType
   offset?: number

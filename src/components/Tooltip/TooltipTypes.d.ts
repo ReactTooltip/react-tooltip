@@ -27,7 +27,6 @@ export type PositionStrategy = 'absolute' | 'fixed'
 export type DataAttribute =
   | 'place'
   | 'content'
-  | 'html'
   | 'variant'
   | 'offset'
   | 'wrapper'

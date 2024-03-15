@@ -12,7 +12,6 @@ import type {
   TooltipRefProps,
 } from 'components/Tooltip/TooltipTypes'
 import { useTooltip } from 'components/TooltipProvider'
-import { TooltipContent } from 'components/TooltipContent'
 import { cssSupports } from 'utils'
 import clsx from 'clsx'
 import type { ITooltipController } from './TooltipControllerTypes'
@@ -24,7 +23,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       anchorId,
       anchorSelect,
       content,
-      html,
       render,
       className,
       classNameArrow,
@@ -66,7 +64,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     ref,
   ) => {
     const [tooltipContent, setTooltipContent] = useState(content)
-    const [tooltipHtml, setTooltipHtml] = useState(html)
     const [tooltipPlace, setTooltipPlace] = useState(place)
     const [tooltipVariant, setTooltipVariant] = useState(variant)
     const [tooltipOffset, setTooltipOffset] = useState(offset)
@@ -106,9 +103,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
         },
         content: (value) => {
           setTooltipContent(value ?? content)
-        },
-        html: (value) => {
-          setTooltipHtml(value ?? html)
         },
         variant: (value) => {
           setTooltipVariant((value as VariantType) ?? variant)
@@ -153,10 +147,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     useEffect(() => {
       setTooltipContent(content)
     }, [content])
-
-    useEffect(() => {
-      setTooltipHtml(html)
-    }, [html])
 
     useEffect(() => {
       setTooltipPlace(place)
@@ -325,9 +315,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       ) : null
     } else if (tooltipContent) {
       renderedContent = tooltipContent
-    }
-    if (tooltipHtml) {
-      renderedContent = <TooltipContent content={tooltipHtml} />
     }
 
     const props: ITooltip = {

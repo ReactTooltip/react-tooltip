@@ -30,7 +30,6 @@ export interface ITooltipWrapper {
 
   place?: ITooltipController['place']
   content?: ITooltipController['content']
-  html?: ITooltipController['html']
   variant?: ITooltipController['variant']
   offset?: ITooltipController['offset']
   wrapper?: ITooltipController['wrapper']

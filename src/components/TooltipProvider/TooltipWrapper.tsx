@@ -13,7 +13,6 @@ const TooltipWrapper = ({
   className,
   place,
   content,
-  html,
   variant,
   offset,
   wrapper,
@@ -38,7 +37,6 @@ const TooltipWrapper = ({
       className={clsx('react-tooltip-wrapper', className)}
       data-tooltip-place={place}
       data-tooltip-content={content}
-      data-tooltip-html={html}
       data-tooltip-variant={variant}
       data-tooltip-offset={offset}
       data-tooltip-wrapper={wrapper}
