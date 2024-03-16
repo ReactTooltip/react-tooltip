@@ -11,7 +11,6 @@ import type {
   ChildrenType,
   TooltipRefProps,
 } from 'components/Tooltip/TooltipTypes'
-import { useTooltip } from 'components/TooltipProvider'
 import { cssSupports } from 'utils'
 import clsx from 'clsx'
 import type { ITooltipController } from './TooltipControllerTypes'
@@ -77,10 +76,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     const [tooltipClassName, setTooltipClassName] = useState<string | null>(null)
     const [activeAnchor, setActiveAnchor] = useState<HTMLElement | null>(null)
     const styleInjectionRef = useRef(disableStyleInjection)
-    /**
-     * @todo Remove this in a future version (provider/wrapper method is deprecated)
-     */
-    const { anchorRefs, activeAnchor: providerActiveAnchor } = useTooltip(id)
 
     const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
       const dataAttributes = elementReference?.getAttributeNames().reduce((acc, name) => {
@@ -206,7 +201,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     }, [])
 
     useEffect(() => {
-      const elementRefs = new Set(anchorRefs)
+      const elementRefs = new Set<HTMLElement>()
 
       let selector = anchorSelect
       if (!selector && id) {
@@ -216,7 +211,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
         try {
           const anchorsBySelect = document.querySelectorAll<HTMLElement>(selector)
           anchorsBySelect.forEach((anchor) => {
-            elementRefs.add({ current: anchor })
+            elementRefs.add(anchor)
           })
         } catch {
           /* c8 ignore start */
@@ -230,14 +225,14 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
 
       const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
       if (anchorById) {
-        elementRefs.add({ current: anchorById })
+        elementRefs.add(anchorById)
       }
 
       if (!elementRefs.size) {
         return () => null
       }
 
-      const anchorElement = activeAnchor ?? anchorById ?? providerActiveAnchor.current
+      const anchorElement = activeAnchor ?? anchorById
 
       const observerCallback: MutationCallback = (mutationList) => {
         mutationList.forEach((mutation) => {
@@ -272,7 +267,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
         // Remove the observer when the tooltip is destroyed
         observer.disconnect()
       }
-    }, [anchorRefs, providerActiveAnchor, activeAnchor, anchorId, anchorSelect])
+    }, [activeAnchor, anchorId, anchorSelect])
 
     useEffect(() => {
       /* c8 ignore start */
@@ -358,7 +353,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       afterShow,
       afterHide,
       activeAnchor,
-      setActiveAnchor: (anchor: HTMLElement | null) => setActiveAnchor(anchor),
+      setActiveAnchor,
       role,
     }
 

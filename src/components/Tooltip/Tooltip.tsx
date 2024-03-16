@@ -11,7 +11,6 @@ import {
   clearTimeoutRef,
 } from 'utils'
 import type { IComputedPosition } from 'utils'
-import { useTooltip } from 'components/TooltipProvider'
 import coreStyles from './core-styles.module.css'
 import styles from './styles.module.css'
 import type {
@@ -86,10 +85,6 @@ const Tooltip = ({
   )
   const wasShowing = useRef(false)
   const lastFloatPosition = useRef<IPosition | null>(null)
-  /**
-   * @todo Remove this in a future version (provider/wrapper method is deprecated)
-   */
-  const { anchorRefs, setActiveAnchor: setProviderActiveAnchor } = useTooltip(id)
   const hoveringTooltip = useRef(false)
   const [anchorsBySelect, setAnchorsBySelect] = useState<HTMLElement[]>([])
   const mounted = useRef(false)
@@ -291,7 +286,6 @@ const Tooltip = ({
        * at the same time the tooltip gets triggered
        */
       setActiveAnchor(null)
-      setProviderActiveAnchor({ current: null })
       return
     }
     if (delayShow) {
@@ -300,7 +294,6 @@ const Tooltip = ({
       handleShow(true)
     }
     setActiveAnchor(target)
-    setProviderActiveAnchor({ current: target })
 
     clearTimeoutRef(tooltipHideDelayTimerRef)
   }
@@ -456,15 +449,15 @@ const Tooltip = ({
   ])
 
   useEffect(() => {
-    const elementRefs = new Set(anchorRefs)
+    const elementRefs = new Set<HTMLElement>()
 
     anchorsBySelect.forEach((anchor) => {
-      elementRefs.add({ current: anchor })
+      elementRefs.add(anchor)
     })
 
     const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
     if (anchorById) {
-      elementRefs.add({ current: anchorById })
+      elementRefs.add(anchorById)
     }
 
     const handleScrollResize = () => {
@@ -586,7 +579,7 @@ const Tooltip = ({
 
     enabledEvents.forEach(({ event, listener }) => {
       elementRefs.forEach((ref) => {
-        ref.current?.addEventListener(event, listener)
+        ref.addEventListener(event, listener)
       })
     })
 
@@ -613,7 +606,7 @@ const Tooltip = ({
       }
       enabledEvents.forEach(({ event, listener }) => {
         elementRefs.forEach((ref) => {
-          ref.current?.removeEventListener(event, listener)
+          ref.removeEventListener(event, listener)
         })
       })
     }
@@ -625,7 +618,6 @@ const Tooltip = ({
     activeAnchor,
     updateTooltipPosition,
     rendered,
-    anchorRefs,
     anchorsBySelect,
     // the effect uses the `actual*Events` objects, but this should work
     openEvents,
