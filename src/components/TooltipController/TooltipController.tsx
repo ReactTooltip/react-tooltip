@@ -19,7 +19,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
   (
     {
       id,
-      anchorId,
       anchorSelect,
       content,
       render,
@@ -201,50 +200,17 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     }, [])
 
     useEffect(() => {
-      const elementRefs = new Set<HTMLElement>()
-
-      let selector = anchorSelect
-      if (!selector && id) {
-        selector = `[data-tooltip-id='${id.replace(/'/g, "\\'")}']`
-      }
-      if (selector) {
-        try {
-          const anchorsBySelect = document.querySelectorAll<HTMLElement>(selector)
-          anchorsBySelect.forEach((anchor) => {
-            elementRefs.add(anchor)
-          })
-        } catch {
-          /* c8 ignore start */
-          if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
-            // eslint-disable-next-line no-console
-            console.warn(`[react-tooltip] "${selector}" is not a valid CSS selector`)
-          }
-          /* c8 ignore end */
-        }
-      }
-
-      const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
-      if (anchorById) {
-        elementRefs.add(anchorById)
-      }
-
-      if (!elementRefs.size) {
-        return () => null
-      }
-
-      const anchorElement = activeAnchor ?? anchorById
-
       const observerCallback: MutationCallback = (mutationList) => {
         mutationList.forEach((mutation) => {
           if (
-            !anchorElement ||
+            !activeAnchor ||
             mutation.type !== 'attributes' ||
             !mutation.attributeName?.startsWith('data-tooltip-')
           ) {
             return
           }
           // make sure to get all set attributes, since all unset attributes are reset
-          const dataAttributes = getDataAttributesFromAnchorElement(anchorElement)
+          const dataAttributes = getDataAttributesFromAnchorElement(activeAnchor)
           applyAllDataAttributesFromAnchorElement(dataAttributes)
         })
       }
@@ -256,18 +222,18 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       // to stay watching `data-attributes-*` from anchor element
       const observerConfig = { attributes: true, childList: false, subtree: false }
 
-      if (anchorElement) {
-        const dataAttributes = getDataAttributesFromAnchorElement(anchorElement)
+      if (activeAnchor) {
+        const dataAttributes = getDataAttributesFromAnchorElement(activeAnchor)
         applyAllDataAttributesFromAnchorElement(dataAttributes)
         // Start observing the target node for configured mutations
-        observer.observe(anchorElement, observerConfig)
+        observer.observe(activeAnchor, observerConfig)
       }
 
       return () => {
         // Remove the observer when the tooltip is destroyed
         observer.disconnect()
       }
-    }, [activeAnchor, anchorId, anchorSelect])
+    }, [activeAnchor, anchorSelect])
 
     useEffect(() => {
       /* c8 ignore start */
@@ -315,7 +281,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     const props: ITooltip = {
       forwardRef: ref,
       id,
-      anchorId,
       anchorSelect,
       className: clsx(className, tooltipClassName),
       classNameArrow,

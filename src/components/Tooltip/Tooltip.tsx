@@ -29,7 +29,6 @@ const Tooltip = ({
   className,
   classNameArrow,
   variant = 'dark',
-  anchorId,
   anchorSelect,
   place = 'top',
   offset = 10,
@@ -86,7 +85,7 @@ const Tooltip = ({
   const wasShowing = useRef(false)
   const lastFloatPosition = useRef<IPosition | null>(null)
   const hoveringTooltip = useRef(false)
-  const [anchorsBySelect, setAnchorsBySelect] = useState<HTMLElement[]>([])
+  const [anchorElements, setAnchorElements] = useState<HTMLElement[]>([])
   const mounted = useRef(false)
 
   /**
@@ -364,9 +363,7 @@ const Tooltip = ({
     if (tooltipRef.current?.contains(target)) {
       return
     }
-    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
-    const anchors = [anchorById, ...anchorsBySelect]
-    if (anchors.some((anchor) => anchor?.contains(target))) {
+    if (anchorElements.some((anchor) => anchor?.contains(target))) {
       return
     }
     handleShow(false)
@@ -449,16 +446,14 @@ const Tooltip = ({
   ])
 
   useEffect(() => {
-    const elementRefs = new Set<HTMLElement>()
-
-    anchorsBySelect.forEach((anchor) => {
-      elementRefs.add(anchor)
-    })
-
-    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
-    if (anchorById) {
-      elementRefs.add(anchorById)
-    }
+    /**
+     * TODO(V6): break this effect down into callbacks for clarity
+     *   - `handleKeyboardEvents()`
+     *   - `handleMouseEvents()`
+     *   - `handleGlobalCloseEvents()`
+     *   - `handleAnchorEvents()`
+     *   - ?
+     */
 
     const handleScrollResize = () => {
       handleShow(false)
@@ -578,8 +573,8 @@ const Tooltip = ({
     }
 
     enabledEvents.forEach(({ event, listener }) => {
-      elementRefs.forEach((ref) => {
-        ref.addEventListener(event, listener)
+      anchorElements.forEach((anchor) => {
+        anchor.addEventListener(event, listener)
       })
     })
 
@@ -605,8 +600,8 @@ const Tooltip = ({
         tooltipRef.current?.removeEventListener('mouseleave', handleMouseLeaveTooltip)
       }
       enabledEvents.forEach(({ event, listener }) => {
-        elementRefs.forEach((ref) => {
-          ref.removeEventListener(event, listener)
+        anchorElements.forEach((anchor) => {
+          anchor.removeEventListener(event, listener)
         })
       })
     }
@@ -618,7 +613,7 @@ const Tooltip = ({
     activeAnchor,
     updateTooltipPosition,
     rendered,
-    anchorsBySelect,
+    anchorElements,
     // the effect uses the `actual*Events` objects, but this should work
     openEvents,
     closeEvents,
@@ -711,7 +706,7 @@ const Tooltip = ({
         }
       })
       if (newAnchors.length || removedAnchors.length) {
-        setAnchorsBySelect((anchors) => [
+        setAnchorElements((anchors) => [
           ...anchors.filter((anchor) => !removedAnchors.includes(anchor)),
           ...newAnchors,
         ])
@@ -750,17 +745,15 @@ const Tooltip = ({
   }, [content, contentWrapperRef?.current])
 
   useEffect(() => {
-    const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
-    const anchors = [...anchorsBySelect, anchorById]
-    if (!activeAnchor || !anchors.includes(activeAnchor)) {
+    if (!activeAnchor || !anchorElements.includes(activeAnchor)) {
       /**
        * if there is no active anchor,
        * or if the current active anchor is not amongst the allowed ones,
        * reset it
        */
-      setActiveAnchor(anchorsBySelect[0] ?? anchorById)
+      setActiveAnchor(anchorElements[0] ?? null)
     }
-  }, [anchorId, anchorsBySelect, activeAnchor])
+  }, [anchorElements, activeAnchor])
 
   useEffect(() => {
     if (defaultIsOpen) {
@@ -782,10 +775,10 @@ const Tooltip = ({
     }
     try {
       const anchors = Array.from(document.querySelectorAll<HTMLElement>(selector))
-      setAnchorsBySelect(anchors)
+      setAnchorElements(anchors)
     } catch {
       // warning was already issued in the controller
-      setAnchorsBySelect([])
+      setAnchorElements([])
     }
   }, [id, anchorSelect, imperativeOptions?.anchorSelect])
 
