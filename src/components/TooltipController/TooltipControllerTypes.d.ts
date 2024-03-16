@@ -1,11 +1,9 @@
-import type { CSSProperties } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 
 import type {
   PlacesType,
   VariantType,
   WrapperType,
-  ChildrenType,
-  EventsType,
   PositionStrategy,
   IPosition,
   Middleware,
@@ -18,18 +16,14 @@ export interface ITooltipController {
   className?: string
   classNameArrow?: string
   content?: string
-  render?: (render: { content: string | null; activeAnchor: HTMLElement | null }) => ChildrenType
+  render?: (render: { content: string | null; activeAnchor: HTMLElement | null }) => ReactNode
   place?: PlacesType
   offset?: number
   id?: string
   variant?: VariantType
   anchorSelect?: string
   wrapper?: WrapperType
-  children?: ChildrenType
-  /**
-   * @deprecated Use `openOnClick` or `openEvents`/`closeEvents` instead.
-   */
-  events?: EventsType[]
+  children?: ReactNode
   openOnClick?: boolean
   positionStrategy?: PositionStrategy
   middlewares?: Middleware[]
@@ -39,18 +33,6 @@ export interface ITooltipController {
   hidden?: boolean
   noArrow?: boolean
   clickable?: boolean
-  /**
-   * @deprecated Use `globalCloseEvents={{ escape: true }}` instead.
-   */
-  closeOnEsc?: boolean
-  /**
-   * @deprecated Use `globalCloseEvents={{ scroll: true }}` instead.
-   */
-  closeOnScroll?: boolean
-  /**
-   * @deprecated Use `globalCloseEvents={{ resize: true }}` instead.
-   */
-  closeOnResize?: boolean
   /**
    * @description The events to be listened on anchor elements to open the tooltip.
    */
@@ -97,10 +79,6 @@ declare module 'react' {
     'data-tooltip-variant'?: VariantType
     'data-tooltip-offset'?: number
     'data-tooltip-wrapper'?: WrapperType
-    /**
-     * @deprecated Use `openOnClick` tooltip prop instead.
-     */
-    'data-tooltip-events'?: EventsType[]
     'data-tooltip-position-strategy'?: PositionStrategy
     'data-tooltip-delay-show'?: number
     'data-tooltip-delay-hide'?: number

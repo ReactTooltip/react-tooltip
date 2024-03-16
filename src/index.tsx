@@ -3,9 +3,7 @@ import './tokens.css'
 import { injectStyle } from 'utils/handle-style'
 
 import type {
-  ChildrenType,
   DataAttribute,
-  EventsType,
   PlacesType,
   PositionStrategy,
   VariantType,
@@ -35,9 +33,7 @@ if (typeof window !== 'undefined') {
 
 export { TooltipController as Tooltip } from './components/TooltipController'
 export type {
-  ChildrenType,
   DataAttribute,
-  EventsType,
   PlacesType,
   PositionStrategy,
   VariantType,

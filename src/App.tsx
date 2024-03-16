@@ -157,7 +157,7 @@ function App() {
           <Tooltip
             anchorSelect="#onClickAnchor"
             content={`This is an on click tooltip (x:${position.x},y:${position.y})`}
-            events={['click']}
+            openOnClick
             position={position}
             positionStrategy="fixed"
           />
@@ -197,7 +197,7 @@ function App() {
 
         <button id="buttonCallbacksClick">With click event</button>
         <Tooltip
-          events={['click']}
+          openOnClick
           place="bottom"
           anchorSelect="#buttonCallbacksClick"
           // eslint-disable-next-line no-console

@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Tooltip } from 'components/Tooltip'
 import type {
-  EventsType,
   PositionStrategy,
   PlacesType,
   VariantType,
   WrapperType,
   DataAttribute,
   ITooltip,
-  ChildrenType,
   TooltipRefProps,
 } from 'components/Tooltip/TooltipTypes'
 import { cssSupports } from 'utils'
@@ -29,7 +27,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       offset = 10,
       wrapper = 'div',
       children = null,
-      events = ['hover'],
       openOnClick = false,
       positionStrategy = 'absolute',
       middlewares,
@@ -39,9 +36,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       hidden = false,
       noArrow = false,
       clickable = false,
-      closeOnEsc = false,
-      closeOnScroll = false,
-      closeOnResize = false,
       openEvents,
       closeEvents,
       globalCloseEvents,
@@ -70,7 +64,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     const [tooltipFloat, setTooltipFloat] = useState(float)
     const [tooltipHidden, setTooltipHidden] = useState(hidden)
     const [tooltipWrapper, setTooltipWrapper] = useState<WrapperType>(wrapper)
-    const [tooltipEvents, setTooltipEvents] = useState(events)
     const [tooltipPositionStrategy, setTooltipPositionStrategy] = useState(positionStrategy)
     const [tooltipClassName, setTooltipClassName] = useState<string | null>(null)
     const [activeAnchor, setActiveAnchor] = useState<HTMLElement | null>(null)
@@ -106,10 +99,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
         },
         wrapper: (value) => {
           setTooltipWrapper((value as WrapperType) ?? wrapper)
-        },
-        events: (value) => {
-          const parsed = value?.split(' ') as EventsType[]
-          setTooltipEvents(parsed ?? events)
         },
         'position-strategy': (value) => {
           setTooltipPositionStrategy((value as PositionStrategy) ?? positionStrategy)
@@ -263,7 +252,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
      * content priority: children < render or content < html
      * children should be lower priority so that it can be used as the "default" content
      */
-    let renderedContent: ChildrenType = children
+    let renderedContent = children
     const contentWrapperRef = useRef<HTMLDivElement>(null)
     if (render) {
       const actualContent =
@@ -290,7 +279,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       variant: tooltipVariant,
       offset: tooltipOffset,
       wrapper: tooltipWrapper,
-      events: tooltipEvents,
       openOnClick,
       positionStrategy: tooltipPositionStrategy,
       middlewares,
@@ -300,9 +288,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       hidden: tooltipHidden,
       noArrow,
       clickable,
-      closeOnEsc,
-      closeOnScroll,
-      closeOnResize,
       openEvents,
       closeEvents,
       globalCloseEvents,
