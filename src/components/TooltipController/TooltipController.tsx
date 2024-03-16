@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Tooltip } from 'components/Tooltip'
 import type {
   PositionStrategy,
@@ -81,51 +81,63 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       return dataAttributes
     }
 
-    const applyAllDataAttributesFromAnchorElement = (
-      dataAttributes: Record<string, string | null>,
-    ) => {
-      const handleDataAttributes: Record<DataAttribute, (value: string | null) => void> = {
-        place: (value) => {
-          setTooltipPlace((value as PlacesType) ?? place)
-        },
-        content: (value) => {
-          setTooltipContent(value ?? content)
-        },
-        variant: (value) => {
-          setTooltipVariant((value as VariantType) ?? variant)
-        },
-        offset: (value) => {
-          setTooltipOffset(value === null ? offset : Number(value))
-        },
-        wrapper: (value) => {
-          setTooltipWrapper((value as WrapperType) ?? wrapper)
-        },
-        'position-strategy': (value) => {
-          setTooltipPositionStrategy((value as PositionStrategy) ?? positionStrategy)
-        },
-        'delay-show': (value) => {
-          setTooltipDelayShow(value === null ? delayShow : Number(value))
-        },
-        'delay-hide': (value) => {
-          setTooltipDelayHide(value === null ? delayHide : Number(value))
-        },
-        float: (value) => {
-          setTooltipFloat(value === null ? float : value === 'true')
-        },
-        hidden: (value) => {
-          setTooltipHidden(value === null ? hidden : value === 'true')
-        },
-        'class-name': (value) => {
-          setTooltipClassName(value)
-        },
-      }
-      // reset unset data attributes to default values
-      // without this, data attributes from the last active anchor will still be used
-      Object.values(handleDataAttributes).forEach((handler) => handler(null))
-      Object.entries(dataAttributes).forEach(([key, value]) => {
-        handleDataAttributes[key as DataAttribute]?.(value)
-      })
-    }
+    const applyAllDataAttributesFromAnchorElement = useCallback(
+      (dataAttributes: Record<string, string | null>) => {
+        const handleDataAttributes: Record<DataAttribute, (value: string | null) => void> = {
+          place: (value) => {
+            setTooltipPlace((value as PlacesType) ?? place)
+          },
+          content: (value) => {
+            setTooltipContent(value ?? content)
+          },
+          variant: (value) => {
+            setTooltipVariant((value as VariantType) ?? variant)
+          },
+          offset: (value) => {
+            setTooltipOffset(value === null ? offset : Number(value))
+          },
+          wrapper: (value) => {
+            setTooltipWrapper((value as WrapperType) ?? wrapper)
+          },
+          'position-strategy': (value) => {
+            setTooltipPositionStrategy((value as PositionStrategy) ?? positionStrategy)
+          },
+          'delay-show': (value) => {
+            setTooltipDelayShow(value === null ? delayShow : Number(value))
+          },
+          'delay-hide': (value) => {
+            setTooltipDelayHide(value === null ? delayHide : Number(value))
+          },
+          float: (value) => {
+            setTooltipFloat(value === null ? float : value === 'true')
+          },
+          hidden: (value) => {
+            setTooltipHidden(value === null ? hidden : value === 'true')
+          },
+          'class-name': (value) => {
+            setTooltipClassName(value)
+          },
+        }
+        // reset unset data attributes to default values
+        // without this, data attributes from the last active anchor will still be used
+        Object.values(handleDataAttributes).forEach((handler) => handler(null))
+        Object.entries(dataAttributes).forEach(([key, value]) => {
+          handleDataAttributes[key as DataAttribute]?.(value)
+        })
+      },
+      [
+        content,
+        delayHide,
+        delayShow,
+        float,
+        hidden,
+        offset,
+        place,
+        positionStrategy,
+        variant,
+        wrapper,
+      ],
+    )
 
     useEffect(() => {
       setTooltipContent(content)
@@ -186,6 +198,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
           }),
         )
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -222,7 +235,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
         // Remove the observer when the tooltip is destroyed
         observer.disconnect()
       }
-    }, [activeAnchor, anchorSelect])
+    }, [activeAnchor, anchorSelect, applyAllDataAttributesFromAnchorElement])
 
     useEffect(() => {
       /* c8 ignore start */
@@ -246,7 +259,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
         // eslint-disable-next-line no-console
         console.warn(`[react-tooltip] "${opacity}" is not a valid \`opacity\`.`)
       }
-    }, [])
+    }, [border, opacity, style?.border, style?.opacity])
 
     /**
      * content priority: children < render or content < html
