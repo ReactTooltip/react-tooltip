@@ -624,51 +624,40 @@ const Tooltip = ({
   ])
 
   useEffect(() => {
+    /**
+     * TODO(V6): break down observer callback for clarity
+     *   - `handleAddedAnchors()`
+     *   - `handleRemovedAnchors()`
+     */
     let selector = imperativeOptions?.anchorSelect ?? anchorSelect ?? ''
     if (!selector && id) {
       selector = `[data-tooltip-id='${id.replace(/'/g, "\\'")}']`
     }
     const documentObserverCallback: MutationCallback = (mutationList) => {
-      const newAnchors: HTMLElement[] = []
-      const removedAnchors: HTMLElement[] = []
+      const addedAnchors = new Set<HTMLElement>()
+      const removedAnchors = new Set<HTMLElement>()
       mutationList.forEach((mutation) => {
         if (mutation.type === 'attributes' && mutation.attributeName === 'data-tooltip-id') {
-          const newId = (mutation.target as HTMLElement).getAttribute('data-tooltip-id')
+          const target = mutation.target as HTMLElement
+          const newId = target.getAttribute('data-tooltip-id')
           if (newId === id) {
-            newAnchors.push(mutation.target as HTMLElement)
+            addedAnchors.add(target)
           } else if (mutation.oldValue === id) {
             // data-tooltip-id has now been changed, so we need to remove this anchor
-            removedAnchors.push(mutation.target as HTMLElement)
+            removedAnchors.add(target)
           }
         }
         if (mutation.type !== 'childList') {
           return
         }
+        const removedNodes = [...mutation.removedNodes].filter((node) => node.nodeType === 1)
         if (activeAnchor) {
-          const elements = [...mutation.removedNodes].filter((node) => node.nodeType === 1)
-          if (selector) {
-            try {
-              removedAnchors.push(
-                // the element itself is an anchor
-                ...(elements.filter((element) =>
-                  (element as HTMLElement).matches(selector),
-                ) as HTMLElement[]),
-              )
-              removedAnchors.push(
-                // the element has children which are anchors
-                ...elements.flatMap(
-                  (element) =>
-                    [...(element as HTMLElement).querySelectorAll(selector)] as HTMLElement[],
-                ),
-              )
-            } catch {
-              /**
-               * invalid CSS selector.
-               * already warned on tooltip controller
-               */
-            }
-          }
-          elements.some((node) => {
+          removedNodes.some((node) => {
+            /**
+             * TODO(V6)
+             *   - isn't `!activeAnchor.isConnected` better?
+             *   - maybe move to `handleDisconnectedAnchor()`
+             */
             if (node?.contains?.(activeAnchor)) {
               setRendered(false)
               handleShow(false)
@@ -684,31 +673,63 @@ const Tooltip = ({
           return
         }
         try {
-          const elements = [...mutation.addedNodes].filter((node) => node.nodeType === 1)
-          newAnchors.push(
-            // the element itself is an anchor
-            ...(elements.filter((element) =>
-              (element as HTMLElement).matches(selector),
-            ) as HTMLElement[]),
-          )
-          newAnchors.push(
-            // the element has children which are anchors
-            ...elements.flatMap(
-              (element) =>
-                [...(element as HTMLElement).querySelectorAll(selector)] as HTMLElement[],
-            ),
-          )
+          removedNodes.forEach((node) => {
+            const element = node as HTMLElement
+            if (element.matches(selector)) {
+              // the element itself is an anchor
+              removedAnchors.add(element)
+            } else {
+              /**
+               * TODO(V6): do we care if an element which is an anchor,
+               * has children which are also anchors?
+               * (i.e. should we remove `else` and always do this)
+               */
+              // the element has children which are anchors
+              element
+                .querySelectorAll(selector)
+                .forEach((innerNode) => removedAnchors.add(innerNode as HTMLElement))
+            }
+          })
         } catch {
-          /**
-           * invalid CSS selector.
-           * already warned on tooltip controller
-           */
+          /* c8 ignore start */
+          if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
+            // eslint-disable-next-line no-console
+            console.warn(`[react-tooltip] "${selector}" is not a valid CSS selector`)
+          }
+          /* c8 ignore end */
+        }
+        try {
+          const addedNodes = [...mutation.addedNodes].filter((node) => node.nodeType === 1)
+          addedNodes.forEach((node) => {
+            const element = node as HTMLElement
+            if (element.matches(selector)) {
+              // the element itself is an anchor
+              addedAnchors.add(element)
+            } else {
+              /**
+               * TODO(V6): do we care if an element which is an anchor,
+               * has children which are also anchors?
+               * (i.e. should we remove `else` and always do this)
+               */
+              // the element has children which are anchors
+              element
+                .querySelectorAll(selector)
+                .forEach((innerNode) => addedAnchors.add(innerNode as HTMLElement))
+            }
+          })
+        } catch {
+          /* c8 ignore start */
+          if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
+            // eslint-disable-next-line no-console
+            console.warn(`[react-tooltip] "${selector}" is not a valid CSS selector`)
+          }
+          /* c8 ignore end */
         }
       })
-      if (newAnchors.length || removedAnchors.length) {
+      if (addedAnchors.size || removedAnchors.size) {
         setAnchorElements((anchors) => [
-          ...anchors.filter((anchor) => !removedAnchors.includes(anchor)),
-          ...newAnchors,
+          ...anchors.filter((anchor) => !removedAnchors.has(anchor)),
+          ...addedAnchors,
         ])
       }
     }
