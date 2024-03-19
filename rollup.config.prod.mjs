@@ -8,7 +8,7 @@ import ts from '@rollup/plugin-typescript'
 import { terser } from 'rollup-plugin-terser'
 import typescript from 'typescript'
 import replaceBeforeSaveFile from './rollup-plugins/replace-before-save-file.js'
-import * as pkg from './package.json'
+import pkg from './package.json' assert { type: 'json' }
 
 const input = ['src/index.tsx']
 
