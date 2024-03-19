@@ -122,33 +122,6 @@ exports[`tooltip props tooltip with float 1`] = `
 </div>
 `;
 
-exports[`tooltip props tooltip with html 1`] = `
-<div>
-  <span
-    data-tooltip-id="example-html"
-  >
-    Lorem Ipsum
-  </span>
-  <div
-    class="react-tooltip react-tooltip__place-top react-tooltip__show"
-    id="example-html"
-    role="tooltip"
-    style="left: 5px; top: -10px;"
-  >
-    <span>
-      <div>
-        Hello World!
-        <div />
-      </div>
-    </span>
-    <div
-      class="react-tooltip-arrow"
-      style="left: -1px; bottom: -4px;"
-    />
-  </div>
-</div>
-`;
-
 exports[`tooltip props tooltip with place 1`] = `
 <div>
   <span

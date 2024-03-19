@@ -1,5 +1,5 @@
-const fs = require('fs') // eslint-disable-line @typescript-eslint/no-var-requires
-const rimraf = require('rimraf') // eslint-disable-line @typescript-eslint/no-var-requires
+import fs from 'fs'
+import { rimraf } from 'rimraf'
 
 const args = process.argv.slice(2)
 const parameters = args.reduce((acc, arg) => {
@@ -25,7 +25,7 @@ log(`Building for env: ${parameters.env}`)
 
 // check if directory exists
 if (fs.existsSync(dir)) {
-  rimraf(dir, () => {
+  rimraf(dir).then(() => {
     fs.mkdirSync(dir)
   })
 } else {
