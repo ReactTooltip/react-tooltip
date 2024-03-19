@@ -70,13 +70,16 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     const styleInjectionRef = useRef(disableStyleInjection)
 
     const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
-      const dataAttributes = elementReference?.getAttributeNames().reduce((acc, name) => {
-        if (name.startsWith('data-tooltip-')) {
-          const parsedAttribute = name.replace(/^data-tooltip-/, '') as DataAttribute
-          acc[parsedAttribute] = elementReference?.getAttribute(name) ?? null
-        }
-        return acc
-      }, {} as Record<DataAttribute, string | null>)
+      const dataAttributes = elementReference?.getAttributeNames().reduce(
+        (acc, name) => {
+          if (name.startsWith('data-tooltip-')) {
+            const parsedAttribute = name.replace(/^data-tooltip-/, '') as DataAttribute
+            acc[parsedAttribute] = elementReference?.getAttribute(name) ?? null
+          }
+          return acc
+        },
+        {} as Record<DataAttribute, string | null>,
+      )
 
       return dataAttributes
     }
