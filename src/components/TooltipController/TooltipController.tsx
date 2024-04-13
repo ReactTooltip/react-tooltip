@@ -220,7 +220,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
 
       let selector = anchorSelect
       if (!selector && id) {
-        selector = `[data-tooltip-id='${id}']`
+        selector = `[data-tooltip-id='${id.replace(/'/g, "\\'")}']`
       }
       if (selector) {
         try {
