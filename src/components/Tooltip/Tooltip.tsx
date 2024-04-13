@@ -646,7 +646,7 @@ const Tooltip = ({
   useEffect(() => {
     let selector = imperativeOptions?.anchorSelect ?? anchorSelect ?? ''
     if (!selector && id) {
-      selector = `[data-tooltip-id='${id}']`
+      selector = `[data-tooltip-id='${id.replace(/'/g, "\\'")}']`
     }
     const documentObserverCallback: MutationCallback = (mutationList) => {
       const newAnchors: HTMLElement[] = []
@@ -798,7 +798,7 @@ const Tooltip = ({
   useEffect(() => {
     let selector = imperativeOptions?.anchorSelect ?? anchorSelect
     if (!selector && id) {
-      selector = `[data-tooltip-id='${id}']`
+      selector = `[data-tooltip-id='${id.replace(/'/g, "\\'")}']`
     }
     if (!selector) {
       return
