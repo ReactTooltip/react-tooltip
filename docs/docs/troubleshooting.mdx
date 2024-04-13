@@ -82,6 +82,24 @@ or
 }
 ```
 
+### The tooltip doesn't close when using `closeEvents={{ click: true }}`
+
+Some HTML elements, such as the `<svg>`, can sometimes capture click events and not propagate them. If your anchor element contains an `<svg>` element, try setting `pointer-events: none;` on it.
+
+```jsx
+<button data-tooltip-id="...">
+  <svg className="my-svg">
+    ...
+  </svg>
+</button>
+```
+
+```css
+.my-svg {
+  pointer-events: none;
+}
+```
+
 ## The border doesn't show for the arrow
 
 Simply setting the border for the tooltip through CSS will not work for the arrow.
