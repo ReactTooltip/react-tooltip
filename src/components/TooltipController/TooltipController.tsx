@@ -224,7 +224,11 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
 
       // do not check for subtree and childrens, we only want to know attribute changes
       // to stay watching `data-attributes-*` from anchor element
-      const observerConfig = { attributes: true, childList: false, subtree: false }
+      const observerConfig = {
+        attributes: true,
+        childList: false,
+        subtree: false,
+      }
 
       if (activeAnchor) {
         const dataAttributes = getDataAttributesFromAnchorElement(activeAnchor)
@@ -264,7 +268,10 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     if (render) {
       const actualContent =
         activeAnchor?.getAttribute('data-tooltip-content') || tooltipContent || null
-      const rendered = render({ content: actualContent, activeAnchor }) as React.ReactNode
+      const rendered = render({
+        content: actualContent,
+        activeAnchor,
+      }) as React.ReactNode
       renderedContent = rendered ? (
         <div ref={contentWrapperRef} className="react-tooltip-content-wrapper">
           {rendered}

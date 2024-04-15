@@ -103,7 +103,7 @@ const config = allBuildFormats.map(
       }),
     ]
 
-    if (specificPlugins && specificPlugins.length) {
+    if (specificPlugins?.length) {
       plugins.push(...specificPlugins)
     }
 

@@ -82,7 +82,11 @@ const computeTooltipPosition = async ({
       }
       /* c8 ignore end */
 
-      return { tooltipStyles: styles, tooltipArrowStyles: arrowStyle, place: placement }
+      return {
+        tooltipStyles: styles,
+        tooltipArrowStyles: arrowStyle,
+        place: placement,
+      }
     })
   }
 

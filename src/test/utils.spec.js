@@ -9,7 +9,11 @@ describe('compute positions', () => {
       tooltipArrowReference: null,
     })
 
-    expect(value).toEqual({ tooltipStyles: {}, tooltipArrowStyles: {}, place: 'top' })
+    expect(value).toEqual({
+      tooltipStyles: {},
+      tooltipArrowStyles: {},
+      place: 'top',
+    })
   })
 
   test('empty tooltip reference element', async () => {
@@ -20,7 +24,11 @@ describe('compute positions', () => {
       tooltipArrowReference: null,
     })
 
-    expect(value).toEqual({ tooltipStyles: {}, tooltipArrowStyles: {}, place: 'top' })
+    expect(value).toEqual({
+      tooltipStyles: {},
+      tooltipArrowStyles: {},
+      place: 'top',
+    })
   })
 
   test('empty tooltip arrow reference element', async () => {

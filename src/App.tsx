@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { TooltipController as Tooltip } from 'components/TooltipController'
-import { IPosition, TooltipRefProps } from 'components/Tooltip/TooltipTypes.d'
-import React, { useEffect, useRef, useState } from 'react'
+import type { IPosition, TooltipRefProps } from 'components/Tooltip/TooltipTypes.d'
+import type React from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { inline, offset } from '@floating-ui/dom'
 import styles from './styles.module.css'
 
@@ -81,6 +82,7 @@ function App() {
         <p>
           <button
             id="button2"
+            type="button"
             data-tooltip-content="Hello World from a Tooltip 2"
             onClick={handleButtonClick}
           >
@@ -88,6 +90,7 @@ function App() {
           </button>
           <button
             id="button3"
+            type="button"
             data-tooltip-content="Hello World from a Tooltip 3"
             onClick={handleButtonClick}
           >
@@ -97,11 +100,19 @@ function App() {
       </section>
       <section id="section-anchor-select" style={{ marginTop: '100px' }}>
         <p>
-          <button data-tooltip-id="anchor-select" data-tooltip-content="this content is different">
+          <button
+            type="button"
+            data-tooltip-id="anchor-select"
+            data-tooltip-content="this content is different"
+          >
             Anchor select
           </button>
-          <button data-tooltip-id="anchor-select">Anchor select 2</button>
-          <button data-tooltip-id="anchor-select">Anchor select 3</button>
+          <button type="button" type="button" data-tooltip-id="anchor-select">
+            Anchor select 2
+          </button>
+          <button type="button" type="button" data-tooltip-id="anchor-select">
+            Anchor select 3
+          </button>
         </p>
         <Tooltip id="anchor-select">Tooltip content</Tooltip>
         <Tooltip
@@ -163,6 +174,7 @@ function App() {
           />
         </div>
         <button
+          type="button"
           id="imperativeTooltipButton"
           style={{ height: 40, marginLeft: 100 }}
           onClick={() => {
@@ -184,7 +196,9 @@ function App() {
       </div>
 
       <div style={{ marginTop: '1rem' }}>
-        <button id="buttonCallbacks">Check the dev console</button>
+        <button type="button" id="buttonCallbacks">
+          Check the dev console
+        </button>
         <Tooltip
           place="bottom"
           anchorSelect="#buttonCallbacks"
@@ -195,7 +209,9 @@ function App() {
           content="Showing tooltip and calling afterShow method"
         />
 
-        <button id="buttonCallbacksClick">With click event</button>
+        <button type="button" id="buttonCallbacksClick">
+          With click event
+        </button>
         <Tooltip
           openOnClick
           place="bottom"
@@ -207,7 +223,9 @@ function App() {
           content="Showing tooltip and calling afterShow method"
         />
 
-        <button id="buttonCallbacksDelay">With delay</button>
+        <button type="button" id="buttonCallbacksDelay">
+          With delay
+        </button>
         <Tooltip
           delayShow={1000}
           place="bottom"
