@@ -33,15 +33,8 @@ jobs:
       - name: Get current package.json version
         run: echo "PACKAGE_VERSION=$(npm pkg get version)" >> $GITHUB_ENV
 
-      - name: First beta release for this pull request
-        if: contains(env.PACKAGE_VERSION, 'beta') == false
-        run: echo "NEW_VERSION=$(npm version prerelease --no-git-tag-version --preid=beta.$GITHUB_PR_NUMBER)" >> $GITHUB_ENV
-        env:
-          GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
-
-      - name: Subsequent beta releases for this pull request
-        if: contains(env.PACKAGE_VERSION, 'beta')
-        run: echo "NEW_VERSION=$(npm version prerelease --no-git-tag-version --preid=beta)" >> $GITHUB_ENV
+      - name: Setup Beta Release Version
+        run: node beta-release.js --issue $GITHUB_PR_NUMBER
         env:
           GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
 
@@ -49,12 +42,6 @@ jobs:
         run: npm publish --tag beta
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Save new release version
-        run: |
-          git add ./package.json
-          git commit -m "chore: bump version to $NEW_VERSION"
-          git push
 
       - uses: actions/github-script@v6
         with:
