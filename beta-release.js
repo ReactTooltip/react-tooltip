@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
-const package = require('./package.json')
+const packageJson = require('./package.json')
 
 const args = require('minimist')(process.argv.slice(2))
 
@@ -26,7 +26,7 @@ const AutoBetaRelease = async () => {
 
   // check if there is a beta release with the same issue number on published versions
   const arrayOfBetaReleases = JSON.parse(stdout).filter((version) =>
-    version.includes(`${package.version}-beta.${issueNumber}`),
+    version.includes(`${packageJson.version}-beta.${issueNumber}`),
   )
 
   let fullLastBetaRelease = null
@@ -56,9 +56,9 @@ const AutoBetaRelease = async () => {
   }
 
   // next beta release version. Output: 1.0.0-beta.1.rc.1
-  const nextBetaReleaseVesionFull = `${package.version}-beta.${issueNumber}.rc.${nextBetaReleaseVersion}`
+  const nextBetaReleaseVesionFull = `${packageJson.version}-beta.${issueNumber}.rc.${nextBetaReleaseVersion}`
 
-  // update the beta version on package.json
+  // update the beta version on packageJson.json
   const { error } = await runCommand(
     `npm version ${nextBetaReleaseVesionFull} --no-git-tag-version`,
   )
