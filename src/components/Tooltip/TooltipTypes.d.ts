@@ -88,6 +88,7 @@ export interface TooltipRefProps {
 export type AnchorOpenEvents = {
   mouseenter?: boolean
   focus?: boolean
+  mouseover?: boolean
   click?: boolean
   dblclick?: boolean
   mousedown?: boolean
@@ -95,6 +96,7 @@ export type AnchorOpenEvents = {
 export type AnchorCloseEvents = {
   mouseleave?: boolean
   blur?: boolean
+  mouseout?: boolean
   click?: boolean
   dblclick?: boolean
   mouseup?: boolean

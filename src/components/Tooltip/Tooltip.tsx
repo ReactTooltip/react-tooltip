@@ -104,6 +104,7 @@ const Tooltip = ({
     : {
         mouseenter: true,
         focus: true,
+        mouseover: true,
         click: false,
         dblclick: false,
         mousedown: false,
@@ -112,6 +113,7 @@ const Tooltip = ({
     Object.assign(actualOpenEvents, {
       mouseenter: false,
       focus: false,
+      mouseover: false,
       click: true,
     })
   }
@@ -120,6 +122,7 @@ const Tooltip = ({
     : {
         mouseleave: true,
         blur: true,
+        mouseout: true,
         click: false,
         dblclick: false,
         mouseup: false,
@@ -128,6 +131,7 @@ const Tooltip = ({
     Object.assign(actualCloseEvents, {
       mouseleave: false,
       blur: false,
+      mouseout: false,
     })
   }
   const actualGlobalCloseEvents: GlobalCloseEvents = globalCloseEvents
@@ -540,7 +544,7 @@ const Tooltip = ({
       handleHideTooltip()
     }
 
-    const regularEvents = ['mouseenter', 'mouseleave', 'focus', 'blur']
+    const regularEvents = ['mouseenter', 'mouseleave', 'mouseover', 'mouseout', 'focus', 'blur']
     const clickEvents = ['click', 'dblclick', 'mousedown', 'mouseup']
 
     Object.entries(actualOpenEvents).forEach(([event, enabled]) => {
