@@ -102,9 +102,9 @@ const Tooltip = ({
   const actualOpenEvents: AnchorOpenEvents = openEvents
     ? { ...openEvents }
     : {
-        mouseenter: true,
-        focus: true,
         mouseover: true,
+        focus: true,
+        mouseenter: false,
         click: false,
         dblclick: false,
         mousedown: false,
@@ -120,9 +120,9 @@ const Tooltip = ({
   const actualCloseEvents: AnchorCloseEvents = closeEvents
     ? { ...closeEvents }
     : {
-        mouseleave: true,
-        blur: true,
         mouseout: true,
+        blur: true,
+        mouseleave: false,
         click: false,
         dblclick: false,
         mouseup: false,
@@ -544,7 +544,7 @@ const Tooltip = ({
       handleHideTooltip()
     }
 
-    const regularEvents = ['mouseenter', 'mouseleave', 'mouseover', 'mouseout', 'focus', 'blur']
+    const regularEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave', 'focus', 'blur']
     const clickEvents = ['click', 'dblclick', 'mousedown', 'mouseup']
 
     Object.entries(actualOpenEvents).forEach(([event, enabled]) => {
