@@ -54,9 +54,9 @@ React Tooltip is proud to be sponsored by [Frigade](https://frigade.com/?source=
 
 #### Silver Sponsors ✪
 
-<a href="https://dopt.com/?source=react-tooltip">
-  <img alt="Dopt" style="height: 200px; width: 200px;" src="docs/static/img/sponsors/dopt.png" />
-</a>
+<!-- <a href="#">
+  <img alt="Slot" style="height: 200px; width: 200px;" src="docs/static/img/sponsors/slot.png" />
+</a> -->
 
 ## Powered by
 

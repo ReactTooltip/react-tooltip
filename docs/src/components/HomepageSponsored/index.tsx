@@ -41,20 +41,20 @@ const SponsorList: SponsorItem[] = [
     eventTitle: 'frigade',
     tier: 'gold',
   },
-  {
-    title: 'Dopt',
-    src: require('@site/static/img/sponsors/dopt.png').default,
-    link: 'https://dopt.com/?source=react-tooltip',
-    eventTitle: 'dopt',
-    tier: 'silver',
-  },
+  // {
+  //   title: 'Slot',
+  //   src: require('@site/static/img/sponsors/slot.png').default,
+  //   link: '#',
+  //   eventTitle: 'slot',
+  //   tier: 'silver',
+  // },
 ]
 
 function Feature({ title, Svg, link }: FeatureItem) {
   return (
     <div className={clsx('col col--6')}>
       <div className="text--center">
-        <a href={link} title={title} target="_blank" rel="noreferrer">
+        <a href={link} title={title} target="_blank" rel="noreferrer" aria-label={title}>
           <Svg className={styles.featureSvg} role="img" />
         </a>
       </div>

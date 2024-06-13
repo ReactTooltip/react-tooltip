@@ -9,7 +9,7 @@ const AdsContainer = () => {
     <div className="ads-container fixed">
       <BannerSponsor sponsorKey="frigade" tier="gold" />
       <AdsContainerElement />
-      <BannerSponsor sponsorKey="dopt" tier="silver" />
+      {/* <BannerSponsor sponsorKey="slot" tier="silver" /> */}
     </div>
   )
 }
