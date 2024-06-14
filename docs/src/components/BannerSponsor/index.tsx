@@ -2,8 +2,6 @@
 import React from 'react'
 // @ts-ignore
 import LogoFrigade from '@site/static/img/sponsors/frigade.png'
-// @ts-ignore
-import LogoDopt from '@site/static/img/sponsors/dopt.png'
 import './styles.css'
 
 declare global {
@@ -18,11 +16,6 @@ const SPONSORS = {
     logo: LogoFrigade,
     title: 'Frigade',
     href: 'https://frigade.com/',
-  },
-  dopt: {
-    logo: LogoDopt,
-    title: 'Dopt',
-    href: 'https://dopt.com/',
   },
 }
 
