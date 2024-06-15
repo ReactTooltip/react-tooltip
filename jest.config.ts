@@ -25,8 +25,6 @@ export default {
     // dev stuff
     '!src/*',
     '!src/**/*.d.ts',
-    // deprecated
-    '!src/components/TooltipProvider/*',
   ],
 
   // The directory where Jest should output its coverage files

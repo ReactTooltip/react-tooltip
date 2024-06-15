@@ -1,4 +1,5 @@
 import { debounce, deepEqual, computeTooltipPosition, cssTimeToMs } from 'utils'
+import { injectStyle } from 'utils/handle-style.ts'
 
 describe('compute positions', () => {
   test('empty reference elements', async () => {
@@ -254,5 +255,31 @@ describe('deepEqual', () => {
     const obj2 = { a: 1, b: [2, 4] }
 
     expect(deepEqual(obj1, obj2)).toBe(false)
+  })
+})
+
+describe('handleStyle', () => {
+  test('inject base styles with no CSS into the page', () => {
+    injectStyle({ css: null, type: 'base' })
+
+    const styleElement = document.getElementById('react-tooltip-base-styles')
+
+    expect(styleElement).toBe(null)
+  })
+
+  test('inject core styles into the page', () => {
+    injectStyle({ css: `body { background: 'red' }`, type: 'core' })
+
+    const styleElement = document.getElementById('react-tooltip-core-styles')
+
+    expect(styleElement.innerHTML).toBe(`body { background: 'red' }`)
+  })
+
+  test('inject base styles into the page', () => {
+    injectStyle({ css: `body { background: 'red' }`, type: 'base' })
+
+    const styleElement = document.getElementById('react-tooltip-base-styles')
+
+    expect(styleElement.innerHTML).toBe(`body { background: 'red' }`)
   })
 })

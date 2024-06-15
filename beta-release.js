@@ -1,13 +1,17 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const util = require('util')
-const exec = util.promisify(require('child_process').exec)
-const package = require('./package.json')
+import util from 'util'
+import { exec as execCallback } from 'child_process'
+import minimist from 'minimist'
+import pkg from './package.json' assert { type: 'json' }
 
-const args = require('minimist')(process.argv.slice(2))
+const exec = util.promisify(execCallback)
+
+const args = minimist(process.argv.slice(2))
+
+console.log({ args })
 
 const issueNumber = args['issue']
 
-console.log(issueNumber)
+console.log({ issueNumber })
 
 const runCommand = async (command) => {
   return new Promise((resolve) => {
@@ -26,7 +30,7 @@ const AutoBetaRelease = async () => {
 
   // check if there is a beta release with the same issue number on published versions
   const arrayOfBetaReleases = JSON.parse(stdout).filter((version) =>
-    version.includes(`${package.version}-beta.${issueNumber}`),
+    version.includes(`${pkg.version}-beta.${issueNumber}`),
   )
 
   let fullLastBetaRelease = null
@@ -56,9 +60,9 @@ const AutoBetaRelease = async () => {
   }
 
   // next beta release version. Output: 1.0.0-beta.1.rc.1
-  const nextBetaReleaseVesionFull = `${package.version}-beta.${issueNumber}.rc.${nextBetaReleaseVersion}`
+  const nextBetaReleaseVesionFull = `${pkg.version}-beta.${issueNumber}.rc.${nextBetaReleaseVersion}`
 
-  // update the beta version on package.json
+  // update the beta version on packageJson.json
   const { error } = await runCommand(
     `npm version ${nextBetaReleaseVesionFull} --no-git-tag-version`,
   )
