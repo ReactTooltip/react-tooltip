@@ -17,11 +17,11 @@ import type {
 export interface ITooltipController {
   className?: string
   classNameArrow?: string
-  content?: string
+  content?: string | JSX.Element
   /**
    * @deprecated Use `children` or `render` instead
    */
-  html?: string
+  html?: string | JSX.Element
   render?: (render: { content: string | null; activeAnchor: HTMLElement | null }) => ChildrenType
   place?: PlacesType
   offset?: number
