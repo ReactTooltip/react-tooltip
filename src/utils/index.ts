@@ -6,6 +6,7 @@ import debounce from './debounce'
 import deepEqual from './deep-equal'
 import getScrollParent from './get-scroll-parent'
 import useIsomorphicLayoutEffect from './use-isomorphic-layout-effect'
+import clearTimeoutRef from './clear-timeout-ref'
 
 export type { IComputedPosition }
 export {
@@ -16,4 +17,5 @@ export {
   deepEqual,
   getScrollParent,
   useIsomorphicLayoutEffect,
+  clearTimeoutRef,
 }
