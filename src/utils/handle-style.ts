@@ -52,13 +52,7 @@ function injectStyle({
   const { insertAt } = ref
 
   if (document.getElementById(id)) {
-    // this should never happen because of `injected[type]`
-    if (process.env.NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
-      console.warn(
-        `[react-tooltip] Element with id '${id}' already exists. Call \`removeStyle()\` first`,
-      )
-    }
+    // this could happen in cases the tooltip is imported by multiple js modules
     return
   }
 
