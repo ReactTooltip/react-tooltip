@@ -1,4 +1,4 @@
-import { debounce, deepEqual, computeTooltipPosition, cssTimeToMs } from 'utils'
+import { debounce, deepEqual, computeTooltipPosition, cssTimeToMs, clearTimeoutRef } from 'utils'
 
 describe('compute positions', () => {
   test('empty reference elements', async () => {
@@ -254,5 +254,21 @@ describe('deepEqual', () => {
     const obj2 = { a: 1, b: [2, 4] }
 
     expect(deepEqual(obj1, obj2)).toBe(false)
+  })
+})
+
+describe('clearTimeoutRef', () => {
+  jest.useFakeTimers()
+
+  const func = jest.fn()
+
+  test('clears timeout ref', () => {
+    const timeoutRef = { current: setTimeout(func, 1000) }
+    clearTimeoutRef(timeoutRef)
+
+    jest.runAllTimers()
+
+    expect(func).not.toHaveBeenCalled()
+    expect(timeoutRef.current).toBe(null)
   })
 })

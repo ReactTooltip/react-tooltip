@@ -8,6 +8,7 @@ import {
   getScrollParent,
   computeTooltipPosition,
   cssTimeToMs,
+  clearTimeoutRef,
 } from 'utils'
 import type { IComputedPosition } from 'utils'
 import { useTooltip } from 'components/TooltipProvider'
@@ -223,9 +224,7 @@ const Tooltip = ({
     if (show === wasShowing.current) {
       return
     }
-    if (missedTransitionTimerRef.current) {
-      clearTimeout(missedTransitionTimerRef.current)
-    }
+    clearTimeoutRef(missedTransitionTimerRef)
     wasShowing.current = show
     if (show) {
       afterShow?.()
@@ -257,9 +256,7 @@ const Tooltip = ({
   }
 
   const handleShowTooltipDelayed = (delay = delayShow) => {
-    if (tooltipShowDelayTimerRef.current) {
-      clearTimeout(tooltipShowDelayTimerRef.current)
-    }
+    clearTimeoutRef(tooltipShowDelayTimerRef)
 
     if (rendered) {
       // if the tooltip is already rendered, ignore delay
@@ -273,9 +270,7 @@ const Tooltip = ({
   }
 
   const handleHideTooltipDelayed = (delay = delayHide) => {
-    if (tooltipHideDelayTimerRef.current) {
-      clearTimeout(tooltipHideDelayTimerRef.current)
-    }
+    clearTimeoutRef(tooltipHideDelayTimerRef)
 
     tooltipHideDelayTimerRef.current = setTimeout(() => {
       if (hoveringTooltip.current) {
@@ -307,9 +302,7 @@ const Tooltip = ({
     setActiveAnchor(target)
     setProviderActiveAnchor({ current: target })
 
-    if (tooltipHideDelayTimerRef.current) {
-      clearTimeout(tooltipHideDelayTimerRef.current)
-    }
+    clearTimeoutRef(tooltipHideDelayTimerRef)
   }
 
   const handleHideTooltip = () => {
@@ -322,9 +315,7 @@ const Tooltip = ({
       handleShow(false)
     }
 
-    if (tooltipShowDelayTimerRef.current) {
-      clearTimeout(tooltipShowDelayTimerRef.current)
-    }
+    clearTimeoutRef(tooltipShowDelayTimerRef)
   }
 
   const handleTooltipPosition = ({ x, y }: IPosition) => {
@@ -386,9 +377,7 @@ const Tooltip = ({
       return
     }
     handleShow(false)
-    if (tooltipShowDelayTimerRef.current) {
-      clearTimeout(tooltipShowDelayTimerRef.current)
-    }
+    clearTimeoutRef(tooltipShowDelayTimerRef)
   }
 
   // debounce handler to prevent call twice when
@@ -697,12 +686,8 @@ const Tooltip = ({
               setRendered(false)
               handleShow(false)
               setActiveAnchor(null)
-              if (tooltipShowDelayTimerRef.current) {
-                clearTimeout(tooltipShowDelayTimerRef.current)
-              }
-              if (tooltipHideDelayTimerRef.current) {
-                clearTimeout(tooltipHideDelayTimerRef.current)
-              }
+              clearTimeoutRef(tooltipShowDelayTimerRef)
+              clearTimeoutRef(tooltipHideDelayTimerRef)
               return true
             }
             return false
@@ -790,12 +775,8 @@ const Tooltip = ({
       handleShow(true)
     }
     return () => {
-      if (tooltipShowDelayTimerRef.current) {
-        clearTimeout(tooltipShowDelayTimerRef.current)
-      }
-      if (tooltipHideDelayTimerRef.current) {
-        clearTimeout(tooltipHideDelayTimerRef.current)
-      }
+      clearTimeoutRef(tooltipShowDelayTimerRef)
+      clearTimeoutRef(tooltipHideDelayTimerRef)
     }
   }, [])
 
@@ -818,7 +799,11 @@ const Tooltip = ({
 
   useEffect(() => {
     if (tooltipShowDelayTimerRef.current) {
-      clearTimeout(tooltipShowDelayTimerRef.current)
+      /**
+       * if the delay changes while the tooltip is waiting to show,
+       * reset the timer with the new delay
+       */
+      clearTimeoutRef(tooltipShowDelayTimerRef)
       handleShowTooltipDelayed(delayShow)
     }
   }, [delayShow])
@@ -875,9 +860,7 @@ const Tooltip = ({
         clickable && coreStyles['clickable'],
       )}
       onTransitionEnd={(event: TransitionEvent) => {
-        if (missedTransitionTimerRef.current) {
-          clearTimeout(missedTransitionTimerRef.current)
-        }
+        clearTimeoutRef(missedTransitionTimerRef)
         if (show || event.propertyName !== 'opacity') {
           return
         }
