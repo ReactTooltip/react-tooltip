@@ -1,11 +1,4 @@
-import {
-  debounce,
-  deepEqual,
-  computeTooltipPosition,
-  cssTimeToMs,
-  cssSupports,
-  clearTimeoutRef,
-} from 'utils'
+import { debounce, deepEqual, computeTooltipPosition, cssTimeToMs, clearTimeoutRef } from 'utils'
 import { injectStyle } from 'utils/handle-style.ts'
 
 describe('compute positions', () => {
@@ -304,20 +297,5 @@ describe('handleStyle', () => {
     const styleElement = document.getElementById('react-tooltip-base-styles')
 
     expect(styleElement.innerHTML).toBe(`body { background: 'red' }`)
-  })
-})
-
-describe('check for CSS attribute support on current page', () => {
-  test('CSS attribute should be supported in global Window', () => {
-    const hasSupportToOpacity = cssSupports('opacity', '1')
-
-    expect(hasSupportToOpacity).toBe('1')
-  })
-
-  test('CSS attribute should not be supported in global Window', () => {
-    // not a valid css attribute
-    const hasSupportToOpacity = cssSupports('lorem', '100')
-
-    expect(hasSupportToOpacity).toBe(false)
   })
 })

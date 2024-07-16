@@ -9,7 +9,6 @@ import type {
   ITooltip,
   TooltipRefProps,
 } from 'components/Tooltip/TooltipTypes'
-import { cssSupports } from 'utils'
 import clsx from 'clsx'
 import type { ITooltipController } from './TooltipControllerTypes'
 
@@ -250,17 +249,9 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
         // eslint-disable-next-line no-console
         console.warn('[react-tooltip] Do not set `style.border`. Use `border` prop instead.')
       }
-      if (border && !cssSupports('border', `${border}`)) {
-        // eslint-disable-next-line no-console
-        console.warn(`[react-tooltip] "${border}" is not a valid \`border\`.`)
-      }
       if (style?.opacity) {
         // eslint-disable-next-line no-console
         console.warn('[react-tooltip] Do not set `style.opacity`. Use `opacity` prop instead.')
-      }
-      if (opacity && !cssSupports('opacity', `${opacity}`)) {
-        // eslint-disable-next-line no-console
-        console.warn(`[react-tooltip] "${opacity}" is not a valid \`opacity\`.`)
       }
     }, [border, opacity, style?.border, style?.opacity])
 

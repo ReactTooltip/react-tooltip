@@ -1,6 +1,5 @@
 import type { IComputedPosition } from './compute-tooltip-position-types'
 import computeTooltipPosition from './compute-tooltip-position'
-import cssSupports from './css-supports'
 import cssTimeToMs from './css-time-to-ms'
 import debounce from './debounce'
 import deepEqual from './deep-equal'
@@ -11,7 +10,6 @@ import clearTimeoutRef from './clear-timeout-ref'
 export type { IComputedPosition }
 export {
   computeTooltipPosition,
-  cssSupports,
   cssTimeToMs,
   debounce,
   deepEqual,
