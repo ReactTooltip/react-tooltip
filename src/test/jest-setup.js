@@ -1,5 +1,4 @@
 import React from 'react'
-// whatever else you need in here
 
 global.React = React
 
@@ -8,3 +7,13 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
   unobserve: jest.fn(),
   disconnect: jest.fn(),
 }))
+
+global.CSS = {
+  supports: (key, value) => {
+    if (key === 'opacity') {
+      return value
+    }
+
+    return false
+  },
+}
