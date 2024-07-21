@@ -56,6 +56,7 @@ const Tooltip = ({
   position,
   afterShow,
   afterHide,
+  disableTooltip,
   // props handled by controller
   content,
   contentWrapperRef,
@@ -459,6 +460,9 @@ const Tooltip = ({
     const elementRefs = new Set(anchorRefs)
 
     anchorsBySelect.forEach((anchor) => {
+      if(disableTooltip?.(anchor)){
+        return;
+      }
       elementRefs.add({ current: anchor })
     })
 

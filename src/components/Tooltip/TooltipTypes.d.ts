@@ -152,6 +152,7 @@ export interface ITooltip {
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
   afterHide?: () => void
+  disableTooltip?: (anchorRef: HTMLElement | null) => boolean
   activeAnchor: HTMLElement | null
   setActiveAnchor: (anchor: HTMLElement | null) => void
   border?: CSSProperties['border']
