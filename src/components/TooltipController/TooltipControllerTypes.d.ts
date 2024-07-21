@@ -94,6 +94,7 @@ export interface ITooltipController {
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
   afterHide?: () => void
+  disableTooltip?: (anchorRef: HTMLElement | null) => boolean
   role?: React.AriaRole
 }
 
