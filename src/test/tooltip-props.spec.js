@@ -181,4 +181,35 @@ describe('tooltip props', () => {
     expect(tooltip).toBeInTheDocument()
     expect(container).toMatchSnapshot()
   })
+
+  test('tooltip with disableTooltip return true', async () => {
+    render(
+      <TooltipProps
+        id="example-disableTooltip-true"
+        content="Hello World!"
+        disableTooltip={() => true}
+      />,
+    )
+    const anchorElement = screen.getByText('Lorem Ipsum')
+    await userEvent.hover(anchorElement)
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+  })
+
+  test('tooltip with disableTooltip return false', async () => {
+    const { container } = render(
+      <TooltipProps
+        id="example-disableTooltip-false"
+        content="Hello World!"
+        disableTooltip={() => false}
+      />,
+    )
+    const anchorElement = screen.getByText('Lorem Ipsum')
+    await userEvent.hover(anchorElement)
+
+    const tooltip = await screen.findByRole('tooltip')
+
+    expect(tooltip).toBeInTheDocument()
+    expect(container).toMatchSnapshot()
+  })
 })
