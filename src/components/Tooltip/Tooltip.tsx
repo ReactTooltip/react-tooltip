@@ -460,14 +460,14 @@ const Tooltip = ({
     const elementRefs = new Set(anchorRefs)
 
     anchorsBySelect.forEach((anchor) => {
-      if(disableTooltip?.(anchor)){
-        return;
+      if (disableTooltip?.(anchor)) {
+        return
       }
       elementRefs.add({ current: anchor })
     })
 
     const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
-    if (anchorById) {
+    if (anchorById && !disableTooltip?.(anchorById)) {
       elementRefs.add({ current: anchorById })
     }
 
