@@ -29,3 +29,7 @@
     width: 100%;
   }
 }
+
+html[data-theme='dark'] .AlgoliaLogo{
+  fill: #fff;
+}
