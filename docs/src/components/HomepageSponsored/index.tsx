@@ -51,7 +51,7 @@ const SponsorList: SponsorItem[] = [
 ]
 
 function Feature({ title, Svg, link }: FeatureItem) {
-  var classVar = styles.featureSvg;
+  let classVar = styles.featureSvg;
   if(Svg === require('@site/static/img/Algolia-logo.svg').default)
   {
     classVar = styles.featureSvg +" "+ styles.AlgoliaLogo;
