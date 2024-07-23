@@ -42,7 +42,7 @@ const FeatureList: FeatureItem[] = [
 ]
 
 function Feature({ title, Svg, description }: FeatureItem) {
-  var classVar = styles.featureSvg;
+  let classVar = styles.featureSvg;
   if(Svg === require('@site/static/img/github.svg').default)
   {
     classVar = styles.featureSvg +" "+ styles.githubLogo;
