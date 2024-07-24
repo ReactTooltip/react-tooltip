@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable global-require */
@@ -9,6 +10,7 @@ type FeatureItem = {
   title: string
   Svg: React.ComponentType<React.ComponentProps<'svg'>>
   description: JSX.Element
+  allowsDarkMode?: boolean
 }
 
 const FeatureList: FeatureItem[] = [
@@ -28,6 +30,7 @@ const FeatureList: FeatureItem[] = [
         community to always try to improve ReactTooltip.
       </>
     ),
+    allowsDarkMode: true,
   },
   {
     title: 'Focus on What Matters',
@@ -41,16 +44,16 @@ const FeatureList: FeatureItem[] = [
   },
 ]
 
-function Feature({ title, Svg, description }: FeatureItem) {
-  let svgClassName = styles.featureSvg
-  if (Svg === require('@site/static/img/github.svg').default) {
-    svgClassName = `${styles.featureSvg} ${styles.githubLogo}`
-  }
-
+function Feature({ title, Svg, description,allowsDarkMode }: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <Svg className={svgClassName} role="img" />
+        <Svg
+          className={clsx(styles.featureSvg, {
+            [styles.svgDarkMode]: allowsDarkMode,
+          })} 
+          role="img" 
+          />
       </div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>

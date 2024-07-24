@@ -14,6 +14,7 @@ type FeatureItem = {
   // eslint-disable-next-line react/no-unused-prop-types
   eventTitle?: string
   link: string
+  allowsDarkMode?: boolean
 }
 
 type SponsorItem = FeatureItem & {
@@ -30,6 +31,7 @@ const FeatureList: FeatureItem[] = [
     title: 'Algolia',
     Svg: require('@site/static/img/Algolia-logo.svg').default,
     link: 'https://docsearch.algolia.com/',
+    allowsDarkMode: true,
   },
 ]
 
@@ -50,17 +52,17 @@ const SponsorList: SponsorItem[] = [
   // },
 ]
 
-function Feature({ title, Svg, link }: FeatureItem) {
-  let svgClassName = styles.featureSvg
-  if (Svg === require('@site/static/img/Algolia-logo.svg').default) {
-    svgClassName = `${styles.featureSvg} ${styles.AlgoliaLogo}`
-  }
-
+function Feature({ title, Svg, link,allowsDarkMode}: FeatureItem) {
   return (
     <div className={clsx('col col--6')}>
       <div className="text--center">
         <a href={link} title={title} target="_blank" rel="noreferrer" aria-label={title}>
-          <Svg className={svgClassName} role="img"/>
+        <Svg
+          className={clsx(styles.featureSvg, {
+            [styles.svgDarkMode]: allowsDarkMode,
+          })} 
+          role="img" 
+          />
         </a>
       </div>
     </div>

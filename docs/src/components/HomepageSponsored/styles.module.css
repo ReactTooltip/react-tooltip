@@ -30,6 +30,6 @@
   }
 }
 
-html[data-theme='dark'] .AlgoliaLogo{
+html[data-theme='dark'] .svgDarkMode {
   fill: #fff;
 }

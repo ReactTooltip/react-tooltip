@@ -10,6 +10,6 @@
   width: 200px;
 }
 
-html[data-theme='dark'] .githubLogo {
+html[data-theme='dark'] .svgDarkMode {
   fill: #fff;
 }
