@@ -42,15 +42,15 @@ const FeatureList: FeatureItem[] = [
 ]
 
 function Feature({ title, Svg, description }: FeatureItem) {
-  let classVar = styles.featureSvg;
-  if(Svg === require('@site/static/img/github.svg').default)
-  {
-    classVar = styles.featureSvg +" "+ styles.githubLogo;
+  let svgClassName = styles.featureSvg
+  if (Svg === require('@site/static/img/github.svg').default) {
+    svgClassName = `${styles.featureSvg} ${styles.githubLogo}`
   }
+
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <Svg className={classVar} role="img" />
+        <Svg className={svgClassName} role="img" />
       </div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
