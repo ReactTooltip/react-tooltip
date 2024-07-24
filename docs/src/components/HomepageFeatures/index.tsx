@@ -44,16 +44,16 @@ const FeatureList: FeatureItem[] = [
   },
 ]
 
-function Feature({ title, Svg, description,allowsDarkMode }: FeatureItem) {
+function Feature({ title, Svg, description, allowsDarkMode }: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
         <Svg
           className={clsx(styles.featureSvg, {
             [styles.svgDarkMode]: allowsDarkMode,
-          })} 
-          role="img" 
-          />
+          })}
+          role="img"
+        />
       </div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
