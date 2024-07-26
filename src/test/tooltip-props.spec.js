@@ -57,19 +57,6 @@ describe('tooltip props', () => {
     expect(container).toMatchSnapshot()
   })
 
-  test('tooltip with html', async () => {
-    const { container } = render(<TooltipProps id="example-html" html="<div>Hello World!<div>" />)
-    const anchorElement = screen.getByText('Lorem Ipsum')
-
-    await userEvent.hover(anchorElement)
-
-    const tooltip = await screen.findByRole('tooltip')
-    expect(tooltip).toHaveAttribute('style')
-
-    expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
-  })
-
   test('clickable tooltip', async () => {
     const id = 'example-clickable'
 

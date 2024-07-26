@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode, CSSProperties, RefObject } from 'react'
+import type { ElementType, CSSProperties, RefObject, ReactNode } from 'react'
 
 export type PlacesType =
   | 'top'
@@ -18,20 +18,14 @@ export type VariantType = 'dark' | 'light' | 'success' | 'warning' | 'error' | '
 
 export type WrapperType = ElementType | 'div' | 'span'
 
-export type ChildrenType = Element | ElementType | ReactNode
-
-export type EventsType = 'hover' | 'click'
-
 export type PositionStrategy = 'absolute' | 'fixed'
 
 export type DataAttribute =
   | 'place'
   | 'content'
-  | 'html'
   | 'variant'
   | 'offset'
   | 'wrapper'
-  | 'events'
   | 'position-strategy'
   | 'delay-show'
   | 'delay-hide'
@@ -54,7 +48,7 @@ export interface TooltipImperativeOpenOptions {
   anchorSelect?: string
   position?: IPosition
   place?: PlacesType
-  content?: ChildrenType
+  content?: ReactNode
   /**
    * @description Delay (in ms) before opening the tooltip.
    */
@@ -112,23 +106,14 @@ export interface ITooltip {
   forwardRef?: React.ForwardedRef<TooltipRefProps>
   className?: string
   classNameArrow?: string
-  content?: ChildrenType
+  content?: ReactNode
   contentWrapperRef?: RefObject<HTMLDivElement>
   place?: PlacesType
   offset?: number
   id?: string
   variant?: VariantType
-  /**
-   * @deprecated Use the `data-tooltip-id` attribute, or the `anchorSelect` prop instead.
-   * See https://react-tooltip.com/docs/getting-started
-   */
-  anchorId?: string
   anchorSelect?: string
   wrapper: WrapperType
-  /**
-   * @deprecated Use `openOnClick` instead.
-   */
-  events?: EventsType[]
   openOnClick?: boolean
   positionStrategy?: PositionStrategy
   middlewares?: Middleware[]
@@ -138,9 +123,6 @@ export interface ITooltip {
   hidden?: boolean
   noArrow?: boolean
   clickable?: boolean
-  closeOnEsc?: boolean
-  closeOnScroll?: boolean
-  closeOnResize?: boolean
   openEvents?: AnchorOpenEvents
   closeEvents?: AnchorCloseEvents
   globalCloseEvents?: GlobalCloseEvents
