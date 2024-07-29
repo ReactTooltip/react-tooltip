@@ -2,8 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { TooltipController as Tooltip } from 'components/TooltipController'
 import type { IPosition, TooltipRefProps } from 'components/Tooltip/TooltipTypes.d'
-import type React from 'react'
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { inline, offset } from '@floating-ui/dom'
 import styles from './styles.module.css'
 
@@ -107,10 +106,10 @@ function App() {
           >
             Anchor select
           </button>
-          <button type="button" type="button" data-tooltip-id="anchor-select">
+          <button type="button" data-tooltip-id="anchor-select">
             Anchor select 2
           </button>
-          <button type="button" type="button" data-tooltip-id="anchor-select">
+          <button type="button" data-tooltip-id="anchor-select">
             Anchor select 3
           </button>
         </p>
