@@ -508,7 +508,10 @@ const Tooltip = ({
       window.addEventListener('click', handleClickOutsideAnchors)
     }
 
-    const enabledEvents: { event: string; listener: (event?: Event) => void }[] = []
+    const enabledEvents: {
+      event: string
+      listener: (event?: Event) => void
+    }[] = []
 
     const handleClickOpenTooltipAnchor = (event?: Event) => {
       if (show && event?.target === activeAnchor) {

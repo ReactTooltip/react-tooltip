@@ -15,6 +15,9 @@
     "bundlesize": "bundlesize",
     "esbuild": "esbuild",
     "test": "jest",
+    "biome:lint": "biome lint --max-diagnostics 1000 --apply ./src",
+    "biome:format": "biome format --max-diagnostics 1000 --write ./src",
+    "biome:pre-commit": "npm run biome:lint && npm run biome:format",
     "postbuild": "npm run types && npm run bundlesize",
     "prepublishOnly": "npm run build"
   },
@@ -49,6 +52,7 @@
   },
   "homepage": "https://github.com/ReactTooltip/react-tooltip#readme",
   "devDependencies": {
+    "@biomejs/biome": "1.8.3",
     "@rollup/plugin-commonjs": "26.0.1",
     "@rollup/plugin-node-resolve": "15.2.3",
     "@rollup/plugin-replace": "5.0.7",
