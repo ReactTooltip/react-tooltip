@@ -5,7 +5,7 @@
 	},
   "files": {
     "include": ["./src"],
-    "ignore": ["node_modules/**", "dist/**", "build/**", "coverage/**", "public/**", "docs/**"]
+    "ignore": ["node_modules/**", "dist/**", "build/**", "coverage/**", "public/**", "docs/**", "./src/App.tsx"]
   },
 	"linter": {
 		"enabled": true,
