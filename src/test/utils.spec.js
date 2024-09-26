@@ -497,4 +497,17 @@ describe('injectStyle', () => {
     injectStyle({ css: 'body { color: blue; }', type: 'core' })
     expect(injected.core).toBe(true)
   })
+
+  test('should inject styles before the first child of head element', () => {
+    const fisrtStyleElement = document.createElement('style')
+    fisrtStyleElement.id = 'old-first-child'
+    document.head.appendChild(fisrtStyleElement)
+
+    injectStyle({ css: cssBase, ref: { insertAt: 'top' }, state: { core: false, base: false } })
+
+    const styleElement = document.getElementById('react-tooltip-base-styles')
+
+    expect(fisrtStyleElement).toBeInTheDocument()
+    expect(document.head.firstChild).toBe(styleElement)
+  })
 })
