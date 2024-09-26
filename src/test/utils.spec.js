@@ -1,5 +1,13 @@
-import { debounce, deepEqual, computeTooltipPosition, cssTimeToMs, clearTimeoutRef } from 'utils'
+import {
+  debounce,
+  deepEqual,
+  computeTooltipPosition,
+  cssTimeToMs,
+  clearTimeoutRef,
+  getScrollParent,
+} from 'utils'
 import { injectStyle } from 'utils/handle-style.ts'
+import { isScrollable } from '../utils/get-scroll-parent'
 
 describe('compute positions', () => {
   test('empty reference elements', async () => {
@@ -297,5 +305,98 @@ describe('handleStyle', () => {
     const styleElement = document.getElementById('react-tooltip-base-styles')
 
     expect(styleElement.innerHTML).toBe(`body { background: 'red' }`)
+  })
+})
+
+describe('getScrollParent', () => {
+  let div
+  let scrollParent
+
+  beforeEach(() => {
+    // Basic DOM setup simulating a container with scroll
+    div = document.createElement('div')
+    scrollParent = document.createElement('div')
+
+    document.body.appendChild(scrollParent)
+    scrollParent.appendChild(div)
+
+    // Reset styles before each test
+    scrollParent.style.overflow = ''
+    scrollParent.style.overflowY = ''
+    scrollParent.style.overflowX = ''
+  })
+
+  afterEach(() => {
+    // Clear the DOM after each test
+    document.body.innerHTML = ''
+  })
+
+  test('returns null when no element is provided', () => {
+    expect(getScrollParent(null)).toBeNull()
+  })
+
+  test('returns document.scrollingElement when no scrollable parent is found', () => {
+    expect(getScrollParent(div)).toBe(document.scrollingElement || document.documentElement)
+  })
+
+  test('returns the parent when it has overflow set to auto', () => {
+    scrollParent.style.overflow = 'auto'
+    expect(getScrollParent(div)).toBe(scrollParent)
+  })
+
+  test('returns the parent when it has overflow-y set to scroll', () => {
+    scrollParent.style.overflowY = 'scroll'
+    expect(getScrollParent(div)).toBe(scrollParent)
+  })
+
+  test('returns the parent when it has overflow-x set to auto', () => {
+    scrollParent.style.overflowX = 'auto'
+    expect(getScrollParent(div)).toBe(scrollParent)
+  })
+
+  test('returns the parent when multiple ancestors exist with overflow', () => {
+    const grandParent = document.createElement('div')
+    document.body.appendChild(grandParent)
+    grandParent.appendChild(scrollParent)
+
+    grandParent.style.overflow = 'auto'
+    scrollParent.style.overflow = 'scroll'
+
+    expect(getScrollParent(div)).toBe(scrollParent)
+  })
+
+  test('returns document.scrollingElement when no scroll parent is found', () => {
+    scrollParent.style.overflow = 'visible' // overflow that doesn't allow scrolling
+    expect(getScrollParent(div)).toBe(document.scrollingElement || document.documentElement)
+  })
+})
+
+describe('isScrollable', () => {
+  test('returns false for non-HTMLElement and non-SVGElement nodes', () => {
+    const textNode = document.createTextNode('This is a text node')
+    const commentNode = document.createComment('This is a comment node')
+    const fragment = document.createDocumentFragment()
+
+    expect(isScrollable(textNode)).toBe(false)
+    expect(isScrollable(commentNode)).toBe(false)
+    expect(isScrollable(fragment)).toBe(false)
+  })
+
+  test('returns false for HTMLElement with no scrollable styles', () => {
+    const div = document.createElement('div')
+    div.style.overflow = 'visible' // No scrolling allowed
+    expect(isScrollable(div)).toBe(false)
+  })
+
+  test('returns true for HTMLElement with scrollable styles', () => {
+    const div = document.createElement('div')
+    div.style.overflow = 'auto' // Scrollable
+    expect(isScrollable(div)).toBe(true)
+  })
+
+  test('returns true for SVGElement with scrollable styles', () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    svg.style.overflow = 'scroll' // Scrollable
+    expect(isScrollable(svg)).toBe(true)
   })
 })
