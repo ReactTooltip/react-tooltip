@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState, memo } from 'react'
 import { Tooltip } from 'components/Tooltip'
 import type {
   PositionStrategy,
@@ -318,4 +318,4 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
   },
 )
 
-export default TooltipController
+export default memo(TooltipController)

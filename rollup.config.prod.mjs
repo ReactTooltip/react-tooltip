@@ -40,7 +40,6 @@ const buildFormats = [
       react: 'React',
       'react-dom': 'ReactDOM',
       clsx: 'clsx',
-      'prop-types': 'PropTypes',
     },
   },
   {
@@ -58,7 +57,7 @@ const sharedPlugins = [
   replace({
     preventAssignment: true,
     values: {
-      'process.env.NODE_ENV': JSON.stringify('development'),
+      'process.env.NODE_ENV': JSON.stringify('production'),
     },
   }),
   nodeResolve(),
@@ -115,6 +114,10 @@ const config = allBuildFormats.map(
         name,
         globals,
         sourcemap: true,
+        // Exclude the actual source content from the source map.
+        // This means that the source maps will contain references
+        // to positions in the original code, but not the source code itself.
+        sourcemapExcludeSources: true,
         banner,
       },
       external,

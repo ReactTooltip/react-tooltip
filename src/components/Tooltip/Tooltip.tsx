@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback, useImperativeHandle } from 'react'
+import React, { useEffect, useState, useRef, useCallback, useImperativeHandle, memo } from 'react'
 import { autoUpdate } from '@floating-ui/dom'
 import clsx from 'clsx'
 import {
@@ -920,4 +920,4 @@ const Tooltip = ({
   ) : null
 }
 
-export default Tooltip
+export default memo(Tooltip)

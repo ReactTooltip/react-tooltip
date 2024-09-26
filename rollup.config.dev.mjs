@@ -19,7 +19,6 @@ const globals = {
   react: 'React',
   'react-dom': 'ReactDOM',
   clsx: 'clsx',
-  'prop-types': 'PropTypes',
 }
 
 const plugins = [
