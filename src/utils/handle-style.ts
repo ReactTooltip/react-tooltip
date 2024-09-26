@@ -93,8 +93,8 @@ function injectStyle({
     // eslint-disable-next-line no-param-reassign
     state[type] = true
   } else {
-    injected[type] = true
+    injected[type] = true // internal global state that jest doesn't have access
   }
 }
 
-export { injectStyle }
+export { injectStyle, injected }

@@ -7,7 +7,7 @@ import {
   clearTimeoutRef,
   getScrollParent,
 } from 'utils'
-import { injectStyle } from 'utils/handle-style.ts'
+import { injectStyle, injected } from 'utils/handle-style.ts'
 import { isScrollable } from 'utils/get-scroll-parent'
 
 describe('compute positions', () => {
@@ -488,5 +488,13 @@ describe('injectStyle', () => {
 
     // Restore the original document.createElement implementation
     createElementSpy.mockRestore()
+  })
+
+  test('should update state[type] after injection', () => {
+    injectStyle({ css: 'body { color: black; }' })
+    expect(injected.base).toBe(true)
+
+    injectStyle({ css: 'body { color: blue; }', type: 'core' })
+    expect(injected.core).toBe(true)
   })
 })
