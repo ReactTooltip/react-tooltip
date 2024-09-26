@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom'
 import {
   debounce,
   deepEqual,
@@ -6,8 +7,8 @@ import {
   clearTimeoutRef,
   getScrollParent,
 } from 'utils'
-import { injectStyle } from 'utils/handle-style.ts'
-import { isScrollable } from '../utils/get-scroll-parent'
+import { injectStyle, injected } from 'utils/handle-style.ts'
+import { isScrollable } from 'utils/get-scroll-parent'
 
 describe('compute positions', () => {
   test('empty reference elements', async () => {
@@ -282,32 +283,6 @@ describe('clearTimeoutRef', () => {
   })
 })
 
-describe('handleStyle', () => {
-  test('inject base styles with no CSS into the page', () => {
-    injectStyle({ css: null, type: 'base' })
-
-    const styleElement = document.getElementById('react-tooltip-base-styles')
-
-    expect(styleElement).toBe(null)
-  })
-
-  test('inject core styles into the page', () => {
-    injectStyle({ css: `body { background: 'red' }`, type: 'core' })
-
-    const styleElement = document.getElementById('react-tooltip-core-styles')
-
-    expect(styleElement.innerHTML).toBe(`body { background: 'red' }`)
-  })
-
-  test('inject base styles into the page', () => {
-    injectStyle({ css: `body { background: 'red' }`, type: 'base' })
-
-    const styleElement = document.getElementById('react-tooltip-base-styles')
-
-    expect(styleElement.innerHTML).toBe(`body { background: 'red' }`)
-  })
-})
-
 describe('getScrollParent', () => {
   let div
   let scrollParent
@@ -398,5 +373,97 @@ describe('isScrollable', () => {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     svg.style.overflow = 'scroll' // Scrollable
     expect(isScrollable(svg)).toBe(true)
+  })
+})
+
+describe('injectStyle', () => {
+  const cssBase = 'body { background-color: red; }'
+  const cssCore = 'body { background-color: blue; }'
+
+  beforeEach(() => {
+    document.head.innerHTML = '' // Reset the DOM
+    jest.resetModules() // Ensure module reset between tests
+  })
+
+  test('should not inject if no CSS is provided', () => {
+    injectStyle({ css: '' })
+    const styleElement = document.getElementById('react-tooltip-base-styles')
+    expect(styleElement).not.toBeInTheDocument()
+  })
+
+  test('should not inject base styles if already injected', () => {
+    const sharedState = { core: false, base: false }
+
+    injectStyle({ css: cssBase, state: sharedState })
+    injectStyle({ css: cssBase, state: sharedState }) // Attempt to inject again
+
+    const styleElements = document.querySelectorAll('#react-tooltip-base-styles')
+    expect(styleElements.length).toBe(1) // Only one instance
+  })
+
+  test('should not inject core styles if already injected', () => {
+    const sharedState = { core: false, base: false }
+
+    injectStyle({ css: cssCore, type: 'core', state: sharedState })
+    injectStyle({ css: cssCore, type: 'core', stage: sharedState })
+
+    const styleElements = document.querySelectorAll('#react-tooltip-core-styles')
+    expect(styleElements.length).toBe(1) // Only one instance
+  })
+
+  test('should not inject core styles if REACT_TOOLTIP_DISABLE_CORE_STYLES is set', () => {
+    process.env.REACT_TOOLTIP_DISABLE_CORE_STYLES = 'true'
+    injectStyle({ css: cssCore, type: 'core' })
+
+    const styleElement = document.getElementById('react-tooltip-core-styles')
+    expect(styleElement).not.toBeInTheDocument()
+
+    delete process.env.REACT_TOOLTIP_DISABLE_CORE_STYLES // Clean up
+  })
+
+  test('should not inject base styles if REACT_TOOLTIP_DISABLE_BASE_STYLES is set', () => {
+    process.env.REACT_TOOLTIP_DISABLE_BASE_STYLES = 'true'
+    injectStyle({ css: cssBase, state: { core: false, base: false } })
+
+    const styleElement = document.getElementById('react-tooltip-base-styles')
+    expect(styleElement).not.toBeInTheDocument()
+
+    delete process.env.REACT_TOOLTIP_DISABLE_BASE_STYLES // Clean up
+  })
+
+  test('should inject base styles into the DOM', () => {
+    injectStyle({ css: cssBase, state: { core: false, base: false } })
+
+    const styleElement = document.getElementById('react-tooltip-base-styles')
+    expect(styleElement).toBeInTheDocument()
+    expect(styleElement.textContent).toBe(cssBase)
+  })
+
+  test('should inject core styles into the DOM', () => {
+    injectStyle({ css: cssCore, type: 'core', state: { core: false, base: false } })
+
+    const styleElement = document.getElementById('react-tooltip-core-styles')
+    expect(styleElement).toBeInTheDocument()
+    expect(styleElement.textContent).toBe(cssCore)
+  })
+
+  test('should inject style at the top of the head when insertAt is "top"', () => {
+    injectStyle({ css: cssBase, ref: { insertAt: 'top' }, state: { core: false, base: false } })
+
+    const firstStyleElement = document.head.firstChild
+    expect(firstStyleElement.textContent).toBe(cssBase)
+  })
+
+  test('should inject style at the bottom of the head when insertAt is not "top"', () => {
+    const appendChildSpy = jest.spyOn(document.head, 'appendChild')
+
+    // No need to provide insertAt: 'bottom', just omit it
+    injectStyle({ css: cssBase, state: { core: false, base: false } })
+
+    expect(appendChildSpy).toHaveBeenCalledTimes(1) // Append should be called
+    const lastStyleElement = document.head.lastChild
+    expect(lastStyleElement.textContent).toBe(cssBase) // Check the inserted style content
+
+    appendChildSpy.mockRestore() // Clean up the spy
   })
 })

@@ -3,24 +3,35 @@ const REACT_TOOLTIP_CORE_STYLES_ID = 'react-tooltip-core-styles'
 // This is the ID for the visual styles of ReactTooltip
 const REACT_TOOLTIP_BASE_STYLES_ID = 'react-tooltip-base-styles'
 
-const injected = {
+export const injected = {
   core: false,
   base: false,
 }
 
+/**
+ * Note about `state` parameter:
+ * This parameter is used to keep track of the state of the styles
+ * into the tests since the const `injected` is not acessible or resettable in the tests
+ */
 function injectStyle({
   css,
   id = REACT_TOOLTIP_BASE_STYLES_ID,
   type = 'base',
   ref,
+  state = {},
 }: {
   css: string
   id?: string
   type?: 'core' | 'base'
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref?: any
+  state: { [key: string]: boolean }
 }) {
-  if (!css || typeof document === 'undefined' || injected[type]) {
+  if (
+    !css ||
+    typeof document === 'undefined' ||
+    (typeof state[type] !== 'undefined' ? state[type] : injected[type])
+  ) {
     return
   }
 
@@ -33,7 +44,7 @@ function injectStyle({
   }
 
   if (
-    type !== 'base' &&
+    type === 'base' &&
     typeof process !== 'undefined' && // this validation prevents docs from breaking even with `process?`
     process?.env?.REACT_TOOLTIP_DISABLE_BASE_STYLES
   ) {
@@ -78,7 +89,12 @@ function injectStyle({
     style.appendChild(document.createTextNode(css))
   }
 
-  injected[type] = true
+  if (typeof state[type] !== 'undefined') {
+    // eslint-disable-next-line no-param-reassign
+    state[type] = true
+  } else {
+    injected[type] = true
+  }
 }
 
 export { injectStyle }
