@@ -503,11 +503,61 @@ describe('injectStyle', () => {
     fisrtStyleElement.id = 'old-first-child'
     document.head.appendChild(fisrtStyleElement)
 
-    injectStyle({ css: cssBase, ref: { insertAt: 'top' }, state: { core: false, base: false } })
+    injectStyle({
+      css: cssBase,
+      ref: { insertAt: 'top' },
+      state: { core: false, base: false },
+    })
 
     const styleElement = document.getElementById('react-tooltip-base-styles')
 
     expect(fisrtStyleElement).toBeInTheDocument()
     expect(document.head.firstChild).toBe(styleElement)
+  })
+
+  test('should not fail if process.env is undefined', () => {
+    const originalEnv = process.env
+    delete process.env
+
+    expect(() => {
+      injectStyle({ css: cssCore, type: 'core' })
+    }).not.toThrow()
+
+    process.env = originalEnv
+  })
+
+  test('should use document.getElementsByTagName when document.head is undefined', () => {
+    // Backup the original document.head
+    const originalHead = document.head
+    const mockHeadElement = document.createElement('head')
+
+    // Remove document.head
+    Object.defineProperty(document, 'head', {
+      get: () => undefined,
+      configurable: true,
+    })
+
+    // Spy on getElementsByTagName and return a mock head element
+    const getElementsByTagNameSpy = jest
+      .spyOn(document, 'getElementsByTagName')
+      .mockReturnValue([mockHeadElement])
+
+    // Execute the injectStyle function
+    injectStyle({ css: 'body { color: black; }', state: { core: false, base: false } })
+
+    // Ensure getElementsByTagName was called with 'head'
+    expect(getElementsByTagNameSpy).toHaveBeenCalledWith('head')
+
+    // Ensure the style element was correctly appended to the mock head element
+    const styleElement = mockHeadElement.querySelector('style')
+    expect(styleElement).not.toBeNull()
+    expect(styleElement.textContent).toBe('body { color: black; }')
+
+    // Restore the original document.head
+    Object.defineProperty(document, 'head', {
+      get: () => originalHead,
+    })
+
+    getElementsByTagNameSpy.mockRestore()
   })
 })
