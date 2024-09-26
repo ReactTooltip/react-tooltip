@@ -7,7 +7,7 @@ import {
   clearTimeoutRef,
   getScrollParent,
 } from 'utils'
-import { injectStyle, injected } from 'utils/handle-style.ts'
+import { injectStyle } from 'utils/handle-style.ts'
 import { isScrollable } from 'utils/get-scroll-parent'
 
 describe('compute positions', () => {
@@ -465,5 +465,28 @@ describe('injectStyle', () => {
     expect(lastStyleElement.textContent).toBe(cssBase) // Check the inserted style content
 
     appendChildSpy.mockRestore() // Clean up the spy
+  })
+
+  test('should handle legacy IE styleSheet property', () => {
+    // Mock the style element with styleSheet property (for older IE)
+    const styleMock = document.createElement('style')
+    styleMock.styleSheet = { cssText: '' } // Add the legacy styleSheet property
+
+    // Spy on document.createElement to return our mock when 'style' is created
+    const createElementSpy = jest.spyOn(document, 'createElement').mockImplementation((tag) => {
+      if (tag === 'style') {
+        return styleMock
+      }
+      return document.createElement(tag) // Return the original for other elements
+    })
+
+    // Inject the style
+    injectStyle({ css: 'body { background-color: red; }', state: { core: false, base: false } })
+
+    // Check that the styleSheet property was updated correctly
+    expect(styleMock.styleSheet.cssText).toBe('body { background-color: red; }')
+
+    // Restore the original document.createElement implementation
+    createElementSpy.mockRestore()
   })
 })

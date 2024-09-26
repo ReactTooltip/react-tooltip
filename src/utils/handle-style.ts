@@ -3,7 +3,7 @@ const REACT_TOOLTIP_CORE_STYLES_ID = 'react-tooltip-core-styles'
 // This is the ID for the visual styles of ReactTooltip
 const REACT_TOOLTIP_BASE_STYLES_ID = 'react-tooltip-base-styles'
 
-export const injected = {
+const injected = {
   core: false,
   base: false,
 }
