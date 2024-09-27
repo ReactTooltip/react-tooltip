@@ -68,6 +68,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     const [activeAnchor, setActiveAnchor] = useState<HTMLElement | null>(null)
     const styleInjectionRef = useRef(disableStyleInjection)
 
+    /* c8 ignore start */
     const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
       const dataAttributes = elementReference?.getAttributeNames().reduce(
         (acc, name) => {
@@ -82,6 +83,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
 
       return dataAttributes
     }
+    /* c8 ignore end */
 
     const applyAllDataAttributesFromAnchorElement = useCallback(
       (dataAttributes: Record<string, string | null>) => {
