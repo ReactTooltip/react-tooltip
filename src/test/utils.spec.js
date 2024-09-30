@@ -499,9 +499,9 @@ describe('injectStyle', () => {
   })
 
   test('should inject styles before the first child of head element', () => {
-    const fisrtStyleElement = document.createElement('style')
-    fisrtStyleElement.id = 'old-first-child'
-    document.head.appendChild(fisrtStyleElement)
+    const firstStyleElement = document.createElement('style')
+    firstStyleElement.id = 'old-first-child'
+    document.head.appendChild(firstStyleElement)
 
     injectStyle({
       css: cssBase,
@@ -511,7 +511,7 @@ describe('injectStyle', () => {
 
     const styleElement = document.getElementById('react-tooltip-base-styles')
 
-    expect(fisrtStyleElement).toBeInTheDocument()
+    expect(firstStyleElement).toBeInTheDocument()
     expect(document.head.firstChild).toBe(styleElement)
   })
 
