@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom'
+import React from 'react'
 import {
   debounce,
   deepEqual,
@@ -382,7 +383,6 @@ describe('injectStyle', () => {
 
   beforeEach(() => {
     document.head.innerHTML = '' // Reset the DOM
-    jest.resetModules() // Ensure module reset between tests
   })
 
   test('should not inject if no CSS is provided', () => {
@@ -559,5 +559,38 @@ describe('injectStyle', () => {
     })
 
     getElementsByTagNameSpy.mockRestore()
+  })
+})
+
+describe('useIsomorphicLayoutEffect', () => {
+  let originalWindow
+
+  beforeEach(() => {
+    originalWindow = global.window
+  })
+
+  afterEach(() => {
+    global.window = originalWindow
+    jest.resetModules()
+  })
+
+  test('should use useLayoutEffect when window is defined (browser)', async () => {
+    expect(typeof window !== 'undefined').toBe(true)
+
+    const { default: useIsomorphicLayoutEffect } = await import(
+      'utils/use-isomorphic-layout-effect'
+    )
+
+    expect(useIsomorphicLayoutEffect).toBe(React.useLayoutEffect)
+  })
+
+  test('should use useEffect when window is undefined (server)', async () => {
+    delete global.window
+
+    const { default: useIsomorphicLayoutEffect } = await import(
+      'utils/use-isomorphic-layout-effect'
+    )
+
+    expect(typeof useIsomorphicLayoutEffect).toBe(typeof React.useEffect)
   })
 })
