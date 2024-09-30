@@ -25,7 +25,7 @@ function injectStyle({
   type?: 'core' | 'base'
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref?: any
-  state: { [key: string]: boolean }
+  state?: { [key: string]: boolean }
 }) {
   if (
     !css ||
