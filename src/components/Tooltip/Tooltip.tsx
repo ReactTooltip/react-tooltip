@@ -68,6 +68,7 @@ const Tooltip = ({
   border,
   opacity,
   arrowColor,
+  enforceDelayShow = false,
   role = 'tooltip',
 }: ITooltip) => {
   const tooltipRef = useRef<HTMLElement>(null)
@@ -259,7 +260,7 @@ const Tooltip = ({
   const handleShowTooltipDelayed = (delay = delayShow) => {
     clearTimeoutRef(tooltipShowDelayTimerRef)
 
-    if (rendered) {
+    if (rendered && !enforceDelayShow) {
       // if the tooltip is already rendered, ignore delay
       handleShow(true)
       return
