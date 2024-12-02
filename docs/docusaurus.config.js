@@ -157,6 +157,10 @@ const config = {
                 label: 'Getting Started',
                 to: '/docs/getting-started',
               },
+              {
+                label: 'Deploying to DigitalOcean',
+                to: '/blog/digital-ocean-app-platform',
+              },
             ],
           },
           // {
