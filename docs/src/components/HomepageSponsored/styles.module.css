@@ -20,6 +20,11 @@
   gap: 21px;
 }
 
+.feature-item {
+  display: flex;
+  flex-direction: column;
+}
+
 @media screen and (min-width: 1024px) {
   .features {
     display: flex;
