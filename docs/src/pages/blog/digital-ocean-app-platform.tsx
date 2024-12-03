@@ -2,21 +2,13 @@
 /* eslint-disable import/no-unresolved */
 import React from 'react'
 import Layout from '@theme/Layout'
-// @ts-ignore
 import DigitalOceanBanner from '@site/static/img/digital-ocean-banner.webp'
-// @ts-ignore
 import DigitalOceanLogin from '@site/static/img/digital-ocean-login.webp'
-// @ts-ignore
 import DigitalOceanCreateApp from '@site/static/img/digital-ocean-create-app.webp'
-// @ts-ignore
 import DigitalOceanAppConfig1 from '@site/static/img/digital-ocean-app-config-1.png'
-// @ts-ignore
 import DigitalOceanAppConfig2 from '@site/static/img/digital-ocean-app-config-2.png'
-// @ts-ignore
 import DigitalOceanStaticSite from '@site/static/img/digital-ocean-static-site.png'
-// @ts-ignore
 import DigitalOceanCreateResource from '@site/static/img/digital-ocean-create-resource.png'
-// @ts-ignore
 import { Tooltip } from 'react-tooltip'
 
 export default function Home(): JSX.Element {
