@@ -1,5 +1,4 @@
 import commonjs from '@rollup/plugin-commonjs'
-import filesize from 'rollup-plugin-filesize'
 import postcss from 'rollup-plugin-postcss'
 import progress from 'rollup-plugin-progress'
 import replace from '@rollup/plugin-replace'
@@ -7,8 +6,16 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import ts from '@rollup/plugin-typescript'
 import { terser } from 'rollup-plugin-terser'
 import typescript from 'typescript'
+import { readFileSync } from 'fs'
+import { fileURLToPath } from 'url'
+import { dirname, resolve } from 'path'
 import replaceBeforeSaveFile from './rollup-plugins/replace-before-save-file.js'
-import pkg from './package.json' assert { type: 'json' }
+
+const filename = fileURLToPath(import.meta.url)
+const dirName = dirname(filename)
+
+// Read package.json
+const pkg = JSON.parse(readFileSync(resolve(dirName, './package.json'), 'utf8'))
 
 const input = ['src/index.tsx']
 
@@ -75,7 +82,7 @@ const minifiedBuildFormats = buildFormats.map(({ file, ...rest }) => ({
   file: file.replace(/(\.[cm]?js)$/, '.min$1'),
   ...rest,
   minify: true,
-  plugins: [terser({ compress: { directives: false } }), filesize()],
+  plugins: [terser({ compress: { directives: false } })],
 }))
 
 const allBuildFormats = [...buildFormats, ...minifiedBuildFormats]
