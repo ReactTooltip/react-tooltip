@@ -35,7 +35,7 @@ function App() {
     return () => {
       window.removeEventListener('keydown', handleQ)
     }
-  })
+  }, [])
 
   return (
     <main className={styles['main']}>
