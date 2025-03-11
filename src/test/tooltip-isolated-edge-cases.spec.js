@@ -18,7 +18,7 @@ jest.mock('@floating-ui/dom', () => {
 // Tell Jest to mock all timeout functions
 jest.useFakeTimers()
 
-describe('tooltip final coverage', () => {
+describe('tooltip isolated edge cases', () => {
   beforeEach(() => {
     // Reset all mocks before each test
     jest.clearAllMocks()
