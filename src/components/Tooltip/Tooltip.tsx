@@ -339,6 +339,7 @@ const Tooltip = ({
       handleShow(false)
       if (tooltipShowDelayTimerRef.current) {
         clearTimeout(tooltipShowDelayTimerRef.current)
+        tooltipShowDelayTimerRef.current = null
       }
     }
 
@@ -590,6 +591,10 @@ const Tooltip = ({
     })
 
     return () => {
+      // Clear all timeout refs to prevent memory leaks
+      clearTimeoutRef(tooltipShowDelayTimerRef)
+      clearTimeoutRef(tooltipHideDelayTimerRef)
+
       if (actualGlobalCloseEvents.scroll) {
         window.removeEventListener('scroll', handleScrollResize)
         anchorScrollParent?.removeEventListener('scroll', handleScrollResize)
@@ -597,9 +602,13 @@ const Tooltip = ({
       }
       if (actualGlobalCloseEvents.resize) {
         window.removeEventListener('resize', handleScrollResize)
-      } else {
-        updateTooltipCleanup?.()
       }
+
+      // Always call the cleanup function for autoUpdate to prevent memory leaks
+      if (updateTooltipCleanup) {
+        updateTooltipCleanup()
+      }
+
       if (actualGlobalCloseEvents.clickOutsideAnchor) {
         window.removeEventListener('click', handleClickOutsideAnchors)
       }
@@ -612,9 +621,15 @@ const Tooltip = ({
       }
       enabledEvents.forEach(({ event, listener }) => {
         anchorElements.forEach((anchor) => {
-          anchor.removeEventListener(event, listener)
+          if (anchor && anchor.isConnected) {
+            anchor.removeEventListener(event, listener)
+          }
         })
       })
+
+      // Cancel any debounced functions to prevent memory leaks
+      internalDebouncedHandleShowTooltip.cancel()
+      internalDebouncedHandleHideTooltip.cancel()
     }
     /**
      * rendered is also a dependency to ensure anchor observers are re-registered
@@ -746,7 +761,7 @@ const Tooltip = ({
       })
       if (addedAnchors.size || removedAnchors.size) {
         setAnchorElements((anchors) => [
-          ...anchors.filter((anchor) => !removedAnchors.has(anchor)),
+          ...anchors.filter((anchor) => !removedAnchors.has(anchor) && anchor.isConnected),
           ...addedAnchors,
         ])
       }
@@ -763,6 +778,10 @@ const Tooltip = ({
     })
     return () => {
       documentObserver.disconnect()
+      // Clean up any lingering timeouts
+      clearTimeoutRef(tooltipShowDelayTimerRef)
+      clearTimeoutRef(tooltipHideDelayTimerRef)
+      clearTimeoutRef(missedTransitionTimerRef)
     }
   }, [id, anchorSelect, imperativeOptions?.anchorSelect, activeAnchor, handleShow, setActiveAnchor])
 
@@ -774,12 +793,27 @@ const Tooltip = ({
     if (!contentWrapperRef?.current) {
       return () => null
     }
+
+    let timeoutId: NodeJS.Timeout | null = null
     const contentObserver = new ResizeObserver(() => {
-      setTimeout(() => updateTooltipPosition())
+      // Clear any existing timeout to prevent memory leaks
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+      timeoutId = setTimeout(() => {
+        if (mounted.current) {
+          updateTooltipPosition()
+        }
+        timeoutId = null
+      }, 0)
     })
     contentObserver.observe(contentWrapperRef.current)
+
     return () => {
       contentObserver.disconnect()
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
     }
   }, [content, contentWrapperRef, updateTooltipPosition])
 
@@ -801,6 +835,7 @@ const Tooltip = ({
     return () => {
       clearTimeoutRef(tooltipShowDelayTimerRef)
       clearTimeoutRef(tooltipHideDelayTimerRef)
+      clearTimeoutRef(missedTransitionTimerRef)
     }
   }, [defaultIsOpen, handleShow])
 
@@ -866,6 +901,15 @@ const Tooltip = ({
     place: computedPosition.place,
     isOpen: Boolean(rendered && !hidden && actualContent && canShow),
   }))
+
+  useEffect(() => {
+    return () => {
+      // Final cleanup to ensure no memory leaks
+      clearTimeoutRef(tooltipShowDelayTimerRef)
+      clearTimeoutRef(tooltipHideDelayTimerRef)
+      clearTimeoutRef(missedTransitionTimerRef)
+    }
+  }, [])
 
   return rendered && !hidden && actualContent ? (
     <WrapperElement
