@@ -573,19 +573,21 @@ const Tooltip = ({
       })
     }
 
-    const handleMouseEnterTooltip = () => {
+    const handleMouseOverTooltip = () => {
       hoveringTooltip.current = true
     }
-    const handleMouseLeaveTooltip = () => {
+    const handleMouseOutTooltip = () => {
       hoveringTooltip.current = false
       handleHideTooltip()
     }
 
-    if (clickable && !hasClickEvent) {
-      // used to keep the tooltip open when hovering content.
-      // not needed if using click events.
-      tooltipRef.current?.addEventListener('mouseenter', handleMouseEnterTooltip)
-      tooltipRef.current?.addEventListener('mouseleave', handleMouseLeaveTooltip)
+    const addHoveringTooltipListeners =
+      clickable && (actualCloseEvents.mouseout || actualCloseEvents.mouseleave)
+    if (addHoveringTooltipListeners) {
+      // used to keep the tooltip open when hovering from anchor to tooltip.
+      // only relevant if either `mouseout`/`mouseleave` is in use
+      tooltipRef.current?.addEventListener('mouseover', handleMouseOverTooltip)
+      tooltipRef.current?.addEventListener('mouseout', handleMouseOutTooltip)
     }
 
     enabledEvents.forEach(({ event, listener }) => {
@@ -611,9 +613,9 @@ const Tooltip = ({
       if (actualGlobalCloseEvents.escape) {
         window.removeEventListener('keydown', handleEsc)
       }
-      if (clickable && !hasClickEvent) {
-        tooltipRef.current?.removeEventListener('mouseenter', handleMouseEnterTooltip)
-        tooltipRef.current?.removeEventListener('mouseleave', handleMouseLeaveTooltip)
+      if (addHoveringTooltipListeners) {
+        tooltipRef.current?.removeEventListener('mouseover', handleMouseOverTooltip)
+        tooltipRef.current?.removeEventListener('mouseout', handleMouseOutTooltip)
       }
       enabledEvents.forEach(({ event, listener }) => {
         elementRefs.forEach((ref) => {
