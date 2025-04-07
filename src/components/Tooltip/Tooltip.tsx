@@ -147,15 +147,17 @@ const Tooltip = ({
 
   if (imperativeModeOnly) {
     Object.assign(actualOpenEvents, {
-      mouseenter: false,
+      mouseover: false,
       focus: false,
+      mouseenter: false,
       click: false,
       dblclick: false,
       mousedown: false,
     })
     Object.assign(actualCloseEvents, {
-      mouseleave: false,
+      mouseout: false,
       blur: false,
+      mouseleave: false,
       click: false,
       dblclick: false,
       mouseup: false,
