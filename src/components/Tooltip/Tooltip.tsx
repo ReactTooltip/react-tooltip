@@ -517,8 +517,10 @@ const Tooltip = ({
 
     const enabledEvents: { event: string; listener: (event?: Event) => void }[] = []
 
+    const activeAnchorContainsTarget = (event?: Event): boolean =>
+      Boolean(event?.target && activeAnchor?.contains(event.target as HTMLElement))
     const handleClickOpenTooltipAnchor = (event?: Event) => {
-      if (show && event?.target === activeAnchor) {
+      if (show && activeAnchorContainsTarget(event)) {
         /**
          * ignore clicking the anchor that was used to open the tooltip.
          * this avoids conflict with the click close event.
@@ -528,7 +530,7 @@ const Tooltip = ({
       handleShowTooltip(event)
     }
     const handleClickCloseTooltipAnchor = (event?: Event) => {
-      if (!show || event?.target !== activeAnchor) {
+      if (!show || !activeAnchorContainsTarget(event)) {
         /**
          * ignore clicking the anchor that was NOT used to open the tooltip.
          * this avoids closing the tooltip when clicking on a
