@@ -158,5 +158,6 @@ export interface ITooltip {
   border?: CSSProperties['border']
   opacity?: CSSProperties['opacity']
   arrowColor?: CSSProperties['backgroundColor']
+  arrowSize?: number
   role?: React.AriaRole
 }

@@ -10,6 +10,7 @@ export interface IComputePositionArgs {
   strategy?: 'absolute' | 'fixed'
   middlewares?: Middleware[]
   border?: CSSProperties['border']
+  arrowSize?: number
 }
 
 export interface IComputedPosition {

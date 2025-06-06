@@ -6,8 +6,8 @@
 }
 
 .arrow {
-  width: 8px;
-  height: 8px;
+  width: var(--rt-arrow-size);
+  height: var(--rt-arrow-size);
 }
 
 [class*='react-tooltip__place-top'] > .arrow {

@@ -68,6 +68,7 @@ const Tooltip = ({
   border,
   opacity,
   arrowColor,
+  arrowSize = 8,
   role = 'tooltip',
 }: ITooltip) => {
   const tooltipRef = useRef<HTMLElement>(null)
@@ -345,6 +346,7 @@ const Tooltip = ({
       strategy: positionStrategy,
       middlewares,
       border,
+      arrowSize,
     }).then((computedStylesData) => {
       handleComputedPosition(computedStylesData)
     })
@@ -437,6 +439,7 @@ const Tooltip = ({
       strategy: positionStrategy,
       middlewares,
       border,
+      arrowSize,
     }).then((computedStylesData) => {
       if (!mounted.current) {
         // invalidate computed positions after remount
@@ -456,6 +459,7 @@ const Tooltip = ({
     position,
     imperativeOptions?.position,
     float,
+    arrowSize,
   ])
 
   useEffect(() => {
@@ -899,6 +903,7 @@ const Tooltip = ({
           background: arrowColor
             ? `linear-gradient(to right bottom, transparent 50%, ${arrowColor} 50%)`
             : undefined,
+          '--rt-arrow-size': `${arrowSize}px`,
         }}
         ref={tooltipArrowRef}
       />

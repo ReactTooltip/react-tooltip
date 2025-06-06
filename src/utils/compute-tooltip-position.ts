@@ -16,6 +16,7 @@ const computeTooltipPosition = async ({
     shift({ padding: 5 }),
   ],
   border,
+  arrowSize = 8,
 }: IComputePositionArgs) => {
   if (!elementReference) {
     // elementReference can be null or undefined and we will not compute the position
@@ -78,7 +79,7 @@ const computeTooltipPosition = async ({
         right: '',
         bottom: '',
         ...borderSide,
-        [staticSide]: `-${4 + borderWidth}px`,
+        [staticSide]: `-${arrowSize / 2 + borderWidth}px`,
       }
       /* c8 ignore end */
 
