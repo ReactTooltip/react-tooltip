@@ -42,6 +42,9 @@ esbuild.config.dev.mjs
 esbuild.config.prod.mjs
 
 // unused configs
-.*
+.eslintrc.json
+.gitattributes
+.prettierrc.json
+.stylelintrc.json
 beta-release.js
 tsconfig.json
