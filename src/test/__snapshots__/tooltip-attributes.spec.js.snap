@@ -17,7 +17,7 @@ exports[`tooltip attributes basic tooltip 1`] = `
     Hello World!
     <div
       class="react-tooltip-arrow"
-      style="left: -1px; bottom: -4px;"
+      style="--rt-arrow-size: 8px; left: -1px; bottom: -4px;"
     />
   </div>
 </div>
@@ -41,7 +41,7 @@ exports[`tooltip attributes tooltip with class name 1`] = `
     Hello World!
     <div
       class="react-tooltip-arrow"
-      style="left: -1px; bottom: -4px;"
+      style="--rt-arrow-size: 8px; left: -1px; bottom: -4px;"
     />
   </div>
 </div>
@@ -65,7 +65,7 @@ exports[`tooltip attributes tooltip with place 1`] = `
     Hello World!
     <div
       class="react-tooltip-arrow"
-      style="left: -4px; top: -1px;"
+      style="--rt-arrow-size: 8px; left: -4px; top: -1px;"
     />
   </div>
 </div>

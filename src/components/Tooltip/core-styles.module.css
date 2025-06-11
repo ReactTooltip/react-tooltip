@@ -14,6 +14,7 @@
 .arrow {
   position: absolute;
   background: inherit;
+  z-index: -1;
 }
 
 .noArrow {

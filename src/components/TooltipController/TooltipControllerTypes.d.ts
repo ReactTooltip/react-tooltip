@@ -91,6 +91,7 @@ export interface ITooltipController {
   border?: CSSProperties['border']
   opacity?: CSSProperties['opacity']
   arrowColor?: CSSProperties['backgroundColor']
+  arrowSize?: number
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
   afterHide?: () => void
