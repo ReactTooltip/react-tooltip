@@ -236,7 +236,7 @@ const Tooltip = ({
       /**
        * see `onTransitionEnd` on tooltip wrapper
        */
-      const style = getComputedStyle(document.body)
+      const style = getComputedStyle(tooltipRef.current || document.body)
       const transitionShowDelay = cssTimeToMs(style.getPropertyValue('--rt-transition-show-delay'))
       missedTransitionTimerRef.current = setTimeout(() => {
         /**
