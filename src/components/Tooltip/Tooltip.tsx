@@ -233,7 +233,7 @@ const Tooltip = ({
     } else {
       removeAriaDescribedBy(activeAnchor)
     }
-  }, [activeAnchor, show])
+  }, [activeAnchor, show, id, previousActiveAnchor])
 
   /**
    * this replicates the effect from `handleShow()`

@@ -378,10 +378,12 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       activeAnchor,
       previousActiveAnchor: previousActiveAnchorRef.current,
       setActiveAnchor: (anchor: HTMLElement | null) => {
-        if (!anchor?.isSameNode(activeAnchor)) {
-          previousActiveAnchorRef.current = activeAnchor
-        }
-        setActiveAnchor(anchor)
+        setActiveAnchor((prev) => {
+          if (!anchor?.isSameNode(prev)) {
+            previousActiveAnchorRef.current = prev
+          }
+          return anchor
+        })
       },
       role,
     }
