@@ -233,6 +233,13 @@ const Tooltip = ({
     } else {
       removeAriaDescribedBy(activeAnchor)
     }
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      // cleanup aria-describedby when the tooltip is closed
+      removeAriaDescribedBy(activeAnchor)
+      removeAriaDescribedBy(previousActiveAnchor)
+    }
   }, [activeAnchor, show, id, previousActiveAnchor])
 
   /**
