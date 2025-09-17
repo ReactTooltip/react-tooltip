@@ -63,6 +63,7 @@ const Tooltip = ({
   isOpen,
   defaultIsOpen = false,
   setIsOpen,
+  previousActiveAnchor,
   activeAnchor,
   setActiveAnchor,
   border,
@@ -204,6 +205,35 @@ const Tooltip = ({
       }
     }, 10)
   }
+
+  /**
+   * Add aria-describedby to activeAnchor when tooltip is active
+   */
+  useEffect(() => {
+    if (!id) return
+
+    function getAriaDescribedBy(element: HTMLElement | null) {
+      return element?.getAttribute('aria-describedby')?.split(' ') || []
+    }
+
+    function removeAriaDescribedBy(element: HTMLElement | null) {
+      const newDescribedBy = getAriaDescribedBy(element).filter((s) => s !== id)
+      if (newDescribedBy.length) {
+        element?.setAttribute('aria-describedby', newDescribedBy.join(' '))
+      } else {
+        element?.removeAttribute('aria-describedby')
+      }
+    }
+
+    if (show) {
+      removeAriaDescribedBy(previousActiveAnchor)
+      const currentDescribedBy = getAriaDescribedBy(activeAnchor)
+      const describedBy = [...new Set([...currentDescribedBy, id])].filter(Boolean).join(' ')
+      activeAnchor?.setAttribute('aria-describedby', describedBy)
+    } else {
+      removeAriaDescribedBy(activeAnchor)
+    }
+  }, [activeAnchor, show])
 
   /**
    * this replicates the effect from `handleShow()`

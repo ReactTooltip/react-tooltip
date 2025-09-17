@@ -3,6 +3,7 @@
 exports[`tooltip attributes basic tooltip 1`] = `
 <div>
   <span
+    aria-describedby="basic-example-attr"
     data-tooltip-content="Hello World!"
     data-tooltip-id="basic-example-attr"
   >
@@ -26,6 +27,7 @@ exports[`tooltip attributes basic tooltip 1`] = `
 exports[`tooltip attributes tooltip with class name 1`] = `
 <div>
   <span
+    aria-describedby="example-class-name-attr"
     data-tooltip-class-name="tooltip-class-name"
     data-tooltip-content="Hello World!"
     data-tooltip-id="example-class-name-attr"
@@ -50,6 +52,7 @@ exports[`tooltip attributes tooltip with class name 1`] = `
 exports[`tooltip attributes tooltip with place 1`] = `
 <div>
   <span
+    aria-describedby="example-place-attr"
     data-tooltip-content="Hello World!"
     data-tooltip-id="example-place-attr"
     data-tooltip-place="right"

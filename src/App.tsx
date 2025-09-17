@@ -47,8 +47,15 @@ function App() {
       >
         My button
       </button>
-      <Tooltip place="bottom" anchorId={anchorId} isOpen={isDarkOpen} setIsOpen={setIsDarkOpen} />
       <Tooltip
+        id="button1"
+        place="bottom"
+        anchorId={anchorId}
+        isOpen={isDarkOpen}
+        setIsOpen={setIsDarkOpen}
+      />
+      <Tooltip
+        id="button2"
         place="top"
         variant="success"
         anchorId="button2"
@@ -101,6 +108,7 @@ function App() {
         <Tooltip id="anchor-select">Tooltip content</Tooltip>
         <Tooltip
           ref={tooltipRef}
+          id="tooltip-content"
           anchorSelect="section[id='section-anchor-select'] > p > button"
           place="bottom"
           openEvents={{ click: true }}
@@ -127,6 +135,7 @@ function App() {
           </div>
           <Tooltip
             anchorId="floatAnchor"
+            id="float-tooltip"
             content={
               toggle
                 ? 'This is a float tooltip with a very very large content string'
@@ -151,6 +160,7 @@ function App() {
           </div>
           <Tooltip
             anchorId="onClickAnchor"
+            id="onclick-tooltip"
             content={`This is an on click tooltip (x:${position.x},y:${position.y})`}
             events={['click']}
             position={position}

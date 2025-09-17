@@ -3,6 +3,7 @@
 exports[`tooltip props basic tooltip 1`] = `
 <div>
   <span
+    aria-describedby="basic-example"
     data-tooltip-id="basic-example"
   >
     Lorem Ipsum
@@ -25,6 +26,7 @@ exports[`tooltip props basic tooltip 1`] = `
 exports[`tooltip props clickable tooltip 1`] = `
 <div>
   <span
+    aria-describedby="example-clickable"
     data-tooltip-id="example-clickable"
   >
     Lorem Ipsum
@@ -49,6 +51,7 @@ exports[`tooltip props clickable tooltip 1`] = `
 exports[`tooltip props tooltip with custom position 1`] = `
 <div>
   <span
+    aria-describedby="example-place"
     data-tooltip-id="example-place"
   >
     Lorem Ipsum
@@ -81,6 +84,7 @@ exports[`tooltip props tooltip with delay hide 1`] = `
 exports[`tooltip props tooltip with delay show 1`] = `
 <div>
   <span
+    aria-describedby="example-delay-show"
     data-tooltip-id="example-delay-show"
   >
     Lorem Ipsum
@@ -103,6 +107,7 @@ exports[`tooltip props tooltip with delay show 1`] = `
 exports[`tooltip props tooltip with disableTooltip return false 1`] = `
 <div>
   <span
+    aria-describedby="example-disableTooltip-false"
     data-tooltip-id="example-disableTooltip-false"
   >
     Lorem Ipsum
@@ -125,6 +130,7 @@ exports[`tooltip props tooltip with disableTooltip return false 1`] = `
 exports[`tooltip props tooltip with float 1`] = `
 <div>
   <span
+    aria-describedby="example-float"
     data-tooltip-id="example-float"
   >
     Lorem Ipsum
@@ -147,6 +153,7 @@ exports[`tooltip props tooltip with float 1`] = `
 exports[`tooltip props tooltip with html 1`] = `
 <div>
   <span
+    aria-describedby="example-html"
     data-tooltip-id="example-html"
   >
     Lorem Ipsum
@@ -174,6 +181,7 @@ exports[`tooltip props tooltip with html 1`] = `
 exports[`tooltip props tooltip with place 1`] = `
 <div>
   <span
+    aria-describedby="example-place"
     data-tooltip-id="example-place"
   >
     Lorem Ipsum
