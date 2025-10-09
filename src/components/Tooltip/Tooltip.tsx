@@ -76,6 +76,7 @@ const Tooltip = ({
   const tooltipShowDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const tooltipHideDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const missedTransitionTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const tooltipShowTimerRef = useRef<NodeJS.Timeout | null>(null)
   const [computedPosition, setComputedPosition] = useState<IComputedPosition>({
     tooltipStyles: {},
     tooltipArrowStyles: {},
@@ -194,7 +195,8 @@ const Tooltip = ({
      * wait for the component to render and calculate position
      * before actually showing
      */
-    setTimeout(() => {
+    clearTimeoutRef(tooltipShowTimerRef)
+    tooltipShowTimerRef.current = setTimeout(() => {
       if (!mounted.current) {
         return
       }
@@ -348,6 +350,9 @@ const Tooltip = ({
       border,
       arrowSize,
     }).then((computedStylesData) => {
+      if (!mounted.current) {
+        return
+      }
       handleComputedPosition(computedStylesData)
     })
   }
@@ -803,6 +808,7 @@ const Tooltip = ({
     return () => {
       clearTimeoutRef(tooltipShowDelayTimerRef)
       clearTimeoutRef(tooltipHideDelayTimerRef)
+      clearTimeoutRef(tooltipShowTimerRef)
     }
   }, [])
 
