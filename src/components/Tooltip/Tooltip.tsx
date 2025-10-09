@@ -759,17 +759,29 @@ const Tooltip = ({
   }, [updateTooltipPosition])
 
   useEffect(() => {
-    if (!contentWrapperRef?.current) {
+    if (!rendered || !contentWrapperRef?.current) {
       return () => null
     }
+    const timeoutIds: Set<NodeJS.Timeout> = new Set()
     const contentObserver = new ResizeObserver(() => {
-      setTimeout(() => updateTooltipPosition())
+      const timeoutId = setTimeout(() => {
+        timeoutIds.delete(timeoutId)
+        if (!mounted.current) {
+          return
+        }
+        updateTooltipPosition()
+      })
+      timeoutIds.add(timeoutId)
     })
     contentObserver.observe(contentWrapperRef.current)
     return () => {
       contentObserver.disconnect()
+      timeoutIds.forEach((timeoutId) => {
+        clearTimeout(timeoutId)
+      })
+      timeoutIds.clear()
     }
-  }, [content, contentWrapperRef?.current])
+  }, [rendered, contentWrapperRef?.current])
 
   useEffect(() => {
     const anchorById = document.querySelector<HTMLElement>(`[id='${anchorId}']`)
