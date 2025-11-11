@@ -1,0 +1,12 @@
+{
+  "name": "react-tooltip-benchmark",
+  "version": "1.0.0",
+  "description": "Memory leak benchmark for react-tooltip",
+  "private": true,
+  "scripts": {
+    "benchmark": "node memory-benchmark.js"
+  },
+  "keywords": ["benchmark", "memory", "testing"],
+  "author": "",
+  "license": "MIT"
+}

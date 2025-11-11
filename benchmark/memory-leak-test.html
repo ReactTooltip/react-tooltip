@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Tooltip Memory Leak Benchmark</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            padding: 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .test-area {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            min-height: 300px;
+            border-radius: 5px;
+        }
+        .anchor {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .log {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .log-entry {
+            padding: 2px 0;
+        }
+        .warning { color: #ff6b00; }
+        .error { color: #dc3545; }
+        .success { color: #28a745; }
+    </style>
+</head>
+<body>
+    <h1>React Tooltip Memory Leak Benchmark</h1>
+    <p>This test rapidly shows/hides tooltips to detect memory leaks. Monitor the stats below and browser DevTools Memory tab.</p>
+    
+    <div class="controls">
+        <button id="startTest">Start Rapid Test (1000 cycles)</button>
+        <button id="stopTest">Stop Test</button>
+        <button id="gcButton">Force Garbage Collection (DevTools required)</button>
+        <button id="clearLog">Clear Log</button>
+        <button id="resetStats">Reset Stats</button>
+    </div>
+
+    <div class="stats">
+        <div class="stat-box">
+            <div class="stat-label">Hover Cycles</div>
+            <div class="stat-value" id="cycleCount">0</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">DOM Nodes</div>
+            <div class="stat-value" id="domNodes">0</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">Tooltip Elements</div>
+            <div class="stat-value" id="tooltipCount">0</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">Memory Used (MB)</div>
+            <div class="stat-value" id="memoryUsed">N/A</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">JS Heap Size (MB)</div>
+            <div class="stat-value" id="heapSize">N/A</div>
+        </div>
+    </div>
+
+    <div class="test-area" id="testArea">
+        <p>Tooltips will appear here during testing...</p>
+    </div>
+
+    <div class="log" id="log">
+        <div class="log-entry">Ready to start benchmark...</div>
+    </div>
+
+    <script>
+        // This is a placeholder - you'll need to build and include the actual tooltip library
+        // For testing, you can use: <script src="../dist/react-tooltip.min.js"></script>
+        
+        let testRunning = false;
+        let cycleCount = 0;
+        let testInterval = null;
+
+        const log = (message, type = 'info') => {
+            const logEl = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logEl.insertBefore(entry, logEl.firstChild);
+            
+            // Keep only last 100 entries
+            while (logEl.children.length > 100) {
+                logEl.removeChild(logEl.lastChild);
+            }
+        };
+
+        const updateStats = () => {
+            // Update cycle count
+            document.getElementById('cycleCount').textContent = cycleCount;
+
+            // Count all DOM nodes
+            const allNodes = document.getElementsByTagName('*').length;
+            document.getElementById('domNodes').textContent = allNodes;
+
+            // Count tooltip-specific elements
+            const tooltips = document.querySelectorAll('[role="tooltip"], .react-tooltip').length;
+            document.getElementById('tooltipCount').textContent = tooltips;
+
+            // Memory stats (if available)
+            if (performance.memory) {
+                const used = (performance.memory.usedJSHeapSize / 1048576).toFixed(2);
+                const total = (performance.memory.totalJSHeapSize / 1048576).toFixed(2);
+                document.getElementById('memoryUsed').textContent = used;
+                document.getElementById('heapSize').textContent = total;
+            }
+        };
+
+        const simulateHover = async (element) => {
+            // Simulate mouseenter
+            const mouseEnter = new MouseEvent('mouseenter', {
+                view: window,
+                bubbles: true,
+                cancelable: true
+            });
+            element.dispatchEvent(mouseEnter);
+
+            // Wait a bit for tooltip to appear
+            await new Promise(resolve => setTimeout(resolve, 20));
+
+            // Simulate mouseleave
+            const mouseLeave = new MouseEvent('mouseleave', {
+                view: window,
+                bubbles: true,
+                cancelable: true
+            });
+            element.dispatchEvent(mouseLeave);
+        };
+
+        const runRapidTest = async (totalCycles = 1000) => {
+            testRunning = true;
+            log(`Starting rapid test: ${totalCycles} cycles`, 'success');
+
+            const testArea = document.getElementById('testArea');
+            testArea.innerHTML = `
+                <span class="anchor" data-tooltip-id="test-tooltip">Hover Target 1</span>
+                <span class="anchor" data-tooltip-id="test-tooltip">Hover Target 2</span>
+                <span class="anchor" data-tooltip-id="test-tooltip">Hover Target 3</span>
+            `;
+
+            // Note: You'll need to initialize React Tooltip here
+            // Example: <Tooltip id="test-tooltip"><div>Complex content with children</div></Tooltip>
+
+            const anchors = testArea.querySelectorAll('.anchor');
+            const startDomNodes = document.getElementsByTagName('*').length;
+            const startMemory = performance.memory ? performance.memory.usedJSHeapSize : null;
+
+            for (let i = 0; i < totalCycles && testRunning; i++) {
+                cycleCount = i + 1;
+                
+                // Simulate hover on each anchor
+                for (const anchor of anchors) {
+                    if (!testRunning) break;
+                    await simulateHover(anchor);
+                }
+
+                // Update stats every 50 cycles
+                if (i % 50 === 0) {
+                    updateStats();
+                    
+                    if (i > 0) {
+                        const currentDomNodes = document.getElementsByTagName('*').length;
+                        const domIncrease = currentDomNodes - startDomNodes;
+                        
+                        if (domIncrease > 100) {
+                            log(`⚠️  DOM nodes increased by ${domIncrease}`, 'warning');
+                        }
+
+                        if (performance.memory) {
+                            const currentMemory = performance.memory.usedJSHeapSize;
+                            const memoryIncrease = ((currentMemory - startMemory) / 1048576).toFixed(2);
+                            if (memoryIncrease > 10) {
+                                log(`⚠️  Memory increased by ${memoryIncrease} MB`, 'warning');
+                            }
+                        }
+                    }
+                }
+
+                // Small delay to prevent browser freeze
+                if (i % 100 === 0) {
+                    await new Promise(resolve => setTimeout(resolve, 10));
+                }
+            }
+
+            const endDomNodes = document.getElementsByTagName('*').length;
+            const domDelta = endDomNodes - startDomNodes;
+            const endMemory = performance.memory ? performance.memory.usedJSHeapSize : null;
+            const memoryDelta = endMemory && startMemory ? ((endMemory - startMemory) / 1048576).toFixed(2) : 'N/A';
+
+            log(`Test completed: ${cycleCount} cycles`, 'success');
+            log(`DOM nodes changed: ${domDelta > 0 ? '+' : ''}${domDelta}`, domDelta > 50 ? 'error' : 'success');
+            log(`Memory changed: ${memoryDelta} MB`, 'info');
+
+            testRunning = false;
+            updateStats();
+        };
+
+        document.getElementById('startTest').addEventListener('click', () => {
+            if (!testRunning) {
+                runRapidTest(1000);
+            }
+        });
+
+        document.getElementById('stopTest').addEventListener('click', () => {
+            testRunning = false;
+            log('Test stopped by user', 'warning');
+        });
+
+        document.getElementById('gcButton').addEventListener('click', () => {
+            if (window.gc) {
+                window.gc();
+                log('Garbage collection triggered', 'success');
+                setTimeout(updateStats, 100);
+            } else {
+                log('GC not available. Start Chrome with --js-flags="--expose-gc"', 'error');
+            }
+        });
+
+        document.getElementById('clearLog').addEventListener('click', () => {
+            document.getElementById('log').innerHTML = '<div class="log-entry">Log cleared</div>';
+        });
+
+        document.getElementById('resetStats').addEventListener('click', () => {
+            cycleCount = 0;
+            updateStats();
+            log('Stats reset', 'info');
+        });
+
+        // Update stats every 2 seconds
+        setInterval(updateStats, 2000);
+        updateStats();
+    </script>
+</body>
+</html>
