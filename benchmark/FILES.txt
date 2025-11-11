@@ -1,0 +1,22 @@
+Benchmark Suite File Structure
+===============================
+
+Documentation (700+ lines):
+  README.md              - Quick start guide
+  DECISION_GUIDE.md      - TL;DR for reviewers (Should we merge?)
+  ANALYSIS.md            - Technical deep-dive and cost-benefit analysis
+  BENCHMARK_GUIDE.md     - Step-by-step testing instructions
+  TROUBLESHOOTING.md     - Common issues and solutions
+
+Testing Tools (700+ lines):
+  memory-benchmark.js    - Automated build and test script
+  memory-leak-test.html  - Browser-based stress test harness
+  package.json           - NPM configuration
+
+Generated Files (created by memory-benchmark.js):
+  test-before.html       - Test page for version WITHOUT fixes
+  test-after.html        - Test page for version WITH fixes
+  react-tooltip-before.js - Built library before fixes
+  react-tooltip-after.js  - Built library with fixes
+
+Total: ~1,400 lines of documentation and tooling
