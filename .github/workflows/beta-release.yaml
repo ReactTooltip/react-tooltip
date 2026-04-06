@@ -21,7 +21,7 @@ jobs:
           ref: ${{ github.head_ref }}
       - uses: actions/setup-node@v4
         with:
-          node-version: '22.14.0'
+          node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
           cache: 'yarn'
 
@@ -41,8 +41,16 @@ jobs:
         env:
           GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
 
+      - name: Build package
+        run: npm run build
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.14.0'
+          registry-url: 'https://registry.npmjs.org'
+
       - name: Release a new beta version
-        run: npm publish --tag beta --access public
+        run: npm publish --tag beta --access public --ignore-scripts
 
       - uses: actions/github-script@v6
         with:
