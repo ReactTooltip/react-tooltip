@@ -16,60 +16,6 @@ jobs:
     if: 'github.event.pull_request.draft == false'
     uses: ./.github/workflows/bundlesize.yaml
 
-  beta_release:
-    permissions:
-      contents: read
-      id-token: write
-    if: github.event.pull_request.draft == false
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'yarn'
-
-      - name: Install dev dependencies
-        run: yarn install
-
-      - name: Setup git credentials
-        run: |
-          git config --global user.name 'Auto Release Bot'
-          git config --global user.email 'auto-release-bot@users.noreply.github.com'
-
-      - name: Get current package.json version
-        run: echo "PACKAGE_VERSION=$(npm pkg get version)" >> $GITHUB_ENV
-
-      - name: Setup Beta Release Version
-        run: node beta-release.js --issue $GITHUB_PR_NUMBER
-        env:
-          GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
-
-      - name: Release a new beta version
-        run: npm publish --tag beta --provenance --access public
-
-      - uses: actions/github-script@v6
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `Beta version released with the last commit 🚀
-
-              \`\`\`
-              yarn add react-tooltip@${{ env.NEW_VERSION }}
-              \`\`\`
-              or
-              \`\`\`
-              npm install react-tooltip@${{ env.NEW_VERSION }}
-              \`\`\`
-              `
-            })
-
   fail_if_pull_request_is_draft:
     if: github.event.pull_request.draft == true
     runs-on: ubuntu-18.04
