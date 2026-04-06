@@ -16,12 +16,6 @@ jobs:
     if: 'github.event.pull_request.draft == false'
     uses: ./.github/workflows/bundlesize.yaml
 
-  beta_release:
-    permissions:
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/beta-release.yaml
-
   fail_if_pull_request_is_draft:
     if: github.event.pull_request.draft == true
     runs-on: ubuntu-18.04

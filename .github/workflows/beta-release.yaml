@@ -1,10 +1,13 @@
 name: Beta Release
 
 on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
   workflow_call:
 
 jobs:
   beta_release:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -37,9 +40,6 @@ jobs:
 
       - name: Release a new beta version
         run: npm publish --tag beta --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ''
-          NPM_TOKEN: ''
 
       - uses: actions/github-script@v6
         with:
