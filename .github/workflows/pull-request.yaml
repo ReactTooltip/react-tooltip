@@ -18,8 +18,6 @@ jobs:
 
   beta_release:
     uses: ./.github/workflows/beta-release.yaml
-    # allow the children job to have access to the secrets of the repository
-    secrets: inherit
 
   fail_if_pull_request_is_draft:
     if: github.event.pull_request.draft == true

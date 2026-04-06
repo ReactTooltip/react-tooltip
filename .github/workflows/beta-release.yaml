@@ -39,9 +39,10 @@ jobs:
           GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
 
       - name: Release a new beta version
-        run: npm publish --tag beta
+        run: npm publish --tag beta --provenance --access public
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ''
+          NPM_TOKEN: ''
 
       - uses: actions/github-script@v6
         with:
