@@ -9,8 +9,6 @@ import {
   computeTooltipPosition,
   cssTimeToMs,
   clearTimeoutRef,
-  getBorderWidth,
-  getBorderColor,
 } from 'utils'
 import type { IComputedPosition } from 'utils'
 import { useTooltip } from 'components/TooltipProvider'
@@ -98,10 +96,6 @@ const Tooltip = ({
   const hoveringTooltip = useRef(false)
   const [anchorsBySelect, setAnchorsBySelect] = useState<HTMLElement[]>([])
   const mounted = useRef(false)
-  const arrowBorderWidth = getBorderWidth(border)
-  const arrowBorderColor = getBorderColor(border)
-  const arrowBackground =
-    border && arrowBorderColor ? arrowBorderColor : (arrowColor ?? 'var(--rt-tooltip-background)')
 
   /**
    * @todo Update when deprecated stuff gets removed.
@@ -932,7 +926,15 @@ const Tooltip = ({
       }}
       ref={tooltipRef}
     >
-      {actualContent}
+      <WrapperElement
+        className={classNames(
+          'react-tooltip-content-wrapper',
+          coreStyles['content'],
+          styles['content'],
+        )}
+      >
+        {actualContent}
+      </WrapperElement>
       <WrapperElement
         className={classNames(
           'react-tooltip-arrow',
@@ -943,15 +945,13 @@ const Tooltip = ({
         )}
         style={{
           ...computedPosition.tooltipArrowStyles,
+          background: arrowColor
+            ? `linear-gradient(to right bottom, transparent 50%, ${arrowColor} 50%)`
+            : undefined,
           '--rt-arrow-size': `${arrowSize}px`,
-          '--rt-arrow-background': arrowBackground,
-          '--rt-arrow-border-width': arrowBorderColor ? arrowBorderWidth : '0px',
-          '--rt-arrow-border-color': arrowBorderColor,
         }}
         ref={tooltipArrowRef}
-      >
-        <WrapperElement className={coreStyles['arrowInner']} />
-      </WrapperElement>
+      />
     </WrapperElement>
   ) : null
 }

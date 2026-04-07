@@ -1,8 +1,13 @@
 .tooltip {
-  padding: 8px 16px;
   border-radius: 3px;
   font-size: 90%;
   width: max-content;
+}
+
+.content {
+  background: inherit;
+  border-radius: inherit;
+  padding: 8px 16px;
 }
 
 .arrow {
@@ -28,37 +33,31 @@
 
 /** Types variant **/
 .dark {
-  --rt-tooltip-background: var(--rt-color-dark);
-  background: var(--rt-tooltip-background);
+  background: var(--rt-color-dark);
   color: var(--rt-color-white);
 }
 
 .light {
-  --rt-tooltip-background: var(--rt-color-white);
-  background-color: var(--rt-tooltip-background);
+  background-color: var(--rt-color-white);
   color: var(--rt-color-dark);
 }
 
 .success {
-  --rt-tooltip-background: var(--rt-color-success);
-  background-color: var(--rt-tooltip-background);
+  background-color: var(--rt-color-success);
   color: var(--rt-color-white);
 }
 
 .warning {
-  --rt-tooltip-background: var(--rt-color-warning);
-  background-color: var(--rt-tooltip-background);
+  background-color: var(--rt-color-warning);
   color: var(--rt-color-white);
 }
 
 .error {
-  --rt-tooltip-background: var(--rt-color-error);
-  background-color: var(--rt-tooltip-background);
+  background-color: var(--rt-color-error);
   color: var(--rt-color-white);
 }
 
 .info {
-  --rt-tooltip-background: var(--rt-color-info);
-  background-color: var(--rt-tooltip-background);
+  background-color: var(--rt-color-info);
   color: var(--rt-color-white);
 }
