@@ -42,12 +42,6 @@ jobs:
         env:
           GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
 
-      - name: Verify publish toolchain
-        run: |
-          which npm
-          node -v
-          npm -v
-
       - name: Release a new beta version
         run: npm publish --tag beta --access public
 
