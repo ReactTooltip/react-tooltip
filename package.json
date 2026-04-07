@@ -22,7 +22,7 @@
   "author": "ReactTooltip",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ReactTooltip/react-tooltip.git"
+    "url": "https://github.com/ReactTooltip/react-tooltip"
   },
   "keywords": [
     "react",
