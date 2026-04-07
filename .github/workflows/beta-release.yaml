@@ -44,6 +44,13 @@ jobs:
       - name: Release a new beta version
         run: npm publish --tag beta --access public
 
+      - name: Upload npm debug logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-debug-logs
+          path: /home/runner/.npm/_logs
+
       - uses: actions/github-script@v6
         with:
           script: |
