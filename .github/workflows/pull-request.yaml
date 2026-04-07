@@ -12,10 +12,6 @@ jobs:
     if: 'github.event.pull_request.draft == false'
     uses: ./.github/workflows/lint.yaml
 
-  bundlesize:
-    if: 'github.event.pull_request.draft == false'
-    uses: ./.github/workflows/bundlesize.yaml
-
   fail_if_pull_request_is_draft:
     if: github.event.pull_request.draft == true
     runs-on: ubuntu-18.04

@@ -1870,14 +1870,6 @@ braces@^3.0.2, braces@~3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
-brotli-size@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/brotli-size/-/brotli-size-0.1.0.tgz#a2c518096c7c1a75e9e66908a42cd9dc77d2b69f"
-  integrity sha512-5ny7BNvpe2TSmdafF1T9dnFYp3AIrJ8qJt29K0DQJzORlK38LBim/CmlY26JtreV6SWmXza7Oa+9m61SzvxR0Q==
-  dependencies:
-    duplexer "^0.1.1"
-    iltorb "^2.4.3"
-
 brotli-size@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/brotli-size/-/brotli-size-4.0.0.tgz#a05ee3faad3c0e700a2f2da826ba6b4d76e69e5e"
@@ -1993,22 +1985,6 @@ builtins@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/builtins/-/builtins-1.0.3.tgz#cb94faeb61c8696451db36534e1422f94f0aee88"
   integrity sha512-uYBjakWipfaO/bXI7E8rq6kpwHRZK5cNYrUv2OzZSI/FvmdMyXJ2tG9dKcjEC5YHmHpUAwsargWIZNWdxb/bnQ==
-
-bundlesize@^0.18.1:
-  version "0.18.1"
-  resolved "https://registry.yarnpkg.com/bundlesize/-/bundlesize-0.18.1.tgz#17b5c158e7a0d01d70c65c616d87783dfd4b55f3"
-  integrity sha512-NAsKBH6BeVmDopoa4tod0m5/koM7iLY3saKyGn7wyAravBYmKNUpDJba4zyVhwRm5Dw9WXv8FIO0N//tCkx68Q==
-  dependencies:
-    axios "^0.21.1"
-    brotli-size "0.1.0"
-    bytes "^3.1.0"
-    ci-env "^1.4.0"
-    commander "^2.20.0"
-    cosmiconfig "^5.2.1"
-    github-build "^1.2.2"
-    glob "^7.1.4"
-    gzip-size "^4.0.0"
-    prettycli "^1.4.3"
 
 bytes@3.1.2, bytes@^3.1.0:
   version "3.1.2"
@@ -4195,17 +4171,6 @@ ignore@^5.1.1, ignore@^5.1.8, ignore@^5.2.0:
   version "5.2.4"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.4.tgz#a291c0c6178ff1b960befe47fcdec301674a6324"
   integrity sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==
-
-iltorb@^2.4.3:
-  version "2.4.5"
-  resolved "https://registry.yarnpkg.com/iltorb/-/iltorb-2.4.5.tgz#d64434b527099125c6839ed48b666247a172ef87"
-  integrity sha512-EMCMl3LnnNSZJS5QrxyZmMTaAC4+TJkM5woD+xbpm9RB+mFYCr7C05GFE3TEGCsVQSVHmjX+3sf5AiwsylNInQ==
-  dependencies:
-    detect-libc "^1.0.3"
-    nan "^2.14.0"
-    npmlog "^4.1.2"
-    prebuild-install "^5.3.3"
-    which-pm-runs "^1.0.0"
 
 immutable@^3:
   version "3.8.2"
