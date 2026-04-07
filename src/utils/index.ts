@@ -7,6 +7,7 @@ import deepEqual from './deep-equal'
 import getScrollParent from './get-scroll-parent'
 import useIsomorphicLayoutEffect from './use-isomorphic-layout-effect'
 import clearTimeoutRef from './clear-timeout-ref'
+import { getBorderWidth, getBorderColor } from './border-style'
 
 export type { IComputedPosition }
 export {
@@ -18,4 +19,6 @@ export {
   getScrollParent,
   useIsomorphicLayoutEffect,
   clearTimeoutRef,
+  getBorderWidth,
+  getBorderColor,
 }

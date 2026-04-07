@@ -53,11 +53,6 @@ const computeTooltipPosition = async ({
         }[placement.split('-')[0]] ?? 'bottom'
       /* c8 ignore end */
 
-      const borderSide = border && {
-        borderBottom: border,
-        borderRight: border,
-      }
-
       let borderWidth = 0
       if (border) {
         const match = `${border}`.match(/(\d+)px/)
@@ -78,8 +73,10 @@ const computeTooltipPosition = async ({
         top: arrowY != null ? `${arrowY}px` : '',
         right: '',
         bottom: '',
-        ...borderSide,
-        [staticSide]: `-${arrowSize / 2 + borderWidth}px`,
+        // Keep the arrow tucked under the tooltip body. When the tooltip has a
+        // border, offset by that width, but do not draw a separate arrow border:
+        // the rotated/clipped element cannot render that seam cleanly.
+        [staticSide]: `-${arrowSize * 0.5 + borderWidth}px`,
       }
       /* c8 ignore end */
 
