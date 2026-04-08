@@ -1,8 +1,13 @@
 .tooltip {
-  padding: 8px 16px;
   border-radius: 3px;
   font-size: 90%;
   width: max-content;
+}
+
+.content {
+  background: inherit;
+  border-radius: inherit;
+  padding: 8px 16px;
 }
 
 .arrow {

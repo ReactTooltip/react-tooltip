@@ -926,7 +926,15 @@ const Tooltip = ({
       }}
       ref={tooltipRef}
     >
-      {actualContent}
+      <WrapperElement
+        className={classNames(
+          'react-tooltip-content-wrapper',
+          coreStyles['content'],
+          styles['content'],
+        )}
+      >
+        {actualContent}
+      </WrapperElement>
       <WrapperElement
         className={classNames(
           'react-tooltip-arrow',

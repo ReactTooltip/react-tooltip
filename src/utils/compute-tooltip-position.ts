@@ -79,7 +79,7 @@ const computeTooltipPosition = async ({
         right: '',
         bottom: '',
         ...borderSide,
-        [staticSide]: `-${arrowSize / 2 + borderWidth}px`,
+        [staticSide]: `-${arrowSize / 2 + borderWidth - 1}px`,
       }
       /* c8 ignore end */
 
