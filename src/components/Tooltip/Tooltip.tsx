@@ -995,11 +995,7 @@ const Tooltip = ({
       ref={tooltipRef}
     >
       <WrapperElement
-        className={clsx(
-          'react-tooltip-content-wrapper',
-          coreStyles['content'],
-          styles['content'],
-        )}
+        className={clsx('react-tooltip-content-wrapper', coreStyles['content'], styles['content'])}
       >
         {actualContent}
       </WrapperElement>
