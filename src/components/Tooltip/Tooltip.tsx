@@ -13,6 +13,7 @@ import {
 import type { IComputedPosition } from 'utils'
 import coreStyles from './core-styles.module.css'
 import styles from './styles.module.css'
+import useTooltipAnchors from './use-tooltip-anchors'
 import type {
   AnchorCloseEvents,
   AnchorOpenEvents,
@@ -84,7 +85,6 @@ const Tooltip = ({
   const wasShowing = useRef(false)
   const lastFloatPosition = useRef<IPosition | null>(null)
   const hoveringTooltip = useRef(false)
-  const [anchorElements, setAnchorElements] = useState<HTMLElement[]>([])
   const mounted = useRef(false)
 
   /**
@@ -340,6 +340,23 @@ const Tooltip = ({
     handleTooltipPosition,
     arrowSize,
   ])
+
+  const handleActiveAnchorRemoved = useCallback(() => {
+    setRendered(false)
+    handleShow(false)
+    setActiveAnchor(null)
+    clearTimeoutRef(tooltipShowDelayTimerRef)
+    clearTimeoutRef(tooltipHideDelayTimerRef)
+  }, [handleShow, setActiveAnchor])
+
+  const anchorElements = useTooltipAnchors({
+    id,
+    anchorSelect,
+    imperativeAnchorSelect: imperativeOptions?.anchorSelect,
+    activeAnchor,
+    disableTooltip,
+    onActiveAnchorRemoved: handleActiveAnchorRemoved,
+  })
 
   useEffect(() => {
     /**
@@ -706,149 +723,6 @@ const Tooltip = ({
   ])
 
   useEffect(() => {
-    /**
-     * TODO(V6): break down observer callback for clarity
-     *   - `handleAddedAnchors()`
-     *   - `handleRemovedAnchors()`
-     */
-    let selector = imperativeOptions?.anchorSelect ?? anchorSelect ?? ''
-    if (!selector && id) {
-      selector = `[data-tooltip-id='${id.replace(/'/g, "\\'")}']`
-    }
-    const documentObserverCallback: MutationCallback = (mutationList) => {
-      const addedAnchors = new Set<HTMLElement>()
-      const removedAnchors = new Set<HTMLElement>()
-      const maybeAddAnchor = (anchor: HTMLElement) => {
-        if (disableTooltip?.(anchor)) {
-          return
-        }
-        addedAnchors.add(anchor)
-      }
-      mutationList.forEach((mutation) => {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'data-tooltip-id') {
-          const target = mutation.target as HTMLElement
-          const newId = target.getAttribute('data-tooltip-id')
-          if (newId === id) {
-            maybeAddAnchor(target)
-          } else if (mutation.oldValue === id) {
-            // data-tooltip-id has now been changed, so we need to remove this anchor
-            removedAnchors.add(target)
-          }
-        }
-        if (mutation.type !== 'childList') {
-          return
-        }
-        const removedNodes = [...mutation.removedNodes].filter((node) => node.nodeType === 1)
-        if (activeAnchor) {
-          removedNodes.some((node) => {
-            /**
-             * TODO(V6)
-             *   - isn't `!activeAnchor.isConnected` better?
-             *   - maybe move to `handleDisconnectedAnchor()`
-             */
-            if (node?.contains?.(activeAnchor)) {
-              setRendered(false)
-              handleShow(false)
-              setActiveAnchor(null)
-              clearTimeoutRef(tooltipShowDelayTimerRef)
-              clearTimeoutRef(tooltipHideDelayTimerRef)
-              return true
-            }
-            return false
-          })
-        }
-        if (!selector) {
-          return
-        }
-        try {
-          removedNodes.forEach((node) => {
-            const element = node as HTMLElement
-            if (element.matches(selector)) {
-              // the element itself is an anchor
-              removedAnchors.add(element)
-            } else {
-              /**
-               * TODO(V6): do we care if an element which is an anchor,
-               * has children which are also anchors?
-               * (i.e. should we remove `else` and always do this)
-               */
-              // the element has children which are anchors
-              element
-                .querySelectorAll<HTMLElement>(selector)
-                .forEach((innerNode) => removedAnchors.add(innerNode))
-            }
-          })
-        } catch {
-          /* c8 ignore start */
-          if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
-            // eslint-disable-next-line no-console
-            console.warn(`[react-tooltip] "${selector}" is not a valid CSS selector`)
-          }
-          /* c8 ignore end */
-        }
-        try {
-          const addedNodes = [...mutation.addedNodes].filter((node) => node.nodeType === 1)
-          addedNodes.forEach((node) => {
-            const element = node as HTMLElement
-            if (element.matches(selector)) {
-              // the element itself is an anchor
-              maybeAddAnchor(element)
-            } else {
-              /**
-               * TODO(V6): do we care if an element which is an anchor,
-               * has children which are also anchors?
-               * (i.e. should we remove `else` and always do this)
-               */
-              // the element has children which are anchors
-              element
-                .querySelectorAll<HTMLElement>(selector)
-                .forEach((innerNode) => maybeAddAnchor(innerNode))
-            }
-          })
-        } catch {
-          /* c8 ignore start */
-          if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
-            // eslint-disable-next-line no-console
-            console.warn(`[react-tooltip] "${selector}" is not a valid CSS selector`)
-          }
-          /* c8 ignore end */
-        }
-      })
-      if (addedAnchors.size || removedAnchors.size) {
-        setAnchorElements((anchors) => [
-          ...anchors.filter((anchor) => !removedAnchors.has(anchor) && anchor.isConnected),
-          ...addedAnchors,
-        ])
-      }
-    }
-    const documentObserver = new MutationObserver(documentObserverCallback)
-    // watch for anchor being removed from the DOM
-    documentObserver.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['data-tooltip-id'],
-      // to track the prev value if we need to remove anchor when data-tooltip-id gets changed
-      attributeOldValue: true,
-    })
-    return () => {
-      documentObserver.disconnect()
-      // Clean up any lingering timeouts
-      clearTimeoutRef(tooltipShowDelayTimerRef)
-      clearTimeoutRef(tooltipHideDelayTimerRef)
-      clearTimeoutRef(missedTransitionTimerRef)
-    }
-  }, [
-    id,
-    anchorSelect,
-    imperativeOptions?.anchorSelect,
-    activeAnchor,
-    handleShow,
-    setActiveAnchor,
-    disableTooltip,
-  ])
-
-  useEffect(() => {
     updateTooltipPosition()
   }, [updateTooltipPosition])
 
@@ -901,25 +775,6 @@ const Tooltip = ({
       clearTimeoutRef(missedTransitionTimerRef)
     }
   }, [defaultIsOpen, handleShow])
-
-  useEffect(() => {
-    let selector = imperativeOptions?.anchorSelect ?? anchorSelect
-    if (!selector && id) {
-      selector = `[data-tooltip-id='${id.replace(/'/g, "\\'")}']`
-    }
-    if (!selector) {
-      return
-    }
-    try {
-      const anchors = Array.from(document.querySelectorAll<HTMLElement>(selector)).filter(
-        (anchor) => !disableTooltip?.(anchor),
-      )
-      setAnchorElements(anchors)
-    } catch {
-      // warning was already issued in the controller
-      setAnchorElements([])
-    }
-  }, [id, anchorSelect, imperativeOptions?.anchorSelect, disableTooltip])
 
   useEffect(() => {
     if (tooltipShowDelayTimerRef.current) {

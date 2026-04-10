@@ -463,4 +463,57 @@ describe('tooltip observers', () => {
     // MutationObserver should be disconnected
     expect(mockMutationObserverInstance.disconnect).toBeDefined()
   })
+
+  test('tooltip ignores dynamically added anchors disabled by disableTooltip', () => {
+    const { rerender } = render(
+      <>
+        <span data-tooltip-id="dynamic-disable-test">Allowed Anchor</span>
+        <Tooltip
+          id="dynamic-disable-test"
+          content="Dynamic Disable Test"
+          disableTooltip={(anchor) => anchor?.textContent === 'Blocked Anchor'}
+        />
+      </>,
+    )
+
+    const allowedAnchor = screen.getByText('Allowed Anchor')
+    act(() => {
+      fireEvent.mouseEnter(allowedAnchor)
+      jest.advanceTimersByTime(100)
+    })
+    expect(screen.getByText('Dynamic Disable Test')).toBeInTheDocument()
+
+    rerender(
+      <>
+        <span data-tooltip-id="dynamic-disable-test">Allowed Anchor</span>
+        <span data-tooltip-id="dynamic-disable-test">Blocked Anchor</span>
+        <Tooltip
+          id="dynamic-disable-test"
+          content="Dynamic Disable Test"
+          disableTooltip={(anchor) => anchor?.textContent === 'Blocked Anchor'}
+        />
+      </>,
+    )
+
+    const blockedAnchor = screen.getByText('Blocked Anchor')
+    act(() => {
+      mockMutationObserverCallback([
+        {
+          type: 'attributes',
+          attributeName: 'data-tooltip-id',
+          target: blockedAnchor,
+          oldValue: null,
+        },
+      ])
+      jest.advanceTimersByTime(100)
+    })
+
+    act(() => {
+      fireEvent.mouseLeave(allowedAnchor)
+      fireEvent.mouseEnter(blockedAnchor)
+      jest.advanceTimersByTime(100)
+    })
+
+    expect(screen.queryByText('Dynamic Disable Test')).not.toBeInTheDocument()
+  })
 })
