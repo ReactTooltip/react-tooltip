@@ -15,8 +15,8 @@ import type {
 export interface ITooltipController {
   className?: string
   classNameArrow?: string
-  content?: string
-  render?: (render: { content: string | null; activeAnchor: HTMLElement | null }) => ReactNode
+  content?: ReactNode
+  render?: (render: { content: ReactNode | null; activeAnchor: HTMLElement | null }) => ReactNode
   place?: PlacesType
   offset?: number
   id?: string

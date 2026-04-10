@@ -275,7 +275,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
           {rendered}
         </div>
       ) : null
-    } else if (tooltipContent) {
+    } else if (tooltipContent !== null && tooltipContent !== undefined) {
       renderedContent = tooltipContent
     }
 

@@ -933,6 +933,7 @@ const Tooltip = ({
   }, [delayShow, handleShowTooltipDelayed])
 
   const actualContent = imperativeOptions?.content ?? content
+  const hasContent = actualContent !== null && actualContent !== undefined
   const canShow = show && Object.keys(computedPosition.tooltipStyles).length > 0
 
   useImperativeHandle(forwardRef, () => ({
@@ -964,7 +965,7 @@ const Tooltip = ({
     },
     activeAnchor,
     place: computedPosition.place,
-    isOpen: Boolean(rendered && !hidden && actualContent && canShow),
+    isOpen: Boolean(rendered && !hidden && hasContent && canShow),
   }))
 
   useEffect(() => {
@@ -976,7 +977,7 @@ const Tooltip = ({
     }
   }, [])
 
-  return rendered && !hidden && actualContent ? (
+  return rendered && !hidden && hasContent ? (
     <WrapperElement
       id={id}
       role={role}

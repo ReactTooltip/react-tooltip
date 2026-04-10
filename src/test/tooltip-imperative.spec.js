@@ -146,4 +146,33 @@ describe('tooltip imperative API', () => {
       expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
     })
   })
+
+  test('imperative ref reports open for numeric zero content', async () => {
+    let tooltipRefInstance = null
+
+    const TestComponent = () => {
+      const tooltipRef = useRef(null)
+      tooltipRefInstance = tooltipRef
+
+      return (
+        <>
+          <button onClick={() => tooltipRef.current?.open()}>Open Zero</button>
+          <span data-tooltip-id="imperative-zero">Target</span>
+          <Tooltip id="imperative-zero" content={0} ref={tooltipRef} />
+        </>
+      )
+    }
+
+    render(<TestComponent />)
+
+    await userEvent.click(screen.getByText('Open Zero'))
+
+    const tooltip = await screen.findByRole('tooltip')
+
+    expect(tooltip).toBeInTheDocument()
+    expect(tooltip).toHaveTextContent('0')
+    await waitFor(() => {
+      expect(tooltipRefInstance.current?.isOpen).toBe(true)
+    })
+  })
 })

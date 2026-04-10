@@ -199,4 +199,16 @@ describe('tooltip props', () => {
     expect(tooltip).toBeInTheDocument()
     expect(container).toMatchSnapshot()
   })
+
+  test('tooltip renders numeric zero content', async () => {
+    render(<TooltipProps id="example-zero-content" content={0} />)
+    const anchorElement = screen.getByText('Lorem Ipsum')
+
+    await userEvent.hover(anchorElement)
+
+    const tooltip = await screen.findByRole('tooltip')
+
+    expect(tooltip).toBeInTheDocument()
+    expect(tooltip).toHaveTextContent('0')
+  })
 })
