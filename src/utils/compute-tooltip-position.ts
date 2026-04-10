@@ -29,7 +29,7 @@ const computeTooltipPosition = async ({
     return { tooltipStyles: {}, tooltipArrowStyles: {}, place }
   }
 
-  const middleware = middlewares
+  const middleware = [...middlewares]
 
   if (tooltipArrowReference) {
     middleware.push(arrow({ element: tooltipArrowReference as HTMLElement, padding: 5 }))

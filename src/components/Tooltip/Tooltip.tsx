@@ -718,12 +718,18 @@ const Tooltip = ({
     const documentObserverCallback: MutationCallback = (mutationList) => {
       const addedAnchors = new Set<HTMLElement>()
       const removedAnchors = new Set<HTMLElement>()
+      const maybeAddAnchor = (anchor: HTMLElement) => {
+        if (disableTooltip?.(anchor)) {
+          return
+        }
+        addedAnchors.add(anchor)
+      }
       mutationList.forEach((mutation) => {
         if (mutation.type === 'attributes' && mutation.attributeName === 'data-tooltip-id') {
           const target = mutation.target as HTMLElement
           const newId = target.getAttribute('data-tooltip-id')
           if (newId === id) {
-            addedAnchors.add(target)
+            maybeAddAnchor(target)
           } else if (mutation.oldValue === id) {
             // data-tooltip-id has now been changed, so we need to remove this anchor
             removedAnchors.add(target)
@@ -786,7 +792,7 @@ const Tooltip = ({
             const element = node as HTMLElement
             if (element.matches(selector)) {
               // the element itself is an anchor
-              addedAnchors.add(element)
+              maybeAddAnchor(element)
             } else {
               /**
                * TODO(V6): do we care if an element which is an anchor,
@@ -796,7 +802,7 @@ const Tooltip = ({
               // the element has children which are anchors
               element
                 .querySelectorAll<HTMLElement>(selector)
-                .forEach((innerNode) => addedAnchors.add(innerNode))
+                .forEach((innerNode) => maybeAddAnchor(innerNode))
             }
           })
         } catch {
@@ -832,7 +838,15 @@ const Tooltip = ({
       clearTimeoutRef(tooltipHideDelayTimerRef)
       clearTimeoutRef(missedTransitionTimerRef)
     }
-  }, [id, anchorSelect, imperativeOptions?.anchorSelect, activeAnchor, handleShow, setActiveAnchor])
+  }, [
+    id,
+    anchorSelect,
+    imperativeOptions?.anchorSelect,
+    activeAnchor,
+    handleShow,
+    setActiveAnchor,
+    disableTooltip,
+  ])
 
   useEffect(() => {
     updateTooltipPosition()
