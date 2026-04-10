@@ -14,6 +14,14 @@
 .arrow {
   position: absolute;
   background: inherit;
+  z-index: -1;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
 }
 
 .noArrow {

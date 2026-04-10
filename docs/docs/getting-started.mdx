@@ -179,9 +179,11 @@ import { Tooltip } from 'react-tooltip'
   <Tooltip anchorSelect=".my-anchor-element">Hello world!</Tooltip>
 </div>
 
-### Clickable tooltip
+### Clickable tooltip/accessibility
 
-By default, you can't interact with elements inside the tooltip. To allow for proper usage of elements such as buttons and inputs, use the `clickable` prop.
+By default the tooltip disappears when the pointer leaves the tooltip anchor element - which means you can't interact with elements inside the tooltip and that it won't meet the 'hoverable' requirement of [WCAG Success Criterion 1.4.13 Content on Hover or Focus](https://www.w3.org/TR/WCAG22/#content-on-hover-or-focus).
+
+To allow for proper usage of elements such as buttons and inputs - or to ensure the pointer can be moved over the tooltip content without it disappearing - use the `clickable` prop.
 
 ```jsx
 <a id="not-clickable">◕‿‿◕</a>

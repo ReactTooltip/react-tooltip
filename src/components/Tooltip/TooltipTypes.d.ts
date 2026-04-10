@@ -79,22 +79,14 @@ export interface TooltipRefProps {
   isOpen: boolean
 }
 
-export type AnchorOpenEvents = {
-  mouseenter?: boolean
-  focus?: boolean
-  mouseover?: boolean
-  click?: boolean
-  dblclick?: boolean
-  mousedown?: boolean
-}
-export type AnchorCloseEvents = {
-  mouseleave?: boolean
-  blur?: boolean
-  mouseout?: boolean
-  click?: boolean
-  dblclick?: boolean
-  mouseup?: boolean
-}
+type AnchorClickEvents = 'click' | 'dblclick' | 'mousedown' | 'mouseup'
+
+export type AnchorOpenEvents = Partial<
+  Record<'mouseenter' | 'focus' | 'mouseover' | AnchorClickEvents, boolean>
+>
+export type AnchorCloseEvents = Partial<
+  Record<'mouseleave' | 'blur' | 'mouseout' | AnchorClickEvents, boolean>
+>
 export type GlobalCloseEvents = {
   escape?: boolean
   scroll?: boolean
@@ -134,10 +126,13 @@ export interface ITooltip {
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
   afterHide?: () => void
+  disableTooltip?: (anchorRef: HTMLElement | null) => boolean
+  previousActiveAnchor: HTMLElement | null
   activeAnchor: HTMLElement | null
   setActiveAnchor: (anchor: HTMLElement | null) => void
   border?: CSSProperties['border']
   opacity?: CSSProperties['opacity']
   arrowColor?: CSSProperties['backgroundColor']
+  arrowSize?: number
   role?: React.AriaRole
 }

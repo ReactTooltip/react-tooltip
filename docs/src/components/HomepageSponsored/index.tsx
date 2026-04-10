@@ -14,6 +14,8 @@ type FeatureItem = {
   // eslint-disable-next-line react/no-unused-prop-types
   eventTitle?: string
   link: string
+  allowsDarkMode?: boolean
+  extraLink?: string
 }
 
 type SponsorItem = FeatureItem & {
@@ -25,11 +27,13 @@ const FeatureList: FeatureItem[] = [
     title: 'Digital Ocean',
     Svg: require('@site/static/img/digital-ocean-powered-by.svg').default,
     link: 'https://www.digitalocean.com/?refcode=0813b3be1161&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge',
+    extraLink: '/blog/digital-ocean-app-platform',
   },
   {
     title: 'Algolia',
     Svg: require('@site/static/img/Algolia-logo.svg').default,
     link: 'https://docsearch.algolia.com/',
+    allowsDarkMode: true,
   },
 ]
 
@@ -50,13 +54,29 @@ const SponsorList: SponsorItem[] = [
   // },
 ]
 
-function Feature({ title, Svg, link }: FeatureItem) {
+function Feature({ title, Svg, link, allowsDarkMode, extraLink }: FeatureItem) {
   return (
     <div className={clsx('col col--6')}>
-      <div className="text--center">
+      <div className={clsx('text--center', styles['feature-item'])}>
         <a href={link} title={title} target="_blank" rel="noreferrer" aria-label={title}>
-          <Svg className={styles.featureSvg} role="img" />
+          <Svg
+            className={clsx(styles.featureSvg, {
+              [styles.svgDarkMode]: allowsDarkMode,
+            })}
+            role="img"
+          />
         </a>
+        {extraLink && (
+          <a
+            href={extraLink}
+            title={`Learn more about ${title}`}
+            target="_blank"
+            rel="noreferrer"
+            className={styles.featureLink}
+          >
+            Learn more about {title}
+          </a>
+        )}
       </div>
     </div>
   )

@@ -47,9 +47,11 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       border,
       opacity,
       arrowColor,
+      arrowSize,
       setIsOpen,
       afterShow,
       afterHide,
+      disableTooltip,
       role = 'tooltip',
     }: ITooltipController,
     ref,
@@ -66,6 +68,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     const [tooltipPositionStrategy, setTooltipPositionStrategy] = useState(positionStrategy)
     const [tooltipClassName, setTooltipClassName] = useState<string | null>(null)
     const [activeAnchor, setActiveAnchor] = useState<HTMLElement | null>(null)
+    const previousActiveAnchorRef = useRef<HTMLElement | null>(null)
     const styleInjectionRef = useRef(disableStyleInjection)
 
     /* c8 ignore start */
@@ -308,11 +311,21 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       border,
       opacity,
       arrowColor,
+      arrowSize,
       setIsOpen,
       afterShow,
       afterHide,
+      disableTooltip,
       activeAnchor,
-      setActiveAnchor,
+      previousActiveAnchor: previousActiveAnchorRef.current,
+      setActiveAnchor: (anchor: HTMLElement | null) => {
+        setActiveAnchor((prev) => {
+          if (!anchor?.isSameNode(prev)) {
+            previousActiveAnchorRef.current = prev
+          }
+          return anchor
+        })
+      },
       role,
     }
 

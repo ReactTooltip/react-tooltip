@@ -1,29 +1,33 @@
 name: Beta Release
 
 on:
-  workflow_call:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   beta_release:
+    if: github.event.pull_request.draft == false && github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    concurrency:
+      group: beta-release-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      id-token: write
+      issues: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
       - uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '24.14.0'
           registry-url: 'https://registry.npmjs.org'
           cache: 'yarn'
 
       - name: Install dev dependencies
         run: yarn install
-
-      - name: Setup npm credentials file
-        run: echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
 
       - name: Setup git credentials
         run: |
@@ -39,9 +43,14 @@ jobs:
           GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
 
       - name: Release a new beta version
-        run: npm publish --tag beta
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --tag beta --access public
+
+      - name: Upload npm debug logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-debug-logs
+          path: /home/runner/.npm/_logs
 
       - uses: actions/github-script@v6
         with:

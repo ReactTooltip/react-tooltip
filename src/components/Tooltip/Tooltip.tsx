@@ -50,17 +50,20 @@ const Tooltip = ({
   position,
   afterShow,
   afterHide,
+  disableTooltip,
   // props handled by controller
   content,
   contentWrapperRef,
   isOpen,
   defaultIsOpen = false,
   setIsOpen,
+  previousActiveAnchor,
   activeAnchor,
   setActiveAnchor,
   border,
   opacity,
   arrowColor,
+  arrowSize = 8,
   role = 'tooltip',
 }: ITooltip) => {
   const tooltipRef = useRef<HTMLElement>(null)
@@ -120,6 +123,42 @@ const Tooltip = ({
     },
     [isOpen, setIsOpen],
   )
+
+  /**
+   * Add aria-describedby to activeAnchor when tooltip is active
+   */
+  useEffect(() => {
+    if (!id) return
+
+    function getAriaDescribedBy(element: HTMLElement | null) {
+      return element?.getAttribute('aria-describedby')?.split(' ') || []
+    }
+
+    function removeAriaDescribedBy(element: HTMLElement | null) {
+      const newDescribedBy = getAriaDescribedBy(element).filter((s) => s !== id)
+      if (newDescribedBy.length) {
+        element?.setAttribute('aria-describedby', newDescribedBy.join(' '))
+      } else {
+        element?.removeAttribute('aria-describedby')
+      }
+    }
+
+    if (show) {
+      removeAriaDescribedBy(previousActiveAnchor)
+      const currentDescribedBy = getAriaDescribedBy(activeAnchor)
+      const describedBy = [...new Set([...currentDescribedBy, id])].filter(Boolean).join(' ')
+      activeAnchor?.setAttribute('aria-describedby', describedBy)
+    } else {
+      removeAriaDescribedBy(activeAnchor)
+    }
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      // cleanup aria-describedby when the tooltip is closed
+      removeAriaDescribedBy(activeAnchor)
+      removeAriaDescribedBy(previousActiveAnchor)
+    }
+  }, [activeAnchor, show, id, previousActiveAnchor])
 
   /**
    * this replicates the effect from `handleShow()`
@@ -235,11 +274,12 @@ const Tooltip = ({
         strategy: positionStrategy,
         middlewares,
         border,
+        arrowSize,
       }).then((computedStylesData) => {
         handleComputedPosition(computedStylesData)
       })
     },
-    [imperativeOptions?.place, place, offset, positionStrategy, middlewares, border],
+    [imperativeOptions?.place, place, offset, positionStrategy, middlewares, border, arrowSize],
   )
 
   const updateTooltipPosition = useCallback(() => {
@@ -278,6 +318,7 @@ const Tooltip = ({
       strategy: positionStrategy,
       middlewares,
       border,
+      arrowSize,
     }).then((computedStylesData) => {
       if (!mounted.current) {
         // invalidate computed positions after remount
@@ -297,6 +338,7 @@ const Tooltip = ({
     middlewares,
     border,
     handleTooltipPosition,
+    arrowSize,
   ])
 
   useEffect(() => {
@@ -354,6 +396,9 @@ const Tooltip = ({
          * at the same time the tooltip gets triggered
          */
         setActiveAnchor(null)
+        return
+      }
+      if (disableTooltip?.(target)) {
         return
       }
       if (delayShow) {
@@ -511,8 +556,10 @@ const Tooltip = ({
 
     const enabledEvents: { event: string; listener: (event?: Event) => void }[] = []
 
+    const activeAnchorContainsTarget = (event?: Event): boolean =>
+      Boolean(event?.target && activeAnchor?.contains(event.target as HTMLElement))
     const handleClickOpenTooltipAnchor = (event?: Event) => {
-      if (show && event?.target === activeAnchor) {
+      if (show && activeAnchorContainsTarget(event)) {
         /**
          * ignore clicking the anchor that was used to open the tooltip.
          * this avoids conflict with the click close event.
@@ -522,7 +569,7 @@ const Tooltip = ({
       handleShowTooltip(event)
     }
     const handleClickCloseTooltipAnchor = (event?: Event) => {
-      if (!show || event?.target !== activeAnchor) {
+      if (!show || !activeAnchorContainsTarget(event)) {
         /**
          * ignore clicking the anchor that was NOT used to open the tooltip.
          * this avoids closing the tooltip when clicking on a
@@ -569,19 +616,21 @@ const Tooltip = ({
       })
     }
 
-    const handleMouseEnterTooltip = () => {
+    const handleMouseOverTooltip = () => {
       hoveringTooltip.current = true
     }
-    const handleMouseLeaveTooltip = () => {
+    const handleMouseOutTooltip = () => {
       hoveringTooltip.current = false
       handleHideTooltip()
     }
 
-    if (clickable && !hasClickEvent) {
-      // used to keep the tooltip open when hovering content.
-      // not needed if using click events.
-      tooltipElement?.addEventListener('mouseenter', handleMouseEnterTooltip)
-      tooltipElement?.addEventListener('mouseleave', handleMouseLeaveTooltip)
+    const addHoveringTooltipListeners =
+      clickable && (actualCloseEvents.mouseout || actualCloseEvents.mouseleave)
+    if (addHoveringTooltipListeners) {
+      // used to keep the tooltip open when hovering from anchor to tooltip.
+      // only relevant if either `mouseout`/`mouseleave` is in use
+      tooltipElement?.addEventListener('mouseover', handleMouseOverTooltip)
+      tooltipElement?.addEventListener('mouseout', handleMouseOutTooltip)
     }
 
     enabledEvents.forEach(({ event, listener }) => {
@@ -615,9 +664,9 @@ const Tooltip = ({
       if (actualGlobalCloseEvents.escape) {
         window.removeEventListener('keydown', handleEsc)
       }
-      if (clickable && !hasClickEvent) {
-        tooltipElement?.removeEventListener('mouseenter', handleMouseEnterTooltip)
-        tooltipElement?.removeEventListener('mouseleave', handleMouseLeaveTooltip)
+      if (addHoveringTooltipListeners) {
+        tooltipElement?.removeEventListener('mouseover', handleMouseOverTooltip)
+        tooltipElement?.removeEventListener('mouseout', handleMouseOutTooltip)
       }
       enabledEvents.forEach(({ event, listener }) => {
         anchorElements.forEach((anchor) => {
@@ -848,13 +897,15 @@ const Tooltip = ({
       return
     }
     try {
-      const anchors = Array.from(document.querySelectorAll<HTMLElement>(selector))
+      const anchors = Array.from(document.querySelectorAll<HTMLElement>(selector)).filter(
+        (anchor) => !disableTooltip?.(anchor),
+      )
       setAnchorElements(anchors)
     } catch {
       // warning was already issued in the controller
       setAnchorElements([])
     }
-  }, [id, anchorSelect, imperativeOptions?.anchorSelect])
+  }, [id, anchorSelect, imperativeOptions?.anchorSelect, disableTooltip])
 
   useEffect(() => {
     if (tooltipShowDelayTimerRef.current) {
@@ -943,7 +994,15 @@ const Tooltip = ({
       }}
       ref={tooltipRef}
     >
-      {actualContent}
+      <WrapperElement
+        className={clsx(
+          'react-tooltip-content-wrapper',
+          coreStyles['content'],
+          styles['content'],
+        )}
+      >
+        {actualContent}
+      </WrapperElement>
       <WrapperElement
         className={clsx(
           'react-tooltip-arrow',
@@ -957,6 +1016,7 @@ const Tooltip = ({
           background: arrowColor
             ? `linear-gradient(to right bottom, transparent 50%, ${arrowColor} 50%)`
             : undefined,
+          '--rt-arrow-size': `${arrowSize}px`,
         }}
         ref={tooltipArrowRef}
       />

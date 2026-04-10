@@ -3,6 +3,7 @@
 exports[`tooltip attributes basic tooltip 1`] = `
 <div>
   <span
+    aria-describedby="basic-example-attr"
     data-tooltip-content="Hello World!"
     data-tooltip-id="basic-example-attr"
   >
@@ -17,7 +18,7 @@ exports[`tooltip attributes basic tooltip 1`] = `
     Hello World!
     <div
       class="react-tooltip-arrow"
-      style="left: -1px; bottom: -4px;"
+      style="--rt-arrow-size: 8px; left: -1px; bottom: -4px;"
     />
   </div>
 </div>
@@ -26,6 +27,7 @@ exports[`tooltip attributes basic tooltip 1`] = `
 exports[`tooltip attributes tooltip with class name 1`] = `
 <div>
   <span
+    aria-describedby="example-class-name-attr"
     data-tooltip-class-name="tooltip-class-name"
     data-tooltip-content="Hello World!"
     data-tooltip-id="example-class-name-attr"
@@ -41,7 +43,7 @@ exports[`tooltip attributes tooltip with class name 1`] = `
     Hello World!
     <div
       class="react-tooltip-arrow"
-      style="left: -1px; bottom: -4px;"
+      style="--rt-arrow-size: 8px; left: -1px; bottom: -4px;"
     />
   </div>
 </div>
@@ -50,6 +52,7 @@ exports[`tooltip attributes tooltip with class name 1`] = `
 exports[`tooltip attributes tooltip with place 1`] = `
 <div>
   <span
+    aria-describedby="example-place-attr"
     data-tooltip-content="Hello World!"
     data-tooltip-id="example-place-attr"
     data-tooltip-place="right"
@@ -57,15 +60,15 @@ exports[`tooltip attributes tooltip with place 1`] = `
     Lorem Ipsum
   </span>
   <div
-    class="react-tooltip react-tooltip__place-right react-tooltip__show"
+    class="react-tooltip react-tooltip__place-left react-tooltip__show"
     id="example-place-attr"
     role="tooltip"
-    style="left: 10px; top: 5px;"
+    style="left: -10px; top: 5px;"
   >
     Hello World!
     <div
       class="react-tooltip-arrow"
-      style="left: -4px; top: -1px;"
+      style="--rt-arrow-size: 8px; top: -1px; right: -4px;"
     />
   </div>
 </div>

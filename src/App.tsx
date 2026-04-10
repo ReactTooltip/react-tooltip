@@ -48,12 +48,14 @@ function App() {
         My button
       </button>
       <Tooltip
+        id="button1"
         place="bottom"
         anchorSelect={`#${anchorId}`}
         isOpen={isDarkOpen}
         setIsOpen={setIsDarkOpen}
       />
       <Tooltip
+        id="button2"
         place="top"
         variant="success"
         anchorSelect="#button2"
@@ -106,6 +108,7 @@ function App() {
         <Tooltip id="anchor-select">Tooltip content</Tooltip>
         <Tooltip
           ref={tooltipRef}
+          id="tooltip-content"
           anchorSelect="section[id='section-anchor-select'] > p > button"
           place="bottom"
           openEvents={{ click: true }}
