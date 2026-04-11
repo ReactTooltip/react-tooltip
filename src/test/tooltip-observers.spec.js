@@ -145,7 +145,7 @@ describe('tooltip observers', () => {
     }
 
     // Create a mock constructor that sets the callback and returns the instance
-    global.MutationObserver = function (callback) {
+    global.MutationObserver = function MockMutationObserver(callback) {
       mockMutationObserverCallback = callback
       return mockMutationObserverInstance
     }

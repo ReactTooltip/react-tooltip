@@ -199,6 +199,8 @@ export default {
       'ts-jest',
       {
         tsconfig: 'tsconfig.json',
+        useESM: true,
+        isolatedModules: true,
       },
     ],
     '^.+\\.css$': 'jest-transform-css',

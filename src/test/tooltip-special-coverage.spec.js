@@ -52,7 +52,7 @@ describe('tooltip special coverage', () => {
             }
           }, 100)
         }
-      }, [tooltipRef.current])
+      }, [])
 
       return (
         <div>
