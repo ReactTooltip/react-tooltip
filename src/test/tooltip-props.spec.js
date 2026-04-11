@@ -211,4 +211,22 @@ describe('tooltip props', () => {
     expect(tooltip).toBeInTheDocument()
     expect(tooltip).toHaveTextContent('0')
   })
+
+  test('tooltip render callback receives numeric zero content', async () => {
+    render(
+      <TooltipProps
+        id="example-zero-render-content"
+        content={0}
+        render={({ content }) => <span>{String(content)}</span>}
+      />,
+    )
+    const anchorElement = screen.getByText('Lorem Ipsum')
+
+    await userEvent.hover(anchorElement)
+
+    const tooltip = await screen.findByRole('tooltip')
+
+    expect(tooltip).toBeInTheDocument()
+    expect(tooltip).toHaveTextContent('0')
+  })
 })
