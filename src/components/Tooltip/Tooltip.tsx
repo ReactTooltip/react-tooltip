@@ -197,13 +197,16 @@ const Tooltip = ({
     }
   }, [afterHide, afterShow, show])
 
-  const handleComputedPosition = (newComputedPosition: IComputedPosition) => {
+  const handleComputedPosition = useCallback((newComputedPosition: IComputedPosition) => {
+    if (!mounted.current) {
+      return
+    }
     setComputedPosition((oldComputedPosition) =>
       deepEqual(oldComputedPosition, newComputedPosition)
         ? oldComputedPosition
         : newComputedPosition,
     )
-  }
+  }, [])
 
   const handleShowTooltipDelayed = useCallback(
     (delay = delayShow) => {
@@ -270,7 +273,16 @@ const Tooltip = ({
         handleComputedPosition(computedStylesData)
       })
     },
-    [imperativeOptions?.place, place, offset, positionStrategy, middlewares, border, arrowSize],
+    [
+      imperativeOptions?.place,
+      place,
+      offset,
+      positionStrategy,
+      middlewares,
+      border,
+      arrowSize,
+      handleComputedPosition,
+    ],
   )
 
   const updateTooltipPosition = useCallback(() => {
@@ -329,6 +341,7 @@ const Tooltip = ({
     middlewares,
     border,
     handleTooltipPosition,
+    handleComputedPosition,
     arrowSize,
   ])
 

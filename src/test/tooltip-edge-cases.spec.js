@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { render, screen, act, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { TooltipController } from '../components/TooltipController'
+import { flushMicrotasks, flushPendingTimers } from './test-utils'
 
 // Tell Jest to mock all timeout functions
 jest.useRealTimers()
@@ -13,7 +14,7 @@ describe('tooltip edge cases', () => {
   })
 
   afterEach(() => {
-    // Clean up timers
+    flushPendingTimers()
     jest.useRealTimers()
   })
 
@@ -103,6 +104,7 @@ describe('tooltip edge cases', () => {
     act(() => {
       jest.advanceTimersByTime(200)
     })
+    await flushMicrotasks()
 
     // Now there should be an element with the selector class
     expect(container.querySelectorAll('.selector-class').length).toBe(1)
@@ -131,7 +133,7 @@ describe('tooltip edge cases', () => {
     expect(screen.getByText('Hover Me')).toBeInTheDocument()
   })
 
-  test('tooltip handles active anchor being removed', () => {
+  test('tooltip handles active anchor being removed', async () => {
     // Create a component where we'll remove the active anchor
     const RemovableTest = () => {
       const [showAnchor, setShowAnchor] = useState(true)
@@ -162,6 +164,7 @@ describe('tooltip edge cases', () => {
     act(() => {
       jest.advanceTimersByTime(200)
     })
+    await flushMicrotasks()
 
     // Now the anchor should be gone
     expect(screen.queryByText('Hover Me')).not.toBeInTheDocument()
@@ -187,7 +190,7 @@ describe('tooltip edge cases', () => {
     // The test passes if no error is thrown during unmount
   })
 
-  test('tooltip handles attribute changes', () => {
+  test('tooltip handles attribute changes', async () => {
     // Create a component where we'll change attributes
     const AttributeChangeTest = () => {
       const [tooltipId, setTooltipId] = useState('attribute-test')
@@ -222,12 +225,13 @@ describe('tooltip edge cases', () => {
     act(() => {
       jest.advanceTimersByTime(200)
     })
+    await flushMicrotasks()
 
     // Now it should have the changed ID
     expect(anchorElement).toHaveAttribute('data-tooltip-id', 'changed-id')
   })
 
-  test('tooltip handles try-catch blocks in mutation observer', () => {
+  test('tooltip handles try-catch blocks in mutation observer', async () => {
     // Create a component that will trigger a try-catch in the mutation observer
     const TryCatchTest = () => {
       const [showElement, setShowElement] = useState(false)
@@ -266,6 +270,7 @@ describe('tooltip edge cases', () => {
     act(() => {
       jest.advanceTimersByTime(200)
     })
+    await flushMicrotasks()
 
     // Now there should be an element with the selector class
     expect(container.querySelectorAll('.try-catch-selector').length).toBe(1)
@@ -299,6 +304,7 @@ describe('tooltip edge cases', () => {
       fireEvent.mouseEnter(screen.getByText('Hover Me'))
       jest.advanceTimersByTime(1000)
     })
+    await flushMicrotasks()
 
     // Verify the tooltip is visible
     await waitFor(() => {
@@ -311,6 +317,7 @@ describe('tooltip edge cases', () => {
       fireEvent.mouseLeave(screen.getByText('Hover Me'))
       jest.advanceTimersByTime(1000)
     })
+    await flushMicrotasks()
 
     // Verify the tooltip is hidden or closing
     await waitFor(
@@ -359,6 +366,7 @@ describe('tooltip edge cases', () => {
       fireEvent.mouseEnter(anchor)
       jest.advanceTimersByTime(1000)
     })
+    await flushMicrotasks()
 
     // Skip the tooltip verification since it's difficult to test with selectors
     // Instead, verify that the anchor element is still in the document
@@ -369,6 +377,7 @@ describe('tooltip edge cases', () => {
       fireEvent.mouseLeave(anchor)
       jest.advanceTimersByTime(1000)
     })
+    await flushMicrotasks()
 
     // Skip the tooltip verification
   })
@@ -404,6 +413,7 @@ describe('tooltip edge cases', () => {
       fireEvent.click(anchor)
       jest.advanceTimersByTime(1000)
     })
+    await flushMicrotasks()
 
     // Skip the tooltip verification since it's difficult to test with custom events
     // Instead, verify that the anchor element is still in the document
@@ -415,6 +425,7 @@ describe('tooltip edge cases', () => {
       fireEvent.click(document.body)
       jest.advanceTimersByTime(1000)
     })
+    await flushMicrotasks()
 
     // Skip the tooltip verification
   })

@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { TooltipController as Tooltip } from '../components/TooltipController'
+import { flushMicrotasks } from './test-utils'
 
 // Tell Jest to mock all timeout functions
 jest.useRealTimers()
@@ -41,7 +42,7 @@ afterEach(() => {
 })
 
 describe('tooltip observers', () => {
-  test('tooltip handles scroll and resize events', () => {
+  test('tooltip handles scroll and resize events', async () => {
     render(
       <>
         <span data-tooltip-id="scroll-test">Hover Me</span>
@@ -53,6 +54,7 @@ describe('tooltip observers', () => {
 
     // Hover to show tooltip
     fireEvent.mouseEnter(anchorElement)
+    await flushMicrotasks()
 
     // Tooltip should be visible
     const tooltip = screen.getByRole('tooltip')
@@ -71,7 +73,7 @@ describe('tooltip observers', () => {
     expect(tooltip).toBeInTheDocument()
   })
 
-  test('tooltip handles DOM mutations', () => {
+  test('tooltip handles DOM mutations', async () => {
     const { container } = render(
       <div id="container">
         <span data-tooltip-id="mutation-test" id="anchor">
@@ -85,6 +87,7 @@ describe('tooltip observers', () => {
 
     // Hover to show tooltip
     fireEvent.mouseEnter(anchorElement)
+    await flushMicrotasks()
 
     // Tooltip should be visible
     const tooltip = screen.getByRole('tooltip')
@@ -102,7 +105,7 @@ describe('tooltip observers', () => {
     expect(screen.queryByText('Hover Me')).not.toBeInTheDocument()
   })
 
-  test('tooltip handles auto update cleanup', () => {
+  test('tooltip handles auto update cleanup', async () => {
     const { unmount } = render(
       <>
         <span data-tooltip-id="auto-update-test">Hover Me</span>
@@ -114,6 +117,7 @@ describe('tooltip observers', () => {
 
     // Hover to show tooltip
     fireEvent.mouseEnter(anchorElement)
+    await flushMicrotasks()
 
     // Tooltip should be visible
     const tooltip = screen.getByRole('tooltip')
@@ -198,7 +202,7 @@ describe('tooltip observers', () => {
     })
   })
 
-  test('tooltip handles mutation observer callbacks', () => {
+  test('tooltip handles mutation observer callbacks', async () => {
     const { rerender } = render(
       <>
         <span data-tooltip-id="mutation-test" id="anchor1">
@@ -217,6 +221,7 @@ describe('tooltip observers', () => {
       fireEvent.mouseEnter(anchorElement)
       jest.advanceTimersByTime(100)
     })
+    await flushMicrotasks()
 
     // Tooltip should be visible
     expect(screen.getByText('Mutation Test')).toBeInTheDocument()
@@ -233,6 +238,7 @@ describe('tooltip observers', () => {
       ])
       jest.advanceTimersByTime(100)
     })
+    await flushMicrotasks()
 
     // Simulate mutation for attribute change (changing an existing anchor's id)
     act(() => {
@@ -246,6 +252,7 @@ describe('tooltip observers', () => {
       ])
       jest.advanceTimersByTime(100)
     })
+    await flushMicrotasks()
 
     // Rerender with a new anchor
     rerender(
@@ -273,9 +280,10 @@ describe('tooltip observers', () => {
       ])
       jest.advanceTimersByTime(100)
     })
+    await flushMicrotasks()
   })
 
-  test('tooltip handles mutation observer for removed nodes', () => {
+  test('tooltip handles mutation observer for removed nodes', async () => {
     const RemovableAnchorTooltip = () => {
       const containerRef = useRef(null)
 
@@ -310,6 +318,7 @@ describe('tooltip observers', () => {
       fireEvent.mouseEnter(anchorElement)
       jest.advanceTimersByTime(100)
     })
+    await flushMicrotasks()
 
     // Tooltip should be visible
     expect(screen.getByText('Remove Test')).toBeInTheDocument()
@@ -329,15 +338,17 @@ describe('tooltip observers', () => {
       ])
       jest.advanceTimersByTime(100)
     })
+    await flushMicrotasks()
 
     // Click the remove button
     act(() => {
       fireEvent.click(screen.getByText('Remove Anchor'))
       jest.advanceTimersByTime(100)
     })
+    await flushMicrotasks()
   })
 
-  test('tooltip handles mutation observer for active anchor removal', () => {
+  test('tooltip handles mutation observer for active anchor removal', async () => {
     const ActiveAnchorRemovalTest = () => {
       const containerRef = useRef(null)
 
@@ -372,6 +383,7 @@ describe('tooltip observers', () => {
       fireEvent.mouseEnter(anchorElement)
       jest.advanceTimersByTime(100)
     })
+    await flushMicrotasks()
 
     // Tooltip should be visible
     expect(screen.getByText('Active Removal Test')).toBeInTheDocument()
@@ -391,15 +403,17 @@ describe('tooltip observers', () => {
       ])
       jest.advanceTimersByTime(100)
     })
+    await flushMicrotasks()
 
     // Click the remove button
     act(() => {
       fireEvent.click(screen.getByText('Remove Active Anchor'))
       jest.advanceTimersByTime(100)
     })
+    await flushMicrotasks()
   })
 
-  test('tooltip handles mutation observer for selector changes', () => {
+  test('tooltip handles mutation observer for selector changes', async () => {
     render(
       <>
         <span className="tooltip-target" data-tooltip-id="selector-test">
@@ -418,6 +432,7 @@ describe('tooltip observers', () => {
       fireEvent.mouseEnter(anchorElement)
       jest.advanceTimersByTime(100)
     })
+    await flushMicrotasks()
 
     // Tooltip should be visible
     expect(screen.getByText('Selector Test')).toBeInTheDocument()
@@ -443,6 +458,7 @@ describe('tooltip observers', () => {
       // Clean up
       document.body.removeChild(mockElement)
     })
+    await flushMicrotasks()
   })
 
   test('tooltip handles mutation observer cleanup on unmount', () => {
@@ -464,7 +480,7 @@ describe('tooltip observers', () => {
     expect(mockMutationObserverInstance.disconnect).toBeDefined()
   })
 
-  test('tooltip ignores dynamically added anchors disabled by disableTooltip', () => {
+  test('tooltip ignores dynamically added anchors disabled by disableTooltip', async () => {
     const { rerender } = render(
       <>
         <span data-tooltip-id="dynamic-disable-test">Allowed Anchor</span>
@@ -481,6 +497,7 @@ describe('tooltip observers', () => {
       fireEvent.mouseEnter(allowedAnchor)
       jest.advanceTimersByTime(100)
     })
+    await flushMicrotasks()
     expect(screen.getByText('Dynamic Disable Test')).toBeInTheDocument()
 
     rerender(
@@ -507,12 +524,14 @@ describe('tooltip observers', () => {
       ])
       jest.advanceTimersByTime(100)
     })
+    await flushMicrotasks()
 
     act(() => {
       fireEvent.mouseLeave(allowedAnchor)
       fireEvent.mouseEnter(blockedAnchor)
       jest.advanceTimersByTime(100)
     })
+    await flushMicrotasks()
 
     expect(screen.queryByText('Dynamic Disable Test')).not.toBeInTheDocument()
   })
