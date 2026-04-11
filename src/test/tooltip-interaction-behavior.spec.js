@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { autoUpdate } from '@floating-ui/dom'
 import { TooltipController } from '../components/TooltipController'
 import {
+  flushMicrotasks,
   flushPendingTimers,
   hoverAnchor,
   unhoverAnchor,
@@ -33,8 +34,17 @@ describe('tooltip interaction behavior', () => {
     jest.useRealTimers()
   })
 
+  const renderAndFlush = async (ui) => {
+    let view
+    await act(async () => {
+      view = render(ui)
+      await Promise.resolve()
+    })
+    return view
+  }
+
   test('opens on click when click is the configured trigger', async () => {
-    render(
+    await renderAndFlush(
       <>
         <span data-tooltip-id="click-only-test">Hover Me</span>
         <TooltipController
@@ -52,12 +62,13 @@ describe('tooltip interaction behavior', () => {
     expect(document.getElementById('click-only-test')).not.toBeInTheDocument()
 
     fireEvent.click(anchor)
+    await flushMicrotasks()
     const tooltip = await waitForTooltip('click-only-test')
     expect(tooltip).toHaveTextContent('Click Only Test')
   })
 
   test('stops showing after scroll and resize global close events', async () => {
-    render(
+    await renderAndFlush(
       <>
         <span data-tooltip-id="global-events-test">Hover Me</span>
         <TooltipController
@@ -74,17 +85,19 @@ describe('tooltip interaction behavior', () => {
     await waitForTooltip('global-events-test')
 
     fireEvent.scroll(window)
+    await flushMicrotasks()
     await waitForTooltipToStopShowing('global-events-test')
 
     hoverAnchor(anchor, 1000)
     await waitForTooltip('global-events-test')
 
     fireEvent.resize(window)
+    await flushMicrotasks()
     await waitForTooltipToStopShowing('global-events-test')
   })
 
   test('keeps a clickable tooltip open while the pointer moves into it', async () => {
-    render(
+    await renderAndFlush(
       <>
         <span data-tooltip-id="clickable-test">Hover Me</span>
         <TooltipController
@@ -103,9 +116,11 @@ describe('tooltip interaction behavior', () => {
 
     unhoverAnchor(anchor, 0)
     fireEvent.mouseEnter(tooltip)
+    await flushMicrotasks()
     expect(screen.getByRole('tooltip')).toBeInTheDocument()
 
     fireEvent.mouseLeave(tooltip)
+    await flushMicrotasks()
     await waitForTooltipToStopShowing('clickable-test')
   })
 
@@ -122,13 +137,14 @@ describe('tooltip interaction behavior', () => {
       )
     }
 
-    render(<RemovableTest />)
+    await renderAndFlush(<RemovableTest />)
 
     const anchor = screen.getByText('Hover Me')
     hoverAnchor(anchor, 500)
     await waitForTooltip('removable-test')
 
     fireEvent.click(screen.getByText('Remove Anchor'))
+    await flushMicrotasks()
 
     await waitFor(() => {
       expect(screen.queryByText('Hover Me')).not.toBeInTheDocument()
@@ -136,10 +152,10 @@ describe('tooltip interaction behavior', () => {
     expect(autoUpdate).toHaveBeenCalled()
   })
 
-  test('opens without emitting runtime errors', () => {
+  test('opens without emitting runtime errors', async () => {
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
 
-    render(
+    await renderAndFlush(
       <>
         <span data-tooltip-id="console-error-test">Hover Me</span>
         <TooltipController id="console-error-test" content="Console Error Test" />
@@ -147,6 +163,7 @@ describe('tooltip interaction behavior', () => {
     )
 
     hoverAnchor(screen.getByText('Hover Me'), 500)
+    await flushMicrotasks()
 
     expect(screen.getByText('Console Error Test')).toBeInTheDocument()
     consoleErrorSpy.mockRestore()

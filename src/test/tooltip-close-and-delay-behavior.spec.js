@@ -10,6 +10,7 @@ import {
   waitForTooltip,
   waitForTooltipToClose,
 } from './test-utils'
+import { installMockMutationObserver } from './mutation-observer-test-utils'
 
 jest.mock('@floating-ui/dom', () => {
   const originalModule = jest.requireActual('@floating-ui/dom')
@@ -20,13 +21,17 @@ jest.mock('@floating-ui/dom', () => {
 })
 
 describe('tooltip close and delay behavior', () => {
+  let mutationObserverController
+
   beforeEach(() => {
     jest.useFakeTimers()
     jest.clearAllMocks()
+    mutationObserverController = installMockMutationObserver()
   })
 
   afterEach(() => {
     flushPendingTimers()
+    mutationObserverController.restore()
     jest.useRealTimers()
   })
 
@@ -101,6 +106,13 @@ describe('tooltip close and delay behavior', () => {
     expect(container.querySelector('.selector-target')).toBeInTheDocument()
 
     fireEvent.click(screen.getByText('Remove Element'))
+    mutationObserverController.triggerAll([
+      {
+        type: 'childList',
+        removedNodes: [],
+        addedNodes: [],
+      },
+    ])
     expect(container.querySelector('.selector-target')).not.toBeInTheDocument()
   })
 

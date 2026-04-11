@@ -3,18 +3,23 @@ import { render, screen, act, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { TooltipController } from '../components/TooltipController'
 import { flushMicrotasks, flushPendingTimers } from './test-utils'
+import { installMockMutationObserver } from './mutation-observer-test-utils'
 
 // Tell Jest to mock all timeout functions
 jest.useRealTimers()
 
 describe('tooltip edge cases', () => {
+  let mutationObserverController
+
   beforeEach(() => {
     // Use fake timers for tests that need them
     jest.useFakeTimers()
+    mutationObserverController = installMockMutationObserver()
   })
 
   afterEach(() => {
     flushPendingTimers()
+    mutationObserverController.restore()
     jest.useRealTimers()
   })
 
@@ -88,7 +93,7 @@ describe('tooltip edge cases', () => {
           <TooltipController
             id="selector-test"
             content="Selector Test"
-            selector=".selector-class"
+            anchorSelect=".selector-class"
           />
         </div>
       )
@@ -104,6 +109,7 @@ describe('tooltip edge cases', () => {
     act(() => {
       jest.advanceTimersByTime(200)
     })
+    mutationObserverController.triggerAll([{ type: 'childList', removedNodes: [], addedNodes: [] }])
     await flushMicrotasks()
 
     // Now there should be an element with the selector class
@@ -120,7 +126,7 @@ describe('tooltip edge cases', () => {
           <TooltipController
             id="invalid-selector-test"
             content="Invalid Selector Test"
-            selector="[invalid-selector"
+            anchorSelect="[invalid-selector"
           />
         </div>
       )
@@ -164,6 +170,7 @@ describe('tooltip edge cases', () => {
     act(() => {
       jest.advanceTimersByTime(200)
     })
+    mutationObserverController.triggerAll([{ type: 'childList', removedNodes: [], addedNodes: [] }])
     await flushMicrotasks()
 
     // Now the anchor should be gone
@@ -254,7 +261,7 @@ describe('tooltip edge cases', () => {
           <TooltipController
             id="try-catch-test"
             content="Try Catch Test"
-            selector=".try-catch-selector"
+            anchorSelect=".try-catch-selector"
           />
         </div>
       )
@@ -270,6 +277,7 @@ describe('tooltip edge cases', () => {
     act(() => {
       jest.advanceTimersByTime(200)
     })
+    mutationObserverController.triggerAll([{ type: 'childList', removedNodes: [], addedNodes: [] }])
     await flushMicrotasks()
 
     // Now there should be an element with the selector class
@@ -287,7 +295,6 @@ describe('tooltip edge cases', () => {
             id="cleanup-functions-test"
             content="Cleanup Functions Test"
             place="top"
-            events={['hover']}
             delayShow={0}
             delayHide={0}
             globalCloseEvents={{ scroll: true, resize: true }}
@@ -343,8 +350,7 @@ describe('tooltip edge cases', () => {
           <TooltipController
             id="selector-variable-test"
             content="Selector Variable Test"
-            selector=".custom-anchor"
-            events={['hover']}
+            anchorSelect=".custom-anchor"
             delayShow={0}
             delayHide={0}
             place="top"
@@ -391,7 +397,7 @@ describe('tooltip edge cases', () => {
           <TooltipController
             id="custom-events-test"
             content="Custom Events Test"
-            events={['click']}
+            openEvents={{ click: true }}
             delayShow={0}
             delayHide={0}
             place="top"

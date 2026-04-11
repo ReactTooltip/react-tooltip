@@ -10,6 +10,7 @@ import {
   waitForTooltip,
   waitForTooltipToClose,
 } from './test-utils'
+import { installMockMutationObserver } from './mutation-observer-test-utils'
 
 jest.mock('@floating-ui/dom', () => {
   const originalModule = jest.requireActual('@floating-ui/dom')
@@ -20,13 +21,17 @@ jest.mock('@floating-ui/dom', () => {
 })
 
 describe('tooltip controlled state and refs', () => {
+  let mutationObserverController
+
   beforeEach(() => {
     jest.useFakeTimers()
     jest.clearAllMocks()
+    mutationObserverController = installMockMutationObserver()
   })
 
   afterEach(() => {
     flushPendingTimers()
+    mutationObserverController.restore()
     jest.useRealTimers()
   })
 
@@ -111,6 +116,13 @@ describe('tooltip controlled state and refs', () => {
 
     expect(document.querySelector('.try-catch-selector')).toBeInTheDocument()
     advanceTimers(200)
+    mutationObserverController.triggerAll([
+      {
+        type: 'childList',
+        removedNodes: [],
+        addedNodes: [],
+      },
+    ])
     expect(document.querySelector('.try-catch-selector')).not.toBeInTheDocument()
   })
 
