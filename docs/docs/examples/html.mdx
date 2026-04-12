@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # HTML
 
-Using HTML content in ReactTooltip component.
+Using rich markup content in ReactTooltip.
 
 import { Tooltip } from 'react-tooltip'
 
@@ -33,76 +33,97 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-### Using `data-tooltip-html` attribute
+Raw HTML string APIs such as `data-tooltip-html` and the `html` prop are no longer part of the current API.
+Use tooltip `children` or the `render` prop instead so content stays in React rather than being injected as a string.
 
-:::info
-
-You can also use [`renderToStaticMarkup()`](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to render HTML/JSX.
-
-:::
+### Using tooltip children
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 
 <a
-  data-tooltip-id="my-tooltip-data-html"
-  data-tooltip-html="<div><h3>Cool stuff</h3><ul><li>This is cool</li><li>This too</li></ul></div>"
+  data-tooltip-id="my-tooltip-children-html"
 >
   ◕‿‿◕
 </a>
-<Tooltip id="my-tooltip-data-html" />
+<Tooltip id="my-tooltip-children-html">
+  <div>
+    <h3>Cool stuff</h3>
+    <ul>
+      <li>This is cool</li>
+      <li>This too</li>
+    </ul>
+  </div>
+</Tooltip>
 ```
 
 <TooltipAnchor
-  data-tooltip-id="my-tooltip-data-html"
-  data-tooltip-html="<div><h3>Cool stuff</h3><ul><li>This is cool</li><li>This too</li></ul></div>"
+  data-tooltip-id="my-tooltip-children-html"
 >
   ◕‿‿◕
 </TooltipAnchor>
-<Tooltip id="my-tooltip-data-html" />
+<Tooltip id="my-tooltip-children-html">
+  <div>
+    <h3>Cool stuff</h3>
+    <ul>
+      <li>This is cool</li>
+      <li>This too</li>
+    </ul>
+  </div>
+</Tooltip>
 
-### Using `html` prop
-
-:::info
-
-You should probably pass the content as children to the tooltip instead.
-
-:::
+### Using `render` for dynamic rich content
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 
-<a data-tooltip-id="my-tooltip-html-prop">◕‿‿◕</a>
+<a data-tooltip-id="my-tooltip-render">◕‿‿◕</a>
 <Tooltip
-  id="my-tooltip-html-prop"
-  html="Hello<br /><s>multiline</s><br /><b>HTML</b><br />tooltip"
+  id="my-tooltip-render"
+  render={() => (
+    <div>
+      Hello
+      <br />
+      <s>multiline</s>
+      <br />
+      <b>markup</b>
+      <br />
+      tooltip
+    </div>
+  )}
 />
 ```
 
-<TooltipAnchor data-tooltip-id="my-tooltip-html-prop">◕‿‿◕</TooltipAnchor>
+<TooltipAnchor data-tooltip-id="my-tooltip-render">◕‿‿◕</TooltipAnchor>
 <Tooltip
-  id="my-tooltip-html-prop"
-  html="Hello<br /><s>multiline</s><br /><b>HTML</b><br />tooltip"
+  id="my-tooltip-render"
+  render={() => (
+    <div>
+      Hello
+      <br />
+      <s>multiline</s>
+      <br />
+      <b>markup</b>
+      <br />
+      tooltip
+    </div>
+  )}
 />
 
 #### Security note
 
-The `html` option allows a tooltip to directly display raw HTML. This is a security risk if any of that content is supplied by the user.
-Any user-supplied content must be sanitized, using a package like [sanitize-html](https://www.npmjs.com/package/sanitize-html).
-We chose not to include sanitization after discovering it [increased our package size](https://github.com/wwayne/react-tooltip/issues/429) too much - we don't want to penalize people who don't use the `html` option.
+Avoid turning user-supplied strings into markup inside the tooltip.
+Prefer rendering React nodes directly with `children` or `render`.
 
 #### JSX note
 
-You can use [`renderToStaticMarkup()` function](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to use JSX instead of HTML.
-**Example:**
+If you already have JSX, pass it directly to the tooltip instead of converting it to a string.
 
 ```jsx
-import ReactDOMServer from 'react-dom/server';
-[...]
-<a
-  data-tooltip-id="my-tooltip"
-  data-tooltip-html={ReactDOMServer.renderToStaticMarkup(<div>I am <b>JSX</b> content</div>)}
->
-  ◕‿‿◕
-</a>
+<a data-tooltip-id="my-tooltip-jsx">◕‿‿◕</a>
+<Tooltip id="my-tooltip-jsx">
+  <div>
+    I am <b>JSX</b> content
+  </div>
+</Tooltip>
 ```
