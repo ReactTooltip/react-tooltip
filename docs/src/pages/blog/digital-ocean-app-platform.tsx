@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable import/no-unresolved */
-import React from 'react'
+import React, { JSX } from 'react'
 import Layout from '@theme/Layout'
 import DigitalOceanBanner from '@site/static/img/digital-ocean-banner.webp'
 import DigitalOceanLogin from '@site/static/img/digital-ocean-login.webp'

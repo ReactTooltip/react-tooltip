@@ -10,8 +10,8 @@ The tooltip arrow inherits its background color from the tooltip (its parent).
 
 import { Tooltip } from 'react-tooltip'
 import CodeBlock from '@theme/CodeBlock'
-import TooltipStyles from '!!raw-loader!../../../src/components/Tooltip/styles.module.css'
-import TooltipCoreStyles from '!!raw-loader!../../../src/components/Tooltip/core-styles.module.css'
+import TooltipStyles from '@site/src/generated/tooltipStylesSource'
+import TooltipCoreStyles from '@site/src/generated/tooltipCoreStylesSource'
 
 export const TooltipAnchor = ({ children, id, ...rest }) => {
   return (

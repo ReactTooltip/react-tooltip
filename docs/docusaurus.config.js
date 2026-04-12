@@ -4,9 +4,11 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github')
-const darkCodeTheme = require('prism-react-renderer/themes/dracula')
+const { themes } = require('prism-react-renderer')
 const postcssPresetEnv = require('postcss-preset-env')
+
+const lightCodeTheme = themes.github
+const darkCodeTheme = themes.dracula
 
 /** @return {import('@docusaurus/types').Plugin} */
 function customPostCssPlugin() {
@@ -27,7 +29,6 @@ const config = {
   url: 'https://react-tooltip.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
 
   // GitHub pages deployment config.
@@ -41,6 +42,17 @@ const config = {
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
+  },
+
+  markdown: {
+    mdx1Compat: {
+      comments: true,
+      admonitions: true,
+      headingIds: true,
+    },
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
   },
 
   plugins: [customPostCssPlugin],
