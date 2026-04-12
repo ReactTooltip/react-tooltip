@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { TooltipController as Tooltip } from '../components/TooltipController'
-import { flushMicrotasks } from './test-utils'
+import { flushMicrotasks, flushPendingTimers, waitForTooltip } from './test-utils'
 
 // Tell Jest to mock all timeout functions
 jest.useRealTimers()
@@ -534,5 +534,106 @@ describe('tooltip observers', () => {
     await flushMicrotasks()
 
     expect(screen.queryByText('Dynamic Disable Test')).not.toBeInTheDocument()
+  })
+})
+
+describe('tooltip resize observer behavior', () => {
+  const OriginalResizeObserver = global.ResizeObserver
+  let resizeObserverInstances
+
+  beforeEach(() => {
+    jest.useFakeTimers()
+    resizeObserverInstances = []
+
+    global.ResizeObserver = function MockResizeObserver(callback) {
+      this.callback = callback
+      this.observe = jest.fn()
+      this.unobserve = jest.fn()
+      this.disconnect = jest.fn()
+      resizeObserverInstances.push(this)
+    }
+  })
+
+  afterEach(() => {
+    flushPendingTimers()
+    global.ResizeObserver = OriginalResizeObserver
+    jest.useRealTimers()
+  })
+
+  test('repositions when rendered content resizes', async () => {
+    render(
+      <>
+        <span data-tooltip-id="resize-observer-test">Hover Me</span>
+        <Tooltip
+          id="resize-observer-test"
+          content="Resize Observer Test"
+          defaultIsOpen
+          render={({ content }) => <div>{content}</div>}
+        />
+      </>,
+    )
+
+    await waitForTooltip('resize-observer-test')
+
+    expect(resizeObserverInstances.length).toBeGreaterThan(0)
+    const resizeObserver = resizeObserverInstances[resizeObserverInstances.length - 1]
+
+    act(() => {
+      resizeObserver.callback()
+      jest.advanceTimersByTime(0)
+    })
+
+    expect(screen.getByRole('tooltip')).toBeInTheDocument()
+  })
+
+  test('replaces a pending resize observer timeout when another resize arrives', async () => {
+    render(
+      <>
+        <span data-tooltip-id="resize-observer-debounce-test">Hover Me</span>
+        <Tooltip
+          id="resize-observer-debounce-test"
+          content="Resize Observer Debounce Test"
+          defaultIsOpen
+          render={({ content }) => <div>{content}</div>}
+        />
+      </>,
+    )
+
+    await waitForTooltip('resize-observer-debounce-test')
+
+    const resizeObserver = resizeObserverInstances[resizeObserverInstances.length - 1]
+
+    act(() => {
+      resizeObserver.callback()
+      resizeObserver.callback()
+      jest.advanceTimersByTime(0)
+    })
+
+    expect(screen.getByRole('tooltip')).toBeInTheDocument()
+  })
+
+  test('cleans pending resize observer work on unmount', async () => {
+    const { unmount } = render(
+      <>
+        <span data-tooltip-id="resize-observer-cleanup-test">Hover Me</span>
+        <Tooltip
+          id="resize-observer-cleanup-test"
+          content="Resize Observer Cleanup Test"
+          defaultIsOpen
+          render={({ content }) => <div>{content}</div>}
+        />
+      </>,
+    )
+
+    await waitForTooltip('resize-observer-cleanup-test')
+    const resizeObserver = resizeObserverInstances[resizeObserverInstances.length - 1]
+
+    act(() => {
+      resizeObserver.callback()
+    })
+
+    unmount()
+
+    expect(resizeObserver.disconnect).toHaveBeenCalled()
   })
 })

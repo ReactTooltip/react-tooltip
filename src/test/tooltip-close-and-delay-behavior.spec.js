@@ -183,6 +183,105 @@ describe('tooltip close and delay behavior', () => {
     await waitForTooltipToClose('debounced-test')
   })
 
+  test('restarts the pending show timer when hover is retriggered', async () => {
+    render(
+      <>
+        <span data-tooltip-id="retriggered-delay-test">Hover Me</span>
+        <TooltipController
+          id="retriggered-delay-test"
+          content="Retriggered Delay Test"
+          delayShow={100}
+        />
+      </>,
+    )
+
+    const anchor = screen.getByText('Hover Me')
+
+    hoverAnchor(anchor)
+    advanceTimers(60)
+    hoverAnchor(anchor)
+    advanceTimers(90)
+    expect(document.getElementById('retriggered-delay-test')).not.toBeInTheDocument()
+
+    advanceTimers(30)
+    await waitForTooltip('retriggered-delay-test')
+  })
+
+  test('keeps a clickable tooltip open when the hide delay expires while hovering it', async () => {
+    render(
+      <>
+        <span data-tooltip-id="clickable-delay-hide-test">Hover Me</span>
+        <TooltipController
+          id="clickable-delay-hide-test"
+          content="Clickable Delay Hide Test"
+          clickable
+          delayHide={50}
+        />
+      </>,
+    )
+
+    const anchor = screen.getByText('Hover Me')
+
+    hoverAnchor(anchor, 100)
+    const tooltip = await waitForTooltip('clickable-delay-hide-test')
+
+    unhoverAnchor(anchor)
+    fireEvent.mouseEnter(tooltip)
+    advanceTimers(60)
+    expect(screen.getByRole('tooltip')).toBeInTheDocument()
+
+    fireEvent.mouseLeave(tooltip)
+    advanceTimers(60)
+    await waitForTooltipToClose('clickable-delay-hide-test')
+  })
+
+  test('clears a pending hide delay when the anchor is hovered again', async () => {
+    render(
+      <>
+        <span data-tooltip-id="rehydrated-hide-delay-test">Hover Me</span>
+        <TooltipController
+          id="rehydrated-hide-delay-test"
+          content="Rehydrated Hide Delay Test"
+          delayHide={100}
+        />
+      </>,
+    )
+
+    const anchor = screen.getByText('Hover Me')
+
+    hoverAnchor(anchor, 100)
+    await waitForTooltip('rehydrated-hide-delay-test')
+
+    unhoverAnchor(anchor)
+    advanceTimers(40)
+    hoverAnchor(anchor)
+    advanceTimers(80)
+
+    expect(document.getElementById('rehydrated-hide-delay-test')).toBeInTheDocument()
+  })
+
+  test('cancels a pending show timer when the anchor hides first', () => {
+    render(
+      <>
+        <span data-tooltip-id="cancel-show-timer-test">Hover Me</span>
+        <TooltipController
+          id="cancel-show-timer-test"
+          content="Cancel Show Timer Test"
+          delayShow={100}
+        />
+      </>,
+    )
+
+    const anchor = screen.getByText('Hover Me')
+
+    hoverAnchor(anchor)
+    advanceTimers(40)
+    unhoverAnchor(anchor)
+    advanceTimers(100)
+
+    expect(document.getElementById('cancel-show-timer-test')).not.toBeInTheDocument()
+  })
+
   test('does not close on non-Escape keys', async () => {
     render(
       <>
@@ -200,5 +299,85 @@ describe('tooltip close and delay behavior', () => {
 
     fireEvent.keyDown(document, { key: 'Enter', code: 'Enter' })
     expect(document.getElementById('non-escape-key-test')).toBeInTheDocument()
+  })
+
+  test('ignores outside-click close events for disconnected targets and tooltip clicks', async () => {
+    render(
+      <>
+        <span data-tooltip-id="outside-click-guards-test">Hover Me</span>
+        <TooltipController
+          id="outside-click-guards-test"
+          content="Outside Click Guards Test"
+          globalCloseEvents={{ clickOutsideAnchor: true }}
+        />
+      </>,
+    )
+
+    hoverAnchor(screen.getByText('Hover Me'), 100)
+    const tooltip = await waitForTooltip('outside-click-guards-test')
+
+    const disconnectedTarget = document.createElement('button')
+    const disconnectedClick = new MouseEvent('click', { bubbles: true })
+    Object.defineProperty(disconnectedClick, 'target', { value: disconnectedTarget })
+    fireEvent(window, disconnectedClick)
+    expect(document.getElementById('outside-click-guards-test')).toBeInTheDocument()
+
+    fireEvent.click(tooltip)
+    expect(document.getElementById('outside-click-guards-test')).toBeInTheDocument()
+  })
+
+  test('completes the hide flow on opacity transition end', async () => {
+    const afterHide = jest.fn()
+
+    render(
+      <>
+        <span data-tooltip-id="transition-end-test">Hover Me</span>
+        <TooltipController
+          id="transition-end-test"
+          content="Transition End Test"
+          afterHide={afterHide}
+        />
+      </>,
+    )
+
+    const anchor = screen.getByText('Hover Me')
+
+    hoverAnchor(anchor, 100)
+    const tooltip = await waitForTooltip('transition-end-test')
+
+    unhoverAnchor(anchor, 20)
+    expect(tooltip).toHaveClass('react-tooltip__closing')
+
+    const transitionEndEvent = new Event('transitionend', { bubbles: true })
+    Object.defineProperty(transitionEndEvent, 'propertyName', { value: 'opacity' })
+    fireEvent(tooltip, transitionEndEvent)
+    await waitForTooltipToClose('transition-end-test')
+    expect(afterHide).toHaveBeenCalledTimes(1)
+  })
+
+  test('ignores transition end events for unrelated CSS properties', async () => {
+    render(
+      <>
+        <span data-tooltip-id="transition-property-guard-test">Hover Me</span>
+        <TooltipController
+          id="transition-property-guard-test"
+          content="Transition Property Guard Test"
+        />
+      </>,
+    )
+
+    const anchor = screen.getByText('Hover Me')
+
+    hoverAnchor(anchor, 100)
+    const tooltip = await waitForTooltip('transition-property-guard-test')
+
+    unhoverAnchor(anchor, 20)
+    expect(tooltip).toHaveClass('react-tooltip__closing')
+
+    const transitionEndEvent = new Event('transitionend', { bubbles: true })
+    Object.defineProperty(transitionEndEvent, 'propertyName', { value: 'transform' })
+    fireEvent(tooltip, transitionEndEvent)
+
+    expect(document.getElementById('transition-property-guard-test')).toBeInTheDocument()
   })
 })

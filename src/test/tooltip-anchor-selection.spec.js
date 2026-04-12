@@ -9,7 +9,9 @@ import {
   unhoverAnchor,
   waitForTooltip,
   waitForTooltipToClose,
+  waitForTooltipToStopShowing,
 } from './test-utils'
+import { installMockMutationObserver } from './mutation-observer-test-utils'
 
 jest.mock('@floating-ui/dom', () => {
   const originalModule = jest.requireActual('@floating-ui/dom')
@@ -20,13 +22,17 @@ jest.mock('@floating-ui/dom', () => {
 })
 
 describe('tooltip anchor selection', () => {
+  let mutationObserverController
+
   beforeEach(() => {
     jest.useFakeTimers()
     jest.clearAllMocks()
+    mutationObserverController = installMockMutationObserver()
   })
 
   afterEach(() => {
     flushPendingTimers()
+    mutationObserverController.restore()
     jest.useRealTimers()
   })
 
@@ -142,5 +148,46 @@ describe('tooltip anchor selection', () => {
     await waitFor(() => {
       expect(screen.queryByText('No Selector Test')).not.toBeInTheDocument()
     })
+  })
+
+  test('ignores mutation scans when no selector can be derived', () => {
+    render(<TooltipController content="Selectorless Tooltip" />)
+
+    expect(() => {
+      mutationObserverController.triggerAll([
+        {
+          type: 'childList',
+          removedNodes: [document.createElement('div')],
+          addedNodes: [document.createElement('div')],
+        },
+      ])
+    }).not.toThrow()
+  })
+
+  test('removes anchors after data-tooltip-id changes away from the tooltip id', async () => {
+    render(
+      <>
+        <span data-tooltip-id="attribute-removal-test">Hover Me</span>
+        <TooltipController id="attribute-removal-test" content="Attribute Removal Test" />
+      </>,
+    )
+
+    const anchor = screen.getByText('Hover Me')
+
+    hoverAnchor(anchor, 100)
+    await waitForTooltip('attribute-removal-test')
+
+    anchor.setAttribute('data-tooltip-id', 'different-id')
+    mutationObserverController.triggerAll([
+      {
+        type: 'attributes',
+        attributeName: 'data-tooltip-id',
+        target: anchor,
+        oldValue: 'attribute-removal-test',
+      },
+    ])
+
+    unhoverAnchor(anchor, 100)
+    await waitForTooltipToStopShowing('attribute-removal-test')
   })
 })

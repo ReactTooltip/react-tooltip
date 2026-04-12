@@ -1,16 +1,26 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
+import { computeTooltipPosition } from 'utils'
 import { TooltipController } from '../components/TooltipController'
 import {
   advanceTimers,
   flushPendingTimers,
   hoverAnchor,
   unhoverAnchor,
+  clickAnchor,
   waitForTooltip,
   waitForTooltipToClose,
 } from './test-utils'
 import { installMockMutationObserver } from './mutation-observer-test-utils'
+
+jest.mock('utils', () => {
+  const originalModule = jest.requireActual('utils')
+  return {
+    ...originalModule,
+    computeTooltipPosition: jest.fn(originalModule.computeTooltipPosition),
+  }
+})
 
 jest.mock('@floating-ui/dom', () => {
   const originalModule = jest.requireActual('@floating-ui/dom')
@@ -147,5 +157,194 @@ describe('tooltip controlled state and refs', () => {
 
     unhoverAnchor(anchor, 100)
     await waitForTooltipToClose('null-ref-test')
+  })
+
+  test('preserves unrelated aria-describedby values when hiding', async () => {
+    render(
+      <>
+        <span data-tooltip-id="aria-describedby-test" aria-describedby="external-description">
+          Hover Me
+        </span>
+        <TooltipController id="aria-describedby-test" content="Aria Describedby Test" />
+      </>,
+    )
+
+    const anchor = screen.getByText('Hover Me')
+
+    hoverAnchor(anchor, 100)
+    await waitForTooltip('aria-describedby-test')
+    expect(anchor).toHaveAttribute(
+      'aria-describedby',
+      expect.stringContaining('external-description'),
+    )
+    expect(anchor).toHaveAttribute(
+      'aria-describedby',
+      expect.stringContaining('aria-describedby-test'),
+    )
+
+    unhoverAnchor(anchor, 100)
+    await waitForTooltipToClose('aria-describedby-test')
+
+    expect(anchor).toHaveAttribute('aria-describedby', 'external-description')
+  })
+
+  test('opens by default when defaultIsOpen is enabled', async () => {
+    render(
+      <>
+        <span data-tooltip-id="default-open-test">Hover Me</span>
+        <TooltipController id="default-open-test" content="Default Open Test" defaultIsOpen />
+      </>,
+    )
+
+    advanceTimers(20)
+    await waitForTooltip('default-open-test')
+  })
+
+  test('no-ops when a cached imperative ref method is called after unmount', () => {
+    let cachedOpen
+
+    const ImperativeUnmountTest = () => {
+      const tooltipRef = useRef(null)
+
+      useEffect(() => {
+        cachedOpen = tooltipRef.current?.open
+      }, [])
+
+      return (
+        <>
+          <span data-tooltip-id="imperative-unmount-test">Hover Me</span>
+          <TooltipController
+            id="imperative-unmount-test"
+            content="Imperative Unmount Test"
+            ref={tooltipRef}
+          />
+        </>
+      )
+    }
+
+    const { unmount } = render(<ImperativeUnmountTest />)
+
+    unmount()
+
+    expect(() => {
+      cachedOpen?.()
+      advanceTimers(20)
+    }).not.toThrow()
+    expect(document.getElementById('imperative-unmount-test')).not.toBeInTheDocument()
+  })
+
+  test('warns and aborts imperative open when anchorSelect is invalid', () => {
+    const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+
+    const InvalidSelectorOpenTest = () => {
+      const tooltipRef = useRef(null)
+
+      return (
+        <>
+          <button onClick={() => tooltipRef.current?.open({ anchorSelect: '[invalid-selector' })}>
+            Open Tooltip
+          </button>
+          <TooltipController
+            id="invalid-selector-open-test"
+            content="Invalid Selector Open Test"
+            ref={tooltipRef}
+          />
+        </>
+      )
+    }
+
+    render(<InvalidSelectorOpenTest />)
+
+    clickAnchor(screen.getByText('Open Tooltip'), 0)
+
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      '[react-tooltip] "[invalid-selector" is not a valid CSS selector',
+    )
+    expect(document.getElementById('invalid-selector-open-test')).not.toBeInTheDocument()
+
+    consoleWarnSpy.mockRestore()
+  })
+
+  test('honors imperative open and close delays', async () => {
+    const DelayedImperativeTest = () => {
+      const tooltipRef = useRef(null)
+
+      return (
+        <>
+          <button onClick={() => tooltipRef.current?.open({ delay: 50 })}>Open Delayed</button>
+          <button onClick={() => tooltipRef.current?.close({ delay: 50 })}>Close Delayed</button>
+          <span data-tooltip-id="delayed-imperative-test">Hover Me</span>
+          <TooltipController
+            id="delayed-imperative-test"
+            content="Delayed Imperative Test"
+            ref={tooltipRef}
+          />
+        </>
+      )
+    }
+
+    render(<DelayedImperativeTest />)
+
+    fireEvent.click(screen.getByText('Open Delayed'))
+    advanceTimers(40)
+    expect(document.getElementById('delayed-imperative-test')).not.toBeInTheDocument()
+
+    advanceTimers(20)
+    await waitForTooltip('delayed-imperative-test')
+
+    fireEvent.click(screen.getByText('Close Delayed'))
+    advanceTimers(40)
+    expect(document.getElementById('delayed-imperative-test')).toBeInTheDocument()
+
+    advanceTimers(20)
+    await waitFor(() => {
+      const tooltip = document.getElementById('delayed-imperative-test')
+      expect(tooltip === null || tooltip.classList.contains('react-tooltip__closing')).toBe(true)
+    })
+  })
+
+  test('ignores deferred position updates after unmount', async () => {
+    let resolvePosition
+
+    computeTooltipPosition.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          resolvePosition = resolve
+        }),
+    )
+
+    const DeferredPositionTest = () => {
+      const tooltipRef = useRef(null)
+
+      return (
+        <>
+          <button onClick={() => tooltipRef.current?.open({ position: { x: 10, y: 20 } })}>
+            Open Deferred
+          </button>
+          <TooltipController
+            id="deferred-position-test"
+            content="Deferred Position Test"
+            ref={tooltipRef}
+          />
+        </>
+      )
+    }
+
+    const { unmount } = render(<DeferredPositionTest />)
+
+    fireEvent.click(screen.getByText('Open Deferred'))
+    advanceTimers(20)
+    unmount()
+
+    await act(async () => {
+      resolvePosition({
+        tooltipStyles: { left: '10px', top: '20px' },
+        tooltipArrowStyles: {},
+        place: 'top',
+      })
+      await Promise.resolve()
+    })
+
+    expect(document.getElementById('deferred-position-test')).not.toBeInTheDocument()
   })
 })

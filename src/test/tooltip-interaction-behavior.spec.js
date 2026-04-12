@@ -4,6 +4,7 @@ import '@testing-library/jest-dom'
 import { autoUpdate } from '@floating-ui/dom'
 import { TooltipController } from '../components/TooltipController'
 import {
+  advanceTimers,
   flushMicrotasks,
   flushPendingTimers,
   hoverAnchor,
@@ -167,5 +168,108 @@ describe('tooltip interaction behavior', () => {
 
     expect(screen.getByText('Console Error Test')).toBeInTheDocument()
     consoleErrorSpy.mockRestore()
+  })
+
+  test('ignores missing pointermove events in float mode', () => {
+    const originalAddEventListener = HTMLSpanElement.prototype.addEventListener
+    const listenerRegistry = []
+
+    const addEventListenerSpy = jest
+      .spyOn(HTMLSpanElement.prototype, 'addEventListener')
+      .mockImplementation(function mockAddEventListener(event, listener, options) {
+        listenerRegistry.push({ target: this, event, listener })
+        return originalAddEventListener.call(this, event, listener, options)
+      })
+
+    render(
+      <>
+        <span data-tooltip-id="float-guard-test">Hover Me</span>
+        <TooltipController id="float-guard-test" content="Float Guard Test" float />
+      </>,
+    )
+
+    const pointerMoveListener = listenerRegistry.find(
+      ({ target, event }) => target.textContent === 'Hover Me' && event === 'pointermove',
+    )?.listener
+
+    expect(() => {
+      act(() => {
+        pointerMoveListener?.()
+      })
+    }).not.toThrow()
+
+    addEventListenerSpy.mockRestore()
+  })
+
+  test('ignores missing open events before an anchor is resolved', () => {
+    const originalAddEventListener = HTMLSpanElement.prototype.addEventListener
+    const listenerRegistry = []
+
+    const addEventListenerSpy = jest
+      .spyOn(HTMLSpanElement.prototype, 'addEventListener')
+      .mockImplementation(function mockAddEventListener(event, listener, options) {
+        listenerRegistry.push({ target: this, event, listener })
+        return originalAddEventListener.call(this, event, listener, options)
+      })
+
+    render(
+      <>
+        <span data-tooltip-id="missing-open-event-test">Hover Me</span>
+        <TooltipController id="missing-open-event-test" content="Missing Open Event Test" />
+      </>,
+    )
+
+    const mouseEnterListener = listenerRegistry.find(
+      ({ target, event }) => target.textContent === 'Hover Me' && event === 'mouseenter',
+    )?.listener
+
+    expect(() => {
+      act(() => {
+        mouseEnterListener?.()
+      })
+      advanceTimers(60)
+    }).not.toThrow()
+    expect(document.getElementById('missing-open-event-test')).not.toBeInTheDocument()
+
+    addEventListenerSpy.mockRestore()
+  })
+
+  test('ignores disconnected anchors during open handling', () => {
+    const originalAddEventListener = window.EventTarget.prototype.addEventListener
+    const listenerRegistry = []
+
+    const addEventListenerSpy = jest
+      .spyOn(window.EventTarget.prototype, 'addEventListener')
+      .mockImplementation(function mockAddEventListener(event, listener, options) {
+        listenerRegistry.push({ target: this, event, listener })
+        return originalAddEventListener.call(this, event, listener, options)
+      })
+
+    render(
+      <>
+        <span data-tooltip-id="anchor-guards-test">Hover Me</span>
+        <TooltipController id="anchor-guards-test" content="Anchor Guards Test" />
+      </>,
+    )
+
+    const mouseEnterListener = listenerRegistry.find(
+      ({ target, event }) => target.textContent === 'Hover Me' && event === 'mouseenter',
+    )?.listener
+    expect(mouseEnterListener).toBeDefined()
+
+    const detachedAnchor = document.createElement('span')
+    detachedAnchor.textContent = 'Detached Anchor'
+
+    act(() => {
+      mouseEnterListener({
+        currentTarget: detachedAnchor,
+        target: detachedAnchor,
+      })
+    })
+    advanceTimers(60)
+
+    expect(document.getElementById('anchor-guards-test')).not.toBeInTheDocument()
+
+    addEventListenerSpy.mockRestore()
   })
 })
