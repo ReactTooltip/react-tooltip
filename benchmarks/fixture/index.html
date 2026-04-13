@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>React Tooltip Benchmark</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: sans-serif;
+      }
+
+      #root {
+        min-height: 100vh;
+      }
+
+      .benchmark-surface {
+        left: 24px;
+        opacity: 0.02;
+        pointer-events: none;
+        position: fixed;
+        top: 24px;
+        width: 1200px;
+        z-index: -1;
+      }
+
+      .anchor-grid {
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(10, minmax(0, 1fr));
+      }
+
+      .anchor {
+        align-items: center;
+        background: #111827;
+        border: 0;
+        border-radius: 6px;
+        color: #fff;
+        display: inline-flex;
+        height: 28px;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

@@ -1,7 +1,9 @@
 import * as esbuild from 'esbuild'
 import cssModulesPlugin from 'esbuild-css-modules-plugin'
 import fs from 'fs'
-import pkg from './package.json' assert { type: 'json' }
+import { readFile } from 'fs/promises'
+
+const pkg = JSON.parse(await readFile(new URL('./package.json', import.meta.url), 'utf8'))
 
 const buildsConfig = [
   {
