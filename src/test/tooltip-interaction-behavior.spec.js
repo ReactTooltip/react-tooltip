@@ -252,18 +252,18 @@ describe('tooltip interaction behavior', () => {
       </>,
     )
 
-    const mouseEnterListener = listenerRegistry.find(
-      ({ target, event }) => target.textContent === 'Hover Me' && event === 'mouseenter',
+    const mouseOverListener = listenerRegistry.find(
+      ({ target, event }) => target === document && event === 'mouseover',
     )?.listener
-    expect(mouseEnterListener).toBeDefined()
+    expect(mouseOverListener).toBeDefined()
 
     const detachedAnchor = document.createElement('span')
     detachedAnchor.textContent = 'Detached Anchor'
 
     act(() => {
-      mouseEnterListener({
-        currentTarget: detachedAnchor,
+      mouseOverListener({
         target: detachedAnchor,
+        relatedTarget: null,
       })
     })
     advanceTimers(60)

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { subscribeAnchorSelector } from './anchor-registry'
 
 const getAnchorSelector = ({
   id,
@@ -16,22 +17,6 @@ const getAnchorSelector = ({
   return selector
 }
 
-const queryAnchorsBySelector = ({
-  selector,
-  disableTooltip,
-}: {
-  selector: string
-  disableTooltip?: (anchorRef: HTMLElement | null) => boolean
-}) => {
-  if (!selector) {
-    return []
-  }
-
-  return Array.from(document.querySelectorAll<HTMLElement>(selector)).filter(
-    (anchor) => !disableTooltip?.(anchor),
-  )
-}
-
 const useTooltipAnchors = ({
   id,
   anchorSelect,
@@ -47,135 +32,70 @@ const useTooltipAnchors = ({
   disableTooltip?: (anchorRef: HTMLElement | null) => boolean
   onActiveAnchorRemoved: () => void
 }) => {
-  const [anchorElements, setAnchorElements] = useState<HTMLElement[]>([])
+  const [rawAnchorElements, setRawAnchorElements] = useState<HTMLElement[]>([])
+  const [selectorError, setSelectorError] = useState<Error | null>(null)
+  const warnedSelectorRef = useRef<string | null>(null)
+  const selector = useMemo(
+    () => getAnchorSelector({ id, anchorSelect, imperativeAnchorSelect }),
+    [id, anchorSelect, imperativeAnchorSelect],
+  )
+  const anchorElements = useMemo(
+    () => rawAnchorElements.filter((anchor) => !disableTooltip?.(anchor)),
+    [rawAnchorElements, disableTooltip],
+  )
 
-  useEffect(() => {
-    const selector = getAnchorSelector({ id, anchorSelect, imperativeAnchorSelect })
-    if (!selector) {
-      return
+  const activeAnchorMatchesSelector = useMemo(() => {
+    if (!activeAnchor || !selector) {
+      return false
     }
 
     try {
-      setAnchorElements(queryAnchorsBySelector({ selector, disableTooltip }))
+      return activeAnchor.matches(selector)
     } catch {
-      setAnchorElements([])
+      return false
     }
-  }, [id, anchorSelect, imperativeAnchorSelect, disableTooltip])
+  }, [activeAnchor, selector])
 
   useEffect(() => {
-    const selector = getAnchorSelector({ id, anchorSelect, imperativeAnchorSelect })
-
-    const documentObserverCallback: MutationCallback = (mutationList) => {
-      const addedAnchors = new Set<HTMLElement>()
-      const removedAnchors = new Set<HTMLElement>()
-
-      const maybeAddAnchor = (anchor: HTMLElement) => {
-        if (disableTooltip?.(anchor)) {
-          return
-        }
-        addedAnchors.add(anchor)
-      }
-
-      mutationList.forEach((mutation) => {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'data-tooltip-id') {
-          const target = mutation.target as HTMLElement
-          const newId = target.getAttribute('data-tooltip-id')
-          if (newId === id) {
-            maybeAddAnchor(target)
-          } else if (mutation.oldValue === id) {
-            removedAnchors.add(target)
-          }
-        }
-
-        if (mutation.type !== 'childList') {
-          return
-        }
-
-        const removedNodes = [...mutation.removedNodes].filter((node) => node.nodeType === 1)
-        if (activeAnchor) {
-          removedNodes.some((node) => {
-            if (node?.contains?.(activeAnchor)) {
-              onActiveAnchorRemoved()
-              return true
-            }
-            return false
-          })
-        }
-
-        if (!selector) {
-          return
-        }
-
-        try {
-          removedNodes.forEach((node) => {
-            const element = node as HTMLElement
-            if (element.matches(selector)) {
-              removedAnchors.add(element)
-            } else {
-              element
-                .querySelectorAll<HTMLElement>(selector)
-                .forEach((innerNode) => removedAnchors.add(innerNode))
-            }
-          })
-        } catch {
-          /* c8 ignore start */
-          if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
-            // eslint-disable-next-line no-console
-            console.warn(`[react-tooltip] "${selector}" is not a valid CSS selector`)
-          }
-          /* c8 ignore end */
-        }
-
-        try {
-          const addedNodes = [...mutation.addedNodes].filter((node) => node.nodeType === 1)
-          addedNodes.forEach((node) => {
-            const element = node as HTMLElement
-            if (element.matches(selector)) {
-              maybeAddAnchor(element)
-            } else {
-              element
-                .querySelectorAll<HTMLElement>(selector)
-                .forEach((innerNode) => maybeAddAnchor(innerNode))
-            }
-          })
-        } catch {
-          /* c8 ignore start */
-          if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
-            // eslint-disable-next-line no-console
-            console.warn(`[react-tooltip] "${selector}" is not a valid CSS selector`)
-          }
-          /* c8 ignore end */
-        }
-      })
-
-      if (addedAnchors.size || removedAnchors.size) {
-        setAnchorElements((anchors) => [
-          ...anchors.filter((anchor) => !removedAnchors.has(anchor) && anchor.isConnected),
-          ...addedAnchors,
-        ])
-      }
+    if (!selector) {
+      setRawAnchorElements([])
+      setSelectorError(null)
+      return undefined
     }
 
-    const documentObserver = new MutationObserver(documentObserverCallback)
-    documentObserver.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['data-tooltip-id'],
-      attributeOldValue: true,
+    return subscribeAnchorSelector(selector, (anchors, error) => {
+      setRawAnchorElements(anchors)
+      setSelectorError(error)
     })
+  }, [selector])
 
-    return () => {
-      documentObserver.disconnect()
+  useEffect(() => {
+    if (!selectorError || warnedSelectorRef.current === selector) {
+      return
     }
-  }, [
-    id,
-    anchorSelect,
-    imperativeAnchorSelect,
-    activeAnchor,
-    disableTooltip,
-    onActiveAnchorRemoved,
-  ])
+    warnedSelectorRef.current = selector
+    /* c8 ignore start */
+    if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.warn(`[react-tooltip] "${selector}" is not a valid CSS selector`)
+    }
+    /* c8 ignore end */
+  }, [selector, selectorError])
+
+  useEffect(() => {
+    if (!activeAnchor) {
+      return
+    }
+
+    if (!activeAnchor.isConnected) {
+      onActiveAnchorRemoved()
+      return
+    }
+
+    if (!anchorElements.includes(activeAnchor) && !activeAnchorMatchesSelector) {
+      onActiveAnchorRemoved()
+    }
+  }, [activeAnchor, anchorElements, activeAnchorMatchesSelector, onActiveAnchorRemoved])
 
   return anchorElements
 }

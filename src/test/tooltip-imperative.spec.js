@@ -176,4 +176,57 @@ describe('tooltip imperative API', () => {
       expect(tooltipRefInstance.current?.isOpen).toBe(true)
     })
   })
+
+  test('tooltip can be reopened imperatively when the same instance also has declarative anchor behavior', async () => {
+    const MixedImperativeExample = () => {
+      const tooltipRef = useRef(null)
+
+      return (
+        <>
+          <section id="section-anchor-select">
+            <p>
+              <button data-tooltip-id="anchor-select">Anchor select</button>
+              <button data-tooltip-id="anchor-select">Anchor select 2</button>
+            </p>
+            <Tooltip
+              ref={tooltipRef}
+              id="tooltip-content"
+              anchorSelect="section[id='section-anchor-select'] > p > button"
+              place="bottom"
+              openEvents={{ click: true }}
+              closeEvents={{ click: true }}
+              globalCloseEvents={{ clickOutsideAnchor: true }}
+            >
+              Tooltip content
+            </Tooltip>
+          </section>
+
+          <button
+            id="imperativeTooltipButton"
+            onClick={() => {
+              tooltipRef.current?.open({
+                anchorSelect: '#imperativeTooltipButton',
+                content: <div>Opened imperatively!</div>,
+              })
+            }}
+          >
+            imperative tooltip
+          </button>
+        </>
+      )
+    }
+
+    render(<MixedImperativeExample />)
+
+    await userEvent.click(screen.getByText('Anchor select'))
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Tooltip content')
+
+    await userEvent.click(document.body)
+    await waitFor(() => {
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+    })
+
+    await userEvent.click(screen.getByText('imperative tooltip'))
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Opened imperatively!')
+  })
 })

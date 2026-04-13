@@ -61,8 +61,29 @@ const useTooltipEvents = ({
   updateTooltipPosition: () => void
 }) => {
   useEffect(() => {
+    const resolveAnchorElement = (target: EventTarget | null) => {
+      const targetElement = target as HTMLElement | null
+
+      if (!targetElement?.isConnected) {
+        return null
+      }
+
+      return (
+        anchorElements.find(
+          (anchor) => anchor === targetElement || anchor.contains(targetElement),
+        ) ?? null
+      )
+    }
+
     const handlePointerMove = (event?: Event) => {
       if (!event) {
+        return
+      }
+      if (!activeAnchor) {
+        return
+      }
+      const targetAnchor = resolveAnchorElement(event.target)
+      if (targetAnchor !== activeAnchor) {
         return
       }
       const mouseEvent = event as MouseEvent
@@ -86,6 +107,9 @@ const useTooltipEvents = ({
       if (tooltipRef.current?.contains(target)) {
         return
       }
+      if (activeAnchor?.contains(target)) {
+        return
+      }
       if (anchorElements.some((anchor) => anchor?.contains(target))) {
         return
       }
@@ -93,16 +117,15 @@ const useTooltipEvents = ({
       clearTimeoutRef(tooltipShowDelayTimerRef)
     }
 
-    const handleShowTooltip = (event?: Event) => {
-      if (!event) {
+    const handleShowTooltip = (anchor: HTMLElement | null) => {
+      if (!anchor) {
         return
       }
-      const target = (event.currentTarget ?? event.target) as HTMLElement | null
-      if (!target?.isConnected) {
+      if (!anchor.isConnected) {
         setActiveAnchor(null)
         return
       }
-      if (disableTooltip?.(target)) {
+      if (disableTooltip?.(anchor)) {
         return
       }
       if (delayShow) {
@@ -110,7 +133,7 @@ const useTooltipEvents = ({
       } else {
         handleShow(true)
       }
-      setActiveAnchor(target)
+      setActiveAnchor(anchor)
 
       if (tooltipHideDelayTimerRef.current) {
         clearTimeout(tooltipHideDelayTimerRef.current)
@@ -133,9 +156,9 @@ const useTooltipEvents = ({
 
     const internalDebouncedHandleShowTooltip = debounce(handleShowTooltip, 50, true)
     const internalDebouncedHandleHideTooltip = debounce(handleHideTooltip, 50, true)
-    const debouncedHandleShowTooltip = (e?: Event) => {
+    const debouncedHandleShowTooltip = (anchor: HTMLElement | null) => {
       internalDebouncedHandleHideTooltip.cancel()
-      internalDebouncedHandleShowTooltip(e)
+      internalDebouncedHandleShowTooltip(anchor)
     }
     const debouncedHandleHideTooltip = () => {
       internalDebouncedHandleShowTooltip.cancel()
@@ -250,15 +273,17 @@ const useTooltipEvents = ({
       window.addEventListener('click', handleClickOutsideAnchors)
     }
 
-    const enabledEvents: { event: string; listener: (event?: Event) => void }[] = []
-
     const activeAnchorContainsTarget = (event?: Event): boolean =>
       Boolean(event?.target && activeAnchor?.contains(event.target as HTMLElement))
     const handleClickOpenTooltipAnchor = (event?: Event) => {
-      if (show && activeAnchorContainsTarget(event)) {
+      const anchor = resolveAnchorElement(event?.target ?? null)
+      if (!anchor) {
         return
       }
-      handleShowTooltip(event)
+      if (show && activeAnchor === anchor) {
+        return
+      }
+      handleShowTooltip(anchor)
     }
     const handleClickCloseTooltipAnchor = (event?: Event) => {
       if (!show || !activeAnchorContainsTarget(event)) {
@@ -269,33 +294,105 @@ const useTooltipEvents = ({
 
     const regularEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave', 'focus', 'blur']
     const clickEvents = ['click', 'dblclick', 'mousedown', 'mouseup']
+    const delegatedEvents: { event: string; listener: (event: Event) => void }[] = []
+
+    const addDelegatedHoverOpenListener = () => {
+      delegatedEvents.push({
+        event: 'mouseover',
+        listener: (event) => {
+          const anchor = resolveAnchorElement(event.target)
+          if (!anchor) {
+            return
+          }
+          const relatedAnchor = resolveAnchorElement((event as MouseEvent).relatedTarget)
+          if (relatedAnchor === anchor) {
+            return
+          }
+          debouncedHandleShowTooltip(anchor)
+        },
+      })
+    }
+
+    const addDelegatedHoverCloseListener = () => {
+      delegatedEvents.push({
+        event: 'mouseout',
+        listener: (event) => {
+          if (!activeAnchorContainsTarget(event)) {
+            return
+          }
+          const relatedTarget = (event as MouseEvent).relatedTarget as HTMLElement | null
+          if (activeAnchor?.contains(relatedTarget)) {
+            return
+          }
+          debouncedHandleHideTooltip()
+        },
+      })
+    }
+
+    if (actualOpenEvents.mouseenter) {
+      addDelegatedHoverOpenListener()
+    }
+    if (actualCloseEvents.mouseleave) {
+      addDelegatedHoverCloseListener()
+    }
+    if (actualOpenEvents.mouseover) {
+      addDelegatedHoverOpenListener()
+    }
+    if (actualCloseEvents.mouseout) {
+      addDelegatedHoverCloseListener()
+    }
+    if (actualOpenEvents.focus) {
+      delegatedEvents.push({
+        event: 'focusin',
+        listener: (event) => {
+          debouncedHandleShowTooltip(resolveAnchorElement(event.target))
+        },
+      })
+    }
+    if (actualCloseEvents.blur) {
+      delegatedEvents.push({
+        event: 'focusout',
+        listener: (event) => {
+          if (!activeAnchorContainsTarget(event)) {
+            return
+          }
+          const relatedTarget = event.relatedTarget as HTMLElement | null
+          if (activeAnchor?.contains(relatedTarget)) {
+            return
+          }
+          debouncedHandleHideTooltip()
+        },
+      })
+    }
 
     Object.entries(actualOpenEvents).forEach(([event, enabled]) => {
-      if (!enabled) {
+      if (!enabled || regularEvents.includes(event)) {
         return
       }
-      if (regularEvents.includes(event)) {
-        enabledEvents.push({ event, listener: debouncedHandleShowTooltip })
-      } else if (clickEvents.includes(event)) {
-        enabledEvents.push({ event, listener: handleClickOpenTooltipAnchor })
+      if (clickEvents.includes(event)) {
+        delegatedEvents.push({
+          event,
+          listener: handleClickOpenTooltipAnchor as (event: Event) => void,
+        })
       }
     })
 
     Object.entries(actualCloseEvents).forEach(([event, enabled]) => {
-      if (!enabled) {
+      if (!enabled || regularEvents.includes(event)) {
         return
       }
-      if (regularEvents.includes(event)) {
-        enabledEvents.push({ event, listener: debouncedHandleHideTooltip })
-      } else if (clickEvents.includes(event)) {
-        enabledEvents.push({ event, listener: handleClickCloseTooltipAnchor })
+      if (clickEvents.includes(event)) {
+        delegatedEvents.push({
+          event,
+          listener: handleClickCloseTooltipAnchor as (event: Event) => void,
+        })
       }
     })
 
     if (float) {
-      enabledEvents.push({
+      delegatedEvents.push({
         event: 'pointermove',
-        listener: handlePointerMove,
+        listener: handlePointerMove as (event: Event) => void,
       })
     }
 
@@ -316,10 +413,8 @@ const useTooltipEvents = ({
       tooltipElement?.addEventListener('mouseout', handleMouseOutTooltip)
     }
 
-    enabledEvents.forEach(({ event, listener }) => {
-      anchorElements.forEach((anchor) => {
-        anchor.addEventListener(event, listener)
-      })
+    delegatedEvents.forEach(({ event, listener }) => {
+      document.addEventListener(event, listener)
     })
 
     return () => {
@@ -349,12 +444,8 @@ const useTooltipEvents = ({
         tooltipElement?.removeEventListener('mouseover', handleMouseOverTooltip)
         tooltipElement?.removeEventListener('mouseout', handleMouseOutTooltip)
       }
-      enabledEvents.forEach(({ event, listener }) => {
-        anchorElements.forEach((anchor) => {
-          if (anchor && anchor.isConnected) {
-            anchor.removeEventListener(event, listener)
-          }
-        })
+      delegatedEvents.forEach(({ event, listener }) => {
+        document.removeEventListener(event, listener)
       })
 
       internalDebouncedHandleShowTooltip.cancel()

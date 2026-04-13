@@ -19,7 +19,7 @@ const benchmarkVersion = 3
 const benchmarkLabel = 'precise-memory-gc-separated'
 
 const args = minimist(process.argv.slice(2))
-const counts = `${args.counts ?? '50,100,500,2000,5000,10000,50000'}`
+const counts = `${args.counts ?? '50,100,500,2000,5000,10000,25000'}`
   .split(',')
   .map((value) => Number(value.trim()))
   .filter((value) => Number.isFinite(value) && value > 0)
@@ -44,12 +44,9 @@ function aggregateNumbers(values) {
 
   const middle = Math.floor(sorted.length / 2)
   const median =
-    sorted.length % 2 === 0
-      ? (sorted[middle - 1] + sorted[middle]) / 2
-      : sorted[middle]
+    sorted.length % 2 === 0 ? (sorted[middle - 1] + sorted[middle]) / 2 : sorted[middle]
   const mean = sorted.reduce((total, value) => total + value, 0) / sorted.length
-  const variance =
-    sorted.reduce((total, value) => total + (value - mean) ** 2, 0) / sorted.length
+  const variance = sorted.reduce((total, value) => total + (value - mean) ** 2, 0) / sorted.length
   const standardDeviation = Math.sqrt(variance)
   const p95 = sorted[Math.min(sorted.length - 1, Math.ceil(sorted.length * 0.95) - 1)]
 
@@ -178,13 +175,7 @@ async function main() {
     const runVersion = async (version) => {
       logProgress(`Starting ${version.toUpperCase()} run`)
       return page.evaluate(
-        async ({
-          nextVersion,
-          nextCounts,
-          nextTimeoutMs,
-          nextRepeats,
-          nextWarmups,
-        }) => {
+        async ({ nextVersion, nextCounts, nextTimeoutMs, nextRepeats, nextWarmups }) => {
           const harness = window.__reactTooltipBenchmark
           if (!harness) {
             throw new Error('Benchmark harness was not initialized.')
@@ -259,15 +250,18 @@ async function main() {
         v5: v5Aggregate,
         v6: v6Aggregate,
         mountDeltaMs:
-          typeof v5Aggregate.mount.median === 'number' && typeof v6Aggregate.mount.median === 'number'
+          typeof v5Aggregate.mount.median === 'number' &&
+          typeof v6Aggregate.mount.median === 'number'
             ? v6Aggregate.mount.median - v5Aggregate.mount.median
             : null,
         unmountDeltaMs:
-          typeof v5Aggregate.unmount.median === 'number' && typeof v6Aggregate.unmount.median === 'number'
+          typeof v5Aggregate.unmount.median === 'number' &&
+          typeof v6Aggregate.unmount.median === 'number'
             ? v6Aggregate.unmount.median - v5Aggregate.unmount.median
             : null,
         mountMemoryDeltaBytes:
-          typeof v5Aggregate.mountMemory.median === 'number' && typeof v6Aggregate.mountMemory.median === 'number'
+          typeof v5Aggregate.mountMemory.median === 'number' &&
+          typeof v6Aggregate.mountMemory.median === 'number'
             ? v6Aggregate.mountMemory.median - v5Aggregate.mountMemory.median
             : null,
       }
@@ -291,14 +285,10 @@ async function main() {
       summary,
       aggregates: {
         v5MountDurationsMs: aggregateNumbers(
-          summary
-            .map((item) => item.v5.mount.median)
-            .filter((value) => typeof value === 'number'),
+          summary.map((item) => item.v5.mount.median).filter((value) => typeof value === 'number'),
         ),
         v6MountDurationsMs: aggregateNumbers(
-          summary
-            .map((item) => item.v6.mount.median)
-            .filter((value) => typeof value === 'number'),
+          summary.map((item) => item.v6.mount.median).filter((value) => typeof value === 'number'),
         ),
         v5UnmountDurationsMs: aggregateNumbers(
           summary

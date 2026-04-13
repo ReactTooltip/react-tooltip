@@ -422,15 +422,30 @@ const Tooltip = ({
   }, [content, contentWrapperRef, updateTooltipPosition])
 
   useEffect(() => {
+    const activeAnchorMatchesImperativeSelector = (() => {
+      if (!activeAnchor || !imperativeOptions?.anchorSelect) {
+        return false
+      }
+
+      try {
+        return activeAnchor.matches(imperativeOptions.anchorSelect)
+      } catch {
+        return false
+      }
+    })()
+
     if (!activeAnchor || !anchorElements.includes(activeAnchor)) {
       /**
        * if there is no active anchor,
        * or if the current active anchor is not amongst the allowed ones,
        * reset it
        */
+      if (activeAnchorMatchesImperativeSelector) {
+        return
+      }
       setActiveAnchor(anchorElements[0] ?? null)
     }
-  }, [anchorElements, activeAnchor, setActiveAnchor])
+  }, [anchorElements, activeAnchor, imperativeOptions?.anchorSelect, setActiveAnchor])
 
   useEffect(() => {
     if (defaultIsOpen) {
@@ -460,9 +475,10 @@ const Tooltip = ({
 
   useImperativeHandle(forwardRef, () => ({
     open: (options) => {
+      let imperativeAnchor: HTMLElement | null = null
       if (options?.anchorSelect) {
         try {
-          document.querySelector(options.anchorSelect)
+          imperativeAnchor = document.querySelector<HTMLElement>(options.anchorSelect)
         } catch {
           if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
             // eslint-disable-next-line no-console
@@ -470,6 +486,9 @@ const Tooltip = ({
           }
           return
         }
+      }
+      if (imperativeAnchor) {
+        setActiveAnchor(imperativeAnchor)
       }
       setImperativeOptions(options ?? null)
       if (options?.delay) {
