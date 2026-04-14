@@ -229,4 +229,58 @@ describe('tooltip imperative API', () => {
     await userEvent.click(screen.getByText('imperative tooltip'))
     expect(await screen.findByRole('tooltip')).toHaveTextContent('Opened imperatively!')
   })
+
+  test('imperative open with a selector that matches nothing does not reuse declarative anchors', async () => {
+    const MissingImperativeAnchorExample = () => {
+      const tooltipRef = useRef(null)
+
+      return (
+        <>
+          <section id="section-anchor-select">
+            <p>
+              <button data-tooltip-id="anchor-select">Anchor select</button>
+            </p>
+            <Tooltip
+              ref={tooltipRef}
+              id="tooltip-content"
+              anchorSelect="section[id='section-anchor-select'] > p > button"
+              place="bottom"
+              openEvents={{ click: true }}
+              closeEvents={{ click: true }}
+              globalCloseEvents={{ clickOutsideAnchor: true }}
+            >
+              Tooltip content
+            </Tooltip>
+          </section>
+
+          <button
+            onClick={() => {
+              tooltipRef.current?.open({
+                anchorSelect: '#missing-imperative-anchor',
+                content: <div>Opened imperatively!</div>,
+              })
+            }}
+          >
+            missing imperative anchor
+          </button>
+        </>
+      )
+    }
+
+    render(<MissingImperativeAnchorExample />)
+
+    await userEvent.click(screen.getByText('Anchor select'))
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Tooltip content')
+
+    await userEvent.click(document.body)
+    await waitFor(() => {
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+    })
+
+    await userEvent.click(screen.getByText('missing imperative anchor'))
+
+    await waitFor(() => {
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+    })
+  })
 })

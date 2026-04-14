@@ -486,6 +486,9 @@ const Tooltip = ({
           }
           return
         }
+        if (!imperativeAnchor) {
+          return
+        }
       }
       if (imperativeAnchor) {
         setActiveAnchor(imperativeAnchor)
