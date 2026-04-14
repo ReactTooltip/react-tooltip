@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import { computeTooltipPosition } from 'utils'
+import { computeTooltipPosition } from '../utils'
 import { TooltipController } from '../components/TooltipController'
 import {
   advanceTimers,
@@ -14,8 +14,8 @@ import {
 } from './test-utils'
 import { installMockMutationObserver } from './mutation-observer-test-utils'
 
-jest.mock('utils', () => {
-  const originalModule = jest.requireActual('utils')
+jest.mock('../utils', () => {
+  const originalModule = jest.requireActual('../utils')
   return {
     ...originalModule,
     computeTooltipPosition: jest.fn(originalModule.computeTooltipPosition),

@@ -30,7 +30,7 @@ rollup-plugins/
 // misc files
 bundlesize.config.json
 prebuild.js
-jest.config.ts
+jest.config.mjs
 
 // bundler - rollup
 rollup.config.dev.js

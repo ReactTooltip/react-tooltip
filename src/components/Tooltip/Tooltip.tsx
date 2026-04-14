@@ -6,8 +6,8 @@ import {
   computeTooltipPosition,
   cssTimeToMs,
   clearTimeoutRef,
-} from 'utils'
-import type { IComputedPosition } from 'utils'
+} from '../../utils'
+import type { IComputedPosition } from '../../utils'
 import coreStyles from './core-styles.module.css'
 import styles from './styles.module.css'
 import useTooltipAnchors from './use-tooltip-anchors'

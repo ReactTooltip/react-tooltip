@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 import React, { useEffect, useState } from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
@@ -189,5 +190,50 @@ describe('tooltip anchor selection', () => {
 
     unhoverAnchor(anchor, 100)
     await waitForTooltipToStopShowing('attribute-removal-test')
+  })
+
+  test('does not reopen or close when delegated hover events stay inside the same anchor', async () => {
+    render(
+      <>
+        <button data-tooltip-id="delegated-hover-test" type="button">
+          Hover Me
+          <span>Inner target</span>
+        </button>
+        <TooltipController id="delegated-hover-test" content="Delegated Hover Test" />
+      </>,
+    )
+
+    const anchor = screen.getByRole('button', { name: /hover me inner target/i })
+    const innerTarget = screen.getByText('Inner target')
+
+    hoverAnchor(anchor, 100)
+    await waitForTooltip('delegated-hover-test')
+
+    fireEvent.mouseOver(innerTarget, { relatedTarget: anchor })
+    fireEvent.mouseOut(anchor, { relatedTarget: innerTarget })
+
+    expect(document.getElementById('delegated-hover-test')).toBeInTheDocument()
+  })
+
+  test('does not close on focus transitions inside the same anchor', async () => {
+    render(
+      <>
+        <div data-tooltip-id="focus-anchor-test" tabIndex={0}>
+          Focus Anchor
+          <button type="button">Inner Button</button>
+        </div>
+        <TooltipController id="focus-anchor-test" content="Focus Anchor Test" />
+      </>,
+    )
+
+    const anchor = screen.getByText('Focus Anchor').closest('div')
+    const innerButton = screen.getByRole('button', { name: 'Inner Button' })
+
+    fireEvent.focus(anchor)
+    await waitForTooltip('focus-anchor-test')
+
+    fireEvent.focusOut(anchor, { relatedTarget: innerButton })
+
+    expect(document.getElementById('focus-anchor-test')).toBeInTheDocument()
   })
 })

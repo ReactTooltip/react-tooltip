@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, memo } from 'react'
-import { Tooltip } from 'components/Tooltip'
+import clsx from 'clsx'
+import { Tooltip } from '../Tooltip'
 import type {
   PositionStrategy,
   PlacesType,
@@ -8,8 +9,7 @@ import type {
   DataAttribute,
   ITooltip,
   TooltipRefProps,
-} from 'components/Tooltip/TooltipTypes'
-import clsx from 'clsx'
+} from '../Tooltip/TooltipTypes'
 import type { ITooltipController } from './TooltipControllerTypes'
 
 const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(

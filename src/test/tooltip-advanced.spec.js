@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { render, screen, fireEvent, act } from '@testing-library/react'
+import { render, screen, fireEvent, act, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { TooltipController as Tooltip } from '../components/TooltipController'
 import { flushMicrotasks, flushPendingTimers } from './test-utils'
@@ -143,9 +143,9 @@ describe('tooltip advanced scenarios', () => {
       fireEvent.click(screen.getByText('Outside'))
       jest.advanceTimersByTime(100)
     })
-    await flushMicrotasks()
-
-    expect(screen.queryByText('Global Events Test')).not.toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.queryByText('Global Events Test')).not.toBeInTheDocument()
+    })
   })
 
   test('tooltip with float property', async () => {

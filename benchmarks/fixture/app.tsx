@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import ReactDOM from 'react-dom'
+import { flushSync } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { Tooltip as TooltipV5 } from '../../docs/node_modules/react-tooltip/dist/react-tooltip.mjs'
 import { Tooltip as TooltipV6 } from '../../dist/react-tooltip.esm.js'
 
@@ -84,10 +85,7 @@ async function readStableHeapBytes() {
   return readUsedHeapBytes()
 }
 
-async function waitUntil(
-  predicate: () => boolean,
-  timeoutMs: number,
-) {
+async function waitUntil(predicate: () => boolean, timeoutMs: number) {
   const startedAt = window.performance.now()
 
   while (window.performance.now() - startedAt < timeoutMs) {
@@ -141,15 +139,22 @@ if (!rootNode) {
   throw new Error('Benchmark root element was not found.')
 }
 
+const benchmarkRoot = createRoot(rootNode)
+
 function renderFixture(nextState: FixtureState) {
   return new Promise<void>((resolve) => {
-    ReactDOM.render(<BenchmarkFixture {...nextState} />, rootNode, () => resolve())
+    flushSync(() => {
+      benchmarkRoot.render(<BenchmarkFixture {...nextState} />)
+    })
+    resolve()
   })
 }
 
 function unmountFixture() {
   return new Promise<void>((resolve) => {
-    ReactDOM.unmountComponentAtNode(rootNode)
+    flushSync(() => {
+      benchmarkRoot.render(<></>)
+    })
     resolve()
   })
 }
@@ -187,7 +192,10 @@ async function runScalingBenchmark({
         count,
         renderMode,
       })
-      await waitUntil(() => document.querySelectorAll('[data-tooltip-id]').length === count, timeoutMs)
+      await waitUntil(
+        () => document.querySelectorAll('[data-tooltip-id]').length === count,
+        timeoutMs,
+      )
       await nextFrame()
       await unmountFixture()
       await nextFrame()

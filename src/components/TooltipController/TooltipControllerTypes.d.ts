@@ -10,7 +10,7 @@ import type {
   AnchorOpenEvents,
   AnchorCloseEvents,
   GlobalCloseEvents,
-} from 'components/Tooltip/TooltipTypes'
+} from '../Tooltip/TooltipTypes'
 
 export interface ITooltipController {
   className?: string

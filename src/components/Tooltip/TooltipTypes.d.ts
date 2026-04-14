@@ -99,7 +99,7 @@ export interface ITooltip {
   className?: string
   classNameArrow?: string
   content?: ReactNode
-  contentWrapperRef?: RefObject<HTMLDivElement>
+  contentWrapperRef?: RefObject<HTMLDivElement | null>
   place?: PlacesType
   offset?: number
   id?: string

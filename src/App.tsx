@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { TooltipController as Tooltip } from 'components/TooltipController'
-import { IPosition, TooltipRefProps } from 'components/Tooltip/TooltipTypes.d'
 import React, { useEffect, useRef, useState } from 'react'
 import { inline, offset } from '@floating-ui/dom'
+import { TooltipController as Tooltip } from './components/TooltipController'
+import type { IPosition, TooltipRefProps } from './components/Tooltip/TooltipTypes'
 import styles from './styles.module.css'
 
 function App() {

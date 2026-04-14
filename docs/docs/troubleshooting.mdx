@@ -244,6 +244,8 @@ Less ideally, if you're unable to upgrade, you can set `swcMinify: false` on you
 
 This normally happens when you use `react-tooltip` inside a component that is not tagged as client component. For more info, see the [Next.js docs](https://nextjs.org/docs/getting-started/react-essentials#client-components).
 
+This is not specific to Next.js. `react-tooltip` is a client-side component, so the same rule applies to any React Server Components setup: render the tooltip from a client boundary.
+
 To use `react-tooltip` on Next.js 13 without having to tag your component or page as a client component, just create a new file `ReactTooltip.tsx` (for this example, the file path is `src/components/ReactTooltip.tsx`) and place the following code inside of the created file:
 
 :::caution

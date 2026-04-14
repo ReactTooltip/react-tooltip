@@ -1,6 +1,6 @@
 import './tokens.css'
 
-import { injectStyle } from 'utils/handle-style'
+import { injectStyle } from './utils/handle-style'
 
 import type {
   DataAttribute,

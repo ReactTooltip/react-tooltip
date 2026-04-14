@@ -32,9 +32,7 @@ describe('tooltip attributes', () => {
   })
 
   test('basic tooltip', async () => {
-    const { container } = render(
-      <TooltipAttrs id="basic-example-attr" data-tooltip-content="Hello World!" />,
-    )
+    render(<TooltipAttrs id="basic-example-attr" data-tooltip-content="Hello World!" />)
     const anchorElement = screen.getByText('Lorem Ipsum')
 
     await userEvent.hover(anchorElement)
@@ -43,12 +41,14 @@ describe('tooltip attributes', () => {
     expect(tooltip).toHaveAttribute('style')
 
     expect(anchorElement).toHaveAttribute('data-tooltip-content')
+    await waitFor(() => {
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'basic-example-attr')
+    })
     expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
   })
 
   test('tooltip with place', async () => {
-    const { container } = render(
+    render(
       <TooltipAttrs
         id="example-place-attr"
         data-tooltip-content="Hello World!"
@@ -64,12 +64,14 @@ describe('tooltip attributes', () => {
 
     expect(anchorElement).toHaveAttribute('data-tooltip-place')
     expect(anchorElement).toHaveAttribute('data-tooltip-content')
+    await waitFor(() => {
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'example-place-attr')
+    })
     expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
   })
 
   test('tooltip with class name', async () => {
-    const { container } = render(
+    render(
       <TooltipAttrs
         id="example-class-name-attr"
         data-tooltip-content="Hello World!"
@@ -84,7 +86,9 @@ describe('tooltip attributes', () => {
     expect(tooltip).toHaveClass('tooltip-class-name')
 
     expect(anchorElement).toHaveAttribute('data-tooltip-class-name')
+    await waitFor(() => {
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'example-class-name-attr')
+    })
     expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
   })
 })

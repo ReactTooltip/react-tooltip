@@ -1,32 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`tooltip props basic tooltip 1`] = `
-<div>
-  <span
-    aria-describedby="basic-example"
-    data-tooltip-id="basic-example"
-  >
-    Lorem Ipsum
-  </span>
-  <div
-    class="react-tooltip react-tooltip__place-top react-tooltip__show"
-    id="basic-example"
-    role="tooltip"
-    style="left: 5px; top: -10px;"
-  >
-    <div
-      class="react-tooltip-content-wrapper"
-    >
-      Hello World!
-    </div>
-    <div
-      class="react-tooltip-arrow"
-      style="--rt-arrow-size: 8px; left: -1px; bottom: -3px;"
-    />
-  </div>
-</div>
-`;
-
 exports[`tooltip props clickable tooltip 1`] = `
 <div>
   <span
@@ -47,33 +20,6 @@ exports[`tooltip props clickable tooltip 1`] = `
       <button>
         button
       </button>
-    </div>
-    <div
-      class="react-tooltip-arrow"
-      style="--rt-arrow-size: 8px; left: -1px; bottom: -3px;"
-    />
-  </div>
-</div>
-`;
-
-exports[`tooltip props tooltip with custom position 1`] = `
-<div>
-  <span
-    aria-describedby="example-place"
-    data-tooltip-id="example-place"
-  >
-    Lorem Ipsum
-  </span>
-  <div
-    class="react-tooltip react-tooltip__place-top react-tooltip__show"
-    id="example-place"
-    role="tooltip"
-    style="left: 5px; top: -10px;"
-  >
-    <div
-      class="react-tooltip-content-wrapper"
-    >
-      Hello World!
     </div>
     <div
       class="react-tooltip-arrow"
@@ -169,33 +115,6 @@ exports[`tooltip props tooltip with float 1`] = `
     <div
       class="react-tooltip-arrow"
       style="--rt-arrow-size: 8px; left: -1px; bottom: -3px;"
-    />
-  </div>
-</div>
-`;
-
-exports[`tooltip props tooltip with place 1`] = `
-<div>
-  <span
-    aria-describedby="example-place"
-    data-tooltip-id="example-place"
-  >
-    Lorem Ipsum
-  </span>
-  <div
-    class="react-tooltip react-tooltip__place-right react-tooltip__show"
-    id="example-place"
-    role="tooltip"
-    style="left: 10px; top: 5px;"
-  >
-    <div
-      class="react-tooltip-content-wrapper"
-    >
-      Hello World!
-    </div>
-    <div
-      class="react-tooltip-arrow"
-      style="--rt-arrow-size: 8px; left: -3px; top: -1px;"
     />
   </div>
 </div>

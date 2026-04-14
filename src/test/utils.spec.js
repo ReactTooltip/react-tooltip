@@ -7,9 +7,9 @@ import {
   cssTimeToMs,
   clearTimeoutRef,
   getScrollParent,
-} from 'utils'
-import { injectStyle, injected } from 'utils/handle-style.ts'
-import { isScrollable } from 'utils/get-scroll-parent'
+} from '../utils'
+import { injectStyle, injected } from '../utils/handle-style.ts'
+import { isScrollable } from '../utils/get-scroll-parent'
 
 describe('compute positions', () => {
   test('empty reference elements', async () => {
@@ -578,7 +578,7 @@ describe('useIsomorphicLayoutEffect', () => {
     expect(typeof window !== 'undefined').toBe(true)
 
     const { default: useIsomorphicLayoutEffect } = await import(
-      'utils/use-isomorphic-layout-effect'
+      '../utils/use-isomorphic-layout-effect'
     )
 
     expect(useIsomorphicLayoutEffect).toBe(React.useLayoutEffect)
@@ -588,7 +588,7 @@ describe('useIsomorphicLayoutEffect', () => {
     delete global.window
 
     const { default: useIsomorphicLayoutEffect } = await import(
-      'utils/use-isomorphic-layout-effect'
+      '../utils/use-isomorphic-layout-effect'
     )
 
     expect(typeof useIsomorphicLayoutEffect).toBe(typeof React.useEffect)

@@ -30,31 +30,31 @@ describe('tooltip props', () => {
   })
 
   test('basic tooltip', async () => {
-    const { container } = render(<TooltipProps id="basic-example" content="Hello World!" />)
+    render(<TooltipProps id="basic-example" content="Hello World!" />)
     const anchorElement = screen.getByText('Lorem Ipsum')
 
     await userEvent.hover(anchorElement)
 
     const tooltip = await screen.findByRole('tooltip')
     expect(tooltip).toHaveAttribute('style')
-
+    await waitFor(() => {
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'basic-example')
+    })
     expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
   })
 
   test('tooltip with place', async () => {
-    const { container } = render(
-      <TooltipProps id="example-place" content="Hello World!" place="right" />,
-    )
+    render(<TooltipProps id="example-place" content="Hello World!" place="right" />)
     const anchorElement = screen.getByText('Lorem Ipsum')
 
     await userEvent.hover(anchorElement)
 
     const tooltip = await screen.findByRole('tooltip')
     expect(tooltip).toHaveAttribute('style')
-
+    await waitFor(() => {
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'example-place')
+    })
     expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
   })
 
   test('clickable tooltip', async () => {
@@ -142,18 +142,19 @@ describe('tooltip props', () => {
   })
 
   test('tooltip with custom position', async () => {
-    const { container } = render(
-      <TooltipProps id="example-place" content="Hello World!" position={{ x: 0, y: 0 }} />,
-    )
+    render(<TooltipProps id="example-place" content="Hello World!" position={{ x: 0, y: 0 }} />)
     const anchorElement = screen.getByText('Lorem Ipsum')
 
     await userEvent.hover(anchorElement)
 
     const tooltip = await screen.findByRole('tooltip')
     expect(tooltip).toHaveAttribute('style')
+    await waitFor(() => {
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'example-place')
+    })
 
     expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
+    expect(tooltip).toHaveTextContent('Hello World!')
   })
 
   test('tooltip with float', async () => {

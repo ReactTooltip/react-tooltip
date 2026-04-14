@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import type { MutableRefObject } from 'react'
 import { autoUpdate } from '@floating-ui/dom'
-import { debounce, getScrollParent, clearTimeoutRef } from 'utils'
+import { debounce, getScrollParent, clearTimeoutRef } from '../../utils'
 import type {
   AnchorCloseEvents,
   AnchorOpenEvents,
@@ -356,7 +356,7 @@ const useTooltipEvents = ({
           if (!activeAnchorContainsTarget(event)) {
             return
           }
-          const relatedTarget = event.relatedTarget as HTMLElement | null
+          const relatedTarget = (event as FocusEvent).relatedTarget as HTMLElement | null
           if (activeAnchor?.contains(relatedTarget)) {
             return
           }

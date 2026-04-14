@@ -42,6 +42,32 @@ or
 yarn add react-tooltip
 ```
 
+## React Compatibility
+
+`react-tooltip` supports React `16.14.0` and newer through peer dependencies, including React 17, 18, and 19.
+
+The project is currently validated against React 19, but the published package remains compatible with older supported React versions.
+
+| React version | Supported |
+| ------------- | --------- |
+| 16.14+        | Yes       |
+| 17.x          | Yes       |
+| 18.x          | Yes       |
+| 19.x          | Yes       |
+
+## Server Components
+
+`react-tooltip` is a client-side library. It uses hooks, DOM observers, browser events, and layout measurement, so the tooltip component itself must run inside a client component boundary.
+
+This works well in frameworks such as Next.js with Server Components, but you should render `<Tooltip />` from a client component and attach your tooltip attributes or selectors from elements rendered under that client boundary.
+
+If you are using React Server Components, the practical rule is simple:
+
+- server components can render the anchor markup
+- client components should render and control `react-tooltip`
+
+In Next.js, the usual pattern is to export the tooltip from a small wrapper file marked with `'use client'`.
+
 ## Sponsors
 
 ### Gold Sponsors 🌟
