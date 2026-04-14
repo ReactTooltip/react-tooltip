@@ -1,4 +1,5 @@
 .page {
+  overflow-x: hidden;
   padding: 3rem 0 4rem;
 }
 
@@ -63,7 +64,7 @@
 .summaryGrid {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   margin: 2rem 0 3rem;
 }
 
@@ -72,7 +73,7 @@
   border: 1px solid rgba(15, 23, 42, 0.08);
   border-radius: 20px;
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
-  padding: 1.25rem;
+  padding: 1.3rem;
 }
 
 .summaryLabel {
@@ -89,6 +90,7 @@
   display: block;
   font-size: 2rem;
   font-weight: 800;
+  font-variant-numeric: tabular-nums;
   letter-spacing: -0.04em;
   margin-top: 0.45rem;
 }
@@ -104,6 +106,7 @@
 .contentGrid {
   display: grid;
   gap: 1.5rem;
+  min-width: 0;
 }
 
 .card {
@@ -111,20 +114,22 @@
   border: 1px solid rgba(15, 23, 42, 0.08);
   border-radius: 24px;
   box-shadow: 0 20px 44px rgba(15, 23, 42, 0.06);
+  min-width: 0;
   overflow: hidden;
 }
 
 .cardBody {
-  padding: 1.5rem;
+  min-width: 0;
+  padding: 1.6rem;
 }
 
 .cardTitle {
   color: #0f172a;
-  font-size: 1.3rem;
+  font-size: 1.32rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.2;
-  margin-top: 1.5rem;
+  margin-top: 1.75rem;
 }
 
 .cardTitle:first-child {
@@ -148,7 +153,7 @@
 .signalList + .note,
 .cardText + .signalList,
 .note + .signalList {
-  margin-top: 0.5rem;
+  margin-top: 0.85rem;
 }
 
 .signalList {
@@ -167,13 +172,19 @@
 }
 
 .tableWrap {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  display: block;
   overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 .table {
   border-collapse: collapse;
-  min-width: 1380px;
-  width: 100%;
+  min-width: 1450px;
+  width: max-content;
 }
 
 .table thead th {
@@ -190,8 +201,29 @@
   text-transform: uppercase;
 }
 
-.table thead th:first-child {
-  min-width: 86px;
+.countColumn {
+  background: #f1f5f9 !important;
+}
+
+.mountGroup {
+  background: rgba(14, 165, 233, 0.08) !important;
+}
+
+.unmountGroup {
+  background: rgba(148, 163, 184, 0.12) !important;
+}
+
+.memoryGroup {
+  background: rgba(16, 185, 129, 0.08) !important;
+}
+
+.samplesColumn {
+  background: #f8fafc !important;
+}
+
+.table thead th:first-child,
+.countCell {
+  min-width: 92px;
 }
 
 .table tbody td {
@@ -205,12 +237,29 @@
   white-space: nowrap;
 }
 
-.table tbody td:first-child {
-  min-width: 86px;
-}
-
 .table tbody tr:last-child td {
   border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.table tbody tr:nth-child(even) td {
+  background: rgba(248, 250, 252, 0.5);
+}
+
+.metricCell,
+.samplesCell,
+.countCell {
+  font-variant-numeric: tabular-nums;
+}
+
+.countCell {
+  background: #fcfdff;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.samplesCell {
+  color: #475569;
+  font-weight: 600;
 }
 
 .positive {
