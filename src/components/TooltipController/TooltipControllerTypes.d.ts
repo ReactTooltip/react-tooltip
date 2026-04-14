@@ -30,6 +30,7 @@ export interface ITooltipController {
   middlewares?: Middleware[]
   delayShow?: number
   delayHide?: number
+  autoClose?: number
   float?: boolean
   hidden?: boolean
   noArrow?: boolean
@@ -84,6 +85,7 @@ declare module 'react' {
     'data-tooltip-position-strategy'?: PositionStrategy
     'data-tooltip-delay-show'?: number
     'data-tooltip-delay-hide'?: number
+    'data-tooltip-auto-close'?: number
     'data-tooltip-float'?: boolean
     'data-tooltip-hidden'?: boolean
     'data-tooltip-class-name'?: string

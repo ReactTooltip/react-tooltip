@@ -32,6 +32,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       middlewares,
       delayShow = 0,
       delayHide = 0,
+      autoClose,
       float = false,
       hidden = false,
       noArrow = false,
@@ -182,6 +183,10 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       anchorDataAttributes['delay-hide'] == null
         ? delayHide
         : Number(anchorDataAttributes['delay-hide'])
+    const tooltipAutoClose =
+      anchorDataAttributes['auto-close'] == null
+        ? autoClose
+        : Number(anchorDataAttributes['auto-close'])
     const tooltipFloat =
       anchorDataAttributes.float == null ? float : anchorDataAttributes.float === 'true'
     const tooltipHidden =
@@ -220,6 +225,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       middlewares,
       delayShow: tooltipDelayShow,
       delayHide: tooltipDelayHide,
+      autoClose: tooltipAutoClose,
       float: tooltipFloat,
       hidden: tooltipHidden,
       noArrow,

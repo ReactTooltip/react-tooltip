@@ -260,6 +260,55 @@ describe('tooltip close and delay behavior', () => {
     expect(document.getElementById('rehydrated-hide-delay-test')).toBeInTheDocument()
   })
 
+  test('closes automatically after the configured time while still hovering the anchor', async () => {
+    render(
+      <>
+        <span data-tooltip-id="auto-close-test">Hover Me</span>
+        <TooltipController id="auto-close-test" content="Auto Close Test" autoClose={5000} />
+      </>,
+    )
+
+    const anchor = screen.getByText('Hover Me')
+
+    hoverAnchor(anchor, 100)
+    await waitForTooltip('auto-close-test')
+
+    advanceTimers(4900)
+    expect(document.getElementById('auto-close-test')).toBeInTheDocument()
+
+    advanceTimers(200)
+    await waitForTooltipToClose('auto-close-test')
+  })
+
+  test('restarts the auto-close timer when the active anchor changes', async () => {
+    render(
+      <>
+        <span data-tooltip-id="auto-close-reset-test">First Anchor</span>
+        <span data-tooltip-id="auto-close-reset-test">Second Anchor</span>
+        <TooltipController
+          id="auto-close-reset-test"
+          content="Auto Close Reset Test"
+          autoClose={5000}
+        />
+      </>,
+    )
+
+    const firstAnchor = screen.getByText('First Anchor')
+    const secondAnchor = screen.getByText('Second Anchor')
+
+    hoverAnchor(firstAnchor, 100)
+    await waitForTooltip('auto-close-reset-test')
+
+    advanceTimers(3000)
+    hoverAnchor(secondAnchor, 100)
+
+    advanceTimers(3000)
+    expect(document.getElementById('auto-close-reset-test')).toBeInTheDocument()
+
+    advanceTimers(2200)
+    await waitForTooltipToClose('auto-close-reset-test')
+  })
+
   test('cancels a pending show timer when the anchor hides first', () => {
     render(
       <>

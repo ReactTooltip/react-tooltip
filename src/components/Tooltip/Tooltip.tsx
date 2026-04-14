@@ -32,6 +32,7 @@ const Tooltip = ({
   wrapper: WrapperElement,
   delayShow = 0,
   delayHide = 0,
+  autoClose,
   float = false,
   hidden = false,
   noArrow = false,
@@ -64,6 +65,7 @@ const Tooltip = ({
   const tooltipArrowRef = useRef<HTMLElement>(null)
   const tooltipShowDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const tooltipHideDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const tooltipAutoCloseTimerRef = useRef<NodeJS.Timeout | null>(null)
   const missedTransitionTimerRef = useRef<NodeJS.Timeout | null>(null)
   const [computedPosition, setComputedPosition] = useState<IComputedPosition>({
     tooltipStyles: {},
@@ -198,6 +200,24 @@ const Tooltip = ({
       }, transitionShowDelay + 25)
     }
   }, [afterHide, afterShow, show])
+
+  useEffect(() => {
+    clearTimeoutRef(tooltipAutoCloseTimerRef)
+
+    if (!show || !autoClose || autoClose <= 0) {
+      return () => {
+        clearTimeoutRef(tooltipAutoCloseTimerRef)
+      }
+    }
+
+    tooltipAutoCloseTimerRef.current = setTimeout(() => {
+      handleShow(false)
+    }, autoClose)
+
+    return () => {
+      clearTimeoutRef(tooltipAutoCloseTimerRef)
+    }
+  }, [activeAnchor, autoClose, handleShow, show])
 
   const handleComputedPosition = useCallback((newComputedPosition: IComputedPosition) => {
     if (!mounted.current) {
@@ -353,6 +373,7 @@ const Tooltip = ({
     setActiveAnchor(null)
     clearTimeoutRef(tooltipShowDelayTimerRef)
     clearTimeoutRef(tooltipHideDelayTimerRef)
+    clearTimeoutRef(tooltipAutoCloseTimerRef)
   }, [handleShow, setActiveAnchor])
 
   const anchorElements = useTooltipAnchors({
@@ -456,6 +477,7 @@ const Tooltip = ({
     return () => {
       clearTimeoutRef(tooltipShowDelayTimerRef)
       clearTimeoutRef(tooltipHideDelayTimerRef)
+      clearTimeoutRef(tooltipAutoCloseTimerRef)
       clearTimeoutRef(missedTransitionTimerRef)
     }
   }, [defaultIsOpen, handleShow])
@@ -519,6 +541,7 @@ const Tooltip = ({
       // Final cleanup to ensure no memory leaks
       clearTimeoutRef(tooltipShowDelayTimerRef)
       clearTimeoutRef(tooltipHideDelayTimerRef)
+      clearTimeoutRef(tooltipAutoCloseTimerRef)
       clearTimeoutRef(missedTransitionTimerRef)
     }
   }, [])

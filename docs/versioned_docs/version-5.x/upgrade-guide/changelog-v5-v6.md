@@ -14,6 +14,7 @@ V6 keeps the core tooltip behavior from V5, but updates the implementation and A
 - runtime behavior is lighter and more scalable in larger interfaces
 - React 19 is supported while React 16.14+ remains compatible
 - optional `portalRoot` support lets you render the tooltip into a custom DOM container when you need tighter control over clipping and overlay layout
+- optional `autoClose` support lets a tooltip dismiss itself after a fixed visible duration without custom timeout wiring
 
 ## Breaking Changes
 
@@ -25,6 +26,7 @@ V6 keeps the core tooltip behavior from V5, but updates the implementation and A
 
 - `children` and `render` are the preferred way to render rich tooltip content in v6
 - `portalRoot` is available when the tooltip should render into a specific DOM node, such as `document.body`
+- `autoClose` is available when a tooltip should close after a fixed delay, including cases where the pointer is still over the anchor
 - v6 includes internal runtime improvements that reduce mount cost, memory retention, and shipped bundle size relative to v5
 
 ## `portalRoot`
@@ -43,6 +45,16 @@ When a layout clips overlays or makes stacking difficult, you can render the too
 `portalRoot` is optional. If you do not provide it, the tooltip keeps the existing inline render behavior.
 
 When portaling to `document.body`, `positionStrategy="fixed"` is the safest default because it avoids most coordinate-space and overflow issues.
+
+## `autoClose`
+
+If a tooltip should remain visible only for a fixed amount of time, you can let the component close itself:
+
+```jsx
+<Tooltip id="my-tooltip" content="Hello" autoClose={5000} />
+```
+
+This is useful when the tooltip should dismiss after a short reading window even if the user keeps hovering the same anchor. When the active anchor changes, the timer starts again for the newly active anchor.
 
 ## What should I use instead?
 
@@ -97,5 +109,6 @@ If you previously used HTML strings for multiline tooltips, render JSX instead:
 - `content` is still supported for plain string content
 - `children` and `render` are now the recommended way to display rich tooltip content
 - `portalRoot` is optional and only needed when you want the tooltip rendered outside its default location
+- `autoClose` is optional and only needed when the tooltip should dismiss itself after a fixed visible duration
 
 Check the current examples for [children](../examples/children.mdx), [render](../examples/render.mdx), and [multiline content](../examples/multiline.mdx).

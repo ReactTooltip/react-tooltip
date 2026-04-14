@@ -29,6 +29,7 @@ export type DataAttribute =
   | 'position-strategy'
   | 'delay-show'
   | 'delay-hide'
+  | 'auto-close'
   | 'float'
   | 'hidden'
   | 'class-name'
@@ -112,6 +113,7 @@ export interface ITooltip {
   middlewares?: Middleware[]
   delayShow?: number
   delayHide?: number
+  autoClose?: number
   float?: boolean
   hidden?: boolean
   noArrow?: boolean
