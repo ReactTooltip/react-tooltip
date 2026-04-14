@@ -1,11 +1,28 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import { TooltipController as Tooltip } from '../components/TooltipController'
 
 // Tell Jest to mock all timeout functions
 jest.useRealTimers()
+
+const waitForTooltipUpdates = async () => {
+  await act(async () => {
+    await new Promise((resolve) => {
+      setTimeout(resolve, 25)
+    })
+  })
+}
+
+const hoverAndFindTooltip = async (anchorText = 'Hover Me') => {
+  const anchorElement = screen.getByText(anchorText)
+
+  await userEvent.hover(anchorElement)
+  await waitForTooltipUpdates()
+
+  return screen.findByRole('tooltip')
+}
 
 describe('tooltip styling and appearance', () => {
   test('tooltip with custom className', async () => {
@@ -16,13 +33,7 @@ describe('tooltip styling and appearance', () => {
       </>,
     )
 
-    const anchorElement = screen.getByText('Hover Me')
-
-    // Hover to show tooltip
-    await userEvent.hover(anchorElement)
-
-    // Tooltip should be visible with custom class
-    const tooltip = await screen.findByRole('tooltip')
+    const tooltip = await hoverAndFindTooltip()
     expect(tooltip).toHaveClass('custom-tooltip-class')
   })
 
@@ -34,13 +45,7 @@ describe('tooltip styling and appearance', () => {
       </>,
     )
 
-    const anchorElement = screen.getByText('Hover Me')
-
-    // Hover to show tooltip
-    await userEvent.hover(anchorElement)
-
-    // Tooltip should be visible
-    await screen.findByRole('tooltip')
+    await hoverAndFindTooltip()
 
     // Arrow should have custom class
     const arrow = document.querySelector('.react-tooltip-arrow')
@@ -55,13 +60,7 @@ describe('tooltip styling and appearance', () => {
       </>,
     )
 
-    const anchorElement = screen.getByText('Hover Me')
-
-    // Hover to show tooltip
-    await userEvent.hover(anchorElement)
-
-    // Tooltip should be visible
-    await screen.findByRole('tooltip')
+    await hoverAndFindTooltip()
 
     // We're just testing that the tooltip renders with the noArrow prop
     // The actual implementation of how arrows are hidden may vary
@@ -76,13 +75,7 @@ describe('tooltip styling and appearance', () => {
       </>,
     )
 
-    const anchorElement = screen.getByText('Hover Me')
-
-    // Hover to show tooltip
-    await userEvent.hover(anchorElement)
-
-    // Tooltip should be visible
-    const tooltip = await screen.findByRole('tooltip')
+    const tooltip = await hoverAndFindTooltip()
 
     // Check that the tooltip contains the content
     expect(tooltip).toHaveTextContent('Light Variant')
@@ -105,13 +98,7 @@ describe('tooltip styling and appearance', () => {
       </>,
     )
 
-    const anchorElement = screen.getByText('Hover Me')
-
-    // Hover to show tooltip
-    await userEvent.hover(anchorElement)
-
-    // Tooltip should be visible with custom style
-    const tooltip = await screen.findByRole('tooltip')
+    const tooltip = await hoverAndFindTooltip()
 
     expect(tooltip).toHaveStyle({
       backgroundColor: 'purple',
@@ -128,13 +115,7 @@ describe('tooltip styling and appearance', () => {
       </>,
     )
 
-    const anchorElement = screen.getByText('Hover Me')
-
-    // Hover to show tooltip
-    await userEvent.hover(anchorElement)
-
-    // Tooltip should be visible with custom opacity
-    const tooltip = await screen.findByRole('tooltip')
+    const tooltip = await hoverAndFindTooltip()
     expect(tooltip).toHaveStyle('opacity: 0.5')
   })
 
@@ -146,13 +127,7 @@ describe('tooltip styling and appearance', () => {
       </>,
     )
 
-    const anchorElement = screen.getByText('Hover Me')
-
-    // Hover to show tooltip
-    await userEvent.hover(anchorElement)
-
-    // Tooltip should be visible with custom border
-    const tooltip = await screen.findByRole('tooltip')
+    const tooltip = await hoverAndFindTooltip()
     expect(tooltip).toHaveStyle('border: 1px solid red')
   })
 
@@ -164,13 +139,7 @@ describe('tooltip styling and appearance', () => {
       </>,
     )
 
-    const anchorElement = screen.getByText('Hover Me')
-
-    // Hover to show tooltip
-    await userEvent.hover(anchorElement)
-
-    // Tooltip should be visible
-    const tooltip = await screen.findByRole('tooltip')
+    const tooltip = await hoverAndFindTooltip()
 
     // We're just testing that the tooltip renders with the arrowColor prop
     expect(tooltip).toHaveTextContent('Arrow Color')

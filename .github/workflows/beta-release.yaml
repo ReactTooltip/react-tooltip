@@ -17,10 +17,10 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.head_ref }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '24.14.0'
           registry-url: 'https://registry.npmjs.org'
@@ -52,7 +52,7 @@ jobs:
           name: npm-debug-logs
           path: /home/runner/.npm/_logs
 
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v8
         with:
           script: |
             github.rest.issues.createComment({
