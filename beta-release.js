@@ -1,9 +1,10 @@
 import util from 'util'
+import fs from 'node:fs/promises'
 import { exec as execCallback } from 'child_process'
 import minimist from 'minimist'
-import pkg from './package.json' assert { type: 'json' }
 
 const exec = util.promisify(execCallback)
+const pkg = JSON.parse(await fs.readFile(new URL('./package.json', import.meta.url), 'utf8'))
 
 const args = minimist(process.argv.slice(2))
 
