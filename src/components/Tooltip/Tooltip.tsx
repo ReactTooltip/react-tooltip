@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useImperativeHandle, memo } from 'react'
+import { createPortal } from 'react-dom'
 import clsx from 'clsx'
 import {
   deepEqual,
@@ -21,6 +22,7 @@ const Tooltip = ({
   className,
   classNameArrow,
   variant = 'dark',
+  portalRoot,
   anchorSelect,
   place = 'top',
   offset = 10,
@@ -521,62 +523,77 @@ const Tooltip = ({
     }
   }, [])
 
-  return rendered && !hidden && hasContent ? (
-    <WrapperElement
-      id={id}
-      role={role}
-      className={clsx(
-        'react-tooltip',
-        coreStyles['tooltip'],
-        styles['tooltip'],
-        styles[variant],
-        className,
-        `react-tooltip__place-${computedPosition.place}`,
-        coreStyles[canShow ? 'show' : 'closing'],
-        canShow ? 'react-tooltip__show' : 'react-tooltip__closing',
-        positionStrategy === 'fixed' && coreStyles['fixed'],
-        clickable && coreStyles['clickable'],
-      )}
-      onTransitionEnd={(event: TransitionEvent) => {
-        clearTimeoutRef(missedTransitionTimerRef)
-        if (show || event.propertyName !== 'opacity') {
-          return
-        }
-        setRendered(false)
-        setImperativeOptions(null)
-        afterHide?.()
-      }}
-      style={{
-        ...externalStyles,
-        ...computedPosition.tooltipStyles,
-        opacity: opacity !== undefined && canShow ? opacity : undefined,
-      }}
-      ref={tooltipRef}
-    >
+  const tooltipNode =
+    rendered && !hidden && hasContent ? (
       <WrapperElement
-        className={clsx('react-tooltip-content-wrapper', coreStyles['content'], styles['content'])}
-      >
-        {actualContent}
-      </WrapperElement>
-      <WrapperElement
+        id={id}
+        role={role}
         className={clsx(
-          'react-tooltip-arrow',
-          coreStyles['arrow'],
-          styles['arrow'],
-          classNameArrow,
-          noArrow && coreStyles['noArrow'],
+          'react-tooltip',
+          coreStyles['tooltip'],
+          styles['tooltip'],
+          styles[variant],
+          className,
+          `react-tooltip__place-${computedPosition.place}`,
+          coreStyles[canShow ? 'show' : 'closing'],
+          canShow ? 'react-tooltip__show' : 'react-tooltip__closing',
+          positionStrategy === 'fixed' && coreStyles['fixed'],
+          clickable && coreStyles['clickable'],
         )}
-        style={{
-          ...computedPosition.tooltipArrowStyles,
-          background: arrowColor
-            ? `linear-gradient(to right bottom, transparent 50%, ${arrowColor} 50%)`
-            : undefined,
-          '--rt-arrow-size': `${arrowSize}px`,
+        onTransitionEnd={(event: TransitionEvent) => {
+          clearTimeoutRef(missedTransitionTimerRef)
+          if (show || event.propertyName !== 'opacity') {
+            return
+          }
+          setRendered(false)
+          setImperativeOptions(null)
+          afterHide?.()
         }}
-        ref={tooltipArrowRef}
-      />
-    </WrapperElement>
-  ) : null
+        style={{
+          ...externalStyles,
+          ...computedPosition.tooltipStyles,
+          opacity: opacity !== undefined && canShow ? opacity : undefined,
+        }}
+        ref={tooltipRef}
+      >
+        <WrapperElement
+          className={clsx(
+            'react-tooltip-content-wrapper',
+            coreStyles['content'],
+            styles['content'],
+          )}
+        >
+          {actualContent}
+        </WrapperElement>
+        <WrapperElement
+          className={clsx(
+            'react-tooltip-arrow',
+            coreStyles['arrow'],
+            styles['arrow'],
+            classNameArrow,
+            noArrow && coreStyles['noArrow'],
+          )}
+          style={{
+            ...computedPosition.tooltipArrowStyles,
+            background: arrowColor
+              ? `linear-gradient(to right bottom, transparent 50%, ${arrowColor} 50%)`
+              : undefined,
+            '--rt-arrow-size': `${arrowSize}px`,
+          }}
+          ref={tooltipArrowRef}
+        />
+      </WrapperElement>
+    ) : null
+
+  if (!tooltipNode) {
+    return null
+  }
+
+  if (portalRoot) {
+    return createPortal(tooltipNode, portalRoot)
+  }
+
+  return tooltipNode
 }
 
 export default memo(Tooltip)

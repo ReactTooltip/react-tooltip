@@ -100,6 +100,7 @@ export interface ITooltip {
   classNameArrow?: string
   content?: ReactNode
   contentWrapperRef?: RefObject<HTMLDivElement | null>
+  portalRoot?: Element | null
   place?: PlacesType
   offset?: number
   id?: string

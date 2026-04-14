@@ -16,6 +16,7 @@ export interface ITooltipController {
   className?: string
   classNameArrow?: string
   content?: ReactNode
+  portalRoot?: Element | null
   render?: (render: { content: ReactNode | null; activeAnchor: HTMLElement | null }) => ReactNode
   place?: PlacesType
   offset?: number

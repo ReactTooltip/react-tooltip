@@ -234,4 +234,35 @@ describe('tooltip advanced scenarios', () => {
 
     expect(screen.getByRole('tooltip')).toBeInTheDocument()
   })
+
+  test('tooltip can render into a provided portal root', async () => {
+    const portalRoot = document.createElement('div')
+    portalRoot.setAttribute('id', 'tooltip-portal-root')
+    document.body.appendChild(portalRoot)
+
+    render(
+      <>
+        <span data-tooltip-id="portal-root-test">Hover Me</span>
+        <Tooltip
+          id="portal-root-test"
+          content="Portal Root Test"
+          portalRoot={portalRoot}
+          positionStrategy="fixed"
+        />
+      </>,
+    )
+
+    const anchorElement = screen.getByText('Hover Me')
+
+    act(() => {
+      fireEvent.mouseEnter(anchorElement)
+      jest.advanceTimersByTime(100)
+    })
+    await flushMicrotasks()
+
+    const tooltip = await screen.findByRole('tooltip')
+
+    expect(tooltip).toBeInTheDocument()
+    expect(portalRoot).toContainElement(tooltip)
+  })
 })

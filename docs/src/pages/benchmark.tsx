@@ -398,7 +398,8 @@ export default function BenchmarkPage(): React.JSX.Element {
                   size.
                 </p>
                 <p className={styles.cardText}>
-                  If you like the project, please give the project a GitHub 🌟
+                  For the full migration surface between v5 and v6, including API changes and new
+                  capabilities, check the <a href="/docs/upgrade-guide/changelog-v5-v6">v5 to v6 changelog</a>.
                 </p>
               </div>
             </section>

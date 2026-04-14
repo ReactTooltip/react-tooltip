@@ -1,0 +1,144 @@
+---
+sidebar_position: 1
+---
+
+# Portal Root
+
+Render the tooltip into a custom DOM container with `portalRoot`.
+
+This is useful when the tooltip needs to escape local clipping, stacking, or layout constraints.
+
+import React, { useEffect, useRef, useState } from 'react'
+import { Tooltip } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+export const PortalRootExample = () => {
+  const portalContainerRef = useRef(null)
+  const [portalRoot, setPortalRoot] = useState(null)
+
+  useEffect(() => {
+    setPortalRoot(portalContainerRef.current)
+  }, [])
+
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gap: '1rem',
+        justifyItems: 'center',
+      }}
+    >
+      <div
+        style={{
+          width: '100%',
+          maxWidth: '580px',
+          overflow: 'hidden',
+          border: '1px solid #cbd5e1',
+          borderRadius: '16px',
+          padding: '1.25rem',
+          background:
+            'linear-gradient(180deg, rgba(248,250,252,1) 0%, rgba(241,245,249,1) 100%)',
+        }}
+      >
+        <p style={{ margin: 0, textAlign: 'center', color: '#475569' }}>
+          This panel clips its content. The tooltip is rendered into the container below instead of
+          staying inside this box.
+        </p>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            paddingTop: '1rem',
+          }}
+        >
+          <TooltipAnchor data-tooltip-id="my-tooltip-portal-root">◕‿‿◕</TooltipAnchor>
+        </div>
+      </div>
+
+      <div
+        ref={portalContainerRef}
+        style={{
+          width: '100%',
+          maxWidth: '580px',
+          minHeight: '96px',
+          border: '1px dashed #0f766e',
+          borderRadius: '16px',
+          padding: '1rem',
+          background: 'rgba(240, 253, 250, 1)',
+          position: 'relative',
+        }}
+      >
+        <p style={{ margin: 0, textAlign: 'center', color: '#115e59' }}>
+          Tooltip portal container
+        </p>
+      </div>
+
+      <Tooltip
+        id="my-tooltip-portal-root"
+        content="Rendered through portalRoot"
+        portalRoot={portalRoot}
+        positionStrategy="fixed"
+      />
+    </div>
+  )
+}
+
+### Basic usage
+
+```jsx
+import React, { useEffect, useRef, useState } from 'react'
+import { Tooltip } from 'react-tooltip'
+
+function Example() {
+  const portalContainerRef = useRef(null)
+  const [portalRoot, setPortalRoot] = useState(null)
+
+  useEffect(() => {
+    setPortalRoot(portalContainerRef.current)
+  }, [])
+
+  return (
+    <>
+      <button data-tooltip-id="my-tooltip">Hover me</button>
+      <div ref={portalContainerRef} />
+      <Tooltip
+        id="my-tooltip"
+        content="Rendered through portalRoot"
+        portalRoot={portalRoot}
+        positionStrategy="fixed"
+      />
+    </>
+  )
+}
+```
+
+<PortalRootExample />
+
+### Notes
+
+- `portalRoot` is optional. Without it, the tooltip renders inline as usual.
+- `positionStrategy="fixed"` is the safest default when rendering into `document.body` or another external container.
+- The anchor element stays in place. Only the tooltip node is moved.
