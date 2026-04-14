@@ -1,0 +1,251 @@
+.page {
+  padding: 3rem 0 4rem;
+}
+
+.hero {
+  background:
+    radial-gradient(circle at top right, rgba(34, 139, 230, 0.18), transparent 28%),
+    radial-gradient(circle at left center, rgba(20, 184, 166, 0.18), transparent 24%),
+    linear-gradient(180deg, #f7fafc 0%, #eef6f8 100%);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.heroInner {
+  display: grid;
+  gap: 2rem;
+  padding: 4rem 0 3rem;
+}
+
+.eyebrow {
+  color: #0f766e;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  margin: 0 0 0.75rem;
+  text-transform: uppercase;
+}
+
+.title {
+  color: #0f172a;
+  font-size: clamp(2.5rem, 4vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  margin: 0;
+  max-width: 10ch;
+}
+
+.subtitle {
+  color: #334155;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin: 1rem 0 0;
+  max-width: 66ch;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.metaBadge {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 999px;
+  color: #0f172a;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.55rem 0.85rem;
+}
+
+.summaryGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin: 2rem 0 3rem;
+}
+
+.summaryCard {
+  background: white;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+  padding: 1.25rem;
+}
+
+.summaryLabel {
+  color: #64748b;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.summaryValue {
+  color: #0f172a;
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin-top: 0.45rem;
+}
+
+.summaryText {
+  color: #475569;
+  font-size: 0.98rem;
+  line-height: 1.72;
+  margin: 0.75rem 0 0;
+  max-width: none;
+}
+
+.contentGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.card {
+  background: white;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 20px 44px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+.cardBody {
+  padding: 1.5rem;
+}
+
+.cardTitle {
+  color: #0f172a;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-top: 1.5rem;
+}
+
+.cardTitle:first-child {
+  margin-top: 0;
+}
+
+.cardText {
+  color: #334155;
+  font-size: 1rem;
+  line-height: 1.75;
+  margin: 0;
+  max-width: none;
+  text-wrap: pretty;
+}
+
+.cardText + .cardText,
+.cardText + .note,
+.note + .cardText,
+.note + .note,
+.signalList + .cardText,
+.signalList + .note,
+.cardText + .signalList,
+.note + .signalList {
+  margin-top: 0.5rem;
+}
+
+.signalList {
+  color: #0f172a;
+  display: grid;
+  gap: 0.85rem;
+  margin: 1.2rem 0 0;
+  max-width: none;
+  padding-left: 1.25rem;
+}
+
+.signalList li {
+  color: #334155;
+  line-height: 1.72;
+  padding-left: 0.15rem;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  border-collapse: collapse;
+  min-width: 1380px;
+  width: 100%;
+}
+
+.table thead th {
+  background: #f8fafc;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  color: #334155;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  min-width: 108px;
+  padding: 1rem 0.85rem;
+  text-align: center;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.table thead th:first-child {
+  min-width: 86px;
+}
+
+.table tbody td {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+  font-size: 0.95rem;
+  min-width: 108px;
+  padding: 0.95rem 0.85rem;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.table tbody td:first-child {
+  min-width: 86px;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.positive {
+  color: #047857;
+  font-weight: 700;
+}
+
+.negative {
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.muted {
+  color: #64748b;
+}
+
+.note {
+  color: #526277;
+  font-size: 0.95rem;
+  line-height: 1.78;
+  margin-top: 1.15rem;
+  max-width: none;
+  text-wrap: pretty;
+}
+
+@media (max-width: 996px) {
+  .page {
+    padding-top: 2rem;
+  }
+
+  .heroInner {
+    padding: 2.75rem 0 2.25rem;
+  }
+
+  .cardBody {
+    padding: 1.2rem;
+  }
+}

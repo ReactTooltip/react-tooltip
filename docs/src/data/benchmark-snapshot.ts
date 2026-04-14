@@ -1,0 +1,177 @@
+export type BenchmarkRow = {
+  count: number
+  v5MountMs: number
+  v6MountMs: number
+  mountDeltaMs: number
+  mountSpreadPercent: number
+  v5UnmountMs: number
+  v6UnmountMs: number
+  unmountDeltaMs: number
+  unmountSpreadPercent: number
+  v5MountMemKiB: number
+  v6MountMemKiB: number
+  mountMemDeltaKiB: number
+  mountMemSpreadPercent: number
+  v5UnmountMemKiB: number
+  v6UnmountMemKiB: number
+  unmountMemDeltaKiB: number
+  unmountMemSpreadPercent: number
+  samples: number
+}
+
+export const benchmarkSnapshot = {
+  title: 'React Tooltip V5 vs V6 Benchmark Snapshot',
+  timestamp: '2026-04-13T19:02:43.182Z',
+  versions: {
+    v5: '5.30.1',
+    v6: '6.0.0',
+  },
+  inputFiles: 10,
+  selection: 'latest 10 scaling run(s)',
+  generationFilter: 'all benchmark generations',
+  counts: [50, 100, 500, 2000, 5000, 10000, 25000],
+  rows: [
+    {
+      count: 50,
+      v5MountMs: 8.2,
+      v6MountMs: 6.85,
+      mountDeltaMs: -1.35,
+      mountSpreadPercent: 21.2,
+      v5UnmountMs: 8.3,
+      v6UnmountMs: 6.85,
+      unmountDeltaMs: -1.45,
+      unmountSpreadPercent: 21.2,
+      v5MountMemKiB: 85.1,
+      v6MountMemKiB: 49.5,
+      mountMemDeltaKiB: -35.6,
+      mountMemSpreadPercent: 4.2,
+      v5UnmountMemKiB: 0.3,
+      v6UnmountMemKiB: -1.0,
+      unmountMemDeltaKiB: -1.3,
+      unmountMemSpreadPercent: 4.2,
+      samples: 10,
+    },
+    {
+      count: 100,
+      v5MountMs: 8.2,
+      v6MountMs: 6.55,
+      mountDeltaMs: -1.65,
+      mountSpreadPercent: 26.7,
+      v5UnmountMs: 8.2,
+      v6UnmountMs: 6.4,
+      unmountDeltaMs: -1.8,
+      unmountSpreadPercent: 29.7,
+      v5MountMemKiB: 95.6,
+      v6MountMemKiB: 79.4,
+      mountMemDeltaKiB: -16.2,
+      mountMemSpreadPercent: 7.7,
+      v5UnmountMemKiB: -0.6,
+      v6UnmountMemKiB: -4.7,
+      unmountMemDeltaKiB: -4.1,
+      unmountMemSpreadPercent: 69.7,
+      samples: 10,
+    },
+    {
+      count: 500,
+      v5MountMs: 8.2,
+      v6MountMs: 7.05,
+      mountDeltaMs: -1.15,
+      mountSpreadPercent: 17.7,
+      v5UnmountMs: 8.2,
+      v6UnmountMs: 6.55,
+      unmountDeltaMs: -1.65,
+      unmountSpreadPercent: 28.2,
+      v5MountMemKiB: 411.8,
+      v6MountMemKiB: 372.0,
+      mountMemDeltaKiB: -39.8,
+      mountMemSpreadPercent: 0.7,
+      v5UnmountMemKiB: -2.2,
+      v6UnmountMemKiB: -8.0,
+      unmountMemDeltaKiB: -5.8,
+      unmountMemSpreadPercent: 40.5,
+      samples: 10,
+    },
+    {
+      count: 2000,
+      v5MountMs: 30.7,
+      v6MountMs: 25.5,
+      mountDeltaMs: -5.2,
+      mountSpreadPercent: 2.0,
+      v5UnmountMs: 8.2,
+      v6UnmountMs: 5.55,
+      unmountDeltaMs: -2.65,
+      unmountSpreadPercent: 49.5,
+      v5MountMemKiB: 1559.0,
+      v6MountMemKiB: 1472.4,
+      mountMemDeltaKiB: -86.6,
+      mountMemSpreadPercent: 0.1,
+      v5UnmountMemKiB: -8.0,
+      v6UnmountMemKiB: -20.0,
+      unmountMemDeltaKiB: -11.9,
+      unmountMemSpreadPercent: 16.3,
+      samples: 10,
+    },
+    {
+      count: 5000,
+      v5MountMs: 87.3,
+      v6MountMs: 79.25,
+      mountDeltaMs: -8.05,
+      mountSpreadPercent: 2.3,
+      v5UnmountMs: 4.0,
+      v6UnmountMs: 3.25,
+      unmountDeltaMs: -0.75,
+      unmountSpreadPercent: 80.0,
+      v5MountMemKiB: 3956.8,
+      v6MountMemKiB: 3681.7,
+      mountMemDeltaKiB: -275.1,
+      mountMemSpreadPercent: 2.4,
+      v5UnmountMemKiB: -27.8,
+      v6UnmountMemKiB: -52.2,
+      unmountMemDeltaKiB: -24.4,
+      unmountMemSpreadPercent: 0.0,
+      samples: 10,
+    },
+    {
+      count: 10000,
+      v5MountMs: 226.3,
+      v6MountMs: 213.1,
+      mountDeltaMs: -13.2,
+      mountSpreadPercent: 4.7,
+      v5UnmountMs: 6.4,
+      v6UnmountMs: 4.4,
+      unmountDeltaMs: -2.0,
+      unmountSpreadPercent: 63.6,
+      v5MountMemKiB: 8197.6,
+      v6MountMemKiB: 7330.6,
+      mountMemDeltaKiB: -867.0,
+      mountMemSpreadPercent: 0.4,
+      v5UnmountMemKiB: -352.6,
+      v6UnmountMemKiB: -86.4,
+      unmountMemDeltaKiB: 266.3,
+      unmountMemSpreadPercent: 87.8,
+      samples: 10,
+    },
+    {
+      count: 25000,
+      v5MountMs: 1263.85,
+      v6MountMs: 1214.45,
+      mountDeltaMs: -49.4,
+      mountSpreadPercent: 13.3,
+      v5UnmountMs: 16.6,
+      v6UnmountMs: 9.55,
+      unmountDeltaMs: -7.05,
+      unmountSpreadPercent: 7.9,
+      v5MountMemKiB: 20002.7,
+      v6MountMemKiB: 18357.6,
+      mountMemDeltaKiB: -1645.1,
+      mountMemSpreadPercent: 2.6,
+      v5UnmountMemKiB: -639.8,
+      v6UnmountMemKiB: -196.4,
+      unmountMemDeltaKiB: 443.4,
+      unmountMemSpreadPercent: 0.4,
+      samples: 10,
+    },
+  ] as BenchmarkRow[],
+}
+
+export default benchmarkSnapshot

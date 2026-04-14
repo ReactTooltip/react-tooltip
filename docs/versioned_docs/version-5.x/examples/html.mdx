@@ -1,0 +1,108 @@
+---
+sidebar_position: 1
+---
+
+# HTML
+
+Using HTML content in ReactTooltip component.
+
+import { Tooltip } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        margin: 'auto',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+### Using `data-tooltip-html` attribute
+
+:::info
+
+You can also use [`renderToStaticMarkup()`](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to render HTML/JSX.
+
+:::
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a
+  data-tooltip-id="my-tooltip-data-html"
+  data-tooltip-html="<div><h3>Cool stuff</h3><ul><li>This is cool</li><li>This too</li></ul></div>"
+>
+  ◕‿‿◕
+</a>
+<Tooltip id="my-tooltip-data-html" />
+```
+
+<TooltipAnchor
+  data-tooltip-id="my-tooltip-data-html"
+  data-tooltip-html="<div><h3>Cool stuff</h3><ul><li>This is cool</li><li>This too</li></ul></div>"
+>
+  ◕‿‿◕
+</TooltipAnchor>
+<Tooltip id="my-tooltip-data-html" />
+
+### Using `html` prop
+
+:::info
+
+You should probably pass the content as children to the tooltip instead.
+
+:::
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a data-tooltip-id="my-tooltip-html-prop">◕‿‿◕</a>
+<Tooltip
+  id="my-tooltip-html-prop"
+  html="Hello<br /><s>multiline</s><br /><b>HTML</b><br />tooltip"
+/>
+```
+
+<TooltipAnchor data-tooltip-id="my-tooltip-html-prop">◕‿‿◕</TooltipAnchor>
+<Tooltip
+  id="my-tooltip-html-prop"
+  html="Hello<br /><s>multiline</s><br /><b>HTML</b><br />tooltip"
+/>
+
+#### Security note
+
+The `html` option allows a tooltip to directly display raw HTML. This is a security risk if any of that content is supplied by the user.
+Any user-supplied content must be sanitized, using a package like [sanitize-html](https://www.npmjs.com/package/sanitize-html).
+We chose not to include sanitization after discovering it [increased our package size](https://github.com/wwayne/react-tooltip/issues/429) too much - we don't want to penalize people who don't use the `html` option.
+
+#### JSX note
+
+You can use [`renderToStaticMarkup()` function](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to use JSX instead of HTML.
+**Example:**
+
+```jsx
+import ReactDOMServer from 'react-dom/server';
+[...]
+<a
+  data-tooltip-id="my-tooltip"
+  data-tooltip-html={ReactDOMServer.renderToStaticMarkup(<div>I am <b>JSX</b> content</div>)}
+>
+  ◕‿‿◕
+</a>
+```

@@ -1,0 +1,86 @@
+---
+sidebar_position: 1
+---
+
+# Multiline
+
+Multiline content in ReactTooltip component.
+
+import { Tooltip } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        margin: 'auto',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+### Using `data-tooltip-html`
+
+:::info
+
+You can also use [`renderToStaticMarkup()`](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to render HTML/JSX.
+
+:::
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a
+  data-tooltip-id="my-tooltip-multiline"
+  data-tooltip-html="Hello<br />some stuff in between<br />world!"
+>
+  ◕‿‿◕
+</a>
+<Tooltip id="my-tooltip-multiline" />
+```
+
+<TooltipAnchor
+  data-tooltip-id="my-tooltip-multiline"
+  data-tooltip-html="Hello<br />some stuff in between<br />world!"
+>
+  ◕‿‿◕
+</TooltipAnchor>
+<Tooltip id="my-tooltip-multiline" />
+
+### Using tooltip children and JSX
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a data-tooltip-id="my-tooltip-children-multiline"> ◕‿‿◕ </a>
+<Tooltip id="my-tooltip-children-multiline">
+  <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <span>Hello</span>
+    <span>some stuff in between</span>
+    <span>world!</span>
+  </div>
+</Tooltip>
+```
+
+<TooltipAnchor data-tooltip-id="my-tooltip-children-multiline">◕‿‿◕</TooltipAnchor>
+<Tooltip id="my-tooltip-children-multiline">
+  <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <span>Hello</span>
+    <span>some stuff in between</span>
+    <span>world!</span>
+  </div>
+</Tooltip>

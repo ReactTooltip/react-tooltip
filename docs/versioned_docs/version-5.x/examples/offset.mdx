@@ -1,0 +1,82 @@
+---
+sidebar_position: 1
+---
+
+# Offset
+
+Offset option for the ReactTooltip component.
+
+import { Tooltip } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        margin: 'auto',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+### Using `data-tooltip-offset` attribute
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a data-tooltip-id="my-tooltip" data-tooltip-offset={10}>◕‿‿◕</a>
+<a data-tooltip-id="my-tooltip" data-tooltip-offset={20}>◕‿‿◕</a>
+<a data-tooltip-id="my-tooltip" data-tooltip-offset={30}>◕‿‿◕</a>
+<a data-tooltip-id="my-tooltip" data-tooltip-offset={40}>◕‿‿◕</a>
+<a data-tooltip-id="my-tooltip" data-tooltip-offset={50}>◕‿‿◕</a>
+<Tooltip id="my-tooltip" content="Hello world!" />
+```
+
+<div style={{ display: 'flex', gap: '5px', width: 'fit-content', margin: 'auto' }}>
+  <TooltipAnchor data-tooltip-id="my-tooltip" data-tooltip-offset={10}>
+    ◕‿‿◕
+  </TooltipAnchor>
+  <TooltipAnchor data-tooltip-id="my-tooltip" data-tooltip-offset={20}>
+    ◕‿‿◕
+  </TooltipAnchor>
+  <TooltipAnchor data-tooltip-id="my-tooltip" data-tooltip-offset={30}>
+    ◕‿‿◕
+  </TooltipAnchor>
+  <TooltipAnchor data-tooltip-id="my-tooltip" data-tooltip-offset={40}>
+    ◕‿‿◕
+  </TooltipAnchor>
+  <TooltipAnchor data-tooltip-id="my-tooltip" data-tooltip-offset={50}>
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip" content="Hello world!" />
+</div>
+
+### Using `offset` tooltip prop
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a data-tooltip-id="my-tooltip-offset-prop">◕‿‿◕</a>
+<Tooltip
+  id="my-tooltip-offset-prop"
+  content="Hello world!"
+  offset={30}
+/>
+```
+
+<TooltipAnchor data-tooltip-id="my-tooltip-offset-prop">◕‿‿◕</TooltipAnchor>
+<Tooltip id="my-tooltip-offset-prop" content="Hello world!" offset={30} />

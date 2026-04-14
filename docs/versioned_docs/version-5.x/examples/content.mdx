@@ -1,0 +1,68 @@
+---
+sidebar_position: 1
+---
+
+# Content
+
+Setting the ReactTooltip content.
+
+import { Tooltip } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        margin: 'auto',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+### Using `data-tooltip-content` anchor element attribute
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="Hello world!"
+>
+  ◕‿‿◕
+</a>
+<Tooltip id="my-tooltip" />
+```
+
+<TooltipAnchor data-tooltip-id="my-tooltip" data-tooltip-content="Hello world!">
+  ◕‿‿◕
+</TooltipAnchor>
+<Tooltip id="my-tooltip" />
+
+### Using `content` tooltip prop
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a id="my-anchor-element">◕‿‿◕</a>
+<Tooltip
+  anchorSelect="#my-anchor-element"
+  content="Hello world!"
+/>
+```
+
+<TooltipAnchor id="my-anchor-element">◕‿‿◕</TooltipAnchor>
+<Tooltip anchorSelect="#my-anchor-element" content="Hello world!" />

@@ -1,0 +1,117 @@
+---
+sidebar_position: 1
+---
+
+# Render
+
+Using the ReactTooltip render prop to render dynamic content based on the active anchor element.
+
+import { Tooltip } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        margin: 'auto',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+### Basic usage
+
+The `render` prop can be used to render the tooltip content dynamically based on the currently active anchor element.
+The function signature is as follows:
+
+```ts
+(render: { content: string | null; activeAnchor: HTMLElement | null }) => ChildrenType
+```
+
+- `content` is available for quick access to the `data-tooltip-content` attribute on the anchor element
+- `activeAnchor` is a ref to the anchor element currently active (or `null` if no element is active)
+- `ChildrenType` is essentially the same as `React.ReactNode`
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="1"
+  data-some-relevant-attr="wow"
+>
+  ◕‿‿◕
+</a>
+<a
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="2"
+  data-some-relevant-attr="so relevant"
+>
+  ◕‿‿◕
+</a>
+<a
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="3"
+  data-some-relevant-attr="much important"
+>
+  ◕‿‿◕
+</a>
+<Tooltip
+  id="my-tooltip"
+  render={({ content, activeAnchor }) => (
+    <span>
+      The element #{content} is currently active.
+      <br/>
+      Relevant attribute: {activeAnchor?.getAttribute('data-some-relevant-attr') || 'not set'}
+    </span>
+  )}
+/>
+```
+
+<div style={{ display: 'flex', gap: '5px', width: 'fit-content', margin: 'auto' }}>
+  <TooltipAnchor
+    data-tooltip-id="my-tooltip"
+    data-tooltip-content="1"
+    data-some-relevant-attr="wow"
+  >
+    ◕‿‿◕
+  </TooltipAnchor>
+  <TooltipAnchor
+    data-tooltip-id="my-tooltip"
+    data-tooltip-content="2"
+    data-some-relevant-attr="so relevant"
+  >
+    ◕‿‿◕
+  </TooltipAnchor>
+  <TooltipAnchor
+    data-tooltip-id="my-tooltip"
+    data-tooltip-content="3"
+    data-some-relevant-attr="much important"
+  >
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip
+    id="my-tooltip"
+    render={({ content, activeAnchor }) => (
+      <span>
+        The element #{content} is currently active.
+        <br />
+        Relevant attribute: {activeAnchor?.getAttribute('data-some-relevant-attr') || 'not set'}
+      </span>
+    )}
+  />
+</div>

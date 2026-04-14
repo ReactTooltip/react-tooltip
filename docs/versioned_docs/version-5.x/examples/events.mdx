@@ -1,0 +1,86 @@
+---
+sidebar_position: 1
+---
+
+# Events
+
+Events available in ReactTooltip component.
+
+:::danger
+
+This has been deprecated. Use `openOnClick`, or `openEvents`, `closeEvents`, and `globalCloseEvents` instead.
+
+See the [options page](../options.mdx#available-props) for more details.
+
+:::
+
+import { Tooltip } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        margin: 'auto',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+### Using `hover`
+
+:::info
+
+This is the default event option, so it doesn't have to be manually set.
+
+:::
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a data-tooltip-id="my-tooltip"> ◕‿‿◕ </a>
+<Tooltip
+  id="my-tooltip"
+  content="Hello world!"
+  events={['hover']}
+/>
+```
+
+<TooltipAnchor data-tooltip-id="my-tooltip">◕‿‿◕</TooltipAnchor>
+<Tooltip id="my-tooltip" content="Hello world!" events={['hover']} />
+
+### Using `click`
+
+:::info
+
+Clicking anywhere outside the anchor element will close the tooltip.
+
+:::
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a data-tooltip-id="my-tooltip-click"> ◕‿‿◕ </a>
+<Tooltip
+  id="my-tooltip-click"
+  content="Hello world!"
+  events={['click']}
+/>
+```
+
+<TooltipAnchor data-tooltip-id="my-tooltip-click">◕‿‿◕</TooltipAnchor>
+<Tooltip id="my-tooltip-click" content="Hello world!" events={['click']} />

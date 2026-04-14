@@ -79,6 +79,17 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          lastVersion: 'current',
+          versions: {
+            current: {
+              label: 'v6',
+              path: '',
+            },
+            '5.x': {
+              label: 'v5',
+              path: 'v5',
+            },
+          },
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl: 'https://github.com/ReactTooltip/react-tooltip/tree/master/docs/',
@@ -147,10 +158,23 @@ const config = {
         },
         items: [
           {
-            type: 'doc',
-            docId: 'getting-started',
-            position: 'left',
             label: 'Docs',
+            position: 'left',
+            items: [
+              {
+                label: 'v6',
+                to: '/docs/getting-started',
+              },
+              {
+                label: 'v5',
+                to: '/docs/v5/getting-started',
+              },
+            ],
+          },
+          {
+            to: '/benchmark',
+            position: 'left',
+            label: 'Benchmark',
           },
           {
             href: 'https://github.com/ReactTooltip/react-tooltip/',
@@ -166,12 +190,20 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Getting Started',
+                label: 'Getting Started (v6)',
                 to: '/docs/getting-started',
+              },
+              {
+                label: 'Getting Started (v5)',
+                to: '/docs/v5/getting-started',
               },
               {
                 label: 'Deploying to DigitalOcean',
                 to: '/blog/digital-ocean-app-platform',
+              },
+              {
+                label: 'Benchmark',
+                to: '/benchmark',
               },
             ],
           },

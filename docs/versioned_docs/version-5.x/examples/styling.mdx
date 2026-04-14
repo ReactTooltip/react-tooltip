@@ -1,0 +1,513 @@
+---
+sidebar_position: 1
+---
+
+# Styling
+
+How to customize tooltip styles in ReactTooltip styles.
+
+The tooltip arrow inherits its background color from the tooltip (its parent).
+
+import { Tooltip } from 'react-tooltip'
+import CodeBlock from '@theme/CodeBlock'
+import TooltipStyles from '@site/src/generated/tooltipStylesSource'
+import TooltipCoreStyles from '@site/src/generated/tooltipCoreStylesSource'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+### Inline Styling
+
+You can add styles to the tooltip with inline styling.
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<a
+  data-tooltip-id="my-tooltip-inline"
+  data-tooltip-content="Hello world!"
+>
+  ◕‿‿◕
+</a>
+<Tooltip
+  id="my-tooltip-inline"
+  style={{ backgroundColor: "rgb(0, 255, 30)", color: "#222" }}
+/>
+```
+
+<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}>
+  <TooltipAnchor data-tooltip-id="my-tooltip-inline" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-inline" style={{ backgroundColor: 'rgb(0, 255, 30)', color: '#222' }} />
+</div>
+
+### Classes
+
+You don't need to use `!important` to override the styles, take advantage of CSS Specificity instead ([MDN Docs](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity) | [W3c Docs](https://www.w3schools.com/css/css_specificity.asp)).
+
+Using CSS Specificity you can add a class with more specificity than the default used in tooltip so you can override or add new rules to the component style.
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<style>
+.example {
+  color: #222;
+  background-color: rgb(0, 247, 255);
+}
+</style>
+
+<div className="example-container">
+  <a
+    data-tooltip-id="my-tooltip-styles"
+    data-tooltip-content="Hello world!"
+  >
+    ◕‿‿◕
+  </a>
+  <Tooltip id="my-tooltip-styles" className="example" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor data-tooltip-id="my-tooltip-styles" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-styles" className="example" />
+</div>
+
+#### Explanation
+
+:::info
+Please note that **Core** styles are different from **Base** styles, for more information, please check the [Disabling ReactTooltip CSS](#disabling-reacttooltip-css) section.
+:::
+
+##### Base styles
+
+In this example, we are adding an extra level to the CSS classes. The following are the default **base** styles for the tooltip:
+
+<CodeBlock language="css">{TooltipStyles}</CodeBlock>
+
+##### Core styles
+
+And the following are the **core** styles for the tooltip:
+
+<CodeBlock language="css">{TooltipCoreStyles}</CodeBlock>
+
+If we only add new classes like below, it will not work because it has the same level of specificity as the default dark variant.
+
+```css
+.example {
+  color: #222;
+  background-color: rgb(0, 247, 255);
+}
+
+/** Add next line only if you want to have a tooltip arrow with a different background color from the tooltip **/
+.example .example-arrow {
+  background-color: rgb(255, 0, 0);
+}
+```
+
+To make this work as expected, we need to add another level of specificity:
+
+```css
+.some-class-or-rule .example {
+  color: #222;
+  background-color: rgb(0, 247, 255);
+}
+
+/** Add next line only if you want to have a tooltip arrow with a different background color from the tooltip **/
+.some-class-or-rule .example .example-arrow {
+  background-color: rgb(255, 0, 0);
+}
+```
+
+---
+
+### Changing colors
+
+#### Orange
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<style>
+.example-container .example-orange {
+  color: #222;
+  background-color: rgb(255, 153, 0);
+}
+</style>
+
+<div className="example-container">
+  <a data-tooltip-id="my-tooltip-orange" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip id="my-tooltip-orange" className="example-orange" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor data-tooltip-id="my-tooltip-orange" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-orange" className="example-orange" />
+</div>
+
+#### Pink
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<style>
+.example-container .example-pink {
+  color: #fff;
+  background-color: rgb(255, 0, 255);
+}
+</style>
+
+<div className="example-container">
+  <a data-tooltip-id="my-tooltip-pink" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip id="my-tooltip-pink" className="example-pink" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor data-tooltip-id="my-tooltip-pink" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-pink" className="example-pink" />
+</div>
+
+#### Tooltip Arrow with a different color from Tooltip
+
+:::info
+
+This is for demonstration purposes only. Using `arrowColor` instead is recommended.
+
+```jsx
+<Tooltip arrowColor="red" />
+```
+
+:::
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<style>
+.example-container .example-diff-arrow {
+  color: #fff;
+  background-color: rgb(55, 55, 55);
+}
+
+.example-container .example-diff-arrow .example-arrow {
+  background-color: rgb(222, 34, 72);
+}
+</style>
+
+<div className="example-container">
+  <a data-tooltip-id="my-tooltip-diff" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip id="my-tooltip-diff" className="example-diff-arrow" classNameArrow="example-arrow" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor data-tooltip-id="my-tooltip-diff" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-diff" className="example-diff-arrow" classNameArrow="example-arrow" />
+</div>
+
+### Changing the opacity
+
+Setting the opacity through CSS directly on the tooltip element breaks functionality. Use the `opacity` prop, or override the `--rt-opacity` CSS variable instead.
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<div className="example-container">
+  <a data-tooltip-id="my-tooltip-opacity" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip id="my-tooltip-opacity" opacity={0.3} />
+</div>
+```
+
+```css
+/* To be used instead of the `opacity` prop, not required otherwise */
+:root {
+  --rt-opacity: 0.3;
+}
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor data-tooltip-id="my-tooltip-opacity" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-opacity" opacity={0.3} />
+</div>
+
+### Changing the border radius
+
+#### Removing radius
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<style>
+.example-container .example-no-radius {
+  border-radius: 0;
+}
+</style>
+
+<div className="example-container">
+  <a data-tooltip-id="my-tooltip-no-radius" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip id="my-tooltip-no-radius" className="example-no-radius" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor data-tooltip-id="my-tooltip-no-radius" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-no-radius" className="example-no-radius" />
+</div>
+
+#### Rounded
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<style>
+.example-container .example-rounded {
+  border-radius: 50%;
+}
+</style>
+
+<div className="example-container">
+  <a data-tooltip-id="my-tooltip-rounded" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip id="my-tooltip-rounded" className="example-rounded" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor data-tooltip-id="my-tooltip-rounded" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-rounded" className="example-rounded" />
+</div>
+
+### Changing the padding
+
+#### Removing padding
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<style>
+.example-container .example-no-padding {
+  padding: 0;
+}
+</style>
+
+<div className="example-container">
+  <a data-tooltip-id="my-tooltip-no-padding" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip id="my-tooltip-no-padding" className="example-no-padding" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor data-tooltip-id="my-tooltip-no-padding" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-no-padding" className="example-no-padding" />
+</div>
+
+#### Adding more padding
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<style>
+.example-container .example-padding {
+  padding: 48px;
+}
+</style>
+
+<div className="example-container">
+  <a data-tooltip-id="my-tooltip-padding" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip id="my-tooltip-padding" className="example-padding" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor data-tooltip-id="my-tooltip-padding" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-padding" className="example-padding" />
+</div>
+
+### Changing the border
+
+If you're using the tooltip with the arrow, setting a border through CSS will not work for the arrow.
+
+We recommend using the `border` prop to avoid that.
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<div className="example-container">
+  <a data-tooltip-id="my-tooltip-border" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </a>
+  <Tooltip id="my-tooltip-border" border="1px solid red" />
+</div>
+```
+
+<div
+  className="example-container"
+  style={{ display: 'flex', columnGap: '16px', justifyContent: 'center' }}
+>
+  <TooltipAnchor data-tooltip-id="my-tooltip-border" data-tooltip-content="Hello world!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip-border" border="1px solid red" />
+</div>
+
+---
+
+:::info
+
+In summary, if you do it correctly you can use CSS specificity instead of `!important`.
+
+:::
+
+### Customizing opening/closing animation
+
+By default, the tooltip has a fade-in/fade-out transition when opening/closing, with a delay of 150ms for both.
+If you wish to change the delay for any of them, override the following CSS variables:
+
+```css
+:root {
+  --rt-transition-show-delay: 0.15s;
+  --rt-transition-closing-delay: 0.15s;
+}
+```
+
+### Disabling ReactTooltip CSS
+
+ReactTooltip works seamlessly by automatically injecting CSS into your application. To disable this functionality, use the tooltip prop `disableStyleInjection`.
+Details on how it works:
+
+- Set to `true`: what we call "base" styles will be disabled. Useful if you wish to style your tooltip from scratch.
+- Set to `'core'`: both the "base" and the "core" styles will be disabled. This means the tooltip will not work properly without adding specific CSS attributes to it.
+
+In both cases, you can add `import 'react-tooltip/dist/react-tooltip.css'` to your project to get the tooltip working again, or add your own custom CSS.
+
+:::caution
+
+Do not set `disableStyleInjection` dynamically. Changing its value requires a page refresh, so that will not work.
+
+:::
+
+:::info
+
+Check out more details about the [base](#base-styles) and [core](#core-styles) styles.
+
+:::
+
+#### Environment variables
+
+:::danger
+
+This has been deprecated. Use [`disableStyleInjection`](#disabling-reacttooltip-css) instead.
+
+:::
+
+You can prevent ReactTooltip from injecting styles into the page by using environment variables.
+
+| name                                | type      | required | default | values         | description                                                                                                                                                                                                                                   |
+| ----------------------------------- | --------- | -------- | ------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `REACT_TOOLTIP_DISABLE_CORE_STYLES` | `boolean` | no       | `false` | `true` `false` | Environment variable to disable **core** styles from being injected into the page by ReactTooltip.<br /><br /> We strongly recommend to keep the core styles being injected into the project unless you know what you are doing.              |
+| `REACT_TOOLTIP_DISABLE_BASE_STYLES` | `boolean` | no       | `false` | `true` `false` | Environment variable to disable **base** styles from being injected into the page by ReactTooltip.<br /><br /> Those styles are just visual styles like colors, padding, etc... And can be disabled if you want to write your tooltip styles. |
+
+
+#### `removeStyle()` function
+
+:::danger
+
+This has been deprecated. Use [`disableStyleInjection`](#disabling-reacttooltip-css) instead.
+
+:::
+
+You can also use the `removeStyle()` function to remove injected styles from the page. It accepts the following parameters:
+
+| name | type   | required | default | values        | description                                                                                                                                |
+| ---- | ------ | -------- | ------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| type | string | no       | `base`  | `base` `core` | If `core` is defined, the core styles will be removed from the page, if nothing is defined, `base` styles will be removed as default value |
+
+```jsx
+import { removeStyle } from 'react-tooltip'
+
+removeStyle() // removes the injected base style of ReactTooltip
+removeStyle({ type: 'core' }) // removes the injected core style of ReactTooltip - this can affect the basic functionality of ReactTooltip
+```

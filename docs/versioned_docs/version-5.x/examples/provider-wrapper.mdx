@@ -1,0 +1,138 @@
+---
+sidebar_position: 1
+---
+
+# Provider/wrapper
+
+Using multiple anchors elements with a single ReactTooltip component.
+
+:::danger
+
+This has been deprecated. Use the `data-tooltip-id` attribute, or the `anchorSelect` prop instead. [Click here](../getting-started.mdx) for more details.
+
+:::
+
+import { Tooltip, TooltipProvider, TooltipWrapper } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+export const WithProvider = ({ children }) => {
+  return <TooltipProvider>{children}</TooltipProvider>
+}
+
+### Setting up `<TooltipProvider />`
+
+To get the `<TooltipWrapper />` to work, your component must be inside the `<TooltipProvider />`.
+For simplicity, just wrap your whole application with the provider.
+
+```jsx
+// this is usually the `src/App.jsx` (or `src/App.tsx`) file
+import { TooltipProvider } from 'react-tooltip'
+
+function App() {
+  return (
+    <TooltipProvider>
+      <MyComponent />
+    </TooltipProvider>
+  )
+}
+
+export default App
+```
+
+### Using `<TooltipWrapper />`
+
+```jsx
+import { Tooltip, TooltipWrapper } from 'react-tooltip';
+
+<TooltipWrapper content="I am using a global tooltip!">
+  <a> ◕‿‿◕ </a>
+</TooltipWrapper>
+<TooltipWrapper content="This is the same tooltip!">
+  <a> ◕‿‿◕ </a>
+</TooltipWrapper>
+// the tooltip component can be placed anywhere inside the provider
+<Tooltip />
+```
+
+<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
+  <WithProvider>
+    <TooltipWrapper content="I am using a global tooltip!">
+      <TooltipAnchor>◕‿‿◕</TooltipAnchor>
+    </TooltipWrapper>
+    <TooltipWrapper content="This is the same tooltip!">
+      <TooltipAnchor>◕‿‿◕</TooltipAnchor>
+    </TooltipWrapper>
+    <Tooltip />
+  </WithProvider>
+</div>
+
+### Multiple tooltips
+
+:::danger
+
+Reminder that this has been deprecated. Use the `data-tooltip-id` attribute, or the `anchorSelect` prop instead. [Click here](../getting-started.mdx) for more details.
+
+:::
+
+If you need to use multiple tooltips, each with multiple anchors, use the tooltip `id` prop, and the wrapper `tooltipId` prop.
+
+```jsx
+import { Tooltip, TooltipWrapper } from 'react-tooltip';
+
+<TooltipWrapper tooltipId="tooltip-1">
+  <a> ◕‿‿◕ </a>
+</TooltipWrapper>
+<TooltipWrapper tooltipId="tooltip-1">
+  <a> ◕‿‿◕ </a>
+</TooltipWrapper>
+<TooltipWrapper tooltipId="tooltip-2">
+  <a> ◕‿‿◕ </a>
+</TooltipWrapper>
+<TooltipWrapper tooltipId="tooltip-2">
+  <a> ◕‿‿◕ </a>
+</TooltipWrapper>
+<Tooltip id="tooltip-1" content="I am using tooltip-1" />
+<Tooltip id="tooltip-2" content="I am using tooltip-2" />
+```
+
+<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '36px' }}>
+  <WithProvider>
+    <TooltipWrapper tooltipId="tooltip-1">
+      <TooltipAnchor>◕‿‿◕</TooltipAnchor>
+    </TooltipWrapper>
+    <TooltipWrapper tooltipId="tooltip-1">
+      <TooltipAnchor>◕‿‿◕</TooltipAnchor>
+    </TooltipWrapper>
+    <TooltipWrapper tooltipId="tooltip-2">
+      <TooltipAnchor>◕‿‿◕</TooltipAnchor>
+    </TooltipWrapper>
+    <TooltipWrapper tooltipId="tooltip-2">
+      <TooltipAnchor>◕‿‿◕</TooltipAnchor>
+    </TooltipWrapper>
+    <Tooltip id="tooltip-1" content="I am using tooltip-1" />
+    <Tooltip id="tooltip-2" content="I am using tooltip-2" />
+  </WithProvider>
+</div>
