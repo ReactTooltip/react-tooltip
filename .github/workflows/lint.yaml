@@ -18,7 +18,7 @@ jobs:
       - name: ESLint
         run: yarn run eslint
 
-  test:
+  react-versions:
     needs: lint
     strategy:
       matrix:
