@@ -35,4 +35,3 @@ To this:
 
 OBS: do not commit this change or the docs will broken the deployment and will not be updated.
 
-

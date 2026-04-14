@@ -8,6 +8,14 @@ function formatDeltaMs(value: number) {
   return `${sign}${value.toFixed(2)} ms`
 }
 
+function formatBytes(value: number) {
+  if (value >= 1024) {
+    return `${(value / 1024).toFixed(2)} KB`
+  }
+
+  return `${value} B`
+}
+
 function formatMemory(value: number) {
   const sign = value > 0 ? '+' : ''
   const absolute = Math.abs(value)
@@ -23,6 +31,11 @@ function formatPercent(value: number) {
   return `${value.toFixed(1)}%`
 }
 
+function formatByteDelta(value: number) {
+  const sign = value > 0 ? '+' : ''
+  return `${sign}${formatBytes(value)}`
+}
+
 function getDeltaClass(value: number) {
   if (value < 0) {
     return styles.positive
@@ -31,6 +44,64 @@ function getDeltaClass(value: number) {
     return styles.negative
   }
   return styles.muted
+}
+
+const bundleSizeRows = [
+  {
+    artifact: 'react-tooltip.min.mjs',
+    v5Raw: 22704,
+    v6Raw: 20749,
+    rawDelta: -1955,
+    rawDeltaPercent: -8.6,
+    v5Gzip: 7670,
+    v6Gzip: 7192,
+    gzipDelta: -478,
+    gzipDeltaPercent: -6.2,
+  },
+  {
+    artifact: 'react-tooltip.min.cjs',
+    v5Raw: 23414,
+    v6Raw: 21067,
+    rawDelta: -2347,
+    rawDeltaPercent: -10.0,
+    v5Gzip: 7733,
+    v6Gzip: 7167,
+    gzipDelta: -566,
+    gzipDeltaPercent: -7.3,
+  },
+  {
+    artifact: 'react-tooltip.umd.min.js',
+    v5Raw: 23691,
+    v6Raw: 21357,
+    rawDelta: -2334,
+    rawDeltaPercent: -9.9,
+    v5Gzip: 7824,
+    v6Gzip: 7259,
+    gzipDelta: -565,
+    gzipDeltaPercent: -7.2,
+  },
+  {
+    artifact: 'react-tooltip.min.css',
+    v5Raw: 2129,
+    v6Raw: 2129,
+    rawDelta: 0,
+    rawDeltaPercent: 0,
+    v5Gzip: 706,
+    v6Gzip: 706,
+    gzipDelta: 0,
+    gzipDeltaPercent: 0,
+  },
+]
+
+const packageSizeSnapshot = {
+  v5Tarball: 212464,
+  v6Tarball: 114179,
+  tarballDelta: -98285,
+  tarballDeltaPercent: -46.3,
+  v5Unpacked: 894316,
+  v6Unpacked: 483478,
+  unpackedDelta: -410838,
+  unpackedDeltaPercent: -45.9,
 }
 
 export default function BenchmarkPage(): React.JSX.Element {
@@ -280,6 +351,54 @@ export default function BenchmarkPage(): React.JSX.Element {
                   The importance of that difference increases with density. Small memory wins at low
                   counts are easy to dismiss. The same pattern at higher counts is much more
                   consequential.
+                </p>
+              </div>
+              <div className={styles.cardBody}>
+                <h3 className={styles.cardTitle}>Shipped Size</h3>
+                <p className={styles.cardText} style={{ marginBottom: '1rem' }}>
+                  Runtime bundle size was also reduced. The minified JavaScript artifacts shipped by
+                  v6 are smaller than their v5 equivalents across ESM, CJS, and UMD, while the
+                  published CSS stays unchanged.
+                </p>
+                <div className={styles.tableWrap}>
+                  <table className={`${styles.table} ${styles.compactTable}`}>
+                    <thead>
+                      <tr>
+                        <th className={styles.countColumn}>Artifact</th>
+                        <th className={styles.mountGroup}>V5 Raw</th>
+                        <th className={styles.mountGroup}>V6 Raw</th>
+                        <th className={styles.mountGroup}>Raw Delta</th>
+                        <th className={styles.mountGroup}>V5 Gzip</th>
+                        <th className={styles.mountGroup}>V6 Gzip</th>
+                        <th className={styles.mountGroup}>Gzip Delta</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {bundleSizeRows.map((row) => (
+                        <tr key={row.artifact}>
+                          <td className={styles.countCell}>{row.artifact}</td>
+                          <td className={styles.metricCell}>{formatBytes(row.v5Raw)}</td>
+                          <td className={styles.metricCell}>{formatBytes(row.v6Raw)}</td>
+                          <td className={`${styles.metricCell} ${getDeltaClass(row.rawDelta)}`}>
+                            {formatByteDelta(row.rawDelta)} ({formatPercent(row.rawDeltaPercent)})
+                          </td>
+                          <td className={styles.metricCell}>{formatBytes(row.v5Gzip)}</td>
+                          <td className={styles.metricCell}>{formatBytes(row.v6Gzip)}</td>
+                          <td className={`${styles.metricCell} ${getDeltaClass(row.gzipDelta)}`}>
+                            {formatByteDelta(row.gzipDelta)} ({formatPercent(row.gzipDeltaPercent)})
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className={styles.cardText}>
+                  These numbers were measured from the built <b>dist/</b> artifacts and the packed
+                  npm package for each version, so they reflect shipped output rather than source
+                  size.
+                </p>
+                <p className={styles.cardText}>
+                  If you like the project, please give the project a GitHub 🌟
                 </p>
               </div>
             </section>

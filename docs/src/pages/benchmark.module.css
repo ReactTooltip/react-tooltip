@@ -172,8 +172,6 @@
 }
 
 .tableWrap {
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 18px;
   display: block;
   overflow-x: auto;
   overflow-y: hidden;
@@ -185,6 +183,11 @@
   border-collapse: collapse;
   min-width: 1450px;
   width: max-content;
+}
+
+.compactTable {
+  min-width: 100%;
+  width: 100%;
 }
 
 .table thead th {

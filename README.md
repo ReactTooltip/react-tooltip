@@ -181,7 +181,7 @@ We would gladly accept a new maintainer to help out!
 
 ## Contributing
 
-We welcome your contribution! Fork the repo, make some changes, submit a pull-request! Our [contributing](CONTRIBUTION.md) doc has some details.
+We welcome your contribution! Fork the repo, make some changes, submit a pull-request! Our [contributing](CONTRIBUTING.md) doc has some details.
 
 ## License
 
