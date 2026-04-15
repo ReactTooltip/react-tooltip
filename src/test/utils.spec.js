@@ -120,6 +120,11 @@ describe('debounce', () => {
 
   const func = jest.fn()
 
+  afterEach(() => {
+    func.mockClear()
+    jest.clearAllTimers()
+  })
+
   test('execute just once', () => {
     const debouncedFunc = debounce(func, 1000)
     for (let i = 0; i < 100; i += 1) {
@@ -130,14 +135,14 @@ describe('debounce', () => {
 
     jest.runAllTimers()
 
-    expect(func).toBeCalledTimes(1)
+    expect(func).toHaveBeenCalledTimes(1)
   })
 
   test('execute immediately just once', () => {
     const debouncedFunc = debounce(func, 1000, true)
 
     debouncedFunc()
-    expect(func).toBeCalledTimes(1)
+    expect(func).toHaveBeenCalledTimes(1)
 
     for (let i = 0; i < 100; i += 1) {
       debouncedFunc()

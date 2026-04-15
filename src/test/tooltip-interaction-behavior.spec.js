@@ -86,13 +86,20 @@ describe('tooltip interaction behavior', () => {
     await waitForTooltip('global-events-test')
 
     fireEvent.scroll(window)
+    advanceTimers(100)
     await flushMicrotasks()
     await waitForTooltipToStopShowing('global-events-test')
 
+    // Allow the tooltip to fully unmount before re-hovering
+    advanceTimers(100)
+    await flushMicrotasks()
+
     hoverAnchor(anchor, 1000)
+    await flushMicrotasks()
     await waitForTooltip('global-events-test')
 
     fireEvent.resize(window)
+    advanceTimers(100)
     await flushMicrotasks()
     await waitForTooltipToStopShowing('global-events-test')
   })

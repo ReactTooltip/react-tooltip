@@ -100,11 +100,9 @@ describe('tooltip styling and appearance', () => {
 
     const tooltip = await hoverAndFindTooltip()
 
-    expect(tooltip).toHaveStyle({
-      backgroundColor: 'purple',
-      color: 'white',
-      borderRadius: '10px',
-    })
+    expect(tooltip.style.backgroundColor).toBe('purple')
+    expect(tooltip.style.color).toBe('white')
+    expect(tooltip.style.borderRadius).toBe('10px')
   })
 
   test('tooltip with custom opacity', async () => {
