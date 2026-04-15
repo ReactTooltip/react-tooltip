@@ -1,0 +1,52 @@
+name: Feature request
+description: Suggest an improvement or new capability
+title: "[FEAT REQ] "
+labels:
+  - Feature Request
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe the limitation, friction, or missing capability.
+      placeholder: I need a way to...
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      description: Describe the API, behavior, or developer experience you want.
+      placeholder: Add a prop that...
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe workarounds or alternative designs you considered.
+      placeholder: I tried...
+    validations:
+      required: false
+  - type: textarea
+    id: example
+    attributes:
+      label: Example usage
+      description: Show what the feature would look like in real code if you can.
+      render: tsx
+    validations:
+      required: false
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add screenshots, references, prior art, or anything else that helps frame the request.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues and did not find an open match.
+          required: true

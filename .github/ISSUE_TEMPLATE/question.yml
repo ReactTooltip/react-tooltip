@@ -1,0 +1,47 @@
+name: Question
+description: Ask a usage or integration question
+title: "[QUESTION] "
+labels:
+  - Question
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for usage and integration questions.
+
+        If you are reporting a bug or requesting a feature, use the matching template instead.
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: Describe what you are trying to do and what is unclear.
+      placeholder: How can I...
+    validations:
+      required: true
+  - type: textarea
+    id: current-setup
+    attributes:
+      label: Current setup
+      description: Share the relevant environment or integration details.
+      render: markdown
+      value: |
+        - react-tooltip version:
+        - React version:
+        - Framework:
+    validations:
+      required: false
+  - type: textarea
+    id: code
+    attributes:
+      label: Relevant code
+      description: Paste the smallest example that shows your current approach.
+      render: tsx
+    validations:
+      required: false
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any extra details that would help answer the question.
+    validations:
+      required: false
