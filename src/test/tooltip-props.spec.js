@@ -6,7 +6,6 @@ import { TooltipController as Tooltip } from '../components/TooltipController'
 // Tell Jest to mock all timeout functions
 jest.useRealTimers()
 
-// eslint-disable-next-line react/prop-types
 const TooltipProps = ({ id, ...tooltipParams }) => (
   <>
     <span data-tooltip-id={id}>Lorem Ipsum</span>

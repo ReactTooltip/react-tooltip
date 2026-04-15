@@ -1,7 +1,13 @@
 import { useEffect } from 'react'
 import type { MutableRefObject } from 'react'
 import { autoUpdate } from '@floating-ui/dom'
-import { debounce, getScrollParent, clearTimeoutRef } from '../../utils'
+import {
+  debounce,
+  getScrollParent,
+  clearTimeoutRef,
+  parseDataTooltipIdSelector,
+  resolveDataTooltipAnchor,
+} from '../../utils'
 import type {
   AnchorCloseEvents,
   AnchorOpenEvents,
@@ -12,6 +18,7 @@ import type {
 const useTooltipEvents = ({
   activeAnchor,
   anchorElements,
+  anchorSelector,
   clickable,
   closeEvents,
   delayHide,
@@ -37,6 +44,7 @@ const useTooltipEvents = ({
 }: {
   activeAnchor: HTMLElement | null
   anchorElements: HTMLElement[]
+  anchorSelector: string
   clickable: boolean
   closeEvents?: AnchorCloseEvents
   delayHide: number
@@ -61,11 +69,34 @@ const useTooltipEvents = ({
   updateTooltipPosition: () => void
 }) => {
   useEffect(() => {
+    const dataTooltipId = anchorSelector ? parseDataTooltipIdSelector(anchorSelector) : null
+
     const resolveAnchorElement = (target: EventTarget | null) => {
       const targetElement = target as HTMLElement | null
 
       if (!targetElement?.isConnected) {
         return null
+      }
+
+      if (dataTooltipId) {
+        const matchedAnchor = resolveDataTooltipAnchor(targetElement, dataTooltipId)
+
+        if (matchedAnchor && !disableTooltip?.(matchedAnchor)) {
+          return matchedAnchor
+        }
+      } else if (anchorSelector) {
+        try {
+          const matchedAnchor =
+            (targetElement.matches(anchorSelector)
+              ? targetElement
+              : targetElement.closest(anchorSelector)) ?? null
+
+          if (matchedAnchor && !disableTooltip?.(matchedAnchor as HTMLElement)) {
+            return matchedAnchor as HTMLElement
+          }
+        } catch {
+          return null
+        }
       }
 
       return (
@@ -92,7 +123,7 @@ const useTooltipEvents = ({
         y: mouseEvent.clientY,
       }
       handleTooltipPosition(mousePosition)
-      // eslint-disable-next-line no-param-reassign
+
       lastFloatPosition.current = mousePosition
     }
 
@@ -101,7 +132,7 @@ const useTooltipEvents = ({
         return
       }
       const target = event.target as HTMLElement
-      if (!target.isConnected) {
+      if (!target?.isConnected) {
         return
       }
       if (tooltipRef.current?.contains(target)) {
@@ -397,11 +428,9 @@ const useTooltipEvents = ({
     }
 
     const handleMouseOverTooltip = () => {
-      // eslint-disable-next-line no-param-reassign
       hoveringTooltip.current = true
     }
     const handleMouseOutTooltip = () => {
-      // eslint-disable-next-line no-param-reassign
       hoveringTooltip.current = false
       handleHideTooltip()
     }
@@ -418,9 +447,6 @@ const useTooltipEvents = ({
     })
 
     return () => {
-      clearTimeoutRef(tooltipShowDelayTimerRef)
-      clearTimeoutRef(tooltipHideDelayTimerRef)
-
       if (actualGlobalCloseEvents.scroll) {
         window.removeEventListener('scroll', handleScrollResize)
         anchorScrollParent?.removeEventListener('scroll', handleScrollResize)
@@ -454,6 +480,7 @@ const useTooltipEvents = ({
   }, [
     activeAnchor,
     anchorElements,
+    anchorSelector,
     clickable,
     closeEvents,
     delayHide,

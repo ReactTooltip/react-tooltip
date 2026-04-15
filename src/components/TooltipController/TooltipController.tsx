@@ -88,7 +88,6 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       }
       /* c8 ignore start */
       if (process.env.NODE_ENV !== 'production') {
-        // eslint-disable-next-line no-console
         console.warn('[react-tooltip] Do not change `disableStyleInjection` dynamically.')
       }
       /* c8 ignore end */
@@ -153,11 +152,9 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       }
       /* c8 ignore end */
       if (style?.border) {
-        // eslint-disable-next-line no-console
         console.warn('[react-tooltip] Do not set `style.border`. Use `border` prop instead.')
       }
       if (style?.opacity) {
-        // eslint-disable-next-line no-console
         console.warn('[react-tooltip] Do not set `style.opacity`. Use `opacity` prop instead.')
       }
     }, [border, opacity, style?.border, style?.opacity])

@@ -72,6 +72,11 @@ const sharedPlugins = [
     typescript,
     tsconfig: './tsconfig.json',
     noEmitOnError: false,
+    compilerOptions: {
+      declaration: false,
+      declarationMap: false,
+      outDir: './dist',
+    },
   }),
   commonjs({
     include: 'node_modules/**',

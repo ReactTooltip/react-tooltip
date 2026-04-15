@@ -147,7 +147,6 @@ const Tooltip = ({
       removeAriaDescribedBy(activeAnchor)
     }
 
-    // eslint-disable-next-line consistent-return
     return () => {
       // cleanup aria-describedby when the tooltip is closed
       removeAriaDescribedBy(activeAnchor)
@@ -376,18 +375,27 @@ const Tooltip = ({
     clearTimeoutRef(tooltipAutoCloseTimerRef)
   }, [handleShow, setActiveAnchor])
 
-  const anchorElements = useTooltipAnchors({
+  const shouldTrackAnchors =
+    rendered ||
+    defaultIsOpen ||
+    Boolean(isOpen) ||
+    Boolean(activeAnchor) ||
+    Boolean(imperativeOptions?.anchorSelect)
+
+  const { anchorElements, selector: anchorSelector } = useTooltipAnchors({
     id,
     anchorSelect,
     imperativeAnchorSelect: imperativeOptions?.anchorSelect,
     activeAnchor,
     disableTooltip,
     onActiveAnchorRemoved: handleActiveAnchorRemoved,
+    trackAnchors: shouldTrackAnchors,
   })
 
   useTooltipEvents({
     activeAnchor,
     anchorElements,
+    anchorSelector,
     clickable,
     closeEvents,
     delayHide,
@@ -413,11 +421,14 @@ const Tooltip = ({
   })
 
   useEffect(() => {
+    if (!rendered) {
+      return
+    }
     updateTooltipPosition()
-  }, [updateTooltipPosition])
+  }, [rendered, updateTooltipPosition])
 
   useEffect(() => {
-    if (!contentWrapperRef?.current) {
+    if (!rendered || !contentWrapperRef?.current) {
       return () => null
     }
 
@@ -442,9 +453,15 @@ const Tooltip = ({
         clearTimeout(timeoutId)
       }
     }
-  }, [content, contentWrapperRef, updateTooltipPosition])
+  }, [content, contentWrapperRef, rendered, updateTooltipPosition])
 
   useEffect(() => {
+    const shouldResolveInitialActiveAnchor = rendered || defaultIsOpen || Boolean(isOpen)
+
+    if (!shouldResolveInitialActiveAnchor) {
+      return
+    }
+
     const activeAnchorMatchesImperativeSelector = (() => {
       if (!activeAnchor || !imperativeOptions?.anchorSelect) {
         return false
@@ -468,7 +485,15 @@ const Tooltip = ({
       }
       setActiveAnchor(anchorElements[0] ?? null)
     }
-  }, [anchorElements, activeAnchor, imperativeOptions?.anchorSelect, setActiveAnchor])
+  }, [
+    activeAnchor,
+    anchorElements,
+    defaultIsOpen,
+    imperativeOptions?.anchorSelect,
+    isOpen,
+    rendered,
+    setActiveAnchor,
+  ])
 
   useEffect(() => {
     if (defaultIsOpen) {
@@ -505,7 +530,6 @@ const Tooltip = ({
           imperativeAnchor = document.querySelector<HTMLElement>(options.anchorSelect)
         } catch {
           if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
-            // eslint-disable-next-line no-console
             console.warn(`[react-tooltip] "${options.anchorSelect}" is not a valid CSS selector`)
           }
           return

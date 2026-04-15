@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useEffect, useRef, useState } from 'react'
 import { inline, offset } from '@floating-ui/dom'
 import { TooltipController as Tooltip } from './components/TooltipController'
@@ -191,9 +189,7 @@ function App() {
         <Tooltip
           place="bottom"
           anchorSelect="#buttonCallbacks"
-          // eslint-disable-next-line no-console
           afterShow={() => console.log('After show')}
-          // eslint-disable-next-line no-console
           afterHide={() => console.log('After hide')}
           content="Showing tooltip and calling afterShow method"
         />
@@ -203,9 +199,7 @@ function App() {
           openOnClick
           place="bottom"
           anchorSelect="#buttonCallbacksClick"
-          // eslint-disable-next-line no-console
           afterShow={() => console.log('After show with click')}
-          // eslint-disable-next-line no-console
           afterHide={() => console.log('After hide with click')}
           content="Showing tooltip and calling afterShow method"
         />
@@ -215,9 +209,7 @@ function App() {
           delayShow={1000}
           place="bottom"
           anchorSelect="#buttonCallbacksDelay"
-          // eslint-disable-next-line no-console
           afterShow={() => console.log('After show with delay')}
-          // eslint-disable-next-line no-console
           afterHide={() => console.log('After hide with delay')}
           content="Showing tooltip and calling afterShow method"
         />

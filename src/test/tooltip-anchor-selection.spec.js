@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 import React, { useEffect, useState } from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'

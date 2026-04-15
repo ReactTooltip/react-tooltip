@@ -577,9 +577,8 @@ describe('useIsomorphicLayoutEffect', () => {
   test('should use useLayoutEffect when window is defined (browser)', async () => {
     expect(typeof window !== 'undefined').toBe(true)
 
-    const { default: useIsomorphicLayoutEffect } = await import(
-      '../utils/use-isomorphic-layout-effect'
-    )
+    const { default: useIsomorphicLayoutEffect } =
+      await import('../utils/use-isomorphic-layout-effect')
 
     expect(useIsomorphicLayoutEffect).toBe(React.useLayoutEffect)
   })
@@ -587,9 +586,8 @@ describe('useIsomorphicLayoutEffect', () => {
   test('should use useEffect when window is undefined (server)', async () => {
     delete global.window
 
-    const { default: useIsomorphicLayoutEffect } = await import(
-      '../utils/use-isomorphic-layout-effect'
-    )
+    const { default: useIsomorphicLayoutEffect } =
+      await import('../utils/use-isomorphic-layout-effect')
 
     expect(typeof useIsomorphicLayoutEffect).toBe(typeof React.useEffect)
   })

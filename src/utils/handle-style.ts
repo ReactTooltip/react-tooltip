@@ -54,12 +54,10 @@ function injectStyle({
   }
 
   if (type === 'core') {
-    // eslint-disable-next-line no-param-reassign
     id = REACT_TOOLTIP_CORE_STYLES_ID
   }
 
   if (!ref) {
-    // eslint-disable-next-line no-param-reassign
     ref = {}
   }
   const { insertAt } = ref
@@ -92,7 +90,6 @@ function injectStyle({
   }
 
   if (typeof state[type] !== 'undefined') {
-    // eslint-disable-next-line no-param-reassign
     state[type] = true
   } else {
     injected[type] = true // internal global state that jest doesn't have access

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { createRoot } from 'react-dom/client'
 import { Tooltip as TooltipV5 } from '../../docs/node_modules/react-tooltip/dist/react-tooltip.mjs'
-import { Tooltip as TooltipV6 } from '../../dist/react-tooltip.esm.js'
+import { Tooltip as TooltipV6 } from '../../dist/react-tooltip.mjs'
 
 type BenchmarkVersion = 'v5' | 'v6'
 

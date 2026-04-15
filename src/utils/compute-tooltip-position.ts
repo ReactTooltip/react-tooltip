@@ -20,7 +20,7 @@ const computeTooltipPosition = async ({
 }: IComputePositionArgs) => {
   if (!elementReference) {
     // elementReference can be null or undefined and we will not compute the position
-    // eslint-disable-next-line no-console
+
     // console.error('The reference element for tooltip was not defined: ', elementReference)
     return { tooltipStyles: {}, tooltipArrowStyles: {}, place }
   }

@@ -32,7 +32,7 @@
 
     /* Modules */
     "module": "esnext" /* Specify what module code is generated. */,
-    // "rootDir": "./",                                  /* Specify the root folder within your source files. */
+    "rootDir": "." /* Specify the root folder within your source files. */,
     "moduleResolution": "bundler" /* Match the package's bundler-based module resolution. */,
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                   /* Specify multiple folders that act like './node_modules/@types'. */

@@ -6,6 +6,8 @@ import deepEqual from './deep-equal'
 import getScrollParent from './get-scroll-parent'
 import useIsomorphicLayoutEffect from './use-isomorphic-layout-effect'
 import clearTimeoutRef from './clear-timeout-ref'
+import parseDataTooltipIdSelector from './parse-data-tooltip-id-selector'
+import resolveDataTooltipAnchor from './resolve-data-tooltip-anchor'
 
 export type { IComputedPosition }
 export {
@@ -16,4 +18,6 @@ export {
   getScrollParent,
   useIsomorphicLayoutEffect,
   clearTimeoutRef,
+  parseDataTooltipIdSelector,
+  resolveDataTooltipAnchor,
 }

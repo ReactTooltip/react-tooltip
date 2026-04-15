@@ -179,6 +179,11 @@ export default function BenchmarkPage(): React.JSX.Element {
               <div className={styles.cardBody}>
                 <h2 className={styles.cardTitle}>What Changed In V6</h2>
                 <p className={styles.cardText}>
+                  The current snapshot shows a cleaner result than the earlier runs: v6 now trends
+                  lower on mount time, lower on unmount time, and lower on mount memory across the
+                  full range of tested workloads.
+                </p>
+                <p className={styles.cardText}>
                   The v6 work keeps the existing feature surface while reducing the internal cost of
                   supporting it. Most of the gains come from removing repeated work and making
                   high-frequency runtime paths cheaper.
@@ -343,9 +348,9 @@ export default function BenchmarkPage(): React.JSX.Element {
 
                 <h3 className={styles.cardTitle}>The Memory Metrics</h3>
                 <p className={styles.cardText}>
-                  In the current snapshot, v6 consistently trends lower on mount memory. That means
-                  the implementation is not only doing less work during initialization, but also
-                  carrying less state while doing the same job.
+                  In the current snapshot, v6 is lower on mount memory at every tested workload.
+                  That means the implementation is not only doing less work during initialization,
+                  but also carrying less state while doing the same job.
                 </p>
                 <p className={styles.cardText}>
                   The importance of that difference increases with density. Small memory wins at low
@@ -399,7 +404,8 @@ export default function BenchmarkPage(): React.JSX.Element {
                 </p>
                 <p className={styles.cardText}>
                   For the full migration surface between v5 and v6, including API changes and new
-                  capabilities, check the <a href="/docs/upgrade-guide/changelog-v5-v6">v5 to v6 changelog</a>.
+                  capabilities, check the{' '}
+                  <a href="/docs/upgrade-guide/changelog-v5-v6">v5 to v6 changelog</a>.
                 </p>
               </div>
             </section>

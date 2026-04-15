@@ -8,7 +8,7 @@ import { TooltipController as Tooltip } from '../components/TooltipController'
 jest.useRealTimers()
 
 // Component that uses imperative API
-// eslint-disable-next-line react/prop-types
+
 const ImperativeTooltipExample = ({ onAfterShow, onAfterHide }) => {
   const tooltipRef = useRef(null)
 

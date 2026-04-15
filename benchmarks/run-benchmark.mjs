@@ -7,18 +7,19 @@ import { chromium } from 'playwright'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(__dirname, '..')
-const cacheDir = path.join(__dirname, '.cache')
 const resultsDir = path.join(__dirname, 'results')
 const fixtureHtmlPath = path.join(__dirname, 'fixture', 'index.html')
 const fixtureEntryPath = path.join(__dirname, 'fixture', 'app.tsx')
-const cacheHtmlPath = path.join(cacheDir, 'index.html')
-const fixtureBundlePath = path.join(cacheDir, 'app.js')
-const rootReactPath = path.join(rootDir, 'node_modules', 'react', 'index.js')
-const rootReactDomPath = path.join(rootDir, 'node_modules', 'react-dom', 'index.js')
+const rootReactPath = path.join(rootDir, 'node_modules', 'react')
+const rootReactDomPath = path.join(rootDir, 'node_modules', 'react-dom')
 const benchmarkVersion = 3
 const benchmarkLabel = 'precise-memory-gc-separated'
 
-const args = minimist(process.argv.slice(2))
+const args = minimist(process.argv.slice(2), {
+  alias: {
+    w: 'worker',
+  },
+})
 const counts = `${args.counts ?? '50,100,500,2000,5000,10000,25000'}`
   .split(',')
   .map((value) => Number(value.trim()))
@@ -27,6 +28,12 @@ const timeoutMs = Number(args.timeoutMs ?? 1200)
 const repeats = Number(args.repeats ?? 5)
 const warmups = Number(args.warmups ?? 1)
 const executablePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+const workerId = args.worker ? String(args.worker) : null
+const runLabel = args.label ? String(args.label) : null
+const cacheDir = path.resolve(args.cacheDir ?? path.join(__dirname, '.cache'))
+const cacheHtmlPath = path.join(cacheDir, 'index.html')
+const fixtureBundlePath = path.join(cacheDir, 'app.js')
+const benchmarkStartedAt = Date.now()
 
 function aggregateNumbers(values) {
   const sorted = [...values].sort((left, right) => left - right)
@@ -74,11 +81,15 @@ function buildMarkdownReport(result) {
     '# React Tooltip Scaling Benchmark',
     '',
     `- Timestamp: ${result.timestamp}`,
+    `- Duration: ${result.durationMs} ms`,
     `- Browser: ${result.browser}`,
     `- Counts: ${result.counts.join(', ')}`,
     `- Warmups: ${result.warmups}`,
     `- Repeats: ${result.repeats}`,
     `- Timeout: ${result.timeoutMs} ms`,
+    `- Cache directory: ${result.cacheDir}`,
+    `- Worker: ${result.workerId ?? 'standalone'}`,
+    `- Label: ${result.runLabel ?? '—'}`,
     '',
     '| Count | V5 mount | V6 mount | Mount delta | V5 unmount | V6 unmount | Unmount delta | V5 mount mem | V6 mount mem | V5 issues | V6 issues |',
     '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
@@ -95,7 +106,15 @@ function buildMarkdownReport(result) {
 
 function logProgress(message) {
   const timestamp = new Date().toLocaleTimeString()
-  console.log(`[benchmark ${timestamp}] ${message}`)
+  const elapsedSeconds = ((Date.now() - benchmarkStartedAt) / 1000).toFixed(1)
+  const tags = ['benchmark']
+  if (workerId) {
+    tags.push(`worker:${workerId}`)
+  }
+  if (runLabel) {
+    tags.push(runLabel)
+  }
+  console.log(`[${tags.join(' ')} ${timestamp} +${elapsedSeconds}s] ${message}`)
 }
 
 function timestampId() {
@@ -270,6 +289,7 @@ async function main() {
     const result = {
       id: `scaling-${timestampId()}`,
       timestamp: new Date().toISOString(),
+      durationMs: Date.now() - benchmarkStartedAt,
       benchmarkVersion,
       benchmarkLabel,
       benchmarkFeatures: {
@@ -277,6 +297,9 @@ async function main() {
         exposedGc: true,
         gcSeparatedFromTiming: true,
       },
+      cacheDir,
+      workerId,
+      runLabel,
       browser: await page.evaluate(() => window.navigator.userAgent),
       counts,
       warmups,

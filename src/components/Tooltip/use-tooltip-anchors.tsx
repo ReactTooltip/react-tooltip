@@ -24,6 +24,7 @@ const useTooltipAnchors = ({
   activeAnchor,
   disableTooltip,
   onActiveAnchorRemoved,
+  trackAnchors,
 }: {
   id?: string
   anchorSelect?: string
@@ -31,6 +32,7 @@ const useTooltipAnchors = ({
   activeAnchor: HTMLElement | null
   disableTooltip?: (anchorRef: HTMLElement | null) => boolean
   onActiveAnchorRemoved: () => void
+  trackAnchors: boolean
 }) => {
   const [rawAnchorElements, setRawAnchorElements] = useState<HTMLElement[]>([])
   const [selectorError, setSelectorError] = useState<Error | null>(null)
@@ -57,7 +59,7 @@ const useTooltipAnchors = ({
   }, [activeAnchor, selector])
 
   useEffect(() => {
-    if (!selector) {
+    if (!selector || !trackAnchors) {
       setRawAnchorElements([])
       setSelectorError(null)
       return undefined
@@ -67,7 +69,7 @@ const useTooltipAnchors = ({
       setRawAnchorElements(anchors)
       setSelectorError(error)
     })
-  }, [selector])
+  }, [selector, trackAnchors])
 
   useEffect(() => {
     if (!selectorError || warnedSelectorRef.current === selector) {
@@ -76,7 +78,6 @@ const useTooltipAnchors = ({
     warnedSelectorRef.current = selector
     /* c8 ignore start */
     if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
       console.warn(`[react-tooltip] "${selector}" is not a valid CSS selector`)
     }
     /* c8 ignore end */
@@ -97,7 +98,10 @@ const useTooltipAnchors = ({
     }
   }, [activeAnchor, anchorElements, activeAnchorMatchesSelector, onActiveAnchorRemoved])
 
-  return anchorElements
+  return {
+    anchorElements,
+    selector,
+  }
 }
 
 export default useTooltipAnchors
