@@ -50,35 +50,35 @@ const bundleSizeRows = [
   {
     artifact: 'react-tooltip.min.mjs',
     v5Raw: 22704,
-    v6Raw: 20749,
-    rawDelta: -1955,
-    rawDeltaPercent: -8.6,
+    v6Raw: 21846,
+    rawDelta: -858,
+    rawDeltaPercent: -3.8,
     v5Gzip: 7670,
-    v6Gzip: 7192,
-    gzipDelta: -478,
-    gzipDeltaPercent: -6.2,
+    v6Gzip: 7562,
+    gzipDelta: -108,
+    gzipDeltaPercent: -1.4,
   },
   {
     artifact: 'react-tooltip.min.cjs',
     v5Raw: 23414,
-    v6Raw: 21067,
-    rawDelta: -2347,
-    rawDeltaPercent: -10.0,
+    v6Raw: 22163,
+    rawDelta: -1251,
+    rawDeltaPercent: -5.3,
     v5Gzip: 7733,
-    v6Gzip: 7167,
-    gzipDelta: -566,
-    gzipDeltaPercent: -7.3,
+    v6Gzip: 7527,
+    gzipDelta: -206,
+    gzipDeltaPercent: -2.7,
   },
   {
     artifact: 'react-tooltip.umd.min.js',
     v5Raw: 23691,
-    v6Raw: 21357,
-    rawDelta: -2334,
-    rawDeltaPercent: -9.9,
+    v6Raw: 22476,
+    rawDelta: -1215,
+    rawDeltaPercent: -5.1,
     v5Gzip: 7824,
-    v6Gzip: 7259,
-    gzipDelta: -565,
-    gzipDeltaPercent: -7.2,
+    v6Gzip: 7631,
+    gzipDelta: -193,
+    gzipDeltaPercent: -2.5,
   },
   {
     artifact: 'react-tooltip.min.css',
@@ -95,13 +95,13 @@ const bundleSizeRows = [
 
 const packageSizeSnapshot = {
   v5Tarball: 212464,
-  v6Tarball: 114179,
-  tarballDelta: -98285,
-  tarballDeltaPercent: -46.3,
+  v6Tarball: 119728,
+  tarballDelta: -92736,
+  tarballDeltaPercent: -43.6,
   v5Unpacked: 894316,
-  v6Unpacked: 483478,
-  unpackedDelta: -410838,
-  unpackedDeltaPercent: -45.9,
+  v6Unpacked: 517595,
+  unpackedDelta: -376721,
+  unpackedDeltaPercent: -42.1,
 }
 
 export default function BenchmarkPage(): React.JSX.Element {
@@ -398,9 +398,19 @@ export default function BenchmarkPage(): React.JSX.Element {
                   </table>
                 </div>
                 <p className={styles.cardText}>
-                  These numbers were measured from the built <b>dist/</b> artifacts and the packed
-                  npm package for each version, so they reflect shipped output rather than source
-                  size.
+                  These numbers were measured from the published npm packages for{' '}
+                  <b>react-tooltip@5.30.1</b> and <b>react-tooltip@6.0.0-beta.1179.rc.12</b>.
+                </p>
+                <p className={styles.cardText}>
+                  The packed npm tarball also drops from{' '}
+                  {formatBytes(packageSizeSnapshot.v5Tarball)} to{' '}
+                  {formatBytes(packageSizeSnapshot.v6Tarball)} (
+                  {formatByteDelta(packageSizeSnapshot.tarballDelta)}{' '}
+                  {formatPercent(packageSizeSnapshot.tarballDeltaPercent)}), and the unpacked
+                  package drops from {formatBytes(packageSizeSnapshot.v5Unpacked)} to{' '}
+                  {formatBytes(packageSizeSnapshot.v6Unpacked)} (
+                  {formatByteDelta(packageSizeSnapshot.unpackedDelta)}{' '}
+                  {formatPercent(packageSizeSnapshot.unpackedDeltaPercent)}).
                 </p>
                 <p className={styles.cardText}>
                   For the full migration surface between v5 and v6, including API changes and new
