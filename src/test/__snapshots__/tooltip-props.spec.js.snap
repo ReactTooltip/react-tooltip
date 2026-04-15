@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`tooltip props clickable tooltip 1`] = `
 <div>
@@ -96,13 +96,12 @@ exports[`tooltip props tooltip with disableTooltip return false 1`] = `
 exports[`tooltip props tooltip with float 1`] = `
 <div>
   <span
-    aria-describedby="example-float"
     data-tooltip-id="example-float"
   >
     Lorem Ipsum
   </span>
   <div
-    class="react-tooltip react-tooltip__place-top react-tooltip__show"
+    class="react-tooltip react-tooltip__place-top react-tooltip__closing"
     id="example-float"
     role="tooltip"
     style="left: 5px; top: -10px;"

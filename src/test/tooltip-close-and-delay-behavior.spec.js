@@ -429,4 +429,68 @@ describe('tooltip close and delay behavior', () => {
 
     expect(document.getElementById('transition-property-guard-test')).toBeInTheDocument()
   })
+
+  test('does not switch active anchor before delayShow fires when moving between anchors', async () => {
+    const renderFn = jest.fn(({ activeAnchor }) => {
+      return <span>{activeAnchor?.textContent ?? 'none'}</span>
+    })
+
+    render(
+      <>
+        <span data-tooltip-id="cross-anchor-delay-test">Anchor A</span>
+        <span data-tooltip-id="cross-anchor-delay-test">Anchor B</span>
+        <TooltipController id="cross-anchor-delay-test" render={renderFn} delayShow={200} />
+      </>,
+    )
+
+    const anchorA = screen.getByText('Anchor A')
+    const anchorB = screen.getByText('Anchor B')
+
+    // Hover anchor A and wait for delayShow to fire (tooltip renders on A)
+    hoverAnchor(anchorA, 250)
+    await waitForTooltip('cross-anchor-delay-test')
+
+    const tooltip = document.getElementById('cross-anchor-delay-test')
+    expect(tooltip.textContent).toBe('Anchor A')
+
+    // Move to anchor B while tooltip is visible on A
+    unhoverAnchor(anchorA)
+    hoverAnchor(anchorB)
+
+    // During the delay, the tooltip content should still reflect anchor A
+    advanceTimers(50)
+    expect(tooltip.textContent).toBe('Anchor A')
+
+    // After the delay fires, the anchor switches to B
+    advanceTimers(200)
+    expect(tooltip.textContent).toBe('Anchor B')
+  })
+
+  test('defers anchor switch until delayShow completes for initial show', () => {
+    render(
+      <>
+        <span data-tooltip-id="deferred-anchor-test">Anchor A</span>
+        <span data-tooltip-id="deferred-anchor-test">Anchor B</span>
+        <TooltipController
+          id="deferred-anchor-test"
+          content="Deferred Anchor Test"
+          delayShow={200}
+        />
+      </>,
+    )
+
+    const anchorB = screen.getByText('Anchor B')
+
+    // Hover anchor B — tooltip is not yet visible, so delay applies
+    hoverAnchor(anchorB)
+    advanceTimers(100)
+
+    // Before delay fires, tooltip should NOT be in the document
+    expect(document.getElementById('deferred-anchor-test')).not.toBeInTheDocument()
+
+    // After full delay, tooltip should appear
+    advanceTimers(150)
+    const tooltip = document.getElementById('deferred-anchor-test')
+    expect(tooltip).toBeInTheDocument()
+  })
 })

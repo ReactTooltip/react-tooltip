@@ -164,7 +164,20 @@ const useTooltipEvents = ({
       } else {
         handleShow(true)
       }
-      setActiveAnchor(anchor)
+      if (delayShow && activeAnchor && anchor !== activeAnchor) {
+        // Moving to a different anchor while one is already active — defer the anchor
+        // switch until the show delay fires to prevent content/position from updating
+        // before visibility transitions complete.
+        if (tooltipShowDelayTimerRef.current) {
+          clearTimeout(tooltipShowDelayTimerRef.current)
+        }
+        tooltipShowDelayTimerRef.current = setTimeout(() => {
+          setActiveAnchor(anchor)
+          handleShow(true)
+        }, delayShow)
+      } else {
+        setActiveAnchor(anchor)
+      }
 
       if (tooltipHideDelayTimerRef.current) {
         clearTimeout(tooltipHideDelayTimerRef.current)
