@@ -21,6 +21,7 @@ jobs:
   react-versions:
     needs: lint
     strategy:
+      fail-fast: false
       matrix:
         react-version: ['16.14', '17', '18', '19']
     runs-on: ubuntu-latest

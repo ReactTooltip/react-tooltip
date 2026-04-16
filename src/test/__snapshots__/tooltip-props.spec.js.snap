@@ -96,12 +96,13 @@ exports[`tooltip props tooltip with disableTooltip return false 1`] = `
 exports[`tooltip props tooltip with float 1`] = `
 <div>
   <span
+    aria-describedby="example-float"
     data-tooltip-id="example-float"
   >
     Lorem Ipsum
   </span>
   <div
-    class="react-tooltip react-tooltip__place-top react-tooltip__closing"
+    class="react-tooltip react-tooltip__place-top react-tooltip__show"
     id="example-float"
     role="tooltip"
     style="left: 5px; top: -10px;"

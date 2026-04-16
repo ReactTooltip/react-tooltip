@@ -164,6 +164,9 @@ describe('tooltip props', () => {
 
     const tooltip = await screen.findByRole('tooltip')
     expect(tooltip).toHaveAttribute('style')
+    await waitFor(() => {
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'example-float')
+    })
 
     expect(tooltip).toBeInTheDocument()
     expect(container).toMatchSnapshot()
