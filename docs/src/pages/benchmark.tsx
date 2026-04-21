@@ -232,23 +232,6 @@ export default function BenchmarkPage(): React.JSX.Element {
                   stays resident after setup, especially when many anchors are active on the same
                   page.
                 </p>
-
-                <h3 className={styles.cardTitle}>How To Read The Numbers</h3>
-                <p className={styles.cardText}>
-                  Read the table in three passes: raw values first, deltas second, spread last.
-                </p>
-                <ul className={styles.signalList}>
-                  <li>
-                    <strong>Raw values</strong> show the measured result for each version.
-                  </li>
-                  <li>
-                    <strong>Delta</strong> shows direction. Negative values favor v6 because they
-                    mean less time or memory used.
-                  </li>
-                  <li>
-                    <strong>Spread</strong> shows how stable the metric was across repeated runs.
-                  </li>
-                </ul>
               </div>
               <div className={styles.cardBody}>
                 <h2 className={styles.cardTitle}>Benchmark Results</h2>
@@ -309,9 +292,10 @@ export default function BenchmarkPage(): React.JSX.Element {
                   </table>
                 </div>
                 <p className={styles.note}>
-                  <strong>Delta</strong> compares v5 and v6 for the same scenario.{' '}
+                  <strong>Delta</strong> compares v5 and v6 for the same scenario. <br />
                   <strong>Variation</strong> reflects how much repeated runs moved for that metric
-                  across repeated runs of the same scenario.
+                  across repeated runs of the same scenario. <br />
+                  <strong>Spread</strong> shows how stable the metric was across repeated runs.
                 </p>
                 <p className={styles.cardText}>
                   Each row summarizes {benchmarkSnapshot.inputFiles} benchmark runs for the same
