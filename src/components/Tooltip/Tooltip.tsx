@@ -81,6 +81,7 @@ const Tooltip = ({
   const lastFloatPosition = useRef<IPosition | null>(null)
   const hoveringTooltip = useRef(false)
   const mounted = useRef(false)
+  const cachedTransitionShowDelay = useRef<number | null>(null)
 
   /**
    * useLayoutEffect runs before useEffect,
@@ -185,8 +186,13 @@ const Tooltip = ({
       /**
        * see `onTransitionEnd` on tooltip wrapper
        */
-      const style = getComputedStyle(document.body)
-      const transitionShowDelay = cssTimeToMs(style.getPropertyValue('--rt-transition-show-delay'))
+      if (cachedTransitionShowDelay.current === null) {
+        const style = getComputedStyle(document.body)
+        cachedTransitionShowDelay.current = cssTimeToMs(
+          style.getPropertyValue('--rt-transition-show-delay'),
+        )
+      }
+      const transitionShowDelay = cachedTransitionShowDelay.current
       missedTransitionTimerRef.current = setTimeout(() => {
         /**
          * if the tooltip switches from `show === true` to `show === false` too fast

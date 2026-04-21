@@ -161,22 +161,26 @@ async function runTasksInParallel(tasks, totalWorkers) {
         `${workerLabel} starting pass ${task.runNumber}/${tasks.length} (${completedTasks}/${tasks.length} completed)`,
       )
 
-      await runCommand(
-        'node',
-        [
-          './benchmarks/run-benchmark.mjs',
-          '--worker',
-          String(workerNumber),
-          '--label',
-          task.label,
-          '--cacheDir',
-          cacheDir,
-          ...passthroughArgs,
-        ],
-        {
-          label: `${workerLabel} ${task.label}`,
-        },
-      )
+      try {
+        await runCommand(
+          'node',
+          [
+            './benchmarks/run-benchmark.mjs',
+            '--worker',
+            String(workerNumber),
+            '--label',
+            task.label,
+            '--cacheDir',
+            cacheDir,
+            ...passthroughArgs,
+          ],
+          {
+            label: `${workerLabel} ${task.label}`,
+          },
+        )
+      } catch (error) {
+        logSeries(`${workerLabel} pass ${task.runNumber} FAILED: ${error.message}`)
+      }
 
       completedTasks += 1
       const elapsedMs = Date.now() - taskStartedAt
@@ -201,9 +205,7 @@ async function main() {
   logSeries('Building Rollup production bundle')
   await runCommand('yarn', ['build'], { label: 'build' })
 
-  logSeries(
-    `Starting scaling series with ${runCount} run(s) across ${workerCount} worker(s)`,
-  )
+  logSeries(`Starting scaling series with ${runCount} run(s) across ${workerCount} worker(s)`)
 
   const tasks = buildRunTasks(runCount)
   await runTasksInParallel(tasks, workerCount)

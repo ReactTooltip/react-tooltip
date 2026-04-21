@@ -4,7 +4,6 @@
   left: 0;
   pointer-events: none;
   opacity: 0;
-  will-change: opacity;
 }
 
 .fixed {
@@ -35,11 +34,13 @@
 .show {
   opacity: var(--rt-opacity);
   transition: opacity var(--rt-transition-show-delay) ease-out;
+  will-change: opacity;
 }
 
 .closing {
   opacity: 0;
   transition: opacity var(--rt-transition-closing-delay) ease-in;
+  will-change: opacity;
 }
 
 /** end - core styles **/

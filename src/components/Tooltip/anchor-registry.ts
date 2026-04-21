@@ -65,13 +65,34 @@ function refreshAllEntries() {
   })
 }
 
+let refreshScheduled = false
+
+function scheduleRefreshAllEntries() {
+  if (refreshScheduled) {
+    return
+  }
+  refreshScheduled = true
+  if (typeof requestAnimationFrame === 'function') {
+    requestAnimationFrame(() => {
+      refreshScheduled = false
+      refreshAllEntries()
+    })
+  } else {
+    // Fallback for environments without requestAnimationFrame (e.g., JSDOM/SSR)
+    Promise.resolve().then(() => {
+      refreshScheduled = false
+      refreshAllEntries()
+    })
+  }
+}
+
 function ensureDocumentObserver() {
   if (documentObserver || typeof MutationObserver === 'undefined') {
     return
   }
 
   documentObserver = new MutationObserver(() => {
-    refreshAllEntries()
+    scheduleRefreshAllEntries()
   })
 
   documentObserver.observe(document.body, {
@@ -121,4 +142,14 @@ export function subscribeAnchorSelector(selector: string, subscriber: AnchorRegi
     }
     cleanupDocumentObserverIfUnused()
   }
+}
+
+/** @internal Reset module state between tests */
+export function resetAnchorRegistry() {
+  registry.clear()
+  if (documentObserver) {
+    documentObserver.disconnect()
+    documentObserver = null
+  }
+  refreshScheduled = false
 }

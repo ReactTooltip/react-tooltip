@@ -39,12 +39,11 @@ The `render` prop can be used to render the tooltip content dynamically based on
 The function signature is as follows:
 
 ```ts
-(render: { content: string | null; activeAnchor: HTMLElement | null }) => ChildrenType
+(render: { content: ReactNode | null; activeAnchor: HTMLElement | null }) => ReactNode
 ```
 
-- `content` is available for quick access to the `data-tooltip-content` attribute on the anchor element
+- `content` is the tooltip content (from the `content` prop or the `data-tooltip-content` attribute on the anchor element)
 - `activeAnchor` is a ref to the anchor element currently active (or `null` if no element is active)
-- `ChildrenType` is essentially the same as `React.ReactNode`
 
 ```jsx
 import { Tooltip } from 'react-tooltip';

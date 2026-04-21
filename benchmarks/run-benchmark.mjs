@@ -27,7 +27,7 @@ const counts = `${args.counts ?? '50,100,500,2000,5000,10000,25000'}`
 const timeoutMs = Number(args.timeoutMs ?? 1200)
 const repeats = Number(args.repeats ?? 5)
 const warmups = Number(args.warmups ?? 1)
-const executablePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+const executablePath = args.executablePath ?? null
 const workerId = args.worker ? String(args.worker) : null
 const runLabel = args.label ? String(args.label) : null
 const cacheDir = path.resolve(args.cacheDir ?? path.join(__dirname, '.cache'))
@@ -160,11 +160,15 @@ async function main() {
   await ensureFixtureBundle()
   logProgress('Launching headless Chrome')
 
-  const browser = await chromium.launch({
-    executablePath,
+  const launchOptions = {
     headless: true,
     args: ['--enable-precise-memory-info', '--js-flags=--expose-gc'],
-  })
+  }
+  if (executablePath) {
+    launchOptions.executablePath = executablePath
+  }
+
+  const browser = await chromium.launch(launchOptions)
 
   try {
     const page = await browser.newPage()
@@ -224,10 +228,21 @@ async function main() {
       )
     }
 
-    const v5 = await runVersion('v5')
-    logProgress('Completed V5 run')
-    const v6 = await runVersion('v6')
-    logProgress('Completed V6 run')
+    const versions = ['v5', 'v6']
+    // Randomize execution order to avoid first-run bias
+    if (Math.random() < 0.5) {
+      versions.reverse()
+    }
+    logProgress(`Execution order: ${versions.join(' → ')}`)
+
+    const results = {}
+    for (const version of versions) {
+      results[version] = await runVersion(version)
+      logProgress(`Completed ${version.toUpperCase()} run`)
+    }
+
+    const v5 = results.v5
+    const v6 = results.v6
 
     const summary = counts.map((count) => {
       const v5Samples = v5.samplesByCount.filter((sample) => sample.count === count)

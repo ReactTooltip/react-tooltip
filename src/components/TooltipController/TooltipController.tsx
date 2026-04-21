@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, memo } from 'react'
+import React, { useCallback, useEffect, useRef, useState, memo } from 'react'
 import clsx from 'clsx'
 import { Tooltip } from '../Tooltip'
 import type {
@@ -64,6 +64,15 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     >({})
     const previousActiveAnchorRef = useRef<HTMLElement | null>(null)
     const styleInjectionRef = useRef(disableStyleInjection)
+
+    const handleSetActiveAnchor = useCallback((anchor: HTMLElement | null) => {
+      setActiveAnchor((prev) => {
+        if (!anchor?.isSameNode(prev)) {
+          previousActiveAnchorRef.current = prev
+        }
+        return anchor
+      })
+    }, [])
 
     /* c8 ignore start */
     const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
@@ -245,14 +254,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       disableTooltip,
       activeAnchor,
       previousActiveAnchor: previousActiveAnchorRef.current,
-      setActiveAnchor: (anchor: HTMLElement | null) => {
-        setActiveAnchor((prev) => {
-          if (!anchor?.isSameNode(prev)) {
-            previousActiveAnchorRef.current = prev
-          }
-          return anchor
-        })
-      },
+      setActiveAnchor: handleSetActiveAnchor,
       role,
     }
 
