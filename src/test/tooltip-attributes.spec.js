@@ -36,14 +36,14 @@ describe('tooltip attributes', () => {
 
     await userEvent.hover(anchorElement)
 
-    const tooltip = await screen.findByRole('tooltip')
-    expect(tooltip).toHaveAttribute('style')
-
-    expect(anchorElement).toHaveAttribute('data-tooltip-content')
     await waitFor(() => {
+      const tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveAttribute('style')
       expect(anchorElement).toHaveAttribute('aria-describedby', 'basic-example-attr')
     })
-    expect(tooltip).toBeInTheDocument()
+
+    expect(anchorElement).toHaveAttribute('data-tooltip-content')
+    expect(screen.getByRole('tooltip')).toBeInTheDocument()
   })
 
   test('tooltip with place', async () => {
@@ -58,15 +58,15 @@ describe('tooltip attributes', () => {
 
     await userEvent.hover(anchorElement)
 
-    const tooltip = await screen.findByRole('tooltip')
-    expect(tooltip).toHaveAttribute('style')
+    await waitFor(() => {
+      const tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveAttribute('style')
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'example-place-attr')
+    })
 
     expect(anchorElement).toHaveAttribute('data-tooltip-place')
     expect(anchorElement).toHaveAttribute('data-tooltip-content')
-    await waitFor(() => {
-      expect(anchorElement).toHaveAttribute('aria-describedby', 'example-place-attr')
-    })
-    expect(tooltip).toBeInTheDocument()
+    expect(screen.getByRole('tooltip')).toBeInTheDocument()
   })
 
   test('tooltip with class name', async () => {
@@ -81,13 +81,13 @@ describe('tooltip attributes', () => {
 
     await userEvent.hover(anchorElement)
 
-    const tooltip = await screen.findByRole('tooltip')
-    expect(tooltip).toHaveClass('tooltip-class-name')
-
-    expect(anchorElement).toHaveAttribute('data-tooltip-class-name')
     await waitFor(() => {
+      const tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveClass('tooltip-class-name')
       expect(anchorElement).toHaveAttribute('aria-describedby', 'example-class-name-attr')
     })
-    expect(tooltip).toBeInTheDocument()
+
+    expect(anchorElement).toHaveAttribute('data-tooltip-class-name')
+    expect(screen.getByRole('tooltip')).toBeInTheDocument()
   })
 })

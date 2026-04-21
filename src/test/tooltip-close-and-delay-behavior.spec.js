@@ -77,6 +77,10 @@ describe('tooltip close and delay behavior', () => {
     expect(screen.getByRole('tooltip')).toBeInTheDocument()
 
     fireEvent.mouseLeave(tooltip)
+    advanceTimers(100)
+    // Second advancement needed: the first fires handleShow(false) timeout,
+    // which creates the missedTransitionTimer during the effect flush
+    advanceTimers(100)
     await waitForTooltipToClose('clickable-no-click-test')
   })
 

@@ -114,7 +114,7 @@ exports[`tooltip props tooltip with float 1`] = `
     </div>
     <div
       class="react-tooltip-arrow"
-      style="--rt-arrow-size: 8px; left: -1px; bottom: -3px;"
+      style="--rt-arrow-size: 8px; left: 0px; bottom: -3px;"
     />
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, fireEvent, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import { TooltipController as Tooltip } from '../components/TooltipController'
@@ -160,15 +160,27 @@ describe('tooltip props', () => {
     const { container } = render(<TooltipProps id="example-float" content="Hello World!" float />)
     const anchorElement = screen.getByText('Lorem Ipsum')
 
-    await userEvent.hover(anchorElement)
+    // Use act to ensure state updates and effects are flushed between steps
+    await act(async () => {
+      fireEvent.mouseEnter(anchorElement)
+    })
 
-    const tooltip = await screen.findByRole('tooltip')
-    expect(tooltip).toHaveAttribute('style')
+    // Fire pointermove after activeAnchor is set (batching in older React prevents it during hover)
+    await act(async () => {
+      anchorElement.dispatchEvent(
+        new MouseEvent('pointermove', { clientX: 5, clientY: 0, bubbles: true }),
+      )
+      // Allow microtask (computeTooltipPosition promise) to resolve
+      await new Promise((r) => setTimeout(r, 50))
+    })
+
     await waitFor(() => {
+      const tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveAttribute('style')
       expect(anchorElement).toHaveAttribute('aria-describedby', 'example-float')
     })
 
-    expect(tooltip).toBeInTheDocument()
+    expect(screen.getByRole('tooltip')).toBeInTheDocument()
     expect(container).toMatchSnapshot()
   })
 
@@ -197,9 +209,12 @@ describe('tooltip props', () => {
     const anchorElement = screen.getByText('Lorem Ipsum')
     await userEvent.hover(anchorElement)
 
-    const tooltip = await screen.findByRole('tooltip')
+    await waitFor(() => {
+      const tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toBeInTheDocument()
+      expect(tooltip).toHaveClass('react-tooltip__show')
+    })
 
-    expect(tooltip).toBeInTheDocument()
     expect(container).toMatchSnapshot()
   })
 

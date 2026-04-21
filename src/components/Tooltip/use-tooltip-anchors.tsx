@@ -56,7 +56,8 @@ const useTooltipAnchors = ({
     } catch {
       return false
     }
-  }, [activeAnchor, selector])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeAnchor, selector, anchorElements])
 
   useEffect(() => {
     if (!selector || !trackAnchors) {
