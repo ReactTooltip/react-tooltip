@@ -26,7 +26,9 @@ Why do we show ads on our docs?
 
 Documentation for V4 - [Github Page](https://reacttooltip.github.io/react-tooltip/).
 
-Documentation for V5 - [ReactTooltip](https://react-tooltip.com/docs/getting-started).
+Documentation for V5 - [ReactTooltip](https://react-tooltip.com/docs/5.x/getting-started).
+
+Documentation for V6 - [ReactTooltip](https://react-tooltip.com/docs/getting-started).
 
 ---
 
