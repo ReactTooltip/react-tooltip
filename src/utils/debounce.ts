@@ -11,12 +11,13 @@ const debounce = <T, A extends any[]>(
   immediate?: boolean,
 ) => {
   let timeout: NodeJS.Timeout | null = null
+  let currentFunc = func
 
   const debounced = function debounced(this: T, ...args: A): void {
     const later = () => {
       timeout = null
       if (!immediate) {
-        func.apply(this, args)
+        currentFunc.apply(this, args)
       }
     }
 
@@ -25,7 +26,7 @@ const debounce = <T, A extends any[]>(
        * there's no need to clear the timeout
        * since we expect it to resolve and set `timeout = null`
        */
-      func.apply(this, args)
+      currentFunc.apply(this, args)
       timeout = setTimeout(later, wait)
     }
 
@@ -45,6 +46,10 @@ const debounce = <T, A extends any[]>(
     /* c8 ignore end */
     clearTimeout(timeout)
     timeout = null
+  }
+
+  debounced.setCallback = (newFunc: (...args: A) => void) => {
+    currentFunc = newFunc
   }
 
   return debounced

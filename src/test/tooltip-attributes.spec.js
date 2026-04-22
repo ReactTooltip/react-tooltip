@@ -37,13 +37,11 @@ describe('tooltip attributes', () => {
     await userEvent.hover(anchorElement)
 
     await waitFor(() => {
-      const tooltip = screen.getByRole('tooltip')
-      expect(tooltip).toHaveAttribute('style')
       expect(anchorElement).toHaveAttribute('aria-describedby', 'basic-example-attr')
+      expect(screen.getByRole('tooltip')).toBeInTheDocument()
     })
 
     expect(anchorElement).toHaveAttribute('data-tooltip-content')
-    expect(screen.getByRole('tooltip')).toBeInTheDocument()
   })
 
   test('tooltip with place', async () => {

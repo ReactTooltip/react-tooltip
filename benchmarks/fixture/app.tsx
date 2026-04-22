@@ -12,12 +12,14 @@ type FixtureState = {
   version: BenchmarkVersion
   count: number
   renderMode: RenderMode
+  place?: string
 }
 
 type ScenarioSample = {
   count: number
   mountDurationMs: number | null
   unmountDurationMs: number | null
+  updateDurationMs: number | null
   mountMemoryDeltaBytes: number | null
   unmountMemoryDeltaBytes: number | null
   timedOut: boolean
@@ -98,7 +100,7 @@ async function waitUntil(predicate: () => boolean, timeoutMs: number) {
   return false
 }
 
-function BenchmarkFixture({ version, count }: FixtureState) {
+function BenchmarkFixture({ version, count, place }: FixtureState) {
   const TooltipComponent = version === 'v5' ? TooltipV5 : TooltipV6
   const tooltipId = `benchmark-tooltip-${version}`
 
@@ -128,7 +130,7 @@ function BenchmarkFixture({ version, count }: FixtureState) {
           </button>
         ))}
       </div>
-      <TooltipComponent id={tooltipId} />
+      <TooltipComponent id={tooltipId} place={place} />
     </div>
   )
 }
@@ -179,8 +181,11 @@ async function runScalingBenchmark({
   const samplesByCount: ScenarioSample[] = []
 
   for (const count of counts) {
-    for (let warmupIndex = 0; warmupIndex < warmups; warmupIndex += 1) {
-      onProgress?.(`count=${count} warmup ${warmupIndex + 1}/${warmups}`)
+    // Scale warmups for large counts to ensure JIT is fully warm
+    const effectiveWarmups = count >= 10000 ? Math.max(warmups, 2) : warmups
+
+    for (let warmupIndex = 0; warmupIndex < effectiveWarmups; warmupIndex += 1) {
+      onProgress?.(`count=${count} warmup ${warmupIndex + 1}/${effectiveWarmups}`)
       await renderFixture({
         version,
         count: 0,
@@ -210,7 +215,9 @@ async function runScalingBenchmark({
       })
       await nextFrame()
 
-      const mountMemoryBefore = await readStableHeapBytes()
+      // Settle memory before mount measurement
+      await collectGarbage()
+      const mountMemoryBefore = readUsedHeapBytes()
       const mountStartedAt = window.performance.now()
 
       await renderFixture({
@@ -223,11 +230,34 @@ async function runScalingBenchmark({
         return document.querySelectorAll('[data-tooltip-id]').length === count
       }, timeoutMs)
 
-      await nextFrame()
-
       const mountEndedAt = window.performance.now()
 
-      const mountMemoryAfter = await readStableHeapBytes()
+      // Settle memory after mount, outside timing window
+      await nextFrame()
+      await collectGarbage()
+      const mountMemoryAfter = readUsedHeapBytes()
+
+      // --- Update measurement: change `place` prop to trigger a re-render cycle ---
+      const updateStartedAt = window.performance.now()
+
+      await renderFixture({
+        version,
+        count,
+        renderMode,
+        place: 'bottom',
+      })
+      await nextFrame()
+
+      const updateEndedAt = window.performance.now()
+
+      // Restore original place for a clean unmount
+      await renderFixture({
+        version,
+        count,
+        renderMode,
+      })
+      await nextFrame()
+
       const unmountMemoryBefore = mountMemoryAfter
       const unmountStartedAt = window.performance.now()
 
@@ -237,16 +267,17 @@ async function runScalingBenchmark({
         return document.querySelectorAll('[data-tooltip-id]').length === 0
       }, timeoutMs)
 
-      await nextFrame()
-
       const unmountEndedAt = window.performance.now()
 
-      const unmountMemoryAfter = await readStableHeapBytes()
+      await nextFrame()
+      await collectGarbage()
+      const unmountMemoryAfter = readUsedHeapBytes()
 
       samplesByCount.push({
         count,
         mountDurationMs: mountReady ? mountEndedAt - mountStartedAt : null,
         unmountDurationMs: unmountReady ? unmountEndedAt - unmountStartedAt : null,
+        updateDurationMs: mountReady ? updateEndedAt - updateStartedAt : null,
         mountMemoryDeltaBytes:
           mountReady && mountMemoryBefore !== null && mountMemoryAfter !== null
             ? mountMemoryAfter - mountMemoryBefore

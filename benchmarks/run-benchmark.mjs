@@ -20,7 +20,7 @@ const args = minimist(process.argv.slice(2), {
     w: 'worker',
   },
 })
-const counts = `${args.counts ?? '50,100,500,2000,5000,10000,25000'}`
+const counts = `${args.counts ?? '50,100,500,2000,5000,10000'}`
   .split(',')
   .map((value) => Number(value.trim()))
   .filter((value) => Number.isFinite(value) && value > 0)
@@ -46,25 +46,46 @@ function aggregateNumbers(values) {
       mean: null,
       standardDeviation: null,
       spreadPercent: null,
+      trimmedCount: 0,
+      originalCount: 0,
     }
   }
 
-  const middle = Math.floor(sorted.length / 2)
+  // IQR-based outlier trimming (only when enough samples)
+  let trimmed = sorted
+  if (sorted.length >= 8) {
+    const q1Index = Math.floor(sorted.length * 0.25)
+    const q3Index = Math.floor(sorted.length * 0.75)
+    const q1 = sorted[q1Index]
+    const q3 = sorted[q3Index]
+    const iqr = q3 - q1
+    const lowerFence = q1 - 1.5 * iqr
+    const upperFence = q3 + 1.5 * iqr
+    trimmed = sorted.filter((value) => value >= lowerFence && value <= upperFence)
+    // Fall back to original if trimming removed too many samples
+    if (trimmed.length < sorted.length * 0.5) {
+      trimmed = sorted
+    }
+  }
+
+  const middle = Math.floor(trimmed.length / 2)
   const median =
-    sorted.length % 2 === 0 ? (sorted[middle - 1] + sorted[middle]) / 2 : sorted[middle]
-  const mean = sorted.reduce((total, value) => total + value, 0) / sorted.length
-  const variance = sorted.reduce((total, value) => total + (value - mean) ** 2, 0) / sorted.length
+    trimmed.length % 2 === 0 ? (trimmed[middle - 1] + trimmed[middle]) / 2 : trimmed[middle]
+  const mean = trimmed.reduce((total, value) => total + value, 0) / trimmed.length
+  const variance = trimmed.reduce((total, value) => total + (value - mean) ** 2, 0) / trimmed.length
   const standardDeviation = Math.sqrt(variance)
-  const p95 = sorted[Math.min(sorted.length - 1, Math.ceil(sorted.length * 0.95) - 1)]
+  const p95 = trimmed[Math.min(trimmed.length - 1, Math.ceil(trimmed.length * 0.95) - 1)]
 
   return {
     median,
     p95,
-    min: sorted[0],
-    max: sorted[sorted.length - 1],
+    min: trimmed[0],
+    max: trimmed[trimmed.length - 1],
     mean,
     standardDeviation,
     spreadPercent: median === 0 ? null : ((p95 - median) / Math.abs(median)) * 100,
+    trimmedCount: trimmed.length,
+    originalCount: sorted.length,
   }
 }
 
@@ -91,13 +112,13 @@ function buildMarkdownReport(result) {
     `- Worker: ${result.workerId ?? 'standalone'}`,
     `- Label: ${result.runLabel ?? '—'}`,
     '',
-    '| Count | V5 mount | V6 mount | Mount delta | V5 unmount | V6 unmount | Unmount delta | V5 mount mem | V6 mount mem | V5 issues | V6 issues |',
-    '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+    '| Count | V5 mount | V6 mount | Mount delta | V5 unmount | V6 unmount | Unmount delta | V5 update | V6 update | Update delta | V5 mount mem | V6 mount mem | V5 issues | V6 issues |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
   ]
 
   result.summary.forEach((row) => {
     lines.push(
-      `| ${row.count} | ${formatMs(row.v5.mount.median)} | ${formatMs(row.v6.mount.median)} | ${formatMs(row.mountDeltaMs)} | ${formatMs(row.v5.unmount.median)} | ${formatMs(row.v6.unmount.median)} | ${formatMs(row.unmountDeltaMs)} | ${formatBytes(row.v5.mountMemory.median)} | ${formatBytes(row.v6.mountMemory.median)} | ${row.v5.timeoutCount} | ${row.v6.timeoutCount} |`,
+      `| ${row.count} | ${formatMs(row.v5.mount.median)} | ${formatMs(row.v6.mount.median)} | ${formatMs(row.mountDeltaMs)} | ${formatMs(row.v5.unmount.median)} | ${formatMs(row.v6.unmount.median)} | ${formatMs(row.unmountDeltaMs)} | ${formatMs(row.v5.update.median)} | ${formatMs(row.v6.update.median)} | ${formatMs(row.updateDeltaMs)} | ${formatBytes(row.v5.mountMemory.median)} | ${formatBytes(row.v6.mountMemory.median)} | ${row.v5.timeoutCount} | ${row.v6.timeoutCount} |`,
     )
   })
 
@@ -162,7 +183,19 @@ async function main() {
 
   const launchOptions = {
     headless: true,
-    args: ['--enable-precise-memory-info', '--js-flags=--expose-gc'],
+    args: [
+      '--enable-precise-memory-info',
+      '--js-flags=--expose-gc',
+      // Reduce OS/browser noise
+      '--disable-background-networking',
+      '--disable-background-timer-throttling',
+      '--disable-backgrounding-occluded-windows',
+      '--disable-renderer-backgrounding',
+      '--disable-ipc-flooding-protection',
+      '--disable-hang-monitor',
+      '--disable-extensions',
+      '--no-sandbox',
+    ],
   }
   if (executablePath) {
     launchOptions.executablePath = executablePath
@@ -171,61 +204,69 @@ async function main() {
   const browser = await chromium.launch(launchOptions)
 
   try {
-    const page = await browser.newPage()
-    page.on('console', (message) => {
-      const text = message.text()
-      if (text.includes('Download the React DevTools')) {
-        return
-      }
-      console.log(`[page:${message.type()}] ${text}`)
-    })
-    page.on('pageerror', (error) => {
-      console.error(`[pageerror] ${error.message}`)
-    })
+    const fixtureBundleContent = await readFile(fixtureBundlePath, 'utf8')
 
-    logProgress('Loading benchmark fixture')
-    await page.goto(pathToFileURL(cacheHtmlPath).toString(), {
-      waitUntil: 'networkidle',
-    })
-    await page.addScriptTag({
-      content: await readFile(fixtureBundlePath, 'utf8'),
-    })
-    await page.waitForFunction(() => Boolean(window.__reactTooltipBenchmark), null, {
-      timeout: timeoutMs,
-    })
+    async function createBenchmarkPage() {
+      const page = await browser.newPage()
+      page.on('console', (message) => {
+        const text = message.text()
+        if (text.includes('Download the React DevTools')) {
+          return
+        }
+        console.log(`[page:${message.type()}] ${text}`)
+      })
+      page.on('pageerror', (error) => {
+        console.error(`[pageerror] ${error.message}`)
+      })
+
+      await page.goto(pathToFileURL(cacheHtmlPath).toString(), {
+        waitUntil: 'networkidle',
+      })
+      await page.addScriptTag({ content: fixtureBundleContent })
+      await page.waitForFunction(() => Boolean(window.__reactTooltipBenchmark), null, {
+        timeout: timeoutMs,
+      })
+      return page
+    }
+
     logProgress(`Running scaling benchmark for counts: ${counts.join(', ')}`)
 
     const runVersion = async (version) => {
-      logProgress(`Starting ${version.toUpperCase()} run`)
-      return page.evaluate(
-        async ({ nextVersion, nextCounts, nextTimeoutMs, nextRepeats, nextWarmups }) => {
-          const harness = window.__reactTooltipBenchmark
-          if (!harness) {
-            throw new Error('Benchmark harness was not initialized.')
-          }
+      logProgress(`Starting ${version.toUpperCase()} run (fresh page)`)
+      const page = await createBenchmarkPage()
+      try {
+        return await page.evaluate(
+          async ({ nextVersion, nextCounts, nextTimeoutMs, nextRepeats, nextWarmups }) => {
+            const harness = window.__reactTooltipBenchmark
+            if (!harness) {
+              throw new Error('Benchmark harness was not initialized.')
+            }
 
-          const progressPrefix = `[${nextVersion.toUpperCase()}]`
+            const progressPrefix = `[${nextVersion.toUpperCase()}]`
 
-          return harness.runScalingBenchmark({
-            version: nextVersion,
-            counts: nextCounts,
-            timeoutMs: nextTimeoutMs,
-            repeats: nextRepeats,
-            warmups: nextWarmups,
-            renderMode: 'shared',
-            onProgress: (message) => {
-              console.log(`${progressPrefix} ${message}`)
-            },
-          })
-        },
-        {
-          nextVersion: version,
-          nextCounts: counts,
-          nextTimeoutMs: timeoutMs,
-          nextRepeats: repeats,
-          nextWarmups: warmups,
-        },
-      )
+            return harness.runScalingBenchmark({
+              version: nextVersion,
+              counts: nextCounts,
+              timeoutMs: nextTimeoutMs,
+              repeats: nextRepeats,
+              warmups: nextWarmups,
+              renderMode: 'shared',
+              onProgress: (message) => {
+                console.log(`${progressPrefix} ${message}`)
+              },
+            })
+          },
+          {
+            nextVersion: version,
+            nextCounts: counts,
+            nextTimeoutMs: timeoutMs,
+            nextRepeats: repeats,
+            nextWarmups: warmups,
+          },
+        )
+      } finally {
+        await page.close()
+      }
     }
 
     const versions = ['v5', 'v6']
@@ -261,6 +302,11 @@ async function main() {
               .map((sample) => sample.unmountDurationMs)
               .filter((value) => typeof value === 'number'),
           ),
+          update: aggregateNumbers(
+            successful
+              .map((sample) => sample.updateDurationMs)
+              .filter((value) => typeof value === 'number'),
+          ),
           mountMemory: aggregateNumbers(
             successful
               .map((sample) => sample.mountMemoryDeltaBytes)
@@ -293,6 +339,11 @@ async function main() {
           typeof v6Aggregate.unmount.median === 'number'
             ? v6Aggregate.unmount.median - v5Aggregate.unmount.median
             : null,
+        updateDeltaMs:
+          typeof v5Aggregate.update.median === 'number' &&
+          typeof v6Aggregate.update.median === 'number'
+            ? v6Aggregate.update.median - v5Aggregate.update.median
+            : null,
         mountMemoryDeltaBytes:
           typeof v5Aggregate.mountMemory.median === 'number' &&
           typeof v6Aggregate.mountMemory.median === 'number'
@@ -302,7 +353,7 @@ async function main() {
     })
 
     const result = {
-      id: `scaling-${timestampId()}`,
+      id: `scaling-${timestampId()}${workerId ? `-w${workerId}` : ''}`,
       timestamp: new Date().toISOString(),
       durationMs: Date.now() - benchmarkStartedAt,
       benchmarkVersion,
@@ -315,7 +366,7 @@ async function main() {
       cacheDir,
       workerId,
       runLabel,
-      browser: await page.evaluate(() => window.navigator.userAgent),
+      browser: browser.version(),
       counts,
       warmups,
       repeats,

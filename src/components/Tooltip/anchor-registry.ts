@@ -4,11 +4,26 @@ type AnchorRegistryEntry = {
   anchors: HTMLElement[]
   error: Error | null
   subscribers: Set<AnchorRegistrySubscriber>
+  /**
+   * When the selector is a simple `[data-tooltip-id='value']` pattern,
+   * this holds the extracted tooltip ID so we can skip expensive
+   * querySelectorAll calls when the mutation doesn't affect it.
+   */
+  tooltipId: string | null
 }
 
 const registry = new Map<string, AnchorRegistryEntry>()
 
 let documentObserver: MutationObserver | null = null
+
+/**
+ * Extract a tooltip ID from a simple `[data-tooltip-id='value']` selector.
+ * Returns null for complex or custom selectors.
+ */
+function extractTooltipId(selector: string): string | null {
+  const match = selector.match(/^\[data-tooltip-id=(['"])((?:\\.|(?!\1).)*)\1\]$/)
+  return match ? match[2].replace(/\\(['"])/g, '$1') : null
+}
 
 function areAnchorListsEqual(left: HTMLElement[], right: HTMLElement[]) {
   if (left.length !== right.length) {
@@ -33,8 +48,7 @@ function readAnchorsForSelector(selector: string) {
 }
 
 function notifySubscribers(entry: AnchorRegistryEntry) {
-  const anchors = [...entry.anchors]
-  entry.subscribers.forEach((subscriber) => subscriber(anchors, entry.error))
+  entry.subscribers.forEach((subscriber) => subscriber(entry.anchors, entry.error))
 }
 
 function refreshEntry(selector: string, entry: AnchorRegistryEntry) {
@@ -66,24 +80,109 @@ function refreshAllEntries() {
 }
 
 let refreshScheduled = false
+let pendingTooltipIds: Set<string> | null = null
+let pendingFullRefresh = false
 
-function scheduleRefreshAllEntries() {
+function scheduleRefresh(affectedTooltipIds: Set<string> | null) {
+  if (affectedTooltipIds) {
+    if (!pendingTooltipIds) {
+      pendingTooltipIds = new Set()
+    }
+    affectedTooltipIds.forEach((id) => pendingTooltipIds!.add(id))
+  } else {
+    pendingFullRefresh = true
+  }
+
   if (refreshScheduled) {
     return
   }
   refreshScheduled = true
-  if (typeof requestAnimationFrame === 'function') {
-    requestAnimationFrame(() => {
-      refreshScheduled = false
+
+  const flush = () => {
+    refreshScheduled = false
+    const fullRefresh = pendingFullRefresh
+    const ids = pendingTooltipIds
+    pendingFullRefresh = false
+    pendingTooltipIds = null
+
+    if (fullRefresh) {
       refreshAllEntries()
-    })
-  } else {
-    // Fallback for environments without requestAnimationFrame (e.g., JSDOM/SSR)
-    Promise.resolve().then(() => {
-      refreshScheduled = false
-      refreshAllEntries()
-    })
+    } else if (ids && ids.size > 0) {
+      refreshEntriesForTooltipIds(ids)
+    }
   }
+
+  if (typeof requestAnimationFrame === 'function') {
+    requestAnimationFrame(flush)
+  } else {
+    Promise.resolve().then(flush)
+  }
+}
+
+/**
+ * Only refresh entries whose tooltipId is in the affected set,
+ * plus any entries with custom (non-tooltipId) selectors.
+ */
+function refreshEntriesForTooltipIds(affectedIds: Set<string>) {
+  registry.forEach((entry, selector) => {
+    if (entry.tooltipId === null || affectedIds.has(entry.tooltipId)) {
+      refreshEntry(selector, entry)
+    }
+  })
+}
+
+/**
+ * Collect tooltip IDs from mutation records. Returns null when targeted
+ * analysis is not worthwhile (few registry entries, or too many nodes to scan).
+ */
+function collectAffectedTooltipIds(records: MutationRecord[]): Set<string> | null {
+  // Targeted refresh only pays off when there are many distinct selectors.
+  // With few entries, full refresh is already cheap — skip the analysis overhead.
+  if (registry.size <= 4) {
+    return null
+  }
+
+  const ids = new Set<string>()
+
+  for (const record of records) {
+    if (record.type === 'attributes') {
+      const target = record.target as HTMLElement
+      const currentId = target.getAttribute?.('data-tooltip-id')
+      if (currentId) ids.add(currentId)
+      if (record.oldValue) ids.add(record.oldValue)
+      continue
+    }
+
+    if (record.type === 'childList') {
+      const gatherIds = (nodes: NodeList) => {
+        for (let i = 0; i < nodes.length; i++) {
+          const node = nodes[i]
+          if (node.nodeType !== Node.ELEMENT_NODE) continue
+          const el = node as HTMLElement
+          const id = el.getAttribute?.('data-tooltip-id')
+          if (id) ids.add(id)
+          // For large subtrees, bail out to full refresh to avoid double-scanning
+          const descendants = el.querySelectorAll?.('[data-tooltip-id]')
+          if (descendants) {
+            if (descendants.length > 50) {
+              return true // signal bail-out
+            }
+            for (let j = 0; j < descendants.length; j++) {
+              const descId = descendants[j].getAttribute('data-tooltip-id')
+              if (descId) ids.add(descId)
+            }
+          }
+        }
+        return false
+      }
+      if (gatherIds(record.addedNodes) || gatherIds(record.removedNodes)) {
+        return null // large mutation — full refresh is cheaper
+      }
+      continue
+    }
+  }
+
+  return ids
 }
 
 function ensureDocumentObserver() {
@@ -91,8 +190,9 @@ function ensureDocumentObserver() {
     return
   }
 
-  documentObserver = new MutationObserver(() => {
-    scheduleRefreshAllEntries()
+  documentObserver = new MutationObserver((records) => {
+    const affectedIds = collectAffectedTooltipIds(records)
+    scheduleRefresh(affectedIds)
   })
 
   documentObserver.observe(document.body, {
@@ -122,6 +222,7 @@ export function subscribeAnchorSelector(selector: string, subscriber: AnchorRegi
       anchors: initialState.anchors,
       error: initialState.error,
       subscribers: new Set(),
+      tooltipId: extractTooltipId(selector),
     }
     registry.set(selector, entry)
   }
@@ -152,4 +253,6 @@ export function resetAnchorRegistry() {
     documentObserver = null
   }
   refreshScheduled = false
+  pendingTooltipIds = null
+  pendingFullRefresh = false
 }

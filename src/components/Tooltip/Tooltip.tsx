@@ -1,8 +1,15 @@
-import React, { useEffect, useState, useRef, useCallback, useImperativeHandle, memo } from 'react'
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+  useCallback,
+  useImperativeHandle,
+  memo,
+} from 'react'
 import { createPortal } from 'react-dom'
 import clsx from 'clsx'
 import {
-  deepEqual,
   useIsomorphicLayoutEffect,
   computeTooltipPosition,
   cssTimeToMs,
@@ -14,6 +21,9 @@ import styles from './styles.module.css'
 import useTooltipAnchors from './use-tooltip-anchors'
 import useTooltipEvents from './use-tooltip-events'
 import type { IPosition, ITooltip, TooltipImperativeOpenOptions } from './TooltipTypes'
+
+// Shared across all tooltip instances — the CSS variable is on :root and never changes per-instance
+let globalTransitionShowDelay: number | null = null
 
 const Tooltip = ({
   // props
@@ -81,7 +91,18 @@ const Tooltip = ({
   const lastFloatPosition = useRef<IPosition | null>(null)
   const hoveringTooltip = useRef(false)
   const mounted = useRef(false)
-  const cachedTransitionShowDelay = useRef<number | null>(null)
+  const virtualElementRef = useRef({
+    getBoundingClientRect: () => ({
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+    }),
+  })
 
   /**
    * useLayoutEffect runs before useEffect,
@@ -186,13 +207,13 @@ const Tooltip = ({
       /**
        * see `onTransitionEnd` on tooltip wrapper
        */
-      if (cachedTransitionShowDelay.current === null) {
+      if (globalTransitionShowDelay === null) {
         const style = getComputedStyle(document.body)
-        cachedTransitionShowDelay.current = cssTimeToMs(
+        globalTransitionShowDelay = cssTimeToMs(
           style.getPropertyValue('--rt-transition-show-delay'),
         )
       }
-      const transitionShowDelay = cachedTransitionShowDelay.current
+      const transitionShowDelay = globalTransitionShowDelay
       missedTransitionTimerRef.current = setTimeout(() => {
         /**
          * if the tooltip switches from `show === true` to `show === false` too fast
@@ -228,11 +249,28 @@ const Tooltip = ({
     if (!mounted.current) {
       return
     }
-    setComputedPosition((oldComputedPosition) =>
-      deepEqual(oldComputedPosition, newComputedPosition)
-        ? oldComputedPosition
-        : newComputedPosition,
-    )
+    setComputedPosition((oldComputedPosition) => {
+      if (
+        oldComputedPosition.place === newComputedPosition.place &&
+        oldComputedPosition.tooltipStyles.left === newComputedPosition.tooltipStyles.left &&
+        oldComputedPosition.tooltipStyles.top === newComputedPosition.tooltipStyles.top &&
+        oldComputedPosition.tooltipStyles.border === newComputedPosition.tooltipStyles.border &&
+        oldComputedPosition.tooltipArrowStyles.left ===
+          newComputedPosition.tooltipArrowStyles.left &&
+        oldComputedPosition.tooltipArrowStyles.top === newComputedPosition.tooltipArrowStyles.top &&
+        oldComputedPosition.tooltipArrowStyles.right ===
+          newComputedPosition.tooltipArrowStyles.right &&
+        oldComputedPosition.tooltipArrowStyles.bottom ===
+          newComputedPosition.tooltipArrowStyles.bottom &&
+        oldComputedPosition.tooltipArrowStyles.borderBottom ===
+          newComputedPosition.tooltipArrowStyles.borderBottom &&
+        oldComputedPosition.tooltipArrowStyles.borderRight ===
+          newComputedPosition.tooltipArrowStyles.borderRight
+      ) {
+        return oldComputedPosition
+      }
+      return newComputedPosition
+    })
   }, [])
 
   const handleShowTooltipDelayed = useCallback(
@@ -272,24 +310,20 @@ const Tooltip = ({
 
   const handleTooltipPosition = useCallback(
     ({ x, y }: IPosition) => {
-      const virtualElement = {
-        getBoundingClientRect() {
-          return {
-            x,
-            y,
-            width: 0,
-            height: 0,
-            top: y,
-            left: x,
-            right: x,
-            bottom: y,
-          }
-        },
-      } as Element
+      virtualElementRef.current.getBoundingClientRect = () => ({
+        x,
+        y,
+        width: 0,
+        height: 0,
+        top: y,
+        left: x,
+        right: x,
+        bottom: y,
+      })
       computeTooltipPosition({
         place: imperativeOptions?.place ?? place,
         offset,
-        elementReference: virtualElement,
+        elementReference: virtualElementRef.current as unknown as Element,
         tooltipReference: tooltipRef.current,
         tooltipArrowReference: tooltipArrowRef.current,
         strategy: positionStrategy,
@@ -426,6 +460,9 @@ const Tooltip = ({
     updateTooltipPosition,
   })
 
+  const updateTooltipPositionRef = useRef(updateTooltipPosition)
+  updateTooltipPositionRef.current = updateTooltipPosition
+
   useEffect(() => {
     if (!rendered) {
       return
@@ -446,7 +483,7 @@ const Tooltip = ({
       }
       timeoutId = setTimeout(() => {
         if (mounted.current) {
-          updateTooltipPosition()
+          updateTooltipPositionRef.current()
         }
         timeoutId = null
       }, 0)
@@ -459,7 +496,7 @@ const Tooltip = ({
         clearTimeout(timeoutId)
       }
     }
-  }, [content, contentWrapperRef, rendered, updateTooltipPosition])
+  }, [content, contentWrapperRef, rendered])
 
   useEffect(() => {
     const shouldResolveInitialActiveAnchor = rendered || defaultIsOpen || Boolean(isOpen)
@@ -526,7 +563,33 @@ const Tooltip = ({
 
   const actualContent = imperativeOptions?.content ?? content
   const hasContent = actualContent !== null && actualContent !== undefined
-  const canShow = show && Object.keys(computedPosition.tooltipStyles).length > 0
+  const canShow = show && computedPosition.tooltipStyles.left !== undefined
+
+  const tooltipStyle = useMemo(
+    () => ({
+      ...externalStyles,
+      ...computedPosition.tooltipStyles,
+      opacity: opacity !== undefined && canShow ? opacity : undefined,
+    }),
+    [externalStyles, computedPosition.tooltipStyles, opacity, canShow],
+  )
+
+  const arrowBackground = useMemo(
+    () =>
+      arrowColor
+        ? `linear-gradient(to right bottom, transparent 50%, ${arrowColor} 50%)`
+        : undefined,
+    [arrowColor],
+  )
+
+  const arrowStyle = useMemo(
+    () => ({
+      ...computedPosition.tooltipArrowStyles,
+      background: arrowBackground,
+      '--rt-arrow-size': `${arrowSize}px`,
+    }),
+    [computedPosition.tooltipArrowStyles, arrowBackground, arrowSize],
+  )
 
   useImperativeHandle(forwardRef, () => ({
     open: (options) => {
@@ -602,11 +665,7 @@ const Tooltip = ({
           setImperativeOptions(null)
           afterHide?.()
         }}
-        style={{
-          ...externalStyles,
-          ...computedPosition.tooltipStyles,
-          opacity: opacity !== undefined && canShow ? opacity : undefined,
-        }}
+        style={tooltipStyle}
         ref={tooltipRef}
       >
         <WrapperElement
@@ -626,13 +685,7 @@ const Tooltip = ({
             classNameArrow,
             noArrow && coreStyles['noArrow'],
           )}
-          style={{
-            ...computedPosition.tooltipArrowStyles,
-            background: arrowColor
-              ? `linear-gradient(to right bottom, transparent 50%, ${arrowColor} 50%)`
-              : undefined,
-            '--rt-arrow-size': `${arrowSize}px`,
-          }}
+          style={arrowStyle}
           ref={tooltipArrowRef}
         />
       </WrapperElement>

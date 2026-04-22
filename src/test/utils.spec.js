@@ -2,12 +2,12 @@ import '@testing-library/jest-dom'
 import React from 'react'
 import {
   debounce,
-  deepEqual,
   computeTooltipPosition,
   cssTimeToMs,
   clearTimeoutRef,
   getScrollParent,
 } from '../utils'
+import deepEqual from '../utils/deep-equal'
 import { injectStyle, injected } from '../utils/handle-style.ts'
 import { isScrollable } from '../utils/get-scroll-parent'
 

@@ -28,29 +28,44 @@ function aggregateNumbers(values) {
       standardDeviation: null,
       spreadPercent: null,
       sampleCount: 0,
+      trimmedCount: 0,
     }
   }
 
-  const middle = Math.floor(sorted.length / 2)
+  // IQR-based outlier trimming (only when enough samples)
+  let trimmed = sorted
+  if (sorted.length >= 8) {
+    const q1Index = Math.floor(sorted.length * 0.25)
+    const q3Index = Math.floor(sorted.length * 0.75)
+    const q1 = sorted[q1Index]
+    const q3 = sorted[q3Index]
+    const iqr = q3 - q1
+    const lowerFence = q1 - 1.5 * iqr
+    const upperFence = q3 + 1.5 * iqr
+    trimmed = sorted.filter((value) => value >= lowerFence && value <= upperFence)
+    if (trimmed.length < sorted.length * 0.5) {
+      trimmed = sorted
+    }
+  }
+
+  const middle = Math.floor(trimmed.length / 2)
   const median =
-    sorted.length % 2 === 0
-      ? (sorted[middle - 1] + sorted[middle]) / 2
-      : sorted[middle]
-  const mean = sorted.reduce((total, value) => total + value, 0) / sorted.length
-  const variance =
-    sorted.reduce((total, value) => total + (value - mean) ** 2, 0) / sorted.length
+    trimmed.length % 2 === 0 ? (trimmed[middle - 1] + trimmed[middle]) / 2 : trimmed[middle]
+  const mean = trimmed.reduce((total, value) => total + value, 0) / trimmed.length
+  const variance = trimmed.reduce((total, value) => total + (value - mean) ** 2, 0) / trimmed.length
   const standardDeviation = Math.sqrt(variance)
-  const p95 = sorted[Math.min(sorted.length - 1, Math.ceil(sorted.length * 0.95) - 1)]
+  const p95 = trimmed[Math.min(trimmed.length - 1, Math.ceil(trimmed.length * 0.95) - 1)]
 
   return {
     median,
     p95,
-    min: sorted[0],
-    max: sorted[sorted.length - 1],
+    min: trimmed[0],
+    max: trimmed[trimmed.length - 1],
     mean,
     standardDeviation,
     spreadPercent: median === 0 ? null : ((p95 - median) / Math.abs(median)) * 100,
     sampleCount: sorted.length,
+    trimmedCount: trimmed.length,
   }
 }
 
@@ -134,13 +149,13 @@ function buildMarkdownReport(result) {
     `- Generation filter: ${result.generationFilter}`,
     `- Counts: ${result.counts.join(', ')}`,
     '',
-    '| Count | V5 mount | V6 mount | Mount delta | Mount spread | V5 unmount | V6 unmount | Unmount delta | Unmount spread | V5 mount mem | V6 mount mem | Mount mem delta | Mount mem spread | V5 unmount mem | V6 unmount mem | Unmount mem delta | Unmount mem spread | Samples | V5 timeouts | V6 timeouts |',
-    '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+    '| Count | V5 mount | V6 mount | Mount delta | Mount spread | V5 unmount | V6 unmount | Unmount delta | Unmount spread | V5 update | V6 update | Update delta | Update spread | V5 mount mem | V6 mount mem | Mount mem delta | Mount mem spread | V5 unmount mem | V6 unmount mem | Unmount mem delta | Unmount mem spread | Samples | V5 timeouts | V6 timeouts |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
   ]
 
   result.summary.forEach((row) => {
     lines.push(
-      `| ${row.count} | ${formatMs(row.v5.mount.median)} | ${formatMs(row.v6.mount.median)} | ${formatMs(row.mountDeltaMs)} | ${formatPercent(row.mountDeltaSpreadPercent)} | ${formatMs(row.v5.unmount.median)} | ${formatMs(row.v6.unmount.median)} | ${formatMs(row.unmountDeltaMs)} | ${formatPercent(row.unmountDeltaSpreadPercent)} | ${formatBytes(row.v5.mountMemory.median)} | ${formatBytes(row.v6.mountMemory.median)} | ${formatBytes(row.mountMemoryDeltaBytes)} | ${formatPercent(row.mountMemoryDeltaSpreadPercent)} | ${formatBytes(row.v5.unmountMemory.median)} | ${formatBytes(row.v6.unmountMemory.median)} | ${formatBytes(row.unmountMemoryDeltaBytes)} | ${formatPercent(row.unmountMemoryDeltaSpreadPercent)} | ${row.sampleCount} | ${row.v5.timeoutCount} | ${row.v6.timeoutCount} |`,
+      `| ${row.count} | ${formatMs(row.v5.mount.median)} | ${formatMs(row.v6.mount.median)} | ${formatMs(row.mountDeltaMs)} | ${formatPercent(row.mountDeltaSpreadPercent)} | ${formatMs(row.v5.unmount.median)} | ${formatMs(row.v6.unmount.median)} | ${formatMs(row.unmountDeltaMs)} | ${formatPercent(row.unmountDeltaSpreadPercent)} | ${formatMs(row.v5.update.median)} | ${formatMs(row.v6.update.median)} | ${formatMs(row.updateDeltaMs)} | ${formatPercent(row.updateDeltaSpreadPercent)} | ${formatBytes(row.v5.mountMemory.median)} | ${formatBytes(row.v6.mountMemory.median)} | ${formatBytes(row.mountMemoryDeltaBytes)} | ${formatPercent(row.mountMemoryDeltaSpreadPercent)} | ${formatBytes(row.v5.unmountMemory.median)} | ${formatBytes(row.v6.unmountMemory.median)} | ${formatBytes(row.unmountMemoryDeltaBytes)} | ${formatPercent(row.unmountMemoryDeltaSpreadPercent)} | ${row.sampleCount} | ${row.v5.timeoutCount} | ${row.v6.timeoutCount} |`,
     )
   })
 
@@ -163,9 +178,9 @@ async function main() {
     throw new Error('No benchmark result files matched the requested generation filter.')
   }
 
-  const counts = Array.from(
-    new Set(runs.flatMap((run) => run.counts ?? [])),
-  ).sort((left, right) => left - right)
+  const counts = Array.from(new Set(runs.flatMap((run) => run.counts ?? []))).sort(
+    (left, right) => left - right,
+  )
 
   const summary = counts.map((count) => {
     const rows = runs
@@ -175,12 +190,10 @@ async function main() {
     const aggregateVersion = (version) => ({
       mount: aggregateNumbers(rows.map((row) => row[version]?.mount?.median)),
       unmount: aggregateNumbers(rows.map((row) => row[version]?.unmount?.median)),
+      update: aggregateNumbers(rows.map((row) => row[version]?.update?.median)),
       mountMemory: aggregateNumbers(rows.map((row) => row[version]?.mountMemory?.median)),
       unmountMemory: aggregateNumbers(rows.map((row) => row[version]?.unmountMemory?.median)),
-      timeoutCount: rows.reduce(
-        (total, row) => total + (row[version]?.timeoutCount ?? 0),
-        0,
-      ),
+      timeoutCount: rows.reduce((total, row) => total + (row[version]?.timeoutCount ?? 0), 0),
     })
 
     const v5 = aggregateVersion('v5')
@@ -203,6 +216,10 @@ async function main() {
       typeof v5.unmountMemory.median === 'number' && typeof v6.unmountMemory.median === 'number'
         ? v6.unmountMemory.median - v5.unmountMemory.median
         : null
+    const updateDeltaMs =
+      typeof v5.update.median === 'number' && typeof v6.update.median === 'number'
+        ? v6.update.median - v5.update.median
+        : null
 
     return {
       count,
@@ -211,6 +228,7 @@ async function main() {
       v6,
       mountDeltaMs,
       unmountDeltaMs,
+      updateDeltaMs,
       mountMemoryDeltaBytes,
       unmountMemoryDeltaBytes,
       mountDeltaSpreadPercent:
@@ -222,12 +240,18 @@ async function main() {
           ? Math.max(v5.unmount.spreadPercent, v6.unmount.spreadPercent)
           : null,
       mountMemoryDeltaSpreadPercent:
-        typeof v5.mountMemory.spreadPercent === 'number' && typeof v6.mountMemory.spreadPercent === 'number'
+        typeof v5.mountMemory.spreadPercent === 'number' &&
+        typeof v6.mountMemory.spreadPercent === 'number'
           ? Math.max(v5.mountMemory.spreadPercent, v6.mountMemory.spreadPercent)
           : null,
       unmountMemoryDeltaSpreadPercent:
-        typeof v5.unmountMemory.spreadPercent === 'number' && typeof v6.unmountMemory.spreadPercent === 'number'
+        typeof v5.unmountMemory.spreadPercent === 'number' &&
+        typeof v6.unmountMemory.spreadPercent === 'number'
           ? Math.max(v5.unmountMemory.spreadPercent, v6.unmountMemory.spreadPercent)
+          : null,
+      updateDeltaSpreadPercent:
+        typeof v5.update.spreadPercent === 'number' && typeof v6.update.spreadPercent === 'number'
+          ? Math.max(v5.update.spreadPercent, v6.update.spreadPercent)
           : null,
     }
   })

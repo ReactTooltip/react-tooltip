@@ -11,6 +11,7 @@ import type {
   TooltipRefProps,
 } from '../Tooltip/TooltipTypes'
 import type { ITooltipController } from './TooltipControllerTypes'
+import { observeAnchorAttributes } from './shared-attribute-observer'
 
 const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
   (
@@ -117,41 +118,28 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     }, [])
 
     useEffect(() => {
-      const observerCallback: MutationCallback = (mutationList) => {
-        mutationList.forEach((mutation) => {
-          if (
-            !activeAnchor ||
-            mutation.type !== 'attributes' ||
-            !mutation.attributeName?.startsWith('data-tooltip-')
-          ) {
-            return
+      if (!activeAnchor) {
+        setAnchorDataAttributes({})
+        return () => {}
+      }
+
+      const updateAttributes = (element: HTMLElement) => {
+        const attrs = getDataAttributesFromAnchorElement(element)
+        setAnchorDataAttributes((prev) => {
+          const keys = Object.keys(attrs) as DataAttribute[]
+          const prevKeys = Object.keys(prev) as DataAttribute[]
+          if (keys.length === prevKeys.length && keys.every((key) => attrs[key] === prev[key])) {
+            return prev
           }
-          // make sure to get all set attributes, since all unset attributes are reset
-          const dataAttributes = getDataAttributesFromAnchorElement(activeAnchor)
-          setAnchorDataAttributes(dataAttributes)
+          return attrs
         })
       }
 
-      // Create an observer instance linked to the callback function
-      const observer = new MutationObserver(observerCallback)
+      updateAttributes(activeAnchor)
 
-      // do not check for subtree and childrens, we only want to know attribute changes
-      // to stay watching `data-attributes-*` from anchor element
-      const observerConfig = { attributes: true, childList: false, subtree: false }
+      const unsubscribe = observeAnchorAttributes(activeAnchor, updateAttributes)
 
-      if (activeAnchor) {
-        const dataAttributes = getDataAttributesFromAnchorElement(activeAnchor)
-        setAnchorDataAttributes(dataAttributes)
-        // Start observing the target node for configured mutations
-        observer.observe(activeAnchor, observerConfig)
-      } else {
-        setAnchorDataAttributes({})
-      }
-
-      return () => {
-        // Remove the observer when the tooltip is destroyed
-        observer.disconnect()
-      }
+      return unsubscribe
     }, [activeAnchor, anchorSelect])
 
     useEffect(() => {
