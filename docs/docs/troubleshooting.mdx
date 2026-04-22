@@ -62,7 +62,7 @@ import 'react-tooltip/dist/react-tooltip.css'
 
 If you've imported the default styling and the tooltip is still not showing up when you hover on your anchor element, make sure you have content to be displayed by the tooltip.
 
-If `data-tooltip-content` and `data-tooltip-html` are both unset (or they have empty values) on the anchor element, and also the `content`, `render`, and `children` props on the tooltip are unset (or have empty values), the tooltip is not shown by default.
+If `data-tooltip-content` is unset (or has an empty value) on the anchor element, and the `content`, `render`, and `children` props on the tooltip are also unset (or have empty values), the tooltip is not shown by default.
 
 ## The tooltip doesn't close
 
@@ -243,6 +243,8 @@ Less ideally, if you're unable to upgrade, you can set `swcMinify: false` on you
 ## Next.js `"use client"` error
 
 This normally happens when you use `react-tooltip` inside a component that is not tagged as client component. For more info, see the [Next.js docs](https://nextjs.org/docs/getting-started/react-essentials#client-components).
+
+This is not specific to Next.js. `react-tooltip` is a client-side component, so the same rule applies to any React Server Components setup: render the tooltip from a client boundary.
 
 To use `react-tooltip` on Next.js 13 without having to tag your component or page as a client component, just create a new file `ReactTooltip.tsx` (for this example, the file path is `src/components/ReactTooltip.tsx`) and place the following code inside of the created file:
 

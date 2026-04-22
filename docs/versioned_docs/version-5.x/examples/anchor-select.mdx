@@ -1,0 +1,172 @@
+---
+sidebar_position: 1
+---
+
+# Anchor select
+
+Using the ReactTooltip anchor select prop.
+
+import { Tooltip } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        margin: 'auto',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+### Basic usage
+
+The `anchorSelect` prop uses a [CSS selector](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) to attach the tooltip to the anchor elements. The most common use for this is selecting elements with a specific id, or with a CSS class.
+
+#### Using id attribute
+
+:::info
+
+A CSS selector for a specific id begins with a `#`. Don't forget to put it before the id on your selector!
+
+:::
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a id="my-anchor-element-id">◕‿‿◕</a>
+<Tooltip
+  // Don't forget the `#`!
+  anchorSelect="#my-anchor-element-id"
+  content="Hello world!"
+/>
+```
+
+<TooltipAnchor id="my-anchor-element-id">◕‿‿◕</TooltipAnchor>
+<Tooltip anchorSelect="#my-anchor-element-id" content="Hello world!" />
+
+#### Using class attribute
+
+:::info
+
+A CSS selector for a specific class begins with a `.`. Don't forget to put it before the class on your selector!
+
+:::
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a className="my-anchor-element-class">◕‿‿◕</a>
+<a className="my-anchor-element-class">◕‿‿◕</a>
+<a className="my-anchor-element-class">◕‿‿◕</a>
+<a className="my-anchor-element-class">◕‿‿◕</a>
+<Tooltip
+  // Don't forget the `.`!
+  anchorSelect=".my-anchor-element-class"
+  content="Hello world!"
+/>
+```
+
+<div style={{ display: 'flex', gap: '5px', width: 'fit-content', margin: 'auto' }}>
+  <TooltipAnchor className="my-anchor-element-class">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor className="my-anchor-element-class">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor className="my-anchor-element-class">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor className="my-anchor-element-class">◕‿‿◕</TooltipAnchor>
+</div>
+<Tooltip anchorSelect=".my-anchor-element-class" content="Hello world!" />
+
+### Complex selectors
+
+Once you've understood how it works, you can write CSS selectors as complex as you can imagine. Here are some interesting examples.
+
+#### Attribute prefix
+
+:::info
+
+`[attr^='prefix']` can be read as "any element that has an attribute `attr` in which its value starts with `prefix`". Remove the `^` for an exact match.
+
+This example uses the `name` attribute, but it works for any HTML attribute (id, class, ...).
+
+:::
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a name="my-anchor-element-1">◕‿‿◕</a>
+<a name="my-anchor-element-2">◕‿‿◕</a>
+<a name="my-anchor-element-3">◕‿‿◕</a>
+<a name="my-anchor-element-4">◕‿‿◕</a>
+<Tooltip
+  anchorSelect="[name^='my-anchor-element-']"
+  content="Hello world!"
+/>
+```
+
+<div style={{ display: 'flex', gap: '5px', width: 'fit-content', margin: 'auto' }}>
+  <TooltipAnchor name="my-anchor-element-1">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor name="my-anchor-element-2">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor name="my-anchor-element-3">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor name="my-anchor-element-4">◕‿‿◕</TooltipAnchor>
+</div>
+<Tooltip anchorSelect="[name^='my-anchor-element-']" content="Hello world!" />
+
+#### Child selector
+
+:::info
+
+Make sure there isn't an easier alternative before diving into complex selectors like this.
+
+Often you can just use a class selector or something else much simpler.
+
+:::
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<section id="section-anchor-select" style={{ marginTop: '100px' }}>
+  <a>◕‿‿◕</a>
+  <a>◕‿‿◕</a>
+  <a>◕‿‿◕</a>
+  <a>◕‿‿◕</a>
+</section>
+<Tooltip
+  anchorSelect="section[id='section-anchor-select'] > a:nth-child(odd)"
+  content="I am an odd child!"
+/>
+<Tooltip
+  anchorSelect="section[id='section-anchor-select'] > a:nth-child(even)"
+  content="I am an even child!"
+/>
+```
+
+<section
+  id="section-anchor-select"
+  style={{ display: 'flex', gap: '5px', width: 'fit-content', margin: 'auto' }}
+>
+  <TooltipAnchor>◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor>◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor>◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor>◕‿‿◕</TooltipAnchor>
+</section>
+<Tooltip
+  anchorSelect="section[id='section-anchor-select'] > span:nth-child(odd)"
+  content="I am an odd child!"
+/>
+<Tooltip
+  anchorSelect="section[id='section-anchor-select'] > span:nth-child(even)"
+  content="I am an even child!"
+/>

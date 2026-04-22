@@ -1,0 +1,8 @@
+{
+  "label": "Upgrade Guide",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Migration guide from V4 to V5."
+  }
+}

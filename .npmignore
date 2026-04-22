@@ -8,6 +8,7 @@ node_modules/
 example/
 example-v5/
 build/
+benchmarks/
 test/
 bin/
 CHANGELOG.md
@@ -15,6 +16,7 @@ src/
 docs/
 public/
 coverage/
+scripts/
 
 // setting files
 .babelrc
@@ -30,12 +32,17 @@ rollup-plugins/
 // misc files
 bundlesize.config.json
 prebuild.js
-jest.config.ts
+jest.config.mjs
+global.d.ts
+tsconfig.jest.json
 
 // bundler - rollup
 rollup.config.dev.js
 rollup.config.prod.js
 rollup.config.types.js
+rollup.config.dev.mjs
+rollup.config.prod.mjs
+rollup.config.types.mjs
 
 // bundler - esbuild
 esbuild.config.dev.mjs

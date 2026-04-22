@@ -1,0 +1,121 @@
+---
+sidebar_position: 1
+---
+
+# State
+
+Controlled state example for the ReactTooltip component.
+
+import { useState } from 'react'
+import { Tooltip } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, background, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: background || 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+### Controlled tooltip state
+
+:::caution
+
+Most of the time, leaving the state to be handled internally will be enough.
+
+Only do this if you need some more complex behavior.
+
+:::
+
+This is a very simple example in which hovering over any anchor element opens the tooltip, but it can only be closed by clicking the last anchor.
+
+It is just a demonstration, and you can come up with use cases as complex as you can imagine.
+
+```jsx
+import { useState } from 'react';
+import { Tooltip } from 'react-tooltip';
+
+const [isOpen, setIsOpen] = useState(false)
+
+<a data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+  ◕‿‿◕
+</a>
+<a data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+  ◕‿‿◕
+</a>
+<a data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+  ◕‿‿◕
+</a>
+<a data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+  ◕‿‿◕
+</a>
+<a data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+  ◕‿‿◕
+</a>
+<a
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="Click me!"
+  onMouseEnter={() => setIsOpen(true)}
+  onClick={() => setIsOpen(false)}
+>
+  ◕‿‿◕
+</a>
+<Tooltip
+  id="my-tooltip"
+  content="Hello world!"
+  isOpen={isOpen}
+/>
+```
+
+export const ControlledStateExample = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  return (
+    <>
+      <TooltipAnchor data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+        ◕‿‿◕
+      </TooltipAnchor>
+      <TooltipAnchor data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+        ◕‿‿◕
+      </TooltipAnchor>
+      <TooltipAnchor data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+        ◕‿‿◕
+      </TooltipAnchor>
+      <TooltipAnchor data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+        ◕‿‿◕
+      </TooltipAnchor>
+      <TooltipAnchor data-tooltip-id="my-tooltip" onMouseEnter={() => setIsOpen(true)}>
+        ◕‿‿◕
+      </TooltipAnchor>
+      <TooltipAnchor
+        background="lightgray"
+        data-tooltip-id="my-tooltip"
+        data-tooltip-content="Click me!"
+        onMouseEnter={() => setIsOpen(true)}
+        onClick={() => setIsOpen(false)}
+      >
+        ◕‿‿◕
+      </TooltipAnchor>
+      <Tooltip id="my-tooltip" content="Hello world!" isOpen={isOpen} />
+    </>
+  )
+}
+
+<div style={{ display: 'flex', columnGap: '8px', justifyContent: 'center', paddingTop: '36px' }}>
+  <ControlledStateExample />
+</div>

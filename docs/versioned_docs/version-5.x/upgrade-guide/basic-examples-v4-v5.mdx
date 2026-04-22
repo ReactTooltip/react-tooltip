@@ -1,0 +1,151 @@
+---
+sidebar_position: 4
+---
+
+# Basic examples V4 -> V5
+
+Examples of use in V4 -> V5.
+
+import { Tooltip } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        margin: 'auto',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+The main changes you should be aware of is the new names for the data attributes.
+
+| V4         | V5                     |
+| ---------- | ---------------------- |
+| `data-for` | `data-tooltip-id`      |
+| `data-tip` | `data-tooltip-content` |
+
+### V4 or less
+
+```jsx
+import ReactTooltip from 'react-tooltip';
+
+<a
+  data-tip="Hello world!"
+  data-for="tooltip"
+>
+  ◕‿‿◕
+</a>
+<ReactTooltip id="tooltip" place="top" />
+```
+
+### V5 using data attributes
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="Hello world!"
+>
+  ◕‿‿◕
+</a>
+<Tooltip id="my-tooltip" place="top" />
+```
+
+<TooltipAnchor data-tooltip-id="my-tooltip" data-tooltip-content="Hello world!">
+  ◕‿‿◕
+</TooltipAnchor>
+<Tooltip id="my-tooltip" place="top" />
+
+### V5 using tooltip props
+
+:::info
+
+Don't forget to check [the examples](../examples/basic-examples) for more details!
+
+:::
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a className="my-anchor-element">◕‿‿◕</a>
+<a className="my-anchor-element">◕‿‿◕</a>
+<Tooltip anchorSelect=".my-anchor-element" content="Hello world!" />
+```
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'row',
+    width: 'fit-content',
+    margin: 'auto',
+    gap: '5px',
+  }}
+>
+  <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
+</div>
+<Tooltip anchorSelect=".my-anchor-element" content="Hello world!" />
+
+---
+
+## Colors
+
+| V4     | V5        |
+| ------ | --------- |
+| `type` | `variant` |
+
+### V4 -> `type`
+
+```jsx
+import ReactTooltip from 'react-tooltip';
+
+<a data-tip="hello world!" data-for="tooltip"> ◕‿‿◕ </a>
+<ReactTooltip id="tooltip" place="top" type="success" />
+```
+
+### V5 -> `variant`
+
+Available values `'dark' | 'light' | 'success' | 'warning' | 'error' | 'info'`
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="Hello world!"
+  data-tooltip-variant="success"
+>
+  ◕‿‿◕
+</a>
+<Tooltip id="my-tooltip" />
+```
+
+<TooltipAnchor
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="Hello world!"
+  data-tooltip-variant="success"
+>
+  ◕‿‿◕
+</TooltipAnchor>
+<Tooltip id="my-tooltip" />
+
+---
+
+See [all V5 options here](../options.mdx).

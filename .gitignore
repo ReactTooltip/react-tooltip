@@ -30,6 +30,9 @@
 
 ## other
 yarn-error.log
+/benchmarks/results/*.json
+/benchmarks/results/*.md
+/benchmarks/.cache/
 
 # push to github
 !.babelrc
@@ -38,4 +41,3 @@ yarn-error.log
 
 # yalc
 /.yalc
-

@@ -41,11 +41,11 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-### Using `hover`
+### Hover (default)
 
 :::info
 
-This is the default event option, so it doesn't have to be manually set.
+Hover is the default behavior. No extra props are needed.
 
 :::
 
@@ -56,14 +56,13 @@ import { Tooltip } from 'react-tooltip';
 <Tooltip
   id="my-tooltip"
   content="Hello world!"
-  events={['hover']}
 />
 ```
 
 <TooltipAnchor data-tooltip-id="my-tooltip">◕‿‿◕</TooltipAnchor>
-<Tooltip id="my-tooltip" content="Hello world!" events={['hover']} />
+<Tooltip id="my-tooltip" content="Hello world!" />
 
-### Using `click`
+### Click to open
 
 :::info
 
@@ -78,9 +77,9 @@ import { Tooltip } from 'react-tooltip';
 <Tooltip
   id="my-tooltip-click"
   content="Hello world!"
-  events={['click']}
+  openOnClick
 />
 ```
 
 <TooltipAnchor data-tooltip-id="my-tooltip-click">◕‿‿◕</TooltipAnchor>
-<Tooltip id="my-tooltip-click" content="Hello world!" events={['click']} />
+<Tooltip id="my-tooltip-click" content="Hello world!" openOnClick />

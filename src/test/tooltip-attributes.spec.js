@@ -6,7 +6,6 @@ import { TooltipController as Tooltip } from '../components/TooltipController'
 // Tell Jest to mock all timeout functions
 jest.useRealTimers()
 
-// eslint-disable-next-line react/prop-types
 const TooltipAttrs = ({ id, ...anchorParams }) => (
   <>
     <span data-tooltip-id={id} {...anchorParams}>
@@ -32,23 +31,21 @@ describe('tooltip attributes', () => {
   })
 
   test('basic tooltip', async () => {
-    const { container } = render(
-      <TooltipAttrs id="basic-example-attr" data-tooltip-content="Hello World!" />,
-    )
+    render(<TooltipAttrs id="basic-example-attr" data-tooltip-content="Hello World!" />)
     const anchorElement = screen.getByText('Lorem Ipsum')
 
     await userEvent.hover(anchorElement)
 
-    const tooltip = await screen.findByRole('tooltip')
-    expect(tooltip).toHaveAttribute('style')
+    await waitFor(() => {
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'basic-example-attr')
+      expect(screen.getByRole('tooltip')).toBeInTheDocument()
+    })
 
     expect(anchorElement).toHaveAttribute('data-tooltip-content')
-    expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
   })
 
   test('tooltip with place', async () => {
-    const { container } = render(
+    render(
       <TooltipAttrs
         id="example-place-attr"
         data-tooltip-content="Hello World!"
@@ -59,17 +56,19 @@ describe('tooltip attributes', () => {
 
     await userEvent.hover(anchorElement)
 
-    const tooltip = await screen.findByRole('tooltip')
-    expect(tooltip).toHaveAttribute('style')
+    await waitFor(() => {
+      const tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveAttribute('style')
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'example-place-attr')
+    })
 
     expect(anchorElement).toHaveAttribute('data-tooltip-place')
     expect(anchorElement).toHaveAttribute('data-tooltip-content')
-    expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
+    expect(screen.getByRole('tooltip')).toBeInTheDocument()
   })
 
   test('tooltip with class name', async () => {
-    const { container } = render(
+    render(
       <TooltipAttrs
         id="example-class-name-attr"
         data-tooltip-content="Hello World!"
@@ -80,11 +79,13 @@ describe('tooltip attributes', () => {
 
     await userEvent.hover(anchorElement)
 
-    const tooltip = await screen.findByRole('tooltip')
-    expect(tooltip).toHaveClass('tooltip-class-name')
+    await waitFor(() => {
+      const tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveClass('tooltip-class-name')
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'example-class-name-attr')
+    })
 
     expect(anchorElement).toHaveAttribute('data-tooltip-class-name')
-    expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
+    expect(screen.getByRole('tooltip')).toBeInTheDocument()
   })
 })

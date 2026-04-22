@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unresolved */
-import React from 'react'
+import React, { JSX } from 'react'
 import clsx from 'clsx'
 import Link from '@docusaurus/Link'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
@@ -22,10 +22,10 @@ function HomepageHeader() {
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
           <Link className="button button--primary button--lg" to="/docs/category/upgrade-guide">
-            Upgrade from V4 to V5
+            Upgrade Guides
           </Link>
           <Link className="button button--secondary button--lg" to="/docs/getting-started">
-            Getting Started with V5
+            Getting Started with V6
           </Link>
         </div>
       </div>

@@ -1,0 +1,207 @@
+---
+sidebar_position: 1
+---
+
+# Imperative mode (ref)
+
+Using the ReactTooltip imperative mode to control the tooltip programmatically.
+
+import { useRef } from 'react';
+import { Tooltip } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        margin: 'auto',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+### Basic usage
+
+A ref object created with `React.useRef()` can be passed to the `ref` tooltip prop.
+It allows you to expose internal state variables (read-only), and to also control the tooltip programmatically.
+
+#### API
+
+```ts
+interface TooltipImperativeOpenOptions {
+  anchorSelect?: string
+  position?: IPosition
+  place?: PlacesType
+  /**
+   * In practice, `ChildrenType` -> `React.ReactNode`
+   */
+  content?: ChildrenType
+  /**
+   * Delay (in ms) before opening the tooltip.
+   */
+  delay?: number
+}
+
+interface TooltipImperativeCloseOptions {
+  /**
+   * Delay (in ms) before closing the tooltip.
+   */
+  delay?: number
+}
+
+interface TooltipRefProps {
+  open: (options?: TooltipImperativeOpenOptions) => void
+  close: (options?: TooltipImperativeCloseOptions) => void
+  /**
+   * @readonly
+   */
+  activeAnchor: HTMLElement | null
+  /**
+   * @readonly
+   */
+  place: PlacesType
+  /**
+   * @readonly
+   */
+  isOpen: boolean
+}
+```
+
+#### Methods
+
+:::info
+
+The imperative methods <b>can</b> be applied alongside regular tooltip usage. For example, you could use just `close()` to close a regular tooltip after an HTTP request is finished.
+
+If you intend to use the tooltip exclusively with these methods, setting the `imperativeModeOnly` prop to disable default behavior is recommended. Otherwise, you might face undesired behavior.
+
+:::
+
+- `open()` opens the tooltip programmatically. All arguments are optional
+  - `anchorSelect` overrides the current selector. Ideally, it should match only one element (e.g. `#my-element`)
+  - `position` overrides the `position` tooltip prop
+  - `place` overrides the `place` tooltip prop
+  - `content` overrides the tooltip content, whether it was set through `content`, `render`, or any other way
+  - `delay` indicates how long (in ms) before the tooltip actually opens
+- `close()` closes the tooltip programmatically
+  - `delay` indicates how long (in ms) before the tooltip actually closes
+
+#### Internal state
+
+:::note
+
+These are read-only. Updating their values has no effect on the tooltip.
+
+:::
+
+- `activeAnchor` is a reference to the current anchor element
+- `place` is the current tooltip placement relative to the anchor element. Can differ from the `place` tooltip prop if the tooltip is close to the edges of its container
+- `isOpen` indicates whether the tooltip is currently being shown or not
+
+```jsx
+import { useRef } from 'react';
+import { Tooltip, TooltipRefProps } from 'react-tooltip';
+
+const tooltipRef1 = useRef<TooltipRefProps>(null)
+const tooltipRef2 = useRef<TooltipRefProps>(null)
+
+<a id="my-element">
+  ◕‿‿◕
+</a>
+<button 
+  onClick={() => {
+    tooltipRef1.current?.open({
+      anchorSelect: '#my-element',
+      content: 'Hello world!',
+    })
+    tooltipRef2.current?.open({
+      position: {
+        x: Math.random() * 500,
+        y: Math.random() * 300,
+      },
+      place: 'bottom',
+      content: 'Where am I? 😕😕',
+    })
+  }}
+>
+  Open
+</button>
+<button 
+  onClick={() => {
+    tooltipRef1.current?.close()
+    tooltipRef2.current?.close()
+  }}
+>
+  Close
+</button>
+<Tooltip ref={tooltipRef1} />
+<Tooltip ref={tooltipRef2} />
+```
+
+:::caution
+
+Notice the tooltip still closes when unhovering the anchor element. This might be undesired if you're using the imperative methods exclusively.
+
+If that's the case, use the `imperativeModeOnly` tooltip prop to disable default tooltip behavior.
+
+:::
+
+export const ImperativeModeExample = () => {
+  const tooltipRef1 = useRef(null)
+  const tooltipRef2 = useRef(null)
+  return (
+    <>
+      <TooltipAnchor id="my-element">
+        ◕‿‿◕
+      </TooltipAnchor>
+      <div style={{ display: 'flex', flexDirection: 'row', gap: '5px' }}>
+        <button 
+          onClick={() => {
+            tooltipRef1.current?.open({
+              anchorSelect: '#my-element',
+              content: 'Hello world!',
+            })
+            tooltipRef2.current?.open({
+              position: {
+                x: 300 + Math.random() * 500,
+                y: 300 + Math.random() * 300,
+              },
+              place: 'bottom',
+              content: 'Where am I? 😕😕',
+            })
+          }}
+        >
+          Open
+        </button>
+        <button 
+          onClick={() => {
+            tooltipRef1.current?.close()
+            tooltipRef2.current?.close()
+          }}
+        >
+          Close
+        </button>
+      </div>
+      <Tooltip ref={tooltipRef1} />
+      <Tooltip ref={tooltipRef2} />
+    </>
+  )
+}
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: 'fit-content', margin: 'auto' }}>
+  <ImperativeModeExample />
+</div>

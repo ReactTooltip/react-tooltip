@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "./global.d.ts",
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "./src/**/*.js",
+    "./src/**/*.jsx"
+  ],
+  "compilerOptions": {
+    "rootDir": ".",
+    "ignoreDeprecations": "6.0"
+  }
+}

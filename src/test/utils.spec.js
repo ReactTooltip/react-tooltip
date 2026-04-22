@@ -1,4 +1,15 @@
-import { debounce, deepEqual, computeTooltipPosition, cssTimeToMs, clearTimeoutRef } from 'utils'
+import '@testing-library/jest-dom'
+import React from 'react'
+import {
+  debounce,
+  computeTooltipPosition,
+  cssTimeToMs,
+  clearTimeoutRef,
+  getScrollParent,
+} from '../utils'
+import deepEqual from '../utils/deep-equal'
+import { injectStyle, injected } from '../utils/handle-style.ts'
+import { isScrollable } from '../utils/get-scroll-parent'
 
 describe('compute positions', () => {
   test('empty reference elements', async () => {
@@ -109,6 +120,11 @@ describe('debounce', () => {
 
   const func = jest.fn()
 
+  afterEach(() => {
+    func.mockClear()
+    jest.clearAllTimers()
+  })
+
   test('execute just once', () => {
     const debouncedFunc = debounce(func, 1000)
     for (let i = 0; i < 100; i += 1) {
@@ -119,14 +135,14 @@ describe('debounce', () => {
 
     jest.runAllTimers()
 
-    expect(func).toBeCalledTimes(1)
+    expect(func).toHaveBeenCalledTimes(1)
   })
 
   test('execute immediately just once', () => {
     const debouncedFunc = debounce(func, 1000, true)
 
     debouncedFunc()
-    expect(func).toBeCalledTimes(1)
+    expect(func).toHaveBeenCalledTimes(1)
 
     for (let i = 0; i < 100; i += 1) {
       debouncedFunc()
@@ -270,5 +286,314 @@ describe('clearTimeoutRef', () => {
 
     expect(func).not.toHaveBeenCalled()
     expect(timeoutRef.current).toBe(null)
+  })
+})
+
+describe('getScrollParent', () => {
+  let div
+  let scrollParent
+
+  beforeEach(() => {
+    // Basic DOM setup simulating a container with scroll
+    div = document.createElement('div')
+    scrollParent = document.createElement('div')
+
+    document.body.appendChild(scrollParent)
+    scrollParent.appendChild(div)
+
+    // Reset styles before each test
+    scrollParent.style.overflow = ''
+    scrollParent.style.overflowY = ''
+    scrollParent.style.overflowX = ''
+  })
+
+  afterEach(() => {
+    // Clear the DOM after each test
+    document.body.innerHTML = ''
+  })
+
+  test('returns null when no element is provided', () => {
+    expect(getScrollParent(null)).toBeNull()
+  })
+
+  test('returns document.scrollingElement when no scrollable parent is found', () => {
+    expect(getScrollParent(div)).toBe(document.scrollingElement || document.documentElement)
+  })
+
+  test('returns the parent when it has overflow set to auto', () => {
+    scrollParent.style.overflow = 'auto'
+    expect(getScrollParent(div)).toBe(scrollParent)
+  })
+
+  test('returns the parent when it has overflow-y set to scroll', () => {
+    scrollParent.style.overflowY = 'scroll'
+    expect(getScrollParent(div)).toBe(scrollParent)
+  })
+
+  test('returns the parent when it has overflow-x set to auto', () => {
+    scrollParent.style.overflowX = 'auto'
+    expect(getScrollParent(div)).toBe(scrollParent)
+  })
+
+  test('returns the parent when multiple ancestors exist with overflow', () => {
+    const grandParent = document.createElement('div')
+    document.body.appendChild(grandParent)
+    grandParent.appendChild(scrollParent)
+
+    grandParent.style.overflow = 'auto'
+    scrollParent.style.overflow = 'scroll'
+
+    expect(getScrollParent(div)).toBe(scrollParent)
+  })
+
+  test('returns document.scrollingElement when no scroll parent is found', () => {
+    scrollParent.style.overflow = 'visible' // overflow that doesn't allow scrolling
+    expect(getScrollParent(div)).toBe(document.scrollingElement || document.documentElement)
+  })
+})
+
+describe('isScrollable', () => {
+  test('returns false for non-HTMLElement and non-SVGElement nodes', () => {
+    const textNode = document.createTextNode('This is a text node')
+    const commentNode = document.createComment('This is a comment node')
+    const fragment = document.createDocumentFragment()
+
+    expect(isScrollable(textNode)).toBe(false)
+    expect(isScrollable(commentNode)).toBe(false)
+    expect(isScrollable(fragment)).toBe(false)
+  })
+
+  test('returns false for HTMLElement with no scrollable styles', () => {
+    const div = document.createElement('div')
+    div.style.overflow = 'visible' // No scrolling allowed
+    expect(isScrollable(div)).toBe(false)
+  })
+
+  test('returns true for HTMLElement with scrollable styles', () => {
+    const div = document.createElement('div')
+    div.style.overflow = 'auto' // Scrollable
+    expect(isScrollable(div)).toBe(true)
+  })
+
+  test('returns true for SVGElement with scrollable styles', () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    svg.style.overflow = 'scroll' // Scrollable
+    expect(isScrollable(svg)).toBe(true)
+  })
+})
+
+describe('injectStyle', () => {
+  const cssBase = 'body { background-color: red; }'
+  const cssCore = 'body { background-color: blue; }'
+
+  beforeEach(() => {
+    document.head.innerHTML = '' // Reset the DOM
+  })
+
+  test('should not inject if no CSS is provided', () => {
+    injectStyle({ css: '' })
+    const styleElement = document.getElementById('react-tooltip-base-styles')
+    expect(styleElement).not.toBeInTheDocument()
+  })
+
+  test('should not inject base styles if already injected', () => {
+    const sharedState = { core: false, base: false }
+
+    injectStyle({ css: cssBase, state: sharedState })
+    injectStyle({ css: cssBase, state: sharedState }) // Attempt to inject again
+
+    const styleElements = document.querySelectorAll('#react-tooltip-base-styles')
+    expect(styleElements.length).toBe(1) // Only one instance
+  })
+
+  test('should not inject core styles if already injected', () => {
+    const sharedState = { core: false, base: false }
+
+    injectStyle({ css: cssCore, type: 'core', state: sharedState })
+    injectStyle({ css: cssCore, type: 'core', stage: sharedState })
+
+    const styleElements = document.querySelectorAll('#react-tooltip-core-styles')
+    expect(styleElements.length).toBe(1) // Only one instance
+  })
+
+  test('should not inject core styles if REACT_TOOLTIP_DISABLE_CORE_STYLES is set', () => {
+    process.env.REACT_TOOLTIP_DISABLE_CORE_STYLES = 'true'
+    injectStyle({ css: cssCore, type: 'core' })
+
+    const styleElement = document.getElementById('react-tooltip-core-styles')
+    expect(styleElement).not.toBeInTheDocument()
+
+    delete process.env.REACT_TOOLTIP_DISABLE_CORE_STYLES // Clean up
+  })
+
+  test('should not inject base styles if REACT_TOOLTIP_DISABLE_BASE_STYLES is set', () => {
+    process.env.REACT_TOOLTIP_DISABLE_BASE_STYLES = 'true'
+    injectStyle({ css: cssBase, state: { core: false, base: false } })
+
+    const styleElement = document.getElementById('react-tooltip-base-styles')
+    expect(styleElement).not.toBeInTheDocument()
+
+    delete process.env.REACT_TOOLTIP_DISABLE_BASE_STYLES // Clean up
+  })
+
+  test('should inject base styles into the DOM', () => {
+    injectStyle({ css: cssBase, state: { core: false, base: false } })
+
+    const styleElement = document.getElementById('react-tooltip-base-styles')
+    expect(styleElement).toBeInTheDocument()
+    expect(styleElement.textContent).toBe(cssBase)
+  })
+
+  test('should inject core styles into the DOM', () => {
+    injectStyle({ css: cssCore, type: 'core', state: { core: false, base: false } })
+
+    const styleElement = document.getElementById('react-tooltip-core-styles')
+    expect(styleElement).toBeInTheDocument()
+    expect(styleElement.textContent).toBe(cssCore)
+  })
+
+  test('should inject style at the top of the head when insertAt is "top"', () => {
+    injectStyle({ css: cssBase, ref: { insertAt: 'top' }, state: { core: false, base: false } })
+
+    const firstStyleElement = document.head.firstChild
+    expect(firstStyleElement.textContent).toBe(cssBase)
+  })
+
+  test('should inject style at the bottom of the head when insertAt is not "top"', () => {
+    const appendChildSpy = jest.spyOn(document.head, 'appendChild')
+
+    // No need to provide insertAt: 'bottom', just omit it
+    injectStyle({ css: cssBase, state: { core: false, base: false } })
+
+    expect(appendChildSpy).toHaveBeenCalledTimes(1) // Append should be called
+    const lastStyleElement = document.head.lastChild
+    expect(lastStyleElement.textContent).toBe(cssBase) // Check the inserted style content
+
+    appendChildSpy.mockRestore() // Clean up the spy
+  })
+
+  test('should handle legacy IE styleSheet property', () => {
+    // Mock the style element with styleSheet property (for older IE)
+    const styleMock = document.createElement('style')
+    styleMock.styleSheet = { cssText: '' } // Add the legacy styleSheet property
+
+    // Spy on document.createElement to return our mock when 'style' is created
+    const createElementSpy = jest.spyOn(document, 'createElement').mockImplementation((tag) => {
+      if (tag === 'style') {
+        return styleMock
+      }
+      return document.createElement(tag) // Return the original for other elements
+    })
+
+    // Inject the style
+    injectStyle({ css: 'body { background-color: red; }', state: { core: false, base: false } })
+
+    // Check that the styleSheet property was updated correctly
+    expect(styleMock.styleSheet.cssText).toBe('body { background-color: red; }')
+
+    // Restore the original document.createElement implementation
+    createElementSpy.mockRestore()
+  })
+
+  test('should update state[type] after injection', () => {
+    injectStyle({ css: 'body { color: black; }' })
+    expect(injected.base).toBe(true)
+
+    injectStyle({ css: 'body { color: blue; }', type: 'core' })
+    expect(injected.core).toBe(true)
+  })
+
+  test('should inject styles before the first child of head element', () => {
+    const firstStyleElement = document.createElement('style')
+    firstStyleElement.id = 'old-first-child'
+    document.head.appendChild(firstStyleElement)
+
+    injectStyle({
+      css: cssBase,
+      ref: { insertAt: 'top' },
+      state: { core: false, base: false },
+    })
+
+    const styleElement = document.getElementById('react-tooltip-base-styles')
+
+    expect(firstStyleElement).toBeInTheDocument()
+    expect(document.head.firstChild).toBe(styleElement)
+  })
+
+  test('should not fail if process.env is undefined', () => {
+    const originalEnv = process.env
+    delete process.env
+
+    expect(() => {
+      injectStyle({ css: cssCore, type: 'core' })
+    }).not.toThrow()
+
+    process.env = originalEnv
+  })
+
+  test('should use document.getElementsByTagName when document.head is undefined', () => {
+    // Backup the original document.head
+    const originalHead = document.head
+    const mockHeadElement = document.createElement('head')
+
+    // Remove document.head
+    Object.defineProperty(document, 'head', {
+      get: () => undefined,
+      configurable: true,
+    })
+
+    // Spy on getElementsByTagName and return a mock head element
+    const getElementsByTagNameSpy = jest
+      .spyOn(document, 'getElementsByTagName')
+      .mockReturnValue([mockHeadElement])
+
+    // Execute the injectStyle function
+    injectStyle({ css: 'body { color: black; }', state: { core: false, base: false } })
+
+    // Ensure getElementsByTagName was called with 'head'
+    expect(getElementsByTagNameSpy).toHaveBeenCalledWith('head')
+
+    // Ensure the style element was correctly appended to the mock head element
+    const styleElement = mockHeadElement.querySelector('style')
+    expect(styleElement).not.toBeNull()
+    expect(styleElement.textContent).toBe('body { color: black; }')
+
+    // Restore the original document.head
+    Object.defineProperty(document, 'head', {
+      get: () => originalHead,
+    })
+
+    getElementsByTagNameSpy.mockRestore()
+  })
+})
+
+describe('useIsomorphicLayoutEffect', () => {
+  let originalWindow
+
+  beforeEach(() => {
+    originalWindow = global.window
+  })
+
+  afterEach(() => {
+    global.window = originalWindow
+    jest.resetModules()
+  })
+
+  test('should use useLayoutEffect when window is defined (browser)', async () => {
+    expect(typeof window !== 'undefined').toBe(true)
+
+    const { default: useIsomorphicLayoutEffect } =
+      await import('../utils/use-isomorphic-layout-effect')
+
+    expect(useIsomorphicLayoutEffect).toBe(React.useLayoutEffect)
+  })
+
+  test('should use useEffect when window is undefined (server)', async () => {
+    delete global.window
+
+    const { default: useIsomorphicLayoutEffect } =
+      await import('../utils/use-isomorphic-layout-effect')
+
+    expect(typeof useIsomorphicLayoutEffect).toBe(typeof React.useEffect)
   })
 })

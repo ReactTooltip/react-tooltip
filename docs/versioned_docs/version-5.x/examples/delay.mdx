@@ -1,0 +1,82 @@
+---
+sidebar_position: 1
+---
+
+# Delays
+
+Delay showing/hiding the ReactTooltip component.
+
+import { Tooltip } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        margin: 'auto',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+### Delay to hide tooltip
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a
+  data-tooltip-id="tooltip-anchor-hide"
+  data-tooltip-content="It will take me 1000ms to close"
+  data-tooltip-delay-hide={1000}
+>
+  ◕‿‿◕
+</a>
+<Tooltip id="tooltip-anchor-hide" />
+```
+
+<TooltipAnchor
+  data-tooltip-id="tooltip-anchor-hide"
+  data-tooltip-content="It will take me 1000ms to close"
+  data-tooltip-delay-hide={1000}
+>
+  ◕‿‿◕
+</TooltipAnchor>
+<Tooltip id="tooltip-anchor-hide" />
+
+### Delay to show tooltip
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a
+  data-tooltip-id="tooltip-anchor-show"
+  data-tooltip-content="It took me 1000ms to open"
+  data-tooltip-delay-show={1000}
+>
+  ◕‿‿◕
+</a>
+<Tooltip id="tooltip-anchor-show" />
+```
+
+<TooltipAnchor
+  data-tooltip-id="tooltip-anchor-show"
+  data-tooltip-content="It took me 1000ms to open"
+  data-tooltip-delay-show={1000}
+>
+  ◕‿‿◕
+</TooltipAnchor>
+<Tooltip id="tooltip-anchor-show" />

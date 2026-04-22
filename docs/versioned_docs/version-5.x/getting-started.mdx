@@ -1,0 +1,225 @@
+---
+sidebar_position: 1
+---
+
+# Getting Started
+
+A react tooltip is a floating react element that displays information related to an anchor element when it receives keyboard focus or the mouse hovers over it.
+
+import { Tooltip } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+## Installation
+
+```bash
+npm install react-tooltip
+```
+
+or
+
+```bash
+yarn add react-tooltip
+```
+
+## Usage
+
+:::info
+
+If you've been using V5 for a while, you'll notice we've deprecated the `anchorId` prop in favor of the `data-tooltip-id` attribute, or the `anchorSelect` prop.
+For more info and more complex use cases using `anchorSelect`, check [the examples](./examples/anchor-select.mdx).
+
+:::
+
+### Set the default styling
+
+:::caution
+
+If you are using a version before than `v5.13.0`, you must import the CSS file or the tooltip won't show!
+
+:::
+
+:::info
+
+If you are using `v5.13.0` or newer, you don't need to import the css file manually, the styles will be injected into the page by default.
+
+:::
+
+```js
+import 'react-tooltip/dist/react-tooltip.css'
+```
+
+This needs to be done only once. We suggest you do it on your `src/index.js` or equivalent file.
+For advanced styling, check [the examples](./examples/styling.mdx).
+
+There are two ways to use ReactTooltip.
+
+1. Using props into ReactTooltip Element.
+2. Using data-attributes on anchor element.
+
+### Using anchor data attributes
+
+1 . Import `react-tooltip` after installation.
+
+```js
+import { Tooltip } from 'react-tooltip'
+```
+
+2 . Add `data-tooltip-id="<tooltip id>"`, `data-tooltip-content="<your placeholder>"` and other attributes to your elements.
+
+:::info
+
+[Click here](./options.mdx#available-attributes) the full list of available data attributes.
+
+:::
+
+```jsx
+<a
+  data-tooltip-id="my-tooltip"
+  data-tooltip-content="Hello world!"
+  data-tooltip-place="top"
+>
+  ◕‿‿◕
+</a>
+<a data-tooltip-id="my-tooltip" data-tooltip-content="Hello to you too!">
+  ◕‿‿◕
+</a>
+```
+
+3 . Create `<Tooltip />` element and set the `id` prop.
+
+:::caution
+
+Don't forget to set the tooltip id, or it will not work!
+
+:::
+
+```jsx
+<Tooltip id="my-tooltip" />
+```
+
+<div style={{ display: 'flex', columnGap: '8px', justifyContent: 'center', paddingTop: '18px' }}>
+  <TooltipAnchor
+    data-tooltip-id="my-tooltip"
+    data-tooltip-content="Hello world!"
+    data-tooltip-place="top"
+  >
+    ◕‿‿◕
+  </TooltipAnchor>
+  <TooltipAnchor data-tooltip-id="my-tooltip" data-tooltip-content="Hello to you too!">
+    ◕‿‿◕
+  </TooltipAnchor>
+  <Tooltip id="my-tooltip" />
+</div>
+
+### Using ReactTooltip props
+
+1 . Import `react-tooltip` after installation.
+
+```js
+import { Tooltip } from 'react-tooltip'
+```
+
+2 . Create anchor elements.
+
+```jsx
+<a className="my-anchor-element">◕‿‿◕</a>
+<a className="my-anchor-element">◕‿‿◕</a>
+<a className="my-anchor-element">◕‿‿◕</a>
+```
+
+3 . Create `<Tooltip />` element and set the `anchorSelect` prop.
+
+:::caution
+
+`anchorSelect` must be a valid CSS selector. [Click here](./examples/anchor-select.mdx) for more info.
+
+:::
+
+:::info
+
+[Click here](./options.mdx#available-props) the full list of available tooltip props.
+
+:::
+
+```jsx
+<Tooltip anchorSelect=".my-anchor-element" place="top">
+  Hello world!
+</Tooltip>
+```
+
+<div style={{ display: 'flex', columnGap: '8px', justifyContent: 'center', paddingTop: '18px' }}>
+  <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
+  <TooltipAnchor className="my-anchor-element">◕‿‿◕</TooltipAnchor>
+  <Tooltip anchorSelect=".my-anchor-element">Hello world!</Tooltip>
+</div>
+
+### Clickable tooltip/accessibility
+
+By default the tooltip disappears when the pointer leaves the tooltip anchor element - which means you can't interact with elements inside the tooltip and that it won't meet the 'hoverable' requirement of [WCAG Success Criterion 1.4.13 Content on Hover or Focus](https://www.w3.org/TR/WCAG22/#content-on-hover-or-focus).
+
+To allow for proper usage of elements such as buttons and inputs - or to ensure the pointer can be moved over the tooltip content without it disappearing - use the `clickable` prop.
+
+```jsx
+<a id="not-clickable">◕‿‿◕</a>
+<Tooltip anchorSelect="#not-clickable">
+  <button>You can't click me :(</button>
+</Tooltip>
+<a id="clickable">◕‿‿◕</a>
+<Tooltip anchorSelect="#clickable" clickable>
+  <button>You can click me!</button>
+</Tooltip>
+```
+
+<div style={{ display: 'flex', columnGap: '8px', justifyContent: 'center', paddingTop: '18px' }}>
+  <TooltipAnchor id="not-clickable">◕‿‿◕</TooltipAnchor>
+  <Tooltip anchorSelect="#not-clickable">
+    <button>You can't click me :(</button>
+  </Tooltip>
+  <TooltipAnchor id="clickable">◕‿‿◕</TooltipAnchor>
+  <Tooltip anchorSelect="#clickable" clickable>
+    <button>You can click me!</button>
+  </Tooltip>
+</div>
+
+### Styling
+
+Basic styling can be done by overriding the following css variables.
+For advanced styling, check [the examples](./examples/styling.mdx).
+
+```css
+:root {
+  --rt-color-white: #fff;
+  --rt-color-dark: #222;
+  --rt-color-success: #8dc572;
+  --rt-color-error: #be6464;
+  --rt-color-warning: #f0ad4e;
+  --rt-color-info: #337ab7;
+  --rt-opacity: 0.9;
+  --rt-transition-show-delay: 0.15s;
+  --rt-transition-closing-delay: 0.15s;
+}
+```

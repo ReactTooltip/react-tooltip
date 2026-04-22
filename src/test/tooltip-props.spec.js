@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, fireEvent, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import { TooltipController as Tooltip } from '../components/TooltipController'
@@ -6,7 +6,6 @@ import { TooltipController as Tooltip } from '../components/TooltipController'
 // Tell Jest to mock all timeout functions
 jest.useRealTimers()
 
-// eslint-disable-next-line react/prop-types
 const TooltipProps = ({ id, ...tooltipParams }) => (
   <>
     <span data-tooltip-id={id}>Lorem Ipsum</span>
@@ -30,44 +29,31 @@ describe('tooltip props', () => {
   })
 
   test('basic tooltip', async () => {
-    const { container } = render(<TooltipProps id="basic-example" content="Hello World!" />)
+    render(<TooltipProps id="basic-example" content="Hello World!" />)
     const anchorElement = screen.getByText('Lorem Ipsum')
 
     await userEvent.hover(anchorElement)
 
     const tooltip = await screen.findByRole('tooltip')
     expect(tooltip).toHaveAttribute('style')
-
+    await waitFor(() => {
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'basic-example')
+    })
     expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
   })
 
   test('tooltip with place', async () => {
-    const { container } = render(
-      <TooltipProps id="example-place" content="Hello World!" place="right" />,
-    )
+    render(<TooltipProps id="example-place" content="Hello World!" place="right" />)
     const anchorElement = screen.getByText('Lorem Ipsum')
 
     await userEvent.hover(anchorElement)
 
     const tooltip = await screen.findByRole('tooltip')
     expect(tooltip).toHaveAttribute('style')
-
+    await waitFor(() => {
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'example-place')
+    })
     expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
-  })
-
-  test('tooltip with html', async () => {
-    const { container } = render(<TooltipProps id="example-html" html="<div>Hello World!<div>" />)
-    const anchorElement = screen.getByText('Lorem Ipsum')
-
-    await userEvent.hover(anchorElement)
-
-    const tooltip = await screen.findByRole('tooltip')
-    expect(tooltip).toHaveAttribute('style')
-
-    expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
   })
 
   test('clickable tooltip', async () => {
@@ -155,30 +141,46 @@ describe('tooltip props', () => {
   })
 
   test('tooltip with custom position', async () => {
-    const { container } = render(
-      <TooltipProps id="example-place" content="Hello World!" position={{ x: 0, y: 0 }} />,
-    )
+    render(<TooltipProps id="example-place" content="Hello World!" position={{ x: 0, y: 0 }} />)
     const anchorElement = screen.getByText('Lorem Ipsum')
 
     await userEvent.hover(anchorElement)
 
     const tooltip = await screen.findByRole('tooltip')
     expect(tooltip).toHaveAttribute('style')
+    await waitFor(() => {
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'example-place')
+    })
 
     expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
+    expect(tooltip).toHaveTextContent('Hello World!')
   })
 
   test('tooltip with float', async () => {
     const { container } = render(<TooltipProps id="example-float" content="Hello World!" float />)
     const anchorElement = screen.getByText('Lorem Ipsum')
 
-    await userEvent.hover(anchorElement)
+    // Use act to ensure state updates and effects are flushed between steps
+    await act(async () => {
+      fireEvent.mouseEnter(anchorElement)
+    })
 
-    const tooltip = await screen.findByRole('tooltip')
-    expect(tooltip).toHaveAttribute('style')
+    // Fire pointermove after activeAnchor is set (batching in older React prevents it during hover)
+    await act(async () => {
+      anchorElement.dispatchEvent(
+        new MouseEvent('pointermove', { clientX: 5, clientY: 0, bubbles: true }),
+      )
+      // Allow microtask (computeTooltipPosition promise) to resolve
+      await new Promise((r) => setTimeout(r, 50))
+    })
 
-    expect(tooltip).toBeInTheDocument()
+    await waitFor(() => {
+      const tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toHaveAttribute('style')
+      expect(anchorElement).toHaveAttribute('aria-describedby', 'example-float')
+    })
+
+    expect(screen.getByRole('tooltip')).toBeInTheDocument()
     expect(container).toMatchSnapshot()
   })
 
@@ -207,9 +209,42 @@ describe('tooltip props', () => {
     const anchorElement = screen.getByText('Lorem Ipsum')
     await userEvent.hover(anchorElement)
 
+    await waitFor(() => {
+      const tooltip = screen.getByRole('tooltip')
+      expect(tooltip).toBeInTheDocument()
+      expect(tooltip).toHaveClass('react-tooltip__show')
+    })
+
+    expect(container).toMatchSnapshot()
+  })
+
+  test('tooltip renders numeric zero content', async () => {
+    render(<TooltipProps id="example-zero-content" content={0} />)
+    const anchorElement = screen.getByText('Lorem Ipsum')
+
+    await userEvent.hover(anchorElement)
+
     const tooltip = await screen.findByRole('tooltip')
 
     expect(tooltip).toBeInTheDocument()
-    expect(container).toMatchSnapshot()
+    expect(tooltip).toHaveTextContent('0')
+  })
+
+  test('tooltip render callback receives numeric zero content', async () => {
+    render(
+      <TooltipProps
+        id="example-zero-render-content"
+        content={0}
+        render={({ content }) => <span>{String(content)}</span>}
+      />,
+    )
+    const anchorElement = screen.getByText('Lorem Ipsum')
+
+    await userEvent.hover(anchorElement)
+
+    const tooltip = await screen.findByRole('tooltip')
+
+    expect(tooltip).toBeInTheDocument()
+    expect(tooltip).toHaveTextContent('0')
   })
 })

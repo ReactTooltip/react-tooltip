@@ -7,8 +7,10 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24.14.0'
 
       - name: Install dev dependencies
         run: yarn install
@@ -16,20 +18,27 @@ jobs:
       - name: ESLint
         run: yarn run eslint
 
-  test:
+  react-versions:
     needs: lint
     strategy:
+      fail-fast: false
       matrix:
-        version: [16, 18, 20]
+        react-version: ['16.14', '17', '18', '19']
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: ${{ matrix.version }}
+          node-version: '24.14.0'
 
       - name: Install dev dependencies
         run: yarn install
 
+      - name: Configure React version
+        run: yarn ci:react-version ${{ matrix.react-version }}
+
       - name: Run tests
-        run: yarn run test
+        run: yarn test --runInBand
+
+      - name: Generate types
+        run: npm run types

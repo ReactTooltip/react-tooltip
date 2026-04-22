@@ -33,54 +33,62 @@ export const TooltipAnchor = ({ children, id, ...rest }) => {
   )
 }
 
-### Using `data-tooltip-html`
-
-:::info
-
-You can also use [`renderToStaticMarkup()`](https://reactjs.org/docs/react-dom-server.html#rendertostaticmarkup) to render HTML/JSX.
-
-:::
+### Using tooltip children
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 
 <a
   data-tooltip-id="my-tooltip-multiline"
-  data-tooltip-html="Hello<br />some stuff in between<br />world!"
 >
   ◕‿‿◕
 </a>
-<Tooltip id="my-tooltip-multiline" />
+<Tooltip id="my-tooltip-multiline">
+  <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <span>Hello</span>
+    <span>some stuff in between</span>
+    <span>world!</span>
+  </div>
+</Tooltip>
 ```
 
-<TooltipAnchor
-  data-tooltip-id="my-tooltip-multiline"
-  data-tooltip-html="Hello<br />some stuff in between<br />world!"
->
+<TooltipAnchor data-tooltip-id="my-tooltip-multiline">
   ◕‿‿◕
 </TooltipAnchor>
-<Tooltip id="my-tooltip-multiline" />
+<Tooltip id="my-tooltip-multiline">
+  <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <span>Hello</span>
+    <span>some stuff in between</span>
+    <span>world!</span>
+  </div>
+</Tooltip>
 
-### Using tooltip children and JSX
+### Using `render` for multiline content
 
 ```jsx
 import { Tooltip } from 'react-tooltip';
 
-<a data-tooltip-id="my-tooltip-children-multiline"> ◕‿‿◕ </a>
-<Tooltip id="my-tooltip-children-multiline">
-  <div style={{ display: 'flex', flexDirection: 'column' }}>
-    <span>Hello</span>
-    <span>some stuff in between</span>
-    <span>world!</span>
-  </div>
-</Tooltip>
+<a data-tooltip-id="my-tooltip-render-multiline"> ◕‿‿◕ </a>
+<Tooltip
+  id="my-tooltip-render-multiline"
+  render={() => (
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <span>Hello</span>
+      <span>some stuff in between</span>
+      <span>world!</span>
+    </div>
+  )}
+/>
 ```
 
-<TooltipAnchor data-tooltip-id="my-tooltip-children-multiline">◕‿‿◕</TooltipAnchor>
-<Tooltip id="my-tooltip-children-multiline">
-  <div style={{ display: 'flex', flexDirection: 'column' }}>
-    <span>Hello</span>
-    <span>some stuff in between</span>
-    <span>world!</span>
-  </div>
-</Tooltip>
+<TooltipAnchor data-tooltip-id="my-tooltip-render-multiline">◕‿‿◕</TooltipAnchor>
+<Tooltip
+  id="my-tooltip-render-multiline"
+  render={() => (
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <span>Hello</span>
+      <span>some stuff in between</span>
+      <span>world!</span>
+    </div>
+  )}
+/>

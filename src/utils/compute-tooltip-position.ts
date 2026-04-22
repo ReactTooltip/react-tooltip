@@ -1,6 +1,10 @@
 import { computePosition, offset, shift, arrow, flip } from '@floating-ui/dom'
 import type { IComputePositionArgs } from './compute-tooltip-position-types'
 
+// Hoisted constant middlewares — these configs never change
+const defaultFlip = flip({ fallbackAxisSideDirection: 'start' })
+const defaultShift = shift({ padding: 5 })
+
 const computeTooltipPosition = async ({
   elementReference = null,
   tooltipReference = null,
@@ -8,19 +12,13 @@ const computeTooltipPosition = async ({
   place = 'top',
   offset: offsetValue = 10,
   strategy = 'absolute',
-  middlewares = [
-    offset(Number(offsetValue)),
-    flip({
-      fallbackAxisSideDirection: 'start',
-    }),
-    shift({ padding: 5 }),
-  ],
+  middlewares = [offset(Number(offsetValue)), defaultFlip, defaultShift],
   border,
   arrowSize = 8,
 }: IComputePositionArgs) => {
   if (!elementReference) {
     // elementReference can be null or undefined and we will not compute the position
-    // eslint-disable-next-line no-console
+
     // console.error('The reference element for tooltip was not defined: ', elementReference)
     return { tooltipStyles: {}, tooltipArrowStyles: {}, place }
   }
@@ -29,7 +27,7 @@ const computeTooltipPosition = async ({
     return { tooltipStyles: {}, tooltipArrowStyles: {}, place }
   }
 
-  const middleware = middlewares
+  const middleware = [...middlewares]
 
   if (tooltipArrowReference) {
     middleware.push(arrow({ element: tooltipArrowReference as HTMLElement, padding: 5 }))

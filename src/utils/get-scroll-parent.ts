@@ -1,4 +1,4 @@
-const isScrollable = (node: Element) => {
+export const isScrollable = (node: Element) => {
   if (!(node instanceof HTMLElement || node instanceof SVGElement)) {
     return false
   }

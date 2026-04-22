@@ -8,45 +8,56 @@ const injected = {
   base: false,
 }
 
+/**
+ * Note about `state` parameter:
+ * This parameter is used to keep track of the state of the styles
+ * into the tests since the const `injected` is not acessible or resettable in the tests
+ */
 function injectStyle({
   css,
   id = REACT_TOOLTIP_BASE_STYLES_ID,
   type = 'base',
   ref,
+  state = {},
 }: {
   css: string
   id?: string
   type?: 'core' | 'base'
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref?: any
+  state?: { [key: string]: boolean }
 }) {
-  if (!css || typeof document === 'undefined' || injected[type]) {
+  if (
+    !css ||
+    typeof document === 'undefined' ||
+    (typeof state[type] !== 'undefined' ? state[type] : injected[type])
+  ) {
     return
   }
 
   if (
     type === 'core' &&
     typeof process !== 'undefined' && // this validation prevents docs from breaking even with `process?`
-    process?.env?.REACT_TOOLTIP_DISABLE_CORE_STYLES
+    process.env &&
+    process.env.REACT_TOOLTIP_DISABLE_CORE_STYLES
   ) {
     return
   }
 
   if (
-    type !== 'base' &&
+    type === 'base' &&
     typeof process !== 'undefined' && // this validation prevents docs from breaking even with `process?`
-    process?.env?.REACT_TOOLTIP_DISABLE_BASE_STYLES
+    process.env &&
+    process.env.REACT_TOOLTIP_DISABLE_BASE_STYLES
   ) {
     return
   }
 
   if (type === 'core') {
-    // eslint-disable-next-line no-param-reassign
     id = REACT_TOOLTIP_CORE_STYLES_ID
   }
 
   if (!ref) {
-    // eslint-disable-next-line no-param-reassign
     ref = {}
   }
   const { insertAt } = ref
@@ -78,40 +89,11 @@ function injectStyle({
     style.appendChild(document.createTextNode(css))
   }
 
-  injected[type] = true
+  if (typeof state[type] !== 'undefined') {
+    state[type] = true
+  } else {
+    injected[type] = true // internal global state that jest doesn't have access
+  }
 }
 
-/**
- * @deprecated Use the `disableStyleInjection` tooltip prop instead.
- * See https://react-tooltip.com/docs/examples/styling#disabling-reacttooltip-css
- */
-function removeStyle({
-  type = 'base',
-  id = REACT_TOOLTIP_BASE_STYLES_ID,
-}: {
-  type?: 'core' | 'base'
-  id?: string
-} = {}) {
-  if (!injected[type]) {
-    return
-  }
-
-  if (type === 'core') {
-    // eslint-disable-next-line no-param-reassign
-    id = REACT_TOOLTIP_CORE_STYLES_ID
-  }
-
-  const style = document.getElementById(id)
-  if (style?.tagName === 'style') {
-    style?.remove()
-  } else if (process.env.NODE_ENV !== 'production') {
-    // eslint-disable-next-line no-console
-    console.warn(
-      `[react-tooltip] Failed to remove 'style' element with id '${id}'. Call \`injectStyle()\` first`,
-    )
-  }
-
-  injected[type] = false
-}
-
-export { injectStyle, removeStyle }
+export { injectStyle, injected }

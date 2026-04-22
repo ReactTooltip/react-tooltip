@@ -1,9 +1,7 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-import { TooltipController as Tooltip } from 'components/TooltipController'
-import { IPosition, TooltipRefProps } from 'components/Tooltip/TooltipTypes.d'
 import React, { useEffect, useRef, useState } from 'react'
 import { inline, offset } from '@floating-ui/dom'
+import { TooltipController as Tooltip } from './components/TooltipController'
+import type { IPosition, TooltipRefProps } from './components/Tooltip/TooltipTypes'
 import styles from './styles.module.css'
 
 function App() {
@@ -35,7 +33,7 @@ function App() {
     return () => {
       window.removeEventListener('keydown', handleQ)
     }
-  })
+  }, [])
 
   return (
     <main className={styles['main']}>
@@ -50,7 +48,7 @@ function App() {
       <Tooltip
         id="button1"
         place="bottom"
-        anchorId={anchorId}
+        anchorSelect={`#${anchorId}`}
         isOpen={isDarkOpen}
         setIsOpen={setIsDarkOpen}
       />
@@ -58,21 +56,21 @@ function App() {
         id="button2"
         place="top"
         variant="success"
-        anchorId="button2"
+        anchorSelect="#button2"
         isOpen={isDarkOpen}
         setIsOpen={setIsDarkOpen}
       />
       <Tooltip
         place="top"
         variant="info"
-        anchorId="button3"
+        anchorSelect="#button3"
         isOpen={isDarkOpen}
         setIsOpen={setIsDarkOpen}
       />
       <Tooltip
         place="right"
         variant="info"
-        anchorId="button3"
+        anchorSelect="#button3"
         content="My big tooltip content"
         isOpen={isDarkOpen}
         setIsOpen={setIsDarkOpen}
@@ -134,8 +132,7 @@ function App() {
             Hover me!
           </div>
           <Tooltip
-            anchorId="floatAnchor"
-            id="float-tooltip"
+            anchorSelect="#floatAnchor"
             content={
               toggle
                 ? 'This is a float tooltip with a very very large content string'
@@ -159,10 +156,9 @@ function App() {
             Click me!
           </div>
           <Tooltip
-            anchorId="onClickAnchor"
-            id="onclick-tooltip"
+            anchorSelect="#onClickAnchor"
             content={`This is an on click tooltip (x:${position.x},y:${position.y})`}
-            events={['click']}
+            openOnClick
             position={position}
             positionStrategy="fixed"
           />
@@ -192,22 +188,18 @@ function App() {
         <button id="buttonCallbacks">Check the dev console</button>
         <Tooltip
           place="bottom"
-          anchorId="buttonCallbacks"
-          // eslint-disable-next-line no-console
+          anchorSelect="#buttonCallbacks"
           afterShow={() => console.log('After show')}
-          // eslint-disable-next-line no-console
           afterHide={() => console.log('After hide')}
           content="Showing tooltip and calling afterShow method"
         />
 
         <button id="buttonCallbacksClick">With click event</button>
         <Tooltip
-          events={['click']}
+          openOnClick
           place="bottom"
-          anchorId="buttonCallbacksClick"
-          // eslint-disable-next-line no-console
+          anchorSelect="#buttonCallbacksClick"
           afterShow={() => console.log('After show with click')}
-          // eslint-disable-next-line no-console
           afterHide={() => console.log('After hide with click')}
           content="Showing tooltip and calling afterShow method"
         />
@@ -216,10 +208,8 @@ function App() {
         <Tooltip
           delayShow={1000}
           place="bottom"
-          anchorId="buttonCallbacksDelay"
-          // eslint-disable-next-line no-console
+          anchorSelect="#buttonCallbacksDelay"
           afterShow={() => console.log('After show with delay')}
-          // eslint-disable-next-line no-console
           afterHide={() => console.log('After hide with delay')}
           content="Showing tooltip and calling afterShow method"
         />
@@ -248,7 +238,7 @@ function App() {
 
         <Tooltip
           place="top"
-          anchorId="withoutCustomMiddleware"
+          anchorSelect="#withoutCustomMiddleware"
           content="Showing tooltip with default middlewares"
           positionStrategy="fixed"
         />
@@ -277,7 +267,7 @@ function App() {
 
         <Tooltip
           place="top"
-          anchorId="withCustomMiddleware"
+          anchorSelect="#withCustomMiddleware"
           content="Showing tooltip with custom inline middleware"
           positionStrategy="fixed"
           middlewares={[inline(), offset(10)]}

@@ -1,0 +1,97 @@
+name: Bug report
+description: Report a bug in react-tooltip
+title: "[BUG] "
+labels:
+  - Bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check the troubleshooting page before opening an issue:
+        https://react-tooltip.com/docs/troubleshooting
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Bug description
+      description: Describe the problem clearly and directly.
+      placeholder: The tooltip stays open after the anchor is removed...
+    validations:
+      required: true
+  - type: input
+    id: package-version
+    attributes:
+      label: Package version
+      placeholder: 6.0.0
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: To reproduce
+      description: List the steps needed to reproduce the issue.
+      placeholder: |
+        1. Render a tooltip with...
+        2. Hover the anchor...
+        3. Notice...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: The tooltip should close after...
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      placeholder: The tooltip closes immediately when...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include only the values that apply.
+      render: markdown
+      value: |
+        - OS:
+        - Browser:
+        - Browser version:
+        - React version:
+        - Framework:
+        - Rendering mode:
+    validations:
+      required: false
+  - type: textarea
+    id: code
+    attributes:
+      label: Reproduction snippet or repository
+      description: Share a minimal code sample, StackBlitz, CodeSandbox, or repository link when possible.
+      render: shell
+    validations:
+      required: false
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or recordings
+      description: Paste screenshots, recordings, or any visual context that helps explain the issue.
+    validations:
+      required: false
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      placeholder: Anything else that is relevant to the bug.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues and did not find an open match.
+          required: true
+        - label: I checked the troubleshooting page before opening this issue.
+          required: true

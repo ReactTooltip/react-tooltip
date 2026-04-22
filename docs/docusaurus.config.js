@@ -4,9 +4,11 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github')
-const darkCodeTheme = require('prism-react-renderer/themes/dracula')
+const { themes } = require('prism-react-renderer')
 const postcssPresetEnv = require('postcss-preset-env')
+
+const lightCodeTheme = themes.github
+const darkCodeTheme = themes.dracula
 
 /** @return {import('@docusaurus/types').Plugin} */
 function customPostCssPlugin() {
@@ -27,7 +29,6 @@ const config = {
   url: 'https://react-tooltip.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
 
   // GitHub pages deployment config.
@@ -41,6 +42,17 @@ const config = {
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
+  },
+
+  markdown: {
+    mdx1Compat: {
+      comments: true,
+      admonitions: true,
+      headingIds: true,
+    },
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
   },
 
   plugins: [customPostCssPlugin],
@@ -67,6 +79,17 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          lastVersion: 'current',
+          versions: {
+            current: {
+              label: 'v6',
+              path: '',
+            },
+            '5.x': {
+              label: 'v5',
+              path: 'v5',
+            },
+          },
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl: 'https://github.com/ReactTooltip/react-tooltip/tree/master/docs/',
@@ -135,10 +158,23 @@ const config = {
         },
         items: [
           {
-            type: 'doc',
-            docId: 'getting-started',
-            position: 'left',
             label: 'Docs',
+            position: 'left',
+            items: [
+              {
+                label: 'v6',
+                to: '/docs/getting-started',
+              },
+              {
+                label: 'v5',
+                to: '/docs/v5/getting-started',
+              },
+            ],
+          },
+          {
+            to: '/benchmark',
+            position: 'left',
+            label: 'Benchmark',
           },
           {
             href: 'https://github.com/ReactTooltip/react-tooltip/',
@@ -154,12 +190,20 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Getting Started',
+                label: 'Getting Started (v6)',
                 to: '/docs/getting-started',
+              },
+              {
+                label: 'Getting Started (v5)',
+                to: '/docs/v5/getting-started',
               },
               {
                 label: 'Deploying to DigitalOcean',
                 to: '/blog/digital-ocean-app-platform',
+              },
+              {
+                label: 'Benchmark',
+                to: '/benchmark',
               },
             ],
           },

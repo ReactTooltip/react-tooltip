@@ -1,0 +1,71 @@
+---
+sidebar_position: 1
+---
+
+# Children
+
+Using children for setting the ReactTooltip content.
+
+import { Tooltip } from 'react-tooltip'
+
+export const TooltipAnchor = ({ children, id, ...rest }) => {
+  return (
+    <span
+      id={id}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        borderRadius: '60px',
+        color: '#222',
+        background: 'rgba(255, 255, 255, 1)',
+        cursor: 'pointer',
+        boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #333',
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+### Using `children` as content
+
+When using `children` as content, `html` and `content` props (and their respective data attributes) will take priority.
+
+This is useful for setting a placeholder for the tooltip content.
+
+```jsx
+import { Tooltip } from 'react-tooltip';
+
+<a data-tooltip-id="my-tooltip">◕‿‿◕</a>
+<Tooltip id="my-tooltip">
+  <div>
+    <h3>This is a very interesting header</h3>
+    <p>Here's some interesting stuff:</p>
+    <ul>
+      <li>Some</li>
+      <li>Interesting</li>
+      <li>Stuff</li>
+    </ul>
+  </div>
+</Tooltip>
+```
+
+<div style={{ display: 'flex', columnGap: '16px', justifyContent: 'center', paddingTop: '18px' }}>
+  <TooltipAnchor data-tooltip-id="my-tooltip">◕‿‿◕</TooltipAnchor>
+  <Tooltip id="my-tooltip">
+    <div>
+      <h3>This is a very interesting header</h3>
+      <p>Here's some interesting stuff:</p>
+      <ul>
+        <li>Some</li>
+        <li>Interesting</li>
+        <li>Stuff</li>
+      </ul>
+    </div>
+  </Tooltip>
+</div>

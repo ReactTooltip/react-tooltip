@@ -90,6 +90,8 @@
     "@typescript-eslint/ban-ts-comment": "off",
     "dot-notation": "off",
     "no-shadow": "off",
-    "@typescript-eslint/no-shadow": "error"
+    "@typescript-eslint/no-shadow": "error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }
