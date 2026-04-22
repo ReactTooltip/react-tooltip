@@ -108,9 +108,8 @@ export default function BenchmarkPage(): React.JSX.Element {
               <div className={styles.cardBody}>
                 <h2 className={styles.cardTitle}>What Changed In V6</h2>
                 <p className={styles.cardText}>
-                  The current snapshot shows a cleaner result than the earlier runs: v6 now trends
-                  lower on mount time, lower on unmount time, and lower on mount memory across the
-                  full range of tested workloads.
+                  V6 now trends lower on mount time, lower on unmount time, and lower on mount
+                  memory across the full range of tested workloads.
                 </p>
                 <p className={styles.cardText}>
                   The v6 work keeps the existing feature surface while reducing the internal cost of
