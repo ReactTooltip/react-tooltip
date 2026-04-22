@@ -8,14 +8,6 @@ function formatDeltaMs(value: number) {
   return `${sign}${value.toFixed(2)} ms`
 }
 
-function formatBytes(value: number) {
-  if (value >= 1024) {
-    return `${(value / 1024).toFixed(2)} KB`
-  }
-
-  return `${value} B`
-}
-
 function formatMemory(value: number) {
   const sign = value > 0 ? '+' : ''
   const absolute = Math.abs(value)
@@ -31,11 +23,6 @@ function formatPercent(value: number) {
   return `${value.toFixed(1)}%`
 }
 
-function formatByteDelta(value: number) {
-  const sign = value > 0 ? '+' : ''
-  return `${sign}${formatBytes(value)}`
-}
-
 function getDeltaClass(value: number) {
   if (value < 0) {
     return styles.positive
@@ -44,64 +31,6 @@ function getDeltaClass(value: number) {
     return styles.negative
   }
   return styles.muted
-}
-
-const bundleSizeRows = [
-  {
-    artifact: 'react-tooltip.min.mjs',
-    v5Raw: 22704,
-    v6Raw: 21846,
-    rawDelta: -858,
-    rawDeltaPercent: -3.8,
-    v5Gzip: 7670,
-    v6Gzip: 7562,
-    gzipDelta: -108,
-    gzipDeltaPercent: -1.4,
-  },
-  {
-    artifact: 'react-tooltip.min.cjs',
-    v5Raw: 23414,
-    v6Raw: 22163,
-    rawDelta: -1251,
-    rawDeltaPercent: -5.3,
-    v5Gzip: 7733,
-    v6Gzip: 7527,
-    gzipDelta: -206,
-    gzipDeltaPercent: -2.7,
-  },
-  {
-    artifact: 'react-tooltip.umd.min.js',
-    v5Raw: 23691,
-    v6Raw: 22476,
-    rawDelta: -1215,
-    rawDeltaPercent: -5.1,
-    v5Gzip: 7824,
-    v6Gzip: 7631,
-    gzipDelta: -193,
-    gzipDeltaPercent: -2.5,
-  },
-  {
-    artifact: 'react-tooltip.min.css',
-    v5Raw: 2129,
-    v6Raw: 2129,
-    rawDelta: 0,
-    rawDeltaPercent: 0,
-    v5Gzip: 706,
-    v6Gzip: 706,
-    gzipDelta: 0,
-    gzipDeltaPercent: 0,
-  },
-]
-
-const packageSizeSnapshot = {
-  v5Tarball: 212464,
-  v6Tarball: 119728,
-  tarballDelta: -92736,
-  tarballDeltaPercent: -43.6,
-  v5Unpacked: 894316,
-  v6Unpacked: 517595,
-  unpackedDelta: -376721,
-  unpackedDeltaPercent: -42.1,
 }
 
 export default function BenchmarkPage(): React.JSX.Element {
@@ -343,63 +272,16 @@ export default function BenchmarkPage(): React.JSX.Element {
                 </p>
               </div>
               <div className={styles.cardBody}>
-                <h3 className={styles.cardTitle}>Shipped Size</h3>
-                <p className={styles.cardText} style={{ marginBottom: '1rem' }}>
-                  Runtime bundle size was also reduced. The minified JavaScript artifacts shipped by
-                  v6 are smaller than their v5 equivalents across ESM, CJS, and UMD, while the
-                  published CSS stays unchanged.
-                </p>
-                <div className={styles.tableWrap}>
-                  <table className={`${styles.table} ${styles.compactTable}`}>
-                    <thead>
-                      <tr>
-                        <th className={styles.countColumn}>Artifact</th>
-                        <th className={styles.mountGroup}>V5 Raw</th>
-                        <th className={styles.mountGroup}>V6 Raw</th>
-                        <th className={styles.mountGroup}>Raw Delta</th>
-                        <th className={styles.mountGroup}>V5 Gzip</th>
-                        <th className={styles.mountGroup}>V6 Gzip</th>
-                        <th className={styles.mountGroup}>Gzip Delta</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {bundleSizeRows.map((row) => (
-                        <tr key={row.artifact}>
-                          <td className={styles.countCell}>{row.artifact}</td>
-                          <td className={styles.metricCell}>{formatBytes(row.v5Raw)}</td>
-                          <td className={styles.metricCell}>{formatBytes(row.v6Raw)}</td>
-                          <td className={`${styles.metricCell} ${getDeltaClass(row.rawDelta)}`}>
-                            {formatByteDelta(row.rawDelta)} ({formatPercent(row.rawDeltaPercent)})
-                          </td>
-                          <td className={styles.metricCell}>{formatBytes(row.v5Gzip)}</td>
-                          <td className={styles.metricCell}>{formatBytes(row.v6Gzip)}</td>
-                          <td className={`${styles.metricCell} ${getDeltaClass(row.gzipDelta)}`}>
-                            {formatByteDelta(row.gzipDelta)} ({formatPercent(row.gzipDeltaPercent)})
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <h2 className={styles.cardTitle}>Finally</h2>
                 <p className={styles.cardText}>
-                  These numbers were measured from the published npm packages for{' '}
-                  <b>react-tooltip@5.30.1</b> and <b>react-tooltip@6.0.0-beta.1179.rc.12</b>.
+                  Across the full range of tested workloads, v6 mounts faster, unmounts faster, and
+                  retains less memory than v5.
                 </p>
-                <p className={styles.cardText}>
-                  The packed npm tarball also drops from{' '}
-                  {formatBytes(packageSizeSnapshot.v5Tarball)} to{' '}
-                  {formatBytes(packageSizeSnapshot.v6Tarball)} (
-                  {formatByteDelta(packageSizeSnapshot.tarballDelta)}{' '}
-                  {formatPercent(packageSizeSnapshot.tarballDeltaPercent)}), and the unpacked
-                  package drops from {formatBytes(packageSizeSnapshot.v5Unpacked)} to{' '}
-                  {formatBytes(packageSizeSnapshot.v6Unpacked)} (
-                  {formatByteDelta(packageSizeSnapshot.unpackedDelta)}{' '}
-                  {formatPercent(packageSizeSnapshot.unpackedDeltaPercent)}).
-                </p>
+
                 <p className={styles.cardText}>
                   For the full migration surface between v5 and v6, including API changes and new
                   capabilities, check the{' '}
-                  <a href="/docs/upgrade-guide/changelog-v5-v6">v5 to v6 changelog</a>.
+                  <a href="/docs/upgrade-guide/changelog-v5-v6">v5 → v6 changelog</a>.
                 </p>
               </div>
             </section>
