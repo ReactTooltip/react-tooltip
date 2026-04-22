@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react'
-import type { MutableRefObject } from 'react'
+import type { RefObject } from 'react'
 import { autoUpdate } from '@floating-ui/dom'
 import {
   debounce,
@@ -57,16 +57,16 @@ const useTooltipEvents = ({
   handleShow: (value: boolean) => void
   handleShowTooltipDelayed: (delay?: number) => void
   handleTooltipPosition: ({ x, y }: IPosition) => void
-  hoveringTooltip: MutableRefObject<boolean>
+  hoveringTooltip: RefObject<boolean>
   imperativeModeOnly?: boolean
-  lastFloatPosition: MutableRefObject<IPosition | null>
+  lastFloatPosition: RefObject<IPosition | null>
   openEvents?: AnchorOpenEvents
   openOnClick: boolean
   setActiveAnchor: (anchor: HTMLElement | null) => void
   show: boolean
-  tooltipHideDelayTimerRef: MutableRefObject<NodeJS.Timeout | null>
-  tooltipRef: MutableRefObject<HTMLElement | null>
-  tooltipShowDelayTimerRef: MutableRefObject<NodeJS.Timeout | null>
+  tooltipHideDelayTimerRef: RefObject<NodeJS.Timeout | null>
+  tooltipRef: RefObject<HTMLElement | null>
+  tooltipShowDelayTimerRef: RefObject<NodeJS.Timeout | null>
   updateTooltipPosition: () => void
 }) => {
   // Ref-stable debounced handlers — avoids recreating debounce instances on every effect run
