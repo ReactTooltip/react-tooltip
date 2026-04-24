@@ -68,7 +68,7 @@ export const benchmarkSnapshot = {
       v5UnmountMs: 0.2,
       v6UnmountMs: 0.2,
       unmountDeltaMs: 0.0,
-      unmountSpreadPercent: 50.0,
+      unmountSpreadPercent: 0.0,
       v5UpdateMs: 8.3,
       v6UpdateMs: 8.3,
       updateDeltaMs: 0.0,
