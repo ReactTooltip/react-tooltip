@@ -36,6 +36,7 @@ const useTooltipEvents = ({
   lastFloatPosition,
   openEvents,
   openOnClick,
+  rendered,
   setActiveAnchor,
   show,
   tooltipHideDelayTimerRef,
@@ -62,6 +63,7 @@ const useTooltipEvents = ({
   lastFloatPosition: RefObject<IPosition | null>
   openEvents?: AnchorOpenEvents
   openOnClick: boolean
+  rendered: boolean
   setActiveAnchor: (anchor: HTMLElement | null) => void
   show: boolean
   tooltipHideDelayTimerRef: RefObject<NodeJS.Timeout | null>
@@ -447,8 +449,10 @@ const useTooltipEvents = ({
       debouncedShow.cancel()
       debouncedHide.cancel()
     }
+    // `rendered` needs to be a dependency because `tooltipRef` becomes stale when the
+    // tooltip is removed from / added to the DOM.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [actualOpenEvents, actualCloseEvents, float, clickable])
+  }, [actualOpenEvents, actualCloseEvents, float, clickable, rendered])
 
   // --- Effect 2: Global close events + auto-update ---
   // Re-runs when the global close config changes, or when the active anchor changes
