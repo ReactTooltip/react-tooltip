@@ -124,8 +124,12 @@ describe('tooltip interaction behavior', () => {
 
     unhoverAnchor(anchor, 0)
     fireEvent.mouseEnter(tooltip)
+    advanceTimers(150) // past clickable's 100ms hide-delay so the close timer fires
     await flushMicrotasks()
-    expect(screen.getByRole('tooltip')).toBeInTheDocument()
+
+    const elem = screen.getByRole('tooltip')
+    expect(elem).toBeInTheDocument()
+    expect(elem).toHaveClass('react-tooltip__show')
 
     fireEvent.mouseLeave(tooltip)
     await flushMicrotasks()

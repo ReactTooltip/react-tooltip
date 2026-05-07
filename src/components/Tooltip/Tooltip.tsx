@@ -452,6 +452,7 @@ const Tooltip = ({
     lastFloatPosition,
     openEvents,
     openOnClick,
+    rendered,
     setActiveAnchor,
     show,
     tooltipHideDelayTimerRef,
