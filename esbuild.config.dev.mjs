@@ -1,11 +1,15 @@
 import * as esbuild from 'esbuild'
 import cssModulesPlugin from 'esbuild-css-modules-plugin'
 import fs from 'fs'
+import { parsePort } from './scripts/dev-port.mjs'
+
+const port = parsePort()
 
 const ctx = await esbuild.context({
   entryPoints: ['./src/index-dev.tsx'],
   bundle: true,
   outdir: 'build',
+  outbase: 'src',
   treeShaking: true,
   logLevel: 'info',
   plugins: [
@@ -25,6 +29,6 @@ fs.copyFile('./public/index.html', './build/index.html', (err) => {
 await ctx.watch()
 await ctx.serve({
   servedir: 'build',
-  port: 3000,
+  port,
   host: 'localhost',
 })

@@ -44,6 +44,26 @@ describe('tooltip attributes', () => {
     expect(anchorElement).toHaveAttribute('data-tooltip-content')
   })
 
+  test('uses the hovered anchor content on the first open', async () => {
+    render(
+      <>
+        <span data-tooltip-id="multiple-anchor-content" data-tooltip-content="First content">
+          First anchor
+        </span>
+        <span data-tooltip-id="multiple-anchor-content" data-tooltip-content="Second content">
+          Second anchor
+        </span>
+        <Tooltip id="multiple-anchor-content" />
+      </>,
+    )
+
+    await userEvent.hover(screen.getByText('Second anchor'))
+
+    await waitFor(() => {
+      expect(screen.getByRole('tooltip')).toHaveTextContent('Second content')
+    })
+  })
+
   test('tooltip with place', async () => {
     render(
       <TooltipAttrs

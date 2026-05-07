@@ -241,11 +241,6 @@ const useTooltipEvents = ({
     if (disableTooltip?.(anchor)) {
       return
     }
-    if (delayShow) {
-      handleShowTooltipDelayed()
-    } else {
-      handleShow(true)
-    }
     if (delayShow && activeAnchorRef.current && anchor !== activeAnchorRef.current) {
       // Moving to a different anchor while one is already active — defer the anchor
       // switch until the show delay fires to prevent content/position from updating
@@ -259,6 +254,11 @@ const useTooltipEvents = ({
       }, delayShow)
     } else {
       setActiveAnchor(anchor)
+      if (delayShow) {
+        handleShowTooltipDelayed()
+      } else {
+        handleShow(true)
+      }
     }
 
     if (tooltipHideDelayTimerRef.current) {

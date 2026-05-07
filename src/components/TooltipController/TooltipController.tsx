@@ -156,41 +156,53 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
       }
     }, [border, opacity, style?.border, style?.opacity])
 
+    const currentAnchorDataAttributes = activeAnchor
+      ? getDataAttributesFromAnchorElement(activeAnchor)
+      : anchorDataAttributes
+
     /**
      * content priority: children < render or content < html
      * children should be lower priority so that it can be used as the "default" content
      */
-    const tooltipContent = anchorDataAttributes.content ?? content
-    const tooltipPlace = (anchorDataAttributes.place as PlacesType | undefined) ?? place
-    const tooltipVariant = (anchorDataAttributes.variant as VariantType | undefined) ?? variant
+    const tooltipContent = currentAnchorDataAttributes.content ?? content
+    const tooltipPlace = (currentAnchorDataAttributes.place as PlacesType | undefined) ?? place
+    const tooltipVariant =
+      (currentAnchorDataAttributes.variant as VariantType | undefined) ?? variant
     const tooltipOffset =
-      anchorDataAttributes.offset == null ? offset : Number(anchorDataAttributes.offset)
-    const tooltipWrapper = (anchorDataAttributes.wrapper as WrapperType | undefined) ?? wrapper
+      currentAnchorDataAttributes.offset == null
+        ? offset
+        : Number(currentAnchorDataAttributes.offset)
+    const tooltipWrapper =
+      (currentAnchorDataAttributes.wrapper as WrapperType | undefined) ?? wrapper
     const tooltipPositionStrategy =
-      (anchorDataAttributes['position-strategy'] as PositionStrategy | undefined) ??
+      (currentAnchorDataAttributes['position-strategy'] as PositionStrategy | undefined) ??
       positionStrategy
     const tooltipDelayShow =
-      anchorDataAttributes['delay-show'] == null
+      currentAnchorDataAttributes['delay-show'] == null
         ? delayShow
-        : Number(anchorDataAttributes['delay-show'])
+        : Number(currentAnchorDataAttributes['delay-show'])
     const tooltipDelayHide =
-      anchorDataAttributes['delay-hide'] == null
+      currentAnchorDataAttributes['delay-hide'] == null
         ? delayHide
-        : Number(anchorDataAttributes['delay-hide'])
+        : Number(currentAnchorDataAttributes['delay-hide'])
     const tooltipAutoClose =
-      anchorDataAttributes['auto-close'] == null
+      currentAnchorDataAttributes['auto-close'] == null
         ? autoClose
-        : Number(anchorDataAttributes['auto-close'])
+        : Number(currentAnchorDataAttributes['auto-close'])
     const tooltipFloat =
-      anchorDataAttributes.float == null ? float : anchorDataAttributes.float === 'true'
+      currentAnchorDataAttributes.float == null
+        ? float
+        : currentAnchorDataAttributes.float === 'true'
     const tooltipHidden =
-      anchorDataAttributes.hidden == null ? hidden : anchorDataAttributes.hidden === 'true'
-    const tooltipClassName = anchorDataAttributes['class-name'] ?? null
+      currentAnchorDataAttributes.hidden == null
+        ? hidden
+        : currentAnchorDataAttributes.hidden === 'true'
+    const tooltipClassName = currentAnchorDataAttributes['class-name'] ?? null
 
     let renderedContent = children
     const contentWrapperRef = useRef<HTMLDivElement>(null)
     if (render) {
-      const actualContent = anchorDataAttributes.content ?? tooltipContent ?? null
+      const actualContent = currentAnchorDataAttributes.content ?? tooltipContent ?? null
       const rendered = render({ content: actualContent, activeAnchor }) as React.ReactNode
       renderedContent = rendered ? (
         <div ref={contentWrapperRef} className="react-tooltip-content-wrapper">

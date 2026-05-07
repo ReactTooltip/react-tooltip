@@ -4,6 +4,8 @@
  * work well for content-centric websites.
  */
 
+@import 'react-tooltip/dist/react-tooltip.css';
+
 /* You can override the default Infima variables here. */
 :root {
   --ifm-color-primary: #004285;

@@ -10,10 +10,13 @@ import copy from 'rollup-plugin-copy'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import ts from '@rollup/plugin-typescript'
 import typescript from 'typescript'
+import { parsePort } from './scripts/dev-port.mjs'
 
 const input = ['src/index-dev.tsx']
 
 const name = 'ReactTooltip'
+
+const port = parsePort()
 
 const globals = {
   react: 'React',
@@ -71,7 +74,7 @@ const plugins = [
     watch: true,
     ui: false,
     open: false,
-    // port: 3000,
+    port,
     // ui: {
     //   port: 3001,
     // },

@@ -2278,7 +2278,7 @@
   dependencies:
     "@floating-ui/utils" "^0.2.11"
 
-"@floating-ui/dom@^1.6.1":
+"@floating-ui/dom@1.7.6":
   version "1.7.6"
   resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.7.6.tgz#f915bba5abbb177e1f227cacee1b4d0634b187bf"
   integrity sha512-9gZSAI5XM36880PPMm//9dfiEngYoC6Am2izES1FF406YFsjvyBMmeJ2g4SAju3xWwtuynNRFL2s9hgxpLI5SQ==
@@ -3939,11 +3939,6 @@ ci-info@^3.2.0:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-3.9.0.tgz#4279a62028a7b1f262f3473fc9605f5e218c59b4"
   integrity sha512-NIxF55hv4nSqQswkAeiOi1r83xy8JldOFDTWiug55KBu9Jnblncd2U6ViHmYgHf01TPZS77NJBhBMKdWj9HQMQ==
-
-classnames@^2.3.0:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.5.1.tgz#ba774c614be0f016da105c858e7159eae8e7687b"
-  integrity sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==
 
 clean-css@^5.2.2, clean-css@^5.3.3, clean-css@~5.3.2:
   version "5.3.3"
@@ -8303,13 +8298,13 @@ react-router@5.3.4, react-router@^5.3.4:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-tooltip@5.30.1:
-  version "5.30.1"
-  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-5.30.1.tgz#d69168af4c3c104193d018ad3e2dd31ed2653262"
-  integrity sha512-1lSPLQXuVooePxadUpmcwLgOsF1mIty7UZTJ9XnyfX4drOzStYs4JMXnazcDLguQr41W5OUZddOp9kfvArdpEQ==
+react-tooltip@6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-6.0.1.tgz#76c26506e43c9cb9170111aa0ade6e4da27d59c2"
+  integrity sha512-Zc83Y1x1QE0ErNnzoEkQT5GSj0HUVZPQmlezIUu4oDUQzvf1trt7Rba3QMPmeHGMTB6qsWUatUURl9AcCYPZlQ==
   dependencies:
-    "@floating-ui/dom" "^1.6.1"
-    classnames "^2.3.0"
+    "@floating-ui/dom" "1.7.6"
+    clsx "2.1.1"
 
 react@18.3.1:
   version "18.3.1"

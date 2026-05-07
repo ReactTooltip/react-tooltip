@@ -500,7 +500,7 @@ const Tooltip = ({
   }, [content, contentWrapperRef, rendered])
 
   useEffect(() => {
-    const shouldResolveInitialActiveAnchor = rendered || defaultIsOpen || Boolean(isOpen)
+    const shouldResolveInitialActiveAnchor = defaultIsOpen || Boolean(isOpen)
 
     if (!shouldResolveInitialActiveAnchor) {
       return
