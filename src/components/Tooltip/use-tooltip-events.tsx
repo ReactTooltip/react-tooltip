@@ -325,11 +325,13 @@ const useTooltipEvents = ({
 
     const addDelegatedHoverCloseListener = () => {
       addDelegatedListener('mouseout', (event) => {
-        if (!activeAnchorContainsTarget(event)) {
+        const targetAnchor = resolveAnchorElementRef.current(event.target)
+        if (!targetAnchor && !activeAnchorContainsTarget(event)) {
           return
         }
         const relatedTarget = (event as MouseEvent).relatedTarget as HTMLElement | null
-        if (activeAnchorRef.current?.contains(relatedTarget)) {
+        const containerAnchor = targetAnchor || activeAnchorRef.current
+        if (containerAnchor?.contains(relatedTarget)) {
           return
         }
         debouncedHandleHideTooltip()
@@ -355,11 +357,13 @@ const useTooltipEvents = ({
     }
     if (actualCloseEvents.blur) {
       addDelegatedListener('focusout', (event) => {
-        if (!activeAnchorContainsTarget(event)) {
+        const targetAnchor = resolveAnchorElementRef.current(event.target)
+        if (!targetAnchor && !activeAnchorContainsTarget(event)) {
           return
         }
         const relatedTarget = (event as FocusEvent).relatedTarget as HTMLElement | null
-        if (activeAnchorRef.current?.contains(relatedTarget)) {
+        const containerAnchor = targetAnchor || activeAnchorRef.current
+        if (containerAnchor?.contains(relatedTarget)) {
           return
         }
         debouncedHandleHideTooltip()

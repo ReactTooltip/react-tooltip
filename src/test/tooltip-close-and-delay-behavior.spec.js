@@ -497,4 +497,32 @@ describe('tooltip close and delay behavior', () => {
     const tooltip = document.getElementById('deferred-anchor-test')
     expect(tooltip).toBeInTheDocument()
   })
+
+  test('hides tooltip when quickly moving between anchors and then away with delayShow', () => {
+    render(
+      <>
+        <span data-tooltip-id="stuck-tooltip-test">Anchor A</span>
+        <span data-tooltip-id="stuck-tooltip-test">Anchor B</span>
+        <TooltipController id="stuck-tooltip-test" content="Stuck Tooltip Test" delayShow={200} />
+      </>,
+    )
+
+    const anchorA = screen.getByText('Anchor A')
+    const anchorB = screen.getByText('Anchor B')
+
+    // Hover anchor A, then quickly move to anchor B before delayShow fires
+    hoverAnchor(anchorA)
+    advanceTimers(50)
+    unhoverAnchor(anchorA)
+    hoverAnchor(anchorB)
+    advanceTimers(50)
+
+    // Move away from anchor B before the deferred delayShow fires
+    unhoverAnchor(anchorB)
+
+    // Advance past the delayShow — tooltip should NOT appear
+    advanceTimers(300)
+
+    expect(document.getElementById('stuck-tooltip-test')).not.toBeInTheDocument()
+  })
 })
