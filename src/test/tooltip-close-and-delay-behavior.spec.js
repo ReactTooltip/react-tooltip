@@ -497,4 +497,138 @@ describe('tooltip close and delay behavior', () => {
     const tooltip = document.getElementById('deferred-anchor-test')
     expect(tooltip).toBeInTheDocument()
   })
+
+  test('hides tooltip when quickly moving between anchors and then away with delayShow', () => {
+    render(
+      <>
+        <span data-tooltip-id="stuck-tooltip-test">Anchor A</span>
+        <span data-tooltip-id="stuck-tooltip-test">Anchor B</span>
+        <TooltipController id="stuck-tooltip-test" content="Stuck Tooltip Test" delayShow={200} />
+      </>,
+    )
+
+    const anchorA = screen.getByText('Anchor A')
+    const anchorB = screen.getByText('Anchor B')
+
+    // Hover anchor A, then quickly move to anchor B before delayShow fires
+    hoverAnchor(anchorA)
+    advanceTimers(50)
+    unhoverAnchor(anchorA)
+    hoverAnchor(anchorB)
+    advanceTimers(50)
+
+    // Move away from anchor B before the deferred delayShow fires
+    unhoverAnchor(anchorB)
+
+    // Advance past the delayShow — tooltip should NOT appear
+    advanceTimers(300)
+
+    expect(document.getElementById('stuck-tooltip-test')).not.toBeInTheDocument()
+  })
+
+  test('switches data-tooltip-content when moving between anchors with delayShow', async () => {
+    render(
+      <>
+        <h1 data-tooltip-id="content-switch-test" data-tooltip-content="first item">
+          First heading
+        </h1>
+        <h2 data-tooltip-id="content-switch-test" data-tooltip-content="second item">
+          Second heading
+        </h2>
+        <TooltipController id="content-switch-test" place="bottom" delayShow={200} />
+      </>,
+    )
+
+    const h1 = screen.getByText('First heading')
+    const h2 = screen.getByText('Second heading')
+
+    // Hover h1 and wait for tooltip to show
+    hoverAnchor(h1, 250)
+    await waitForTooltip('content-switch-test')
+
+    const tooltip = document.getElementById('content-switch-test')
+    expect(tooltip.textContent).toBe('first item')
+
+    // Move from h1 to h2
+    unhoverAnchor(h1)
+    hoverAnchor(h2)
+
+    // During delay, content should still reflect h1
+    advanceTimers(50)
+    expect(tooltip.textContent).toBe('first item')
+
+    // After delay, content should switch to h2
+    advanceTimers(200)
+    expect(tooltip.textContent).toBe('second item')
+  })
+
+  test('switches content when quickly moving between anchors before first delayShow fires', () => {
+    render(
+      <>
+        <span data-tooltip-id="quick-switch-test" data-tooltip-content="first item">
+          Anchor A
+        </span>
+        <span data-tooltip-id="quick-switch-test" data-tooltip-content="second item">
+          Anchor B
+        </span>
+        <TooltipController id="quick-switch-test" delayShow={200} />
+      </>,
+    )
+
+    const anchorA = screen.getByText('Anchor A')
+    const anchorB = screen.getByText('Anchor B')
+
+    // Hover A briefly, then move to B before delayShow fires
+    hoverAnchor(anchorA)
+    advanceTimers(50)
+    unhoverAnchor(anchorA)
+    hoverAnchor(anchorB)
+
+    // Advance past the deferred delayShow
+    advanceTimers(250)
+
+    const tooltip = document.getElementById('quick-switch-test')
+    expect(tooltip).toBeInTheDocument()
+    expect(tooltip.textContent).toBe('second item')
+  })
+
+  test('deferred anchor switch survives when closing transition completes before delay fires', async () => {
+    render(
+      <>
+        <span data-tooltip-id="transition-race-test" data-tooltip-content="first item">
+          Anchor A
+        </span>
+        <span data-tooltip-id="transition-race-test" data-tooltip-content="second item">
+          Anchor B
+        </span>
+        <TooltipController id="transition-race-test" delayShow={200} />
+      </>,
+    )
+
+    const anchorA = screen.getByText('Anchor A')
+    const anchorB = screen.getByText('Anchor B')
+
+    // Show tooltip at A
+    hoverAnchor(anchorA, 250)
+    await waitForTooltip('transition-race-test')
+    const tooltip = document.getElementById('transition-race-test')
+    expect(tooltip.textContent).toBe('first item')
+
+    // Move from A to B — triggers deferred anchor switch
+    unhoverAnchor(anchorA)
+    hoverAnchor(anchorB)
+
+    // Simulate the closing transition completing before the deferred timer fires.
+    // In a real browser, the opacity transition ends after ~150ms (before the 200ms delay).
+    advanceTimers(25)
+    const transitionEndEvent = new Event('transitionend', { bubbles: true })
+    Object.defineProperty(transitionEndEvent, 'propertyName', { value: 'opacity' })
+    fireEvent(tooltip, transitionEndEvent)
+
+    // After the deferred delay completes, content should switch to anchor B
+    advanceTimers(250)
+    const updatedTooltip = document.getElementById('transition-race-test')
+    expect(updatedTooltip).toBeInTheDocument()
+    expect(updatedTooltip.textContent).toBe('second item')
+  })
 })
