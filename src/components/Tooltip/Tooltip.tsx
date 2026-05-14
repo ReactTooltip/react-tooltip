@@ -273,13 +273,16 @@ const Tooltip = ({
     })
   }, [])
 
+  const renderedRef = useRef(rendered)
+  renderedRef.current = rendered
+
   const handleShowTooltipDelayed = useCallback(
     (delay = delayShow) => {
       if (tooltipShowDelayTimerRef.current) {
         clearTimeout(tooltipShowDelayTimerRef.current)
       }
 
-      if (rendered) {
+      if (renderedRef.current) {
         // if the tooltip is already rendered, ignore delay
         handleShow(true)
         return
@@ -289,7 +292,7 @@ const Tooltip = ({
         handleShow(true)
       }, delay)
     },
-    [delayShow, handleShow, rendered],
+    [delayShow, handleShow],
   )
 
   const handleHideTooltipDelayed = useCallback(
