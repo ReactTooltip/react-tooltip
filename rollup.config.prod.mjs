@@ -126,10 +126,11 @@ const config = allBuildFormats.map(
         name,
         globals,
         sourcemap: true,
-        // Exclude the actual source content from the source map.
-        // This means that the source maps will contain references
-        // to positions in the original code, but not the source code itself.
-        sourcemapExcludeSources: true,
+        // Fix source map paths: TypeScript plugin with rootDir="." generates
+        // paths like ../../src/ (relative to intermediate dist/src/), but the
+        // final bundle is at dist/, so paths should be ../src/.
+        sourcemapPathTransform: (relativeSourcePath) =>
+          relativeSourcePath.replace(/^(\.\.\/)+src\//, '../src/'),
         banner,
       },
       external,
