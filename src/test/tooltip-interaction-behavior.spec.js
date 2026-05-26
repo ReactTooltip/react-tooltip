@@ -68,6 +68,27 @@ describe('tooltip interaction behavior', () => {
     expect(tooltip).toHaveTextContent('Click Only Test')
   })
 
+  test('opens on click when the anchor stops propagation', async () => {
+    await renderAndFlush(
+      <>
+        <button
+          type="button"
+          data-tooltip-id="stopped-click-test"
+          onClick={(event) => event.stopPropagation()}
+        >
+          Click Me
+        </button>
+        <TooltipController id="stopped-click-test" content="Stopped Click Test" openOnClick />
+      </>,
+    )
+
+    fireEvent.click(screen.getByText('Click Me'))
+    await flushMicrotasks()
+
+    const tooltip = await waitForTooltip('stopped-click-test')
+    expect(tooltip).toHaveTextContent('Stopped Click Test')
+  })
+
   test('stops showing after scroll and resize global close events', async () => {
     await renderAndFlush(
       <>
