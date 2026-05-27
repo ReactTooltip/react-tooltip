@@ -293,8 +293,12 @@ const useTooltipEvents = ({
   useEffect(() => {
     const cleanupFns: (() => void)[] = []
 
-    const addDelegatedListener = (eventType: string, listener: (event: Event) => void) => {
-      cleanupFns.push(addDelegatedEventListener(eventType, listener))
+    const addDelegatedListener = (
+      eventType: string,
+      listener: (event: Event) => void,
+      options?: AddEventListenerOptions,
+    ) => {
+      cleanupFns.push(addDelegatedEventListener(eventType, listener, options))
     }
 
     const activeAnchorContainsTarget = (event?: Event): boolean =>
@@ -395,7 +399,9 @@ const useTooltipEvents = ({
         return
       }
       if (clickEvents.includes(event)) {
-        addDelegatedListener(event, handleClickOpenTooltipAnchor as (event: Event) => void)
+        addDelegatedListener(event, handleClickOpenTooltipAnchor as (event: Event) => void, {
+          capture: true,
+        })
       }
     })
 
@@ -404,7 +410,9 @@ const useTooltipEvents = ({
         return
       }
       if (clickEvents.includes(event)) {
-        addDelegatedListener(event, handleClickCloseTooltipAnchor as (event: Event) => void)
+        addDelegatedListener(event, handleClickCloseTooltipAnchor as (event: Event) => void, {
+          capture: true,
+        })
       }
     })
 
