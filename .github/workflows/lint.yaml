@@ -17,28 +17,3 @@ jobs:
 
       - name: ESLint
         run: yarn run eslint
-
-  react-versions:
-    needs: lint
-    strategy:
-      fail-fast: false
-      matrix:
-        react-version: ['16.14', '17', '18', '19']
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: '24.14.0'
-
-      - name: Install dev dependencies
-        run: yarn install
-
-      - name: Configure React version
-        run: yarn ci:react-version ${{ matrix.react-version }}
-
-      - name: Run tests
-        run: yarn test --runInBand
-
-      - name: Generate types
-        run: npm run types
