@@ -304,4 +304,22 @@ describe('tooltip interaction behavior', () => {
 
     addEventListenerSpy.mockRestore()
   })
+
+  test('ignores synthetic mouseover events targeting document', () => {
+    render(
+      <>
+        <span data-tooltip-id="document-target-test">Hover Me</span>
+        <TooltipController id="document-target-test" content="Document Target Test" />
+      </>,
+    )
+
+    expect(() => {
+      act(() => {
+        document.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }))
+      })
+      advanceTimers(60)
+    }).not.toThrow()
+
+    expect(document.getElementById('document-target-test')).not.toBeInTheDocument()
+  })
 })
