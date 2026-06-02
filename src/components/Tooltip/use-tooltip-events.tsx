@@ -196,11 +196,11 @@ const useTooltipEvents = ({
   const dataTooltipId = anchorSelector ? parseDataTooltipIdSelector(anchorSelector) : null
 
   resolveAnchorElementRef.current = (target: EventTarget | null) => {
-    const targetElement = target as HTMLElement | null
-
-    if (!targetElement?.isConnected) {
+    if (!(target instanceof Element) || !target.isConnected) {
       return null
     }
+
+    const targetElement = target
 
     if (dataTooltipId) {
       const matchedAnchor = resolveDataTooltipAnchor(targetElement, dataTooltipId)
