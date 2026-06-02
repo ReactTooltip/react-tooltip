@@ -8311,10 +8311,10 @@ react-router@5.3.4, react-router@^5.3.4:
     "@floating-ui/dom" "^1.6.1"
     classnames "^2.3.0"
 
-react-tooltip@6.0.2:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-6.0.2.tgz#475d020f8bbdba9e3d9ebbb68d297982ac54d9e8"
-  integrity sha512-34/RxCkIu+MzIUGZIdRr/BR6heuopU1m1k8EeVEkApFQdloM8nzgYdiigrJ/DniCoMHyx/PcFe0pbG2MtlDwnw==
+react-tooltip@6.0.6:
+  version "6.0.6"
+  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-6.0.6.tgz#4f75c48f65743e17ffef843ac17bdf03f163ca8c"
+  integrity sha512-lVTkfNeswvos9VUdV0McdsnVYczxWQXFG2I15sHvXHEmudYXCSwHKrsbJH1j+WmawrB+83tS28vJYSz5m/Fa7g==
   dependencies:
     "@floating-ui/dom" "1.7.6"
     clsx "2.1.1"
