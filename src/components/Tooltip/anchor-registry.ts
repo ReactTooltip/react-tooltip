@@ -1,7 +1,7 @@
-type AnchorRegistrySubscriber = (anchors: HTMLElement[], error: Error | null) => void
+type AnchorRegistrySubscriber = (anchors: Element[], error: Error | null) => void
 
 type AnchorRegistryEntry = {
-  anchors: HTMLElement[]
+  anchors: Element[]
   error: Error | null
   subscribers: Set<AnchorRegistrySubscriber>
   /**
@@ -25,7 +25,7 @@ function extractTooltipId(selector: string): string | null {
   return match ? match[2].replace(/\\(['"])/g, '$1') : null
 }
 
-function areAnchorListsEqual(left: HTMLElement[], right: HTMLElement[]) {
+function areAnchorListsEqual(left: Element[], right: Element[]) {
   if (left.length !== right.length) {
     return false
   }
@@ -36,7 +36,7 @@ function areAnchorListsEqual(left: HTMLElement[], right: HTMLElement[]) {
 function readAnchorsForSelector(selector: string) {
   try {
     return {
-      anchors: Array.from(document.querySelectorAll<HTMLElement>(selector)),
+      anchors: Array.from(document.querySelectorAll(selector)),
       error: null,
     }
   } catch (error) {
@@ -146,7 +146,7 @@ function collectAffectedTooltipIds(records: MutationRecord[]): Set<string> | nul
 
   for (const record of records) {
     if (record.type === 'attributes') {
-      const target = record.target as HTMLElement
+      const target = record.target as Element
       const currentId = target.getAttribute?.('data-tooltip-id')
       if (currentId) ids.add(currentId)
       if (record.oldValue) ids.add(record.oldValue)
@@ -158,7 +158,7 @@ function collectAffectedTooltipIds(records: MutationRecord[]): Set<string> | nul
         for (let i = 0; i < nodes.length; i++) {
           const node = nodes[i]
           if (node.nodeType !== Node.ELEMENT_NODE) continue
-          const el = node as HTMLElement
+          const el = node as Element
           const id = el.getAttribute?.('data-tooltip-id')
           if (id) ids.add(id)
           // For large subtrees, bail out to full refresh to avoid double-scanning

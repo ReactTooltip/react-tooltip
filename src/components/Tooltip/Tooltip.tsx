@@ -147,11 +147,11 @@ const Tooltip = ({
   useEffect(() => {
     if (!id) return
 
-    function getAriaDescribedBy(element: HTMLElement | null) {
+    function getAriaDescribedBy(element: Element | null) {
       return element?.getAttribute('aria-describedby')?.split(' ') || []
     }
 
-    function removeAriaDescribedBy(element: HTMLElement | null) {
+    function removeAriaDescribedBy(element: Element | null) {
       const newDescribedBy = getAriaDescribedBy(element).filter((s) => s !== id)
       if (newDescribedBy.length) {
         element?.setAttribute('aria-describedby', newDescribedBy.join(' '))
@@ -597,10 +597,10 @@ const Tooltip = ({
 
   useImperativeHandle(forwardRef, () => ({
     open: (options) => {
-      let imperativeAnchor: HTMLElement | null = null
+      let imperativeAnchor: Element | null = null
       if (options?.anchorSelect) {
         try {
-          imperativeAnchor = document.querySelector<HTMLElement>(options.anchorSelect)
+          imperativeAnchor = document.querySelector(options.anchorSelect)
         } catch {
           if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
             console.warn(`[react-tooltip] "${options.anchorSelect}" is not a valid CSS selector`)

@@ -59,14 +59,14 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     }: ITooltipController,
     ref,
   ) => {
-    const [activeAnchor, setActiveAnchor] = useState<HTMLElement | null>(null)
+    const [activeAnchor, setActiveAnchor] = useState<Element | null>(null)
     const [anchorDataAttributes, setAnchorDataAttributes] = useState<
       Partial<Record<DataAttribute, string | null>>
     >({})
-    const previousActiveAnchorRef = useRef<HTMLElement | null>(null)
+    const previousActiveAnchorRef = useRef<Element | null>(null)
     const styleInjectionRef = useRef(disableStyleInjection)
 
-    const handleSetActiveAnchor = useCallback((anchor: HTMLElement | null) => {
+    const handleSetActiveAnchor = useCallback((anchor: Element | null) => {
       setActiveAnchor((prev) => {
         if (!anchor?.isSameNode(prev)) {
           previousActiveAnchorRef.current = prev
@@ -76,7 +76,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
     }, [])
 
     /* c8 ignore start */
-    const getDataAttributesFromAnchorElement = (elementReference: HTMLElement) => {
+    const getDataAttributesFromAnchorElement = (elementReference: Element) => {
       const dataAttributes = elementReference?.getAttributeNames().reduce(
         (acc, name) => {
           if (name.startsWith('data-tooltip-')) {
@@ -123,7 +123,7 @@ const TooltipController = React.forwardRef<TooltipRefProps, ITooltipController>(
         return () => {}
       }
 
-      const updateAttributes = (element: HTMLElement) => {
+      const updateAttributes = (element: Element) => {
         const attrs = getDataAttributesFromAnchorElement(element)
         setAnchorDataAttributes((prev) => {
           const keys = Object.keys(attrs) as DataAttribute[]

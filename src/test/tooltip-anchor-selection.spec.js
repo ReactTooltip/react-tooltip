@@ -214,6 +214,22 @@ describe('tooltip anchor selection', () => {
     expect(document.getElementById('delegated-hover-test')).toBeInTheDocument()
   })
 
+  test('opens for delegated hover on an svg anchor', async () => {
+    render(
+      <>
+        <svg data-tooltip-id="svg-anchor-test" aria-label="SVG anchor" width="16" height="16">
+          <circle cx="8" cy="8" r="8" />
+        </svg>
+        <TooltipController id="svg-anchor-test" content="SVG Anchor Test" />
+      </>,
+    )
+
+    const anchor = screen.getByLabelText('SVG anchor')
+
+    hoverAnchor(anchor, 100)
+    await waitForTooltip('svg-anchor-test')
+  })
+
   test('does not close on focus transitions inside the same anchor', async () => {
     render(
       <>

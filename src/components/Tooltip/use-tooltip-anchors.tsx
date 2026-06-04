@@ -29,12 +29,12 @@ const useTooltipAnchors = ({
   id?: string
   anchorSelect?: string
   imperativeAnchorSelect?: string
-  activeAnchor: HTMLElement | null
-  disableTooltip?: (anchorRef: HTMLElement | null) => boolean
+  activeAnchor: Element | null
+  disableTooltip?: (anchorRef: Element | null) => boolean
   onActiveAnchorRemoved: () => void
   trackAnchors: boolean
 }) => {
-  const [rawAnchorElements, setRawAnchorElements] = useState<HTMLElement[]>([])
+  const [rawAnchorElements, setRawAnchorElements] = useState<Element[]>([])
   const [selectorError, setSelectorError] = useState<Error | null>(null)
   const warnedSelectorRef = useRef<string | null>(null)
   const selector = useMemo(
