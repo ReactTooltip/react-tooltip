@@ -44,14 +44,14 @@ const useTooltipEvents = ({
   tooltipShowDelayTimerRef,
   updateTooltipPosition,
 }: {
-  activeAnchor: HTMLElement | null
-  anchorElements: HTMLElement[]
+  activeAnchor: Element | null
+  anchorElements: Element[]
   anchorSelector: string
   clickable: boolean
   closeEvents?: AnchorCloseEvents
   delayHide: number
   delayShow: number
-  disableTooltip?: (anchorRef: HTMLElement | null) => boolean
+  disableTooltip?: (anchorRef: Element | null) => boolean
   float: boolean
   globalCloseEvents?: GlobalCloseEvents
   handleHideTooltipDelayed: (delay?: number) => void
@@ -64,7 +64,7 @@ const useTooltipEvents = ({
   openEvents?: AnchorOpenEvents
   openOnClick: boolean
   rendered: boolean
-  setActiveAnchor: (anchor: HTMLElement | null) => void
+  setActiveAnchor: (anchor: Element | null) => void
   show: boolean
   tooltipHideDelayTimerRef: RefObject<NodeJS.Timeout | null>
   tooltipRef: RefObject<HTMLElement | null>
@@ -73,13 +73,13 @@ const useTooltipEvents = ({
 }) => {
   // Ref-stable debounced handlers — avoids recreating debounce instances on every effect run
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const debouncedShowRef = useRef(debounce((_anchor: HTMLElement | null) => {}, 50, true))
+  const debouncedShowRef = useRef(debounce((_anchor: Element | null) => {}, 50, true))
   const debouncedHideRef = useRef(debounce(() => {}, 50, true))
 
   // Cache scroll parents — only recompute when the element actually changes
   const anchorScrollParentRef = useRef<Element | null>(null)
   const tooltipScrollParentRef = useRef<Element | null>(null)
-  const prevAnchorRef = useRef<HTMLElement | null>(null)
+  const prevAnchorRef = useRef<Element | null>(null)
   const prevTooltipRef = useRef<HTMLElement | null>(null)
 
   if (activeAnchor !== prevAnchorRef.current) {
@@ -187,10 +187,8 @@ const useTooltipEvents = ({
   updateTooltipPositionRef.current = updateTooltipPosition
 
   // --- Handler refs (updated every render, read via ref indirection in effects) ---
-  const resolveAnchorElementRef = useRef<(target: EventTarget | null) => HTMLElement | null>(
-    () => null,
-  )
-  const handleShowTooltipRef = useRef<(anchor: HTMLElement | null) => void>(() => {})
+  const resolveAnchorElementRef = useRef<(target: EventTarget | null) => Element | null>(() => null)
+  const handleShowTooltipRef = useRef<(anchor: Element | null) => void>(() => {})
   const handleHideTooltipRef = useRef<() => void>(() => {})
 
   const dataTooltipId = anchorSelector ? parseDataTooltipIdSelector(anchorSelector) : null
@@ -215,8 +213,8 @@ const useTooltipEvents = ({
             ? targetElement
             : targetElement.closest(anchorSelector)) ?? null
 
-        if (matchedAnchor && !disableTooltip?.(matchedAnchor as HTMLElement)) {
-          return matchedAnchor as HTMLElement
+        if (matchedAnchor && !disableTooltip?.(matchedAnchor)) {
+          return matchedAnchor
         }
       } catch {
         return null
@@ -230,7 +228,7 @@ const useTooltipEvents = ({
     )
   }
 
-  handleShowTooltipRef.current = (anchor: HTMLElement | null) => {
+  handleShowTooltipRef.current = (anchor: Element | null) => {
     if (!anchor) {
       return
     }
@@ -283,7 +281,7 @@ const useTooltipEvents = ({
   // Update debounced callbacks to always delegate to latest handler refs
   const debouncedShow = debouncedShowRef.current
   const debouncedHide = debouncedHideRef.current
-  debouncedShow.setCallback((anchor: HTMLElement | null) => handleShowTooltipRef.current(anchor))
+  debouncedShow.setCallback((anchor: Element | null) => handleShowTooltipRef.current(anchor))
   debouncedHide.setCallback(() => handleHideTooltipRef.current())
 
   // --- Effect 1: Delegated anchor events + tooltip hover ---
@@ -302,9 +300,9 @@ const useTooltipEvents = ({
     }
 
     const activeAnchorContainsTarget = (event?: Event): boolean =>
-      Boolean(event?.target && activeAnchorRef.current?.contains(event.target as HTMLElement))
+      Boolean(event?.target instanceof Node && activeAnchorRef.current?.contains(event.target))
 
-    const debouncedHandleShowTooltip = (anchor: HTMLElement | null) => {
+    const debouncedHandleShowTooltip = (anchor: Element | null) => {
       debouncedHide.cancel()
       debouncedShow(anchor)
     }
@@ -333,9 +331,9 @@ const useTooltipEvents = ({
         if (!targetAnchor && !activeAnchorContainsTarget(event)) {
           return
         }
-        const relatedTarget = (event as MouseEvent).relatedTarget as HTMLElement | null
+        const relatedTarget = (event as MouseEvent).relatedTarget
         const containerAnchor = targetAnchor || activeAnchorRef.current
-        if (containerAnchor?.contains(relatedTarget)) {
+        if (relatedTarget instanceof Node && containerAnchor?.contains(relatedTarget)) {
           return
         }
         debouncedHandleHideTooltip()
@@ -365,9 +363,9 @@ const useTooltipEvents = ({
         if (!targetAnchor && !activeAnchorContainsTarget(event)) {
           return
         }
-        const relatedTarget = (event as FocusEvent).relatedTarget as HTMLElement | null
+        const relatedTarget = (event as FocusEvent).relatedTarget
         const containerAnchor = targetAnchor || activeAnchorRef.current
-        if (containerAnchor?.contains(relatedTarget)) {
+        if (relatedTarget instanceof Node && containerAnchor?.contains(relatedTarget)) {
           return
         }
         debouncedHandleHideTooltip()
@@ -512,8 +510,8 @@ const useTooltipEvents = ({
       if (!showRef.current) {
         return
       }
-      const target = (event as MouseEvent).target as HTMLElement
-      if (!target?.isConnected) {
+      const target = (event as MouseEvent).target
+      if (!(target instanceof Node) || !target.isConnected) {
         return
       }
       if (tooltipRef.current?.contains(target)) {

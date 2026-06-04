@@ -69,7 +69,7 @@ export interface TooltipRefProps {
   /**
    * @readonly
    */
-  activeAnchor: HTMLElement | null
+  activeAnchor: Element | null
   /**
    * @readonly
    */
@@ -129,10 +129,10 @@ export interface ITooltip {
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
   afterHide?: () => void
-  disableTooltip?: (anchorRef: HTMLElement | null) => boolean
-  previousActiveAnchor: HTMLElement | null
-  activeAnchor: HTMLElement | null
-  setActiveAnchor: (anchor: HTMLElement | null) => void
+  disableTooltip?: (anchorRef: Element | null) => boolean
+  previousActiveAnchor: Element | null
+  activeAnchor: Element | null
+  setActiveAnchor: (anchor: Element | null) => void
   border?: CSSProperties['border']
   opacity?: CSSProperties['opacity']
   arrowColor?: CSSProperties['backgroundColor']

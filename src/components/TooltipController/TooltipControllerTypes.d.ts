@@ -17,7 +17,7 @@ export interface ITooltipController {
   classNameArrow?: string
   content?: ReactNode
   portalRoot?: Element | null
-  render?: (render: { content: ReactNode | null; activeAnchor: HTMLElement | null }) => ReactNode
+  render?: (render: { content: ReactNode | null; activeAnchor: Element | null }) => ReactNode
   place?: PlacesType
   offset?: number
   id?: string
@@ -70,7 +70,7 @@ export interface ITooltipController {
   setIsOpen?: (value: boolean) => void
   afterShow?: () => void
   afterHide?: () => void
-  disableTooltip?: (anchorRef: HTMLElement | null) => boolean
+  disableTooltip?: (anchorRef: Element | null) => boolean
   role?: React.AriaRole
 }
 

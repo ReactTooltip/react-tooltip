@@ -4,9 +4,9 @@
  * all active anchors and dispatches changes to registered callbacks.
  */
 
-type AttributeCallback = (element: HTMLElement) => void
+type AttributeCallback = (element: Element) => void
 
-const observedElements = new Map<HTMLElement, Set<AttributeCallback>>()
+const observedElements = new Map<Element, Set<AttributeCallback>>()
 
 let sharedObserver: MutationObserver | null = null
 
@@ -26,7 +26,7 @@ function getObserver(): MutationObserver {
         ) {
           continue
         }
-        const target = mutation.target as HTMLElement
+        const target = mutation.target as Element
         const callbacks = observedElements.get(target)
         if (callbacks) {
           callbacks.forEach((cb) => cb(target))
@@ -37,10 +37,7 @@ function getObserver(): MutationObserver {
   return sharedObserver
 }
 
-export function observeAnchorAttributes(
-  element: HTMLElement,
-  callback: AttributeCallback,
-): () => void {
+export function observeAnchorAttributes(element: Element, callback: AttributeCallback): () => void {
   const observer = getObserver()
   let callbacks = observedElements.get(element)
   if (!callbacks) {
