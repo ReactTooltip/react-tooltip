@@ -8311,7 +8311,7 @@ react-router@5.3.4, react-router@^5.3.4:
     "@floating-ui/dom" "^1.6.1"
     classnames "^2.3.0"
 
-react-tooltip@6.0.6:
+react-tooltip@^6.0.0:
   version "6.0.6"
   resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-6.0.6.tgz#4f75c48f65743e17ffef843ac17bdf03f163ca8c"
   integrity sha512-lVTkfNeswvos9VUdV0McdsnVYczxWQXFG2I15sHvXHEmudYXCSwHKrsbJH1j+WmawrB+83tS28vJYSz5m/Fa7g==
