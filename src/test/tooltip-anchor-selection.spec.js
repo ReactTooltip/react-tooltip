@@ -63,6 +63,32 @@ describe('tooltip anchor selection', () => {
     await waitForTooltipToClose('scroll-resize-test')
   })
 
+  test('reopens on touch after closing from scroll', async () => {
+    render(
+      <>
+        <span data-tooltip-id="touch-scroll-test">Tap Me</span>
+        <TooltipController
+          id="touch-scroll-test"
+          content="Touch Scroll Test"
+          globalCloseEvents={{ scroll: true }}
+        />
+      </>,
+    )
+
+    const anchor = screen.getByText('Tap Me')
+
+    fireEvent.touchStart(anchor)
+    await waitForTooltip('touch-scroll-test')
+
+    fireEvent.scroll(window)
+    await waitForTooltipToStopShowing('touch-scroll-test')
+
+    fireEvent.touchStart(anchor)
+    await waitFor(() => {
+      expect(document.getElementById('touch-scroll-test')).not.toHaveClass('react-tooltip__closing')
+    })
+  })
+
   test('unmounts cleanly after opening and closing', async () => {
     const { unmount } = render(
       <>
