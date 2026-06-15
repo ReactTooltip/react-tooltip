@@ -357,6 +357,11 @@ const useTooltipEvents = ({
         debouncedHandleShowTooltip(resolveAnchorElementRef.current(event.target))
       })
     }
+    if (actualOpenEvents.mouseenter || actualOpenEvents.mouseover || actualOpenEvents.focus) {
+      addDelegatedListener('touchstart', (event) => {
+        debouncedHandleShowTooltip(resolveAnchorElementRef.current(event.target))
+      })
+    }
     if (actualCloseEvents.blur) {
       addDelegatedListener('focusout', (event) => {
         const targetAnchor = resolveAnchorElementRef.current(event.target)
@@ -470,6 +475,7 @@ const useTooltipEvents = ({
   useEffect(() => {
     const handleScrollResize = () => {
       handleShowRef.current(false)
+      clearTimeoutRef(tooltipShowDelayTimerRef)
     }
 
     const tooltipScrollParent = tooltipScrollParentRef.current
