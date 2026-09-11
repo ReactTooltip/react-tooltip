@@ -1,0 +1,157 @@
+---
+sidebar_position: 5
+---
+
+# Accessibility
+
+How to make sure your tooltips are usable by everyone, including keyboard and screen reader users.
+
+import { Tooltip } from 'react-tooltip'
+
+export const ButtonAnchor = ({ children, ...rest }) => (
+  <button
+    type="button"
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      margin: 'auto',
+      alignItems: 'center',
+      width: '60px',
+      height: '60px',
+      borderRadius: '60px',
+      color: '#222',
+      background: 'rgba(255, 255, 255, 1)',
+      cursor: 'pointer',
+      boxShadow: '3px 4px 3px rgba(0, 0, 0, 0.5)',
+      border: '1px solid #333',
+      font: 'inherit',
+      padding: 0,
+    }}
+    {...rest}
+  >
+    {children}
+  </button>
+)
+
+Tooltips are covered by several [WCAG](https://www.w3.org/TR/WCAG22/) success criteria. The most relevant ones are:
+
+- [**1.4.13 Content on Hover or Focus**](https://www.w3.org/TR/WCAG22/#content-on-hover-or-focus) — content shown on hover or focus must be **dismissible** (can be closed without moving the pointer or focus), **hoverable** (the pointer can move onto the content without it disappearing), and **persistent** (it stays visible until dismissed or no longer relevant).
+- [**2.1.1 Keyboard**](https://www.w3.org/TR/WCAG22/#keyboard) — the tooltip must be reachable and triggerable with a keyboard alone, not only with a pointer.
+- [**1.3.1 Info and Relationships**](https://www.w3.org/TR/WCAG22/#info-and-relationships) — the relationship between the anchor and its tooltip must be conveyed programmatically, so assistive technologies can announce it.
+
+The rest of this page shows how each of these maps to ReactTooltip props and markup. The [full example](#putting-it-all-together) at the end combines them.
+
+:::info
+
+ReactTooltip already opens the tooltip when the anchor receives keyboard focus (not just on hover), so most of the work is making sure your anchor is focusable and correctly associated with the tooltip.
+
+:::
+
+## Hoverable content (1.4.13)
+
+By default the tooltip disappears when the pointer leaves the anchor element — which means the pointer can't be moved onto the tooltip, and any buttons or links inside it are unreachable.
+
+Use the `clickable` prop so the pointer can move onto the tooltip content without it closing. See the [Clickable tooltip example](./getting-started#clickable-tooltip) in the Getting Started section.
+
+## Dismissible with `Esc` (1.4.13)
+
+Users must be able to close the tooltip without moving the pointer or focus. Enable the `escape` global close event so pressing the <kbd>Esc</kbd> key dismisses it.
+
+```jsx
+<Tooltip
+  id="dismissible-tooltip"
+  globalCloseEvents={{ escape: true }}
+/>
+```
+
+:::info
+
+`globalCloseEvents` accepts other options too (`scroll`, `resize`, `clickOutsideAnchor`). See the [options page](./options#available-props) for the full list.
+
+:::
+
+## Keyboard-accessible anchor (2.1.1)
+
+ReactTooltip opens the tooltip when the anchor receives focus, but only focusable elements can receive keyboard focus. Interactive elements such as `<a href="...">`, `<button>`, and form controls are focusable by default.
+
+If your anchor is a non-interactive element (like a `<span>` or `<div>`), make it focusable by adding `tabIndex={0}`.
+
+```jsx
+// ✅ natively focusable
+<button data-tooltip-id="my-tooltip">Help</button>
+
+// ✅ made focusable
+<span data-tooltip-id="my-tooltip" tabIndex={0}>Help</span>
+```
+
+:::caution
+
+Prefer a natively interactive element when the anchor is meant to be interacted with. Adding `tabIndex={0}` to a `<span>` makes it focusable but does not give it a button's role or behavior.
+
+:::
+
+## Associating the anchor and tooltip (1.3.1)
+
+So screen readers announce the tooltip content when the anchor is focused, add an `aria-describedby` attribute to the anchor referencing the tooltip's `id`.
+
+```jsx
+<button
+  data-tooltip-id="my-tooltip"
+  aria-describedby="my-tooltip"
+>
+  Help
+</button>
+<Tooltip id="my-tooltip" content="Helpful description" />
+```
+
+:::info
+
+ReactTooltip renders the tooltip element with `role="tooltip"`, so pairing it with `aria-describedby` gives assistive technologies the expected semantics.
+
+:::
+
+## Putting it all together
+
+This example combines all of the above: a keyboard-focusable anchor, associated with the tooltip via `aria-describedby`, whose content is reachable (`clickable`) and can be dismissed with <kbd>Esc</kbd> (`globalCloseEvents`).
+
+```jsx
+import { Tooltip } from 'react-tooltip'
+
+<button
+  data-tooltip-id="accessible-tooltip"
+  aria-describedby="accessible-tooltip"
+>
+  ◕‿‿◕
+</button>
+<Tooltip
+  id="accessible-tooltip"
+  clickable
+  globalCloseEvents={{ escape: true }}
+>
+  <a
+    href="https://react-tooltip.com"
+    target="_blank"
+    rel="noreferrer"
+    style={{ color: '#8ab4f8' }}
+  >
+    Read the docs
+  </a>
+</Tooltip>
+```
+
+<div style={{ display: 'flex', justifyContent: 'center', padding: '30px 0' }}>
+  <ButtonAnchor data-tooltip-id="accessible-tooltip" aria-describedby="accessible-tooltip">◕‿‿◕</ButtonAnchor>
+  <Tooltip
+    id="accessible-tooltip"
+    clickable
+    globalCloseEvents={{ escape: true }}
+  >
+    <a href="https://react-tooltip.com" target="_blank" rel="noreferrer" style={{ color: '#8ab4f8' }}>Read the docs</a>
+  </Tooltip>
+</div>
+
+:::tip
+
+Try it with the keyboard: <kbd>Tab</kbd> to the anchor to open the tooltip, <kbd>Tab</kbd> again to move into the link, and <kbd>Esc</kbd> to dismiss it.
+
+:::
