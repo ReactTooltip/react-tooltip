@@ -101,7 +101,7 @@ This one is handled for you. While the tooltip is open, ReactTooltip adds its `i
 
 :::caution
 
-Don't add `aria-describedby` to the anchor yourself. ReactTooltip manages it automatically, and a static attribute would point at the tooltip element even before it has been rendered (the tooltip is only added to the DOM once it opens).
+Don't add the tooltip's `id` to the anchor's `aria-describedby` yourself. ReactTooltip manages it automatically, and a static attribute would point at the tooltip element even before it has been rendered (the tooltip is only added to the DOM once it opens).
 
 :::
 
