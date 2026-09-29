@@ -92,37 +92,33 @@ Prefer a natively interactive element when the anchor is meant to be interacted 
 
 ## Associating the anchor and tooltip (1.3.1)
 
-So screen readers announce the tooltip content when the anchor is focused, add an `aria-describedby` attribute to the anchor referencing the tooltip's `id`.
+This one is handled for you. While the tooltip is open, ReactTooltip adds its `id` to the active anchor's `aria-describedby` attribute (merging with any values already there), and removes it again when the tooltip closes. This is what lets screen readers announce the tooltip content when the anchor is focused.
 
 ```jsx
-<button
-  data-tooltip-id="my-tooltip"
-  aria-describedby="my-tooltip"
->
-  Help
-</button>
+<button data-tooltip-id="my-tooltip">Help</button>
 <Tooltip id="my-tooltip" content="Helpful description" />
 ```
 
+:::caution
+
+Don't add the tooltip's `id` to the anchor's `aria-describedby` yourself. ReactTooltip manages it automatically, and a static attribute would point at the tooltip element even before it has been rendered (the tooltip is only added to the DOM once it opens).
+
+:::
+
 :::info
 
-ReactTooltip renders the tooltip element with `role="tooltip"`, so pairing it with `aria-describedby` gives assistive technologies the expected semantics.
+ReactTooltip also renders the tooltip element with `role="tooltip"`, so the automatic association gives assistive technologies the expected semantics.
 
 :::
 
 ## Putting it all together
 
-This example combines all of the above: a keyboard-focusable anchor, associated with the tooltip via `aria-describedby`, whose content is reachable (`clickable`) and can be dismissed with <kbd>Esc</kbd> (`globalCloseEvents`).
+This example combines all of the above: a keyboard-focusable anchor whose content is reachable (`clickable`) and can be dismissed with <kbd>Esc</kbd> (`globalCloseEvents`). ReactTooltip adds the `aria-describedby` association automatically while the tooltip is open.
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
 
-<button
-  data-tooltip-id="accessible-tooltip"
-  aria-describedby="accessible-tooltip"
->
-  ◕‿‿◕
-</button>
+<button data-tooltip-id="accessible-tooltip">◕‿‿◕</button>
 <Tooltip
   id="accessible-tooltip"
   clickable
@@ -140,7 +136,7 @@ import { Tooltip } from 'react-tooltip'
 ```
 
 <div style={{ display: 'flex', justifyContent: 'center', padding: '30px 0' }}>
-  <ButtonAnchor data-tooltip-id="accessible-tooltip" aria-describedby="accessible-tooltip">◕‿‿◕</ButtonAnchor>
+  <ButtonAnchor data-tooltip-id="accessible-tooltip">◕‿‿◕</ButtonAnchor>
   <Tooltip
     id="accessible-tooltip"
     clickable
