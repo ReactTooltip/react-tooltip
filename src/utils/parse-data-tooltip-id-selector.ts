@@ -1,7 +1,7 @@
 function parseDataTooltipIdSelector(selector: string) {
   const match = selector.match(/^\[data-tooltip-id=(['"])((?:\\.|(?!\1).)*)\1\]$/)
 
-  if (!match) {
+  if (!match || /\\(?!['"])/.test(match[2])) {
     return null
   }
 
