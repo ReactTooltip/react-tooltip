@@ -1,3 +1,5 @@
+import parseDataTooltipIdSelector from '../../utils/parse-data-tooltip-id-selector'
+
 type AnchorRegistrySubscriber = (anchors: Element[], error: Error | null) => void
 
 type AnchorRegistryEntry = {
@@ -15,15 +17,6 @@ type AnchorRegistryEntry = {
 const registry = new Map<string, AnchorRegistryEntry>()
 
 let documentObserver: MutationObserver | null = null
-
-/**
- * Extract a tooltip ID from a simple `[data-tooltip-id='value']` selector.
- * Returns null for complex or custom selectors.
- */
-function extractTooltipId(selector: string): string | null {
-  const match = selector.match(/^\[data-tooltip-id=(['"])((?:\\.|(?!\1).)*)\1\]$/)
-  return match ? match[2].replace(/\\(['"])/g, '$1') : null
-}
 
 function areAnchorListsEqual(left: Element[], right: Element[]) {
   if (left.length !== right.length) {
@@ -222,7 +215,7 @@ export function subscribeAnchorSelector(selector: string, subscriber: AnchorRegi
       anchors: initialState.anchors,
       error: initialState.error,
       subscribers: new Set(),
-      tooltipId: extractTooltipId(selector),
+      tooltipId: parseDataTooltipIdSelector(selector),
     }
     registry.set(selector, entry)
   }
