@@ -15,6 +15,11 @@ import type {
   IPosition,
 } from './TooltipTypes'
 import { addDelegatedEventListener } from './event-delegation'
+import {
+  isWindowRestoredFocus,
+  shouldOpenOnVisibleFocus,
+  subscribeFocusOpenGuards,
+} from './focus-open'
 
 const useTooltipEvents = ({
   activeAnchor,
@@ -100,7 +105,7 @@ const useTooltipEvents = ({
       ? { ...openEvents }
       : {
           mouseenter: true,
-          focus: true,
+          focus: 'visible',
           click: false,
           dblclick: false,
           mousedown: false,
@@ -353,7 +358,16 @@ const useTooltipEvents = ({
       addDelegatedHoverCloseListener()
     }
     if (actualOpenEvents.focus) {
+      cleanupFns.push(subscribeFocusOpenGuards())
       addDelegatedListener('focusin', (event) => {
+        if (isWindowRestoredFocus(event.target)) {
+          return
+        }
+        // `true` keeps the old behavior and opens on any focus. The default,
+        // and `'visible'`, open only when the user moved focus there.
+        if (actualOpenEvents.focus !== true && !shouldOpenOnVisibleFocus(event)) {
+          return
+        }
         debouncedHandleShowTooltip(resolveAnchorElementRef.current(event.target))
       })
     }
