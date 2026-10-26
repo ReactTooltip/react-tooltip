@@ -14,15 +14,24 @@ const TYPEABLE_SELECTOR =
 let restoredFocusElement: Element | null = null
 let clearTimer: ReturnType<typeof setTimeout> | null = null
 let listening = false
+let modalityListening = false
 let subscribers = 0
 let session = 0
 let lastInputWasKeyboard = true
+let macSafari: boolean | null = null
 
 function isJSDOM(): boolean {
   return typeof navigator !== 'undefined' && navigator.userAgent.includes('jsdom')
 }
 
 function isMacSafari(): boolean {
+  if (macSafari === null) {
+    macSafari = detectMacSafari()
+  }
+  return macSafari
+}
+
+function detectMacSafari(): boolean {
   // JSDOM reports an Apple vendor. Never treat the test environment as Safari,
   // or a Mac platform string would skip :focus-visible entirely.
   if (isJSDOM() || typeof navigator === 'undefined') {
@@ -78,10 +87,13 @@ function detach() {
   if (listening && typeof window !== 'undefined') {
     window.removeEventListener('blur', onWindowBlur)
     window.removeEventListener('focus', onWindowFocus)
-    window.removeEventListener('keydown', onKeyDown, true)
-    window.removeEventListener('pointerdown', onPointerDown, true)
+    if (modalityListening) {
+      window.removeEventListener('keydown', onKeyDown, true)
+      window.removeEventListener('pointerdown', onPointerDown, true)
+    }
   }
   listening = false
+  modalityListening = false
   restoredFocusElement = null
   lastInputWasKeyboard = true
   if (clearTimer !== null) {
@@ -97,8 +109,13 @@ export function subscribeFocusOpenGuards(): () => void {
     listening = true
     window.addEventListener('blur', onWindowBlur)
     window.addEventListener('focus', onWindowFocus)
-    window.addEventListener('keydown', onKeyDown, true)
-    window.addEventListener('pointerdown', onPointerDown, true)
+    // Only Mac Safari reads this, and only when :focus-visible is wrong.
+    // Other browsers must not pay for a listener on every key and click.
+    if (isMacSafari()) {
+      window.addEventListener('keydown', onKeyDown, true)
+      window.addEventListener('pointerdown', onPointerDown, true)
+      modalityListening = true
+    }
   }
 
   return () => {
@@ -158,5 +175,6 @@ export function shouldOpenOnVisibleFocus(event: Event): boolean {
 export function resetFocusOpenGuards(): void {
   session += 1
   subscribers = 0
+  macSafari = null
   detach()
 }
