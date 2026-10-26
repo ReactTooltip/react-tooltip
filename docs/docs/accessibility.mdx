@@ -43,7 +43,7 @@ The rest of this page shows how each of these maps to ReactTooltip props and mar
 
 :::info
 
-ReactTooltip already opens the tooltip when the anchor receives keyboard focus (not just on hover), so most of the work is making sure your anchor is focusable and correctly associated with the tooltip.
+ReactTooltip opens the tooltip when the anchor receives keyboard focus (`:focus-visible`), not only on hover. Focus moved by a script, or focus the browser restores when you return to the window, does not open it. Most of the remaining work is making sure your anchor is focusable and correctly associated with the tooltip.
 
 :::
 
@@ -72,7 +72,7 @@ Users must be able to close the tooltip without moving the pointer or focus. Ena
 
 ## Keyboard-accessible anchor (2.1.1)
 
-ReactTooltip opens the tooltip when the anchor receives focus, but only focusable elements can receive keyboard focus. Interactive elements such as `<a href="...">`, `<button>`, and form controls are focusable by default.
+ReactTooltip opens the tooltip when the anchor receives keyboard focus, but only focusable elements can receive keyboard focus. Interactive elements such as `<a href="...">`, `<button>`, and form controls are focusable by default.
 
 If your anchor is a non-interactive element (like a `<span>` or `<div>`), make it focusable by adding `tabIndex={0}`.
 
