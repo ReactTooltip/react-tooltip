@@ -123,6 +123,71 @@ describe('tooltip focus visibility', () => {
     expect(describedBy(anchor)).not.toContain('restore-focus')
   })
 
+  test('does not reopen an open tooltip when the window regains focus', async () => {
+    renderTip({
+      id: 'restore-open',
+      children: (
+        <button type="button" data-tooltip-id="restore-open">
+          Model
+        </button>
+      ),
+    })
+    const anchor = screen.getByRole('button', { name: 'Model' })
+
+    act(() => {
+      anchor.focus()
+    })
+    await waitForTooltip('restore-open')
+    act(() => {
+      jest.advanceTimersByTime(30)
+    })
+    expect(describedBy(anchor)).toContain('restore-open')
+
+    act(() => {
+      window.dispatchEvent(new Event('blur'))
+      fireEvent.focusOut(anchor)
+    })
+    act(() => {
+      jest.runOnlyPendingTimers()
+    })
+    act(() => {
+      jest.runOnlyPendingTimers()
+    })
+    expect(document.getElementById('restore-open')).not.toBeInTheDocument()
+    expect(describedBy(anchor)).not.toContain('restore-open')
+
+    act(() => {
+      window.dispatchEvent(new Event('focus'))
+      fireEvent.focus(anchor)
+      jest.advanceTimersByTime(30)
+    })
+    expect(describedBy(anchor)).not.toContain('restore-open')
+  })
+
+  test('opens when focus moves from a non-anchor onto an anchor within the show debounce', () => {
+    renderTip({
+      id: 'tab-sequence',
+      children: (
+        <>
+          <button type="button">Other</button>
+          <button type="button" data-tooltip-id="tab-sequence">
+            Model
+          </button>
+        </>
+      ),
+    })
+    const other = screen.getByRole('button', { name: 'Other' })
+    const anchor = screen.getByRole('button', { name: 'Model' })
+
+    act(() => {
+      fireEvent.focus(other)
+      fireEvent.focus(anchor)
+      jest.advanceTimersByTime(30)
+    })
+
+    expect(describedBy(anchor)).toContain('tab-sequence')
+  })
+
   test('does not keep blocking focus when the window never fires focus', async () => {
     renderTip({
       id: 'restore-no-window-focus',
