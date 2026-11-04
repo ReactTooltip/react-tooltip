@@ -21,6 +21,13 @@ V6 keeps the core tooltip behavior from V5, but updates the implementation and A
 - `data-tooltip-html` was removed
 - `html` prop was removed
 - Raw HTML string examples should now be implemented with `children` or `render`
+- Default padding (`8px 16px`) is on `.react-tooltip-content-wrapper`, not the root `.react-tooltip`. This also shipped in 5.30.1. A `padding` rule on `className` is added around the content instead of replacing the default. Set it on the content wrapper:
+
+```css
+.my-tooltip .react-tooltip-content-wrapper {
+  padding: 0;
+}
+```
 
 ## New And Updated Capabilities
 
