@@ -348,13 +348,15 @@ import { Tooltip } from 'react-tooltip'
 
 ### Changing the padding
 
+The default `padding: 8px 16px` is on `.react-tooltip-content-wrapper`. `className` is applied to the tooltip root, so a `padding` rule there is added around the content instead of replacing the default. Set padding on the content wrapper.
+
 #### Removing padding
 
 ```jsx
 import { Tooltip } from 'react-tooltip'
 
 <style>
-.example-container .example-no-padding {
+.example-container .example-no-padding .react-tooltip-content-wrapper {
   padding: 0;
 }
 </style>
@@ -383,7 +385,7 @@ import { Tooltip } from 'react-tooltip'
 import { Tooltip } from 'react-tooltip'
 
 <style>
-.example-container .example-padding {
+.example-container .example-padding .react-tooltip-content-wrapper {
   padding: 48px;
 }
 </style>

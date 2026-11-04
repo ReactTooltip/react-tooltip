@@ -86,11 +86,11 @@
   border-radius: 50%;
 }
 
-.example-container .example-no-padding {
+.example-container .example-no-padding .react-tooltip-content-wrapper {
   padding: 0;
 }
 
-.example-container .example-padding {
+.example-container .example-padding .react-tooltip-content-wrapper {
   padding: 48px;
 }
 
