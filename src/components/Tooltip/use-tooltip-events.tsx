@@ -15,6 +15,11 @@ import type {
   IPosition,
 } from './TooltipTypes'
 import { addDelegatedEventListener } from './event-delegation'
+import {
+  isWindowRestoredFocus,
+  shouldOpenOnVisibleFocus,
+  subscribeFocusOpenGuards,
+} from './focus-open'
 
 const useTooltipEvents = ({
   activeAnchor,
@@ -100,7 +105,7 @@ const useTooltipEvents = ({
       ? { ...openEvents }
       : {
           mouseenter: true,
-          focus: true,
+          focus: 'visible',
           click: false,
           dblclick: false,
           mousedown: false,
@@ -284,6 +289,14 @@ const useTooltipEvents = ({
   debouncedShow.setCallback((anchor: Element | null) => handleShowTooltipRef.current(anchor))
   debouncedHide.setCallback(() => handleHideTooltipRef.current())
 
+  const focusOpens = Boolean(actualOpenEvents.focus)
+  useEffect(() => {
+    if (!focusOpens) {
+      return undefined
+    }
+    return subscribeFocusOpenGuards()
+  }, [focusOpens])
+
   // --- Effect 1: Delegated anchor events + tooltip hover ---
   // Only re-runs when the set of active event types or interaction mode changes.
   // Handlers read reactive values (activeAnchor, show, etc.) from refs at invocation
@@ -354,12 +367,26 @@ const useTooltipEvents = ({
     }
     if (actualOpenEvents.focus) {
       addDelegatedListener('focusin', (event) => {
-        debouncedHandleShowTooltip(resolveAnchorElementRef.current(event.target))
+        if (isWindowRestoredFocus(event.target)) {
+          return
+        }
+        const anchor = resolveAnchorElementRef.current(event.target)
+        if (!anchor) {
+          return
+        }
+        if (actualOpenEvents.focus !== true && !shouldOpenOnVisibleFocus(event)) {
+          return
+        }
+        debouncedHandleShowTooltip(anchor)
       })
     }
     if (actualOpenEvents.mouseenter || actualOpenEvents.mouseover || actualOpenEvents.focus) {
       addDelegatedListener('touchstart', (event) => {
-        debouncedHandleShowTooltip(resolveAnchorElementRef.current(event.target))
+        const anchor = resolveAnchorElementRef.current(event.target)
+        if (!anchor) {
+          return
+        }
+        debouncedHandleShowTooltip(anchor)
       })
     }
     if (actualCloseEvents.blur) {

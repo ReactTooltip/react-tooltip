@@ -82,9 +82,21 @@ export interface TooltipRefProps {
 
 type AnchorClickEvents = 'click' | 'dblclick' | 'mousedown' | 'mouseup'
 
-export type AnchorOpenEvents = Partial<
-  Record<'mouseenter' | 'focus' | 'mouseover' | AnchorClickEvents, boolean>
->
+export type AnchorOpenEvents = {
+  mouseenter?: boolean
+  mouseover?: boolean
+  /**
+   * `true` also opens when a script moves focus. `'visible'` (the default when
+   * `openEvents` is omitted) opens only for keyboard focus, matching
+   * `:focus-visible`. Neither opens when the browser restores focus after the
+   * window blurs.
+   */
+  focus?: boolean | 'visible'
+  click?: boolean
+  dblclick?: boolean
+  mousedown?: boolean
+  mouseup?: boolean
+}
 export type AnchorCloseEvents = Partial<
   Record<'mouseleave' | 'blur' | 'mouseout' | AnchorClickEvents, boolean>
 >
