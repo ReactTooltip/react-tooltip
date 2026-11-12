@@ -27,7 +27,8 @@
   display: none;
 }
 
-.clickable {
+/* only while it shows: a tooltip that is not showing is invisible and must not take the pointer */
+.clickable.show {
   pointer-events: auto;
 }
 
