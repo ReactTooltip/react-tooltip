@@ -9,21 +9,14 @@ import React, {
 } from 'react'
 import { createPortal } from 'react-dom'
 import clsx from 'clsx'
-import {
-  useIsomorphicLayoutEffect,
-  computeTooltipPosition,
-  cssTimeToMs,
-  clearTimeoutRef,
-} from '../../utils'
+import { useIsomorphicLayoutEffect, computeTooltipPosition, clearTimeoutRef } from '../../utils'
 import type { IComputedPosition } from '../../utils'
 import coreStyles from './core-styles.module.css'
 import styles from './styles.module.css'
 import useTooltipAnchors from './use-tooltip-anchors'
 import useTooltipEvents from './use-tooltip-events'
+import useTooltipRemoval from './use-tooltip-removal'
 import type { IPosition, ITooltip, TooltipImperativeOpenOptions } from './TooltipTypes'
-
-// Shared across all tooltip instances — the CSS variable is on :root and never changes per-instance
-let globalTransitionShowDelay: number | null = null
 
 const Tooltip = ({
   // props
@@ -76,13 +69,13 @@ const Tooltip = ({
   const tooltipShowDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const tooltipHideDelayTimerRef = useRef<NodeJS.Timeout | null>(null)
   const tooltipAutoCloseTimerRef = useRef<NodeJS.Timeout | null>(null)
-  const missedTransitionTimerRef = useRef<NodeJS.Timeout | null>(null)
   const [computedPosition, setComputedPosition] = useState<IComputedPosition>({
     tooltipStyles: {},
     tooltipArrowStyles: {},
     place,
   })
   const [show, setShow] = useState(false)
+  const [showRequested, setShowRequested] = useState(false)
   const [rendered, setRendered] = useState(false)
   const [imperativeOptions, setImperativeOptions] = useState<TooltipImperativeOpenOptions | null>(
     null,
@@ -121,6 +114,7 @@ const Tooltip = ({
       if (!mounted.current) {
         return
       }
+      setShowRequested(value)
       if (value) {
         setRendered(true)
       }
@@ -199,33 +193,23 @@ const Tooltip = ({
     if (show === wasShowing.current) {
       return
     }
-    clearTimeoutRef(missedTransitionTimerRef)
     wasShowing.current = show
     if (show) {
       afterShow?.()
-    } else {
-      /**
-       * see `onTransitionEnd` on tooltip wrapper
-       */
-      if (globalTransitionShowDelay === null) {
-        const style = getComputedStyle(document.body)
-        globalTransitionShowDelay = cssTimeToMs(
-          style.getPropertyValue('--rt-transition-show-delay'),
-        )
-      }
-      const transitionShowDelay = globalTransitionShowDelay
-      missedTransitionTimerRef.current = setTimeout(() => {
-        /**
-         * if the tooltip switches from `show === true` to `show === false` too fast
-         * the transition never runs, so `onTransitionEnd` callback never gets fired
-         */
-        setRendered(false)
-        setImperativeOptions(null)
-        afterHide?.()
-        // +25ms just to make sure `onTransitionEnd` (if it gets fired) has time to run
-      }, transitionShowDelay + 25)
     }
-  }, [afterHide, afterShow, show])
+  }, [afterShow, show])
+
+  const handleTransitionEnd = useTooltipRemoval({
+    rendered,
+    show,
+    // a controlled tooltip shows when `isOpen` says so, whatever was requested
+    showRequested: isOpen === undefined ? showRequested : isOpen,
+    afterHide,
+    onRemove: () => {
+      setRendered(false)
+      setImperativeOptions(null)
+    },
+  })
 
   useEffect(() => {
     clearTimeoutRef(tooltipAutoCloseTimerRef)
@@ -550,7 +534,6 @@ const Tooltip = ({
       clearTimeoutRef(tooltipShowDelayTimerRef)
       clearTimeoutRef(tooltipHideDelayTimerRef)
       clearTimeoutRef(tooltipAutoCloseTimerRef)
-      clearTimeoutRef(missedTransitionTimerRef)
     }
   }, [defaultIsOpen, handleShow])
 
@@ -639,7 +622,6 @@ const Tooltip = ({
       clearTimeoutRef(tooltipShowDelayTimerRef)
       clearTimeoutRef(tooltipHideDelayTimerRef)
       clearTimeoutRef(tooltipAutoCloseTimerRef)
-      clearTimeoutRef(missedTransitionTimerRef)
     }
   }, [])
 
@@ -660,15 +642,7 @@ const Tooltip = ({
           positionStrategy === 'fixed' && coreStyles['fixed'],
           clickable && coreStyles['clickable'],
         )}
-        onTransitionEnd={(event: TransitionEvent) => {
-          clearTimeoutRef(missedTransitionTimerRef)
-          if (show || event.propertyName !== 'opacity') {
-            return
-          }
-          setRendered(false)
-          setImperativeOptions(null)
-          afterHide?.()
-        }}
+        onTransitionEnd={handleTransitionEnd}
         style={tooltipStyle}
         ref={tooltipRef}
       >
