@@ -89,7 +89,8 @@ const useTooltipRemoval = ({
 
   return useCallback(
     (event: TransitionEvent) => {
-      if (!show && event.propertyName === 'opacity') {
+      // the tooltip's own fade, not a transition inside its content that bubbled up
+      if (!show && event.target === event.currentTarget && event.propertyName === 'opacity') {
         setRemovalDue(true)
       }
     },

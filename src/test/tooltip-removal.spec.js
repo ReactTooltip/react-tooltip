@@ -147,6 +147,30 @@ describe('tooltip removal', () => {
     expect(afterHide).toHaveBeenCalledTimes(1)
   })
 
+  test('keeps a closing tooltip when an opacity transition inside its content ends', async () => {
+    render(
+      <>
+        <span data-tooltip-id={TOOLTIP_ID}>Hover Me</span>
+        <TooltipController id={TOOLTIP_ID}>
+          <span>Content</span>
+        </TooltipController>
+      </>,
+    )
+
+    const anchor = screen.getByText('Hover Me')
+    hoverAnchor(anchor, 100)
+    const tooltip = await waitForTooltip(TOOLTIP_ID)
+    await expectTooltipToShow(tooltip)
+
+    unhoverAnchor(anchor, 20)
+    expect(getTooltip()).toHaveClass('react-tooltip__closing')
+    fireOpacityTransitionEnd(screen.getByText('Content'))
+    expect(getTooltip()).toBeInTheDocument()
+
+    fireOpacityTransitionEnd(getTooltip())
+    expect(getTooltip()).not.toBeInTheDocument()
+  })
+
   test.each([
     ['away from the tooltip', false],
     ['on the tooltip', true],
