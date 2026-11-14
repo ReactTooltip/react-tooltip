@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { TooltipController } from '../components/TooltipController'
 import {
@@ -354,6 +354,45 @@ describe('tooltip close and delay behavior', () => {
     advanceTimers(200)
 
     expect(document.getElementById('escape-cancels-show-timer-test')).not.toBeInTheDocument()
+  })
+
+  test('closes a clickable tooltip on leaving its anchor after Escape closed one under the pointer', async () => {
+    render(
+      <>
+        <span data-tooltip-id="escape-on-tooltip-test">Hover Me</span>
+        <TooltipController
+          id="escape-on-tooltip-test"
+          content="Escape On Tooltip Test"
+          clickable
+          globalCloseEvents={{ escape: true }}
+        />
+      </>,
+    )
+
+    const anchor = screen.getByText('Hover Me')
+    hoverAnchor(anchor, 100)
+    const tooltip = await waitForTooltip('escape-on-tooltip-test')
+    await waitFor(() => {
+      expect(tooltip).toHaveClass('react-tooltip__show')
+    })
+    // the pointer moves onto the tooltip, and Escape removes the tooltip from under it
+    unhoverAnchor(anchor)
+    fireEvent.mouseOver(tooltip)
+    fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' })
+    advanceTimers(500)
+    advanceTimers(500)
+    expect(document.getElementById('escape-on-tooltip-test')).not.toBeInTheDocument()
+
+    hoverAnchor(anchor, 100)
+    await waitFor(() => {
+      expect(document.getElementById('escape-on-tooltip-test')).toHaveClass('react-tooltip__show')
+    })
+    unhoverAnchor(anchor)
+    advanceTimers(500)
+    // Second advancement needed: the first fires handleShow(false) timeout,
+    // which creates the missedTransitionTimer during the effect flush
+    advanceTimers(500)
+    expect(document.getElementById('escape-on-tooltip-test')).not.toBeInTheDocument()
   })
 
   test('does not close on non-Escape keys', async () => {

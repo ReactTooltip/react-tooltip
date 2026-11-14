@@ -208,6 +208,11 @@ const Tooltip = ({
     onRemove: () => {
       setRendered(false)
       setImperativeOptions(null)
+      // a tooltip that is not in the DOM is not under the pointer,
+      // even when it left the DOM without a `mouseout`
+      hoveringTooltip.current = false
+      // and a hide that was waiting for the pointer has nothing left to close
+      clearTimeoutRef(tooltipHideDelayTimerRef)
     },
   })
 
@@ -394,6 +399,8 @@ const Tooltip = ({
   ])
 
   const handleActiveAnchorRemoved = useCallback(() => {
+    // the tooltip leaves the DOM here too, so it is no longer under the pointer
+    hoveringTooltip.current = false
     setRendered(false)
     handleShow(false)
     setActiveAnchor(null)
