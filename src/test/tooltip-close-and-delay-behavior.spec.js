@@ -335,6 +335,27 @@ describe('tooltip close and delay behavior', () => {
     expect(document.getElementById('cancel-show-timer-test')).not.toBeInTheDocument()
   })
 
+  test('cancels a pending show timer on Escape when configured globally', () => {
+    render(
+      <>
+        <span data-tooltip-id="escape-cancels-show-timer-test">Hover Me</span>
+        <TooltipController
+          id="escape-cancels-show-timer-test"
+          content="Escape Cancels Show Timer Test"
+          delayShow={100}
+          globalCloseEvents={{ escape: true }}
+        />
+      </>,
+    )
+
+    hoverAnchor(screen.getByText('Hover Me'))
+    advanceTimers(40)
+    fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' })
+    advanceTimers(200)
+
+    expect(document.getElementById('escape-cancels-show-timer-test')).not.toBeInTheDocument()
+  })
+
   test('does not close on non-Escape keys', async () => {
     render(
       <>
