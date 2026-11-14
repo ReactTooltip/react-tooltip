@@ -2,15 +2,18 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { cssTimeToMs, useIsomorphicLayoutEffect } from '../../utils'
 
 // Shared across all tooltip instances — the CSS variable is on :root and never changes per-instance
-let globalTransitionShowDelay: number | null = null
+let globalTransitionClosingDelay: number | null = null
 
+// the removal waits as long as the closing transition takes
 const getMissedTransitionDelay = () => {
-  if (globalTransitionShowDelay === null) {
+  if (globalTransitionClosingDelay === null) {
     const style = getComputedStyle(document.body)
-    globalTransitionShowDelay = cssTimeToMs(style.getPropertyValue('--rt-transition-show-delay'))
+    globalTransitionClosingDelay = cssTimeToMs(
+      style.getPropertyValue('--rt-transition-closing-delay'),
+    )
   }
   // +25ms just to make sure `onTransitionEnd` (if it gets fired) has time to run
-  return globalTransitionShowDelay + 25
+  return globalTransitionClosingDelay + 25
 }
 
 /**
