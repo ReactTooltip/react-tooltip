@@ -214,6 +214,7 @@ const Tooltip = ({
       // and a hide that was waiting for the pointer has nothing left to close
       clearTimeoutRef(tooltipHideDelayTimerRef)
     },
+    tooltipRef,
   })
 
   useEffect(() => {

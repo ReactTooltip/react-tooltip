@@ -1,19 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import type { RefObject } from 'react'
 import { cssTimeToMs, useIsomorphicLayoutEffect } from '../../utils'
 
-// Shared across all tooltip instances — the CSS variable is on :root and never changes per-instance
-let globalTransitionClosingDelay: number | null = null
-
-// the removal waits as long as the closing transition takes
-const getMissedTransitionDelay = () => {
-  if (globalTransitionClosingDelay === null) {
-    const style = getComputedStyle(document.body)
-    globalTransitionClosingDelay = cssTimeToMs(
-      style.getPropertyValue('--rt-transition-closing-delay'),
-    )
-  }
+/**
+ * the removal waits as long as the closing transition takes.
+ * read on the tooltip, where the transition runs,
+ * so the variable can be set on the tooltip or on any of its ancestors
+ */
+const getMissedTransitionDelay = (tooltip: HTMLElement | null) => {
+  const style = getComputedStyle(tooltip ?? document.body)
   // +25ms just to make sure `onTransitionEnd` (if it gets fired) has time to run
-  return globalTransitionClosingDelay + 25
+  return cssTimeToMs(style.getPropertyValue('--rt-transition-closing-delay')) + 25
 }
 
 /**
@@ -33,6 +30,7 @@ const useTooltipRemoval = ({
   showRequested,
   afterHide,
   onRemove,
+  tooltipRef,
 }: {
   rendered: boolean
   show: boolean
@@ -40,6 +38,7 @@ const useTooltipRemoval = ({
   showRequested: boolean
   afterHide?: () => void
   onRemove: () => void
+  tooltipRef: RefObject<HTMLElement | null>
 }) => {
   /**
    * the timer and the transition end only mark the removal as due.
@@ -62,11 +61,11 @@ const useTooltipRemoval = ({
     }
     const timer = setTimeout(() => {
       setRemovalDue(true)
-    }, getMissedTransitionDelay())
+    }, getMissedTransitionDelay(tooltipRef.current))
     return () => {
       clearTimeout(timer)
     }
-  }, [rendered, show, showRequested])
+  }, [rendered, show, showRequested, tooltipRef])
 
   /**
    * `show` and `showRequested` are current here, so this is where a due removal
