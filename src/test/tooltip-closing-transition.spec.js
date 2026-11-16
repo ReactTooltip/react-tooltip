@@ -74,4 +74,18 @@ describe('tooltip closing transition', () => {
     advanceTimers(400)
     expect(getTooltip()).not.toBeInTheDocument()
   })
+
+  test('keeps a closing tooltip for its closing transition when the length is a calc() expression', async () => {
+    // a custom property keeps `calc()` as written. jsdom does not apply the closing class's
+    // stylesheet, so the resolved length of the closing transition is set directly
+    await showThenClose({
+      style: { '--rt-transition-closing-delay': 'calc(0.3s + 0.3s)', transitionDuration: '0.6s' },
+    })
+
+    advanceTimers(300)
+    expect(getTooltip()).toBeInTheDocument()
+
+    advanceTimers(400)
+    expect(getTooltip()).not.toBeInTheDocument()
+  })
 })

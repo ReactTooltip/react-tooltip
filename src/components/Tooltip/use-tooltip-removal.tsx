@@ -9,8 +9,13 @@ import { cssTimeToMs, useIsomorphicLayoutEffect } from '../../utils'
  */
 const getMissedTransitionDelay = (tooltip: HTMLElement | null) => {
   const style = getComputedStyle(tooltip ?? document.body)
+  // a custom property keeps an expression such as `calc()` as written, which reads as 0 here.
+  // the closing transition that uses it has it resolved
+  const delay =
+    cssTimeToMs(style.getPropertyValue('--rt-transition-closing-delay').trim()) ||
+    cssTimeToMs(style.transitionDuration.split(',')[0].trim())
   // +25ms just to make sure `onTransitionEnd` (if it gets fired) has time to run
-  return cssTimeToMs(style.getPropertyValue('--rt-transition-closing-delay')) + 25
+  return delay + 25
 }
 
 /**
