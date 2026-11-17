@@ -1,16 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import type { RefObject } from 'react'
 import { cssTimeToMs, useIsomorphicLayoutEffect } from '../../utils'
 
-// Shared across all tooltip instances — the CSS variable is on :root and never changes per-instance
-let globalTransitionShowDelay: number | null = null
-
-const getMissedTransitionDelay = () => {
-  if (globalTransitionShowDelay === null) {
-    const style = getComputedStyle(document.body)
-    globalTransitionShowDelay = cssTimeToMs(style.getPropertyValue('--rt-transition-show-delay'))
-  }
+/**
+ * the removal waits as long as the closing transition takes.
+ * read on the tooltip, where the transition runs,
+ * so the variable can be set on the tooltip or on any of its ancestors
+ */
+const getMissedTransitionDelay = (tooltip: HTMLElement | null) => {
+  const style = getComputedStyle(tooltip ?? document.body)
+  // a custom property keeps an expression such as `calc()` as written, which reads as 0 here.
+  // the closing transition that uses it has it resolved
+  const delay =
+    cssTimeToMs(style.getPropertyValue('--rt-transition-closing-delay').trim()) ||
+    cssTimeToMs(style.transitionDuration.split(',')[0].trim())
   // +25ms just to make sure `onTransitionEnd` (if it gets fired) has time to run
-  return globalTransitionShowDelay + 25
+  return delay + 25
 }
 
 /**
@@ -30,6 +35,7 @@ const useTooltipRemoval = ({
   showRequested,
   afterHide,
   onRemove,
+  tooltipRef,
 }: {
   rendered: boolean
   show: boolean
@@ -37,6 +43,7 @@ const useTooltipRemoval = ({
   showRequested: boolean
   afterHide?: () => void
   onRemove: () => void
+  tooltipRef: RefObject<HTMLElement | null>
 }) => {
   /**
    * the timer and the transition end only mark the removal as due.
@@ -59,11 +66,11 @@ const useTooltipRemoval = ({
     }
     const timer = setTimeout(() => {
       setRemovalDue(true)
-    }, getMissedTransitionDelay())
+    }, getMissedTransitionDelay(tooltipRef.current))
     return () => {
       clearTimeout(timer)
     }
-  }, [rendered, show, showRequested])
+  }, [rendered, show, showRequested, tooltipRef])
 
   /**
    * `show` and `showRequested` are current here, so this is where a due removal
@@ -86,7 +93,8 @@ const useTooltipRemoval = ({
 
   return useCallback(
     (event: TransitionEvent) => {
-      if (!show && event.propertyName === 'opacity') {
+      // the tooltip's own fade, not a transition inside its content that bubbled up
+      if (!show && event.target === event.currentTarget && event.propertyName === 'opacity') {
         setRemovalDue(true)
       }
     },

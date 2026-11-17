@@ -534,6 +534,7 @@ const useTooltipEvents = ({
         return
       }
       handleShowRef.current(false)
+      clearTimeoutRef(tooltipShowDelayTimerRef)
     }
     if (actualGlobalCloseEvents.escape) {
       window.addEventListener('keydown', handleEsc)

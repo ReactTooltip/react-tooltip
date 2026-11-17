@@ -1,4 +1,8 @@
-:root {
+/**
+ * The defaults have no specificity, so an app's own :root rule (outside a cascade layer)
+ * overrides them wherever it comes in the page. The injected styles can come after the app's.
+ */
+:where(:root) {
   --rt-color-white: #fff;
   --rt-color-dark: #222;
   --rt-color-success: #8dc572;

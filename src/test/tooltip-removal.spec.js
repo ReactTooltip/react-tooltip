@@ -147,6 +147,113 @@ describe('tooltip removal', () => {
     expect(afterHide).toHaveBeenCalledTimes(1)
   })
 
+  test('keeps a closing tooltip when an opacity transition inside its content ends', async () => {
+    render(
+      <>
+        <span data-tooltip-id={TOOLTIP_ID}>Hover Me</span>
+        <TooltipController id={TOOLTIP_ID}>
+          <span>Content</span>
+        </TooltipController>
+      </>,
+    )
+
+    const anchor = screen.getByText('Hover Me')
+    hoverAnchor(anchor, 100)
+    const tooltip = await waitForTooltip(TOOLTIP_ID)
+    await expectTooltipToShow(tooltip)
+
+    unhoverAnchor(anchor, 20)
+    expect(getTooltip()).toHaveClass('react-tooltip__closing')
+    fireOpacityTransitionEnd(screen.getByText('Content'))
+    expect(getTooltip()).toBeInTheDocument()
+
+    fireOpacityTransitionEnd(getTooltip())
+    expect(getTooltip()).not.toBeInTheDocument()
+  })
+
+  test.each([
+    ['away from the tooltip', false],
+    ['on the tooltip', true],
+  ])(
+    'drops a hide that was pending when Escape removed a clickable tooltip, pointer %s',
+    async (_, pointerOnTooltip) => {
+      const tooltipRef = createRef()
+      render(
+        <TestTooltip
+          tooltipRef={tooltipRef}
+          clickable
+          delayHide={1000}
+          globalCloseEvents={{ escape: true }}
+        />,
+      )
+
+      const anchor = screen.getByText('Hover Me')
+      hoverAnchor(anchor, 100)
+      await expectTooltipToShow(await waitForTooltip(TOOLTIP_ID))
+      // leaving the anchor starts the 1000ms hide
+      unhoverAnchor(anchor)
+      if (pointerOnTooltip) {
+        fireEvent.mouseOver(getTooltip())
+      }
+      fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' })
+      advanceTimers(50)
+      advanceTimers(REMOVAL_MS)
+      expect(getTooltip()).not.toBeInTheDocument()
+
+      act(() => {
+        tooltipRef.current.open()
+      })
+      advanceTimers(SHOW_TIMER_MS)
+      await waitFor(() => {
+        expect(getTooltip()).toHaveClass('react-tooltip__show')
+      })
+      // the old hide's 1000ms run out
+      advanceTimers(1000)
+      advanceTimers(REMOVAL_MS)
+      expect(getTooltip()).toHaveClass('react-tooltip__show')
+    },
+  )
+
+  test('closes the next tooltip on leaving its anchor after the anchor of a hovered clickable tooltip is removed', async () => {
+    const TwoAnchors = () => {
+      const [hasFirst, setHasFirst] = useState(true)
+
+      return (
+        <>
+          {hasFirst && <span data-tooltip-id={TOOLTIP_ID}>First</span>}
+          <span data-tooltip-id={TOOLTIP_ID}>Second</span>
+          <button onClick={() => setHasFirst(false)}>Remove First</button>
+          <TooltipController id={TOOLTIP_ID} content="Removal Test" clickable />
+        </>
+      )
+    }
+
+    render(<TwoAnchors />)
+
+    const first = screen.getByText('First')
+    hoverAnchor(first, 100)
+    await expectTooltipToShow(await waitForTooltip(TOOLTIP_ID))
+    // the pointer is on the tooltip when its anchor goes away
+    unhoverAnchor(first)
+    fireEvent.mouseOver(getTooltip())
+    fireEvent.click(screen.getByText('Remove First'))
+    mutationObserverController.triggerAll([
+      { type: 'childList', removedNodes: [first], addedNodes: [] },
+    ])
+    advanceTimers(50)
+    expect(getTooltip()).not.toBeInTheDocument()
+
+    const second = screen.getByText('Second')
+    hoverAnchor(second, 100)
+    await waitFor(() => {
+      expect(getTooltip()).toHaveClass('react-tooltip__show')
+    })
+    unhoverAnchor(second)
+    advanceTimers(REMOVAL_MS)
+    advanceTimers(REMOVAL_MS)
+    expect(getTooltip()).not.toBeInTheDocument()
+  })
+
   test('calls afterHide once when the anchor of a showing tooltip is removed', async () => {
     const afterHide = jest.fn()
     const AnchorRemovalTest = () => {
